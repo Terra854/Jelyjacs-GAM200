@@ -396,3 +396,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+#
+# Custom exceptions start here
+#
+
+# VS temporary stuff that should not be inside the repo
+.vs/
