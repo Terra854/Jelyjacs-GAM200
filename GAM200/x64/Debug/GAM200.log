@@ -1,0 +1,5 @@
+﻿  graphic.cpp
+C:\Users\g2401\Desktop\csd2400_project\Jelyjacs-GAM200\GAM200\src\graphic.cpp(78,17): warning C4305: 'return': truncation from 'int' to 'bool'
+  GAM200.vcxproj -> C:\Users\g2401\Desktop\csd2400_project\Jelyjacs-GAM200\x64\Debug\GAM200.exe
+          1 file(s) copied.
+          1 file(s) copied.
