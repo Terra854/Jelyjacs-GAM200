@@ -72,12 +72,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN32\include;$(SolutionDir)lib\glew-2.1.0\include</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN32\lib-vc2022;$(SolutionDir)lib\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.1.0\include</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)lib\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN32\include;$(SolutionDir)lib\glew-2.1.0\include</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN32\lib-vc2022;$(SolutionDir)lib\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.1.0\include</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)lib\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN32\include;$(SolutionDir)lib\glew-2.1.0\include;$(IncludePath)</IncludePath>
