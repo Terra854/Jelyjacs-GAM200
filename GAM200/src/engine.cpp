@@ -5,7 +5,7 @@ Gamestate Engine::gamestate = Gamestate::start;
 
 void Engine::init() {
     
-    if (!Graphic::init(2400, 1350, "Window")) {
+    if (!Graphic::init(1920, 1080, "Window")) {
         std::cout << "Unable to create window" << std::endl;
         std::exit(EXIT_FAILURE);
     }

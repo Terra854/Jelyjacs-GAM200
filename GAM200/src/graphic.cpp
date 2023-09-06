@@ -19,9 +19,9 @@ GLuint Graphic::elem_cnt;     // how many indices in element buffer
 GLuint Graphic::pboid;        // id for PBO
 GLuint Graphic::texid;        // id for texture object
 
-unsigned char* image_data;
-int image_width{}, image_height{}, image_channels{};
-GLuint texture_name;
+//vector of objects
+std::vector<Graphic::Object> Graphic::all_objects;
+
 
 
 bool Graphic::init(GLint w, GLint h, std::string t) {
@@ -83,19 +83,19 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
     
     setup_quad_vao();
     setup_shdrpgm();
-    loadPicture();
-
+    CreatObject("../Assest/Picture/img_1.png",glm::vec2(1.f,1.f), glm::vec2(1.f, 1.f), 0.f,"img1");
     return true;
 }
 
 void Graphic::setup_quad_vao() {
     //vertices
+    
     float vertices[] = {
         // positions       // texture coords
-     0.5f,  0.5f, 0.0f,    1.0f, 1.0f,   // top right
-     0.5f, -0.5f, 0.0f,    1.0f, 0.0f,   // bottom right
-    -0.5f, -0.5f, 0.0f,    0.0f, 0.0f,   // bottom left
-    -0.5f,  0.5f, 0.0f,    0.0f, 1.0f    // top left 
+     1.f,  1.f, 0.0f,    1.0f, 1.0f,   // top right
+     1.f, -1.f, 0.0f,    1.0f, 0.0f,   // bottom right
+    -1.f, -1.f, 0.0f,    0.0f, 0.0f,   // bottom left
+    -1.f,  1.f, 0.0f,    0.0f, 1.0f    // top left 
     };
 
     unsigned int indices[] = {
@@ -227,22 +227,24 @@ void Graphic::setup_shdrpgm()
     glUseProgram(Program);
 }
 
-void Graphic::loadPicture() {
+void Graphic::CreatObject(const char* file_name_input, glm::vec2 position_input, glm::vec2 scale_input, GLfloat rotation_input, std::string name) {
     stbi_set_flip_vertically_on_load(true);
-    //test
-    const char* image_file = "../Assest/Picture/img_1.png";
+    
+    Image image;
+    image.image_data = stbi_load(file_name_input, &image.image_width, &image.image_height, &image.image_channels, STBI_rgb_alpha);
 
-    image_data = stbi_load(image_file, &image_width, &image_height, &image_channels, STBI_rgb_alpha);
 
-    if (!image_data) {
-        std::cerr << "Failed to load image: " << image_file << std::endl;
+    if (!image.image_data) {
+        std::cerr << "Failed to load image: " << name << "image" << std::endl;
     }
     else {
-        std::cout << "Image" << image_file << "loaded with a width of " << image_width << "  and a height of " << image_height << " " << std::endl;
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+        std::cout << "Image" << name << "loaded with a width of " << image.image_width << "  and a height of " << image.image_height << " " << std::endl;
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.image_width, image.image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.image_data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
-    stbi_image_free(image_data);
+    Object object(image, position_input, scale_input, rotation_input, name);
+    all_objects.push_back(object);
+    stbi_image_free(image.image_data);
 }
 
 void Graphic::update() {
