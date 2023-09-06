@@ -154,6 +154,7 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\graphic.h" />
     <ClInclude Include="include\input.h" />
+    <ClInclude Include="include\physics.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
