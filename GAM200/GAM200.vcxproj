@@ -149,6 +149,7 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClCompile Include="src\graphic.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\physics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine.h" />
