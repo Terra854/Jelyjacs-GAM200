@@ -145,7 +145,6 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="physics.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\graphic.cpp" />
     <ClCompile Include="src\input.cpp" />
@@ -155,7 +154,6 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\graphic.h" />
     <ClInclude Include="include\input.h" />
-    <ClInclude Include="physics.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
