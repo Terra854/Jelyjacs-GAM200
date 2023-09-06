@@ -100,7 +100,7 @@ void Graphic::setup_quad_vao() {
 
     unsigned int indices[] = {
         0,1,2,
-        3//,2,0
+        3,2,0
     };
 
     //VBO buffer
@@ -263,7 +263,7 @@ void Graphic::draw() {
     // bind Texture
     glBindTexture(GL_TEXTURE_2D, texid);
     glBindVertexArray(vaoid);
-    glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
 }
 
