@@ -5,7 +5,7 @@
 #include <iomanip>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
+#include "input.h"
 /*  
 ----------------------------------------------------------------------------- */
 GLint Graphic::width;
@@ -84,7 +84,7 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
     setup_quad_vao();
     setup_shdrpgm();
     loadPicture();
-
+    input::init(Graphic::ptr_window);
     return true;
 }
 
