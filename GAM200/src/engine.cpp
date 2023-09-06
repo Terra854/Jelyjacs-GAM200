@@ -15,6 +15,7 @@ void Engine::init() {
 void Engine::update(){
     // process events if any associated with input devices
     glfwPollEvents();
+
     // main loop computes fps and other time related stuff once for all apps ...
     Graphic::update_time(1.0);
     // animate scene
@@ -35,5 +36,4 @@ void Engine::draw() {
 
 void Engine::cleanup() {
     Graphic::cleanup();
-	
 }

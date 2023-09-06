@@ -1,8 +1,10 @@
-
+﻿#include <glm/glm.hpp>
 #include <graphic.h>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 /*  
 ----------------------------------------------------------------------------- */
@@ -11,7 +13,15 @@ GLint Graphic::height;
 GLdouble Graphic::fps;
 GLdouble Graphic::delta_time;
 std::string Graphic::title;
-GLFWwindow* Graphic::ptr_window;
+GLFWwindow* Graphic::ptr_window; 
+GLuint Graphic::vaoid;        // with GL 4.5, VBO & EBO are not required
+GLuint Graphic::elem_cnt;     // how many indices in element buffer
+GLuint Graphic::pboid;        // id for PBO
+GLuint Graphic::texid;        // id for texture object
+
+unsigned char* image_data;
+int image_width{}, image_height{}, image_channels{};
+GLuint texture_name;
 
 
 bool Graphic::init(GLint w, GLint h, std::string t) {
@@ -51,14 +61,6 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
     // make the previously created OpenGL context current ...
     glfwMakeContextCurrent(Graphic::ptr_window);
 
-    // set callback for events associated with window size changes; keyboard;
-   // mouse buttons, cursor position, and scroller
-    glfwSetFramebufferSizeCallback(Graphic::ptr_window, Graphic::fbsize_cb);
-    glfwSetKeyCallback(Graphic::ptr_window, Graphic::key_cb);
-    glfwSetMouseButtonCallback(Graphic::ptr_window, Graphic::mousebutton_cb);
-    glfwSetCursorPosCallback(Graphic::ptr_window, Graphic::mousepos_cb);
-    glfwSetScrollCallback(Graphic::ptr_window, Graphic::mousescroll_cb);
-
     // this is the default setting ...
     glfwSetInputMode(Graphic::ptr_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -75,271 +77,209 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
     }
     else {
         std::cerr << "Unable to retrieve OpenGL version" << std::endl;
-        return -1;
+        return true;
     }
-    if (GL_VERSION_4_5) {
-        std::cout << "Using glew version: " << glewGetString(GLEW_VERSION) << std::endl;
-        std::cout << "Driver supports OpenGL 4.5\n" << std::endl;
-    }
-    else {
-        std::cerr << "Driver doesn't support OpenGL 4.5 - abort program" << std::endl;
-    }
+    
+    
+    setup_quad_vao();
+    setup_shdrpgm();
+    loadPicture();
 
     return true;
 }
 
-/*  _________________________________________________________________________ */
-/*! update
+void Graphic::setup_quad_vao() {
+    //vertices
+    float vertices[] = {
+        // positions       // texture coords
+     0.5f,  0.5f, 0.0f,    1.0f, 1.0f,   // top right
+     0.5f, -0.5f, 0.0f,    1.0f, 0.0f,   // bottom right
+    -0.5f, -0.5f, 0.0f,    0.0f, 0.0f,   // bottom left
+    -0.5f,  0.5f, 0.0f,    0.0f, 1.0f    // top left 
+    };
 
-@param none
+    unsigned int indices[] = {
+        0,1,2,
+        3//,2,0
+    };
 
-@return none
+    //VBO buffer
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
 
-For now, there is nothing to do except to write appropriate information
-to window title bar.
-*/
+    //bind VBO buffer
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    //configer buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    //vertex array
+    
+    glGenVertexArrays(1, &vaoid);
+
+    //bind vertex array
+    glBindVertexArray(vaoid);
+
+    //linking vertex attributes
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    //color attributes
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    //glEnableVertexAttribArray(1);
+
+    // texture coord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    //EBO buffer
+    unsigned int EBO;
+    glGenBuffers(1, &EBO);
+
+    //bind EBO buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glGenTextures(1, &texid);
+    glBindTexture(GL_TEXTURE_2D, texid); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void Graphic::setup_shdrpgm()
+{
+    //vertex shader code
+    const char* vertexShaderSource = "#version 330 core\n"
+        "layout (location=0) in vec3 aPos;\n"
+        "layout (location=2) in vec2 aTexCoord;"
+        "out vec2 TexCoord;\n"
+        "void main()\n"
+        "{\n"
+        "gl_Position = vec4(aPos, 1.0);\n"
+        "TexCoord = aTexCoord;\n"
+        "}\0";
+
+    //fragment shader code
+    const char* fragmentShaderSource = "#version 330 core\n"
+        "in vec2 TexCoord;\n"
+        "out vec4 FragColor;\n"
+
+        "uniform sampler2D ourTexture;\n"
+
+        "void main()\n"
+        "{\n"
+        "FragColor = texture( ourTexture , TexCoord );\n"
+        "}\0";
+
+    //create vertex shader
+    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+    //compile vertex shader
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+
+    //check if compile correctly
+    int  success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+
+    //compile fragment shader
+    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+    //check if compile correctly
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+
+    //program object
+    unsigned int Program = glCreateProgram();
+
+    //attach shaders and link
+    glAttachShader(Program, vertexShader);
+    glAttachShader(Program, fragmentShader);
+    glLinkProgram(Program);
+
+    //check if linking failed
+    glGetProgramiv(Program, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(Program, 512, NULL, infoLog);
+        std::cout << "linking failed";
+    }
+
+    //delete shaders
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    glUseProgram(Program);
+}
+
+void Graphic::loadPicture() {
+    stbi_set_flip_vertically_on_load(true);
+    //test
+    const char* image_file = "../Assest/Picture/img_1.png";
+
+    image_data = stbi_load(image_file, &image_width, &image_height, &image_channels, STBI_rgb_alpha);
+
+    if (!image_data) {
+        std::cerr << "Failed to load image: " << image_file << std::endl;
+    }
+    else {
+        std::cout << "Image" << image_file << "loaded with a width of " << image_width << "  and a height of " << image_height << " " << std::endl;
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    stbi_image_free(image_data);
+}
+
 void Graphic::update() {
-    // write window title with current fps ...
+    
     std::stringstream sstr;
     sstr << std::fixed << std::setprecision(2) << Graphic::title << " | " << Graphic::fps;
     glfwSetWindowTitle(Graphic::ptr_window, sstr.str().c_str());
+
+   
 }
 
-/*  _________________________________________________________________________ */
-/*! draw
 
-@param none
-
-@return none
-
-For now, there is nothing to do except set the back buffer fill color
-as RGB(0, 1, 0).
-*/
 void Graphic::draw() {
-    // clear colorbuffer with RGBA value in glClearColor ...
+
+    
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0.f, 1.f, 0.f, 1.f);
+    // bind Texture
+    glBindTexture(GL_TEXTURE_2D, texid);
+    glBindVertexArray(vaoid);
+    glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, 0);
+    
 }
 
-/*  _________________________________________________________________________ */
-/*! cleanup
 
-@param none
-
-@return none
-
-For now, there are no resources allocated by the application program.
-The only task is to have GLFW return resources back to the system and
-gracefully terminate.
-*/
 void Graphic::cleanup() {
     glfwTerminate();
 }
 
 
-/*  _________________________________________________________________________*/
-/*! key_cb
 
-@param GLFWwindow*
-Handle to window that is receiving event
-
-@param int
-the keyboard key that was pressed or released
-
-@parm int
-Platform-specific scancode of the key
-
-@parm int
-GLFW_PRESS, GLFW_REPEAT or GLFW_RELEASE
-action will be GLFW_KEY_UNKNOWN if GLFW lacks a key token for it,
-for example E-mail and Play keys.
-
-@parm int
-bit-field describing which modifier keys (shift, alt, control)
-were held down
-
-@return none
-
-This function is called when keyboard buttons are pressed.
-When the ESC key is pressed, the close flag of the window is set.
-*/
-void Graphic::key_cb(GLFWwindow* pwin, int key, int scancode, int action, int mod) {
-    if (GLFW_PRESS == action) {
-#ifdef _DEBUG
-        std::cout << "Key pressed" << std::endl;
-#endif
-    }
-    else if (GLFW_REPEAT == action) {
-#ifdef _DEBUG
-        std::cout << "Key repeatedly pressed" << std::endl;
-#endif
-    }
-    else if (GLFW_RELEASE == action) {
-#ifdef _DEBUG
-        std::cout << "Key released" << std::endl;
-#endif
-    }
-
-    if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action) {
-        glfwSetWindowShouldClose(pwin, GLFW_TRUE);
-    }
-}
-
-/*  _________________________________________________________________________*/
-/*! mousebutton_cb
-
-@param GLFWwindow*
-Handle to window that is receiving event
-
-@param int
-the mouse button that was pressed or released
-GLFW_MOUSE_BUTTON_LEFT and GLFW_MOUSE_BUTTON_RIGHT specifying left and right
-mouse buttons are most useful
-
-@parm int
-action is either GLFW_PRESS or GLFW_RELEASE
-
-@parm int
-bit-field describing which modifier keys (shift, alt, control)
-were held down
-
-@return none
-
-This function is called when mouse buttons are pressed.
-*/
-void Graphic::mousebutton_cb(GLFWwindow* pwin, int button, int action, int mod) {
-    switch (button) {
-    case GLFW_MOUSE_BUTTON_LEFT:
-#ifdef _DEBUG
-        std::cout << "Left mouse button ";
-#endif
-        break;
-    case GLFW_MOUSE_BUTTON_RIGHT:
-#ifdef _DEBUG
-        std::cout << "Right mouse button ";
-#endif
-        break;
-    }
-    switch (action) {
-    case GLFW_PRESS:
-#ifdef _DEBUG
-        std::cout << "pressed!!!" << std::endl;
-#endif
-        break;
-    case GLFW_RELEASE:
-#ifdef _DEBUG
-        std::cout << "released!!!" << std::endl;
-#endif
-        break;
-    }
-}
-
-/*  _________________________________________________________________________*/
-/*! mousepos_cb
-
-@param GLFWwindow*
-Handle to window that is receiving event
-
-@param double
-new cursor x-coordinate, relative to the left edge of the client area
-
-@param double
-new cursor y-coordinate, relative to the top edge of the client area
-
-@return none
-
-This functions receives the cursor position, measured in screen coordinates but
-relative to the top-left corner of the window client area.
-*/
-void Graphic::mousepos_cb(GLFWwindow* pwin, double xpos, double ypos) {
-#ifdef _DEBUG
-    std::cout << "Mouse cursor position: (" << xpos << ", " << ypos << ")" << std::endl;
-#endif
-}
-
-/*  _________________________________________________________________________*/
-/*! mousescroll_cb
-
-@param GLFWwindow*
-Handle to window that is receiving event
-
-@param double
-Scroll offset along X-axis
-
-@param double
-Scroll offset along Y-axis
-
-@return none
-
-This function is called when the user scrolls, whether with a mouse wheel or
-touchpad gesture. Although the function receives 2D scroll offsets, a simple
-mouse scroll wheel, being vertical, provides offsets only along the Y-axis.
-*/
-void Graphic::mousescroll_cb(GLFWwindow* pwin, double xoffset, double yoffset) {
-#ifdef _DEBUG
-    std::cout << "Mouse scroll wheel offset: ("
-        << xoffset << ", " << yoffset << ")" << std::endl;
-#endif
-}
-
-/*  _________________________________________________________________________ */
-/*! error_cb
-
-@param int
-GLFW error code
-
-@parm char const*
-Human-readable description of the code
-
-@return none
-
-The error callback receives a human-readable description of the error and
-(when possible) its cause.
-*/
 void Graphic::error_cb(int error, char const* description) {
     std::cerr << "GLFW error: " << description << std::endl;
 }
 
-/*  _________________________________________________________________________ */
-/*! fbsize_cb
 
-@param GLFWwindow*
-Handle to window that is being resized
 
-@parm int
-Width in pixels of new window size
-
-@parm int
-Height in pixels of new window size
-
-@return none
-
-This function is called when the window is resized - it receives the new size
-of the window in pixels.
-*/
-void Graphic::fbsize_cb(GLFWwindow* ptr_win, int width, int height) {
-    // use the entire framebuffer as drawing region
-    glViewport(0, 0, width, height);
-    // later, if working in 3D, we'll have to set the projection matrix here ...
-}
-
-/*  _________________________________________________________________________*/
-/*! update_time
-
-@param double
-fps: computed frames per second
-
-@param double
-fps_calc_interval: the interval (in seconds) at which fps is to be
-calculated
-
-@return none
-
-This function must be first called once during initialization and once
-per game loop. It uses GLFW's time functions to compute:
-1. interval in seconds between each frame
-2. frames per second every "fps_calc_interval" seconds
-*/
 void Graphic::update_time(double fps_calc_interval) {
     // get elapsed time (in seconds) between previous and current frames
     static double prev_time = glfwGetTime();
@@ -364,3 +304,25 @@ void Graphic::update_time(double fps_calc_interval) {
         count = 0.0;
     }
 }
+
+//void Graphic::loadPicture() {
+//    const char* image_file = "Picture/img_1.png";  
+//    int  image_channels;
+//    image_data = stbi_load(image_file, &image_width, &image_height, &image_channels, STBI_rgb_alpha);
+//    if (!image_data) {
+//        std::cerr << "Failed to load image: " << image_file << std::endl;
+//    }
+//}
+
+//void Graphic::RenderPNGImage(unsigned char* image_data, int img_width, int img_height) {
+//   
+//    glViewport(0, 0, width, height);
+//    glMatrixMode(GL_PROJECTION);
+//    glLoadIdentity();
+//    glOrtho(0, width, 0, height, -1, 1);
+//    glMatrixMode(GL_MODELVIEW);
+//    glLoadIdentity();
+//
+//    
+//    glDrawPixels(img_width, img_height, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+//}

@@ -6,7 +6,10 @@
 ----------------------------------------------------------------------------- */
 #include <GL/glew.h> // for access to OpenGL API declarations 
 #include <GLFW/glfw3.h>
+
+
 #include <string>
+#include <vector>
 
 /*  _________________________________________________________________________ */
 struct Graphic {
@@ -14,17 +17,26 @@ struct Graphic {
 	static void update();
 	static void draw();
 	static void cleanup();
+	static void setup_quad_vao();
+	static void setup_shdrpgm();
+
+
+	// geometry and material information ...
+	static GLuint vaoid;        // with GL 4.5, VBO & EBO are not required
+	static GLuint elem_cnt;     // how many indices in element buffer
+	static GLuint pboid;        // id for PBO
+	static GLuint texid;        // id for texture object
+	//static GLSLShader shdr_pgm; // object that abstracts away nitty-gritty
+	// details of shader management
 
 	// callbacks ...
 	static void error_cb(int error, char const* description);
-	static void fbsize_cb(GLFWwindow* ptr_win, int width, int height);
-	// I/O callbacks ...
-	static void key_cb(GLFWwindow* pwin, int key, int scancode, int action, int mod);
-	static void mousebutton_cb(GLFWwindow* pwin, int button, int action, int mod);
-	static void mousescroll_cb(GLFWwindow* pwin, double xoffset, double yoffset);
-	static void mousepos_cb(GLFWwindow* pwin, double xpos, double ypos);
-
 	static void update_time(double fpsCalcInt = 1.0);
+
+	//picture
+	static void loadPicture();
+	//static void RenderPNGImage(unsigned char* image_data, int width, int height);
+
 
 	static GLint width, height;
 	static GLdouble fps;
