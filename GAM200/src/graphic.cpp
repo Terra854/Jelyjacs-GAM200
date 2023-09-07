@@ -1,4 +1,5 @@
 ﻿#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <graphic.h>
 #include <iostream>
 #include <sstream>
@@ -22,7 +23,10 @@ std::vector <GLuint> Graphic::ptr_tex;        // id for texture object
 //vector of objects
 std::vector<Graphic::Object> Graphic::all_objects;
 
+std::vector <glm::mat4> Graphic::ptr_trans;
 
+unsigned int Program;
+unsigned int VBO;
 
 bool Graphic::init(GLint w, GLint h, std::string t) {
     Graphic::width = w;
@@ -84,7 +88,7 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
     setup_quad_vao();
     setup_shdrpgm();
     CreatObject("../Assest/Picture/img_1.png",glm::vec2(1.f,1.f), glm::vec2(1.f, 1.f), 0.f,"img1");
-    CreatObject("../Assest/Picture/test.png", glm::vec2(1.f, 1.f), glm::vec2(1.f, 1.f), 0.f, "test");
+    CreatObject("../Assest/Picture/test.png", glm::vec2(0.f, 0.f), glm::vec2(0.5f, 0.5f), 0.5f, "test");
 
     return true;
 }
@@ -106,12 +110,9 @@ void Graphic::setup_quad_vao() {
     };
 
     //VBO buffer
-    unsigned int VBO;
     glGenBuffers(1, &VBO);
-
     //bind VBO buffer
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
     //configer buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -137,7 +138,6 @@ void Graphic::setup_quad_vao() {
     //EBO buffer
     unsigned int EBO;
     glGenBuffers(1, &EBO);
-
     //bind EBO buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -201,7 +201,7 @@ void Graphic::setup_shdrpgm()
     }
 
     //program object
-    unsigned int Program = glCreateProgram();
+    Program = glCreateProgram();
 
     //attach shaders and link
     glAttachShader(Program, vertexShader);
@@ -244,6 +244,13 @@ void Graphic::CreatObject(const char* file_name_input, glm::vec2 position_input,
     Object object(image, position_input, scale_input, rotation_input, name);
     all_objects.push_back(object);
     stbi_image_free(image.image_data);
+
+    //set up trans
+    glm::mat4 trans;
+    trans = glm::translate(trans, glm::vec3(position_input, 0.0f));
+    trans = glm::rotate(trans, glm::radians(rotation_input), glm::vec3(0.0f, 0.0f, 1.0f));
+    trans = glm::scale(trans, glm::vec3(scale_input, 1.0f));
+    ptr_trans.push_back(trans);
 }
 
 void Graphic::update() {
@@ -252,6 +259,8 @@ void Graphic::update() {
     sstr << std::fixed << std::setprecision(2) << Graphic::title << " | " << Graphic::fps;
     glfwSetWindowTitle(Graphic::ptr_window, sstr.str().c_str());
 
+
+    glUseProgram(Program);
    
 }
 
@@ -261,15 +270,14 @@ void Graphic::draw() {
     
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    int i = 0;
+    
     // bind Texture
     for (auto texture : ptr_tex) {
-        if (i == 1)continue;
+     
         glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(vaoid);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        std::cout<< "drawing" <<i<< std::endl;
-        i++;
+        
     }
     
 }
