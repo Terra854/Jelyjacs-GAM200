@@ -59,7 +59,7 @@ struct Graphic {
 	static GLuint vaoid;        // with GL 4.5, VBO & EBO are not required
 	static GLuint elem_cnt;     // how many indices in element buffer
 	static GLuint pboid;        // id for PBO
-	static GLuint texid;        // id for texture object
+	static std::vector <GLuint> ptr_tex;       
 	//static GLSLShader shdr_pgm; // object that abstracts away nitty-gritty
 	// details of shader management
 

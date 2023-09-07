@@ -17,7 +17,7 @@ GLFWwindow* Graphic::ptr_window;
 GLuint Graphic::vaoid;        // with GL 4.5, VBO & EBO are not required
 GLuint Graphic::elem_cnt;     // how many indices in element buffer
 GLuint Graphic::pboid;        // id for PBO
-GLuint Graphic::texid;        // id for texture object
+std::vector <GLuint> Graphic::ptr_tex;        // id for texture object
 
 //vector of objects
 std::vector<Graphic::Object> Graphic::all_objects;
@@ -84,6 +84,8 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
     setup_quad_vao();
     setup_shdrpgm();
     CreatObject("../Assest/Picture/img_1.png",glm::vec2(1.f,1.f), glm::vec2(1.f, 1.f), 0.f,"img1");
+    CreatObject("../Assest/Picture/test.png", glm::vec2(1.f, 1.f), glm::vec2(1.f, 1.f), 0.f, "test");
+
     return true;
 }
 
@@ -140,14 +142,7 @@ void Graphic::setup_quad_vao() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glGenTextures(1, &texid);
-    glBindTexture(GL_TEXTURE_2D, texid); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   
 }
 
 void Graphic::setup_shdrpgm()
@@ -229,7 +224,11 @@ void Graphic::setup_shdrpgm()
 
 void Graphic::CreatObject(const char* file_name_input, glm::vec2 position_input, glm::vec2 scale_input, GLfloat rotation_input, std::string name) {
     stbi_set_flip_vertically_on_load(true);
-    
+    unsigned int texid;
+    ptr_tex.push_back(texid);
+    glGenTextures(1, &ptr_tex.back());
+    glBindTexture(GL_TEXTURE_2D, ptr_tex.back()); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+
     Image image;
     image.image_data = stbi_load(file_name_input, &image.image_width, &image.image_height, &image.image_channels, STBI_rgb_alpha);
 
@@ -262,10 +261,16 @@ void Graphic::draw() {
     
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    int i = 0;
     // bind Texture
-    glBindTexture(GL_TEXTURE_2D, texid);
-    glBindVertexArray(vaoid);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    for (auto texture : ptr_tex) {
+        if (i == 1)continue;
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glBindVertexArray(vaoid);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        std::cout<< "drawing" <<i<< std::endl;
+        i++;
+    }
     
 }
 
