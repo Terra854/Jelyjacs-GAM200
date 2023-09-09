@@ -146,6 +146,7 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Assets Manager\file_reader.cpp" />
+    <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\graphic.cpp" />
     <ClCompile Include="src\input.cpp" />
@@ -155,9 +156,12 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClCompile Include="src\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Circle.h" />
+    <ClInclude Include="include\Collision.h" />
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\graphic.h" />
     <ClInclude Include="include\input.h" />
+    <ClInclude Include="include\Line.h" />
     <ClInclude Include="include\Mat3.h" />
     <ClInclude Include="include\physics.h" />
     <ClInclude Include="include\Vec2.h" />

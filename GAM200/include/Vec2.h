@@ -31,7 +31,6 @@ Vec2 Vec2Normalize(const Vec2& pVec0);
 
 float Vec2Length(const Vec2& pVec0);
 
-//This function returns the square of pVec0's length. Avoid the square root
 float Vec2SquareLength(const Vec2& pVec0);
 
 float Vec2Distance(const Vec2& pVec0, const Vec2& pVec1);
