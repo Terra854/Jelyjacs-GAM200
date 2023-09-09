@@ -150,13 +150,17 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClCompile Include="src\graphic.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mat3.cpp" />
     <ClCompile Include="src\physics.cpp" />
+    <ClCompile Include="src\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\graphic.h" />
     <ClInclude Include="include\input.h" />
+    <ClInclude Include="include\Mat3.h" />
     <ClInclude Include="include\physics.h" />
+    <ClInclude Include="include\Vec2.h" />
     <ClInclude Include="src\Assets Manager\file_reader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

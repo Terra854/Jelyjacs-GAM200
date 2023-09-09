@@ -19,6 +19,12 @@
     <Filter Include="Header Files\Assets Manager">
       <UniqueIdentifier>{b007e69c-a1e2-4717-9cbc-806f43909e1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{67e1cd7e-3dc5-40f5-bf1e-4cde9f4b56b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{56b45e39-df7d-415a-b956-e3630e6f544b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -39,6 +45,12 @@
     <ClCompile Include="src\Assets Manager\file_reader.cpp">
       <Filter>Source Files\Assets Manager</Filter>
     </ClCompile>
+    <ClCompile Include="src\Vec2.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mat3.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\graphic.h">
@@ -55,6 +67,12 @@
     </ClInclude>
     <ClInclude Include="src\Assets Manager\file_reader.h">
       <Filter>Header Files\Assets Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vec2.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mat3.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
