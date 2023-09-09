@@ -7,6 +7,7 @@
 #include <GL/glew.h> // for access to OpenGL API declarations 
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glslshader.h>
 #include <string>
 #include <vector>
 
@@ -25,6 +26,11 @@ struct Graphic {
 	static void cleanup();
 	static void setup_quad_vao();
 	static void setup_shdrpgm();
+	//used for setup vao
+	struct vtx {
+		glm::vec2 pos{}, tex{};
+	};
+	static GLSLShader shdr_pgm; // object that abstracts away nitty-gritty
 
 	static struct Image {
 		const char* image_file;

@@ -1,5 +1,7 @@
 #include <graphic.h>
-
+#include <glhelper.h>
+#include <glapp.h>
+#include <iostream>
 enum class Gamestate{
 	start,
 	end

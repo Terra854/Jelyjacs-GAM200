@@ -1,9 +1,11 @@
 ﻿#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
 #include <graphic.h>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <array>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -19,14 +21,14 @@ GLuint Graphic::vaoid;        // with GL 4.5, VBO & EBO are not required
 GLuint Graphic::elem_cnt;     // how many indices in element buffer
 GLuint Graphic::pboid;        // id for PBO
 std::vector <GLuint> Graphic::ptr_tex;        // id for texture object
+GLSLShader Graphic::shdr_pgm{};
 
 //vector of objects
 std::vector<Graphic::Object> Graphic::all_objects;
 
 std::vector <glm::mat4> Graphic::ptr_trans;
 
-unsigned int Program;
-unsigned int VBO;
+
 
 bool Graphic::init(GLint w, GLint h, std::string t) {
     Graphic::width = w;
@@ -43,16 +45,13 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
     // Before asking GLFW to create an OpenGL context, we specify the minimum constraints
     // in that context:
 
-    // specify OpenGL version 4.5
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-    // specify modern OpenGL only - no compatibility with "old" OpenGL
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    // applications will be double-buffered ...
     glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
-    // default behavior: colorbuffer is 32-bit RGBA, depthbuffer is 24-bits
-    // don't change size of window
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_RED_BITS, 8); glfwWindowHint(GLFW_GREEN_BITS, 8);
+    glfwWindowHint(GLFW_BLUE_BITS, 8); glfwWindowHint(GLFW_ALPHA_BITS, 8);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); // window dimensions are static
 
     // size of viewport: width x height
     Graphic::ptr_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
@@ -95,131 +94,79 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
 
 void Graphic::setup_quad_vao() {
     //vertices
-    
-    float vertices[] = {
-        // positions       // texture coords
-     1.f,  1.f, 0.0f,    1.0f, 1.0f,   // top right
-     1.f, -1.f, 0.0f,    1.0f, 0.0f,   // bottom right
-    -1.f, -1.f, 0.0f,    0.0f, 0.0f,   // bottom left
-    -1.f,  1.f, 0.0f,    0.0f, 1.0f    // top left 
+    std::array <glm::vec2, 4 > pos_vtx
+    {
+        glm::vec2(1.0f, -1.0f), glm::vec2(1.0f, 1.0f),
+            glm::vec2(-1.0f, 1.0f), glm::vec2(-1.0f, -1.0f)
+    };
+    std::array <glm::vec3, 4 > clr_vtx
+    {
+        glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f),
+            glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)
     };
 
-    unsigned int indices[] = {
-        0,1,2,
-        3,2,0
+    std::array <glm::vec2, 4 > tex_coor
+    {
+        glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
+            glm::vec2(0.0f, 1.0f), glm::vec2(0.0f, 0.0f)
     };
 
-    //VBO buffer
-    glGenBuffers(1, &VBO);
-    //bind VBO buffer
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    //configer buffer
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    GLuint vbo;
+    glCreateBuffers(1, &vbo);
+    glNamedBufferStorage(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size() + sizeof(glm::vec2) * tex_coor.size(), nullptr, GL_DYNAMIC_STORAGE_BIT);
+    glNamedBufferSubData(vbo, 0, sizeof(glm::vec2) * pos_vtx.size(), pos_vtx.data());
+    glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3) * clr_vtx.size(), clr_vtx.data());
+    glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(),
+        sizeof(glm::vec2) * tex_coor.size(), tex_coor.data());
 
-    //vertex array
-    
-    glGenVertexArrays(1, &vaoid);
+    GLuint vaoid;
+    glCreateVertexArrays(1, &vaoid);
 
-    //bind vertex array
-    glBindVertexArray(vaoid);
+    glEnableVertexArrayAttrib(vaoid, 0);
+    glVertexArrayVertexBuffer(vaoid, 0, vbo, 0, sizeof(glm::vec2));
+    glVertexArrayAttribFormat(vaoid, 0, 2, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(vaoid, 0, 0);
 
-    //linking vertex attributes
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    glEnableVertexArrayAttrib(vaoid, 1);
+    glVertexArrayVertexBuffer(vaoid, 1, vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3));
+    glVertexArrayAttribFormat(vaoid, 1, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(vaoid, 1, 1);
 
-    //color attributes
-    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    //glEnableVertexAttribArray(1);
+    glEnableVertexArrayAttrib(vaoid, 2);
+    glVertexArrayVertexBuffer(vaoid, 2, vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(), sizeof(glm::vec2));
+    glVertexArrayAttribFormat(vaoid, 2, 2, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(vaoid, 2, 2);
 
-    // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    std::array<GLushort, 6> idx_vtx
+    {
+            0, 1, 2,
+            2, 3, 0
+    };
 
-    //EBO buffer
-    unsigned int EBO;
-    glGenBuffers(1, &EBO);
-    //bind EBO buffer
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    GLuint ebo_hdl;
+    glCreateBuffers(1, &ebo_hdl);
+    glNamedBufferStorage(ebo_hdl, sizeof(GLshort) * idx_vtx.size(), idx_vtx.data(), GL_DYNAMIC_STORAGE_BIT);
+    glVertexArrayElementBuffer(vaoid, ebo_hdl);
+    glBindVertexArray(0);
 
-   
 }
 
 void Graphic::setup_shdrpgm()
 {
-    //vertex shader code
-    const char* vertexShaderSource = "#version 330 core\n"
-        "layout (location=0) in vec3 aPos;\n"
-        "layout (location=2) in vec2 aTexCoord;"
-        "out vec2 TexCoord;\n"
-        "void main()\n"
-        "{\n"
-        "gl_Position = vec4(aPos, 1.0);\n"
-        "TexCoord = aTexCoord;\n"
-        "}\0";
-
-    //fragment shader code
-    const char* fragmentShaderSource = "#version 330 core\n"
-        "in vec2 TexCoord;\n"
-        "out vec4 FragColor;\n"
-
-        "uniform sampler2D ourTexture;\n"
-
-        "void main()\n"
-        "{\n"
-        "FragColor = texture( ourTexture , TexCoord );\n"
-        "}\0";
-
-    //create vertex shader
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-    //compile vertex shader
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    //check if compile correctly
-    int  success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
+    std::vector<std::pair<GLenum, std::string>> shdr_files;
+    shdr_files.push_back(std::make_pair(
+        GL_VERTEX_SHADER,
+        "../shaders/image.vert"));
+    shdr_files.push_back(std::make_pair(
+        GL_FRAGMENT_SHADER,
+        "../shaders/image.frag"));
+    shdr_pgm.CompileLinkValidate(shdr_files);
+    if (GL_FALSE == shdr_pgm.IsLinked())
     {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cout << "Unable to compile/link/validate shader programs" << "\n";
+        std::cout << shdr_pgm.GetLog() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
-
-    //compile fragment shader
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    //check if compile correctly
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    //program object
-    Program = glCreateProgram();
-
-    //attach shaders and link
-    glAttachShader(Program, vertexShader);
-    glAttachShader(Program, fragmentShader);
-    glLinkProgram(Program);
-
-    //check if linking failed
-    glGetProgramiv(Program, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(Program, 512, NULL, infoLog);
-        std::cout << "linking failed";
-    }
-
-    //delete shaders
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    glUseProgram(Program);
 }
 
 void Graphic::CreatObject(const char* file_name_input, glm::vec2 position_input, glm::vec2 scale_input, GLfloat rotation_input, std::string name) {
@@ -238,8 +185,17 @@ void Graphic::CreatObject(const char* file_name_input, glm::vec2 position_input,
     }
     else {
         std::cout << "Image" << name << "loaded with a width of " << image.image_width << "  and a height of " << image.image_height << " " << std::endl;
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.image_width, image.image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.image_data);
-        glGenerateMipmap(GL_TEXTURE_2D);
+        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.image_width, image.image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.image_data);
+        //glGenerateMipmap(GL_TEXTURE_2D);
+
+        GLuint texobj_hdl;
+        // define and initialize a handle to texture object that will
+        // encapsulate two-dimensional textures
+        glCreateTextures(GL_TEXTURE_2D, 1, &texobj_hdl);
+        // allocate GPU storage for texture image data loaded from file
+        glTextureStorage2D(texobj_hdl, 1, GL_RGBA8, image.image_width, image.image_height);
+        // copy image data from client memory to GPU texture buffer memory
+        glTextureSubImage2D(texobj_hdl, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, image.image_data);
     }
     Object object(image, position_input, scale_input, rotation_input, name);
     all_objects.push_back(object);
@@ -259,8 +215,6 @@ void Graphic::update() {
     sstr << std::fixed << std::setprecision(2) << Graphic::title << " | " << Graphic::fps;
     glfwSetWindowTitle(Graphic::ptr_window, sstr.str().c_str());
 
-
-    glUseProgram(Program);
    
 }
 
@@ -275,6 +229,10 @@ void Graphic::draw() {
     for (auto texture : ptr_tex) {
      
         glBindTexture(GL_TEXTURE_2D, texture);
+        glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        shdr_pgm.Use();
+        GLuint tex_loc = glGetUniformLocation(shdr_pgm.GetHandle(), "uTex2d");
+        glUniform1i(tex_loc, 3);
         glBindVertexArray(vaoid);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         
@@ -320,24 +278,3 @@ void Graphic::update_time(double fps_calc_interval) {
     }
 }
 
-//void Graphic::loadPicture() {
-//    const char* image_file = "Picture/img_1.png";  
-//    int  image_channels;
-//    image_data = stbi_load(image_file, &image_width, &image_height, &image_channels, STBI_rgb_alpha);
-//    if (!image_data) {
-//        std::cerr << "Failed to load image: " << image_file << std::endl;
-//    }
-//}
-
-//void Graphic::RenderPNGImage(unsigned char* image_data, int img_width, int img_height) {
-//   
-//    glViewport(0, 0, width, height);
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//    glOrtho(0, width, 0, height, -1, 1);
-//    glMatrixMode(GL_MODELVIEW);
-//    glLoadIdentity();
-//
-//    
-//    glDrawPixels(img_width, img_height, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
-//}

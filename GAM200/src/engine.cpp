@@ -5,35 +5,33 @@ Gamestate Engine::gamestate = Gamestate::start;
 
 void Engine::init() {
     
-    if (!Graphic::init(1920, 1080, "Window")) {
-        std::cout << "Unable to create window" << std::endl;
+    if (!GLHelper::init(1920, 1080, "GAME")) {
+        std::cout << "Unable to create OpenGL context" << std::endl;
         std::exit(EXIT_FAILURE);
     }
+
+    GLHelper::print_specs();
+    GLApp::init();
 
 }
 
 void Engine::update(){
-    // process events if any associated with input devices
+    
     glfwPollEvents();
-
-    // main loop computes fps and other time related stuff once for all apps ...
-    Graphic::update_time(1.0);
-    // animate scene
-    Graphic::update();
-    if(glfwWindowShouldClose(Graphic::ptr_window)){
-		gamestate = Gamestate::end;
-	}
+    GLHelper::update_time(1.0);
+    GLApp::update();
 }
 
 void Engine::draw() {
-    // render scene
-    Graphic::draw();
+    
+    GLApp::draw();
 
-    // swap buffers: front <-> back
-    // GLApp::ptr_window is handle to window that defines the OpenGL context
-    glfwSwapBuffers(Graphic::ptr_window);
+    glfwSwapBuffers(GLHelper::ptr_window);
 }
 
 void Engine::cleanup() {
-    Graphic::cleanup();
+    
+    GLApp::cleanup();
+
+    GLHelper::cleanup();
 }
