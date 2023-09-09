@@ -1,6 +1,5 @@
 #include "Mat3.h"
 #include "Vec2.h"
-
 #include <cmath>
 
 Mat3::Mat3(const float* pArr)

@@ -1,14 +1,12 @@
 #pragma once
-class Vec2
+struct Vec2
 {
-public:
 	float x, y;
 
 	// Constructors
 	Vec2() : x(0.0f), y(0.0f) {}
 	Vec2(float _x, float _y);
 
-	// Do not change the following
 	Vec2& operator=(const Vec2& rhs) = default;
 	Vec2(const Vec2& rhs) = default;
 

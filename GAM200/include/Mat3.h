@@ -2,9 +2,8 @@
 
 #include "Vec2.h"
 
-class Mat3
+struct Mat3
 {
-public:
 	union {
 		struct
 		{
@@ -24,7 +23,6 @@ public:
 		float _20, float _21, float _22);
 	Mat3& operator=(const Mat3& rhs);
 
-	//Do not change the following
 	Mat3(const Mat3& rhs) = default;
 
 	// Assignment operators
