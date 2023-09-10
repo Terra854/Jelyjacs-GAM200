@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
-
+#include "input.h"
 /*  
 ----------------------------------------------------------------------------- */
 GLint Graphic::width;
@@ -54,13 +54,16 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
     // set callback for events associated with window size changes; keyboard;
    // mouse buttons, cursor position, and scroller
     glfwSetFramebufferSizeCallback(Graphic::ptr_window, Graphic::fbsize_cb);
-    glfwSetKeyCallback(Graphic::ptr_window, Graphic::key_cb);
-    glfwSetMouseButtonCallback(Graphic::ptr_window, Graphic::mousebutton_cb);
-    glfwSetCursorPosCallback(Graphic::ptr_window, Graphic::mousepos_cb);
-    glfwSetScrollCallback(Graphic::ptr_window, Graphic::mousescroll_cb);
+    //glfwSetKeyCallback(Graphic::ptr_window, Graphic::key_cb);
+    //glfwSetMouseButtonCallback(Graphic::ptr_window, Graphic::mousebutton_cb);
+    //glfwSetCursorPosCallback(Graphic::ptr_window, Graphic::mousepos_cb);
+    //glfwSetScrollCallback(Graphic::ptr_window, Graphic::mousescroll_cb);
 
     // this is the default setting ...
     glfwSetInputMode(Graphic::ptr_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+    //set callbacks for input
+    input::Init(Graphic::ptr_window);
 
     // initialize OpenGL (and extension) function loading library
     GLenum err = glewInit();
