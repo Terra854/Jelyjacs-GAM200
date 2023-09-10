@@ -7,7 +7,8 @@ enum class KEY
 	s,
 	d,
 	mouseL,
-	mouseR
+	mouseR,
+	total
 };
 
 namespace input

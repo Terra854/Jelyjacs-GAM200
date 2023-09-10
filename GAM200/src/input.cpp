@@ -2,7 +2,7 @@
 
 //refer to input.h for input functions interface
 
-namespace//anonymous namespace for internal linage
+namespace
 {
 	struct BUTTON
 	{
@@ -22,13 +22,7 @@ namespace//anonymous namespace for internal linage
 		double x;
 		double y;
 	};
-
-	BUTTON w{};
-	BUTTON a{};
-	BUTTON s{};
-	BUTTON d{};
-	BUTTON mouseL{};
-	BUTTON mouseR{};
+	BUTTON buttons[static_cast<int>(KEY::total)]{};
 	MOUSE mouse{};
 }
 
@@ -67,31 +61,33 @@ void BUTTON::SetKeyState(int action)
 	}
 }
 
+int at(KEY index)
+{
+	return static_cast<int>(index);
+}
+
 void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
 {
 	switch (key)
 	{
 	case GLFW_KEY_W:
 	{
-		w.SetKeyState(action);
+		buttons[at(KEY::w)].SetKeyState(action);
 	}
 	break;
 	case GLFW_KEY_A:
 	{
-		a.SetKeyState(action);
-
+		buttons[at(KEY::a)].SetKeyState(action);
 	}
 	break;
 	case GLFW_KEY_S:
 	{
-		s.SetKeyState(action);
-
+		buttons[at(KEY::s)].SetKeyState(action);
 	}
 	break;
 	case GLFW_KEY_D:
 	{
-		d.SetKeyState(action);
-
+		buttons[at(KEY::d)].SetKeyState(action);
 	}
 	}
 	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
@@ -106,12 +102,12 @@ void MouseButtonCallBack(GLFWwindow* pWin, int button, int action, int mod)
 	{
 	case GLFW_MOUSE_BUTTON_1:
 	{
-		mouseL.SetKeyState(action);
+		buttons[at(KEY::mouseL)].SetKeyState(action);
 	}
 	break;
 	case GLFW_MOUSE_BUTTON_2:
 	{
-		mouseR.SetKeyState(action);
+		buttons[at(KEY::mouseR)].SetKeyState(action);
 	}
 	}
 }
@@ -129,40 +125,22 @@ void input::Init(GLFWwindow* pWin)
 	glfwSetCursorPosCallback(pWin, MousePosCallBack);
 }
 
-BUTTON& whichKey(KEY key)
-{
-	switch (key)
-	{
-	case KEY::w:
-		return w;
-	case KEY::a:
-		return a;
-	case KEY::s:
-		return s;
-	case KEY::d:
-		return d;
-	case KEY::mouseL:
-		return  mouseL;
-	case KEY::mouseR:
-		return  mouseR;
-	}
-}
 
 bool input::IsPressed(KEY key)
 {
-	return whichKey(key).IsPressed();
+	return buttons[at(key)].IsPressed();
 }
 
 
 bool IsReleased(KEY key)
 {
-	return whichKey(key).IsReleased();
+	return buttons[at(key)].IsReleased();
 }
 
 
 bool input::IsPressedRepeatedly(KEY key)
 {
-	return whichKey(key).IsPressedRepeatedly();
+	return buttons[at(key)].IsPressedRepeatedly();
 }
 
 double input::GetMouseX()
