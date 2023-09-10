@@ -1,46 +1,40 @@
 #include "graphic.h"
-class KEY
+
+enum class KEY
 {
-public:
-	bool IsPressed();
-	bool IsPressedRepeatedly();
-	void SetKeyState(int action);
-private:
-	bool pressed = false;
-	bool released = true;
-	bool pressedPrevFrame = false;
+	w,
+	a,
+	s,
+	d,
+	mouseL,
+	mouseR
 };
-
-class MOUSE
-{
-public:
-	int GetPosX();
-	int GetPosY();
-	void SetMousePos(int x, int y);
-private:
-	int x;
-	int y;
-};
-
-
 
 namespace input
 {
-	extern KEY
-		w,
-		a,
-		s,
-		d,
-		mouseL,
-		mouseR;
-
-	extern MOUSE
-		mouse;
-
-	static void KeyCallBack(GLFWwindow* pwin, int key, int scancode, int action, int mod);
-	static void MouseButtonCallBack(GLFWwindow* pwin, int button, int action, int mod);
-	static void MousePosCallBack(GLFWwindow* pwin, double xpos, double ypos);
-
-	void init(GLFWwindow* pwin);
-
+	/*------------------------------------------------------------------------------------------------------------*/
+	/*!	returns true if key is triggered for the first time after released.
+		If key is held down for more than 1 game loop, return false.
+	*/
+	bool IsPressed(KEY);
+	/*------------------------------------------------------------------------------------------------------------*/
+	/*!	returns true as long as key is held down for more than 1 game loop.
+	*/
+	bool IsPressedRepeatedly(KEY);
+	/*------------------------------------------------------------------------------------------------------------*/
+	/*! returns true if key is not pressed/pressedrepeatedly
+	*/
+	bool IsReleased(KEY);
+	/*------------------------------------------------------------------------------------------------------------*/
+	/*!	returns x position of mouse.
+	*/
+	double GetMouseX();
+	/*------------------------------------------------------------------------------------------------------------*/
+	/*!	returns y position of mouse.
+	*/
+	double GetMouseY();
+	/*------------------------------------------------------------------------------------------------------------*/
+	/*!	for use in graphics.cpp to initialise GLFW callbacks
+	*/
+	void Init(GLFWwindow* pWin);
 }

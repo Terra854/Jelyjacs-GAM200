@@ -84,7 +84,7 @@ bool Graphic::init(GLint w, GLint h, std::string t) {
     setup_quad_vao();
     setup_shdrpgm();
     loadPicture();
-    input::init(Graphic::ptr_window);
+    input::Init(Graphic::ptr_window);
     return true;
 }
 

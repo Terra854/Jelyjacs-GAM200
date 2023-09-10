@@ -9,6 +9,7 @@ int main() {
    
 
    while (Engine::gamestate != Gamestate::end) {
+       
        Engine::update();
        Engine::draw();
       

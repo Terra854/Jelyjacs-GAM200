@@ -1,38 +1,58 @@
 #include "input.h"
 
+//refer to input.h for input functions interface
 
-
-KEY input::w{};
-KEY input::a{};
-KEY input::s{};
-KEY input::d{};
-KEY input::mouseL{};
-KEY input::mouseR{};
-MOUSE input::mouse{};
-
-bool KEY::IsPressed()
+namespace//anonymous namespace for internal linage
 {
-	if (pressed && !pressedPrevFrame)
+	struct BUTTON
 	{
-		pressedPrevFrame = true;
+	public:
+		bool IsPressed();
+		bool IsPressedRepeatedly();
+		bool IsReleased();
+		void SetKeyState(int action);
+	private:
+		bool pressed = false;
+		bool released = true;
+		bool pressedFirstTime = true;
+	};
+
+	struct MOUSE
+	{
+		double x;
+		double y;
+	};
+
+	BUTTON w{};
+	BUTTON a{};
+	BUTTON s{};
+	BUTTON d{};
+	BUTTON mouseL{};
+	BUTTON mouseR{};
+	MOUSE mouse{};
+}
+
+bool BUTTON::IsPressed()
+{
+	if (pressed && pressedFirstTime)
+	{
+		pressedFirstTime = false;
 		return true;
 	}
 	else return false;
 }
 
-bool KEY::IsPressedRepeatedly()
+bool BUTTON::IsReleased()
+{
+	return released;
+}
+
+bool BUTTON::IsPressedRepeatedly()
 {
 	return (pressed && !released);
 }
 
-void MOUSE::SetMousePos(int x , int y)
-{
-	MOUSE::x = x;
-	MOUSE::y = y;
-}
-
-
-void KEY::SetKeyState(int action)
+void BUTTON::SetKeyState(int action)
 {
 	if (GLFW_PRESS == action)
 	{
@@ -43,78 +63,113 @@ void KEY::SetKeyState(int action)
 	{
 		released = true;
 		pressed = false;
-		pressedPrevFrame = false;
+		pressedFirstTime = true;
 	}
 }
 
-
-void input::KeyCallBack(GLFWwindow* pwin, int key, int scancode, int action, int mod)
+void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
 {
 	switch (key)
 	{
 	case GLFW_KEY_W:
 	{
-		input::w.SetKeyState(action);
+		w.SetKeyState(action);
 	}
 	break;
 	case GLFW_KEY_A:
 	{
-		input::a.SetKeyState(action);
+		a.SetKeyState(action);
 
 	}
 	break;
 	case GLFW_KEY_S:
 	{
-		input::s.SetKeyState(action);
+		s.SetKeyState(action);
 
 	}
 	break;
 	case GLFW_KEY_D:
 	{
-		input::d.SetKeyState(action);
+		d.SetKeyState(action);
 
 	}
 	}
 	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
 	{
-		glfwSetWindowShouldClose(pwin, GLFW_TRUE);
+		glfwSetWindowShouldClose(pWin, GLFW_TRUE);
 	}
 }
 
-int MOUSE::GetPosX()
-{
-	return x;
-}
-
-int MOUSE::GetPosY()
-{
-	return y;
-}
-void input::MouseButtonCallBack(GLFWwindow* pwin, int button, int action, int mod)
+void MouseButtonCallBack(GLFWwindow* pWin, int button, int action, int mod)
 {
 	switch (button)
 	{
 	case GLFW_MOUSE_BUTTON_1:
 	{
-		input::mouseL.SetKeyState(action);
-
+		mouseL.SetKeyState(action);
 	}
 	break;
 	case GLFW_MOUSE_BUTTON_2:
 	{
-		input::mouseR.SetKeyState(action);
+		mouseR.SetKeyState(action);
 	}
 	}
 }
 
-void input::MousePosCallBack(GLFWwindow* pwin, double xpos, double ypos)
+void MousePosCallBack(GLFWwindow* pWin, double xpos, double ypos)
 {
-	mouse.SetMousePos(xpos, ypos);
+	mouse.x = xpos;
+	mouse.y = ypos;
 }
 
-void input::init(GLFWwindow* pwin)
+void input::Init(GLFWwindow* pWin)
 {
-	glfwSetKeyCallback(pwin, input::KeyCallBack);
-	glfwSetMouseButtonCallback(pwin, input::MouseButtonCallBack);
-	glfwSetCursorPosCallback(pwin, input::MousePosCallBack);
+	glfwSetKeyCallback(pWin, KeyCallBack);
+	glfwSetMouseButtonCallback(pWin, MouseButtonCallBack);
+	glfwSetCursorPosCallback(pWin, MousePosCallBack);
+}
+
+BUTTON& whichKey(KEY key)
+{
+	switch (key)
+	{
+	case KEY::w:
+		return w;
+	case KEY::a:
+		return a;
+	case KEY::s:
+		return s;
+	case KEY::d:
+		return d;
+	case KEY::mouseL:
+		return  mouseL;
+	case KEY::mouseR:
+		return  mouseR;
+	}
+}
+
+bool input::IsPressed(KEY key)
+{
+	return whichKey(key).IsPressed();
+}
+
+
+bool IsReleased(KEY key)
+{
+	return whichKey(key).IsReleased();
+}
+
+
+bool input::IsPressedRepeatedly(KEY key)
+{
+	return whichKey(key).IsPressedRepeatedly();
+}
+
+double input::GetMouseX()
+{
+	return mouse.x;
+}
+double input::GetMouseY()
+{
+	return mouse.y;
 }
