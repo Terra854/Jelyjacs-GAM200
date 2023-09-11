@@ -94,6 +94,8 @@ void GLApp::init_scene()
 
 
 			std::vector < float > pos_vtx;
+			std::vector < float > clr_vtx;
+			std::vector < float > tex_coor;
 			std::vector < GLushort > gl_tri_primitives;
 
 			GLuint vbo, vao, ebo;
@@ -112,6 +114,20 @@ void GLApp::init_scene()
 						pos_vtx.push_back(float_data);
 					}
 				}
+				if (obj_prefix == 'c')
+				{
+					while (line_sstm_mdl >> float_data)
+					{
+						clr_vtx.push_back(float_data);
+					}
+				}
+				if (obj_prefix == 'x')
+				{
+					while (line_sstm_mdl >> float_data)
+					{
+						tex_coor.push_back(float_data);
+					}
+				}
 				if (obj_prefix == 't')
 				{
 					while (line_sstm_mdl >> glushort_data)
@@ -119,39 +135,48 @@ void GLApp::init_scene()
 						gl_tri_primitives.push_back(glushort_data);
 					}
 					Model.primitive_type = GL_TRIANGLES;
-					}
-					if (obj_prefix == 'f')
-					{
-						while (line_sstm_mdl >> glushort_data)
-						{
-							gl_tri_primitives.push_back(glushort_data);
-						}
-						Model.primitive_type = GL_TRIANGLE_FAN;
-					}
-
 				}
-				// Set VAO
-				glCreateBuffers(1, &vbo);
-				glNamedBufferStorage(vbo, sizeof(float) * pos_vtx.size(), pos_vtx.data(), GL_DYNAMIC_STORAGE_BIT);
-
-				glCreateVertexArrays(1, &vao);
-				glEnableVertexArrayAttrib(vao, 0);
-				glVertexArrayVertexBuffer(vao, 0, vbo, 0, 2 * sizeof(float));
-				glVertexArrayAttribFormat(vao, 0, 2, GL_FLOAT, GL_FALSE, 0);
-				glVertexArrayAttribBinding(vao, 0, 0);
-
-				glCreateBuffers(1, &ebo);
-				glNamedBufferStorage(ebo, sizeof(GLushort) * gl_tri_primitives.size(), gl_tri_primitives.data(), GL_DYNAMIC_STORAGE_BIT);
-				glVertexArrayElementBuffer(vao, ebo);
-				glBindVertexArray(0);
-
-				Model.vaoid = vao;
-				Model.primitive_cnt = gl_tri_primitives.size();
-				Model.draw_cnt = gl_tri_primitives.size();
-
-				models[model_name] = Model;
-				Object.mdl_ref = models.find(model_name);
 			}
+				// Set VAO
+
+			
+			glCreateBuffers(1, &vbo);
+			glNamedBufferStorage(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size() + sizeof(glm::vec2) * tex_coor.size(), nullptr, GL_DYNAMIC_STORAGE_BIT);
+			glNamedBufferSubData(vbo, 0, sizeof(glm::vec2) * pos_vtx.size(), pos_vtx.data());
+			glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3) * clr_vtx.size(), clr_vtx.data());
+			glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(),
+				sizeof(glm::vec2) * tex_coor.size(), tex_coor.data());
+
+			
+			glCreateVertexArrays(1, &vao);
+
+			glEnableVertexArrayAttrib(vao, 0);
+			glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(glm::vec2));
+			glVertexArrayAttribFormat(vao, 0, 2, GL_FLOAT, GL_FALSE, 0);
+			glVertexArrayAttribBinding(vao, 0, 0);
+
+			glEnableVertexArrayAttrib(vao, 1);
+			glVertexArrayVertexBuffer(vao, 1, vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3));
+			glVertexArrayAttribFormat(vao, 1, 3, GL_FLOAT, GL_FALSE, 0);
+			glVertexArrayAttribBinding(vao, 1, 1);
+
+			glEnableVertexArrayAttrib(vao, 2);
+			glVertexArrayVertexBuffer(vao, 2, vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(), sizeof(glm::vec2));
+			glVertexArrayAttribFormat(vao, 2, 2, GL_FLOAT, GL_FALSE, 0);
+			glVertexArrayAttribBinding(vao, 2, 2);
+
+			glCreateBuffers(1, &ebo);
+			glNamedBufferStorage(ebo, sizeof(GLushort) * gl_tri_primitives.size(), gl_tri_primitives.data(), GL_DYNAMIC_STORAGE_BIT);
+			glVertexArrayElementBuffer(vao, ebo);
+			glBindVertexArray(0);
+
+			Model.vaoid = vao;
+			Model.primitive_cnt = gl_tri_primitives.size();
+			std::cout<< "primitive_cnt: " << Model.primitive_cnt << std::endl;
+			Model.draw_cnt = gl_tri_primitives.size();
+			models[model_name] = Model;
+			Object.mdl_ref = models.find(model_name);
+		}
 
 		std::cout << "model name: " << model_name << std::endl;
 
@@ -345,11 +370,8 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 void GLApp::GLObject::draw() const
 {
 	glBindTextureUnit(6, tex_ref->second);
-	static int i = 1;
-	if (i == 1) {
-		i++;
-		std::cout << "draw " << tex_ref->first << std::endl;
-	}
+	glBindTexture(GL_TEXTURE_2D, tex_ref->second);
+	glTextureSubImage2D(tex_ref->second, 0, 0, 0, GLHelper::width, GLHelper::height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	// load shader program in use by this object
 	shd_ref->second.Use();
 	// bind VAO of this object's model
@@ -360,9 +382,9 @@ void GLApp::GLObject::draw() const
 
 	// tell fragment shader sampler uTex2d will use texture image unit 6
 	GLuint tex_loc = glGetUniformLocation(mdl_ref->second.shdr_pgm.GetHandle(), "uTex2d");
-	glUniform1i(tex_loc, 6);
+	glUniform1i(tex_loc, 3);
 	// call glDrawElements with appropriate arguments
-	glDrawElements(mdl_ref->second.primitive_type, mdl_ref->second.draw_cnt, GL_UNSIGNED_SHORT, NULL);
+	glDrawElements(mdl_ref->second.primitive_type, mdl_ref->second.draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);

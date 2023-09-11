@@ -28,8 +28,8 @@ struct GLApp
 	// container for shader programs and helper function(s) ...
 	struct GLModel
 	{
-		GLenum		primitive_type{ 0 };		// which OpenGL primitive to be rendered?
-		GLuint		primitive_cnt{ 0 };			// added for tutorial 2
+		GLenum		primitive_type{ GL_TRIANGLES };		// which OpenGL primitive to be rendered?
+		GLuint		primitive_cnt{  };			// added for tutorial 2
 		GLuint		vaoid{ 0 };					// same as tutorial 1
 		GLuint		draw_cnt{ 0 };				// added for tutorial 2
 		GLSLShader	shdr_pgm;
