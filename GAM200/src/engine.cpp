@@ -27,11 +27,10 @@ void Engine::update(){
     glfwPollEvents();
     GLHelper::update_time(1.0);
 
-    GLApp::objects["object1"].scaling = { 0.5f, 0.2f };
+    
     GLApp::objects["object1"].position = { x,y };
-
-    GLApp::objects["object2"].scaling = { 0.5f, 0.2f };
-    GLApp::objects["object2"].position = { x,y };
+    
+    GLApp::objects["object2"].position = { -x, -y };
     GLApp::update();
     
 

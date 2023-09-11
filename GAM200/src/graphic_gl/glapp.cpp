@@ -38,6 +38,13 @@ void GLApp::init ()
 	glViewport ( 0 , 0 , w , h );
 	
 	init_scene();
+	
+	for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
+	{
+		std::cout << "draw " << obj->first << "orentation" << obj->second.orientation << std::endl;
+		
+		
+	}
 }
 
 void GLApp::init_scene()
@@ -184,6 +191,7 @@ void GLApp::init_scene()
 		std::istringstream line_model_obj_num{ line };
 		std::string model_object;
 		line_model_obj_num >> model_object;
+
 		std::cout << "object: " << model_object << std::endl;
 
 		// line3 object texture
@@ -222,7 +230,7 @@ void GLApp::init_scene()
 			insert_shdrpgm(object_shader_program, object_shader_vertex, object_shader_fragment);
 			Object.shd_ref = shdrpgms.find(object_shader_program);
 		}
-		objects[model_object] = Object;
+		
 		std::cout << "shader program: " << object_shader_program << std::endl;
 
 		//line 5 position
@@ -241,8 +249,10 @@ void GLApp::init_scene()
 		getline(ifs, line);
 		std::istringstream line_model_obj_orientation{ line };
 		line_model_obj_orientation >> Object.orientation;
-		Object.orientation = 0.f;
+		Object.orientation *= 3.14159f/180.f;
 		std::cout << "orientation: " << Object.orientation << std::endl;
+
+		objects[model_object] = Object;
 
 	}
 }
@@ -257,7 +267,7 @@ void GLApp::update ( )
 
 void GLApp::GLObject::update()
 {
-	std::cout<< position.x<<position.y << std::endl;
+	//std::cout<< position.x<<position.y << std::endl;
 
 	glm::mat3 Scale
 	{
@@ -267,8 +277,9 @@ void GLApp::GLObject::update()
 	};
 
 	static int a = 0;
-	if (a == 0) {
-		
+
+	if (a < 2) {
+		std::cout << orientation << std::endl;
 		std::cout<<Scale[0][0] << " " << Scale[0][1] << " " << Scale[0][2] << std::endl;
 		std::cout<<Scale[1][0] << " " << Scale[1][1] << " " << Scale[1][2] << std::endl;
 		std::cout<<Scale[2][0] << " " << Scale[2][1] << " " << Scale[2][2] << std::endl;
@@ -310,11 +321,13 @@ void GLApp::draw ()
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	// clear back buffer as before
 	glClear(GL_COLOR_BUFFER_BIT);
-
+	static int a = 0;
 	// draw all objects
 	for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
 	{
+		if(a<2)std::cout<<"draw "<<obj->first <<"orentation"<<obj->second.orientation << std::endl;
 		obj->second.draw();
+		a++;
 	}
 
 }
@@ -396,8 +409,6 @@ void GLApp::GLObject::draw() const
 	// tell fragment shader sampler uTex2d will use texture image unit 6
 	GLuint tex_loc = glGetUniformLocation(mdl_ref->second.shdr_pgm.GetHandle(), "uTex2d");
 	glUniform1i(tex_loc, 6);
-
-	
 
 	// call glDrawElements with appropriate arguments
 	glDrawElements(mdl_ref->second.primitive_type, mdl_ref->second.draw_cnt, GL_UNSIGNED_SHORT, 0);
