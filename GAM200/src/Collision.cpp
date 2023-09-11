@@ -260,10 +260,10 @@ namespace Collision {
 
 		// Split the AABB into 4 lines representing the 4 edges
 		Line edges[4] = {
-			{ aabb.P0(), aabb.P1()},
-			{ aabb.P1(), aabb.P2()},
-			{ aabb.P2(), aabb.P3()},
-			{ aabb.P3(), aabb.P0()}
+			{ aabb.P0(), aabb.P1() },
+			{ aabb.P1(), aabb.P2() },
+			{ aabb.P2(), aabb.P3() },
+			{ aabb.P3(), aabb.P0() }
 		};
 
 		// Check each edge of the AABB against the provided line segment for collision
