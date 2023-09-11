@@ -14,11 +14,11 @@ layout (location=2) in vec2 aTextureCoordinate;
 layout (location=0) out vec3 vColor;
 layout (location=1) out vec2 vTexCoord;
 
-//uniform mat3 uModel_to_NDC;
+uniform mat3 uModel_to_NDC;
 
 void main() 
 {
-	//gl_Position = vec4(vec2(uModel_to_NDC * vec3(aVertexPosition, 1.f)),0.0, 1.0);
+	gl_Position = vec4(vec2(uModel_to_NDC * vec3(aVertexPosition, 1.f)),0.0, 1.0);
 	gl_Position = vec4(aVertexPosition,0.0, 1.0);
 	vColor = aVertexColor;
 	vTexCoord = aTextureCoordinate;

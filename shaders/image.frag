@@ -9,7 +9,6 @@ The shader performs different operations based on the value of uShaderMode.
 #version 450 core
 
 layout (location=1) in vec2 vTexCoord;
-layout (location=0) in vec3 vInterpColor;
 layout (location=0) out vec4 fFragColor;
 
 

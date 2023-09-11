@@ -23,6 +23,8 @@ struct GLApp
 	static void draw ();
 	static void cleanup ();
 
+	static void init_scene();
+
 	// container for shader programs and helper function(s) ...
 	struct GLModel
 	{
@@ -33,44 +35,39 @@ struct GLApp
 		GLSLShader	shdr_pgm;
 		GLuint 	    texobj{ 0 };
 		const char* texfile{ nullptr };
-		// member functions defined in glapp.cpp
-		//void init(const char*);
-		void setup_vao();
-		void setup_shdrpgm();
-		void update();
-		void draw();
+		
 	};
 	static GLModel mdl;
 	static GLuint setup_texobj(const char*);
-
+	static void insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr);
 	struct GLViewport
 	{
 		GLint x , y;
 		GLsizei width , height;
 	};
 
-	/*struct GLObject
+	struct GLObject
 	{
 		glm::vec2 scaling{ 100.0f, 100.0f };
-		glm::vec2 orientation{ 0 };
+		float orientation;
 		glm::vec2 position{ 0.0f, 0.0f };
-		glm::vec3 color{ 0 };
+		//glm::vec3 color{ 0 };
 		glm::mat3 mdl_xform{ 0 };
 		glm::mat3 mdl_to_ndc_xform{ 0 };
 
 		std::map<std::string, GLApp::GLModel>::iterator mdl_ref;
 		std::map<std::string, GLSLShader>::iterator shd_ref;
+		std::map<std::string, GLuint>::iterator tex_ref;
 
-		void init();
-		void draw() const;
 		void update();
-	};*/
+		void draw() const;
+	};
 
 
 	static std::map<std::string, GLSLShader> shdrpgms; // singleton
 	static std::map<std::string, GLModel> models; // singleton
-	//static std::map<std::string, GLObject> objects; // singleton
-	
+	static std::map<std::string, GLObject> objects; // singleton
+	static std::map<std::string, GLuint> textures;
 };
 
 #endif /* GLAPP_H */
