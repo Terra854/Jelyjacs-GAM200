@@ -86,5 +86,8 @@
     <ClInclude Include="include\Collision.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="include\AABB.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
