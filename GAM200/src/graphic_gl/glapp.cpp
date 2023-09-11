@@ -31,20 +31,14 @@ glm::mat3 trans;
 
 void GLApp::init ()
 {
-	// Part 1: Initialize OpenGL state ...
+	
 	glClearColor ( 1.f , 1.f , 1.f , 1.f );
-	// Part 2: Use the entire window as viewport ...
+	
 	GLint w{ GLHelper::width } , h{ GLHelper::height };
 	glViewport ( 0 , 0 , w , h );
 	
 	init_scene();
 	
-	for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
-	{
-		std::cout << "draw " << obj->first << "orentation" << obj->second.orientation << std::endl;
-		
-		
-	}
 }
 
 void GLApp::init_scene()
@@ -295,9 +289,9 @@ void GLApp::GLObject::update()
 
 	glm::mat3 Translate
 	{
-		1, 0, position.x,
-			0, 1, position.y,
-			0,0, 1
+		1, 0, 0,
+		0, 1, 0,
+		position.x, position.y, 1
 	};
 
 	mdl_to_ndc_xform =  Translate * Rotate *Scale;
@@ -321,15 +315,13 @@ void GLApp::draw ()
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	// clear back buffer as before
 	glClear(GL_COLOR_BUFFER_BIT);
-	static int a = 0;
+	
 	// draw all objects
 	for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
 	{
-		if(a<2)std::cout<<"draw "<<obj->first <<"orentation"<<obj->second.orientation << std::endl;
 		obj->second.draw();
-		a++;
-	}
 
+	}
 }
 
 

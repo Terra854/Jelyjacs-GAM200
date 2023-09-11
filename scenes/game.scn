@@ -3,14 +3,14 @@ square          # name of model
 object1         # name of object1
 test3           # name of texture
 image-shdrpgm ../shaders/image.vert ../shaders/image.frag # names of shader program, vertex and fragment shaders for rendering model square
-0.0 0.0         # position
+0.1 0.2         # position
 0.5 0.8         # scale x-y
 0.1             # orientation factors of object
 square          
 object2        
 img_1
 image-shdrpgm ../shaders/image.vert ../shaders/image.frag 
-0.0 0.0 
+0.3 0.4 
 0.3 0.3
 90.0 
       

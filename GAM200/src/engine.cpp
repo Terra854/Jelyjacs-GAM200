@@ -22,8 +22,8 @@ float x = 0.f;
 float y = 0.f;
 void Engine::update(){
     
-    x += 1.f;
-    y += 1.f;
+    x += 0.01f;
+    y += 0.01f;
     glfwPollEvents();
     GLHelper::update_time(1.0);
 
