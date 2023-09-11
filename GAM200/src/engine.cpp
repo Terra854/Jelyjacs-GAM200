@@ -1,7 +1,10 @@
 #include <engine.h>
 #include <iostream>
 
+//need to use our own math
+#include <glm/gtc/type_ptr.hpp>
 Gamestate Engine::gamestate = Gamestate::start;
+
 
 void Engine::init() {
     
@@ -15,11 +18,23 @@ void Engine::init() {
 
 }
 
+float x = 0.f;
+float y = 0.f;
 void Engine::update(){
     
+    x += 1.f;
+    y += 1.f;
     glfwPollEvents();
     GLHelper::update_time(1.0);
+
+    GLApp::objects["object1"].scaling = { 0.5f, 0.2f };
+    GLApp::objects["object1"].position = { x,y };
+
+    GLApp::objects["object2"].scaling = { 0.5f, 0.2f };
+    GLApp::objects["object2"].position = { x,y };
     GLApp::update();
+    
+
 }
 
 void Engine::draw() {

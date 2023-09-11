@@ -28,7 +28,7 @@ struct GLApp
 	// container for shader programs and helper function(s) ...
 	struct GLModel
 	{
-		GLenum		primitive_type{ GL_TRIANGLES };		// which OpenGL primitive to be rendered?
+		GLenum		primitive_type{ 0 };		// which OpenGL primitive to be rendered?
 		GLuint		primitive_cnt{  };			// added for tutorial 2
 		GLuint		vaoid{ 0 };					// same as tutorial 1
 		GLuint		draw_cnt{ 0 };				// added for tutorial 2
@@ -48,12 +48,12 @@ struct GLApp
 
 	struct GLObject
 	{
-		glm::vec2 scaling{ 100.0f, 100.0f };
+		glm::vec2 scaling{ };
 		float orientation;
-		glm::vec2 position{ 0.0f, 0.0f };
+		glm::vec2 position{ };
 		//glm::vec3 color{ 0 };
-		glm::mat3 mdl_xform{ 0 };
-		glm::mat3 mdl_to_ndc_xform{ 0 };
+		glm::mat3 mdl_xform{ };
+		glm::mat3 mdl_to_ndc_xform{ };
 
 		std::map<std::string, GLApp::GLModel>::iterator mdl_ref;
 		std::map<std::string, GLSLShader>::iterator shd_ref;

@@ -17,10 +17,5 @@ uniform sampler2D uTex2d;
 
 void main () 
 {
-    
-    
         fFragColor = texture(uTex2d, vTexCoord);
-    
-        //fFragColor = vec4 (vInterpColor.x * fFragColor.x ,vInterpColor.y * fFragColor.y,vInterpColor.z * fFragColor.z, fFragColor.a );
-    
 }

@@ -172,7 +172,6 @@ void GLApp::init_scene()
 
 			Model.vaoid = vao;
 			Model.primitive_cnt = gl_tri_primitives.size();
-			std::cout<< "primitive_cnt: " << Model.primitive_cnt << std::endl;
 			Model.draw_cnt = gl_tri_primitives.size();
 			models[model_name] = Model;
 			Object.mdl_ref = models.find(model_name);
@@ -242,7 +241,7 @@ void GLApp::init_scene()
 		getline(ifs, line);
 		std::istringstream line_model_obj_orientation{ line };
 		line_model_obj_orientation >> Object.orientation;
-		Object.orientation *= 3.1425f / 180.0f;
+		Object.orientation = 0.f;
 		std::cout << "orientation: " << Object.orientation << std::endl;
 
 	}
@@ -258,6 +257,8 @@ void GLApp::update ( )
 
 void GLApp::GLObject::update()
 {
+	std::cout<< position.x<<position.y << std::endl;
+
 	glm::mat3 Scale
 	{
 		scaling.x, 0, 0,
@@ -265,7 +266,14 @@ void GLApp::GLObject::update()
 			0, 0, 1
 	};
 
-	
+	static int a = 0;
+	if (a == 0) {
+		
+		std::cout<<Scale[0][0] << " " << Scale[0][1] << " " << Scale[0][2] << std::endl;
+		std::cout<<Scale[1][0] << " " << Scale[1][1] << " " << Scale[1][2] << std::endl;
+		std::cout<<Scale[2][0] << " " << Scale[2][1] << " " << Scale[2][2] << std::endl;
+		a++;
+	}
 
 	glm::mat3 Rotate
 	{
@@ -276,21 +284,26 @@ void GLApp::GLObject::update()
 
 	glm::mat3 Translate
 	{
-		1, 0, 0,
-			0, 1, 0,
-			position.x, position.y, 1
+		1, 0, position.x,
+			0, 1, position.y,
+			0,0, 1
 	};
 
-	mdl_to_ndc_xform =  Translate * Rotate * Scale;
-
+	mdl_to_ndc_xform =  Translate * Rotate *Scale;
+	int i = 0;
+	if(i== 1)
+	{
+		std::cout << mdl_to_ndc_xform[0][0] << " " << mdl_to_ndc_xform[0][1] << " " << mdl_to_ndc_xform[0][2] << std::endl;
+		std::cout << mdl_to_ndc_xform[1][0] << " " << mdl_to_ndc_xform[1][1] << " " << mdl_to_ndc_xform[1][2] << std::endl;
+		std::cout << mdl_to_ndc_xform[2][0] << " " << mdl_to_ndc_xform[2][1] << " " << mdl_to_ndc_xform[2][2] << std::endl;
+		i++;
+	}
+	
 }
 void GLApp::draw ()
 {
 	std::stringstream ss;
-	ss << std::fixed;
-
-	ss << std::fixed;
-	ss.precision(2);
+	ss << std::fixed << ss.precision(2) ;
 
 	glfwSetWindowTitle(GLHelper::ptr_window, ss.str().c_str());
 
@@ -382,7 +395,10 @@ void GLApp::GLObject::draw() const
 
 	// tell fragment shader sampler uTex2d will use texture image unit 6
 	GLuint tex_loc = glGetUniformLocation(mdl_ref->second.shdr_pgm.GetHandle(), "uTex2d");
-	glUniform1i(tex_loc, 3);
+	glUniform1i(tex_loc, 6);
+
+	
+
 	// call glDrawElements with appropriate arguments
 	glDrawElements(mdl_ref->second.primitive_type, mdl_ref->second.draw_cnt, GL_UNSIGNED_SHORT, 0);
 

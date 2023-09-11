@@ -1,4 +1,3 @@
-#include <graphic.h>
 #include <glhelper.h>
 #include <glapp.h>
 #include <iostream>
