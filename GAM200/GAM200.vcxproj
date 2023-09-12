@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)Assest;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)Assest;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -148,7 +148,9 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClCompile Include="src\Assets Manager\file_reader.cpp" />
     <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\engine.cpp" />
-    <ClCompile Include="src\graphic.cpp" />
+    <ClCompile Include="src\graphic_gl\glapp.cpp" />
+    <ClCompile Include="src\graphic_gl\glhelper.cpp" />
+    <ClCompile Include="src\graphic_gl\glslshader.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mat3.cpp" />
@@ -160,7 +162,9 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClInclude Include="include\Circle.h" />
     <ClInclude Include="include\Collision.h" />
     <ClInclude Include="include\engine.h" />
-    <ClInclude Include="include\graphic.h" />
+    <ClInclude Include="include\Graphic_gl\glapp.h" />
+    <ClInclude Include="include\Graphic_gl\glhelper.h" />
+    <ClInclude Include="include\Graphic_gl\glslshader.h" />
     <ClInclude Include="include\input.h" />
     <ClInclude Include="include\Line.h" />
     <ClInclude Include="include\Mat3.h" />

@@ -1,39 +1,51 @@
 #include <engine.h>
 #include <iostream>
 
+//need to use our own math
+#include <glm/gtc/type_ptr.hpp>
 Gamestate Engine::gamestate = Gamestate::start;
+
 
 void Engine::init() {
     
-    if (!Graphic::init(1600, 900, "Window")) {
-        std::cout << "Unable to create window" << std::endl;
+    if (!GLHelper::init(1920, 1080, "GAME")) {
+        std::cout << "Unable to create OpenGL context" << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
+    GLHelper::print_specs();
+    GLApp::init();
+
 }
 
+float x = 0.f;
+float y = 0.f;
 void Engine::update(){
-    // process events if any associated with input devices
+    
+    x += 0.01f;
+    y += 0.01f;
     glfwPollEvents();
-    // main loop computes fps and other time related stuff once for all apps ...
-    Graphic::update_time(1.0);
-    // animate scene
-    Graphic::update();
-    if(glfwWindowShouldClose(Graphic::ptr_window)){
-		gamestate = Gamestate::end;
-	}
+    GLHelper::update_time(1.0);
+
+    
+    GLApp::objects["object1"].position = { x,y };
+    
+    GLApp::objects["object2"].position = { -x, -y };
+    GLApp::update();
+    
+
 }
 
 void Engine::draw() {
-    // render scene
-    Graphic::draw();
+    
+    GLApp::draw();
 
-    // swap buffers: front <-> back
-    // GLApp::ptr_window is handle to window that defines the OpenGL context
-    glfwSwapBuffers(Graphic::ptr_window);
+    glfwSwapBuffers(GLHelper::ptr_window);
 }
 
 void Engine::cleanup() {
-    Graphic::cleanup();
-	
+    
+    GLApp::cleanup();
+
+    GLHelper::cleanup();
 }

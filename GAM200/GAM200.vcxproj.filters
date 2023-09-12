@@ -13,24 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Assets Manager">
-      <UniqueIdentifier>{9a3ea55b-1fb4-4b96-8404-0974a0e77d01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Assets Manager">
-      <UniqueIdentifier>{b007e69c-a1e2-4717-9cbc-806f43909e1b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Math">
-      <UniqueIdentifier>{67e1cd7e-3dc5-40f5-bf1e-4cde9f4b56b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Math">
-      <UniqueIdentifier>{56b45e39-df7d-415a-b956-e3630e6f544b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine.cpp">
@@ -39,55 +24,31 @@
     <ClCompile Include="src\input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics.cpp">
+    <ClCompile Include="src\graphic_gl\glapp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Assets Manager\file_reader.cpp">
-      <Filter>Source Files\Assets Manager</Filter>
+    <ClCompile Include="src\graphic_gl\glhelper.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vec2.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Mat3.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Collision.cpp">
-      <Filter>Source Files\Math</Filter>
+    <ClCompile Include="src\graphic_gl\glslshader.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\graphic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\physics.h">
+    <ClInclude Include="include\Graphic_gl\glapp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Assets Manager\file_reader.h">
-      <Filter>Header Files\Assets Manager</Filter>
+    <ClInclude Include="include\Graphic_gl\glhelper.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vec2.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Mat3.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Line.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Circle.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Collision.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AABB.h">
-      <Filter>Header Files\Math</Filter>
+    <ClInclude Include="include\Graphic_gl\glslshader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
