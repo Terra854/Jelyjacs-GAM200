@@ -14,7 +14,7 @@ pointers to OpenGL implementations.
 ----------------------------------------------------------------------------- */
 #include <glhelper.h>
 #include <iostream>
-
+#include "input.h"
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
 // static data members declared in GLHelper
@@ -25,16 +25,7 @@ GLdouble GLHelper::delta_time;
 std::string GLHelper::title;
 GLFWwindow* GLHelper::ptr_window;
 
-//kay statement for H,K,Z,U,V,T,M,A
-GLboolean GLHelper::keystateH = GL_FALSE;
-GLboolean GLHelper::keystateK = GL_FALSE;
-GLboolean GLHelper::keystateZ = GL_FALSE;
-GLboolean GLHelper::keystateU = GL_FALSE;
-GLboolean GLHelper::keystateV = GL_FALSE;
-GLboolean GLHelper::keystateT = GL_FALSE;
-GLboolean GLHelper::keystateM = GL_FALSE;
-GLboolean GLHelper::keystateA = GL_FALSE;
-GLboolean GLHelper::mouseLeft = GL_FALSE;
+
 /*  _________________________________________________________________________ */
 /*! init
 
@@ -91,10 +82,7 @@ bool GLHelper::init(GLint w, GLint h, std::string t) {
   glfwMakeContextCurrent(GLHelper::ptr_window);
 
   glfwSetFramebufferSizeCallback(GLHelper::ptr_window, GLHelper::fbsize_cb);
-  glfwSetKeyCallback(GLHelper::ptr_window, GLHelper::key_cb);
-  glfwSetMouseButtonCallback(GLHelper::ptr_window, GLHelper::mousebutton_cb);
-  glfwSetCursorPosCallback(GLHelper::ptr_window, GLHelper::mousepos_cb);
-  glfwSetScrollCallback(GLHelper::ptr_window, GLHelper::mousescroll_cb);
+  input::Init(GLHelper::ptr_window);
 
   // this is the default setting ...
   glfwSetInputMode(GLHelper::ptr_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -161,180 +149,6 @@ This function is called when keyboard buttons are pressed.
 When the ESC key is pressed, the close flag of the window is set.
 when P key is pressed, change stat of keystateP
 */
-void GLHelper::key_cb(GLFWwindow *pwin, int key, int scancode, int action, int mod) {
-    (void)mod;
-    (void)scancode;
-  if (GLFW_PRESS == action) {
-#ifdef _DEBUG
-    std::cout << "Key pressed" << std::endl;
-#endif
-  } else if (GLFW_REPEAT == action) {
-#ifdef _DEBUG
-    std::cout << "Key repeatedly pressed" << std::endl;
-#endif
-  } else if (GLFW_RELEASE == action) {
-#ifdef _DEBUG
-    std::cout << "Key released" << std::endl;
-#endif
-  }
-
-  if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action) {
-    glfwSetWindowShouldClose(pwin, GLFW_TRUE);
-  }
-  if (GLFW_PRESS == action)
-  {
-      if (GLFW_KEY_ESCAPE == key)
-      {
-          glfwSetWindowShouldClose(pwin, GLFW_TRUE);
-      }
-
-      keystateH = (key == GLFW_KEY_H) ? GL_TRUE : GL_FALSE;
-      keystateK = (key == GLFW_KEY_K) ? GL_TRUE : GL_FALSE;
-      keystateZ = (key == GLFW_KEY_Z) ? GL_TRUE : GL_FALSE;
-      keystateU = (key == GLFW_KEY_U) ? GL_TRUE : GL_FALSE;
-      keystateV = (key == GLFW_KEY_V) ? GL_TRUE : GL_FALSE;
-      keystateT = (key == GLFW_KEY_T) ? GL_TRUE : GL_FALSE;
-      keystateM = (key == GLFW_KEY_M) ? GL_TRUE : GL_FALSE;
-      keystateA = (key == GLFW_KEY_A) ? GL_TRUE : GL_FALSE;
-  }
-  else if (GLFW_REPEAT == action)
-  {
-      // key state was and is being pressed
-      keystateV = GL_FALSE;
-      keystateT = GL_FALSE;
-      keystateM = GL_FALSE;
-      keystateA = GL_FALSE;
-  }
-  else if (GLFW_RELEASE == action)
-  {
-      // key start changes from pressed to released
-      // key start changes from pressed to released
-      keystateV = GL_FALSE;
-      keystateH = GL_FALSE;
-      keystateK = GL_FALSE;
-      keystateZ = GL_FALSE;
-      keystateU = GL_FALSE;
-      keystateT = GL_FALSE;
-      keystateM = GL_FALSE;
-      keystateA = GL_FALSE;
-  }
-}
-
-/*  _________________________________________________________________________*/
-/*! mousebutton_cb
-
-@param GLFWwindow*
-Handle to window that is receiving event
-
-@param int
-the mouse button that was pressed or released
-GLFW_MOUSE_BUTTON_LEFT and GLFW_MOUSE_BUTTON_RIGHT specifying left and right
-mouse buttons are most useful
-
-@parm int
-action is either GLFW_PRESS or GLFW_RELEASE
-
-@parm int
-bit-field describing which modifier keys (shift, alt, control)
-were held down
-
-@return none
-
-This function is called when mouse buttons are pressed.
-*/
-void GLHelper::mousebutton_cb(GLFWwindow *pwin, int button, int action, int mod) {
-    (void)pwin;
-    (void)mod;
-  switch (button) {
-  case GLFW_MOUSE_BUTTON_LEFT:
-#ifdef _DEBUG
-    std::cout << "Left mouse button ";
-#endif
-    break;
-  case GLFW_MOUSE_BUTTON_RIGHT:
-#ifdef _DEBUG
-    std::cout << "Right mouse button ";
-#endif
-    break;
-  }
-  switch (action) {
-  case GLFW_PRESS:
-#ifdef _DEBUG
-    std::cout << "pressed!!!" << std::endl;
-#endif
-    break;
-  case GLFW_RELEASE:
-#ifdef _DEBUG
-    std::cout << "released!!!" << std::endl;
-#endif
-    break;
-  }
-  if (action == GLFW_PRESS)
-  {
-      if (button == GLFW_MOUSE_BUTTON_LEFT)
-      {
-          mouseLeft = GL_TRUE;
-      }
-  }
-  else if (action == GLFW_RELEASE)
-  {
-      if (button == GLFW_MOUSE_BUTTON_LEFT)
-      {
-          mouseLeft = GL_FALSE;
-      }
-  }
-}
-
-/*  _________________________________________________________________________*/
-/*! mousepos_cb
-
-@param GLFWwindow*
-Handle to window that is receiving event
-
-@param double
-new cursor x-coordinate, relative to the left edge of the client area
-
-@param double
-new cursor y-coordinate, relative to the top edge of the client area
-
-@return none
-
-This functions receives the cursor position, measured in screen coordinates but
-relative to the top-left corner of the window client area.
-*/
-void GLHelper::mousepos_cb(GLFWwindow *pwin, double xpos, double ypos) {
-    (void)pwin;
-#ifdef _DEBUG
-  //std::cout << "Mouse cursor position: (" << xpos << ", " << ypos << ")" << std::endl;
-#endif
-}
-
-/*  _________________________________________________________________________*/
-/*! mousescroll_cb
-
-@param GLFWwindow*
-Handle to window that is receiving event
-
-@param double
-Scroll offset along X-axis
-
-@param double
-Scroll offset along Y-axis
-
-@return none
-
-This function is called when the user scrolls, whether with a mouse wheel or
-touchpad gesture. Although the function receives 2D scroll offsets, a simple
-mouse scroll wheel, being vertical, provides offsets only along the Y-axis.
-*/
-void GLHelper::mousescroll_cb(GLFWwindow *pwin, double xoffset, double yoffset) {
-    (void)pwin;
-#ifdef _DEBUG
-  std::cout << "Mouse scroll wheel offset: ("
-    << xoffset << ", " << yoffset << ")" << std::endl;
-#endif
-}
-
 /*  _________________________________________________________________________ */
 /*! error_cb
 
