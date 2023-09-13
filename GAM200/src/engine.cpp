@@ -30,7 +30,7 @@ void Engine::update(){
     
     GLApp::objects["object1"].position = { x,y };
     
-    GLApp::objects["object2"].position = { -x, -y };
+    GLApp::objects["object2"].orientation = { x };
     GLApp::update();
     
 

@@ -231,12 +231,16 @@ void GLApp::init_scene()
 		getline(ifs, line);
 		std::istringstream line_model_obj_pos{ line };
 		line_model_obj_pos >> Object.position.x >> Object.position.y;
+		Object.position.x *= 2.f / GLHelper::width;
+		Object.position.y *= 2.f / GLHelper::height;
 		std::cout << "position: " << Object.position.x << " " << Object.position.y << std::endl;
 
 		//line 6 scale
 		getline(ifs, line);
 		std::istringstream line_model_obj_scale{ line };
 		line_model_obj_scale >> Object.scaling.x >> Object.scaling.y;
+		Object.scaling.x /=  GLHelper::width;
+		Object.scaling.y /=  GLHelper::height;
 		std::cout << "scale: " << Object.scaling.x << " " << Object.scaling.y << std::endl;
 
 		//line 7 orientation
@@ -270,16 +274,6 @@ void GLApp::GLObject::update()
 			0, 0, 1
 	};
 
-	static int a = 0;
-
-	if (a < 2) {
-		std::cout << orientation << std::endl;
-		std::cout<<Scale[0][0] << " " << Scale[0][1] << " " << Scale[0][2] << std::endl;
-		std::cout<<Scale[1][0] << " " << Scale[1][1] << " " << Scale[1][2] << std::endl;
-		std::cout<<Scale[2][0] << " " << Scale[2][1] << " " << Scale[2][2] << std::endl;
-		a++;
-	}
-
 	glm::mat3 Rotate
 	{
 		cos(orientation), sin(orientation), 0,
@@ -294,9 +288,9 @@ void GLApp::GLObject::update()
 		position.x, position.y, 1
 	};
 
-	mdl_to_ndc_xform =  Translate * Rotate *Scale;
-	int i = 0;
-	if(i== 1)
+	mdl_to_ndc_xform =  Scale* Translate * Rotate;
+	static int i = 0;
+	if(i< 3)
 	{
 		std::cout << mdl_to_ndc_xform[0][0] << " " << mdl_to_ndc_xform[0][1] << " " << mdl_to_ndc_xform[0][2] << std::endl;
 		std::cout << mdl_to_ndc_xform[1][0] << " " << mdl_to_ndc_xform[1][1] << " " << mdl_to_ndc_xform[1][2] << std::endl;
