@@ -50,6 +50,11 @@ Mat3& Mat3::operator*=(const Mat3& rhs)
 	return *this;
 }
 
+glm::mat3 Mat3::ToGlmMat3()
+{
+	return glm::mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+}
+
 Mat3 operator*(const Mat3& lhs, const Mat3& rhs)
 {
 	float m[3][3]{};

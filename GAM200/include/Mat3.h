@@ -28,6 +28,8 @@ struct Mat3
 	// Assignment operators
 	Mat3& operator*=(const Mat3& rhs);
 
+	// To be used with OpenGL calls only
+	glm::mat3 ToGlmMat3();
 };
 
 Mat3 operator* (const Mat3& lhs, const Mat3& rhs);

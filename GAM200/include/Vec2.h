@@ -1,4 +1,6 @@
 #pragma once
+#include <glm/glm.hpp>
+
 struct Vec2
 {
 	float x, y;
@@ -18,6 +20,9 @@ struct Vec2
 
 	// Unary operators
 	Vec2 operator -() const;
+
+	// To be used with OpenGL calls only
+	glm::vec2 ToGlmVec2();
 };
 
 // Binary operators

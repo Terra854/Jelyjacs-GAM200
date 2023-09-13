@@ -1,4 +1,5 @@
 #include "Vec2.h"
+
 #include <cmath>
 
 Vec2::Vec2(float _x, float _y)
@@ -67,6 +68,10 @@ Vec2 operator*(float lhs, const Vec2& rhs)
 Vec2 operator/(const Vec2& lhs, float rhs)
 {
 	return Vec2(lhs.x / rhs, lhs.y / rhs);
+}
+
+glm::vec2 Vec2::ToGlmVec2() {
+	return glm::vec2(x, y);
 }
 
 Vec2 Vec2Normalize(const Vec2& pVec0)
