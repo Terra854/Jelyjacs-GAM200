@@ -1,4 +1,4 @@
-#include <glhelper.h>
+#include <GLWindow.h>
 #include <glapp.h>
 #include <iostream>
 enum class Gamestate{
@@ -15,3 +15,4 @@ struct Engine {
 	static Gamestate gamestate;
 	
 };
+

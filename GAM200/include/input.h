@@ -1,4 +1,4 @@
-#include "glhelper.h"
+#include "GLWindow.h"
 
 enum class KEY
 {

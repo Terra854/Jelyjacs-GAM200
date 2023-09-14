@@ -6,7 +6,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include <glapp.h>
-#include <glhelper.h>
+#include <GLWindow.h>
 #include <array>
 #include <vector>
 #include <random>

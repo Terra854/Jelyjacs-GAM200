@@ -145,11 +145,12 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core_Engine.cpp" />
     <ClCompile Include="src\Assets Manager\file_reader.cpp" />
     <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\graphic_gl\glapp.cpp" />
-    <ClCompile Include="src\graphic_gl\glhelper.cpp" />
+    <ClCompile Include="src\graphic_gl\GLWindow.cpp" />
     <ClCompile Include="src\graphic_gl\glslshader.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -158,12 +159,14 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClCompile Include="src\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base_System.h" />
+    <ClInclude Include="Core_Engine.h" />
     <ClInclude Include="include\AABB.h" />
     <ClInclude Include="include\Circle.h" />
     <ClInclude Include="include\Collision.h" />
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\Graphic_gl\glapp.h" />
-    <ClInclude Include="include\Graphic_gl\glhelper.h" />
+    <ClInclude Include="include\Graphic_gl\GLWindow.h" />
     <ClInclude Include="include\Graphic_gl\glslshader.h" />
     <ClInclude Include="include\input.h" />
     <ClInclude Include="include\Line.h" />
