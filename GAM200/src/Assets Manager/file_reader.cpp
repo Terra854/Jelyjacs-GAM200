@@ -1,7 +1,7 @@
 
 #include "file_reader.h"
+#include "text_serialization.h"
 #include <iostream>
-#include <fstream>
 #include <vector>
 
 /*
@@ -99,4 +99,76 @@ bool importMapFromFile(char* textfile)
 	mapfile.close();
 	return true;
 }
+
+// using serialization
+bool s_importMapFromFile(std::string textfile)
+{
+	mapdata.clear();
+	TextSerialization stream;
+
+	bool fileopened = stream.openFileRead(textfile);
+	if (!fileopened)
+	{
+		std::cout << "Error opening map file." << std::endl;
+		return false;
+	}
+
+	int mapwidth{};
+	int mapheight{};
+
+	if (stream.isGood())
+	{
+		int id{};
+		stream.readInt(id);
+		mapwidth = id;
+		stream.readInt(id);
+		mapheight = id;
+
+		if (!(mapheight > 0 && mapwidth > 0))
+		{
+			std::cout << "Invalid map format: width and height must be > 0." << std::endl;
+			return false;
+		}
+
+		for (int i{}; i < mapheight; i++)
+		{
+			int data{};
+			std::vector<int> row;
+			for (int j{}; j < mapwidth; j++)
+			{
+				if (stream.isGood())
+				{
+					stream.readInt(id);
+					data = id;
+				}
+				else if (!stream.isGood()) // Possible cause of error if directly before eof, the character is an interger and map dimension matches, text file could add a END at the end if this is a problem
+				{
+					// Not sure if the error exist while using serialization method of reading
+					std::cout << "Dimension Mismatch: width or height in the file did not match." << std::endl;
+					mapdata.clear();
+					return false;
+				}
+				row.push_back(data);
+			}
+			mapdata.push_back(row);
+		}
+	}
+	else
+	{
+		stream.closeFile();
+		return false;
+	}
+
+	stream.closeFile();
+	return true;
+}
+
+
+
+
+
+
+
+
+
 

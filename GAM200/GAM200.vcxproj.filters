@@ -75,6 +75,9 @@
     <ClCompile Include="src\graphic_gl\glslshader.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Assets Manager\text_serialization.cpp">
+      <Filter>Source Files\miscellanous</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine.h">
@@ -120,6 +123,12 @@
       <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
     <ClInclude Include="src\Assets Manager\file_reader.h">
+      <Filter>Header Files\Miscellanous</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets Manager\serialization.h">
+      <Filter>Header Files\Miscellanous</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets Manager\text_serialization.h">
       <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
   </ItemGroup>

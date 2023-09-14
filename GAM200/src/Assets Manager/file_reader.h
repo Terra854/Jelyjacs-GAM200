@@ -1,4 +1,4 @@
-
+#include <string>
 #include <vector>
 
 std::vector<std::vector<int>> mapdata;
@@ -9,6 +9,7 @@ I plan to update them to be the serializer thing (maybe) taught in week 3 but id
 Returns true if successful
 */
 bool importMapFromFile(char* textfile);
+bool s_importMapFromFile(std::string textfile);
 
 
 

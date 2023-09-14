@@ -147,6 +147,7 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
   <ItemGroup>
     <ClCompile Include="Core_Engine.cpp" />
     <ClCompile Include="src\Assets Manager\file_reader.cpp" />
+    <ClCompile Include="src\Assets Manager\text_serialization.cpp" />
     <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\graphic_gl\glapp.cpp" />
@@ -174,6 +175,8 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClInclude Include="include\physics.h" />
     <ClInclude Include="include\Vec2.h" />
     <ClInclude Include="src\Assets Manager\file_reader.h" />
+    <ClInclude Include="src\Assets Manager\serialization.h" />
+    <ClInclude Include="src\Assets Manager\text_serialization.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
