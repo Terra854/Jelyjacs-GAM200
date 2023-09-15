@@ -68,5 +68,6 @@ class Engine {
 };
 
 
+extern GLWindow* window = NULL;
 
 #endif /* GLHELPER_H */

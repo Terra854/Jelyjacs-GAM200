@@ -1,10 +1,10 @@
-3             # number of objects in scene
+1             # number of objects in scene
 square          # name of model 
 object1         # name of object1
-test3           # name of texture
+PlatformTes1080t           # name of texture
 image-shdrpgm ../shaders/image.vert ../shaders/image.frag # names of shader program, vertex and fragment shaders for rendering model square
-100 100         # position 
-320 320         # scale x-y 
+0 0         # position 
+1080 1080        # scale x-y 
 0             # orientation factors of object
 square          
 object2        

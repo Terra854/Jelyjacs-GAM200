@@ -19,8 +19,7 @@ GLFWwindow* GLWindow::ptr_window;
 
 Gamestate Engine::gamestate = Gamestate::start;
 
-GLApp* app;
-GLWindow* window;
+
 /*
 constructor
 */

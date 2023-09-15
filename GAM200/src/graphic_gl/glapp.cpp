@@ -38,8 +38,8 @@ void GLApp::init ()
 	
 	glClearColor ( 1.f , 1.f , 1.f , 1.f );
 	
-	GLint w{ GLWindow::width } , h{ GLWindow::height };
-	glViewport ( 0 , 0 , w , h );
+	
+	glViewport ( 0 , 0 , 1080 , 1920 );
 	
 	init_scene();
 	

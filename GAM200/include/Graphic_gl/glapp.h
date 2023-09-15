@@ -71,5 +71,5 @@ class GLApp
 	static std::map<std::string, GLObject> objects; // singleton
 	static std::map<std::string, GLuint> textures;
 };
-
+extern GLApp* app = NULL;
 #endif /* GLAPP_H */
