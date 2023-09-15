@@ -31,7 +31,7 @@ void CoreEngine::GameLoop() {
 		}
 	}
 }
-void CoreEngine::AddSystem(System_Class* sys) {
+void CoreEngine::AddSystem(ISystems* sys) {
 	Systems.push_back(sys);
 }
 

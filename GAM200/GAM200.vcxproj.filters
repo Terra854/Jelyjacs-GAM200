@@ -19,14 +19,8 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{bb69d62c-8843-4031-9291-f44dab2a2b41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Physics">
-      <UniqueIdentifier>{0d56c313-ee07-47eb-87e4-e91776b0f3cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\miscellanous">
       <UniqueIdentifier>{29294102-023f-41c7-9dcb-a46a6de68236}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics">
-      <UniqueIdentifier>{54ebbb9e-4d84-43db-9cbc-4f6986a9ebf8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{a8568f62-e759-4909-b21c-f3340d531fd3}</UniqueIdentifier>
@@ -36,6 +30,15 @@
     </Filter>
     <Filter Include="Header Files\Miscellanous">
       <UniqueIdentifier>{758d9815-dd52-4d26-ad17-c07274bd847b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{573340c8-c33e-4477-ba9e-212b92108b3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems\Graphics">
+      <UniqueIdentifier>{54ebbb9e-4d84-43db-9cbc-4f6986a9ebf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems\Physics">
+      <UniqueIdentifier>{0d56c313-ee07-47eb-87e4-e91776b0f3cd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -58,10 +61,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Collision.cpp">
-      <Filter>Source Files\Physics</Filter>
+      <Filter>Source Files\Systems\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\physics.cpp">
-      <Filter>Source Files\Physics</Filter>
+      <Filter>Source Files\Systems\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\input.cpp">
       <Filter>Source Files\miscellanous</Filter>
@@ -70,10 +73,10 @@
       <Filter>Source Files\miscellanous</Filter>
     </ClCompile>
     <ClCompile Include="src\graphic_gl\glapp.cpp">
-      <Filter>Source Files\Graphics</Filter>
+      <Filter>Source Files\Systems\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\graphic_gl\glslshader.cpp">
-      <Filter>Source Files\Graphics</Filter>
+      <Filter>Source Files\Systems\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Assets Manager\text_serialization.cpp">
       <Filter>Source Files\miscellanous</Filter>
@@ -101,7 +104,7 @@
     <ClInclude Include="include\Line.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Base_System.h">
+    <ClInclude Include="Interface_System.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core_Engine.h">

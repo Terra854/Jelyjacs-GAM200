@@ -160,7 +160,7 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClCompile Include="src\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Base_System.h" />
+    <ClInclude Include="Interface_System.h" />
     <ClInclude Include="Core_Engine.h" />
     <ClInclude Include="include\AABB.h" />
     <ClInclude Include="include\Circle.h" />
