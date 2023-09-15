@@ -16,8 +16,10 @@
 #include <list>
 
 
-struct GLApp
+class GLApp
 {
+	public:
+		GLApp();
 	static void init ();
 	static void update ();
 	static void draw ();

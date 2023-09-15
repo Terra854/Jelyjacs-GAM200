@@ -25,12 +25,14 @@ objects participating in the application.
 
 
 /*  _________________________________________________________________________ */
-struct GLHelper
+class GLWindow
   /*! GLHelper structure to encapsulate initialization stuff ...
   */
 {
-  static bool init(GLint w, GLint h, std::string t);
-  static void cleanup();
+public:
+	GLWindow(GLint w, GLint h, std::string t);
+	static bool init(GLint w, GLint h, std::string t);
+	static void cleanup();
 
   // callbacks ...
   static void error_cb(int error, char const* description);
@@ -52,7 +54,10 @@ enum class Gamestate {
 	end
 };
 
-struct Engine {
+class Engine {
+	public:
+		Engine();
+
 	static void init();
 	static void update();
 	static void draw();
@@ -62,26 +67,6 @@ struct Engine {
 
 };
 
-/*
-class GLHelper {
-public:
-	GLHelper(GLint w, GLint h, std::string t);
-	~GLHelper();
 
-	// callbacks ...
-	static void error_cb(int error, char const* description);
-	static void fbsize_cb(GLFWwindow* ptr_win, int wwidth, int hheight);
-	// I/O callbacks ...
 
-	static void update_time(double fpsCalcInt = 1.0);
-	static void print_specs();
-private:
-	static GLint width, height;
-	static GLdouble fps;
-	static GLdouble delta_time; // time taken to complete most recent game loop
-	static std::string title;
-	static GLFWwindow* ptr_window;
-
-};
-*/
 #endif /* GLHELPER_H */

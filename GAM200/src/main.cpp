@@ -5,14 +5,15 @@
 #include <thread>
 
 int main() {
-    Engine::init();
+   Engine*engine = new Engine();
+   engine->init();
    const int targetFPS = 60; // Your desired FPS
    const std::chrono::milliseconds frameDuration(1000 / targetFPS);
 
    while (Engine::gamestate != Gamestate::end) {
        auto frameStart = std::chrono::high_resolution_clock::now();
-       Engine::update();
-       Engine::draw();
+       engine->update();
+       engine->draw();
       
        auto frameEnd = std::chrono::high_resolution_clock::now();
        auto frameTime = std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd - frameStart);
@@ -22,5 +23,5 @@ int main() {
        }
    }
   
-   Engine::cleanup();
+   engine->cleanup();
 }

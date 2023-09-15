@@ -1,12 +1,4 @@
 /*!
-@file    GLWindow.cpp
-@author  pghali@digipen.edu, g.chen@digipen.edu
-@date    10/06/2023
-
-This file implements functionality useful and necessary to build OpenGL
-applications including use of external APIs such as GLFW to create a
-window and start up an OpenGL context and use GLEW to extract function 
-pointers to OpenGL implementations.
 
 *//*__________________________________________________________________________*/
 
@@ -18,15 +10,25 @@ pointers to OpenGL implementations.
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
 // static data members declared in GLHelper
-GLint GLHelper::width;
-GLint GLHelper::height;
-GLdouble GLHelper::fps;
-GLdouble GLHelper::delta_time;
-std::string GLHelper::title;
-GLFWwindow* GLHelper::ptr_window;
+GLint GLWindow::width;
+GLint GLWindow::height;
+GLdouble GLWindow::fps;
+GLdouble GLWindow::delta_time;
+std::string GLWindow::title;
+GLFWwindow* GLWindow::ptr_window;
 
 Gamestate Engine::gamestate = Gamestate::start;
 
+GLApp* app;
+GLWindow* window;
+/*
+constructor
+*/
+GLWindow::GLWindow(GLint w, GLint h, std::string t) {
+	GLWindow::width = w;
+	GLWindow::height = h;
+	GLWindow::title = t;
+}
 
 /*  _________________________________________________________________________ */
 /*! init
@@ -35,27 +37,11 @@ Gamestate Engine::gamestate = Gamestate::start;
 @param GLint height
 Dimensions of window requested by program
 
-@param std::string title_str
-String printed to window's title bar
 
-@return bool
-true if OpenGL context and GLEW were successfully initialized.
-false otherwise.
-
-Uses GLFW to create OpenGL context. GLFW's initialization follows from here:
-http://www.glfw.org/docs/latest/quick.html
-a window of size width x height pixels
-and its associated OpenGL context that matches a core profile that is 
-compatible with OpenGL 4.5 and doesn't support "old" OpenGL, has 32-bit RGBA,
-double-buffered color buffer, 24-bit depth buffer and 8-bit stencil buffer 
-with each buffer of size width x height pixels
 */
 
-bool GLHelper::init(GLint w, GLint h, std::string t) {
-    GLHelper::width = w;
-    GLHelper::height = h;
-    GLHelper::title = t;
-
+bool GLWindow::init(GLint w, GLint h, std::string t) {
+ 
     // Part 1
     if (!glfwInit()) {
         std::cout << "GLFW init has failed - abort program!!!" << std::endl;
@@ -63,7 +49,7 @@ bool GLHelper::init(GLint w, GLint h, std::string t) {
     }
 
     // In case a GLFW function fails, an error is reported to callback function
-    glfwSetErrorCallback(GLHelper::error_cb);
+    glfwSetErrorCallback(GLWindow::error_cb);
 
     // Before asking GLFW to create an OpenGL context, we specify the minimum constraints
     // in that context:
@@ -75,20 +61,20 @@ bool GLHelper::init(GLint w, GLint h, std::string t) {
     glfwWindowHint(GLFW_BLUE_BITS, 8); glfwWindowHint(GLFW_ALPHA_BITS, 8);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); // window dimensions are static
 
-    GLHelper::ptr_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-    if (!GLHelper::ptr_window) {
+    GLWindow::ptr_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    if (!window->ptr_window) {
         std::cerr << "GLFW unable to create OpenGL context - abort program\n";
         glfwTerminate();
         return false;
     }
 
-    glfwMakeContextCurrent(GLHelper::ptr_window);
+    glfwMakeContextCurrent(GLWindow::ptr_window);
 
-    glfwSetFramebufferSizeCallback(GLHelper::ptr_window, GLHelper::fbsize_cb);
-    input::Init(GLHelper::ptr_window);
+    glfwSetFramebufferSizeCallback(GLWindow::ptr_window, GLWindow::fbsize_cb);
+    input::Init(GLWindow::ptr_window);
 
     // this is the default setting ...
-    glfwSetInputMode(GLHelper::ptr_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(GLWindow::ptr_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
     // Part 2: Initialize entry points to OpenGL functions and extensions
     GLenum err = glewInit();
@@ -121,7 +107,7 @@ For now, there are no resources allocated by the application program.
 The only task is to have GLFW return resources back to the system and
 gracefully terminate.
 */
-void GLHelper::cleanup() {
+void GLWindow::cleanup() {
     // Part 1
     glfwTerminate();
 }
@@ -167,7 +153,7 @@ Human-readable description of the code
 The error callback receives a human-readable description of the error and
 (when possible) its cause.
 */
-void GLHelper::error_cb(int error, char const* description) {
+void GLWindow::error_cb(int error, char const* description) {
     (void)error;
 #ifdef _DEBUG
     std::cerr << "GLFW error: " << description << std::endl;
@@ -191,7 +177,7 @@ Height in pixels of new window size
 This function is called when the window is resized - it receives the new size
 of the window in pixels.
 */
-void GLHelper::fbsize_cb(GLFWwindow* ptr_win, int wwidth, int hheight) {
+void GLWindow::fbsize_cb(GLFWwindow* ptr_win, int wwidth, int hheight) {
     (void)ptr_win;
 #ifdef _DEBUG
     std::cout << "fbsize_cb getting called!!!" << std::endl;
@@ -213,7 +199,7 @@ to compute:
 1. the interval in seconds between each frame
 2. the frames per second every "fps_calc_interval" seconds
 */
-void GLHelper::update_time(double fps_calc_interval) {
+void GLWindow::update_time(double fps_calc_interval) {
     // get elapsed time (in seconds) between previous and current frames
     static double prev_time = glfwGetTime();
     double curr_time = glfwGetTime();
@@ -232,7 +218,7 @@ void GLHelper::update_time(double fps_calc_interval) {
     fps_calc_interval = (fps_calc_interval < 0.0) ? 0.0 : fps_calc_interval;
     fps_calc_interval = (fps_calc_interval > 10.0) ? 10.0 : fps_calc_interval;
     if (elapsed_time > fps_calc_interval) {
-        GLHelper::fps = count / elapsed_time;
+        GLWindow::fps = count / elapsed_time;
         start_time = curr_time;
         count = 0.0;
     }
@@ -245,7 +231,7 @@ void GLHelper::update_time(double fps_calc_interval) {
 
 Print usefulvinformation about OpenGL context and graphics hardware to standard output
 */
-void GLHelper::print_specs() {
+void GLWindow::print_specs() {
     GLubyte const* str_vendor = glGetString(GL_VENDOR);
     GLubyte const* str_renderer = glGetString(GL_RENDERER);
     GLubyte const* str_version = glGetString(GL_VERSION);
@@ -297,15 +283,19 @@ void GLHelper::print_specs() {
 
 */
 
+Engine::Engine() {
+}
 void Engine::init() {
-
-    if (!GLHelper::init(1920, 1080, "GAME")) {
+    window = new GLWindow(1920, 1080, "GAME");
+    if (!window->init(1920, 1080, "GAME")) {
         std::cout << "Unable to create OpenGL context" << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
-    GLHelper::print_specs();
-    GLApp::init();
+    window->print_specs();
+
+    app = new GLApp();
+    app->init();
 
 }
 
@@ -316,27 +306,27 @@ void Engine::update() {
     x += 0.01f;
     y += 0.01f;
     glfwPollEvents();
-    GLHelper::update_time(1.0);
+    window->update_time(1.0);
 
 
-    GLApp::objects["object1"].position = { x,y };
+    app->objects["object1"].position = { x,y };
 
-    GLApp::objects["object2"].orientation = { x };
-    GLApp::update();
+    app->objects["object2"].orientation = { x };
+    app->update();
 
 
 }
 
 void Engine::draw() {
 
-    GLApp::draw();
+    app->draw();
 
-    glfwSwapBuffers(GLHelper::ptr_window);
+    glfwSwapBuffers(GLWindow::ptr_window);
 }
 
 void Engine::cleanup() {
 
-    GLApp::cleanup();
+    app->cleanup();
 
-    GLHelper::cleanup();
+    window->cleanup();
 }

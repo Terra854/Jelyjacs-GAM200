@@ -29,12 +29,16 @@ GLuint images{ 0 };
 glm::mat3 trans;
 
 
+GLApp::GLApp()
+{
+}
+
 void GLApp::init ()
 {
 	
 	glClearColor ( 1.f , 1.f , 1.f , 1.f );
 	
-	GLint w{ GLHelper::width } , h{ GLHelper::height };
+	GLint w{ GLWindow::width } , h{ GLWindow::height };
 	glViewport ( 0 , 0 , w , h );
 	
 	init_scene();
@@ -231,16 +235,16 @@ void GLApp::init_scene()
 		getline(ifs, line);
 		std::istringstream line_model_obj_pos{ line };
 		line_model_obj_pos >> Object.position.x >> Object.position.y;
-		Object.position.x *= 2.f / GLHelper::width;
-		Object.position.y *= 2.f / GLHelper::height;
+		Object.position.x *= 2.f / GLWindow::width;
+		Object.position.y *= 2.f / GLWindow::height;
 		std::cout << "position: " << Object.position.x << " " << Object.position.y << std::endl;
 
 		//line 6 scale
 		getline(ifs, line);
 		std::istringstream line_model_obj_scale{ line };
 		line_model_obj_scale >> Object.scaling.x >> Object.scaling.y;
-		Object.scaling.x /=  GLHelper::width;
-		Object.scaling.y /=  GLHelper::height;
+		Object.scaling.x /=  GLWindow::width;
+		Object.scaling.y /=  GLWindow::height;
 		std::cout << "scale: " << Object.scaling.x << " " << Object.scaling.y << std::endl;
 
 		//line 7 orientation
@@ -301,10 +305,6 @@ void GLApp::GLObject::update()
 }
 void GLApp::draw ()
 {
-	std::stringstream ss;
-	ss << std::fixed << ss.precision(2) ;
-
-	glfwSetWindowTitle(GLHelper::ptr_window, ss.str().c_str());
 
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	// clear back buffer as before
@@ -383,7 +383,7 @@ void GLApp::GLObject::draw() const
 {
 	glBindTextureUnit(6, tex_ref->second);
 	glBindTexture(GL_TEXTURE_2D, tex_ref->second);
-	glTextureSubImage2D(tex_ref->second, 0, 0, 0, GLHelper::width, GLHelper::height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTextureSubImage2D(tex_ref->second, 0, 0, 0, GLWindow::width, GLWindow::height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	// load shader program in use by this object
 	shd_ref->second.Use();
 	// bind VAO of this object's model
