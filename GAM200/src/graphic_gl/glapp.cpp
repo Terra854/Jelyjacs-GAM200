@@ -27,26 +27,23 @@ GLApp::GLModel GLApp::mdl{};
 GLuint images{ 0 };
 
 glm::mat3 trans;
-
-
+//Global pointer to GLApp
+GLApp* app = NULL;
 GLApp::GLApp()
 {
 }
 
-void GLApp::init ()
+void GLApp::Initialize()
 {
-	
-	glClearColor ( 1.f , 1.f , 1.f , 1.f );
-	
-	
-	glViewport ( 0 , 0 , 1080 , 1920 );
-	
-	init_scene();
-	
-}
 
-void GLApp::init_scene()
-{
+	glClearColor(1.f, 1.f, 1.f, 1.f);
+
+
+	glViewport(0, 0, 1080, 1920);
+	init_scene();
+}
+	//Initialising Scene
+void GLApp::init_scene(){
 	//read file
 	std::ifstream ifs("../scenes/game.scn", std::ios::in);
 	if (!ifs)

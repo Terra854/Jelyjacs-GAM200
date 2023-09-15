@@ -17,9 +17,9 @@ GLdouble GLWindow::delta_time;
 std::string GLWindow::title;
 GLFWwindow* GLWindow::ptr_window;
 
-Gamestate Engine::gamestate = Gamestate::start;
-
-
+//Gamestate Engine::gamestate = Gamestate::start;
+//Global Pointer to Window System
+GLWindow* window = NULL;
 /*
 constructor
 */
@@ -39,12 +39,12 @@ Dimensions of window requested by program
 
 */
 
-bool GLWindow::init(GLint w, GLint h, std::string t) {
- 
+void GLWindow::Initialize() {
+    
     // Part 1
     if (!glfwInit()) {
         std::cout << "GLFW init has failed - abort program!!!" << std::endl;
-        return false;
+        return;
     }
 
     // In case a GLFW function fails, an error is reported to callback function
@@ -64,7 +64,7 @@ bool GLWindow::init(GLint w, GLint h, std::string t) {
     if (!window->ptr_window) {
         std::cerr << "GLFW unable to create OpenGL context - abort program\n";
         glfwTerminate();
-        return false;
+        return;
     }
 
     glfwMakeContextCurrent(GLWindow::ptr_window);
@@ -80,7 +80,7 @@ bool GLWindow::init(GLint w, GLint h, std::string t) {
     if (GLEW_OK != err) {
         std::cerr << "Unable to initialize GLEW - error: "
             << glewGetErrorString(err) << " abort program" << std::endl;
-        return false;
+        return;
     }
     if (GL_VERSION_4_5) {
         std::cout << "Using glew version: " << glewGetString(GLEW_VERSION) << std::endl;
@@ -88,10 +88,9 @@ bool GLWindow::init(GLint w, GLint h, std::string t) {
     }
     else {
         std::cerr << "Driver doesn't support OpenGL 4.5 - abort program" << std::endl;
-        return false;
+        return;
     }
 
-    return true;
 }
 
 
@@ -281,21 +280,8 @@ void GLWindow::print_specs() {
 
 
 */
-
+/*
 Engine::Engine() {
-}
-void Engine::init() {
-    window = new GLWindow(1920, 1080, "GAME");
-    if (!window->init(1920, 1080, "GAME")) {
-        std::cout << "Unable to create OpenGL context" << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-
-    window->print_specs();
-
-    app = new GLApp();
-    app->init();
-
 }
 
 float x = 0.f;
@@ -329,3 +315,4 @@ void Engine::cleanup() {
 
     window->cleanup();
 }
+*/

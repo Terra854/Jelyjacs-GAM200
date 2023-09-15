@@ -11,19 +11,19 @@
 #include <GLFW/glfw3.h>
 #include <GLWindow.h>
 #include <glslshader.h>
-
+#include "engine.h"
 #include <iostream>
 #include <list>
 
 
-class GLApp
+class GLApp : public ISystems
 {
-	public:
-		GLApp();
-	static void init ();
-	static void update ();
-	static void draw ();
-	static void cleanup ();
+public:
+	GLApp();
+	virtual void Initialize();
+	static void update();
+	static void draw();
+	static void cleanup();
 
 	static void init_scene();
 
@@ -37,15 +37,15 @@ class GLApp
 		GLSLShader	shdr_pgm;
 		GLuint 	    texobj{ 0 };
 		const char* texfile{ nullptr };
-		
+
 	};
 	static GLModel mdl;
 	static GLuint setup_texobj(const char*);
 	static void insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr);
 	struct GLViewport
 	{
-		GLint x , y;
-		GLsizei width , height;
+		GLint x, y;
+		GLsizei width, height;
 	};
 
 	struct GLObject
@@ -71,5 +71,5 @@ class GLApp
 	static std::map<std::string, GLObject> objects; // singleton
 	static std::map<std::string, GLuint> textures;
 };
-extern GLApp* app = NULL;
+extern GLApp* app;
 #endif /* GLAPP_H */

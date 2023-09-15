@@ -8,13 +8,14 @@
 int main() {
    CoreEngine*engine = new CoreEngine();
    GLWindow* windows = new GLWindow(1920, 1080, "Game");
-   Graphics* graphics = new Graphics();                                          // @GuoChen your graphics systems nid to match this code
+   GLApp* graphics = new GLApp();                                          // @GuoChen your graphics systems nid to match this code
                                                                                  // @GuoChen Then declare ur window properties
    engine->AddSystem(windows);                                                   // @GuoChen
    engine->AddSystem(graphics);                                                  // @GuoChen
 
    engine->Initialize();
    windows->ActivateWindow();                                                    // @GuoChen Window Class nid this function
+   windows->print_specs();
    engine->GameLoop();
    //const int targetFPS = 60; // Your desired FPS
    //const std::chrono::milliseconds frameDuration(1000 / targetFPS);

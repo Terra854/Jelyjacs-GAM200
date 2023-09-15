@@ -22,6 +22,7 @@ objects participating in the application.
 #include <GLFW/glfw3.h>
 #include <glapp.h>
 #include <string>
+#include "engine.h"
 
 
 /*  _________________________________________________________________________ */
@@ -31,7 +32,9 @@ class GLWindow : public ISystems
 {
 public:
 	GLWindow(GLint w, GLint h, std::string t);
-	static bool init(GLint w, GLint h, std::string t);
+	virtual void Initialize();
+	virtual void Update();
+	static void ActivateWindow();
 	static void cleanup();
 
   // callbacks ...
@@ -41,6 +44,7 @@ public:
   
   static void update_time(double fpsCalcInt = 1.0);
   static void print_specs();
+
 
   static GLint width, height;
   static GLdouble fps;
@@ -53,7 +57,7 @@ enum class Gamestate {
 	start,
 	end
 };
-
+/*
 class Engine {
 	public:
 		Engine();
@@ -66,8 +70,8 @@ class Engine {
 	static Gamestate gamestate;
 
 };
+*/
 
-
-extern GLWindow* window = NULL;
+extern GLWindow* window;
 
 #endif /* GLHELPER_H */
