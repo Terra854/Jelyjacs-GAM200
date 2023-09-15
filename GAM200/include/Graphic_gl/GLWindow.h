@@ -25,7 +25,7 @@ objects participating in the application.
 
 
 /*  _________________________________________________________________________ */
-class GLWindow
+class GLWindow : public ISystems
   /*! GLHelper structure to encapsulate initialization stuff ...
   */
 {

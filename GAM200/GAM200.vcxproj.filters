@@ -54,9 +54,6 @@
     <ClCompile Include="src\Vec2.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Core_Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Collision.cpp">
       <Filter>Source Files\Systems\Physics</Filter>
     </ClCompile>
@@ -78,6 +75,9 @@
     <ClCompile Include="src\Assets Manager\text_serialization.cpp">
       <Filter>Source Files\miscellanous</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core_Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Graphic_gl\GLWindow.h">
@@ -97,12 +97,6 @@
     </ClInclude>
     <ClInclude Include="include\Line.h">
       <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Interface_System.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core_Engine.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Collision.h">
       <Filter>Header Files\Physics</Filter>
@@ -127,6 +121,12 @@
     </ClInclude>
     <ClInclude Include="src\Assets Manager\text_serialization.h">
       <Filter>Header Files\Miscellanous</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core_Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Interface_System.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

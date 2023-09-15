@@ -1,4 +1,4 @@
-#pragma once
+
 
 
 // Core Engine that manage all systems in game. Update and destroying them.
