@@ -1,6 +1,7 @@
 #include <GLWindow.h>
 #include <glapp.h>
 #include <iostream>
+/*
 enum class Gamestate{
 	start,
 	end
@@ -15,4 +16,4 @@ struct Engine {
 	static Gamestate gamestate;
 	
 };
-
+*/

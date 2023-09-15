@@ -20,6 +20,7 @@ objects participating in the application.
 ----------------------------------------------------------------------------- */
 #include <GL/glew.h> // for access to OpenGL API declarations 
 #include <GLFW/glfw3.h>
+#include <glapp.h>
 #include <string>
 
 
@@ -45,6 +46,22 @@ struct GLHelper
   static std::string title;
   static GLFWwindow *ptr_window;
 };
+
+enum class Gamestate {
+	start,
+	end
+};
+
+struct Engine {
+	static void init();
+	static void update();
+	static void draw();
+	static void cleanup();
+
+	static Gamestate gamestate;
+
+};
+
 /*
 class GLHelper {
 public:

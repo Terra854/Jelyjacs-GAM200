@@ -25,6 +25,8 @@ GLdouble GLHelper::delta_time;
 std::string GLHelper::title;
 GLFWwindow* GLHelper::ptr_window;
 
+Gamestate Engine::gamestate = Gamestate::start;
+
 
 /*  _________________________________________________________________________ */
 /*! init
@@ -286,4 +288,55 @@ void GLHelper::print_specs() {
     glGetIntegerv(GL_MAX_VIEWPORT_DIMS, max_viewport_dimensions);
     std::cout << "Maximum Viewport Dimensions: " << max_viewport_dimensions[0] << " x " << max_viewport_dimensions[1] << std::endl;
 
+}
+
+/********************************************************************************
+    Shifted engine.cpp here
+
+
+
+*/
+
+void Engine::init() {
+
+    if (!GLHelper::init(1920, 1080, "GAME")) {
+        std::cout << "Unable to create OpenGL context" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    GLHelper::print_specs();
+    GLApp::init();
+
+}
+
+float x = 0.f;
+float y = 0.f;
+void Engine::update() {
+
+    x += 0.01f;
+    y += 0.01f;
+    glfwPollEvents();
+    GLHelper::update_time(1.0);
+
+
+    GLApp::objects["object1"].position = { x,y };
+
+    GLApp::objects["object2"].orientation = { x };
+    GLApp::update();
+
+
+}
+
+void Engine::draw() {
+
+    GLApp::draw();
+
+    glfwSwapBuffers(GLHelper::ptr_window);
+}
+
+void Engine::cleanup() {
+
+    GLApp::cleanup();
+
+    GLHelper::cleanup();
 }

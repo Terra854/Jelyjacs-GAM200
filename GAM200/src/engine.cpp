@@ -3,6 +3,7 @@
 
 //need to use our own math
 #include <glm/gtc/type_ptr.hpp>
+/*
 Gamestate Engine::gamestate = Gamestate::start;
 
 
@@ -49,3 +50,4 @@ void Engine::cleanup() {
 
     GLHelper::cleanup();
 }
+*/
