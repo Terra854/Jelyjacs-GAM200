@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)Assest;$(SolutionDir)lib\glm-0.9.9.8;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)Assest;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)Assest;$(SolutionDir)lib\glm-0.9.9.8;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)Assest;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -145,15 +145,37 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine.cpp" />
-    <ClCompile Include="src\graphic.cpp" />
+    <ClCompile Include="src\Assets Manager\file_reader.cpp" />
+    <ClCompile Include="src\Assets Manager\text_serialization.cpp" />
+    <ClCompile Include="src\Collision.cpp" />
+    <ClCompile Include="src\Core_Engine.cpp" />
+    <ClCompile Include="src\graphic_gl\glapp.cpp" />
+    <ClCompile Include="src\graphic_gl\GLWindow.cpp" />
+    <ClCompile Include="src\graphic_gl\glslshader.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mat3.cpp" />
+    <ClCompile Include="src\physics.cpp" />
+    <ClCompile Include="src\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Core_Engine.h" />
     <ClInclude Include="include\engine.h" />
-    <ClInclude Include="include\graphic.h" />
+    <ClInclude Include="include\Interface_System.h" />
+    <ClInclude Include="include\AABB.h" />
+    <ClInclude Include="include\Circle.h" />
+    <ClInclude Include="include\Collision.h" />
+    <ClInclude Include="include\Graphic_gl\glapp.h" />
+    <ClInclude Include="include\Graphic_gl\GLWindow.h" />
+    <ClInclude Include="include\Graphic_gl\glslshader.h" />
     <ClInclude Include="include\input.h" />
+    <ClInclude Include="include\Line.h" />
+    <ClInclude Include="include\Mat3.h" />
+    <ClInclude Include="include\physics.h" />
+    <ClInclude Include="include\Vec2.h" />
+    <ClInclude Include="src\Assets Manager\file_reader.h" />
+    <ClInclude Include="src\Assets Manager\serialization.h" />
+    <ClInclude Include="src\Assets Manager\text_serialization.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

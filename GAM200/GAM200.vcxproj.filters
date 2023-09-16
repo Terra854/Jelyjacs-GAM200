@@ -13,29 +13,122 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{d4ae030f-86cd-4e71-b280-23ae3c14907e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{bb69d62c-8843-4031-9291-f44dab2a2b41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\miscellanous">
+      <UniqueIdentifier>{29294102-023f-41c7-9dcb-a46a6de68236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{a8568f62-e759-4909-b21c-f3340d531fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{abbe2c25-aaf6-4e90-90a3-2254bfe58634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Miscellanous">
+      <UniqueIdentifier>{758d9815-dd52-4d26-ad17-c07274bd847b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{573340c8-c33e-4477-ba9e-212b92108b3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems\Graphics">
+      <UniqueIdentifier>{54ebbb9e-4d84-43db-9cbc-4f6986a9ebf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems\Physics">
+      <UniqueIdentifier>{0d56c313-ee07-47eb-87e4-e91776b0f3cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphic.cpp">
+    <ClCompile Include="src\graphic_gl\GLWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Mat3.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vec2.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Collision.cpp">
+      <Filter>Source Files\Systems\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics.cpp">
+      <Filter>Source Files\Systems\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\input.cpp">
+      <Filter>Source Files\miscellanous</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Assets Manager\file_reader.cpp">
+      <Filter>Source Files\miscellanous</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphic_gl\glapp.cpp">
+      <Filter>Source Files\Systems\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphic_gl\glslshader.cpp">
+      <Filter>Source Files\Systems\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Assets Manager\text_serialization.cpp">
+      <Filter>Source Files\miscellanous</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core_Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\graphic.h">
+    <ClInclude Include="include\Graphic_gl\GLWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AABB.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Circle.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mat3.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vec2.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Line.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collision.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physics.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphic_gl\glapp.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphic_gl\glslshader.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\input.h">
+      <Filter>Header Files\Miscellanous</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets Manager\file_reader.h">
+      <Filter>Header Files\Miscellanous</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets Manager\serialization.h">
+      <Filter>Header Files\Miscellanous</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets Manager\text_serialization.h">
+      <Filter>Header Files\Miscellanous</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core_Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Interface_System.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
