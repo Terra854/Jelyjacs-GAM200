@@ -31,17 +31,17 @@ glm::mat3 trans;
 GLApp* app = NULL;
 GLApp::GLApp()
 {
+
 }
 
 void GLApp::Initialize()
 {
-
 	glClearColor(1.f, 1.f, 1.f, 1.f);
-
-
-	glViewport(0, 0, 1080, 1920);
+	
+	glViewport(0, 0, window->width, window->height);
 	init_scene();
 }
+
 	//Initialising Scene
 void GLApp::init_scene(){
 	//read file
@@ -232,16 +232,16 @@ void GLApp::init_scene(){
 		getline(ifs, line);
 		std::istringstream line_model_obj_pos{ line };
 		line_model_obj_pos >> Object.position.x >> Object.position.y;
-		Object.position.x *= 2.f / GLWindow::width;
-		Object.position.y *= 2.f / GLWindow::height;
+		Object.position.x *= 2.f / window->width;
+		Object.position.y *= 2.f / window->height;
 		std::cout << "position: " << Object.position.x << " " << Object.position.y << std::endl;
 
 		//line 6 scale
 		getline(ifs, line);
 		std::istringstream line_model_obj_scale{ line };
 		line_model_obj_scale >> Object.scaling.x >> Object.scaling.y;
-		Object.scaling.x /=  GLWindow::width;
-		Object.scaling.y /=  GLWindow::height;
+		Object.scaling.x /= window->width;
+		Object.scaling.y /= window->height;
 		std::cout << "scale: " << Object.scaling.x << " " << Object.scaling.y << std::endl;
 
 		//line 7 orientation
@@ -380,7 +380,7 @@ void GLApp::GLObject::draw() const
 {
 	glBindTextureUnit(6, tex_ref->second);
 	glBindTexture(GL_TEXTURE_2D, tex_ref->second);
-	glTextureSubImage2D(tex_ref->second, 0, 0, 0, GLWindow::width, GLWindow::height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTextureSubImage2D(tex_ref->second, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	// load shader program in use by this object
 	shd_ref->second.Use();
 	// bind VAO of this object's model

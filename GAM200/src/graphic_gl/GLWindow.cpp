@@ -93,6 +93,17 @@ void GLWindow::Initialize() {
 
 }
 
+void GLWindow::Update(float time)
+{
+
+}
+
+
+void GLWindow::ActivateWindow()
+{
+
+}
+
 
 /*  _________________________________________________________________________ */
 /*! cleanup
@@ -110,33 +121,7 @@ void GLWindow::cleanup() {
     glfwTerminate();
 }
 
-/*  _________________________________________________________________________*/
-/*! key_cb
 
-@param GLFWwindow*
-Handle to window that is receiving event
-
-@param int
-the keyboard key that was pressed or released
-
-@parm int
-Platform-specific scancode of the key
-
-@parm int
-GLFW_PRESS, GLFW_REPEAT or GLFW_RELEASE
-action will be GLFW_KEY_UNKNOWN if GLFW lacks a key token for it,
-for example E-mail and Play keys.
-
-@parm int
-bit-field describing which modifier keys (shift, alt, control)
-were held down
-
-@return none
-
-This function is called when keyboard buttons are pressed.
-When the ESC key is pressed, the close flag of the window is set.
-when P key is pressed, change stat of keystateP
-*/
 /*  _________________________________________________________________________ */
 /*! error_cb
 
@@ -274,45 +259,3 @@ void GLWindow::print_specs() {
 
 }
 
-/********************************************************************************
-    Shifted engine.cpp here
-
-
-
-*/
-/*
-Engine::Engine() {
-}
-
-float x = 0.f;
-float y = 0.f;
-void Engine::update() {
-
-    x += 0.01f;
-    y += 0.01f;
-    glfwPollEvents();
-    window->update_time(1.0);
-
-
-    app->objects["object1"].position = { x,y };
-
-    app->objects["object2"].orientation = { x };
-    app->update();
-
-
-}
-
-void Engine::draw() {
-
-    app->draw();
-
-    glfwSwapBuffers(GLWindow::ptr_window);
-}
-
-void Engine::cleanup() {
-
-    app->cleanup();
-
-    window->cleanup();
-}
-*/

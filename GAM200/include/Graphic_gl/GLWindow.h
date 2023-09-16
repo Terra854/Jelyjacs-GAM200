@@ -27,13 +27,12 @@ objects participating in the application.
 
 /*  _________________________________________________________________________ */
 class GLWindow : public ISystems
-  /*! GLHelper structure to encapsulate initialization stuff ...
-  */
+  
 {
 public:
 	GLWindow(GLint w, GLint h, std::string t);
 	virtual void Initialize();
-	virtual void Update();
+	virtual void Update(float time);
 	static void ActivateWindow();
 	static void cleanup();
 
@@ -57,20 +56,7 @@ enum class Gamestate {
 	start,
 	end
 };
-/*
-class Engine {
-	public:
-		Engine();
 
-	static void init();
-	static void update();
-	static void draw();
-	static void cleanup();
-
-	static Gamestate gamestate;
-
-};
-*/
 
 extern GLWindow* window;
 

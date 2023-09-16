@@ -14,13 +14,13 @@
 #include "engine.h"
 #include <iostream>
 #include <list>
-
+#include <Interface_System.h>
 
 class GLApp : public ISystems
 {
 public:
 	GLApp();
-	virtual void Initialize();
+	virtual void Initialize() ;
 	static void update();
 	static void draw();
 	static void cleanup();
