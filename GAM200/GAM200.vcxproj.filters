@@ -131,5 +131,8 @@
     <ClInclude Include="include\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
