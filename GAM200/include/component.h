@@ -9,6 +9,8 @@
 	public:
 		friend class GameObjectComposition;
 
+		virtual void Initialize() {};
+
 		GameComponent();
 		virtual ~GameComponent();
 

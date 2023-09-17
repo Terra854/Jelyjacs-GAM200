@@ -1,5 +1,6 @@
 #include "Factory.h"
 #include "Composition.h"
+#include "Assets Manager/text_serialization.h"
 
 GameObjectFactory* gameObjFactory = NULL;
 
@@ -16,7 +17,9 @@ GameObjectFactory::~GameObjectFactory()
 
 GOC* GameObjectFactory::createGameObj(std::string gameObjType)
 {
+	GOC* newGameObj = NULL;
 
+	return newGameObj;
 }
 
 void GameObjectFactory::destroyGameObj(GOC* gameObject)
@@ -42,6 +45,22 @@ GOC* GameObjectFactory::createEmptyGameObj()
 	return gameObj;
 }
 
+GOC* GameObjectFactory::buildFromFile(const std::string& filename)
+{
+	TextSerialization textStream;
+	textStream.openFileRead(filename);
+
+	if (textStream.isGood())
+	{
+		GOC* gameObj = new GOC();
+
+		while (textStream.isGood())
+		{
+
+		}
+	}
+}
+
 void GameObjectFactory::idGameObj(GOC* gameObj)
 {
 	++lastGameObjID;
@@ -49,7 +68,7 @@ void GameObjectFactory::idGameObj(GOC* gameObj)
 	gameObjectMap[lastGameObjID] = gameObj;
 }
 
-GOC* GameObjectFactory::getObjWithID(GOC id)
+GOC* GameObjectFactory::getObjWithID(GOCId id)
 {
 	gameObjIDMap::iterator it = gameObjectMap.find(id);
 	if (it != gameObjectMap.end())

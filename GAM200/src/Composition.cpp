@@ -2,7 +2,7 @@
 
 	GameObjectComposition::GameObjectComposition()
 	{
-
+		ObjectId = 0;
 	}
 
 	GameObjectComposition::~GameObjectComposition()

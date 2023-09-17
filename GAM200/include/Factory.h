@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <string>
 
 class GameObjectFactory : public ISystem
 {
@@ -12,7 +13,7 @@ public:
 	GameObjectFactory();
 	~GameObjectFactory();
 
-	GOC* createGameObj();
+	GOC* createGameObj(std::string gameObjType);
 
 	void destroyGameObj(GOC* gameObject);
 
@@ -26,9 +27,11 @@ public:
 
 	GOC* createEmptyGameObj();
 
+	GOC* buildFromFile(const std::string& filename);
+
 	void idGameObj(GOC* gameObj);
 
-	GOC* getObjWithID(GOC id);
+	GOC* getObjWithID(GOCId id);
 
 private:
 	unsigned lastGameObjID;
