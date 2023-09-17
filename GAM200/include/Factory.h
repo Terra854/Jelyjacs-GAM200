@@ -12,21 +12,31 @@ public:
 	GameObjectFactory();
 	~GameObjectFactory();
 
-	GOC* CreateGameObj();
+	GOC* createGameObj();
 
-	void DestroyGameObj(GOC* gameObject);
+	void destroyGameObj(GOC* gameObject);
+
+	virtual void Update(float dt);
 
 	std::string GetName() { return "Factory"; };
 
-	void SendMessage();
+	void sendMessage();
 
-	void DestroyAllGameObjs();
+	void destroyAllGameObjs();
+
+	GOC* createEmptyGameObj();
+
+	void idGameObj(GOC* gameObj);
+
+	GOC* getObjWithID(GOC id);
 
 private:
 	unsigned lastGameObjID;
 
-	typedef std::map<unsigned, GOC*> gameObjMap;
-	gameObjMap gameObjectMap;
+	typedef std::map<unsigned, GOC*> gameObjIDMap;
+	gameObjIDMap gameObjectMap;
 
 	std::set<GOC*> gameObjsToBeDeleted;
 };
+
+extern GameObjectFactory* gameObjectFactory;
