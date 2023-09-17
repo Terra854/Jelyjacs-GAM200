@@ -1,5 +1,5 @@
 
-	enum ComponentTypeId
+	enum class ComponentTypeId
 	{
 		//Invalid component id
 		CT_None = 0,

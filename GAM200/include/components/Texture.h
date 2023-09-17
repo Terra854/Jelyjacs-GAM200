@@ -2,5 +2,4 @@
 
 class Texture : public GameComponent
 {
-
 };

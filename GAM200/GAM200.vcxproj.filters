@@ -146,9 +146,6 @@
     <ClInclude Include="include\component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ComponentCreator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>

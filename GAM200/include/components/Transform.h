@@ -1,12 +1,13 @@
 #include "Vec2.h"
 #include "Composition.h"
 
-	///The transform component provides a shared position and rotation.
 	class Transform : public GameComponent
 	{
 	public:
-		Transform();
+		//centre position of bodies
 		Vec2 Position;
-		float Rotation;
-		void Serialize(ISerializer& str);
+		Vec2 PrevPosition;
+		float Velocity;
+		float Acceleration;
+		float Mass;
 	};

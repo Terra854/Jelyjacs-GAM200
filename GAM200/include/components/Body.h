@@ -3,35 +3,45 @@
 #include "Collision.h"
 #include "Transform.h"
 
+enum class shape
+{
+	rect,
+	circle,
+	line
+};
+
 	class Body : public GameComponent
 	{
 	public:
-		Body();
-		~Body();
+		virtual shape GetShape() = 0;
+	};
 
-		void AddForce(Vec2 force);
-		void Integrate(float dt);
-		void SetPosition(Vec2);
-		void SetVelocity(Vec2);
-		void PublishResults();
+	class Rectangular : public Body
+	{
+	public:
+		AABB aabb;
+		virtual shape GetShape() override
+		{
+			return shape::rect;
+		}
+	};
 
-		//Draw the object using the debug drawer
-		void DebugDraw();
+	class Circlular : public Body
+	{
+	public:
+		Circle cirlce;
+		virtual shape GetShape() override
+		{
+			return shape::circle;
+		}
+	};
 
-		virtual void Initialize();
-		virtual void Serialize(ISerializer& stream);
-
-		Vec2 Position;
-		Vec2 PrevPosition;
-		Vec2 Velocity;
-		Vec2 Acceleration;
-		float Mass;
-
-
-		//Transform for this body
-		Transform* tx;
-		//Static object are immovable fixed objects
-		bool IsStatic;
-
-
+	class lines : public Body
+	{
+	public:
+		Line line;
+		virtual shape GetShape() override
+		{
+			return shape::line;
+		}
 	};
