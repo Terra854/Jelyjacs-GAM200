@@ -6,7 +6,7 @@ public:
 	//MessageSystem
 	//virtual void SendMessage(Message* message){};
 	virtual void Initialize(){};
-	virtual void Update(float time){};
+	virtual void Update(float time)=0;
 	virtual void Free(){};
 
 	//For Debugging

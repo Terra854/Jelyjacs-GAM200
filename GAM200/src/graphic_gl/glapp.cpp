@@ -256,13 +256,13 @@ void GLApp::init_scene(){
 	}
 }
 
-void GLApp::update ( )
-{
-	for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
-	{
-		obj->second.update();
-	}
-}
+//void GLApp::update ( )
+//{
+//	for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
+//	{
+//		obj->second.update();
+//	}
+//}
 
 void GLApp::GLObject::update()
 {
@@ -300,8 +300,14 @@ void GLApp::GLObject::update()
 	}
 	
 }
-void GLApp::draw ()
+//void GLApp::draw ()
+void GLApp::Update(float time)
 {
+	// update all objects
+	for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
+	{
+		obj->second.update();
+	}
 
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	// clear back buffer as before

@@ -19,8 +19,9 @@ class GLApp : public ISystems
 public:
 	GLApp();
 	virtual void Initialize() ;
-	static void update();
-	static void draw();
+	virtual void Update(float time);
+	//static void update();
+	//static void draw();
 	static void cleanup();
 
 	static void init_scene();
