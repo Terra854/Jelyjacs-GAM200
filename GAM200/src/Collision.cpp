@@ -12,8 +12,7 @@ namespace Collision {
 		const Line& lineSeg,
 		Vec2& interPt,
 		Vec2& normalAtCollision,
-		float& interTime,
-		bool& checkLineEdges)
+		float& interTime)
 	{
 		// LNS is a line segment with end points P0 and P1 and outward normal N.
 		Vec2 P0 = lineSeg.Pt0();
@@ -51,8 +50,7 @@ namespace Collision {
 				}
 			}
 			else {
-				if (checkLineEdges)
-					return Check_Circle_LineEdge(false, circle, ptEnd, lineSeg, interPt, normalAtCollision, interTime);
+				return Check_Circle_LineEdge(false, circle, ptEnd, lineSeg, interPt, normalAtCollision, interTime);
 			}
 		}
 		// Bs is starting from the outside half plane, and away from LNS by at least R
@@ -77,13 +75,11 @@ namespace Collision {
 				}
 			}
 			else {
-				if (checkLineEdges)
-					return Check_Circle_LineEdge(false, circle, ptEnd, lineSeg, interPt, normalAtCollision, interTime);
+				return Check_Circle_LineEdge(false, circle, ptEnd, lineSeg, interPt, normalAtCollision, interTime);
 			}
 		}
 		else { // The circle’s starting position Bs, is between both lines LNS1 and LNS2.
-			if (checkLineEdges)
-				return Check_Circle_LineEdge(true, circle, ptEnd, lineSeg, interPt, normalAtCollision, interTime);
+			return Check_Circle_LineEdge(true, circle, ptEnd, lineSeg, interPt, normalAtCollision, interTime);
 		}
 		return false; // no intersection
 	}
