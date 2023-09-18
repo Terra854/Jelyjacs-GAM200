@@ -9,9 +9,7 @@
 ----------------------------------------------------------------------------- */
 #include <GL/glew.h> // for access to OpenGL API declarations 
 #include <GLFW/glfw3.h>
-#include <GLWindow.h>
 #include <glslshader.h>
-#include "engine.h"
 #include <iostream>
 #include <list>
 #include <Interface_System.h>
@@ -21,8 +19,9 @@ class GLApp : public ISystems
 public:
 	GLApp();
 	virtual void Initialize() ;
-	static void update();
-	static void draw();
+	virtual void Update(float time);
+	//static void update();
+	//static void draw();
 	static void cleanup();
 
 	static void init_scene();

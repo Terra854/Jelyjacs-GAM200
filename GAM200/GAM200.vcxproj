@@ -145,10 +145,15 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\ComponentType.h" />
+    <ClCompile Include="include\GameLogic.h" />
     <ClCompile Include="src\Assets Manager\file_reader.cpp" />
     <ClCompile Include="src\Assets Manager\text_serialization.cpp" />
     <ClCompile Include="src\Collision.cpp" />
+    <ClCompile Include="src\Composition.cpp" />
     <ClCompile Include="src\Core_Engine.cpp" />
+    <ClCompile Include="src\Factory.cpp" />
+    <ClCompile Include="src\GameLogic.cpp" />
     <ClCompile Include="src\graphic_gl\glapp.cpp" />
     <ClCompile Include="src\graphic_gl\GLWindow.cpp" />
     <ClCompile Include="src\graphic_gl\glslshader.cpp" />
@@ -159,8 +164,14 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClCompile Include="src\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\components\Body.h" />
+    <ClInclude Include="include\components\Texture.h" />
+    <ClInclude Include="include\components\Transform.h" />
     <ClInclude Include="include\Core_Engine.h" />
     <ClInclude Include="include\engine.h" />
+    <ClInclude Include="include\Component.h" />
+    <ClInclude Include="include\Factory.h" />
+    <ClInclude Include="include\Composition.h" />
     <ClInclude Include="include\Interface_System.h" />
     <ClInclude Include="include\AABB.h" />
     <ClInclude Include="include\Circle.h" />
@@ -173,6 +184,7 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClInclude Include="include\Mat3.h" />
     <ClInclude Include="include\message.h" />
     <ClInclude Include="include\physics.h" />
+    <ClInclude Include="include\System.h" />
     <ClInclude Include="include\Vec2.h" />
     <ClInclude Include="src\Assets Manager\file_reader.h" />
     <ClInclude Include="src\Assets Manager\serialization.h" />

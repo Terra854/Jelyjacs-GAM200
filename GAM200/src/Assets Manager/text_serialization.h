@@ -1,3 +1,5 @@
+#pragma once
+
 #include "serialization.h"
 
 // Serialization class for text file (.txt)

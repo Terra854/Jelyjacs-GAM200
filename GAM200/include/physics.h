@@ -1,3 +1,5 @@
+#pragma once
+
 float frameTime = 1/60.0f;
 const float gravity = -20.0f;
 
