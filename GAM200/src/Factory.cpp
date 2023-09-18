@@ -1,12 +1,11 @@
 #include "Factory.h"
-#include "Composition.h"
 #include "Assets Manager/text_serialization.h"
 
 GameObjectFactory* gameObjFactory = NULL;
 
 GameObjectFactory::GameObjectFactory()
 {
-	gameObjectFactory = this;
+	gameObjFactory = this;
 	lastGameObjID = 0;
 }
 
@@ -26,7 +25,23 @@ void GameObjectFactory::destroyGameObj(GOC* gameObject)
 {
 	gameObjsToBeDeleted.insert(gameObject);
 }
-
+void GameObjectFactory::Update(float dt) {
+	std::set<GOC*>::iterator it = gameObjsToBeDeleted.begin();
+	for (; it != gameObjsToBeDeleted.end(); ++it)
+	{
+		GOC* gameObject = *it;
+		gameObjIDMap::iterator idItr = gameObjectMap.find(gameObject->ObjectId);
+		//ErrorIf(idItr == gameObjectMap.end(), "Object %d was double deleted or is bad memory.", gameObject->ObjectId);
+		if (idItr != gameObjectMap.end())
+		{
+			//Delete it and remove its entry in the Id map
+			delete gameObject;
+			gameObjectMap.erase(idItr);
+		}
+	}
+	//All objects to be delete have been deleted
+	gameObjsToBeDeleted.clear();
+}
 void GameObjectFactory::destroyAllGameObjs()
 {
 	gameObjIDMap::iterator it = gameObjectMap.begin();
@@ -59,6 +74,7 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 
 		}
 	}
+	return NULL;
 }
 
 void GameObjectFactory::idGameObj(GOC* gameObj)

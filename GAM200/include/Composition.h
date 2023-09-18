@@ -19,6 +19,8 @@
 		//create and destroy game objects.
 		friend class GameObjectFactory;
 
+		GameComponent* GetComponent(ComponentTypeId typeID);
+
 		///Add an component used only for dynamic composition construction.
 		void AddComponent(ComponentTypeId typeId, GameComponent* component);
 

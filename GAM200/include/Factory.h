@@ -1,6 +1,7 @@
 #pragma once
 
 #include "System.h"
+#include "Interface_System.h"
 #include "Composition.h"
 #include "Mat3.h"
 #include "Vec2.h"
@@ -9,7 +10,7 @@
 #include <set>
 #include <string>
 
-class GameObjectFactory : public ISystem
+class GameObjectFactory : public ISystems
 {
 public:
 	GameObjectFactory();
@@ -19,11 +20,11 @@ public:
 
 	void destroyGameObj(GOC* gameObject);
 
-	virtual void Update(float dt);
+	virtual void Update(float time);
 
 	std::string GetName() { return "Factory"; };
 
-	void sendMessage();
+	//virtual void sendMessage();
 
 	void destroyAllGameObjs();
 
@@ -44,4 +45,4 @@ private:
 	std::set<GOC*> gameObjsToBeDeleted;
 };
 
-extern GameObjectFactory* gameObjectFactory;
+extern GameObjectFactory* gameObjFactory;
