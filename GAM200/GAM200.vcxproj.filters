@@ -176,11 +176,10 @@
     <ClInclude Include="include\components\Body.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< Updated upstream
     <ClInclude Include="include\message.h">
-=======
+		<Filter>Header Files</Filter>
+	</ClInclude>
     <ClInclude Include="include\System.h">
->>>>>>> Stashed changes
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\System.h">
