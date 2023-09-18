@@ -17,13 +17,7 @@ template<typename type>
 class ComponentCreatorType : public ComponentCreator
 {
 public:
-	ComponentCreatorType(ComponentTypeId typeID) : ComponentCreator(typeID)
-	{
-		typeId = typeID;
-	}
+	ComponentCreatorType(ComponentTypeId typeID);
 	virtual ~ComponentCreatorType();
-	virtual GameComponent* Create()
-	{
-		return new type();
-	}
+	virtual GameComponent* Create();
 };
