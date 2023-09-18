@@ -26,8 +26,7 @@ namespace Collision {
 		const Line& lineSeg,
 		Vec2& interPt,
 		Vec2& normalAtCollision,
-		float& interTime,
-		bool& checkLineEdges);
+		float& interTime);
 
 	bool Check_AABB_AABB(const AABB& aabb1,
 		const Vec2& vel1,

@@ -243,8 +243,7 @@ namespace Collision {
 		const Line& lineSeg,
 		Vec2& interPt,
 		Vec2& normalAtCollision,
-		float& interTime,
-		bool& checkLineEdges)
+		float& interTime)
 	{
 		// LNS is a line segment with end points P0 and P1 and outward normal N.
 

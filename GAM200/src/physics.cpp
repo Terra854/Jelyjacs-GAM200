@@ -1,4 +1,10 @@
 #include "physics.h"
+#include <components/Body.h>
+#include <Interface_System.h>
+#include <typeinfo>
+
+Vec2 interPt, normalAtCollision;
+float interTime = 0.0f;
 
 /*
 * This function is meant to update the gravity of a game object.
@@ -9,3 +15,32 @@ void gravityUpdate(int* gameobjectYVelocity)
 {
 	*gameobjectYVelocity = gravity * frameTime + *gameobjectYVelocity;
 }
+
+bool Check_Collision(Body* b1, Body* b2) {
+
+	if (typeid(*b1) == typeid(Circlular) && typeid(*b2) == typeid(lines)) {
+		return Collision::Check_Circle_Line(((Circlular*)b1)->cirlce, ((Transform*)b1)->PrevPosition, ((lines*)b2)->line, interPt, normalAtCollision, interTime);
+	}
+	if (typeid(*b1) == typeid(lines) && typeid(*b2) == typeid(Circlular)) {
+		return Collision::Check_Circle_Line(((Circlular*)b2)->cirlce, ((Transform*)b2)->PrevPosition, ((lines*)b1)->line, interPt, normalAtCollision, interTime);
+	}
+	
+	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(lines)) {
+		return Collision::Check_AABB_Line(((Rectangular*)b1)->aabb, ((Transform*)b1)->PrevPosition, ((lines*)b2)->line, interPt, normalAtCollision, interTime);
+	}
+	else if (typeid(*b1) == typeid(lines) && typeid(*b2) == typeid(Rectangular)) {
+		return Collision::Check_AABB_Line(((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, ((lines*)b1)->line, interPt, normalAtCollision, interTime);
+	}
+
+	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
+		return Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->PrevPosition, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition);
+	}
+
+	else {
+		return false; // Unsupported collision
+	}
+}
+
+class Physics : ISystems {
+
+};
