@@ -45,7 +45,8 @@ private:
 
 	//added by jia Ming
 	//to map the component name in object text file to component type
-	std::map< std::string, GameComponent*> componenttype;
+	typedef std::map< std::string, ComponentCreator*> componentCreatorMap;
+	componentCreatorMap componentMap;
 
 	typedef std::map<unsigned, GOC*> gameObjIDMap;
 	gameObjIDMap gameObjectMap;

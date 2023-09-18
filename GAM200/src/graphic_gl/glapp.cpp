@@ -31,7 +31,7 @@ glm::mat3 trans;
 GLApp* app = NULL;
 GLApp::GLApp()
 {
-
+	app = this;
 }
 
 void GLApp::Initialize()
@@ -40,6 +40,10 @@ void GLApp::Initialize()
 	
 	glViewport(0, 0, window->width, window->height);
 	init_scene();
+
+	// enable alpha blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 	//Initialising Scene
@@ -313,6 +317,8 @@ void GLApp::Update(float time)
 	// clear back buffer as before
 	glClear(GL_COLOR_BUFFER_BIT);
 	
+	
+
 	std::stringstream sstr;
 	sstr << window->fps;
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
