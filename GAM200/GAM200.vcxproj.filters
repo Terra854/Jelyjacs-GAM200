@@ -78,13 +78,7 @@
     <ClCompile Include="src\Core_Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\GameLogic.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\GameLogic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\ComponentType.h">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Composition.cpp">
@@ -99,11 +93,17 @@
     <ClCompile Include="src\Factory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\ComponentCreator.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ComponentCreator.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\ComponentCreator.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\ComponentType.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\GameLogic.h">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -177,8 +177,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\message.h">
-		<Filter>Header Files</Filter>
-	</ClInclude>
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\System.h">
       <Filter>Header Files</Filter>
     </ClInclude>
