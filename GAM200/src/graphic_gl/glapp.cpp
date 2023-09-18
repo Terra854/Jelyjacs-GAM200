@@ -31,7 +31,7 @@ glm::mat3 trans;
 GLApp* app = NULL;
 GLApp::GLApp()
 {
-
+	app = this;
 }
 
 void GLApp::Initialize()
