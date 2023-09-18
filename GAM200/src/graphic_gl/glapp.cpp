@@ -319,6 +319,7 @@ void GLApp::Update(float time)
 		obj->second.draw();
 
 	}
+	glfwSwapBuffers( window->ptr_window);
 }
 
 
