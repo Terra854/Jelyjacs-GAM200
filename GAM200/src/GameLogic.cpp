@@ -11,6 +11,7 @@ GameLogic* LOGIC = NULL;
 
 void GameLogic::Initialize()
 {
+	//Broken code. DO NOT REMOVE YET - Jonathan
 	/*
 	gameObjFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Transform));
 
