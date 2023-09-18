@@ -1,6 +1,8 @@
 #pragma once
 
-float frameTime = 1/60.0f;
+#include <Interface_System.h>
+
+//float frameTime = 1/60.0f;
 const float gravity = -20.0f;
 
 /*
@@ -11,3 +13,9 @@ const float gravity = -20.0f;
 void gravityUpdate(int* gameobjectYVelocity);
 
 
+class Physics : public ISystems {
+public:
+	Physics();
+	virtual void Initialize();
+	virtual void Update(float time);
+};

@@ -39,7 +39,7 @@ public:
 
 	void AddComponentCreator(const std::string& name, ComponentCreator* creator);
 
-
+	friend class Physics; // Needed to apply physics onto each object
 private:
 	unsigned lastGameObjID;
 
