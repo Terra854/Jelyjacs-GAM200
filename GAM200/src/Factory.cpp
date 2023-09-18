@@ -11,7 +11,11 @@ GameObjectFactory::GameObjectFactory()
 
 GameObjectFactory::~GameObjectFactory()
 {
-
+	componentCreatorMap::iterator it = componentMap.begin();
+	for  (; it != componentMap.end(); ++it)
+	{
+		delete it->second;
+	}
 }
 
 GOC* GameObjectFactory::createGameObj(std::string gameObjType)
@@ -68,11 +72,25 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 	if (textStream.isGood())
 	{
 		GOC* gameObj = new GOC();
+		std::string componentName;
 
 		while (textStream.isGood())
 		{
+			textStream.readString(componentName);
 
+			componentCreatorMap::iterator it = componentMap.find(componentName);
+			if (it != componentMap.end())
+			{
+				ComponentCreator* creator = it->second;
+				GameComponent* component = creator->Create();
+
+				gameObj->AddComponent(creator->typeId, component);
+			}
 		}
+
+		idGameObj(gameObj);
+
+		return gameObj;
 	}
 	return NULL;
 }
@@ -95,4 +113,9 @@ GOC* GameObjectFactory::getObjWithID(GOCId id)
 	{
 		return NULL;
 	}
+}
+
+void GameObjectFactory::AddComponentCreator(const std::string& name, ComponentCreator* creator)
+{
+	componentMap[name] = creator;
 }

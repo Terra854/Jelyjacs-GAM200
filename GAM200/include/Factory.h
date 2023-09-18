@@ -9,6 +9,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include "ComponentCreator.h"
 
 class GameObjectFactory : public ISystems
 {
@@ -36,8 +37,16 @@ public:
 
 	GOC* getObjWithID(GOCId id);
 
+	void AddComponentCreator(const std::string& name, ComponentCreator* creator);
+
+
 private:
 	unsigned lastGameObjID;
+
+	//added by jia Ming
+	//to map the component name in object text file to component type
+	typedef std::map< std::string, ComponentCreator*> componentCreatorMap;
+	componentCreatorMap componentMap;
 
 	typedef std::map<unsigned, GOC*> gameObjIDMap;
 	gameObjIDMap gameObjectMap;
