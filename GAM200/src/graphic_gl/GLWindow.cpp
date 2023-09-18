@@ -95,7 +95,10 @@ void GLWindow::Initialize() {
 
 void GLWindow::Update(float time)
 {
+    glfwPollEvents();
 
+    // Part 2
+    GLWindow::update_time(1.0);
 }
 
 
