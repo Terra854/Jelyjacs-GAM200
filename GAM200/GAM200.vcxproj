@@ -169,7 +169,7 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClInclude Include="include\components\Transform.h" />
     <ClInclude Include="include\Core_Engine.h" />
     <ClInclude Include="include\engine.h" />
-    <ClInclude Include="include\component.h" />
+    <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\Factory.h" />
     <ClInclude Include="include\Composition.h" />
     <ClInclude Include="include\Interface_System.h" />

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "System.h"
 #include "Composition.h"
 #include "Mat3.h"

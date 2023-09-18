@@ -20,9 +20,8 @@ objects participating in the application.
 ----------------------------------------------------------------------------- */
 #include <GL/glew.h> // for access to OpenGL API declarations 
 #include <GLFW/glfw3.h>
-#include <glapp.h>
 #include <string>
-#include "engine.h"
+#include <Interface_System.h>
 
 
 /*  _________________________________________________________________________ */

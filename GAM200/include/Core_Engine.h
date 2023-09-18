@@ -1,5 +1,4 @@
-
-
+#pragma once
 
 // Core Engine that manage all systems in game. Update and destroying them.
 #include "Interface_System.h"

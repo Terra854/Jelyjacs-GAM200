@@ -10,38 +10,38 @@ enum class shape
 	line
 };
 
-	class Body : public GameComponent
-	{
-	public:
-		virtual shape GetShape() = 0;
-	};
+class Body : public GameComponent
+{
+public:
+	virtual shape GetShape() = 0;
+};
 
-	class Rectangular : public Body
+class Rectangular : public Body
+{
+public:
+	AABB aabb;
+	virtual shape GetShape() override
 	{
-	public:
-		AABB aabb;
-		virtual shape GetShape() override
-		{
-			return shape::rect;
-		}
-	};
+		return shape::rect;
+	}
+};
 
-	class Circlular : public Body
+class Circlular : public Body
+{
+public:
+	Circle cirlce;
+	virtual shape GetShape() override
 	{
-	public:
-		Circle cirlce;
-		virtual shape GetShape() override
-		{
-			return shape::circle;
-		}
-	};
+		return shape::circle;
+	}
+};
 
-	class lines : public Body
+class lines : public Body
+{
+public:
+	Line line;
+	virtual shape GetShape() override
 	{
-	public:
-		Line line;
-		virtual shape GetShape() override
-		{
-			return shape::line;
-		}
-	};
+		return shape::line;
+	}
+};
