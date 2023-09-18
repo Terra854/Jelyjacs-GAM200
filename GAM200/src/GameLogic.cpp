@@ -11,6 +11,7 @@ GameLogic* LOGIC = NULL;
 
 void GameLogic::Initialize()
 {
+	/*
 	gameObjFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Transform));
 
 	ComponentCreatorType<Transform> transformComponetCreator(ComponentTypeId::CT_Transform);
@@ -20,4 +21,5 @@ void GameLogic::Initialize()
 	std::string transform = "Transform";
 
 	gameObjFactory.AddComponentCreator(transform, transformPtr);
+	*/
 }

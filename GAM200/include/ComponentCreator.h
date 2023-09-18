@@ -5,7 +5,7 @@ class ComponentCreator
 {
 public:
 	ComponentCreator(ComponentTypeId);
-	virtual ~ComponentCreator();
+	virtual ~ComponentCreator() {};
 
 	virtual GameComponent* Create() = 0;
 
@@ -18,6 +18,8 @@ class ComponentCreatorType : public ComponentCreator
 {
 public:
 	ComponentCreatorType(ComponentTypeId typeID);
-	virtual ~ComponentCreatorType();
-	virtual GameComponent* Create();
+	virtual GameComponent* Create()
+	{
+		return new type();
+	}
 };
