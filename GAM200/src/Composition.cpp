@@ -15,6 +15,15 @@ GameObjectComposition::~GameObjectComposition()
 
 }
 
+GameComponent* GameObjectComposition::GetComponent(ComponentTypeId typeID)
+{
+	for (GameComponent* c : Components) {
+		if (c->TypeId == typeID)
+			return c;
+	}
+	return nullptr;
+}
+
 void GameObjectComposition::AddComponent(ComponentTypeId typeId, GameComponent* component)
 {
 	//Store the components type Id

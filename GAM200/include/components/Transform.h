@@ -9,7 +9,9 @@ public:
 	//centre position of bodies
 	Vec2 Position;
 	Vec2 PrevPosition;
-	float Velocity;
-	float Acceleration;
+	float X_Velocity;
+	float X_Acceleration;
+	float Y_Velocity;
+	float Y_Acceleration;
 	float Mass;
 };
