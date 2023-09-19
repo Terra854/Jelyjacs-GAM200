@@ -23,7 +23,7 @@ public:
 
 	virtual void Update(float time);
 
-	std::string GetName() { return "Factory"; };
+	virtual std::string GetSystemName() { return "Factory"; };
 
 	//virtual void sendMessage();
 

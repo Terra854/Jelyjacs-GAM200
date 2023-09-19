@@ -10,8 +10,11 @@ public:
 	CoreEngine();
 	~CoreEngine();
 
+	
 	void GameLoop();
+	// Putting all the systems into a vector
 	void AddSystem(ISystems* sys);
+	// Delete all the systems in the vector
 	void DestroySystem();
 	//void BroadcastMessage(Message *m);
 	void Initialize();
