@@ -11,11 +11,15 @@ GameLogic* LOGIC = NULL;
 
 void GameLogic::Initialize()
 {
+	GOC * testObj;
+
 	//In order to use the game object factory, we need to register the components we want to use first like this
 	//See ComponentType.h to see what components we have for now. When we create new types of components, we need to add it in there as well
 	gameObjFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Transform));
 	gameObjFactory->AddComponentCreator("Texture", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Texture));
 	gameObjFactory->AddComponentCreator("Body", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Body));
+
+	testObj = gameObjFactory->buildFromFile("test.txt");
 	//Broken code. DO NOT REMOVE YET - Jonathan
 	/*
 	gameObjFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Transform));

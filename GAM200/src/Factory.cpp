@@ -27,9 +27,9 @@ GameObjectFactory::~GameObjectFactory()
 }
 
 //This creates an empty game object
-GOC* GameObjectFactory::createGameObj(std::string gameObjType)
+GOC* GameObjectFactory::createGameObj(const std::string& filename)
 {
-	GOC* newGameObj = NULL;
+	GOC* newGameObj = buildFromFile(filename);
 
 	return newGameObj;
 }

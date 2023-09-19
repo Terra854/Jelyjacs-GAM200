@@ -14,4 +14,9 @@ public:
 	float Y_Velocity;
 	float Y_Acceleration;
 	float Mass;
+
+	virtual void Initialize()
+	{
+
+	}
 };

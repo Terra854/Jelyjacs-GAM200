@@ -17,7 +17,7 @@ public:
 	GameObjectFactory();
 	~GameObjectFactory();
 
-	GOC* createGameObj(std::string gameObjType);
+	GOC* createGameObj(const std::string& filename);
 
 	void destroyGameObj(GOC* gameObject);
 
