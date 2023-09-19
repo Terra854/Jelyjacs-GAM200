@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 //Base System class for all systems - Interface.
 class ISystems {
@@ -10,5 +11,5 @@ public:
 	virtual void Free(){};
 
 	//For Debugging
-	virtual void GetSystemName(){};
+	//virtual std::string GetSystemName() {};
 };

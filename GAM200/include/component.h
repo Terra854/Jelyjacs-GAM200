@@ -13,8 +13,8 @@ public:
 
 	virtual void Initialize() {};
 
-	GameComponent();
-	virtual ~GameComponent();
+	//GameComponent();
+	virtual ~GameComponent(){};
 
 	///Get the GameObjectComposition this component is owned/composed.
 	GOC* GetOwner() { return Base; }

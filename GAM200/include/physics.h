@@ -18,4 +18,5 @@ public:
 	Physics();
 	virtual void Initialize();
 	virtual void Update(float time);
+	virtual std::string GetSystemName() { return "Physics"; }
 };

@@ -187,7 +187,6 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     <ClInclude Include="include\Mat3.h" />
     <ClInclude Include="include\message.h" />
     <ClInclude Include="include\physics.h" />
-    <ClInclude Include="include\System.h" />
     <ClInclude Include="include\Vec2.h" />
     <ClInclude Include="src\Assets Manager\file_reader.h" />
     <ClInclude Include="src\Assets Manager\serialization.h" />
