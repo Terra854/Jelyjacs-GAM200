@@ -9,6 +9,8 @@
 #include "input.h"
 #include <chrono>
 #include <thread>
+#include <fstream>
+#include <sstream>
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
 // static data members declared in
@@ -29,10 +31,26 @@ double time_per_frame = 1.0 / 60.0;
 /*
 constructor
 */
-GLWindow::GLWindow(GLint w, GLint h, std::string t) {
-	GLWindow::width = w;
-	GLWindow::height = h;
-	GLWindow::title = t;
+GLWindow::GLWindow() {
+
+    std::ifstream ifs("../scenes/config.txt", std::ios::in);
+    if (!ifs)
+    {
+        std::cout <<
+            "Error : Unable to open config file : " << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    ifs.seekg(0, std::ios::beg);
+    std::string line;
+    getline(ifs, line);
+    std::istringstream line_title{ line };
+    line_title >> GLWindow::title;
+    getline(ifs, line);
+    std::istringstream line_width{ line };
+    line_width >> GLWindow::width;
+    getline(ifs, line);
+    std::istringstream line_height{ line };
+    line_height >> GLWindow::height;
 }
 
 /*  _________________________________________________________________________ */
