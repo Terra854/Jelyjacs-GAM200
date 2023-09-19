@@ -29,7 +29,7 @@ class GLWindow : public ISystems
   
 {
 public:
-	GLWindow(GLint w, GLint h, std::string t);
+	GLWindow();
 	virtual void Initialize();
 	virtual void Update(float time);
 	static void ActivateWindow();

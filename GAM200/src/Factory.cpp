@@ -58,7 +58,6 @@ void GameObjectFactory::Update(float dt) {
 	//All objects to be delete have been deleted
 	gameObjsToBeDeleted.clear();
 }
-
 //This destroys all game objects
 void GameObjectFactory::destroyAllGameObjs()
 {
@@ -81,28 +80,36 @@ GOC* GameObjectFactory::createEmptyGameObj()
 //This creates an object from a text file. This needs to be tested a lot
 GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 {
+	//Open text file in read mode
 	TextSerialization textStream;
 	textStream.openFileRead(filename);
 
+	// Make sure stream is valid
 	if (textStream.isGood())
 	{
+		// Create new game object to hold components
 		GOC* gameObj = new GOC();
 		std::string componentName;
 
+
 		while (textStream.isGood())
-		{
+		{	
+			// Read componentName
 			textStream.readString(componentName);
 
+			// Find the component Creator
 			componentCreatorMap::iterator it = componentMap.find(componentName);
 			if (it != componentMap.end())
-			{
+			{	
+				// Create Component by using the interface
 				ComponentCreator* creator = it->second;
 				GameComponent* component = creator->Create();
 
+				// Add component to composition
 				gameObj->AddComponent(creator->typeId, component);
 			}
 		}
-
+		// Id and initialize game object
 		idGameObj(gameObj);
 
 		return gameObj;

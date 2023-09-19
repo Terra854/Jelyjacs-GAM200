@@ -5,6 +5,11 @@
 #include "Vec2.h"
 #include "AABB.h"
 
+const int COLLISION_LEFT = 0x00000001; //0001
+const int COLLISION_RIGHT = 0x00000002; //0010
+const int COLLISION_TOP = 0x00000004; //0100
+const int COLLISION_BOTTOM = 0x00000008; //1000
+
 namespace Collision {
 	bool Check_Circle_Line(const Circle& circle,
 		const Vec2& ptEnd,
@@ -27,6 +32,12 @@ namespace Collision {
 		Vec2& interPt,
 		Vec2& normalAtCollision,
 		float& interTime);
+
+	int Check_Rect_Line(float PosX,
+		float PosY,
+		float scaleX,
+		float scaleY,
+		const Line& line);
 
 	bool Check_AABB_AABB(const AABB& aabb1,
 		const Vec2& vel1,

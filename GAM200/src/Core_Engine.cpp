@@ -40,6 +40,17 @@ void CoreEngine::DestroySystem() {
 	}
 }
 
+void CoreEngine::BroadcastMessage(Message* msg) {
+	if (msg->messageId == MessageID::Quit) {
+		game_active = false;
+	}
+	/*
+	for (unsigned i = 0; i < Systems.size(); i++) {
+		Systems[i]->SendMessage(msg);
+	}
+	*/
+}
+
 void CoreEngine::Initialize() {
 	for (unsigned i = 0; i < Systems.size(); ++i)
 		Systems[i]->Initialize();

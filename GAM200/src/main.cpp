@@ -12,7 +12,7 @@ GameObjectFactory* factory; // Need to be outside for physics component to acces
 
 int main() {
    CoreEngine* engine = new CoreEngine();
-   GLWindow* windows = new GLWindow(1920, 1080, "Game");
+   GLWindow* windows = new GLWindow();
    factory = new GameObjectFactory();
    Physics* physics = new Physics();
 
@@ -42,4 +42,5 @@ int main() {
    */
    engine->DestroySystem();
    delete engine;
+   return 0;
 }
