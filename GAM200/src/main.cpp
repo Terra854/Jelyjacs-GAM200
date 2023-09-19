@@ -4,8 +4,8 @@
 #include <GLWindow.h>
 #include <physics.h>
 #include <iostream>
-#include <chrono>
-#include <thread>
+//#include <chrono>
+//#include <thread>
 
 
 GameObjectFactory* factory; // Need to be outside for physics component to access it

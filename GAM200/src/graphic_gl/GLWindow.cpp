@@ -7,9 +7,11 @@
 #include <GLWindow.h>
 #include <iostream>
 #include "input.h"
+#include <chrono>
+#include <thread>
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
-// static data members declared in GLHelper
+// static data members declared in
 GLint GLWindow::width;
 GLint GLWindow::height;
 GLdouble GLWindow::fps;
@@ -17,9 +19,13 @@ GLdouble GLWindow::delta_time;
 std::string GLWindow::title;
 GLFWwindow* GLWindow::ptr_window;
 
-//Gamestate Engine::gamestate = Gamestate::start;
+
 //Global Pointer to Window System
 GLWindow* window = NULL;
+
+//fps control
+bool fps_control = true;
+double time_per_frame = 1.0 / 60.0;
 /*
 constructor
 */
@@ -197,7 +203,10 @@ void GLWindow::update_time(double fps_calc_interval) {
     static double start_time = glfwGetTime();
     // get elapsed time since very beginning (in seconds) ...
     double elapsed_time = curr_time - start_time;
-
+    if (fps_control) {
+        // sleep for the remaining time if frame was rendered too fast
+        std::this_thread::sleep_for(std::chrono::milliseconds((int)((time_per_frame-delta_time) * 1000)));
+    }
     ++count;
 
     // update fps at least every 10 seconds ...
