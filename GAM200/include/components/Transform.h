@@ -9,6 +9,7 @@ public:
 	//centre position of bodies
 	Vec2 Position;
 	float Scale;
+	float Rotation;
 	Vec2 PrevPosition;
 	float X_Velocity;
 	float X_Acceleration;
