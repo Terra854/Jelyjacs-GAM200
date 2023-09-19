@@ -58,7 +58,7 @@ void Physics::Initialize() {
 
 void Physics::Update(float time) {
 	// DEBUG: Make sure it's running
-	std::cout << "Physics::Update" << std::endl;
+	// std::cout << "Physics::Update" << std::endl;
 
 	// Update velocity for each object
 	for (auto gameObject = factory->gameObjectMap.begin(); gameObject != factory->gameObjectMap.end(); ++gameObject) {
@@ -129,5 +129,3 @@ void Physics::Update(float time) {
 		}
 	}
 }
-
-std::string GetName() { return "Physics"; };

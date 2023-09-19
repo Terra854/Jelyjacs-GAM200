@@ -20,6 +20,7 @@ public:
 	GLApp();
 	virtual void Initialize() ;
 	virtual void Update(float time);
+	virtual std::string GetSystemName() { return "Graphics"; }
 	//static void update();
 	//static void draw();
 	static void cleanup();

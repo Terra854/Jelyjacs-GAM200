@@ -12,5 +12,5 @@ public:
 	virtual void Free(){};
 
 	//For Debugging
-	//virtual std::string GetSystemName() {};
+	virtual std::string GetSystemName() { return "ISystems (If you are seeing this, you need to implement GetSystemName() inside yor component)"; };
 };
