@@ -4,6 +4,7 @@
 #include <Interface_System.h>
 #include <typeinfo>
 #include <string>
+#include <iostream>
 
 Vec2 interPt, normalAtCollision;
 float interTime = 0.0f;
@@ -56,9 +57,17 @@ void Physics::Initialize() {
 }
 
 void Physics::Update(float time) {
+	// DEBUG: Make sure it's running
+	std::cout << "Physics::Update" << std::endl;
 	for (const std::pair<const unsigned int, GOC*>& pair : factory->gameObjectMap) {
 		// GameObjectComposition::GetComponent is not implemented yet
-		//Transform *t = (Transform*) pair.second->GetComponent(ComponentTypeId::CT_Transform);
+		Transform *t = (Transform*) pair.second->GetComponent(ComponentTypeId::CT_Transform);
+
+		// DEBUG: Print address to stdout
+		std::cout << t << std::endl;
+
+		if (t == nullptr)
+			continue; // No transform in that object, move along
 
 		//t->Velocity += t->Acceleration;
 
