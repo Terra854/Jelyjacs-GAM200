@@ -28,7 +28,7 @@ void TextSerialization::readInt(int& i)
 	stream >> i;
 }
 
-void TextSerialization::readFloat(int& f)
+void TextSerialization::readFloat(float& f)
 {
 	stream >> f;
 }
@@ -43,7 +43,7 @@ void TextSerialization::writeInt(int& i)
 	stream << i;
 }
 
-void TextSerialization::writeFloat(int& f)
+void TextSerialization::writeFloat(float& f)
 {
 	stream << f;
 }

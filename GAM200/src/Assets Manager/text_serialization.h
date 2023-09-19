@@ -13,10 +13,10 @@ public:
 	virtual bool closeFile(); // Close file
 	virtual bool isGood(); // Check if the file is good e.g check eof
 	virtual void readInt(int& i);
-	virtual void readFloat(int& f);
+	virtual void readFloat(float& f);
 	virtual void readString(std::string& str);
 	virtual void writeInt(int& i);
-	virtual void writeFloat(int& f);
+	virtual void writeFloat(float& f);
 	virtual void writeString(std::string& str);
 
 };
