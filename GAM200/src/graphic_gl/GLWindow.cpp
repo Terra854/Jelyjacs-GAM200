@@ -24,7 +24,7 @@ GLFWwindow* GLWindow::ptr_window;
 GLWindow* window = NULL;
 
 //fps control
-bool fps_control = true;
+bool fps_control = true; // change to false to test fps without control
 double time_per_frame = 1.0 / 60.0;
 /*
 constructor
@@ -126,7 +126,7 @@ The only task is to have GLFW return resources back to the system and
 gracefully terminate.
 */
 void GLWindow::cleanup() {
-    // Part 1
+
     glfwTerminate();
 }
 
@@ -176,7 +176,7 @@ void GLWindow::fbsize_cb(GLFWwindow* ptr_win, int wwidth, int hheight) {
 #endif
     // use the entire framebuffer as drawing region
     glViewport(0, 0, wwidth, hheight);
-    // later, if working in 3D, we'll have to set the projection matrix here ...
+   
 }
 
 /*  _________________________________________________________________________*/
@@ -201,6 +201,7 @@ void GLWindow::update_time(double fps_calc_interval) {
     // fps calculations
     static double count = 0.0; // number of game loop iterations
     static double start_time = glfwGetTime();
+
     // get elapsed time since very beginning (in seconds) ...
     double elapsed_time = curr_time - start_time;
     if (fps_control) {

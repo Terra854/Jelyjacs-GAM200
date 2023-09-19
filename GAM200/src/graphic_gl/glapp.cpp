@@ -320,7 +320,7 @@ void GLApp::Update(float time)
 	
 
 	std::stringstream sstr;
-	sstr << window->fps;
+	sstr <<window->title <<" FPS: " << window->fps;
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
 	// draw all objects
 	for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
