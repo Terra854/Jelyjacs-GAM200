@@ -5,6 +5,10 @@
 namespace Collision {
 
 	/*
+		CIRCLE COLLISIONS
+	*/
+
+	/*
 		This function calculates whether a given circle is colliding with a given line
 	*/
 	bool Check_Circle_Line(const Circle& circle,
@@ -235,6 +239,10 @@ namespace Collision {
 	}
 
 	/*
+		RECTANGLE COLLISIONS
+	*/
+
+	/*
 		This function checks if a given rectangle intersects with a line via AABB.
 		NOTE: Currently untested, so don't know if it works atm.
 	*/
@@ -304,6 +312,98 @@ namespace Collision {
 			}
 		}
 		return false;  // no intersection
+	}
+
+	bool PointLineCollision(const Vec2& point, const Line& line) {
+		// Get the line segment vector and the point-to-start vector
+		Vec2 lineVec = line.Pt1() - line.Pt0();
+		Vec2 pointVec = point - line.Pt0();
+
+		// Compute the projection of pointVec onto lineVec
+		float projLength = pointVec.x * lineVec.x + pointVec.y * lineVec.y;
+		if (projLength < 0 || projLength > lineVec.x * lineVec.x + lineVec.y * lineVec.y)
+			return false;  // point is outside the line segment
+
+		float projLenPerp = pointVec.x * lineVec.y - pointVec.y * lineVec.x;
+		// Here, you can use a threshold to check for "close enough" collision.
+		return abs(projLenPerp) <= 1.0e-6; // Very small threshold
+	}
+
+	/*
+		This function checks which side of a given rectangle intersects with a line via hotspot checking
+		via PointLineCollision
+
+		Should use Check_AABB_Line first to see if collision actually occured
+
+		NOTE: Currently untested, so don't know if it works atm.
+		TODO: Check for collision at the corners
+	*/
+	int Check_Rect_Line(float PosX, float PosY, float scaleX, float scaleY, const Line& line)
+	{
+		Vec2 point;
+		int flag = 0;
+
+		/************************
+			Left
+		************************/
+		point.x = PosX - scaleX / 2;
+		point.y = PosY + scaleY / 4;
+
+		if (PointLineCollision(point, line)) {
+			flag |= COLLISION_LEFT;
+		}
+
+		point.y = PosY - scaleY / 4;
+		if (PointLineCollision(point, line)) {
+			flag |= COLLISION_LEFT;
+		}
+
+		/************************
+			Right
+		************************/
+		point.x = PosX + scaleX / 2;
+		point.y = PosY + scaleY / 4;
+
+		if (PointLineCollision(point, line)) {
+			flag |= COLLISION_RIGHT;
+		}
+
+		point.y = PosY - scaleY / 4;
+		if (PointLineCollision(point, line)) {
+			flag |= COLLISION_RIGHT;
+		}
+
+		/************************
+			Top
+		************************/
+		point.x = PosX + scaleX / 4;
+		point.y = PosY + scaleY / 2;
+
+		if (PointLineCollision(point, line)) {
+			flag |= COLLISION_TOP;
+		}
+
+		point.x = PosX - scaleX / 4;
+		if (PointLineCollision(point, line)) {
+			flag |= COLLISION_TOP;
+		}
+
+		/************************
+			Bottom
+		************************/
+		point.x = PosX + scaleX / 4;
+		point.y = PosY - scaleY / 2;
+
+		if (PointLineCollision(point, line)) {
+			flag |= COLLISION_BOTTOM;
+		}
+
+		point.x = PosX - scaleX / 4;
+		if (PointLineCollision(point, line)) {
+			flag |= COLLISION_BOTTOM;
+		}
+
+		return flag;
 	}
 
 	/*
