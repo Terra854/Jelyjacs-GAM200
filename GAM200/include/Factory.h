@@ -25,7 +25,7 @@ public:
 
 	virtual std::string GetSystemName() { return "Factory"; };
 
-	//virtual void sendMessage();
+	//virtual void SendMessage(Message* msg);
 
 	void destroyAllGameObjs();
 

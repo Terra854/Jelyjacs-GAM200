@@ -42,4 +42,5 @@ int main() {
    */
    engine->DestroySystem();
    delete engine;
+   return 0;
 }

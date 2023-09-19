@@ -58,7 +58,6 @@ void GameObjectFactory::Update(float dt) {
 	//All objects to be delete have been deleted
 	gameObjsToBeDeleted.clear();
 }
-
 //This destroys all game objects
 void GameObjectFactory::destroyAllGameObjs()
 {
