@@ -2,7 +2,7 @@
 
 #include "Vec2.h"
 #include "Composition.h"
-
+#include "../../src/Assets Manager/serialization.h"
 class Transform : public GameComponent
 {
 public:
@@ -17,8 +17,15 @@ public:
 	float Y_Acceleration;
 	float Mass;
 	Mat3 Matrix;
-	virtual void Initialize()
+	virtual void Initialize() override
 	{
 
+	}
+	virtual void Serialize(Serialization& stream) override
+	{
+		streamGet( stream , Position.x);
+		streamGet(stream, Position.y);
+		streamGet(stream, Scale);
+		streamGet(stream, Rotation);
 	}
 };

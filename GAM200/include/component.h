@@ -16,6 +16,8 @@ public:
 	//GameComponent();
 	virtual ~GameComponent(){};
 
+	virtual void Serialize(Serialization& stream) {};
+
 	///Get the GameObjectComposition this component is owned/composed.
 	GOC* GetOwner() { return Base; }
 
