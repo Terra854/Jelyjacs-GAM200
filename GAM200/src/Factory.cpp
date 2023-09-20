@@ -116,15 +116,17 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 					Transform* trans = static_cast<Transform*>(testComponent);
 
 					Vec2 pos;
-					StreamRead(textStream, pos);
+					streamGet(textStream, pos.x);
+					streamGet(textStream, pos.y);
+					
 					trans->Position = pos;
 
 					float scale;
-					StreamRead(textStream, scale);
+					streamGet(textStream, scale);
 					trans->Scale = scale;
 
 					float rotation;
-					StreamRead(textStream, rotation);
+					streamGet(textStream, rotation);
 					trans->Rotation = rotation;
 				}
 			}
