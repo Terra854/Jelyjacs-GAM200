@@ -4,6 +4,7 @@
 #include "Interface_System.h"
 #include <vector>  // Remove after adding this header somewhere else
 #include <message.h>
+#include <unordered_map>
 
 
 class CoreEngine {
@@ -13,15 +14,13 @@ public:
 
 	
 	void GameLoop();
-	// Putting all the systems into a vector
-	void AddSystem(ISystems* sys);
-	// Delete all the systems in the vector
-	void DestroySystem();
+	// Add the system into the map
+	void AddSystem(std::string SystemName, ISystems* sys);
 	void BroadcastMessage(Message *msg);
 	void Initialize();
 
 private:
-	std::vector<ISystems*> Systems;
+	std::unordered_map<std::string, ISystems*> Systems;
 	unsigned last_update;
 	bool game_active;
 };
