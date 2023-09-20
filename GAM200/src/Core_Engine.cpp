@@ -55,8 +55,6 @@ void CoreEngine::GameLoop() {
 		std::cout << "########################################################################################" << std::endl;
 
 		total_time = 0.0;
-
-		break;
 	}
 }
 void CoreEngine::AddSystem(std::string SystemName, ISystems* sys) {
