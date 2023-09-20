@@ -98,8 +98,8 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 		GOC* gameObj = new GOC();
 		std::string componentName;
 		Vec2 position;
-		float size;
-		float rotation;
+		float size{};
+		float rotation{};
 
 		while (textStream.isGood())
 		{	
@@ -113,6 +113,8 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 				// Create Component by using the interface
 				ComponentCreator* creator = it->second;
 				GameComponent* component = creator->Create();
+
+				/*
 				GameComponent* testComponent = component;
 				// Add component to composition
 				gameObj->AddComponent(creator->typeId, component);
@@ -133,7 +135,12 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 					float rotation;
 					streamGet(textStream, rotation);
 					trans->Rotation = rotation;
-				}
+					
+				} */
+
+				streamGet(textStream, *component);
+				gameObj->AddComponent(creator->typeId, component);
+
 			}
 		}
 		// Id and initialize game object

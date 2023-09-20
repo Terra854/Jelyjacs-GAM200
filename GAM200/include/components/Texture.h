@@ -15,7 +15,7 @@ class Texture : public GameComponent
 	{
 		std::string texturefile;
 		streamGet(stream, texturefile);
-		texturefile = "../../../Asset/Objects" + texturefile;
+		texturefile = "../../../Asset/Picture/" + texturefile;
 		texturepath = GLApp::setup_texobj(texturefile.c_str());
 	}
 

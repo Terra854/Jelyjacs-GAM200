@@ -24,6 +24,9 @@ void GameLogic::Initialize()
 	testObj = gameObjFactory->buildFromFile("test.txt");
 	trans = static_cast<Transform*>( testObj->GetComponent(ComponentTypeId::CT_Transform));
 
+
+	GOC* testobj2 = gameObjFactory->buildFromFile("../../Asset/Objects/TestTile.txt");
+
 	//alternate way to get component without cast
 	//trans = testObj->GetComponent_NoCast<Transform>(ComponentTypeId::CT_Transform);
 	trans->Mass = 0.5f;
