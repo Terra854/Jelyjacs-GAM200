@@ -24,6 +24,12 @@
 		///Add an component used only for dynamic composition construction.
 		void AddComponent(ComponentTypeId typeId, GameComponent* component);
 
+		template<typename type>
+		type* GetComponent_NoCast(ComponentTypeId typeId)
+		{
+			return static_cast<type*>(GetComponent(typeId));
+		}
+
 		///Get the game object's Id
 		GOCId GetId() { return ObjectId; }
 
