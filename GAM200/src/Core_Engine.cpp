@@ -58,7 +58,7 @@ void CoreEngine::GameLoop() {
 		double total_time = 0.0;
 
 		for (const std::pair<std::string, ISystems*>& s : Systems) {
-			if (s.first != "Window" && s.first != "Graphics") // These 2 systems need to be updated last after all other systems are done
+			if (s.first != "Window" && s.first != "Graphics") // These 2 systems need to be updated last after all other systems are done for the most up-to-date info
 				if (log_system_time)
 					DebugUpdate(s.second, dt, elapsed_time, total_time); // DEBUG: To log how long does each system needs to finish updating
 				else
@@ -70,9 +70,6 @@ void CoreEngine::GameLoop() {
 			DebugUpdate(Systems["Window"], dt, elapsed_time, total_time);
 
 			// Output to console for now, will plan to display ingame when the engine can render fonts
-
-			//std::cout << s->SystemName() << " system completed it's update in " << std::fixed << std::setprecision(6) << (double)(end_system_time - start_system_time) / 1000000.0 << " seconds (" << p.second / total_time * 100.0 << "%)" << std::endl;
-
 			for (std::pair<std::string, double> p : elapsed_time)
 				std::cout << p.first << " system completed it's update in " << std::fixed << std::setprecision(6) << p.second << " seconds (" << p.second / total_time * 100.0 << "%)" << std::endl;
 
