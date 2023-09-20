@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComponentType.h"
+#include "../../src/Assets Manager/serialization.h"
 
 //Forward declaration of GOC class
 class GameObjectComposition;
