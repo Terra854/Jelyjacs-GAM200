@@ -1,5 +1,8 @@
 #pragma once
 
+// Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
+// High priority to refactor this before M1 submission to avoid academic misconduct penalties
+
 #include "ComponentType.h"
 
 //Forward declaration of GOC class
