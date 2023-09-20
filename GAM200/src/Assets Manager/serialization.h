@@ -19,49 +19,48 @@ public:
 	virtual void writeString(std::string& str) = 0;
 };
 
-//Base case of serialization is that the object serializes itself.
-// Reference from Sample:
+// ALlows the component to run it's own serialization on creation
 template<typename type>
-inline void StreamRead(Serialization& stream, type& typeInstance)
+inline void streamGet(Serialization& stream, type& typeInstance)
 {
 	typeInstance.Serialize(stream);
 }
 
-//Base non recursive stream operators of fundamental types.
-inline void StreamRead(Serialization& stream, int& i)
+// Stream reading for common base types
+inline void streamGet(Serialization& stream, int& i)
 {
 	stream.readInt(i);
 }
 
-inline void StreamRead(Serialization& stream, float& f)
+inline void streamGet(Serialization& stream, float& f)
 {
 	stream.readFloat(f);
 }
 
-inline void StreamRead(Serialization& stream, std::string& str)
+inline void streamGet(Serialization& stream, std::string& str)
 {
 	stream.readString(str);
 }
 
 // Same as above but for writing to stream
 template<typename type>
-inline void StreamWrite(Serialization& stream, type& typeInstance)
+inline void streamWrite(Serialization& stream, type& typeInstance)
 {
-	typeInstance.Serialize(stream);
+	typeInstance.Deserialize(stream);
 }
 
-//Base non recursive stream operators of fundamental types.
-inline void StreamWrite(Serialization& stream, int& i)
+// Stream writing for common base types
+inline void streamWrite(Serialization& stream, int& i)
 {
 	stream.writeInt(i);
 }
 
-inline void StreamWrite(Serialization& stream, float& f)
+inline void streamWrite(Serialization& stream, float& f)
 {
 	stream.writeFloat(f);
 }
 
-inline void StreamWrite(Serialization& stream, std::string& str)
+inline void streamWrite(Serialization& stream, std::string& str)
 {
 	stream.writeString(str);
 }
