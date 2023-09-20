@@ -28,7 +28,7 @@ public:
 
 	virtual void Update(float time);
 
-	virtual std::string GetSystemName() { return "Factory"; };
+	virtual std::string SystemName() { return "Factory"; };
 
 	//virtual void SendMessage(Message* msg);
 

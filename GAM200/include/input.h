@@ -9,6 +9,7 @@ enum class KEY
 	a,
 	s,
 	d,
+	p,
 	mouseL,
 	mouseR,
 	total

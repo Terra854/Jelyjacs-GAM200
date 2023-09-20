@@ -25,11 +25,11 @@ int main() {
 
 	GLApp* graphics = new GLApp();                                          // @GuoChen your graphics systems nid to match this code
 																			// @GuoChen Then declare ur window properties
-	engine->AddSystem(windows->GetSystemName(), windows);                   // @GuoChen
-	engine->AddSystem(graphics->GetSystemName(), graphics);                 // @GuoChen
+	engine->AddSystem(windows->SystemName(), windows);                   // @GuoChen
+	engine->AddSystem(graphics->SystemName(), graphics);                 // @GuoChen
 
-	engine->AddSystem(factory->GetSystemName(), factory);
-	engine->AddSystem(physics->GetSystemName(), physics);
+	engine->AddSystem(factory->SystemName(), factory);
+	engine->AddSystem(physics->SystemName(), physics);
 
 	engine->Initialize();
 	windows->ActivateWindow();                                                    // @GuoChen Window Class nid this function

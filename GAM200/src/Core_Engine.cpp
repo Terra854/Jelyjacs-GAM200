@@ -3,6 +3,7 @@
 #include <chrono>
 #include <iostream>
 #include <iomanip>
+#include "input.h"
 
 CoreEngine* CORE;
 CoreEngine::CoreEngine() {
@@ -19,9 +20,9 @@ CoreEngine::~CoreEngine() {
 // DEBUG: To log how long does each system needs to finish updating
 void DebugUpdate(ISystems* s, const float& dt, double& total_time) {
 	unsigned start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	s->Update(dt);
+	//s->Update(dt);
 	unsigned end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	std::cout << s->GetSystemName() << " system completed it's update in " << std::fixed << std::setprecision(6) << (double)(end_system_time - start_system_time) / 1000000.0 << " seconds" << std::endl;
+	std::cout << s->SystemName() << " system completed it's update in " << std::fixed << std::setprecision(6) << (double)(end_system_time - start_system_time) / 1000000.0 << " seconds" << std::endl;
 	total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 }
 
@@ -44,24 +45,25 @@ void CoreEngine::GameLoop() {
 		for (const std::pair<std::string, ISystems*>& s : Systems) {
 			if (s.first != "Window" && s.first != "Graphics") // These 2 systems need to be updated last after all other systems are done
 				DebugUpdate(s.second, dt, total_time); // DEBUG: To log how long does each system needs to finish updating
-				//s.second->Update(dt); // The non-debugging version
+				s.second->Update(dt); // The non-debugging version
 		}
+		if (input::IsPressed(KEY::p)) {
+			DebugUpdate(Systems["Graphics"], dt, total_time);
+			DebugUpdate(Systems["Window"], dt, total_time);
 
-		DebugUpdate(Systems["Graphics"], dt, total_time);
-		DebugUpdate(Systems["Window"], dt, total_time);
+			// Output to console for now, will plan to display ingame when the engine can render fonts
+			std::cout << "Total time taken for this frame: " << std::fixed << std::setprecision(6) << total_time << " seconds." << std::endl;
+			std::cout << "########################################################################################" << std::endl;
 
-		// Output to console for now, will plan to display ingame when the engine can render fonts
-		std::cout << "Total time taken for this frame: " << std::fixed << std::setprecision(6) << total_time << " seconds." << std::endl;
-		std::cout << "########################################################################################" << std::endl;
-
-		total_time = 0.0;
+			total_time = 0.0;
+		}
 	}
 }
 void CoreEngine::AddSystem(std::string SystemName, ISystems* sys) {
 	Systems[SystemName] = sys;
 }
 
-void CoreEngine::BroadcastMessage(Message* msg) {
+void CoreEngine::Broadcast(Message* msg) {
 	if (msg->messageId == MessageID::Quit) {
 		game_active = false;
 	}

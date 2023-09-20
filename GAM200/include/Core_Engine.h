@@ -17,7 +17,7 @@ public:
 	void GameLoop();
 	// Add the system into the map
 	void AddSystem(std::string SystemName, ISystems* sys);
-	void BroadcastMessage(Message *msg);
+	void Broadcast(Message *msg);
 	void Initialize();
 
 private:
