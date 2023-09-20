@@ -1,5 +1,7 @@
 #include "Factory.h"
 #include "Assets Manager/text_serialization.h"
+#include "Vec2.h"
+#include "components/Transform.h"
 
 // Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
 // High priority to refactor this before M1 submission to avoid academic misconduct penalties
@@ -93,7 +95,9 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 		// Create new game object to hold components
 		GOC* gameObj = new GOC();
 		std::string componentName;
-
+		Vec2 position;
+		float size;
+		float rotation;
 
 		while (textStream.isGood())
 		{	
@@ -107,9 +111,27 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 				// Create Component by using the interface
 				ComponentCreator* creator = it->second;
 				GameComponent* component = creator->Create();
-
+				GameComponent* testComponent = component;
 				// Add component to composition
 				gameObj->AddComponent(creator->typeId, component);
+				if (componentName == "Transform")
+				{
+					Transform* trans = static_cast<Transform*>(testComponent);
+
+					Vec2 pos;
+					streamGet(textStream, pos.x);
+					streamGet(textStream, pos.y);
+					
+					trans->Position = pos;
+
+					float scale;
+					streamGet(textStream, scale);
+					trans->Scale = scale;
+
+					float rotation;
+					streamGet(textStream, rotation);
+					trans->Rotation = rotation;
+				}
 			}
 		}
 		// Id and initialize game object

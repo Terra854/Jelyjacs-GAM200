@@ -22,7 +22,11 @@ void GameLogic::Initialize()
 
 	testObj = gameObjFactory->buildFromFile("test.txt");
 	trans = static_cast<Transform*>( testObj->GetComponent(ComponentTypeId::CT_Transform));
+
+	//alternate way to get component without cast
+	//trans = testObj->GetComponent_NoCast<Transform>(ComponentTypeId::CT_Transform);
 	trans->Mass = 0.5f;
+	
 	//Broken code. DO NOT REMOVE YET - Jonathan
 	/*
 	gameObjFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Transform));
