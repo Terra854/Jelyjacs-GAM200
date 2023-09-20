@@ -20,14 +20,26 @@ CoreEngine::~CoreEngine() {
 // DEBUG: To log how long does each system needs to finish updating
 void DebugUpdate(ISystems* s, const float& dt, double& total_time) {
 	unsigned start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	//s->Update(dt);
+	s->Update(dt);
 	unsigned end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	std::cout << s->SystemName() << " system completed it's update in " << std::fixed << std::setprecision(6) << (double)(end_system_time - start_system_time) / 1000000.0 << " seconds" << std::endl;
 	total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 }
 
 void CoreEngine::GameLoop() {
+
+	bool log_system_time = false;
+	std::cout << "###############################################" << std::endl;
+	std::cout << "Press P to switch on/off the performance viewer" << std::endl;
+	std::cout << "###############################################" << std::endl;
+
 	while (game_active) {
+
+		if (input::IsPressed(KEY::p)) {
+			log_system_time = !log_system_time;
+
+			std::cout << "Performance viewer is now " << (log_system_time ? "ON" : "OFF. Press P to switch it on again") << std::endl;
+		}
 		//Get the current time from chrono in milliseconds
 		auto now = std::chrono::system_clock::now();
 		auto duration = now.time_since_epoch();
@@ -44,10 +56,13 @@ void CoreEngine::GameLoop() {
 
 		for (const std::pair<std::string, ISystems*>& s : Systems) {
 			if (s.first != "Window" && s.first != "Graphics") // These 2 systems need to be updated last after all other systems are done
-				DebugUpdate(s.second, dt, total_time); // DEBUG: To log how long does each system needs to finish updating
-				s.second->Update(dt); // The non-debugging version
+				if (log_system_time)
+					DebugUpdate(s.second, dt, total_time); // DEBUG: To log how long does each system needs to finish updating
+				else
+					s.second->Update(dt); // The non-debugging version
 		}
-		if (input::IsPressed(KEY::p)) {
+
+		if (log_system_time) {
 			DebugUpdate(Systems["Graphics"], dt, total_time);
 			DebugUpdate(Systems["Window"], dt, total_time);
 
@@ -56,6 +71,10 @@ void CoreEngine::GameLoop() {
 			std::cout << "########################################################################################" << std::endl;
 
 			total_time = 0.0;
+		}
+		else {
+			Systems["Graphics"]->Update(dt);
+			Systems["Window"]->Update(dt);
 		}
 	}
 }
