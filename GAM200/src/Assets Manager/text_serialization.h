@@ -13,6 +13,8 @@ public:
 	virtual bool openFileWrite(const std::string& file); // Open stream for writing (overwrites existing)
 	virtual bool closeFile(); // Close file
 	virtual bool isGood(); // Check if the file is good e.g check eof
+
+	// Read/Write from the file stream
 	virtual void readInt(int& i);
 	virtual void readFloat(float& f);
 	virtual void readString(std::string& str);
