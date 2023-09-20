@@ -1,4 +1,5 @@
 #pragma once
+#include <Debug.h>
 
 #include "component.h"
 #include "ComponentType.h"

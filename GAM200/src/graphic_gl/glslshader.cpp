@@ -1,3 +1,4 @@
+#include <Debug.h>
 /* !
 @file    glslshader.h
 @author  pghali@digipen.edu

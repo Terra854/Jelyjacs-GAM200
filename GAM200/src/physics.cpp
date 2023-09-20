@@ -1,3 +1,4 @@
+#include <Debug.h>
 #include <Factory.h>
 #include <physics.h>
 #include <components/Body.h>

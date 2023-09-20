@@ -24,6 +24,8 @@ program object.
 
 /*                                                                   includes
 ----------------------------------------------------------------------------- */
+#include <Debug.h>
+
 #include <GL/glew.h> // for access to OpenGL API declarations 
 #include <glm/glm.hpp>
 #include <iostream>

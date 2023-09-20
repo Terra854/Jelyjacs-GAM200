@@ -1,3 +1,4 @@
+#include <Debug.h>
 // Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
 // High priority to refactor this before M1 submission to avoid academic misconduct penalties
 // Do not remove this until the changes are made

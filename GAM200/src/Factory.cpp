@@ -1,3 +1,4 @@
+#include <Debug.h>
 #include "Factory.h"
 #include "Assets Manager/text_serialization.h"
 #include "Vec2.h"

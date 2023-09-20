@@ -7,10 +7,17 @@
 //#include <chrono>
 //#include <thread>
 
+#include <debug.h>
 
 GameObjectFactory* factory; // Need to be outside for physics component to access it
 
 int main() {
+	
+	// Enable run-time memory check for debug builds.
+	#if defined(DEBUG) | defined(_DEBUG)
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	#endif
+
 	CoreEngine* engine = new CoreEngine();
 	GLWindow* windows = new GLWindow();
 	factory = new GameObjectFactory();

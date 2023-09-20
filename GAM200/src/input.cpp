@@ -1,3 +1,4 @@
+#include <Debug.h>
 #include "input.h"
 
 //refer to input.h for input functions interface

@@ -1,4 +1,5 @@
 #pragma once
+#include <Debug.h>
 
 // Need to change cause Ellie can tell from just a glance that it's directly plagarised from SampleEngine
 // High priority to refactor this before M1 submission to avoid academic misconduct penalties

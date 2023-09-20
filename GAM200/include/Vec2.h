@@ -1,4 +1,6 @@
 #pragma once
+#include <Debug.h>
+
 #include <glm/glm.hpp>
 
 struct Vec2

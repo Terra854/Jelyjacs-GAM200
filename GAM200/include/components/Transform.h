@@ -1,4 +1,5 @@
 #pragma once
+#include <Debug.h>
 
 #include "Vec2.h"
 #include "Composition.h"

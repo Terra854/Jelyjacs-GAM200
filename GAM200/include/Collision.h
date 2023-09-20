@@ -1,4 +1,5 @@
 #pragma once
+#include <Debug.h>
 
 #include "Circle.h"
 #include "Line.h"

@@ -1,3 +1,4 @@
+#include <Debug.h>
 #include "text_serialization.h"
 
 bool TextSerialization::openFileRead(const std::string& file)

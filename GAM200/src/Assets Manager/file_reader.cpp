@@ -1,4 +1,4 @@
-
+#include <Debug.h>
 #include "file_reader.h"
 #include "text_serialization.h"
 #include <iostream>

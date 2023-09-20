@@ -40,6 +40,9 @@
     <Filter Include="Source Files\Systems\Physics">
       <UniqueIdentifier>{0d56c313-ee07-47eb-87e4-e91776b0f3cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Debug">
+      <UniqueIdentifier>{84e06ede-bc7a-419e-824d-b2f595a1bc0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -179,8 +182,8 @@
     <ClInclude Include="include\message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\System.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Debug.h">
+      <Filter>Header Files\Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

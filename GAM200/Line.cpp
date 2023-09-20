@@ -1,4 +1,5 @@
 #include <Line.h>
+#include <Debug.h>
 
 void Line::RecalculateLineNormal() {
 	normal = Mat3{ 0.f, 1.f, 0.f, -1.f, 0.f, 0.f, 0.f, 0.f, 1.f } *(pt1 - pt0) / sqrt(normal.x * normal.x + normal.y * normal.y);

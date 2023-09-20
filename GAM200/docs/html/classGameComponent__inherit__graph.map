@@ -1,0 +1,9 @@
+<map id="GameComponent" name="GameComponent">
+<area shape="rect" id="node1" title=" " alt="" coords="174,5,310,32"/>
+<area shape="rect" id="node2" href="$classBody.html" title=" " alt="" coords="128,80,183,107"/>
+<area shape="rect" id="node6" href="$classTexture.html" title=" " alt="" coords="207,80,277,107"/>
+<area shape="rect" id="node7" href="$classTransform.html" title=" " alt="" coords="301,80,388,107"/>
+<area shape="rect" id="node3" href="$classCirclular.html" title=" " alt="" coords="5,155,81,181"/>
+<area shape="rect" id="node4" href="$classRectangular.html" title=" " alt="" coords="105,155,205,181"/>
+<area shape="rect" id="node5" href="$classlines.html" title=" " alt="" coords="230,155,283,181"/>
+</map>

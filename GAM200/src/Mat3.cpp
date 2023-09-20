@@ -1,3 +1,4 @@
+#include <Debug.h>
 #include "Mat3.h"
 #include <cmath>
 
