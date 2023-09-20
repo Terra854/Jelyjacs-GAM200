@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComponentType.h"
+#include "../../src/Assets Manager/serialization.h"
 
 //Forward declaration of GOC class
 class GameObjectComposition;
@@ -15,6 +16,8 @@ public:
 
 	//GameComponent();
 	virtual ~GameComponent(){};
+
+	virtual void Serialize(Serialization& stream) {};
 
 	///Get the GameObjectComposition this component is owned/composed.
 	GOC* GetOwner() { return Base; }
