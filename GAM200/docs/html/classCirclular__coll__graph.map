@@ -1,8 +1,0 @@
-<map id="Circlular" name="Circlular">
-<area shape="rect" id="node1" title=" " alt="" coords="124,273,200,300"/>
-<area shape="rect" id="node2" href="$classBody.html" title=" " alt="" coords="95,184,149,211"/>
-<area shape="rect" id="node3" href="$classGameComponent.html" title=" " alt="" coords="30,95,166,121"/>
-<area shape="rect" id="node4" href="$classGameObjectComposition.html" title=" " alt="" coords="5,5,191,32"/>
-<area shape="rect" id="node5" href="$structCircle.html" title=" " alt="" coords="183,184,242,211"/>
-<area shape="rect" id="node6" href="$structVec2.html" title=" " alt="" coords="190,95,243,121"/>
-</map>
