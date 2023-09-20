@@ -114,7 +114,8 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 				ComponentCreator* creator = it->second;
 				GameComponent* component = creator->Create();
 
-				/*
+				/* commented out to test the streamGet way of serialization
+				* 
 				GameComponent* testComponent = component;
 				// Add component to composition
 				gameObj->AddComponent(creator->typeId, component);
