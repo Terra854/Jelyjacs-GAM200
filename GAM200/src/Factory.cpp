@@ -3,6 +3,10 @@
 #include "Vec2.h"
 #include "components/Transform.h"
 
+// Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
+// High priority to refactor this before M1 submission to avoid academic misconduct penalties
+// Do not remove this until the changes are made
+
 /*
 * GOC is what the game object is represented by. It's definition is found in Composition.h.
 * As a reminder, a game object is just a group of components so the GOC will have a vector of
@@ -116,15 +120,17 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 					Transform* trans = static_cast<Transform*>(testComponent);
 
 					Vec2 pos;
-					StreamRead(textStream, pos);
+					streamGet(textStream, pos.x);
+					streamGet(textStream, pos.y);
+					
 					trans->Position = pos;
 
 					float scale;
-					StreamRead(textStream, scale);
+					streamGet(textStream, scale);
 					trans->Scale = scale;
 
 					float rotation;
-					StreamRead(textStream, rotation);
+					streamGet(textStream, rotation);
 					trans->Rotation = rotation;
 				}
 			}
