@@ -1,5 +1,7 @@
 #include "Factory.h"
 #include "Assets Manager/text_serialization.h"
+#include "Vec2.h"
+#include "components/Transform.h"
 
 /*
 * GOC is what the game object is represented by. It's definition is found in Composition.h.
@@ -90,7 +92,9 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 		// Create new game object to hold components
 		GOC* gameObj = new GOC();
 		std::string componentName;
-
+		Vec2 position;
+		float size;
+		float rotation;
 
 		while (textStream.isGood())
 		{	
@@ -104,9 +108,25 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 				// Create Component by using the interface
 				ComponentCreator* creator = it->second;
 				GameComponent* component = creator->Create();
-
+				GameComponent* testComponent = component;
 				// Add component to composition
 				gameObj->AddComponent(creator->typeId, component);
+				if (componentName == "Transform")
+				{
+					Transform* trans = static_cast<Transform*>(testComponent);
+
+					Vec2 pos;
+					StreamRead(textStream, pos);
+					trans->Position = pos;
+
+					float scale;
+					StreamRead(textStream, scale);
+					trans->Scale = scale;
+
+					float rotation;
+					StreamRead(textStream, rotation);
+					trans->Rotation = rotation;
+				}
 			}
 		}
 		// Id and initialize game object
