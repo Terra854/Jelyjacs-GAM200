@@ -1,8 +1,0 @@
-<map id="lines" name="lines">
-<area shape="rect" id="node1" title=" " alt="" coords="125,303,178,329"/>
-<area shape="rect" id="node2" href="$classBody.html" title=" " alt="" coords="87,213,141,240"/>
-<area shape="rect" id="node3" href="$classGameComponent.html" title=" " alt="" coords="30,95,166,121"/>
-<area shape="rect" id="node4" href="$classGameObjectComposition.html" title=" " alt="" coords="5,5,191,32"/>
-<area shape="rect" id="node5" href="$classLine.html" title=" " alt="" coords="187,213,236,240"/>
-<area shape="rect" id="node6" href="$structVec2.html" title=" " alt="" coords="190,95,243,121"/>
-</map>
