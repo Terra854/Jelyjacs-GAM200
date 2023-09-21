@@ -97,9 +97,6 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 		// Create new game object to hold components
 		GOC* gameObj = new GOC();
 		std::string componentName;
-		Vec2 position;
-		float size{};
-		float rotation{};
 
 		while (textStream.isGood())
 		{	
