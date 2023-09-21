@@ -385,7 +385,7 @@ void GLApp::GLObject::update()
 {
 	//std::cout<< position.x<<position.y << std::endl;
 
-	glm::mat3 Scale
+	/*glm::mat3 Scale
 	{
 		scaling.x, 0, 0,
 			0, scaling.y, 0,
@@ -414,7 +414,7 @@ void GLApp::GLObject::update()
 		std::cout << mdl_to_ndc_xform[1][0] << " " << mdl_to_ndc_xform[1][1] << " " << mdl_to_ndc_xform[1][2] << std::endl;
 		std::cout << mdl_to_ndc_xform[2][0] << " " << mdl_to_ndc_xform[2][1] << " " << mdl_to_ndc_xform[2][2] << std::endl;
 		i++;
-	}
+	}*/
 	
 }
 //void GLApp::draw ()
