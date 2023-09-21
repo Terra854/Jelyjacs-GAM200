@@ -8,8 +8,8 @@ class GameLogic : public ISystems
 {
 public:
 	//Constructor to initialise pointer
-	GameLogic();
-	~GameLogic();
+	//GameLogic();
+	//~GameLogic();
 	virtual void SendMessage(Message* msg);
 	void Initialize();
 	void Update(float time);

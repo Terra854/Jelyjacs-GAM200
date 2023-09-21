@@ -9,20 +9,22 @@
 #include "components/Texture.h"
 #include "ComponentType.h"
 
-GameLogic* Logic = NULL;
-			
+//GameLogic* Logic = NULL;
+/*
 GameLogic::GameLogic() {
 	Logic = this;
 }
 GameLogic::~GameLogic() {
 
 }
+*/
 
 void GameLogic::SendMessage(Message* msg) {
 	// Keys to Game Logic
 }
 void GameLogic::Initialize()
 {
+	//Logic = this;
 	GOC * testObj;
 	GOC* testObj2;
 	Transform * trans;
