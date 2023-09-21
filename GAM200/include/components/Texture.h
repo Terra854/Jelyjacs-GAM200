@@ -11,16 +11,6 @@ class Texture : public GameComponent
 
 	GLuint texturepath;
 
-<<<<<<< HEAD
 	virtual void Serialize(Serialization& stream) override;
-=======
-	virtual void Serialize(Serialization& stream) override
-	{
-		std::string texturefile;
-		streamGet(stream, texturefile);
-		texturefile = "../../../Asset/Picture/" + texturefile;
-		texturepath = GLApp::setup_texobj(texturefile.c_str());
-	}
->>>>>>> a5765f1284347935d7736f4e3bbd78ecb01ebfb6
 
 };
