@@ -24,22 +24,20 @@
 		//create and destroy game objects.
 		friend class GameObjectFactory;
 
+		//returns a ptr to a specified type of game component of the object
+		//if object does not contain that component, returns null
 		GameComponent* GetComponent(ComponentTypeId typeID);
 
-		///Add an component used only for dynamic composition construction.
+		///adds a component to be a part of the object by adding it into the components vector
 		void AddComponent(ComponentTypeId typeId, GameComponent* component);
 
-		template<typename type>
-		type* GetComponent_NoCast(ComponentTypeId typeId)
-		{
-			return static_cast<type*>(GetComponent(typeId));
-		}
 
 		///Get the game object's Id
 		GOCId GetId() { return ObjectId; }
 
 
 	private:
+		//contains all components of the current object
 		std::vector<GameComponent*> Components;
 
 		//A unique id for each object used to safely reference 
