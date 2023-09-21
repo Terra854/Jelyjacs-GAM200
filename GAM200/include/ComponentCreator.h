@@ -28,7 +28,7 @@ class ComponentCreatorType : public ComponentCreator
 public:
 	ComponentCreatorType(ComponentTypeId ID)
 		:ComponentCreator(ID)
-	{}
+	{};
 	virtual GameComponent* Create()
 	{
 		return new type();
