@@ -7,10 +7,14 @@
 class GameLogic : public ISystems
 {
 public:
+	//GameLogic();
+	//~GameLogic();
 	void Initialize();
-	//void Update(float time);
+	void Update(float time);
 	virtual std::string SystemName() { return "Game_Logic"; }
 };
+
+extern GameLogic* LOGIC;
 
 
 
