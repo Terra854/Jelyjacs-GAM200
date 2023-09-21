@@ -24,6 +24,7 @@ void gravityUpdate(int* gameobjectYVelocity)
 
 bool Check_Collision(Body* b1, Body* b2) {
 
+	// Circle and Line
 	if (typeid(*b1) == typeid(Circlular) && typeid(*b2) == typeid(lines)) {
 		return Collision::Check_Circle_Line(((Circlular*)b1)->cirlce, ((Transform*)b1)->PrevPosition, ((lines*)b2)->line, interPt, normalAtCollision, interTime);
 	}
@@ -31,6 +32,7 @@ bool Check_Collision(Body* b1, Body* b2) {
 		return Collision::Check_Circle_Line(((Circlular*)b2)->cirlce, ((Transform*)b2)->PrevPosition, ((lines*)b1)->line, interPt, normalAtCollision, interTime);
 	}
 
+	// Rectangle and Line
 	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(lines)) {
 		return Collision::Check_AABB_Line(((Rectangular*)b1)->aabb, ((Transform*)b1)->PrevPosition, ((lines*)b2)->line, interPt, normalAtCollision, interTime);
 	}
@@ -38,6 +40,7 @@ bool Check_Collision(Body* b1, Body* b2) {
 		return Collision::Check_AABB_Line(((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, ((lines*)b1)->line, interPt, normalAtCollision, interTime);
 	}
 
+	// 2 Rectangles
 	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
 		return Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->PrevPosition, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition);
 	}
