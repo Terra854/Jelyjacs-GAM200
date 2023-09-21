@@ -108,6 +108,9 @@
     <ClCompile Include="include\GameLogic.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Graphic_gl\GLWindow.h">
