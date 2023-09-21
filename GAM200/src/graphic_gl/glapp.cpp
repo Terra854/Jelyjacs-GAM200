@@ -15,17 +15,16 @@
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
-//test drawing
-GLApp::GLModel Model;
-GLSLShader shdr_pgm;
-GOC* gameObject;
-GLuint texobj_hdl;
-glm::mat3 matrix;
+//test
+GLApp::GLModel mdl;
+GLSLShader shdr_img;
+GLuint tex_test;
+glm::mat3 mat_test;
 //Declarations of shdrpgms models objects map
-std::map<std::string , GLSLShader> GLApp::shdrpgms;
-std::map<std::string , GLApp::GLModel> GLApp::models;
-std::map<std::string , GLApp::GLObject> GLApp::objects;
-std::map<std::string , GLuint> GLApp::textures;
+std::map<std::string, GLSLShader> GLApp::shdrpgms;
+std::map<std::string, GLApp::GLModel> GLApp::models;
+std::map<std::string, GLApp::GLObject> GLApp::objects;
+std::map<std::string, GLuint> GLApp::textures;
 
 GLApp::GLModel GLApp::mdl{};
 
@@ -43,24 +42,130 @@ GLApp::GLApp()
 void GLApp::Initialize()
 {
 	glClearColor(1.f, 1.f, 1.f, 1.f);
-	
-	glViewport(0, 0, window->width, window->height);
-	//init_scene();
 
+	glViewport(0, 0, window->width, window->height);
 	init_models();
 	init_shdrpgms();
+	//init_scene();
+	Texture* tex_pt = static_cast<Texture*>((gameObjFactory->getObjWithID(0))->GetComponent(ComponentTypeId::CT_Texture));
+	tex_test = tex_pt->texturepath;
 
-	gameObject = gameObjFactory->getObjWithID(0);
-	texobj_hdl = static_cast<Texture*>(gameObject->GetComponent(ComponentTypeId::CT_Texture))->texturepath;
-	Mat3 max = static_cast<Transform*>(gameObject->GetComponent(ComponentTypeId::CT_Transform))->Matrix;
-	matrix = max.ToGlmMat3();
-
+	Transform* tran_pt = static_cast<Transform*>((gameObjFactory->getObjWithID(0))->GetComponent(ComponentTypeId::CT_Transform));
+	mat_test = tran_pt->Matrix.ToGlmMat3();
 	// enable alpha blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-	//Initialising Scene
+void GLApp::init_models() {
+	std::ifstream ifs_msh{ "../meshes/square.msh", std::ios::in };
+	if (!ifs_msh)
+	{
+		std::cout << "ERROR: Unable to open mesh file: "
+			<< "model_test" << "\n";
+		exit(EXIT_FAILURE);
+	}
+	ifs_msh.seekg(0, std::ios::beg);
+	std::string line_mesh;
+	getline(ifs_msh, line_mesh);
+	std::istringstream line_sstm_mesh{ line_mesh };
+	char obj_prefix;
+	std::string mesh_name;
+	line_sstm_mesh >> obj_prefix >> mesh_name;
+
+
+	std::vector < float > pos_vtx;
+	std::vector < float > clr_vtx;
+	std::vector < float > tex_coor;
+	std::vector < GLushort > gl_tri_primitives;
+
+	GLuint vbo, vao, ebo;
+
+	while (getline(ifs_msh, line_mesh))
+	{
+		std::istringstream line_sstm_mdl{ line_mesh };
+		line_sstm_mdl >> obj_prefix;
+		float float_data;
+		GLushort glushort_data;
+
+		if (obj_prefix == 'v')
+		{
+			while (line_sstm_mdl >> float_data)
+			{
+				pos_vtx.push_back(float_data);
+			}
+		}
+		if (obj_prefix == 'c')
+		{
+			while (line_sstm_mdl >> float_data)
+			{
+				clr_vtx.push_back(float_data);
+			}
+		}
+		if (obj_prefix == 'x')
+		{
+			while (line_sstm_mdl >> float_data)
+			{
+				tex_coor.push_back(float_data);
+			}
+		}
+		if (obj_prefix == 't')
+		{
+			while (line_sstm_mdl >> glushort_data)
+			{
+				gl_tri_primitives.push_back(glushort_data);
+			}
+			mdl.primitive_type = GL_TRIANGLES;
+		}
+	}
+	// Set VAO
+
+
+	glCreateBuffers(1, &vbo);
+	glNamedBufferStorage(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size() + sizeof(glm::vec2) * tex_coor.size(), nullptr, GL_DYNAMIC_STORAGE_BIT);
+	glNamedBufferSubData(vbo, 0, sizeof(glm::vec2) * pos_vtx.size(), pos_vtx.data());
+	glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3) * clr_vtx.size(), clr_vtx.data());
+	glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(),
+		sizeof(glm::vec2) * tex_coor.size(), tex_coor.data());
+
+
+	glCreateVertexArrays(1, &vao);
+
+	glEnableVertexArrayAttrib(vao, 0);
+	glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(glm::vec2));
+	glVertexArrayAttribFormat(vao, 0, 2, GL_FLOAT, GL_FALSE, 0);
+	glVertexArrayAttribBinding(vao, 0, 0);
+
+	glEnableVertexArrayAttrib(vao, 1);
+	glVertexArrayVertexBuffer(vao, 1, vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3));
+	glVertexArrayAttribFormat(vao, 1, 3, GL_FLOAT, GL_FALSE, 0);
+	glVertexArrayAttribBinding(vao, 1, 1);
+
+	glEnableVertexArrayAttrib(vao, 2);
+	glVertexArrayVertexBuffer(vao, 2, vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(), sizeof(glm::vec2));
+	glVertexArrayAttribFormat(vao, 2, 2, GL_FLOAT, GL_FALSE, 0);
+	glVertexArrayAttribBinding(vao, 2, 2);
+
+	glCreateBuffers(1, &ebo);
+	glNamedBufferStorage(ebo, sizeof(GLushort) * gl_tri_primitives.size(), gl_tri_primitives.data(), GL_DYNAMIC_STORAGE_BIT);
+	glVertexArrayElementBuffer(vao, ebo);
+	glBindVertexArray(0);
+
+	mdl.vaoid = vao;
+	mdl.primitive_cnt = gl_tri_primitives.size();
+	mdl.draw_cnt = gl_tri_primitives.size();
+
+	std::cout << "test model created" << std::endl;
+}
+
+void GLApp::init_shdrpgms() {
+
+	insert_shdrpgm("image-shdrpgm", "../shaders/image.vert", "../shaders/image.frag");
+
+
+	std::cout << "test shader program: " << "image-shdrpgm" << std::endl;
+}
+//Initialising Scene
 //void GLApp::init_scene(){
 //	//read file
 //	std::ifstream ifs("../scenes/game.scn", std::ios::in);
@@ -97,7 +202,7 @@ void GLApp::Initialize()
 //			GLModel Model;
 //
 //			// Read from meshes files
-//			std::ifstream ifs_msh{ "../meshes/" + model_name + ".msh", std::ios::in };
+//			std::ifstream ifs_msh{ "../meshes/square.msh", std::ios::in };
 //			if (!ifs_msh)
 //			{
 //				std::cout << "ERROR: Unable to open mesh file: "
@@ -274,202 +379,95 @@ void GLApp::Initialize()
 //	}
 //}
 
-void GLApp::init_models() {
-	
-
-	// Read from meshes files
-	std::ifstream ifs_msh{ "../meshes/suqare.msh", std::ios::in };
-	if (!ifs_msh)
-	{
-		std::cout << "ERROR: Unable to open mesh file: "
-			<< "square" << "\n";
-		exit(EXIT_FAILURE);
-	}
-	ifs_msh.seekg(0, std::ios::beg);
-	std::string line_mesh;
-	getline(ifs_msh, line_mesh);
-	std::istringstream line_sstm_mesh{ line_mesh };
-	char obj_prefix;
-	std::string mesh_name;
-	line_sstm_mesh >> obj_prefix >> mesh_name;
 
 
-	std::vector < float > pos_vtx;
-	std::vector < float > clr_vtx;
-	std::vector < float > tex_coor;
-	std::vector < GLushort > gl_tri_primitives;
-
-	GLuint vbo, vao, ebo;
-
-	while (getline(ifs_msh, line_mesh))
-	{
-		std::istringstream line_sstm_mdl{ line_mesh };
-		line_sstm_mdl >> obj_prefix;
-		float float_data;
-		GLushort glushort_data;
-
-		if (obj_prefix == 'v')
-		{
-			while (line_sstm_mdl >> float_data)
-			{
-				pos_vtx.push_back(float_data);
-			}
-		}
-		if (obj_prefix == 'c')
-		{
-			while (line_sstm_mdl >> float_data)
-			{
-				clr_vtx.push_back(float_data);
-			}
-		}
-		if (obj_prefix == 'x')
-		{
-			while (line_sstm_mdl >> float_data)
-			{
-				tex_coor.push_back(float_data);
-			}
-		}
-		if (obj_prefix == 't')
-		{
-			while (line_sstm_mdl >> glushort_data)
-			{
-				gl_tri_primitives.push_back(glushort_data);
-			}
-			Model.primitive_type = GL_TRIANGLES;
-		}
-	}
-	// Set VAO
-
-
-	glCreateBuffers(1, &vbo);
-	glNamedBufferStorage(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size() + sizeof(glm::vec2) * tex_coor.size(), nullptr, GL_DYNAMIC_STORAGE_BIT);
-	glNamedBufferSubData(vbo, 0, sizeof(glm::vec2) * pos_vtx.size(), pos_vtx.data());
-	glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3) * clr_vtx.size(), clr_vtx.data());
-	glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(),
-		sizeof(glm::vec2) * tex_coor.size(), tex_coor.data());
-
-
-	glCreateVertexArrays(1, &vao);
-
-	glEnableVertexArrayAttrib(vao, 0);
-	glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(glm::vec2));
-	glVertexArrayAttribFormat(vao, 0, 2, GL_FLOAT, GL_FALSE, 0);
-	glVertexArrayAttribBinding(vao, 0, 0);
-
-	glEnableVertexArrayAttrib(vao, 1);
-	glVertexArrayVertexBuffer(vao, 1, vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3));
-	glVertexArrayAttribFormat(vao, 1, 3, GL_FLOAT, GL_FALSE, 0);
-	glVertexArrayAttribBinding(vao, 1, 1);
-
-	glEnableVertexArrayAttrib(vao, 2);
-	glVertexArrayVertexBuffer(vao, 2, vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(), sizeof(glm::vec2));
-	glVertexArrayAttribFormat(vao, 2, 2, GL_FLOAT, GL_FALSE, 0);
-	glVertexArrayAttribBinding(vao, 2, 2);
-
-	glCreateBuffers(1, &ebo);
-	glNamedBufferStorage(ebo, sizeof(GLushort) * gl_tri_primitives.size(), gl_tri_primitives.data(), GL_DYNAMIC_STORAGE_BIT);
-	glVertexArrayElementBuffer(vao, ebo);
-	glBindVertexArray(0);
-
-	Model.vaoid = vao;
-	Model.primitive_cnt = gl_tri_primitives.size();
-	Model.draw_cnt = gl_tri_primitives.size();
-}
-
-void GLApp::init_shdrpgms() {
-	insert_shdrpgm("image-shdrpgm", ".. / shaders / image.vert", ".. / shaders / image.frag");
-	std::cout << "shader program: " << "image-shdrpgm" << std::endl;
-
-}
-void GLApp::GLObject::update()
-{
-	//std::cout<< position.x<<position.y << std::endl;
-
-	glm::mat3 Scale
-	{
-		scaling.x, 0, 0,
-			0, scaling.y, 0,
-			0, 0, 1
-	};
-
-	glm::mat3 Rotate
-	{
-		cos(orientation), sin(orientation), 0,
-			-sin(orientation), cos(orientation), 0,
-			0, 0, 1
-	};
-
-	glm::mat3 Translate
-	{
-		1, 0, 0,
-		0, 1, 0,
-		position.x, position.y, 1
-	};
-
-	mdl_to_ndc_xform =  Scale* Translate * Rotate;
-	static int i = 0;
-	if(i< 3)
-	{
-		std::cout << mdl_to_ndc_xform[0][0] << " " << mdl_to_ndc_xform[0][1] << " " << mdl_to_ndc_xform[0][2] << std::endl;
-		std::cout << mdl_to_ndc_xform[1][0] << " " << mdl_to_ndc_xform[1][1] << " " << mdl_to_ndc_xform[1][2] << std::endl;
-		std::cout << mdl_to_ndc_xform[2][0] << " " << mdl_to_ndc_xform[2][1] << " " << mdl_to_ndc_xform[2][2] << std::endl;
-		i++;
-	}
-	
-}
+//void GLApp::GLObject::update()
+//{
+//	//std::cout<< position.x<<position.y << std::endl;
+//
+//	glm::mat3 Scale
+//	{
+//		scaling.x, 0, 0,
+//			0, scaling.y, 0,
+//			0, 0, 1
+//	};
+//
+//	glm::mat3 Rotate
+//	{
+//		cos(orientation), sin(orientation), 0,
+//			-sin(orientation), cos(orientation), 0,
+//			0, 0, 1
+//	};
+//
+//	glm::mat3 Translate
+//	{
+//		1, 0, 0,
+//		0, 1, 0,
+//		position.x, position.y, 1
+//	};
+//
+//	mdl_to_ndc_xform =  Scale* Translate * Rotate;
+//	static int i = 0;
+//	if(i< 3)
+//	{
+//		std::cout << mdl_to_ndc_xform[0][0] << " " << mdl_to_ndc_xform[0][1] << " " << mdl_to_ndc_xform[0][2] << std::endl;
+//		std::cout << mdl_to_ndc_xform[1][0] << " " << mdl_to_ndc_xform[1][1] << " " << mdl_to_ndc_xform[1][2] << std::endl;
+//		std::cout << mdl_to_ndc_xform[2][0] << " " << mdl_to_ndc_xform[2][1] << " " << mdl_to_ndc_xform[2][2] << std::endl;
+//		i++;
+//	}
+//	
+//}
 //void GLApp::draw ()
 void GLApp::Update(float time)
 {
-	//// update all objects
-	//for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
-	//{
-	//	obj->second.update();
-	//}
+	// update all objects
+	/*for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
+	{
+		obj->second.update();
+	}*/
 
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	// clear back buffer as before
 	glClear(GL_COLOR_BUFFER_BIT);
-	
-	
+
+
 
 	std::stringstream sstr;
-	sstr <<window->title <<" FPS: " << window->fps;
-	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
-	// draw all objects
-	/*for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
-	{
-		obj->second.draw();
+	sstr << window->title << " FPS: " << window->fps;
+	//glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
+	//// draw all objects
+	//for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
+	//{
+	//	obj->second.draw();
 
-	}*/
+	//}
+	//glfwSwapBuffers( window->ptr_window);
 
-	
-	glBindTextureUnit(6, texobj_hdl);
-	glBindTexture(GL_TEXTURE_2D, texobj_hdl);
-	glTextureSubImage2D(texobj_hdl, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glBindTextureUnit(6, tex_test);
+	glBindTexture(GL_TEXTURE_2D, tex_test);
+	glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	// load shader program in use by this object
-	shdr_pgm.Use();
+	shdr_img.Use();
 	// bind VAO of this object's model
-	glBindVertexArray(Model.vaoid);
+	glBindVertexArray(mdl.vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
-	shdr_pgm.SetUniform("uModel_to_NDC", matrix);
+	shdr_img.SetUniform("uModel_to_NDC", mat_test);
 
 	// tell fragment shader sampler uTex2d will use texture image unit 6
-	GLuint tex_loc = glGetUniformLocation(shdr_pgm.GetHandle(), "uTex2d");
+	GLuint tex_loc = glGetUniformLocation(shdr_img.GetHandle(), "uTex2d");
 	glUniform1i(tex_loc, 6);
 
 	// call glDrawElements with appropriate arguments
-	glDrawElements(Model.primitive_type, Model.draw_cnt, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(mdl.primitive_type, mdl.draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
-	shdr_pgm.UnUse();
-
-	glfwSwapBuffers( window->ptr_window);
+	shdr_img.UnUse();
 }
 
 
-void GLApp::cleanup ()
+void GLApp::cleanup()
 {
 }
 
@@ -477,7 +475,7 @@ void GLApp::cleanup ()
 GLuint GLApp::setup_texobj(const char* pathname)
 {
 	int width{ }, height{  }, image_channels;
-	
+
 	unsigned char* ptr_texels = stbi_load(pathname, &width, &height, &image_channels, STBI_rgb_alpha);
 	if (!ptr_texels)
 	{
@@ -490,18 +488,18 @@ GLuint GLApp::setup_texobj(const char* pathname)
 		std::cout << "Image height: " << height << "\n";
 	}
 
-	GLuint texobj;
+	GLuint texobj_hdl;
 	// define and initialize a handle to texture object that will
 	// encapsulate two-dimensional textures
-	glCreateTextures(GL_TEXTURE_2D, 1, &texobj);
+	glCreateTextures(GL_TEXTURE_2D, 1, &texobj_hdl);
 	// allocate GPU storage for texture image data loaded from file
-	glTextureStorage2D(texobj, 1, GL_RGBA8, width, height);
+	glTextureStorage2D(texobj_hdl, 1, GL_RGBA8, width, height);
 	// copy image data from client memory to GPU texture buffer memory
-	glTextureSubImage2D(texobj, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr_texels);
+	glTextureSubImage2D(texobj_hdl, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr_texels);
 	// client memory not required since image is buffered in GPU memory
 	delete[] ptr_texels;
 
-	return texobj;
+	return texobj_hdl;
 }
 
 
@@ -510,21 +508,21 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 	std::vector<std::pair<GLenum, std::string>> shdr_files
 	{
 		std::make_pair(GL_VERTEX_SHADER, vtx_shdr),
-		std::make_pair(GL_FRAGMENT_SHADER, frg_shdr)
+			std::make_pair(GL_FRAGMENT_SHADER, frg_shdr)
 	};
 
-	
-	shdr_pgm.CompileLinkValidate(shdr_files);
-	if (GL_FALSE == shdr_pgm.IsLinked())
+
+	shdr_img.CompileLinkValidate(shdr_files);
+	if (GL_FALSE == shdr_img.IsLinked())
 	{
 		std::cout << "Unable to compile/link/validate shader programs\n";
-		std::cout << shdr_pgm.GetLog() << "\n";
+		std::cout << shdr_img.GetLog() << "\n";
 		std::exit(EXIT_FAILURE);
 	}
 
 	// add compiled, linked, and validated shader program to
 	// std::map container GLApp::shdrpgms
-	GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
+	//GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
 }
 
 
