@@ -15,7 +15,9 @@
 #include <iostream>
 #include <list>
 #include <Interface_System.h>
-
+#include <Factory.h>
+#include <components/Texture.h>
+#include <components/Transform.h>
 class GLApp : public ISystems
 {
 public:
@@ -28,6 +30,8 @@ public:
 	static void cleanup();
 
 	static void init_scene();
+	static void init_models();
+	static void init_shdrpgms();
 
 	// container for shader programs and helper function(s) ...
 	struct GLModel
