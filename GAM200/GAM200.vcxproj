@@ -145,9 +145,9 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\ComponentCreator.h" />
-    <ClCompile Include="include\ComponentType.h" />
-    <ClCompile Include="include\GameLogic.h" />
+    <ClInclude Include="include\ComponentCreator.h" />
+    <ClInclude Include="include\ComponentType.h" />
+    <ClInclude Include="include\GameLogic.h" />
     <ClCompile Include="src\Line.cpp" />
     <ClCompile Include="src\Assets Manager\file_reader.cpp" />
     <ClCompile Include="src\Assets Manager\text_serialization.cpp" />

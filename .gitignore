@@ -396,3 +396,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+#
+# Custom exceptions start here
+#
+
+# Personal doxygen stuff
+GAM200/docs
+Doxyfile
