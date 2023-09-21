@@ -4,9 +4,7 @@
 #include <string>
 #include <vector>
 
-#ifndef mapdata
-std::vector<std::vector<int>> mapdata;
-#endif // !mapdata
+extern std::vector<std::vector<int>> mapdata;
 
 /*
 This function is meant to read a .txt file and only intergers from it and save it into a vector<vector<int>>
