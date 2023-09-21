@@ -385,7 +385,7 @@ void GLApp::GLObject::update()
 {
 	//std::cout<< position.x<<position.y << std::endl;
 
-	/*glm::mat3 Scale
+	glm::mat3 Scale
 	{
 		scaling.x, 0, 0,
 			0, scaling.y, 0,
@@ -414,7 +414,7 @@ void GLApp::GLObject::update()
 		std::cout << mdl_to_ndc_xform[1][0] << " " << mdl_to_ndc_xform[1][1] << " " << mdl_to_ndc_xform[1][2] << std::endl;
 		std::cout << mdl_to_ndc_xform[2][0] << " " << mdl_to_ndc_xform[2][1] << " " << mdl_to_ndc_xform[2][2] << std::endl;
 		i++;
-	}*/
+	}
 	
 }
 //void GLApp::draw ()
@@ -490,18 +490,18 @@ GLuint GLApp::setup_texobj(const char* pathname)
 		std::cout << "Image height: " << height << "\n";
 	}
 
-	GLuint texobj_hdl;
+	GLuint texobj;
 	// define and initialize a handle to texture object that will
 	// encapsulate two-dimensional textures
-	glCreateTextures(GL_TEXTURE_2D, 1, &texobj_hdl);
+	glCreateTextures(GL_TEXTURE_2D, 1, &texobj);
 	// allocate GPU storage for texture image data loaded from file
-	glTextureStorage2D(texobj_hdl, 1, GL_RGBA8, width, height);
+	glTextureStorage2D(texobj, 1, GL_RGBA8, width, height);
 	// copy image data from client memory to GPU texture buffer memory
-	glTextureSubImage2D(texobj_hdl, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr_texels);
+	glTextureSubImage2D(texobj, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr_texels);
 	// client memory not required since image is buffered in GPU memory
 	delete[] ptr_texels;
 
-	return texobj_hdl;
+	return texobj;
 }
 
 
