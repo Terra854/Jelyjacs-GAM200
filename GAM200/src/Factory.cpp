@@ -155,9 +155,9 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 //This gives a game object an ID tag which can be used to find that same game object
 void GameObjectFactory::idGameObj(GOC* gameObj)
 {
-	++lastGameObjID;
 	gameObj->ObjectId = lastGameObjID;
 	gameObjectMap[lastGameObjID] = gameObj;
+	++lastGameObjID;
 }
 
 //This gets an object with a certain ID
