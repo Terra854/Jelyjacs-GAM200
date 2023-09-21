@@ -4,6 +4,8 @@
 // Do not remove this until the changes are made
 
 #include "Composition.h"
+
+//don't think this is need for now
 struct ComponentSorter {
 	bool operator()(GameComponent* left, GameComponent* right) {
 		return left->TypeId < right->TypeId;
@@ -22,6 +24,7 @@ GameObjectComposition::~GameObjectComposition()
 
 GameComponent* GameObjectComposition::GetComponent(ComponentTypeId typeID)
 {
+	//loop through components vector to find the type of game component
 	for (GameComponent* c : Components) {
 		if (c->TypeId == typeID)
 			return c;
@@ -33,7 +36,9 @@ void GameObjectComposition::AddComponent(ComponentTypeId typeId, GameComponent* 
 {
 	//Store the components type Id
 	component->TypeId = typeId;
+	//add into component vector
 	Components.push_back(component);
 
+	//sets the component's base ptr to refer to the current object that it is apart of
 	component->Base = this;
 }

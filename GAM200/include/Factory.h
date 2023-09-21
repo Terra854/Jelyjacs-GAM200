@@ -48,7 +48,7 @@ public:
 private:
 	unsigned lastGameObjID;
 
-	//added by jia Ming
+
 	//to map the component name in object text file to component type
 	typedef std::map< std::string, ComponentCreator*> componentCreatorMap;
 	componentCreatorMap componentMap;

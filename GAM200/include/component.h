@@ -17,20 +17,23 @@ class GameComponent
 public:
 	friend class GameObjectComposition;
 
+	//to initialise remainng game components not set from text file
 	virtual void Initialize() {};
 
-	//GameComponent();
-	virtual ~GameComponent(){};
+	GameComponent() = default;
+	virtual ~GameComponent() = default;
 
+	//for serialization to know how far to read in text file to get all the variables of this game component
 	virtual void Serialize(Serialization& stream) {};
 
-	///Get the GameObjectComposition this component is owned/composed.
+	///to get the object that this component is part of
 	GOC* GetOwner() { return Base; }
 
+	//to differentiate between the components
 	ComponentTypeId TypeId;
 
 private:
-	///Each component has a pointer back to the base owning composition.
+	///to refer to the object that component is a part of
 	GOC* Base;
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <Debug.h>
 
+//different types of game components to differentiate
 	enum class ComponentTypeId
 	{
 		//Invalid component id
