@@ -10,8 +10,6 @@
 Vec2 interPt, normalAtCollision;
 float interTime = 0.0f;
 
-extern GameObjectFactory* factory;
-
 /*
 * This function is meant to update the gravity of a game object.
 * In the future, this will be changed to take in a game object struct
@@ -62,8 +60,8 @@ void Physics::Update(float time) {
 	// std::cout << "Physics::Update" << std::endl;
 
 	// Update velocity for each object
-	for (auto gameObject = factory->gameObjectMap.begin(); gameObject != factory->gameObjectMap.end(); ++gameObject) {
-	//for (const std::pair<const unsigned int, GOC*>& pair : factory->gameObjectMap) {
+	for (auto gameObject = gameObjFactory->gameObjectMap.begin(); gameObject != gameObjFactory->gameObjectMap.end(); ++gameObject) {
+	//for (const std::pair<const unsigned int, GOC*>& pair : gameObjFactory->gameObjectMap) {
 		Transform *t = (Transform*) gameObject->second->GetComponent(ComponentTypeId::CT_Transform);
 
 		// DEBUG: Print address to stdout
@@ -76,7 +74,7 @@ void Physics::Update(float time) {
 		t->Y_Velocity += t->Y_Acceleration;
 	}
 
-	for (GameObjectFactory::gameObjIDMap::iterator gameObject = factory->gameObjectMap.begin(); gameObject != factory->gameObjectMap.end(); ++gameObject) {
+	for (GameObjectFactory::gameObjIDMap::iterator gameObject = gameObjFactory->gameObjectMap.begin(); gameObject != gameObjFactory->gameObjectMap.end(); ++gameObject) {
 		Transform* t = (Transform*)gameObject->second->GetComponent(ComponentTypeId::CT_Transform);
 
 		// Save current position to previous position
@@ -87,7 +85,7 @@ void Physics::Update(float time) {
 
 		bool hasCollided = false;
 
-		for (GameObjectFactory::gameObjIDMap::iterator anotherGameObject = std::next(gameObject); anotherGameObject != factory->gameObjectMap.end(); ++anotherGameObject) {
+		for (GameObjectFactory::gameObjIDMap::iterator anotherGameObject = std::next(gameObject); anotherGameObject != gameObjFactory->gameObjectMap.end(); ++anotherGameObject) {
 			if (Check_Collision((Body*)gameObject->second->GetComponent(ComponentTypeId::CT_Body), (Body*)anotherGameObject->second->GetComponent(ComponentTypeId::CT_Body))) {
 				
 				// DEBUG

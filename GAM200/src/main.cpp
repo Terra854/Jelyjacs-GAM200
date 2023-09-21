@@ -9,8 +9,6 @@
 
 #include <debug.h>
 
-GameObjectFactory* factory; // Need to be outside for physics component to access it
-
 int main() {
 	
 	// Enable run-time memory check for debug builds.
@@ -20,7 +18,7 @@ int main() {
 
 	CoreEngine* engine = new CoreEngine();
 	GLWindow* windows = new GLWindow();
-	factory = new GameObjectFactory();
+	GameObjectFactory* factory = new GameObjectFactory();
 	Physics* physics = new Physics();
 
 	GLApp* graphics = new GLApp();                                          // @GuoChen your graphics systems nid to match this code
