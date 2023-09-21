@@ -1,6 +1,10 @@
 #pragma once
 #include "../include/components/Texture.h"
 
+/****************************************************************
+* Serialize Function
+* - Get texture file path
+*****************************************************************/
 void Texture::Serialize(Serialization& stream) 
 {
 	std::string texturefile;

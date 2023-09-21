@@ -9,12 +9,17 @@
 #include "components/Texture.h"
 #include "ComponentType.h"
 
-GameLogic* LOGIC = NULL;
+GameLogic* Logic = NULL;
+			
 GameLogic::GameLogic() {
-
+	Logic = this;
 }
 GameLogic::~GameLogic() {
 
+}
+
+void GameLogic::SendMessage(Message* msg) {
+	// Keys to Game Logic
 }
 void GameLogic::Initialize()
 {

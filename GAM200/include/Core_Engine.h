@@ -24,8 +24,6 @@ public:
 	void DeleteSystem();
 	void Broadcast(Message *msg);
 
-	
-
 private:
 	// Map of Systems
 	std::unordered_map<std::string, ISystems*> Systems;

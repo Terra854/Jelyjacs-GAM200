@@ -7,14 +7,16 @@
 class GameLogic : public ISystems
 {
 public:
-	//GameLogic();
-	//~GameLogic();
+	//Constructor to initialise pointer
+	GameLogic();
+	~GameLogic();
+	virtual void SendMessage(Message* msg);
 	void Initialize();
 	void Update(float time);
 	virtual std::string SystemName() { return "Game_Logic"; }
 };
 
-extern GameLogic* LOGIC;
+extern GameLogic* Logic;
 
 
 

@@ -11,13 +11,15 @@ enum class shape
 	circle,
 	line
 };
-
+// Body Component
 class Body : public GameComponent
 {
 public:
 	virtual shape GetShape() = 0;
 };
 
+
+// Collision Check on Body
 class Rectangular : public Body
 {
 public:

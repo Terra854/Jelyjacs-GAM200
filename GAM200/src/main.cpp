@@ -21,14 +21,13 @@ int main() {
 	GLWindow* windows = new GLWindow();
 	GameObjectFactory* factory = new GameObjectFactory();
 	Physics* physics = new Physics();
+	GLApp* graphics = new GLApp();                                         
 
-	GLApp* graphics = new GLApp();                                          // @GuoChen your graphics systems nid to match this code
-																			// @GuoChen Then declare ur window properties
-	engine->AddSystem(windows->SystemName(), windows);                   // @GuoChen
+	engine->AddSystem(windows->SystemName(), windows);                  
 	engine->AddSystem(logic->SystemName(), logic);
 	engine->AddSystem(factory->SystemName(), factory);
 	engine->AddSystem(physics->SystemName(), physics);
-	engine->AddSystem(graphics->SystemName(), graphics);                 // @GuoChen
+	engine->AddSystem(graphics->SystemName(), graphics);                 
 
 	engine->Initialize();
 	windows->ActivateWindow();                                                    // @GuoChen Window Class nid this function
@@ -46,6 +45,6 @@ int main() {
 		 std::this_thread::sleep_for(frameDuration - frameTime);
 	}
 	*/
-	delete engine;
+	engine->DeleteSystem();
 	return 0;
 }

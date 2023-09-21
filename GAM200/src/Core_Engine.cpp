@@ -103,10 +103,11 @@ void CoreEngine::DeleteSystem() {
 		delete sys.second;
 }
 void CoreEngine::Broadcast(Message* msg) {
+	// Set Game_mode to 0 to stop loop
 	if (msg->messageId == MessageID::Quit) {
 		game_active = false;
 	}
-	
+	// Loop Messaging System
 	for (const std::pair<std::string, ISystems*>& sys : Systems) {
 		sys.second->SendMessage(msg);
 	}

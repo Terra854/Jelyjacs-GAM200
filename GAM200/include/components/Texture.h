@@ -7,10 +7,9 @@
 
 class Texture : public GameComponent
 {
-	public:
-
-	GLuint texturepath;
-
+public:
 	virtual void Serialize(Serialization& stream) override;
 
+	// Path to file for texture
+	GLuint texturepath;
 };
