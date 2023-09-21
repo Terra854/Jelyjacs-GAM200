@@ -107,8 +107,8 @@ void CoreEngine::Broadcast(Message* msg) {
 		game_active = false;
 	}
 	
-	for (unsigned i = 0; i < Systems.size(); i++) {
-		Systems[i]->SendMessage(msg);
+	for (const std::pair<std::string, ISystems*>& sys : Systems) {
+		sys.second->SendMessage(msg);
 	}
 	
 }
