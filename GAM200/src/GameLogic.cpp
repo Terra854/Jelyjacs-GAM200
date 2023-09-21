@@ -9,6 +9,7 @@
 #include "components/Texture.h"
 #include "ComponentType.h"
 
+// It's broken, will be purged in the future
 //GameLogic* Logic = NULL;
 /*
 GameLogic::GameLogic() {

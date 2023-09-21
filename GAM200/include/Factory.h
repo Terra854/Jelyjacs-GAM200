@@ -5,6 +5,15 @@
 // High priority to refactor this before M1 submission to avoid academic misconduct penalties
 // Do not remove this until the changes are made
 
+/*
+* This is the declaration of the game fatory class.
+* It helps to create game objects in the game loop.
+* Game objects are represented by GOC which is defined in Compositiion
+* Game objects are containers for components which are themselves containers for data
+* The code works off the data found in the data of game object components.
+* Every game object is also given a unique ID number called GOCId which is assigned to them at creation time
+* Every game object is also added to map and to access a specific game object in that map, you must have the object's ID
+*/
 #include "System.h"
 #include "Interface_System.h"
 #include "Composition.h"
