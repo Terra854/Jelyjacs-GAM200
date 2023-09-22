@@ -31,6 +31,7 @@
 		///adds a component to be a part of the object by adding it into the components vector
 		void AddComponent(ComponentTypeId typeId, GameComponent* component);
 
+		void Intialize();
 
 		///Get the game object's Id
 		GOCId GetId() { return ObjectId; }

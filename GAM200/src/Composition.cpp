@@ -42,3 +42,12 @@ void GameObjectComposition::AddComponent(ComponentTypeId typeId, GameComponent* 
 	//sets the component's base ptr to refer to the current object that it is apart of
 	component->Base = this;
 }
+
+void GameObjectComposition::Intialize()
+{
+	for (std::vector<GameComponent*>::iterator it = Components.begin(); it != Components.end(); ++it)
+	{
+		(*it)->Base = this;
+		(*it)->Initialize();
+	}
+}

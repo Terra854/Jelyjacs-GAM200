@@ -38,7 +38,10 @@ GameObjectFactory::~GameObjectFactory()
 GOC* GameObjectFactory::createGameObj(const std::string& filename)
 {
 	GOC* newGameObj = buildFromFile(filename);
-
+	if (newGameObj)
+	{
+		newGameObj->Intialize();
+	}
 	return newGameObj;
 }
 
