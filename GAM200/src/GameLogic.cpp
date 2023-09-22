@@ -38,21 +38,21 @@ void GameLogic::Initialize()
 	gameObjFactory->AddComponentCreator("Body", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Body));
 	
 	GOC* testObj;
-	GOC* testObj2;
+	//GOC* testObj2;
 	Transform * trans;
 	Texture* texture;
 	
 	std::cout << "test Object 1" << std::endl;
-	testObj = gameObjFactory->buildFromFile("../test.txt");
+	testObj = gameObjFactory->buildFromFile("../Assest/Objects/TestTile.txt");
 	trans = static_cast<Transform*>( testObj->GetComponent(ComponentTypeId::CT_Transform));
 	std::cout << "test Object 2" << std::endl;
-	testObj2 = gameObjFactory->buildFromFile("../Assest/Objects/TestTile.txt"); // testing
+	//testObj2 = gameObjFactory->buildFromFile("../Assest/Objects/TestTile.txt"); // testing
 	
 	//alternate way to get component without cast
 	//trans = testObj->GetComponent_NoCast<Transform>(ComponentTypeId::CT_Transform);
 	trans->Mass = 0.5f;
 	//Getting a GOC pointer with the game object ID
-	testObj2 = gameObjFactory->getObjWithID(0);
+	testObj = gameObjFactory->getObjWithID(0);
 	texture = static_cast<Texture*>(testObj->GetComponent(ComponentTypeId::CT_Texture));
 	
 	//Broken code. DO NOT REMOVE YET - Jonathan

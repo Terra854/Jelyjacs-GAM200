@@ -1,6 +1,6 @@
-transform
+Transform
 50 50
 30
 0
-texture
+Texture
 test.png

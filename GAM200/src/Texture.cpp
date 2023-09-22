@@ -7,8 +7,16 @@
 *****************************************************************/
 void Texture::Serialize(Serialization& stream) 
 {
-	std::string texturefile;
-	streamGet(stream, texturefile);
-	texturefile = "../../../Asset/Picture/" + texturefile;
-	texturepath = app->setup_texobj(texturefile.c_str());
+	if (stream.isGood())
+	{
+		std::string texturefile;
+		streamGet(stream, texturefile);
+		texturefile = "../../../Asset/Picture/" + texturefile;
+		std::cout << "Texture file location: " << texturefile << std::endl;
+		texturepath = app->setup_texobj(texturefile.c_str());
+	}
+	else
+	{
+		std::cout << "Error serializing texture from stream" << std::endl;
+	}
 }

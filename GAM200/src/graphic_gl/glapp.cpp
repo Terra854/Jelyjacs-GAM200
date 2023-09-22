@@ -46,12 +46,15 @@ void GLApp::Initialize()
 	glViewport(0, 0, window->width, window->height);
 	init_models();
 	init_shdrpgms();
+	/*
 	//init_scene();
 	Texture* tex_pt = static_cast<Texture*>((gameObjFactory->getObjWithID(0))->GetComponent(ComponentTypeId::CT_Texture));
 	tex_test = tex_pt->texturepath;
 
 	Transform* tran_pt = static_cast<Transform*>((gameObjFactory->getObjWithID(0))->GetComponent(ComponentTypeId::CT_Transform));
 	mat_test = tran_pt->Matrix.ToGlmMat3();
+
+	*/
 	// enable alpha blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
