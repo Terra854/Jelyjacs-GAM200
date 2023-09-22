@@ -443,7 +443,7 @@ void GLApp::Update(float time)
 	//	obj->second.draw();
 
 	//}
-	//glfwSwapBuffers( window->ptr_window);
+	glfwSwapBuffers( window->ptr_window);
 
 	glBindTextureUnit(6, tex_test);
 	glBindTexture(GL_TEXTURE_2D, tex_test);
@@ -466,6 +466,7 @@ void GLApp::Update(float time)
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
 	shdr_img.UnUse();
+	glfwSwapBuffers(window->ptr_window);
 }
 
 
