@@ -12,7 +12,7 @@ public:
 	//GameLogic();
 	//~GameLogic();
 	virtual void SendMessage(Message* msg);
-	void Initialize();
+	virtual void Initialize();
 	void Update(float time);
 	virtual std::string SystemName() { return "Game_Logic"; }
 };

@@ -1,11 +1,19 @@
 #include <Debug.h>
 #include "text_serialization.h"
+#include <iostream>
 
 
 // Opens a file for reading, return true if successfully opened
 bool TextSerialization::openFileRead(const std::string& file)
 {
 	stream.open(file.c_str(), std::ios::in);
+	if (!stream.is_open()) {
+		std::cout << "file is not found : " << file.c_str() << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	else {
+		std::cout << "file open" << file.c_str() << std::endl;
+	}
 	return stream.is_open();
 }
 

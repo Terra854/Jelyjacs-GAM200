@@ -3,6 +3,7 @@
 #include "Assets Manager/text_serialization.h"
 #include "Vec2.h"
 #include "components/Transform.h"
+#include <iostream>
 
 // Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
 // High priority to refactor this before M1 submission to avoid academic misconduct penalties
@@ -146,6 +147,7 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 
 		return gameObj;
 	}
+	std::cout << "textstream not good" << std::endl;
 	return NULL;
 }
 

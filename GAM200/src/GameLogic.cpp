@@ -26,10 +26,9 @@ void GameLogic::SendMessage(Message* msg) {
 void GameLogic::Initialize()
 {
 	//Logic = this;
-	GOC * testObj;
-	GOC* testObj2;
-	Transform * trans;
-	Texture* texture;
+	
+	
+	
 
 	//In order to use the game object factory, we need to register the components we want to use first like this
 	//See ComponentType.h to see what components we have for now. 
@@ -37,12 +36,18 @@ void GameLogic::Initialize()
 	gameObjFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Transform));
 	gameObjFactory->AddComponentCreator("Texture", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Texture));
 	gameObjFactory->AddComponentCreator("Body", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Body));
-
-	testObj = gameObjFactory->buildFromFile("test.txt");
+	
+	GOC* testObj;
+	GOC* testObj2;
+	Transform * trans;
+	Texture* texture;
+	
+	std::cout << "test Object 1" << std::endl;
+	testObj = gameObjFactory->buildFromFile("../test.txt");
 	trans = static_cast<Transform*>( testObj->GetComponent(ComponentTypeId::CT_Transform));
-
-	GOC* testobj2 = gameObjFactory->buildFromFile("../../Asset/Objects/TestTile.txt"); // testing
-
+	std::cout << "test Object 2" << std::endl;
+	testObj2 = gameObjFactory->buildFromFile("../Assest/Objects/TestTile.txt"); // testing
+	
 	//alternate way to get component without cast
 	//trans = testObj->GetComponent_NoCast<Transform>(ComponentTypeId::CT_Transform);
 	trans->Mass = 0.5f;

@@ -12,6 +12,8 @@ CoreEngine* CORE = NULL;
 void DebugUpdate(ISystems* sys, const float& dt, std::map<std::string, double>& elapsed_time, double& total_time) {
 	unsigned start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	sys->Update(dt);
+	//Printing System name for debugging purposes
+	std::cout << sys->SystemName() << " is updating" << std::endl;
 	unsigned end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	elapsed_time[sys->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
 	total_time += (double)(end_system_time - start_system_time) / 1000000.0;
@@ -30,10 +32,18 @@ CoreEngine::~CoreEngine() {
 
 void CoreEngine::Initialize() {
 	Systems["Window"]->Initialize(); // Must initialize Window first
-
-	for (const std::pair<std::string, ISystems*>& sys : Systems) // Then initialize all other systems
-		if (sys.first != "Window") // Window already initialized, do not do it again
+	std::cout << "Initialising " << Systems["Window"]->SystemName() << std::endl;
+	for (const std::pair<std::string, ISystems*>& sys : Systems) {
+		if(sys.first != "Window")
+			std::cout << sys.second->SystemName() << std::endl;
+	}
+	for (const std::pair<std::string, ISystems*>& sys : Systems) { // Then initialize all other systems
+		if (sys.first != "Window") { // Window already initialized, do not do it again
 			sys.second->Initialize();
+			// printing system name for debugging purposes
+			std::cout << "Initialising " << sys.second->SystemName() << std::endl;
+		}
+	}
 }
 
 
@@ -70,10 +80,12 @@ void CoreEngine::GameLoop() {
 
 		for (const std::pair<std::string, ISystems*>& sys : Systems) {
 			if (sys.first != "Window" && sys.first != "Graphics") // These 2 systems need to be updated last after all other systems are done for the most up-to-date info
-				if (log_system_time)
+				if (log_system_time) {
 					DebugUpdate(sys.second, dt, elapsed_time, total_time); // DEBUG: To log how long does each system needs to finish updating
-				else
+				}
+				else {
 					sys.second->Update(dt); // The non-debugging version
+				}
 		}
 
 		if (log_system_time) {
