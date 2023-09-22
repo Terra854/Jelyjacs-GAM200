@@ -45,7 +45,7 @@ void GameLogic::Initialize()
 	std::cout << "test Object 1" << std::endl;
 	testObj = gameObjFactory->buildFromFile("../Assest/Objects/TestTile.txt");
 	trans = static_cast<Transform*>( testObj->GetComponent(ComponentTypeId::CT_Transform));
-	std::cout << "test Object 2" << std::endl;
+	//std::cout << "test Object 2" << std::endl;
 	//testObj2 = gameObjFactory->buildFromFile("../Assest/Objects/TestTile.txt"); // testing
 	
 	//alternate way to get component without cast

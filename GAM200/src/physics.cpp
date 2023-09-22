@@ -68,7 +68,7 @@ void Physics::Update(float time) {
 		Transform *t = (Transform*) gameObject->second->GetComponent(ComponentTypeId::CT_Transform);
 
 		// DEBUG: Print address to stdout
-		std::cout << t << std::endl;
+		//std::cout << t << std::endl;
 
 		if (t == nullptr)
 			continue; // No transform in that object, move along
