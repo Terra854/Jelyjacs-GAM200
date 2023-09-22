@@ -2,7 +2,7 @@
 #include <Debug.h>
 
 #include "Vec2.h"
-#include "Composition.h"
+#include "Object.h"
 #include "../../src/Assets Manager/serialization.h"
 class Transform : public Component
 {

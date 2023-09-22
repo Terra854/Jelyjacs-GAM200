@@ -10,7 +10,7 @@
 // Do not remove this until the changes are made
 
 /*
-* Object is what the game object is represented by. It's definition is found in Composition.h.
+* Object is what the game object is represented by. It's definition is found in Object.h.
 * As a reminder, a game object is just a group of components so the Object will have a vector of
 * components
 */

@@ -16,7 +16,7 @@
 */
 #include "System.h"
 #include "Interface_System.h"
-#include "Composition.h"
+#include "Object.h"
 #include "Mat3.h"
 #include "Vec2.h"
 #include <string>

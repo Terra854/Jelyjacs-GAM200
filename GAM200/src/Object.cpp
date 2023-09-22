@@ -3,7 +3,7 @@
 // High priority to refactor this before M1 submission to avoid academic misconduct penalties
 // Do not remove this until the changes are made
 
-#include "Composition.h"
+#include "Object.h"
 
 Object::Object()
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include <Debug.h>
 
-#include "Composition.h"
+#include "Object.h"
 #include "Collision.h"
 #include "Transform.h"
 

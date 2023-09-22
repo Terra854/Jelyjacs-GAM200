@@ -1,7 +1,7 @@
 #pragma once
 #include <Debug.h>
 
-#include "Composition.h"
+#include "Object.h"
 #include "../../src/Assets Manager/serialization.h"
 #include "../Graphic_gl/glapp.h"
 
