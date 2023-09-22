@@ -34,7 +34,7 @@ GameObjectFactory::~GameObjectFactory()
 	}
 }
 
-//This creates an empty game object
+//This creates a game object with a file name. This will be what is used to create game objects in the game loop
 GOC* GameObjectFactory::createGameObj(const std::string& filename)
 {
 	GOC* newGameObj = buildFromFile(filename);
