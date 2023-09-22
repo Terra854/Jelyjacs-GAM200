@@ -432,18 +432,16 @@ void GLApp::Update(float time)
 	// clear back buffer as before
 	glClear(GL_COLOR_BUFFER_BIT);
 
-
-
 	std::stringstream sstr;
 	sstr << window->title << " FPS: " << window->fps;
-	//glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
+	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
 	//// draw all objects
 	//for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
 	//{
 	//	obj->second.draw();
 
 	//}
-	glfwSwapBuffers( window->ptr_window);
+	//glfwSwapBuffers( window->ptr_window);
 
 	glBindTextureUnit(6, tex_test);
 	glBindTexture(GL_TEXTURE_2D, tex_test);
