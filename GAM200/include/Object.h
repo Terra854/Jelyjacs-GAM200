@@ -16,8 +16,7 @@
 
 		~Object();
 
-		//Game object factory is the only class allowed to
-		//create and destroy game objects.
+		//Factory is the only class allowed to create and destroy objects.
 		friend class Factory;
 
 		//returns a ptr to a specified type of game component of the object

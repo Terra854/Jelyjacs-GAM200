@@ -19,15 +19,6 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{bb69d62c-8843-4031-9291-f44dab2a2b41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\miscellanous">
-      <UniqueIdentifier>{29294102-023f-41c7-9dcb-a46a6de68236}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Physics">
-      <UniqueIdentifier>{a8568f62-e759-4909-b21c-f3340d531fd3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Graphics">
-      <UniqueIdentifier>{abbe2c25-aaf6-4e90-90a3-2254bfe58634}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Miscellanous">
       <UniqueIdentifier>{758d9815-dd52-4d26-ad17-c07274bd847b}</UniqueIdentifier>
     </Filter>
@@ -42,6 +33,21 @@
     </Filter>
     <Filter Include="Header Files\Debug">
       <UniqueIdentifier>{84e06ede-bc7a-419e-824d-b2f595a1bc0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{e1625127-aa44-4823-814a-df592b53533b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems">
+      <UniqueIdentifier>{577ec41a-d9b0-407d-8a38-0c78cafbfe02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems\Graphics">
+      <UniqueIdentifier>{abbe2c25-aaf6-4e90-90a3-2254bfe58634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems\Physics">
+      <UniqueIdentifier>{a8568f62-e759-4909-b21c-f3340d531fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Miscellanous">
+      <UniqueIdentifier>{29294102-023f-41c7-9dcb-a46a6de68236}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,10 +70,10 @@
       <Filter>Source Files\Systems\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\input.cpp">
-      <Filter>Source Files\miscellanous</Filter>
+      <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
     <ClCompile Include="src\Assets Manager\file_reader.cpp">
-      <Filter>Source Files\miscellanous</Filter>
+      <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
     <ClCompile Include="src\graphic_gl\glapp.cpp">
       <Filter>Source Files\Systems\Graphics</Filter>
@@ -76,7 +82,7 @@
       <Filter>Source Files\Systems\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Assets Manager\text_serialization.cpp">
-      <Filter>Source Files\miscellanous</Filter>
+      <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
     <ClCompile Include="src\Core_Engine.cpp">
       <Filter>Source Files</Filter>
@@ -123,16 +129,16 @@
       <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Collision.h">
-      <Filter>Header Files\Physics</Filter>
+      <Filter>Header Files\Systems\Physics</Filter>
     </ClInclude>
     <ClInclude Include="include\physics.h">
-      <Filter>Header Files\Physics</Filter>
+      <Filter>Header Files\Systems\Physics</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphic_gl\glapp.h">
-      <Filter>Header Files\Graphics</Filter>
+      <Filter>Header Files\Systems\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphic_gl\glslshader.h">
-      <Filter>Header Files\Graphics</Filter>
+      <Filter>Header Files\Systems\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\input.h">
       <Filter>Header Files\Miscellanous</Filter>
@@ -149,25 +155,10 @@
     <ClInclude Include="include\Core_Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Interface_System.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Factory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\components\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\components\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\components\Body.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\message.h">
@@ -184,6 +175,21 @@
     </ClInclude>
     <ClInclude Include="include\Object.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Body.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Texture.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Transform.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Interface_System.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
