@@ -19,7 +19,7 @@ public:
 	// Main Game Loop - looping all the system updates
 	void GameLoop();
 	// Add the system into the map
-	void AddSystem(std::string SystemName, ISystems* sys);
+	void AddSystem(ISystems* sys);
 	// Loop for systems to send messages to each other.
 	void DeleteSystem();
 	void Broadcast(Message *msg);
