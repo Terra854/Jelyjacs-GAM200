@@ -5,34 +5,27 @@
 
 #include "Composition.h"
 
-//don't think this is need for now
-struct ComponentSorter {
-	bool operator()(GameComponent* left, GameComponent* right) {
-		return left->TypeId < right->TypeId;
-	}
-};
-
-GameObjectComposition::GameObjectComposition()
+Object::Object()
 {
 	ObjectId = 0;
 }
 
-GameObjectComposition::~GameObjectComposition()
+Object::~Object()
 {
 
 }
 
-GameComponent* GameObjectComposition::GetComponent(ComponentTypeId typeID)
+Component* Object::GetComponent(ComponentType typeID)
 {
 	//loop through components vector to find the type of game component
-	for (GameComponent* c : Components) {
+	for (Component* c : Components) {
 		if (c->TypeId == typeID)
 			return c;
 	}
 	return nullptr;
 }
 
-void GameObjectComposition::AddComponent(ComponentTypeId typeId, GameComponent* component)
+void Object::AddComponent(ComponentType typeId, Component* component)
 {
 	//Store the components type Id
 	component->TypeId = typeId;

@@ -19,7 +19,7 @@ int main() {
 	CoreEngine* engine = new CoreEngine();
 	GameLogic* logic = new GameLogic();
 	GLWindow* windows = new GLWindow();
-	GameObjectFactory* factory = new GameObjectFactory();
+	Factory* factory = new Factory();
 	Physics* physics = new Physics();
 	GLApp* graphics = new GLApp();                                         
 

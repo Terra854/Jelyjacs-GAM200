@@ -10,22 +10,22 @@
 // Do not remove this until the changes are made
 
 /*
-* GOC is what the game object is represented by. It's definition is found in Composition.h.
-* As a reminder, a game object is just a group of components so the GOC will have a vector of
+* Object is what the game object is represented by. It's definition is found in Composition.h.
+* As a reminder, a game object is just a group of components so the Object will have a vector of
 * components
 */
 
-GameObjectFactory* gameObjFactory = NULL;
+Factory* objectFactory = NULL;
 
 //Ctor
-GameObjectFactory::GameObjectFactory()
+Factory::Factory()
 {
-	gameObjFactory = this;
-	lastGameObjID = 0;
+	objectFactory = this;
+	nextObjectId = 0;
 }
 
 //Dtor
-GameObjectFactory::~GameObjectFactory()
+Factory::~Factory()
 {
 	componentCreatorMap::iterator it = componentMap.begin();
 	for  (; it != componentMap.end(); ++it)
@@ -35,58 +35,58 @@ GameObjectFactory::~GameObjectFactory()
 }
 
 //This creates an empty game object
-GOC* GameObjectFactory::createGameObj(const std::string& filename)
+Object* Factory::createObject(const std::string& filename)
 {
-	GOC* newGameObj = buildFromFile(filename);
+	Object* newGameObj = buildFromFile(filename);
 
 	return newGameObj;
 }
 
 //This doesn't destroy the game object instantly but will set it to be destroyed in the update loop
-void GameObjectFactory::destroyGameObj(GOC* gameObject)
+void Factory::destroyObject(Object* gameObject)
 {
 	gameObjsToBeDeleted.insert(gameObject);
 }
 
 //This deletes all objects to be deleted
-void GameObjectFactory::Update(float dt) {
-	std::set<GOC*>::iterator it = gameObjsToBeDeleted.begin();
+void Factory::Update(float dt) {
+	std::set<Object*>::iterator it = gameObjsToBeDeleted.begin();
 	for (; it != gameObjsToBeDeleted.end(); ++it)
 	{
-		GOC* gameObject = *it;
-		gameObjIDMap::iterator idItr = gameObjectMap.find(gameObject->ObjectId);
+		Object* gameObject = *it;
+		objectIDMap::iterator idItr = objectMap.find(gameObject->ObjectId);
 		//ErrorIf(idItr == gameObjectMap.end(), "Object %d was double deleted or is bad memory.", gameObject->ObjectId);
-		if (idItr != gameObjectMap.end())
+		if (idItr != objectMap.end())
 		{
 			//Delete it and remove its entry in the Id map
 			delete gameObject;
-			gameObjectMap.erase(idItr);
+			objectMap.erase(idItr);
 		}
 	}
 	//All objects to be delete have been deleted
 	gameObjsToBeDeleted.clear();
 }
 //This destroys all game objects
-void GameObjectFactory::destroyAllGameObjs()
+void Factory::destroyAllObjects()
 {
-	gameObjIDMap::iterator it = gameObjectMap.begin();
-	for (; it != gameObjectMap.end(); ++it)
+	objectIDMap::iterator it = objectMap.begin();
+	for (; it != objectMap.end(); ++it)
 	{
 		delete it->second;
 	}
 
-	gameObjectMap.clear();
+	objectMap.clear();
 }
 
-GOC* GameObjectFactory::createEmptyGameObj()
+Object* Factory::createEmptyObject()
 {
-	GOC* gameObj = new GOC();
-	idGameObj(gameObj);
+	Object* gameObj = new Object();
+	assignIdToObject(gameObj);
 	return gameObj;
 }
 
 //This creates an object from a text file. This needs to be tested a lot
-GOC* GameObjectFactory::buildFromFile(const std::string& filename)
+Object* Factory::buildFromFile(const std::string& filename)
 {
 	//Open text file in read mode
 	TextSerialization textStream;
@@ -96,7 +96,7 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 	if (textStream.isGood())
 	{
 		// Create new game object to hold components
-		GOC* gameObj = new GOC();
+		Object* gameObj = new Object();
 		std::string componentName;
 
 		while (textStream.isGood())
@@ -110,7 +110,7 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 			{	
 				// Create Component by using the interface
 				ComponentCreator* creator = it->second;
-				GameComponent* component = creator->Create();
+				Component* component = creator->Create();
 
 				/* commented out to test the streamGet way of serialization
 				* 
@@ -143,7 +143,7 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 			}
 		}
 		// Id and initialize game object
-		idGameObj(gameObj);
+		assignIdToObject(gameObj);
 
 		return gameObj;
 	}
@@ -152,18 +152,17 @@ GOC* GameObjectFactory::buildFromFile(const std::string& filename)
 }
 
 //This gives a game object an ID tag which can be used to find that same game object
-void GameObjectFactory::idGameObj(GOC* gameObj)
+void Factory::assignIdToObject(Object* gameObj)
 {
-	gameObj->ObjectId = lastGameObjID;
-	gameObjectMap[lastGameObjID] = gameObj;
-	++lastGameObjID;
+	gameObj->ObjectId = nextObjectId;
+	objectMap[nextObjectId] = gameObj;
+	++nextObjectId;
 }
 
-//This gets an object with a certain ID
-GOC* GameObjectFactory::getObjWithID(GOCId id)
+Object* Factory::getObjectWithID(long id)
 {
-	gameObjIDMap::iterator it = gameObjectMap.find(id);
-	if (it != gameObjectMap.end())
+	objectIDMap::iterator it = objectMap.find(id);
+	if (it != objectMap.end())
 	{
 		return it->second;
 	}
@@ -175,7 +174,7 @@ GOC* GameObjectFactory::getObjWithID(GOCId id)
 
 //This adds a new component creator which is necessary for the creation of game objects
 //Call this at the very start of the game loop in Intialize
-void GameObjectFactory::AddComponentCreator(const std::string& name, ComponentCreator* creator)
+void Factory::AddComponentCreator(const std::string& name, ComponentCreator* creator)
 {
 	componentMap[name] = creator;
 }

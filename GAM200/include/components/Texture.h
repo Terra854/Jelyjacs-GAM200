@@ -5,7 +5,7 @@
 #include "../../src/Assets Manager/serialization.h"
 #include "../Graphic_gl/glapp.h"
 
-class Texture : public GameComponent
+class Texture : public Component
 {
 public:
 	virtual void Serialize(Serialization& stream) override;

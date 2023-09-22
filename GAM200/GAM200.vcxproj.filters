@@ -84,9 +84,6 @@
     <ClCompile Include="src\GameLogic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Composition.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Factory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -99,16 +96,10 @@
     <ClCompile Include="src\ComponentCreator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\ComponentCreator.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\ComponentType.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\GameLogic.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -164,13 +155,10 @@
     <ClInclude Include="include\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\component.h">
+    <ClInclude Include="include\Component_t.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Factory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Composition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\components\Texture.h">
@@ -187,6 +175,15 @@
     </ClInclude>
     <ClInclude Include="include\Debug.h">
       <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ComponentCreator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameLogic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Object.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

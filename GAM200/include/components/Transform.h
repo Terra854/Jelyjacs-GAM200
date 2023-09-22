@@ -4,7 +4,7 @@
 #include "Vec2.h"
 #include "Composition.h"
 #include "../../src/Assets Manager/serialization.h"
-class Transform : public GameComponent
+class Transform : public Component
 {
 public:
 	//centre position of bodies

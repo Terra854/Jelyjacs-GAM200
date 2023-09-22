@@ -8,41 +8,35 @@
 #include "Component.h"
 #include <vector>
 
-	///Game Object Id Type
-	typedef unsigned int GOCId;
-	typedef GameObjectComposition GOC;
-
-	class GameObjectComposition
+	class Object
 	{
 	public:
 
-		GameObjectComposition();
+		Object();
 
-		~GameObjectComposition();
+		~Object();
 
 		//Game object factory is the only class allowed to
 		//create and destroy game objects.
-		friend class GameObjectFactory;
+		friend class Factory;
 
 		//returns a ptr to a specified type of game component of the object
 		//if object does not contain that component, returns null
-		GameComponent* GetComponent(ComponentTypeId typeID);
+		Component* GetComponent(ComponentType typeID);
 
 		///adds a component to be a part of the object by adding it into the components vector
-		void AddComponent(ComponentTypeId typeId, GameComponent* component);
-
+		void AddComponent(ComponentType typeId, Component* component);
 
 		///Get the game object's Id
-		GOCId GetId() { return ObjectId; }
-
+		long GetId() { return ObjectId; }
 
 	private:
 		//contains all components of the current object
-		std::vector<GameComponent*> Components;
+		std::vector<Component*> Components;
 
 		//A unique id for each object used to safely reference 
-		//GOCs.
-		GOCId ObjectId;
+		//Objects.
+		long ObjectId;
 
 	};
 

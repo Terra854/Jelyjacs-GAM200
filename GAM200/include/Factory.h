@@ -8,10 +8,10 @@
 /*
 * This is the declaration of the game fatory class.
 * It helps to create game objects in the game loop.
-* Game objects are represented by GOC which is defined in Compositiion
+* Game objects are represented by Object which is defined in Compositiion
 * Game objects are containers for components which are themselves containers for data
 * The code works off the data found in the data of game object components.
-* Every game object is also given a unique ID number called GOCId which is assigned to them at creation time
+* Every game object is also given a unique ID number called long which is assigned to them at creation time
 * Every game object is also added to map and to access a specific game object in that map, you must have the object's ID
 */
 #include "System.h"
@@ -25,15 +25,15 @@
 #include <string>
 #include "ComponentCreator.h"
 
-class GameObjectFactory : public ISystems
+class Factory : public ISystems
 {
 public:
-	GameObjectFactory();
-	~GameObjectFactory();
+	Factory();
+	~Factory();
 
-	GOC* createGameObj(const std::string& filename);
+	Object* createObject(const std::string& filename);
 
-	void destroyGameObj(GOC* gameObject);
+	void destroyObject(Object* object);
 
 	virtual void Update(float time);
 
@@ -41,31 +41,31 @@ public:
 
 	//virtual void SendMessage(Message* msg);
 
-	void destroyAllGameObjs();
+	void destroyAllObjects();
 
-	GOC* createEmptyGameObj();
+	Object* createEmptyObject();
 
-	GOC* buildFromFile(const std::string& filename);
+	Object* buildFromFile(const std::string& filename);
 
-	void idGameObj(GOC* gameObj);
+	void assignIdToObject(Object* object);
 
-	GOC* getObjWithID(GOCId id);
+	Object* getObjectWithID(long id);
 
 	void AddComponentCreator(const std::string& name, ComponentCreator* creator);
 
 	friend class Physics; // Needed to apply physics onto each object
 private:
-	unsigned lastGameObjID;
+	unsigned nextObjectId;
 
 
 	//to map the component name in object text file to component type
 	typedef std::map< std::string, ComponentCreator*> componentCreatorMap;
 	componentCreatorMap componentMap;
 
-	typedef std::map<unsigned, GOC*> gameObjIDMap;
-	gameObjIDMap gameObjectMap;
+	typedef std::map<unsigned, Object*> objectIDMap;
+	objectIDMap objectMap;
 
-	std::set<GOC*> gameObjsToBeDeleted;
+	std::set<Object*> gameObjsToBeDeleted;
 };
 
-extern GameObjectFactory* gameObjFactory;
+extern Factory* objectFactory;

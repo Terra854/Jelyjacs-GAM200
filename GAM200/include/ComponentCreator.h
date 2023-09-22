@@ -2,22 +2,21 @@
 #include <Debug.h>
 
 #include "component.h"
-#include "ComponentType.h"
 
 class ComponentCreator
 {
 public:
 
 	//ctor to set what type of component to create
-	ComponentCreator(ComponentTypeId);
+	ComponentCreator(ComponentType);
 
 	virtual ~ComponentCreator() {};
 
 	//to new a component based on the type set by ctor
-	virtual GameComponent* Create() = 0;
+	virtual Component* Create() = 0;
 
 	//to store type of component to call create() 
-	ComponentTypeId typeId;
+	ComponentType typeId;
 
 };
 
@@ -26,10 +25,10 @@ template<typename type>
 class ComponentCreatorType : public ComponentCreator
 {
 public:
-	ComponentCreatorType(ComponentTypeId ID)
+	ComponentCreatorType(ComponentType ID)
 		:ComponentCreator(ID)
 	{};
-	virtual GameComponent* Create()
+	virtual Component* Create()
 	{
 		return new type();
 	}

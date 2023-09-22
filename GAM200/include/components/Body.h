@@ -12,7 +12,7 @@ enum class shape
 	line
 };
 // Body Component
-class Body : public GameComponent
+class Body : public Component
 {
 public:
 	virtual shape GetShape() = 0;

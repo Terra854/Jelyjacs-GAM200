@@ -3,7 +3,6 @@
 
 // Core Engine that manage all systems in game. Update and destroying them.
 #include "Interface_System.h"
-#include <vector>  // Remove after adding this header somewhere else
 #include <message.h>
 #include <unordered_map>
 

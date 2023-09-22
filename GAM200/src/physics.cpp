@@ -63,9 +63,9 @@ void Physics::Update(float time) {
 	// std::cout << "Physics::Update" << std::endl;
 
 	// Update velocity for each object
-	for (auto gameObject = gameObjFactory->gameObjectMap.begin(); gameObject != gameObjFactory->gameObjectMap.end(); ++gameObject) {
-	//for (const std::pair<const unsigned int, GOC*>& pair : gameObjFactory->gameObjectMap) {
-		Transform *t = (Transform*) gameObject->second->GetComponent(ComponentTypeId::CT_Transform);
+	for (auto gameObject = objectFactory->objectMap.begin(); gameObject != objectFactory->objectMap.end(); ++gameObject) {
+	//for (const std::pair<const unsigned int, Object*>& pair : gameObjFactory->gameObjectMap) {
+		Transform *t = (Transform*) gameObject->second->GetComponent(ComponentType::Transform);
 
 		// DEBUG: Print address to stdout
 		//std::cout << t << std::endl;
@@ -77,8 +77,8 @@ void Physics::Update(float time) {
 		t->Y_Velocity += t->Y_Acceleration;
 	}
 
-	for (GameObjectFactory::gameObjIDMap::iterator gameObject = gameObjFactory->gameObjectMap.begin(); gameObject != gameObjFactory->gameObjectMap.end(); ++gameObject) {
-		Transform* t = (Transform*)gameObject->second->GetComponent(ComponentTypeId::CT_Transform);
+	for (Factory::objectIDMap::iterator gameObject = objectFactory->objectMap.begin(); gameObject != objectFactory->objectMap.end(); ++gameObject) {
+		Transform* t = (Transform*)gameObject->second->GetComponent(ComponentType::Transform);
 
 		// Save current position to previous position
 		t->PrevPosition = t->Position;
@@ -88,12 +88,12 @@ void Physics::Update(float time) {
 
 		bool hasCollided = false;
 
-		for (GameObjectFactory::gameObjIDMap::iterator anotherGameObject = std::next(gameObject); anotherGameObject != gameObjFactory->gameObjectMap.end(); ++anotherGameObject) {
-			if (Check_Collision((Body*)gameObject->second->GetComponent(ComponentTypeId::CT_Body), (Body*)anotherGameObject->second->GetComponent(ComponentTypeId::CT_Body))) {
+		for (Factory::objectIDMap::iterator anotherGameObject = std::next(gameObject); anotherGameObject != objectFactory->objectMap.end(); ++anotherGameObject) {
+			if (Check_Collision((Body*)gameObject->second->GetComponent(ComponentType::Body), (Body*)anotherGameObject->second->GetComponent(ComponentType::Body))) {
 				
 				// DEBUG
 				std::cout << "A collision has occured between ";
-				switch (((Body*)gameObject->second->GetComponent(ComponentTypeId::CT_Body))->GetShape()) {
+				switch (((Body*)gameObject->second->GetComponent(ComponentType::Body))->GetShape()) {
 				case shape::rect:
 						std::cout << "a rectangle ";
 						break;
@@ -105,7 +105,7 @@ void Physics::Update(float time) {
 					break;
 				}
 				std::cout << "and ";
-				switch (((Body*)anotherGameObject->second->GetComponent(ComponentTypeId::CT_Body))->GetShape()) {
+				switch (((Body*)anotherGameObject->second->GetComponent(ComponentType::Body))->GetShape()) {
 				case shape::rect:
 					std::cout << "a rectangle.";
 					break;
