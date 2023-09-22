@@ -106,8 +106,8 @@ void CoreEngine::GameLoop() {
 		}
 	}
 }
-void CoreEngine::AddSystem(std::string SystemName, ISystems* sys) {
-	Systems[SystemName] = sys;
+void CoreEngine::AddSystem(ISystems* sys) {
+	Systems[sys->SystemName()] = sys;
 }
 
 void CoreEngine::DeleteSystem() {

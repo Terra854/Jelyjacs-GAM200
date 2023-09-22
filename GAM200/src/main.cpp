@@ -23,11 +23,11 @@ int main() {
 	Physics* physics = new Physics();
 	GLApp* graphics = new GLApp();                                         
 
-	engine->AddSystem(windows->SystemName(), windows);                  
-	engine->AddSystem(logic->SystemName(), logic);
-	engine->AddSystem(factory->SystemName(), factory);
-	engine->AddSystem(physics->SystemName(), physics);
-	engine->AddSystem(graphics->SystemName(), graphics);                 
+	engine->AddSystem(windows);                  
+	engine->AddSystem(logic);
+	engine->AddSystem(factory);
+	engine->AddSystem(physics);
+	engine->AddSystem(graphics);                 
 
 	engine->Initialize();
 	windows->ActivateWindow();                                                    // @GuoChen Window Class nid this function
