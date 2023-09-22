@@ -35,3 +35,12 @@ void Object::AddComponent(ComponentType typeId, Component* component)
 	//sets the component's base ptr to refer to the current object that it is apart of
 	component->Base = this;
 }
+
+void Object::Intialize()
+{
+	for (std::vector<Component*>::iterator it = Components.begin(); it != Components.end(); ++it)
+	{
+		(*it)->Base = this;
+		(*it)->Initialize();
+	}
+}

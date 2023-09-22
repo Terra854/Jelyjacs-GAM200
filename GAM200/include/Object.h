@@ -27,6 +27,8 @@
 		///adds a component to be a part of the object by adding it into the components vector
 		void AddComponent(ComponentType typeId, Component* component);
 
+		void Intialize();
+
 		///Get the game object's Id
 		long GetId() { return ObjectId; }
 

@@ -34,10 +34,15 @@ Factory::~Factory()
 	}
 }
 
-//This creates an empty game object
+//This creates a game object with a file name. This will be what is used to create game objects in the game loop
 Object* Factory::createObject(const std::string& filename)
 {
 	Object* newGameObj = buildFromFile(filename);
+
+	if (newGameObj)
+	{
+		newGameObj->Intialize();
+	}
 
 	return newGameObj;
 }
