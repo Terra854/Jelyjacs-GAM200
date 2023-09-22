@@ -155,7 +155,7 @@
     <ClInclude Include="include\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component_t.h">
+    <ClInclude Include="include\Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Factory.h">

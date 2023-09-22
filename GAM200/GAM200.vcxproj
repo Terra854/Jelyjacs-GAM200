@@ -177,7 +177,7 @@
     <ClInclude Include="include\Debug.h" />
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\GameLogic.h" />
-    <ClInclude Include="include\Component_t.h" />
+    <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\Factory.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\Interface_System.h" />
