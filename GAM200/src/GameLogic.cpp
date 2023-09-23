@@ -42,7 +42,7 @@ void GameLogic::Initialize()
 	Texture* texture;
 	
 	std::cout << "test Object 1" << std::endl;
-	testObj = objectFactory->buildFromFile("../Assest/Objects/TestTile.txt");
+	testObj = objectFactory->buildFromFile("../Asset/Objects/TestTile.txt");
 	trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));
 	//std::cout << "test Object 2" << std::endl;
 	//testObj2 = gameObjFactory->buildFromFile("../Assest/Objects/TestTile.txt"); // testing
