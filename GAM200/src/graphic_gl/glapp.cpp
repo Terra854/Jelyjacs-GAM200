@@ -53,6 +53,7 @@ void GLApp::Initialize()
 
 	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(0))->GetComponent(ComponentType::Transform));
 	mat_test = tran_pt->Matrix.ToGlmMat3();
+	mat_test ={ 1,0,0,0,1,0,0,0,1 };
 	//print out the matrix
 	std::cout<<"matrix: "<<std::endl;
 	std::cout << mat_test[0][0] << " " << mat_test[0][1] << " " << mat_test[0][2] << std::endl;
