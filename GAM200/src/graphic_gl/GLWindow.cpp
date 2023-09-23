@@ -12,6 +12,8 @@
 #include <thread>
 #include <fstream>
 #include <sstream>
+
+#include "Core_Engine.h"
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
 // static data members declared in
@@ -124,6 +126,10 @@ void GLWindow::Update(float time)
 
     // Part 2
     GLWindow::update_time(1.0);
+    
+    // Check if the close button or alt + f4 is pressed
+    if (glfwWindowShouldClose(ptr_window))
+        engine->game_active = false; // Tells the engine to terminate
 }
 
 

@@ -9,6 +9,8 @@
 #include <debug.h>
 #include <GameLogic.h>
 
+CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet 
+
 int main() {
 	
 	// Enable run-time memory check for debug builds.
@@ -16,7 +18,7 @@ int main() {
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	#endif
 
-	CoreEngine* engine = new CoreEngine();
+	engine = new CoreEngine();
 	GameLogic* logic = new GameLogic();
 	GLWindow* windows = new GLWindow();
 	Factory* factory = new Factory();

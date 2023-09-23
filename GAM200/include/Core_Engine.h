@@ -23,13 +23,13 @@ public:
 	void DeleteSystem();
 	void Broadcast(Message *msg);
 
+	// checking if game is active
+	bool game_active;
 private:
 	// Map of Systems
 	std::unordered_map<std::string, ISystems*> Systems;
 	// For frame time
 	unsigned last_update;
-	// checking if game is active
-	bool game_active;
 };
 
 // To quit the game
@@ -38,4 +38,4 @@ public:
 	MessageQuit() : Message(MessageID::Quit) {};
 };
 
-extern CoreEngine* Core;
+extern CoreEngine* engine;
