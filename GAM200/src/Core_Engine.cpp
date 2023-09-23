@@ -53,15 +53,16 @@ void CoreEngine::GameLoop() {
 
 	bool log_system_time = false;
 	std::cout << "########################################################" << std::endl;
-	std::cout << "To switch on/off the performance viewer, ensure that the" << std::endl;
-	std::cout << "game window is the active window first and then press P" << std::endl;
+	std::cout << "Press P to print out frametime performance information" << std::endl;
+	std::cout << "for the current frame" << std::endl;
+	//std::cout << "game window is the active window first and then press P" << std::endl;
 	std::cout << "########################################################" << std::endl;
 
 	while (game_active) {
 		// Toggle P key to enable performance viewer
 		if (input::IsPressed(KEY::p)) {
 			log_system_time = !log_system_time;
-			std::cout << "Performance viewer is now " << (log_system_time ? "ON" : "OFF. Press P to switch it on again\n(make sure the game window is the active window first)") << std::endl;
+			//std::cout << "Performance viewer is now " << (log_system_time ? "ON" : "OFF. Press P to switch it on again\n(make sure the game window is the active window first)") << std::endl;
 		}
 
 		//Get the current time from chrono in milliseconds
