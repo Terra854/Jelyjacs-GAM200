@@ -1,36 +1,24 @@
 #include <Debug.h>
-// Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
-// High priority to refactor this before M1 submission to avoid academic misconduct penalties
-// Do not remove this until the changes are made
-
 #include "Object.h"
 
-Object::Object()
-{
-	ObjectId = 0;
-}
+Object::Object(){}
 
-Object::~Object()
-{
-
-}
+Object::~Object(){}
 
 Component* Object::GetComponent(ComponentType typeID)
 {
-	//loop through components vector to find the type of game component
-	for (Component* c : Components) {
-		if (c->TypeId == typeID)
-			return c;
+	//loop through component map to find the game component
+	for (const std::pair<ComponentType, Component*>& c : Components) {
+		if (c.first == typeID)
+			return c.second;
 	}
 	return nullptr;
 }
 
-void Object::AddComponent(ComponentType typeId, Component* component)
+void Object::AddComponent(Component* component)
 {
-	//Store the components type Id
-	component->TypeId = typeId;
-	//add into component vector
-	Components.push_back(component);
+	//add into component map
+	Components[component->TypeId()] = component;
 
 	//sets the component's base ptr to refer to the current object that it is apart of
 	component->Base = this;
@@ -38,9 +26,9 @@ void Object::AddComponent(ComponentType typeId, Component* component)
 
 void Object::Intialize()
 {
-	for (std::vector<Component*>::iterator it = Components.begin(); it != Components.end(); ++it)
+	for (std::unordered_map<ComponentType, Component*>::iterator it = Components.begin(); it != Components.end(); ++it)
 	{
-		(*it)->Base = this;
-		(*it)->Initialize();
+		(*it).second->Base = this;
+		(*it).second->Initialize();
 	}
 }

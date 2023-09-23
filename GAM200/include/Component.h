@@ -1,22 +1,13 @@
 #pragma once
 #include <Debug.h>
-
-// Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
-// High priority to refactor this before M1 submission to avoid academic misconduct penalties
-// Do not remove this until the changes are made
-
 #include "../../src/Assets Manager/serialization.h"
 
 //different types of game components to differentiate
 enum class ComponentType
 {
-	//Invalid component id
-	None = 0,
-	//Collision
+	None = 0, //Invalid component id
 	Transform,
-	//Graphics
 	Texture,
-	//Physics
 	Body,
 };
 
@@ -25,13 +16,11 @@ class Component
 public:
 	friend class Object;
 
+	Component() : Base{nullptr} {}
+	virtual ~Component() = default;
+
 	//to initialise remainng game components not set from text file
 	virtual void Initialize() {};
-
-	Component(ComponentType Id)
-		:TypeId(Id), Base{nullptr}
-	{}
-	virtual ~Component() = default;
 
 	//for serialization to know how far to read in text file to get all the variables of this game component
 	virtual void Serialize(Serialization& stream) {};
@@ -40,7 +29,7 @@ public:
 	Object* GetOwner() { return Base; }
 
 	//to differentiate between the components
-	ComponentType TypeId;
+	virtual ComponentType TypeId() const { return ComponentType::None; }
 
 private:
 	///to refer to the object that component is a part of

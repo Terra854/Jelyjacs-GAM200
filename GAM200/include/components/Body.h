@@ -15,20 +15,21 @@ enum class shape
 class Body : public Component
 {
 public:
-	Body(ComponentType ID)
-		:Component(ID)
-	{};
+	Body() : Component(){};
 	virtual shape GetShape() = 0;
+	virtual ComponentType TypeId() const override { return ComponentType::Body; }
 };
 
-
-// Collision Check on Body
+// Rectangle Object
 class Rectangular : public Body
 {
 public:
-	Rectangular(ComponentType ID)
-		:Body(ID)
-	{};
+	Rectangular() {}
+	Rectangular(AABB _aabb) : Body(), aabb(_aabb) {}
+	Rectangular(Vec2 min, Vec2 max) : Body() {
+		aabb.min = min;
+		aabb.max = max;
+	}
 	AABB aabb;
 	virtual shape GetShape() override
 	{
@@ -36,25 +37,33 @@ public:
 	}
 };
 
-class Circlular : public Body
+// Circle Object
+class Circular : public Body
 {
 public:
-	Circlular(ComponentType ID)
-		:Body(ID)
-	{};
-	Circle cirlce;
+	Circular() {}
+	Circular(Circle c) : Body(), circle(c)	{}
+	Circular(Vec2 center, float radius) : Body() {
+		circle.center = center;
+		circle.radius = radius;
+	}
+	Circle circle;
 	virtual shape GetShape() override
 	{
 		return shape::circle;
 	}
 };
 
-class lines : public Body
+// Line Object
+class Lines : public Body
 {
 public:
-	lines(ComponentType ID)
-		:Body(ID)
-	{};
+	Lines() {}
+	Lines(Line _line) : Body(), line(_line) {}
+	Lines(Vec2 pt0, Vec2 pt1) : Body(){
+		line.SetPt0(pt0);
+		line.SetPt1(pt1);
+	}
 	Line line;
 	virtual shape GetShape() override
 	{

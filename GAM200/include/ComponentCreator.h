@@ -3,33 +3,26 @@
 
 #include "component.h"
 
-class ComponentCreator
-{
+class BaseComponentCreator {
 public:
-
-	//ctor to set what type of component to create
-	ComponentCreator(ComponentType);
-
-	virtual ~ComponentCreator() {};
-
-	//to new a component based on the type set by ctor
-	virtual Component* Create() = 0;
-
-	//to store type of component to call create() 
-	ComponentType typeId;
-
+	Component* Create();
+	template <typename... Args> Component* Create(Args&&... args);
+	virtual ~BaseComponentCreator() = default;
 };
 
-//used by addcomponent function, second argument, that specifies what type of game component to create
-template<typename type>
-class ComponentCreatorType : public ComponentCreator
+//used by addcomponent function that specifies what type of game component to create
+template<typename ComponentType> class ComponentCreator : public BaseComponentCreator
 {
 public:
-	ComponentCreatorType(ComponentType ID)
-		:ComponentCreator(ID)
-	{};
-	virtual Component* Create()
+	ComponentCreator() {}
+
+	Component* Create()
 	{
-		return new type(typeId);
+		return new ComponentType();
+	}
+
+	template <typename... Args> Component* Create(Args&&... args)
+	{ 
+		return new ComponentType(std::forward<Args>(args)...);
 	}
 };

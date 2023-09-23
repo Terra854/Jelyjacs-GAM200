@@ -8,19 +8,19 @@ class Transform : public Component
 {
 public:
 	//centre position of bodies
-	Transform(ComponentType ID)
-		:Component(ID)
-	{};
+	Transform()	: Component(){};
+
 	Vec2 Position;
+	Vec2 PrevPosition;
 	float Scale;
 	float Rotation;
-	Vec2 PrevPosition;
 	float X_Velocity;
 	float X_Acceleration;
 	float Y_Velocity;
 	float Y_Acceleration;
 	float Mass;
 	Mat3 Matrix;
+
 	virtual void Initialize() override
 	{
 
@@ -32,4 +32,6 @@ public:
 		streamGet(stream, Scale);
 		streamGet(stream, Rotation);
 	}
+
+	virtual ComponentType TypeId() const override { return ComponentType::Transform; }
 };

@@ -16,28 +16,28 @@ float interTime = 0.0f;
 * once we implement that in the game state update function.
 */
 /*
-void gravityUpdate(int* gameobjectYVelocity)
+void gravityUpdate(int* objYVelocity)
 {
-	*gameobjectYVelocity = gravity * frameTime + *gameobjectYVelocity;
+	*objYVelocity = gravity * frameTime + *objYVelocity;
 }
 */
 
 bool Check_Collision(Body* b1, Body* b2) {
 
 	// Circle and Line
-	if (typeid(*b1) == typeid(Circlular) && typeid(*b2) == typeid(lines)) {
-		return Collision::Check_Circle_Line(((Circlular*)b1)->cirlce, ((Transform*)b1)->PrevPosition, ((lines*)b2)->line, interPt, normalAtCollision, interTime);
+	if (typeid(*b1) == typeid(Circular) && typeid(*b2) == typeid(Lines)) {
+		return Collision::Check_Circle_Line(((Circular*)b1)->circle, ((Transform*)b1)->PrevPosition, ((Lines*)b2)->line, interPt, normalAtCollision, interTime);
 	}
-	if (typeid(*b1) == typeid(lines) && typeid(*b2) == typeid(Circlular)) {
-		return Collision::Check_Circle_Line(((Circlular*)b2)->cirlce, ((Transform*)b2)->PrevPosition, ((lines*)b1)->line, interPt, normalAtCollision, interTime);
+	if (typeid(*b1) == typeid(Lines) && typeid(*b2) == typeid(Circular)) {
+		return Collision::Check_Circle_Line(((Circular*)b2)->circle, ((Transform*)b2)->PrevPosition, ((Lines*)b1)->line, interPt, normalAtCollision, interTime);
 	}
 
 	// Rectangle and Line
-	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(lines)) {
-		return Collision::Check_AABB_Line(((Rectangular*)b1)->aabb, ((Transform*)b1)->PrevPosition, ((lines*)b2)->line, interPt, normalAtCollision, interTime);
+	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Lines)) {
+		return Collision::Check_AABB_Line(((Rectangular*)b1)->aabb, ((Transform*)b1)->PrevPosition, ((Lines*)b2)->line, interPt, normalAtCollision, interTime);
 	}
-	else if (typeid(*b1) == typeid(lines) && typeid(*b2) == typeid(Rectangular)) {
-		return Collision::Check_AABB_Line(((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, ((lines*)b1)->line, interPt, normalAtCollision, interTime);
+	else if (typeid(*b1) == typeid(Lines) && typeid(*b2) == typeid(Rectangular)) {
+		return Collision::Check_AABB_Line(((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, ((Lines*)b1)->line, interPt, normalAtCollision, interTime);
 	}
 
 	// 2 Rectangles
@@ -63,9 +63,9 @@ void Physics::Update(float time) {
 	// std::cout << "Physics::Update" << std::endl;
 
 	// Update velocity for each object
-	for (auto gameObject = objectFactory->objectMap.begin(); gameObject != objectFactory->objectMap.end(); ++gameObject) {
-	//for (const std::pair<const unsigned int, Object*>& pair : gameObjFactory->gameObjectMap) {
-		Transform *t = (Transform*) gameObject->second->GetComponent(ComponentType::Transform);
+	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
+	//for (const std::pair<const unsigned int, Object*>& pair : gameObjFactory->objMap) {
+		Transform *t = (Transform*) obj->second->GetComponent(ComponentType::Transform);
 
 		// DEBUG: Print address to stdout
 		//std::cout << t << std::endl;
@@ -77,8 +77,8 @@ void Physics::Update(float time) {
 		t->Y_Velocity += t->Y_Acceleration;
 	}
 
-	for (Factory::objectIDMap::iterator gameObject = objectFactory->objectMap.begin(); gameObject != objectFactory->objectMap.end(); ++gameObject) {
-		Transform* t = (Transform*)gameObject->second->GetComponent(ComponentType::Transform);
+	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
+		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
 
 		// Save current position to previous position
 		t->PrevPosition = t->Position;
@@ -88,12 +88,12 @@ void Physics::Update(float time) {
 
 		bool hasCollided = false;
 
-		for (Factory::objectIDMap::iterator anotherGameObject = std::next(gameObject); anotherGameObject != objectFactory->objectMap.end(); ++anotherGameObject) {
-			if (Check_Collision((Body*)gameObject->second->GetComponent(ComponentType::Body), (Body*)anotherGameObject->second->GetComponent(ComponentType::Body))) {
+		for (Factory::objectIDMap::iterator anotherobj = std::next(obj); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
+			if (Check_Collision((Body*)obj->second->GetComponent(ComponentType::Body), (Body*)anotherobj->second->GetComponent(ComponentType::Body))) {
 				
 				// DEBUG
 				std::cout << "A collision has occured between ";
-				switch (((Body*)gameObject->second->GetComponent(ComponentType::Body))->GetShape()) {
+				switch (((Body*)obj->second->GetComponent(ComponentType::Body))->GetShape()) {
 				case shape::rect:
 						std::cout << "a rectangle ";
 						break;
@@ -105,7 +105,7 @@ void Physics::Update(float time) {
 					break;
 				}
 				std::cout << "and ";
-				switch (((Body*)anotherGameObject->second->GetComponent(ComponentType::Body))->GetShape()) {
+				switch (((Body*)anotherobj->second->GetComponent(ComponentType::Body))->GetShape()) {
 				case shape::rect:
 					std::cout << "a rectangle.";
 					break;

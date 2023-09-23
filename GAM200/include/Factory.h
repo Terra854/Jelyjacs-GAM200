@@ -1,10 +1,6 @@
 #pragma once
 #include <Debug.h>
 
-// Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
-// High priority to refactor this before M1 submission to avoid academic misconduct penalties
-// Do not remove this until the changes are made
-
 /*
 * This is the declaration of the game fatory class.
 * It helps to create game objects in the game loop.
@@ -39,8 +35,6 @@ public:
 
 	virtual std::string SystemName() { return "Factory"; };
 
-	//virtual void SendMessage(Message* msg);
-
 	void destroyAllObjects();
 
 	Object* createEmptyObject();
@@ -51,15 +45,14 @@ public:
 
 	Object* getObjectWithID(long id);
 
-	void AddComponentCreator(const std::string& name, ComponentCreator* creator);
+	void AddComponentCreator(const std::string& name, BaseComponentCreator* creator);
 
 	friend class Physics; // Needed to apply physics onto each object
 private:
 	unsigned nextObjectId;
 
-
 	//to map the component name in object text file to component type
-	typedef std::map< std::string, ComponentCreator*> componentCreatorMap;
+	typedef std::map< std::string, BaseComponentCreator*> componentCreatorMap;
 	componentCreatorMap componentMap;
 
 	typedef std::map<unsigned, Object*> objectIDMap;

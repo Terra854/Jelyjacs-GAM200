@@ -1,0 +1,42 @@
+{
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 100.0,
+          "y": 100.0
+        },
+        "Scale": 1.0,
+        "Rotation": 0.0,
+        "X_Velocity": 0.0,
+        "X_Acceleration": 0.0,
+        "Y_Velocity": 0.0,
+        "Y_Acceleration": 0.0,
+        "Mass": 0.0
+      }
+    },
+    {
+      "Type": "Body",
+      "Shape": "Rectangle",
+      "Properties": {
+        "AABB": {
+          "min": {
+            "x": 10.0,
+            "y": 20.0
+          },
+          "max": {
+            "x": 50.0,
+            "y": 60.0
+          }
+        }
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "../Asset/Picture/test.png"
+      }
+    }
+  ]
+}

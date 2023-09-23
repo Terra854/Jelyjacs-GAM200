@@ -5,6 +5,8 @@
 
 struct AABB
 {
+	AABB(){}
+	AABB(Vec2 _min, Vec2 _max) : min(_min), max(_max) {}
 	Vec2 min; // Bottom Left
 	Vec2 max; // Top Right
 

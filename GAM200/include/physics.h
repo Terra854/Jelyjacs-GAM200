@@ -11,7 +11,7 @@ const float gravity = -20.0f;
 * In the future, this will be changed to take in a game object struct
 * once we implement that in the game state update function.
 */
-void gravityUpdate(int* gameobjectYVelocity);
+//void gravityUpdate(int* objYVelocity);
 
 
 class Physics : public ISystems {
