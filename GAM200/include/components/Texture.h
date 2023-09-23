@@ -8,6 +8,9 @@
 class Texture : public Component
 {
 public:
+	Texture(ComponentType ID)
+		:Component(ID)
+	{};
 	virtual void Serialize(Serialization& stream) override;
 
 	// Path to file for texture

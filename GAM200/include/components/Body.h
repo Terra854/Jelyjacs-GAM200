@@ -15,6 +15,9 @@ enum class shape
 class Body : public Component
 {
 public:
+	Body(ComponentType ID)
+		:Component(ID)
+	{};
 	virtual shape GetShape() = 0;
 };
 
@@ -23,6 +26,9 @@ public:
 class Rectangular : public Body
 {
 public:
+	Rectangular(ComponentType ID)
+		:Body(ID)
+	{};
 	AABB aabb;
 	virtual shape GetShape() override
 	{
@@ -33,6 +39,9 @@ public:
 class Circlular : public Body
 {
 public:
+	Circlular(ComponentType ID)
+		:Body(ID)
+	{};
 	Circle cirlce;
 	virtual shape GetShape() override
 	{
@@ -43,6 +52,9 @@ public:
 class lines : public Body
 {
 public:
+	lines(ComponentType ID)
+		:Body(ID)
+	{};
 	Line line;
 	virtual shape GetShape() override
 	{

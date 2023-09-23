@@ -30,6 +30,6 @@ public:
 	{};
 	virtual Component* Create()
 	{
-		return new type();
+		return new type(typeId);
 	}
 };

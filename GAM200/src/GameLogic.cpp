@@ -6,6 +6,7 @@
 #include "ComponentCreator.h"
 #include "components/Transform.h"
 #include "components/Texture.h"
+#include "components/Body.h"
 
 // It's broken, will be purged in the future
 //GameLogic* Logic = NULL;
@@ -32,8 +33,8 @@ void GameLogic::Initialize()
 	//See ComponentType.h to see what components we have for now. 
 	//When we create new types of components, we need to add it in there as well
 	objectFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentType::Transform));
-	objectFactory->AddComponentCreator("Texture", new ComponentCreatorType<Transform>(ComponentType::Texture));
-	objectFactory->AddComponentCreator("Body", new ComponentCreatorType<Transform>(ComponentType::Body));
+	objectFactory->AddComponentCreator("Texture", new ComponentCreatorType<Texture>(ComponentType::Texture));
+	objectFactory->AddComponentCreator("Body", new ComponentCreatorType<Rectangular>(ComponentType::Body));
 	
 	Object* testObj;
 	//Object* testObj2;

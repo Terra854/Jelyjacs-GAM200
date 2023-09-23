@@ -28,7 +28,9 @@ public:
 	//to initialise remainng game components not set from text file
 	virtual void Initialize() {};
 
-	Component() = default;
+	Component(ComponentType Id)
+		:TypeId(Id), Base{nullptr}
+	{}
 	virtual ~Component() = default;
 
 	//for serialization to know how far to read in text file to get all the variables of this game component

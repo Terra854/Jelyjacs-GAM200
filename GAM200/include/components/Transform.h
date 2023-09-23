@@ -8,6 +8,9 @@ class Transform : public Component
 {
 public:
 	//centre position of bodies
+	Transform(ComponentType ID)
+		:Component(ID)
+	{};
 	Vec2 Position;
 	float Scale;
 	float Rotation;
