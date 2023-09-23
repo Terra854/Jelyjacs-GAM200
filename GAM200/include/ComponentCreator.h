@@ -7,7 +7,7 @@ class BaseComponentCreator {
 public:
 	Component* Create();
 	template <typename... Args> Component* Create(Args&&... args);
-	virtual ~BaseComponentCreator() = default;
+	virtual ~BaseComponentCreator() {};
 };
 
 //used by addcomponent function that specifies what type of game component to create
@@ -15,6 +15,7 @@ template<typename ComponentType> class ComponentCreator : public BaseComponentCr
 {
 public:
 	ComponentCreator() {}
+	~ComponentCreator() {}
 
 	Component* Create()
 	{

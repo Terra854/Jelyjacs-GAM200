@@ -32,6 +32,7 @@ class GLWindow : public ISystems
 {
 public:
 	GLWindow();
+	~GLWindow() {};
 	virtual void Initialize();
 	virtual void Update(float time);
 	virtual std::string SystemName() { return "Window"; };

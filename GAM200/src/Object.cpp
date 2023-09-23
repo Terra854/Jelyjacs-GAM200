@@ -3,7 +3,13 @@
 
 Object::Object(){}
 
-Object::~Object(){}
+Object::~Object(){
+	// Delete all components inside the object
+	for (const std::pair<ComponentType, Component*>& c : Components) {
+		delete c.second;
+	}
+	Components.clear();
+}
 
 Component* Object::GetComponent(ComponentType typeID)
 {

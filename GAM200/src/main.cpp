@@ -47,6 +47,6 @@ int main() {
 		 std::this_thread::sleep_for(frameDuration - frameTime);
 	}
 	*/
-	engine->DeleteSystem();
+	delete engine;
 	return 0;
 }

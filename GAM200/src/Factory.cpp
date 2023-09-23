@@ -32,11 +32,15 @@ Factory::Factory()
 //Dtor
 Factory::~Factory()
 {
-	componentCreatorMap::iterator it = componentMap.begin();
-	for (; it != componentMap.end(); ++it)
+	// Delete all component creators
+	for (componentCreatorMap::iterator it = componentMap.begin(); it != componentMap.end(); ++it)
 	{
 		delete it->second;
 	}
+	componentMap.clear();
+
+	// Delete all objects
+	destroyAllObjects();
 }
 
 // This creates a game object using the variables from the json file
@@ -56,8 +60,10 @@ Object* Factory::createObject(const std::string& filename)
 	// Check if the given file is a valid json file
 	if (!reader.parse(jsonFile, *jsonObject)) {
 		std::cout << "Failed to parse JSON" << std::endl;
+		jsonFile.close();
 		return NULL;
 	}
+	jsonFile.close();
 
 	// Now parse the file to populate the object with components
 

@@ -6,6 +6,8 @@
 //Base System class for all systems - Interface.
 class ISystems {
 public:
+	ISystems() {};
+	virtual ~ISystems() {};
 	//Messaging System for inter System communication
 	virtual void SendMessage(Message* message) {};
 	// System Initialization

@@ -17,6 +17,7 @@ const float gravity = -20.0f;
 class PhysicsSystem : public ISystems {
 public:
 	PhysicsSystem();
+	~PhysicsSystem() {};
 	virtual void Initialize();
 	virtual void Update(float time);
 	virtual std::string SystemName() { return "Physics"; }

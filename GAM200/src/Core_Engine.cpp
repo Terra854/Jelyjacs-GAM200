@@ -26,8 +26,7 @@ CoreEngine::CoreEngine() {
 }
 
 CoreEngine::~CoreEngine() {
-	//for (const std::pair<std::string, ISystems*>& sys : Systems)
-		//delete sys.second;
+	DeleteSystem();
 }
 
 void CoreEngine::Initialize() {

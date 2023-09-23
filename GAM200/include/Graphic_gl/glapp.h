@@ -22,6 +22,7 @@ class GLApp : public ISystems
 {
 public:
 	GLApp();
+	~GLApp() {}
 	virtual void Initialize() ;
 	virtual void Update(float time);
 	virtual std::string SystemName() { return "Graphics"; }

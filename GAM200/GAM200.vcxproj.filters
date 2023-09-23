@@ -49,12 +49,15 @@
     <Filter Include="Source Files\Miscellanous">
       <UniqueIdentifier>{29294102-023f-41c7-9dcb-a46a6de68236}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\External Libraries">
+      <UniqueIdentifier>{ea581d77-e83b-4ae1-a83f-05ffc1ab96ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\External Libraries\jsoncpp">
+      <UniqueIdentifier>{64c09b18-3074-4cb5-8fb7-4c23ee46f102}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphic_gl\GLWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Mat3.cpp">
@@ -84,12 +87,6 @@
     <ClCompile Include="src\Core_Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameLogic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Factory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Line.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
@@ -102,17 +99,23 @@
     <ClCompile Include="src\Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\PhysicsSystem.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Systems\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp">
+      <Filter>Source Files\External Libraries\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphic_gl\GLWindow.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Factory.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameLogic.cpp">
+      <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Graphic_gl\GLWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\AABB.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
@@ -155,9 +158,6 @@
     <ClInclude Include="include\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Factory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -193,6 +193,12 @@
     </ClInclude>
     <ClInclude Include="include\components\Physics.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Factory.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphic_gl\GLWindow.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
