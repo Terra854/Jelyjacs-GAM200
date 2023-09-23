@@ -2,7 +2,7 @@
 #include <Factory.h>
 #include <glapp.h>
 #include <GLWindow.h>
-#include <physics.h>
+#include <PhysicsSystem.h>
 #include <iostream>
 //#include <chrono>
 //#include <thread>
@@ -20,7 +20,7 @@ int main() {
 	GameLogic* logic = new GameLogic();
 	GLWindow* windows = new GLWindow();
 	Factory* factory = new Factory();
-	Physics* physics = new Physics();
+	PhysicsSystem* physics = new PhysicsSystem();
 	GLApp* graphics = new GLApp();                                         
 
 	engine->AddSystem(windows);                  

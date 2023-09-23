@@ -8,12 +8,7 @@
           "y": 100.0
         },
         "Scale": 1.0,
-        "Rotation": 0.0,
-        "X_Velocity": 0.0,
-        "X_Acceleration": 0.0,
-        "Y_Velocity": 0.0,
-        "Y_Acceleration": 0.0,
-        "Mass": 0.0
+        "Rotation": 0.0
       }
     },
     {
@@ -36,6 +31,16 @@
       "Type": "Texture",
       "Properties": {
         "texturepath": "../Asset/Picture/test.png"
+      }
+    },
+    {
+      "Type": "Physics",
+      "Properties": {
+        "X_Velocity": 1.0,
+        "X_Acceleration": 2.0,
+        "Y_Velocity": 3.0,
+        "Y_Acceleration": 4.0,
+        "Mass": 5.0
       }
     }
   ]

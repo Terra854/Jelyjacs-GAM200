@@ -39,7 +39,7 @@ public:
 
 	Object* createEmptyObject();
 
-	Object* buildFromFile(const std::string& filename);
+	//Object* buildFromFile(const std::string& filename);
 
 	void assignIdToObject(Object* object);
 
@@ -47,7 +47,7 @@ public:
 
 	void AddComponentCreator(const std::string& name, BaseComponentCreator* creator);
 
-	friend class Physics; // Needed to apply physics onto each object
+	friend class PhysicsSystem; // Needed to apply physics onto each object
 private:
 	unsigned nextObjectId;
 

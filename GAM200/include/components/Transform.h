@@ -14,11 +14,6 @@ public:
 	Vec2 PrevPosition;
 	float Scale;
 	float Rotation;
-	float X_Velocity;
-	float X_Acceleration;
-	float Y_Velocity;
-	float Y_Acceleration;
-	float Mass;
 	Mat3 Matrix;
 
 	virtual void Initialize() override

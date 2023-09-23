@@ -9,6 +9,7 @@ enum class ComponentType
 	Transform,
 	Texture,
 	Body,
+	Physics
 };
 
 class Component

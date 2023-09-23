@@ -7,7 +7,8 @@
 #include "components/Transform.h"
 #include "components/Texture.h"
 #include <iostream>
-#include <components/Body.h>
+#include "components/Body.h"
+#include "components/Physics.h"
 
 // Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
 // High priority to refactor this before M1 submission to avoid academic misconduct penalties
@@ -77,12 +78,6 @@ Object* Factory::createObject(const std::string& filename)
 			trans->Scale = component["Properties"]["Scale"].asFloat();
 			trans->Rotation = component["Properties"]["Rotation"].asFloat();
 
-			trans->X_Velocity = component["Properties"]["X_Velocity"].asFloat();
-			trans->X_Acceleration = component["Properties"]["X_Acceleration"].asFloat();
-			trans->Y_Velocity = component["Properties"]["Y_Velocity"].asFloat();
-			trans->Y_Acceleration = component["Properties"]["Y_Acceleration"].asFloat();
-			trans->Mass = component["Properties"]["Mass"].asFloat();
-
 			trans->Matrix = Mat3Scale(trans->Scale, trans->Scale) * Mat3RotDeg(trans->Rotation) * Mat3Translate(trans->Position.x, trans->Position.y);
 
 			obj->AddComponent(trans);
@@ -121,6 +116,17 @@ Object* Factory::createObject(const std::string& filename)
 
 				obj->AddComponent(l);
 			}
+		}
+		else if (type == "Physics") {
+			Physics* p = (Physics*)((ComponentCreator<Physics>*) componentMap["Physics"])->Create();
+
+			p->X_Velocity = component["Properties"]["X_Velocity"].asFloat();
+			p->X_Acceleration = component["Properties"]["X_Acceleration"].asFloat();
+			p->Y_Velocity = component["Properties"]["Y_Velocity"].asFloat();
+			p->Y_Acceleration = component["Properties"]["Y_Acceleration"].asFloat();
+			p->Mass = component["Properties"]["Mass"].asFloat();
+
+			obj->AddComponent(p);
 		}
 	}
 

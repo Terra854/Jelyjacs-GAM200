@@ -164,7 +164,7 @@
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mat3.cpp" />
-    <ClCompile Include="src\physics.cpp" />
+    <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Vec2.cpp" />
   </ItemGroup>
@@ -172,6 +172,7 @@
     <ClInclude Include="include\components\Body.h" />
     <ClInclude Include="include\components\Texture.h" />
     <ClInclude Include="include\components\Transform.h" />
+	<ClInclude Include="include\components\Physics.h" />
     <ClInclude Include="include\ComponentCreator.h" />
     <ClInclude Include="include\Core_Engine.h" />
     <ClInclude Include="include\Debug.h" />
@@ -191,7 +192,7 @@
     <ClInclude Include="include\Line.h" />
     <ClInclude Include="include\Mat3.h" />
     <ClInclude Include="include\message.h" />
-    <ClInclude Include="include\physics.h" />
+    <ClInclude Include="include\PhysicsSystem.h" />
     <ClInclude Include="include\Vec2.h" />
     <ClInclude Include="src\Assets Manager\file_reader.h" />
     <ClInclude Include="src\Assets Manager\serialization.h" />

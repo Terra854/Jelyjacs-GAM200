@@ -7,6 +7,7 @@
 #include "components/Transform.h"
 #include "components/Texture.h"
 #include "components/Body.h"
+#include "components/Physics.h"
 
 void GameLogic::SendMessage(Message* msg) {
 	// Keys to Game Logic
@@ -20,6 +21,7 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Rectangle", new ComponentCreator<Rectangular>());
 	objectFactory->AddComponentCreator("Circle", new ComponentCreator<Circular>());
 	objectFactory->AddComponentCreator("Line", new ComponentCreator<Lines>());
+	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
 	
 	Object* testObj;
 	//Object* testObj2;

@@ -1,11 +1,12 @@
 #include <Debug.h>
 #include <Factory.h>
-#include <physics.h>
+#include <PhysicsSystem.h>
 #include <components/Body.h>
 #include <Interface_System.h>
 #include <typeinfo>
 #include <string>
 #include <iostream>
+#include <components/Physics.h>
 
 Vec2 interPt, normalAtCollision;
 float interTime = 0.0f;
@@ -50,40 +51,41 @@ bool Check_Collision(Body* b1, Body* b2) {
 	}
 }
 
-Physics::Physics() {
+PhysicsSystem::PhysicsSystem() {
 
 }
 
-void Physics::Initialize() {
+void PhysicsSystem::Initialize() {
 
 }
 
-void Physics::Update(float time) {
+void PhysicsSystem::Update(float time) {
 	// DEBUG: Make sure it's running
 	// std::cout << "Physics::Update" << std::endl;
 
 	// Update velocity for each object
 	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 	//for (const std::pair<const unsigned int, Object*>& pair : gameObjFactory->objMap) {
-		Transform *t = (Transform*) obj->second->GetComponent(ComponentType::Transform);
+		Physics *p = (Physics*) obj->second->GetComponent(ComponentType::Physics);
 
 		// DEBUG: Print address to stdout
 		//std::cout << t << std::endl;
 
-		if (t == nullptr)
-			continue; // No transform in that object, move along
+		if (p == nullptr)
+			continue; // No physics in that object, move along
 
-		t->X_Velocity += t->X_Acceleration;
-		t->Y_Velocity += t->Y_Acceleration;
+		p->X_Velocity += p->X_Acceleration;
+		p->Y_Velocity += p->Y_Acceleration;
 	}
 
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
+		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
 
 		// Save current position to previous position
 		t->PrevPosition = t->Position;
 
-		if (t->X_Velocity == 0.f && t->Y_Velocity == 0.f)
+		if (p->X_Velocity == 0.f && p->Y_Velocity == 0.f)
 			continue; // No movement, so no need to calculate collision.
 
 		bool hasCollided = false;
@@ -123,11 +125,11 @@ void Physics::Update(float time) {
 
 		if (hasCollided) {
 			// For now, set all velocity to 0
-			t->X_Velocity = 0.f;
-			t->Y_Velocity = 0.f;
+			p->X_Velocity = 0.f;
+			p->Y_Velocity = 0.f;
 		} else {
-			t->Position.x += t->X_Velocity;
-			t->Position.y += t->Y_Velocity;
+			t->Position.x += p->X_Velocity;
+			t->Position.y += p->Y_Velocity;
 		}
 	}
 }

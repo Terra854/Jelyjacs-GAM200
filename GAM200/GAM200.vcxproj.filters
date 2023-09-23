@@ -66,9 +66,6 @@
     <ClCompile Include="src\Collision.cpp">
       <Filter>Source Files\Systems\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics.cpp">
-      <Filter>Source Files\Systems\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\input.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
@@ -105,6 +102,12 @@
     <ClCompile Include="src\Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Graphic_gl\GLWindow.h">
@@ -126,9 +129,6 @@
       <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Collision.h">
-      <Filter>Header Files\Systems\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\physics.h">
       <Filter>Header Files\Systems\Physics</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphic_gl\glapp.h">
@@ -187,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="include\Interface_System.h">
       <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PhysicsSystem.h">
+      <Filter>Header Files\Systems\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Physics.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
