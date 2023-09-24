@@ -17,7 +17,7 @@
 ----------------------------------------------------------------------------- */
 //test
 
-GLSLShader shdr_img;
+//GLSLShader shdr_img;
 GLuint tex_test;
 glm::mat3 mat_test;
 //Declarations of shdrpgms models objects map
@@ -205,10 +205,10 @@ void GLApp::init_models() {
 
 void GLApp::init_shdrpgms() {
 
-	insert_shdrpgm("image-shdrpgm", "../shaders/image.vert", "../shaders/image.frag");
-
-
+	insert_shdrpgm("image", "../shaders/image.vert", "../shaders/image.frag");
 	std::cout << "test shader program: " << "image-shdrpgm" << std::endl;
+	insert_shdrpgm("shape", "../shaders/shape.vert", "../shaders/shape.frag");
+	std::cout << "test shader program: " << "shape-shdrpgm" << std::endl;
 }
 
 
@@ -276,15 +276,15 @@ void GLApp::Update(float time)
 	glBindTexture(GL_TEXTURE_2D, tex_test);
 	glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	// load shader program in use by this object
-	shdr_img.Use();
+	shdrpgms["image"].Use();
 	// bind VAO of this object's model
 	glBindVertexArray(models["square"].vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
-	shdr_img.SetUniform("uModel_to_NDC", mat_test);
+	shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test);
 
 	// tell fragment shader sampler uTex2d will use texture image unit 6
-	GLuint tex_loc = glGetUniformLocation(shdr_img.GetHandle(), "uTex2d");
+	GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
 	glUniform1i(tex_loc, 6);
 
 	// call glDrawElements with appropriate arguments
@@ -292,7 +292,7 @@ void GLApp::Update(float time)
 
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
-	shdr_img.UnUse();
+	shdrpgms["image"].UnUse();
 
 	
 	glfwSwapBuffers(window->ptr_window);
@@ -343,18 +343,18 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 			std::make_pair(GL_FRAGMENT_SHADER, frg_shdr)
 	};
 
-
-	shdr_img.CompileLinkValidate(shdr_files);
-	if (GL_FALSE == shdr_img.IsLinked())
+	GLSLShader shdr_pgm;
+	shdr_pgm.CompileLinkValidate(shdr_files);
+	if (GL_FALSE == shdr_pgm.IsLinked())
 	{
 		std::cout << "Unable to compile/link/validate shader programs\n";
-		std::cout << shdr_img.GetLog() << "\n";
+		std::cout << shdr_pgm.GetLog() << "\n";
 		std::exit(EXIT_FAILURE);
 	}
 
 	// add compiled, linked, and validated shader program to
 	// std::map container GLApp::shdrpgms
-	//GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
+	GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
 }
 
 
