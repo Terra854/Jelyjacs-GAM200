@@ -46,7 +46,7 @@ public:
 		const char* texfile{ nullptr };
 
 	};
-	static GLModel mdl;
+	
 	static GLuint setup_texobj(const char*);
 	static void insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr);
 	struct GLViewport

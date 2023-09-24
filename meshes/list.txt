@@ -1,0 +1,4 @@
+square
+triangle
+circle
+line
