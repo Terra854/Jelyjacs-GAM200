@@ -139,6 +139,22 @@ void GLApp::init_models() {
 					}
 					Model.primitive_type = GL_TRIANGLES;
 				}
+				if (obj_prefix == 'l')
+				{
+					while (line_sstm_mdl >> glushort_data)
+					{
+						gl_tri_primitives.push_back(glushort_data);
+					}
+					Model.primitive_type = GL_LINES;
+				}
+				if (obj_prefix == 'f')
+				{
+					while (line_sstm_mdl >> glushort_data)
+					{
+						gl_tri_primitives.push_back(glushort_data);
+					}
+					Model.primitive_type = GL_TRIANGLE_FAN;
+				}
 			}
 			// Set VAO
 
