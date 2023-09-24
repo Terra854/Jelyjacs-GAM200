@@ -23,7 +23,7 @@ glm::mat3 mat_test;
 //Declarations of shdrpgms models objects map
 std::map<std::string, GLSLShader> GLApp::shdrpgms;
 std::map<std::string, GLApp::GLModel> GLApp::models;
-std::map<std::string, GLApp::GLObject> GLApp::objects;
+//std::map<std::string, GLApp::GLObject> GLApp::objects;
 std::map<std::string, GLuint> GLApp::textures;
 
 // Animation size 
@@ -294,6 +294,28 @@ void GLApp::Update(float time)
 	glBindVertexArray(0);
 	shdrpgms["image"].UnUse();
 
+
+
+
+	shdrpgms["shape"].Use();
+	// bind VAO of this object's model
+	glBindVertexArray(models["triangle"].vaoid);
+	// copy object's model-to-NDC matrix to vertex shader's
+	// uniform variable uModelToNDC
+	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test);
+
+
+	shdrpgms["shape"].SetUniform("uColor", {0.0f,1.0f,0.0f});
+	// tell fragment shader sampler uTex2d will use texture image unit 6
+	//GLuint tex_loc = glGetUniformLocation(shdrpgms["line"].GetHandle(), "uTex2d");
+	//glUniform1i(tex_loc, 6);
+
+	// call glDrawElements with appropriate arguments
+	glDrawElements(models["triangle"].primitive_type, models["triangle"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+	// unbind VAO and unload shader program
+	glBindVertexArray(0);
+	shdrpgms["shape"].UnUse();
 	
 	glfwSwapBuffers(window->ptr_window);
 }
@@ -359,30 +381,30 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 
 
 
-void GLApp::GLObject::draw() const
-{
-	glBindTextureUnit(6, tex_ref->second);
-	glBindTexture(GL_TEXTURE_2D, tex_ref->second);
-	glTextureSubImage2D(tex_ref->second, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	// load shader program in use by this object
-	shd_ref->second.Use();
-	// bind VAO of this object's model
-	glBindVertexArray(mdl_ref->second.vaoid);
-	// copy object's model-to-NDC matrix to vertex shader's
-	// uniform variable uModelToNDC
-	shd_ref->second.SetUniform("uModel_to_NDC", mdl_to_ndc_xform);
-
-	// tell fragment shader sampler uTex2d will use texture image unit 6
-	GLuint tex_loc = glGetUniformLocation(mdl_ref->second.shdr_pgm.GetHandle(), "uTex2d");
-	glUniform1i(tex_loc, 6);
-
-	// call glDrawElements with appropriate arguments
-	glDrawElements(mdl_ref->second.primitive_type, mdl_ref->second.draw_cnt, GL_UNSIGNED_SHORT, 0);
-
-	// unbind VAO and unload shader program
-	glBindVertexArray(0);
-	shd_ref->second.UnUse();
-
-
-	
-}
+//void GLApp::GLObject::draw() const
+//{
+//	glBindTextureUnit(6, tex_ref->second);
+//	glBindTexture(GL_TEXTURE_2D, tex_ref->second);
+//	glTextureSubImage2D(tex_ref->second, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+//	// load shader program in use by this object
+//	shd_ref->second.Use();
+//	// bind VAO of this object's model
+//	glBindVertexArray(mdl_ref->second.vaoid);
+//	// copy object's model-to-NDC matrix to vertex shader's
+//	// uniform variable uModelToNDC
+//	shd_ref->second.SetUniform("uModel_to_NDC", mdl_to_ndc_xform);
+//
+//	// tell fragment shader sampler uTex2d will use texture image unit 6
+//	GLuint tex_loc = glGetUniformLocation(mdl_ref->second.shdr_pgm.GetHandle(), "uTex2d");
+//	glUniform1i(tex_loc, 6);
+//
+//	// call glDrawElements with appropriate arguments
+//	glDrawElements(mdl_ref->second.primitive_type, mdl_ref->second.draw_cnt, GL_UNSIGNED_SHORT, 0);
+//
+//	// unbind VAO and unload shader program
+//	glBindVertexArray(0);
+//	shd_ref->second.UnUse();
+//
+//
+//	
+//}
