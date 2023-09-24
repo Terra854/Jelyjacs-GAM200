@@ -170,6 +170,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
   <ItemGroup>
     <ClInclude Include="include\Audio.h" />
     <ClInclude Include="include\components\Body.h" />
+    <ClInclude Include="include\components\PlayerControllable.h" />
     <ClInclude Include="include\components\Texture.h" />
     <ClInclude Include="include\components\Transform.h" />
     <ClInclude Include="include\components\Physics.h" />

@@ -7,6 +7,8 @@
 #include <string>
 #include <iostream>
 #include <components/Physics.h>
+#include <components/PlayerControllable.h>
+#include <input.h>
 
 Vec2 interPt, normalAtCollision;
 float interTime = 0.0f;
@@ -60,8 +62,26 @@ void PhysicsSystem::Initialize() {
 }
 
 void PhysicsSystem::Update(float time) {
-	// DEBUG: Make sure it's running
-	// std::cout << "Physics::Update" << std::endl;
+	// Update velocity for player
+	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
+
+		if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) == nullptr)
+			continue; // That object is not controlled by the player, move to the next object
+
+		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
+
+		p->X_Velocity = 0.0f; // Reset velocity
+
+		if (input::IsPressed(KEY::d) || input::IsPressedRepeatedly(KEY::d))
+			p->X_Velocity += 10.0f;
+		if (input::IsPressed(KEY::a) || input::IsPressedRepeatedly(KEY::a))
+			p->X_Velocity -= 10.0f;
+
+		if (input::IsPressed(KEY::w))
+			p->Y_Acceleration = 100.0f;
+		
+		break; // There should only be one object that is player controlled for now
+	}
 
 	// Update velocity for each object
 	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
@@ -75,6 +95,9 @@ void PhysicsSystem::Update(float time) {
 			continue; // No physics in that object, move along
 
 		// No X acceleration, not needed in the game
+
+		// Apply gravity
+		p->Y_Acceleration = gravity * time + p->Y_Acceleration;
 		p->Y_Velocity += p->Y_Acceleration;
 	}
 

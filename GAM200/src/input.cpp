@@ -138,7 +138,7 @@ bool input::IsPressed(KEY key)
 }
 
 
-bool IsReleased(KEY key)
+bool input::IsReleased(KEY key)
 {
 	return buttons[at(key)].IsReleased();
 }
