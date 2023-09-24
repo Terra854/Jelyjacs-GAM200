@@ -8,9 +8,9 @@
 #include "components/Texture.h"
 #include "components/Body.h"
 #include "components/Physics.h"
+#include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
-#include <Movement.h>
 
 void GameLogic::SendMessage(Message* msg) {
 	// Keys to Game Logic
@@ -61,6 +61,7 @@ void GameLogic::Initialize()
 void GameLogic::Update(float time) {
 	if (input::IsPressed(KEY::w)) {
 		
+		//CORE->Broadcast(MessageID::MessageIDType::Movement);
 	}
 	if (input::IsPressed(KEY::a)) {
 
