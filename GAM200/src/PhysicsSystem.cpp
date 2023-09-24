@@ -77,7 +77,7 @@ void PhysicsSystem::Update(float time) {
 		if (input::IsPressed(KEY::a) || input::IsPressedRepeatedly(KEY::a))
 			p->X_Velocity -= 10.0f;
 
-		if (input::IsPressed(KEY::w) && p->Y_Acceleration != 0.0f) // Jump. Make sure vertical velocity is 0 first
+		if (input::IsPressed(KEY::w) && p->Y_Velocity != 0.0f) // Jump. Make sure vertical velocity is 0 first
 			p->Y_Acceleration = 100.0f;
 		
 		break; // There should only be one object that is player controlled for now
@@ -96,8 +96,9 @@ void PhysicsSystem::Update(float time) {
 
 		// No X acceleration, not needed in the game
 
-		// Apply gravity
-		p->Y_Acceleration = gravity * time + p->Y_Acceleration;
+		p->Y_Acceleration = gravity * time + p->Y_Acceleration; // Apply gravity
+		p->Y_Acceleration *= 0.99; // Account for friction
+
 		p->Y_Velocity += p->Y_Acceleration;
 	}
 
