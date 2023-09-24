@@ -37,13 +37,12 @@ void CoreEngine::Initialize() {
 			std::cout << sys.second->SystemName() << std::endl;
 	}
 	for (const std::pair<std::string, ISystems*>& sys : Systems) { // Then initialize all other systems
-		if (sys.first != "Window" && sys.first != "Graphics") { // Window already initialized, do not do it again
+		if (sys.first != "Window") { // Window already initialized, do not do it again
 			sys.second->Initialize();
 			// printing system name for debugging purposes
 			std::cout << "Initialising " << sys.second->SystemName() << std::endl;
 		}
 	}
-	Systems["Graphics"]->Initialize();
 }
 
 
