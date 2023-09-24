@@ -8,6 +8,7 @@
 //#include <thread>
 #include <debug.h>
 #include <GameLogic.h>
+#include <Audio.h>
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet 
 
@@ -23,13 +24,15 @@ int main() {
 	GLWindow* windows = new GLWindow();
 	Factory* factory = new Factory();
 	PhysicsSystem* physics = new PhysicsSystem();
-	GLApp* graphics = new GLApp();                                         
+	GLApp* graphics = new GLApp();     
+	Audio* audio = new Audio();
 
 	engine->AddSystem(windows);                  
 	engine->AddSystem(logic);
 	engine->AddSystem(factory);
 	engine->AddSystem(physics);
-	engine->AddSystem(graphics);                 
+	engine->AddSystem(graphics); 
+	engine->AddSystem(audio);
 
 	engine->Initialize();
 	windows->ActivateWindow();                                                    // @GuoChen Window Class nid this function
