@@ -96,25 +96,25 @@ void PhysicsSystem::Update(float time) {
 				// DEBUG
 				std::cout << "A collision has occured between ";
 				switch (((Body*)obj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case shape::rect:
+				case Shape::Rectangle:
 						std::cout << "a rectangle ";
 						break;
-				case shape::circle:
+				case Shape::Circle:
 					std::cout << "a circle ";
 					break;
-				case shape::line:
+				case Shape::Line:
 					std::cout << "a line ";
 					break;
 				}
 				std::cout << "and ";
 				switch (((Body*)anotherobj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case shape::rect:
+				case Shape::Rectangle:
 					std::cout << "a rectangle.";
 					break;
-				case shape::circle:
+				case Shape::Circle:
 					std::cout << "a circle.";
 					break;
-				case shape::line:
+				case Shape::Line:
 					std::cout << "a line.";
 					break;
 				}

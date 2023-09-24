@@ -5,18 +5,18 @@
 #include "Collision.h"
 #include "Transform.h"
 
-enum class shape
+enum class Shape
 {
-	rect,
-	circle,
-	line
+	Rectangle,
+	Circle,
+	Line
 };
 // Body Component
 class Body : public Component
 {
 public:
 	Body() : Component(){};
-	virtual shape GetShape() = 0;
+	virtual Shape GetShape() = 0;
 	virtual ComponentType TypeId() const override { return ComponentType::Body; }
 };
 
@@ -31,9 +31,9 @@ public:
 		aabb.max = max;
 	}
 	AABB aabb;
-	virtual shape GetShape() override
+	virtual Shape GetShape() override
 	{
-		return shape::rect;
+		return Shape::Rectangle;
 	}
 };
 
@@ -48,9 +48,9 @@ public:
 		circle.radius = radius;
 	}
 	Circle circle;
-	virtual shape GetShape() override
+	virtual Shape GetShape() override
 	{
-		return shape::circle;
+		return Shape::Circle;
 	}
 };
 
@@ -65,8 +65,8 @@ public:
 		line.SetPt1(pt1);
 	}
 	Line line;
-	virtual shape GetShape() override
+	virtual Shape GetShape() override
 	{
-		return shape::line;
+		return Shape::Line;
 	}
 };
