@@ -9,7 +9,6 @@ public:
 	Physics() : Component() {};
 
 	float X_Velocity;
-	float X_Acceleration;
 	float Y_Velocity;
 	float Y_Acceleration;
 	float Mass;

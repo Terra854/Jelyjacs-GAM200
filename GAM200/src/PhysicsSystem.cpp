@@ -74,7 +74,7 @@ void PhysicsSystem::Update(float time) {
 		if (p == nullptr)
 			continue; // No physics in that object, move along
 
-		p->X_Velocity += p->X_Acceleration;
+		// No X acceleration, not needed in the game
 		p->Y_Velocity += p->Y_Acceleration;
 	}
 

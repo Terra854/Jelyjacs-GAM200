@@ -37,7 +37,6 @@
       "Type": "Physics",
       "Properties": {
         "X_Velocity": 1.0,
-        "X_Acceleration": 2.0,
         "Y_Velocity": 3.0,
         "Y_Acceleration": 4.0,
         "Mass": 5.0

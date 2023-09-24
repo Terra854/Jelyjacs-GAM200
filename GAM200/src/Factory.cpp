@@ -123,7 +123,6 @@ Object* Factory::createObject(const std::string& filename)
 			Physics* p = (Physics*)((ComponentCreator<Physics>*) componentMap["Physics"])->Create();
 
 			p->X_Velocity = component["Properties"]["X_Velocity"].asFloat();
-			p->X_Acceleration = component["Properties"]["X_Acceleration"].asFloat();
 			p->Y_Velocity = component["Properties"]["Y_Velocity"].asFloat();
 			p->Y_Acceleration = component["Properties"]["Y_Acceleration"].asFloat();
 			p->Mass = component["Properties"]["Mass"].asFloat();
