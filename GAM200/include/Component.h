@@ -1,6 +1,7 @@
 #pragma once
 #include <Debug.h>
 #include "../../src/Assets Manager/serialization.h"
+#include <Object.h>
 
 //different types of game components to differentiate
 enum class ComponentType

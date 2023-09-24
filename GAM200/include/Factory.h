@@ -10,7 +10,6 @@
 * Every game object is also given a unique ID number called long which is assigned to them at creation time
 * Every game object is also added to map and to access a specific game object in that map, you must have the object's ID
 */
-#include "System.h"
 #include "Interface_System.h"
 #include "Object.h"
 #include "Mat3.h"
