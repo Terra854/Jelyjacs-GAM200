@@ -30,17 +30,17 @@ CoreEngine::~CoreEngine() {
 }
 
 void CoreEngine::Initialize() {
-	Systems["Window"]->Initialize(); // Must initialize Window first
 	std::cout << "Initialising " << Systems["Window"]->SystemName() << std::endl;
-	for (const std::pair<std::string, ISystems*>& sys : Systems) {
-		if(sys.first != "Window")
-			std::cout << sys.second->SystemName() << std::endl;
-	}
+	Systems["Window"]->Initialize(); // Must initialize Window first
+	//for (const std::pair<std::string, ISystems*>& sys : Systems) {
+	//	if(sys.first != "Window")
+	//		std::cout << sys.second->SystemName() << std::endl;
+	//}
 	for (const std::pair<std::string, ISystems*>& sys : Systems) { // Then initialize all other systems
 		if (sys.first != "Window") { // Window already initialized, do not do it again
-			sys.second->Initialize();
 			// printing system name for debugging purposes
 			std::cout << "Initialising " << sys.second->SystemName() << std::endl;
+			sys.second->Initialize();
 		}
 	}
 }
