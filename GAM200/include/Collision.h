@@ -43,7 +43,8 @@ namespace Collision {
 	bool Check_AABB_AABB(const AABB& aabb1,
 		const Vec2& vel1,
 		const AABB& aabb2,
-		const Vec2& vel2);
+		const Vec2& vel2,
+		float dt);
 
 	void Response_Object_Line(const Vec2& ptInter,
 		const Vec2& normal,

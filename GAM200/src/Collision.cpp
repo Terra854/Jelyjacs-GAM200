@@ -409,10 +409,10 @@ namespace Collision {
 
 	/*
 		This function checks if a given rectangle intersects with another rectangle via AABB.
-		NOTE: Currently not working as it needs to get frame time which is not implemented atm.
+		NOTE: Currently untested, so don't know if it works atm.
 	*/
 	bool Check_AABB_AABB(const AABB& aabb1, const Vec2& vel1,
-		const AABB& aabb2, const Vec2& vel2)
+		const AABB& aabb2, const Vec2& vel2, float dt)
 	{
 		/*
 
@@ -445,7 +445,7 @@ namespace Collision {
 
 			// Step 2
 			Vec2 Vb = { vel2.x - vel1.x, vel2.y - vel1.y };
-			float tFirst = 0, tLast = 0; // tLast = 0 is placeholder, will need to change to frame time when it gets implemented
+			float tFirst = 0, tLast = dt;
 
 			// Step 3
 			if (Vb.x < 0) {

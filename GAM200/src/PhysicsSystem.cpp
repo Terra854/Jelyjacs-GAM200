@@ -25,7 +25,7 @@ void gravityUpdate(int* objYVelocity)
 }
 */
 
-bool Check_Collision(Body* b1, Body* b2) {
+bool Check_Collision(Body* b1, Body* b2, float dt) {
 
 	// Circle and Line
 	if (typeid(*b1) == typeid(Circular) && typeid(*b2) == typeid(Lines)) {
@@ -45,7 +45,7 @@ bool Check_Collision(Body* b1, Body* b2) {
 
 	// 2 Rectangles
 	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
-		return Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->PrevPosition, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition);
+		return Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->PrevPosition, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, dt);
 	}
 
 	else {
@@ -115,7 +115,7 @@ void PhysicsSystem::Update(float time) {
 		bool hasCollided = false;
 
 		for (Factory::objectIDMap::iterator anotherobj = std::next(obj); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
-			if (Check_Collision((Body*)obj->second->GetComponent(ComponentType::Body), (Body*)anotherobj->second->GetComponent(ComponentType::Body))) {
+			if (Check_Collision((Body*)obj->second->GetComponent(ComponentType::Body), (Body*)anotherobj->second->GetComponent(ComponentType::Body), time)) {
 				
 				// DEBUG
 				std::cout << "A collision has occured between ";
