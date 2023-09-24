@@ -11,7 +11,7 @@ public:
 	// It's broken, will be purged in the future
 	//GameLogic();
 	//~GameLogic();
-	virtual void SendMessage(Message* msg);
+	virtual void MessageRelay(Message* msg);
 	virtual void Initialize();
 	void Update(float time);
 	virtual std::string SystemName() { return "Game_Logic"; }

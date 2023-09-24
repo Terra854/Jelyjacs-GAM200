@@ -8,7 +8,8 @@ namespace MessageID {
 		Quit,
 		Collide,
 		Movement,
-		MouseMove
+		MouseMove, 
+		MouseClick
 	};
 }
 

@@ -11,9 +11,13 @@
 #include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
+#include <Movement.h>
 
-void GameLogic::SendMessage(Message* msg) {
-	// Keys to Game Logic
+void GameLogic::MessageRelay(Message* msg) {
+	if(msg->messageId == MessageID::Movement) {
+		MovementKey* temp = static_cast<MovementKey*>(msg);
+		std::cout << temp->dir << std::endl;
+	}
 }
 void GameLogic::Initialize()
 {
@@ -27,15 +31,15 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
 	
 	Object* testObj;
-	//Object* testObj2;
+	Object* testObj2;
 	//Transform * trans;
 	//Texture* texture;
 	
 	std::cout << "test Object 1" << std::endl;
 	testObj = objectFactory->createObject("../test.json");
+	std::cout << "test Object 2" << std::endl;
+	testObj2 = objectFactory->createObject("../test2.json");
 	//trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));
-	//std::cout << "test Object 2" << std::endl;
-	//testObj2 = gameObjFactory->buildFromFile("../Assest/Objects/TestTile.txt"); // testing
 	
 	//alternate way to get component without cast
 	//trans = testObj->GetComponent_NoCast<Transform>(ComponentTypeId::CT_Transform);
@@ -60,17 +64,20 @@ void GameLogic::Initialize()
 
 void GameLogic::Update(float time) {
 	if (input::IsPressed(KEY::w)) {
-		
-		//CORE->Broadcast(MessageID::MessageIDType::Movement);
+		MovementKey msg(up);
+		engine->Broadcast(&msg);
 	}
 	if (input::IsPressed(KEY::a)) {
-
+		MovementKey msg(left);
+		engine->Broadcast(&msg);
 	}
 	if (input::IsPressed(KEY::s)) {
-
+		MovementKey msg(down);
+		engine->Broadcast(&msg);
 	}
 	if (input::IsPressed(KEY::d)) {
-
+		MovementKey msg(right);
+		engine->Broadcast(&msg);
 	}
 	
 }
