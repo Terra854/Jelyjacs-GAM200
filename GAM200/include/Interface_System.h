@@ -9,7 +9,7 @@ public:
 	ISystems() {};
 	virtual ~ISystems() {};
 	//Messaging System for inter System communication
-	virtual void SendMessage(Message* message) {};
+	virtual void MessageRelay(Message* message) {};
 	// System Initialization
 	virtual void Initialize(){};
 	// System Update

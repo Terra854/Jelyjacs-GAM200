@@ -121,7 +121,7 @@ void CoreEngine::Broadcast(Message* msg) {
 	}
 	// Loop Messaging System
 	for (const std::pair<std::string, ISystems*>& sys : Systems) {
-		sys.second->SendMessage(msg);
+		sys.second->MessageRelay(msg);
 	}
 	
 }

@@ -200,5 +200,8 @@
     <ClInclude Include="include\Graphic_gl\GLWindow.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="include\Movement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
