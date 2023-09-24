@@ -31,15 +31,15 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
 	
 	Object* testObj;
-	//Object* testObj2;
+	Object* testObj2;
 	//Transform * trans;
 	//Texture* texture;
 	
 	std::cout << "test Object 1" << std::endl;
 	testObj = objectFactory->createObject("../test.json");
+	std::cout << "test Object 2" << std::endl;
+	testObj2 = objectFactory->createObject("../test2.json");
 	//trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));
-	//std::cout << "test Object 2" << std::endl;
-	//testObj2 = gameObjFactory->buildFromFile("../Assest/Objects/TestTile.txt"); // testing
 	
 	//alternate way to get component without cast
 	//trans = testObj->GetComponent_NoCast<Transform>(ComponentTypeId::CT_Transform);
