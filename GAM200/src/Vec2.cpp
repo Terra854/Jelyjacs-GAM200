@@ -71,6 +71,16 @@ Vec2 operator/(const Vec2& lhs, float rhs)
 	return Vec2(lhs.x / rhs, lhs.y / rhs);
 }
 
+bool operator==(const Vec2& lhs, const Vec2& rhs)
+{
+	return (lhs.x == rhs.x && lhs.y == rhs.y);
+}
+
+bool operator!=(const Vec2& lhs, const Vec2& rhs)
+{
+	return (lhs.x != rhs.x || lhs.y != rhs.y);
+}
+
 glm::vec2 Vec2::ToGlmVec2() {
 	return glm::vec2(x, y);
 }

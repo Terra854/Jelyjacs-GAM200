@@ -4,7 +4,7 @@
 #include <Interface_System.h>
 
 //float frameTime = 1/60.0f;
-const float gravity = -20.0f;
+const float gravity = -9.81f;
 
 /*
 * This function is meant to update the gravity of a game object.

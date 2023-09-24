@@ -9,6 +9,7 @@
 #include <iostream>
 #include "components/Body.h"
 #include "components/Physics.h"
+#include "components/PlayerControllable.h"
 
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
@@ -75,7 +76,7 @@ Object* Factory::createObject(const std::string& filename)
 			trans->Position.x = component["Properties"]["Position"]["x"].asFloat();
 			trans->Position.y = component["Properties"]["Position"]["y"].asFloat();
 
-			trans->PrevPosition = trans->Position;
+			//trans->PrevPosition = trans->Position;
 
 			trans->Scale = component["Properties"]["Scale"].asFloat();
 			trans->Rotation = component["Properties"]["Rotation"].asFloat();
@@ -94,10 +95,8 @@ Object* Factory::createObject(const std::string& filename)
 			if (shape == "Rectangle") {
 				Rectangular* r = (Rectangular*)((ComponentCreator<Rectangular>*) componentMap["Rectangle"])->Create();
 
-				r->aabb.min.x = component["Properties"]["AABB"]["min"]["x"].asFloat();
-				r->aabb.min.y = component["Properties"]["AABB"]["min"]["y"].asFloat();
-				r->aabb.max.x = component["Properties"]["AABB"]["max"]["x"].asFloat();
-				r->aabb.max.y = component["Properties"]["AABB"]["max"]["y"].asFloat();
+				r->width = component["Properties"]["width"].asFloat();
+				r->height = component["Properties"]["height"].asFloat();
 
 				obj->AddComponent(r);
 			}
@@ -127,6 +126,10 @@ Object* Factory::createObject(const std::string& filename)
 			p->Y_Acceleration = component["Properties"]["Y_Acceleration"].asFloat();
 			p->Mass = component["Properties"]["Mass"].asFloat();
 
+			obj->AddComponent(p);
+		}
+		else if (type == "Player") {
+			PlayerControllable* p = (PlayerControllable*)((ComponentCreator<PlayerControllable>*) componentMap["Player"])->Create();
 			obj->AddComponent(p);
 		}
 	}

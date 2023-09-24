@@ -4,10 +4,10 @@
       "Type": "Transform",
       "Properties": {
         "Position": {
-          "x": 500.0,
-          "y": 500.0
+          "x": 600.0,
+          "y": 600.0
         },
-        "Scale": 0.1,
+        "Scale": 0.05,
         "Rotation": 0.0
       }
     },
@@ -15,14 +15,14 @@
       "Type": "Body",
       "Shape": "Rectangle",
       "Properties": {
-        "width": 108,
-        "height": 108
+        "width": 54,
+        "height": 54
       }
     },
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "../Asset/Picture/mapbox.png"
+        "texturepath": "../Asset/Picture/test4.png"
       }
     },
     {
@@ -33,6 +33,9 @@
         "Y_Acceleration": 0.0,
         "Mass": 0.0
       }
+    },
+    {
+      "Type": "Player"
     }
   ]
 }

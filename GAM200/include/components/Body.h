@@ -25,12 +25,9 @@ class Rectangular : public Body
 {
 public:
 	Rectangular() {}
-	Rectangular(AABB _aabb) : Body(), aabb(_aabb) {}
-	Rectangular(Vec2 min, Vec2 max) : Body() {
-		aabb.min = min;
-		aabb.max = max;
-	}
+	Rectangular(float _w, float _h) : width(_w), height(_h) {}
 	AABB aabb;
+	float width, height;
 	virtual Shape GetShape() override
 	{
 		return Shape::Rectangle;

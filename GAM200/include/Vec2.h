@@ -34,6 +34,10 @@ Vec2 operator* (const Vec2& lhs, float rhs);
 Vec2 operator* (float lhs, const Vec2& rhs);
 Vec2 operator/ (const Vec2& lhs, float rhs);
 
+// Comparison operators
+bool operator== (const Vec2& lhs, const Vec2& rhs);
+bool operator!= (const Vec2& lhs, const Vec2& rhs);
+
 Vec2 Vec2Normalize(const Vec2& pVec0);
 
 float Vec2Length(const Vec2& pVec0);

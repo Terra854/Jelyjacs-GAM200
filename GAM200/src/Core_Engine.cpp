@@ -70,7 +70,7 @@ void CoreEngine::GameLoop() {
 
 		//Convert it to the time passed since the last frame (in seconds)
 		float dt = (last_update) ? (float)(current_time - last_update) / 1000.0f : 0.f;
-
+		//float dt = 0.1f;
 		//Update the when the last update started
 		last_update = current_time;
 

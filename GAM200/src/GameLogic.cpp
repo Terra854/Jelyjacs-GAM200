@@ -8,6 +8,7 @@
 #include "components/Texture.h"
 #include "components/Body.h"
 #include "components/Physics.h"
+#include "components/PlayerControllable.h"
 #include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
@@ -29,9 +30,12 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Circle", new ComponentCreator<Circular>());
 	objectFactory->AddComponentCreator("Line", new ComponentCreator<Lines>());
 	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
+	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
 	
 	Object* testObj;
 	Object* testObj2;
+	Object* playerObj;
+	Object* bottom_line;
 	//Transform * trans;
 	//Texture* texture;
 	
@@ -39,6 +43,10 @@ void GameLogic::Initialize()
 	testObj = objectFactory->createObject("../test.json");
 	std::cout << "test Object 2" << std::endl;
 	testObj2 = objectFactory->createObject("../test2.json");
+	std::cout << "test Player" << std::endl;
+	playerObj = objectFactory->createObject("../player.json");
+	std::cout << "test bottom_line" << std::endl;
+	bottom_line = objectFactory->createObject("../bottom_line.json");
 	//trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));
 	
 	//alternate way to get component without cast
