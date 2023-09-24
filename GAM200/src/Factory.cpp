@@ -10,10 +10,6 @@
 #include "components/Body.h"
 #include "components/Physics.h"
 
-// Need to change cause Elie can tell from just a glance that it's directly plagarised from SampleEngine
-// High priority to refactor this before M1 submission to avoid academic misconduct penalties
-// Do not remove this until the changes are made
-
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
 * As a reminder, a game object is just a group of components so the Object will have a vector of
