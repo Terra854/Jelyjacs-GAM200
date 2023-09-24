@@ -46,7 +46,7 @@ public:
 		const char* texfile{ nullptr };
 
 	};
-	static GLModel mdl;
+	
 	static GLuint setup_texobj(const char*);
 	static void insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr);
 	struct GLViewport
@@ -55,27 +55,27 @@ public:
 		GLsizei width, height;
 	};
 
-	struct GLObject
-	{
-		glm::vec2 scaling{ };
-		float orientation;
-		glm::vec2 position{ };
-		//glm::vec3 color{ 0 };
-		glm::mat3 mdl_xform{ };
-		glm::mat3 mdl_to_ndc_xform{ };
+	//struct GLObject
+	//{
+	//	glm::vec2 scaling{ };
+	//	float orientation;
+	//	glm::vec2 position{ };
+	//	//glm::vec3 color{ 0 };
+	//	glm::mat3 mdl_xform{ };
+	//	glm::mat3 mdl_to_ndc_xform{ };
 
-		std::map<std::string, GLApp::GLModel>::iterator mdl_ref;
-		std::map<std::string, GLSLShader>::iterator shd_ref;
-		std::map<std::string, GLuint>::iterator tex_ref;
+	//	std::map<std::string, GLApp::GLModel>::iterator mdl_ref;
+	//	std::map<std::string, GLSLShader>::iterator shd_ref;
+	//	std::map<std::string, GLuint>::iterator tex_ref;
 
-		void update();
-		void draw() const;
-	};
+	//	void update();
+	//	void draw() const;
+	//};
 
 
 	static std::map<std::string, GLSLShader> shdrpgms; // singleton
 	static std::map<std::string, GLModel> models; // singleton
-	static std::map<std::string, GLObject> objects; // singleton
+	//static std::map<std::string, GLObject> objects; // singleton
 	static std::map<std::string, GLuint> textures;
 };
 extern GLApp* app;

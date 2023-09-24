@@ -90,6 +90,9 @@
     <ClCompile Include="src\Line.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\Factory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -109,9 +112,6 @@
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
     <ClCompile Include="src\GameLogic.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Factory.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,6 +167,9 @@
     <ClInclude Include="include\ComponentCreator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\GameLogic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -195,9 +198,6 @@
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphic_gl\GLWindow.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GameLogic.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
