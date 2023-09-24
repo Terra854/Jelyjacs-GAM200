@@ -77,7 +77,7 @@ void PhysicsSystem::Update(float time) {
 		if (input::IsPressed(KEY::a) || input::IsPressedRepeatedly(KEY::a))
 			p->X_Velocity -= 10.0f;
 
-		if (input::IsPressed(KEY::w))
+		if (input::IsPressed(KEY::w) && p->Y_Acceleration != 0.0f) // Jump. Make sure vertical velocity is 0 first
 			p->Y_Acceleration = 100.0f;
 		
 		break; // There should only be one object that is player controlled for now
