@@ -268,27 +268,30 @@ void GLApp::Update(float time)
 		orientation = tran_pt->Rotation;
 		scaling_x = tran_pt->Scale;
 		
+		if (i == 2) {
+			 std::cout <<"pos"<< pos_x << " " << pos_y << std::endl;
+		}
 		//calculate transformation matrix
 		glm::mat3 Scale
 		{
-			scaling_x, 0, 0,
-				0, scaling_x, 0,
-				0, 0, 1
+			scaling_x, 0.0f, 0.0f,
+				0.0f, scaling_x, 0.0f,
+				0.0f, 0.0f, 1.0f
 		};
 		glm::mat3 Rotate
 		{
-			cos(orientation), sin(orientation), 0,
-				-sin(orientation), cos(orientation), 0,
-				0, 0, 1
+			cos(orientation), sin(orientation), 0.0f,
+				-sin(orientation), cos(orientation), 0.0f,
+				0.0f, 0.0f, 1.0f
 		};
 		glm::mat3 Translate
 		{
-			-1, 0, 0,
-			0, -1, 0,
-			pos_x/ window->width, pos_y/window->height, 1
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			pos_x/ window->width-1.0f, pos_y/window->height-1.0f, 1.0f
 		};
 
-        mat_test = Scale * Rotate * Translate;
+        mat_test = Scale * Translate * Rotate ;
 
 
 		glBindTextureUnit(6, tex_test);
