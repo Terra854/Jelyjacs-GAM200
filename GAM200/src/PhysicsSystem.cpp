@@ -129,34 +129,13 @@ void PhysicsSystem::Update(float time) {
 		p->Y_Velocity *= 0.95f; // Account for air resistance
 	}
 
-	// Recalculate collision data inside each object
-	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-		Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
-		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
-
-		if (b == nullptr || t == nullptr)
-			continue; // Collision not enabled for that object, move along
-
-		// Only recalculate if position and previous position are not the same
-		if (t->Position != t->PrevPosition) {
-			Vec2 pos = ((Transform*)obj->second->GetComponent(ComponentType::Transform))->Position;
-
-			if (b->GetShape() == Shape::Rectangle) {
-				((Rectangular*)b)->aabb.min = pos - Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
-				((Rectangular*)b)->aabb.max = pos + Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
-			}
-			else if (b->GetShape() == Shape::Circle) {
-				((Circular*)b)->circle.center = pos;
-			}
-		}
-	}
-
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
 		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
+		Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
 
-		if (p == nullptr)
-			continue; // No physics in that object, move along
+		if (p == nullptr || b == nullptr)
+			continue; // No physics or body in that object, move along
 
 		// Save current position to previous position
 		t->PrevPosition = t->Position;
@@ -166,7 +145,14 @@ void PhysicsSystem::Update(float time) {
 
 		bool hasCollided = false;
 
-		for (Factory::objectIDMap::iterator anotherobj = std::next(obj); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
+		for (Factory::objectIDMap::iterator anotherobj = objectFactory->objectMap.begin(); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
+
+			if (obj == anotherobj)
+				continue; // Can't collide with yourself
+
+			if ((Body*)anotherobj->second->GetComponent(ComponentType::Body) == nullptr)
+				continue; // No body in the other object, no way it's collidable
+
 			if (Check_Collision((Body*)obj->second->GetComponent(ComponentType::Body), (Body*)anotherobj->second->GetComponent(ComponentType::Body), time)) {
 				/*
 				// DEBUG
@@ -207,6 +193,28 @@ void PhysicsSystem::Update(float time) {
 		} else {
 			t->Position.x += p->X_Velocity;
 			t->Position.y += p->Y_Velocity;
+		}
+
+		// Recalculate collision data inside each object
+		for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
+			Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
+			Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
+
+			if (b == nullptr || t == nullptr)
+				continue; // Collision not enabled for that object, move along
+
+			// Only recalculate if position and previous position are not the same
+			if (t->Position != t->PrevPosition) {
+				Vec2 pos = ((Transform*)obj->second->GetComponent(ComponentType::Transform))->Position;
+
+				if (b->GetShape() == Shape::Rectangle) {
+					((Rectangular*)b)->aabb.min = pos - Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
+					((Rectangular*)b)->aabb.max = pos + Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
+				}
+				else if (b->GetShape() == Shape::Circle) {
+					((Circular*)b)->circle.center = pos;
+				}
+			}
 		}
 	}
 }

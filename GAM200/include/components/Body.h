@@ -15,8 +15,9 @@ enum class Shape
 class Body : public Component
 {
 public:
-	Body() : Component(){};
+	Body() : Component() {};
 	virtual Shape GetShape() = 0;
+	virtual void Initialize() override {};
 	virtual ComponentType TypeId() const override { return ComponentType::Body; }
 };
 
@@ -24,10 +25,22 @@ public:
 class Rectangular : public Body
 {
 public:
-	Rectangular() {}
-	Rectangular(float _w, float _h) : width(_w), height(_h) {}
+	Rectangular() : Body() {}
+	Rectangular(float _w, float _h) : Body(), width(_w), height(_h) {
+		Initialize();
+	}
 	AABB aabb;
 	float width, height;
+
+	virtual void Initialize() override {
+		Object* o = GetOwner();
+		if (o->GetComponent(ComponentType::Transform) != nullptr) {
+			Vec2 pos = ((Transform*)o->GetComponent(ComponentType::Transform))->Position;
+			aabb.min = pos - Vec2(width / 2, height / 2);
+			aabb.max = pos + Vec2(width / 2, height / 2);
+		}
+	};
+
 	virtual Shape GetShape() override
 	{
 		return Shape::Rectangle;
@@ -38,13 +51,20 @@ public:
 class Circular : public Body
 {
 public:
-	Circular() {}
-	Circular(Circle c) : Body(), circle(c)	{}
-	Circular(Vec2 center, float radius) : Body() {
-		circle.center = center;
+	Circular() : Body() {}
+	Circular(float radius) : Body() {
 		circle.radius = radius;
 	}
 	Circle circle;
+
+	virtual void Initialize() override {
+		Object* o = GetOwner();
+		if (o->GetComponent(ComponentType::Transform) != nullptr) {
+			Vec2 pos = ((Transform*)o->GetComponent(ComponentType::Transform))->Position;
+			circle.center = pos;
+		}
+	};
+
 	virtual Shape GetShape() override
 	{
 		return Shape::Circle;
