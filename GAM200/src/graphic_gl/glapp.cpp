@@ -263,8 +263,8 @@ void GLApp::Update(float time)
 		tex_test = tex_pt->texturepath;
 
 		Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));
-		pos_x= tran_pt->Position.x/ window->width;
-		pos_y = tran_pt->Position.y/window->height;
+		pos_x= tran_pt->Position.x * 2.0f / window->width;
+		pos_y = tran_pt->Position.y * 2.0f / window->height;
 		orientation = tran_pt->Rotation;
 		scaling_x = tran_pt->Scale;
 		
