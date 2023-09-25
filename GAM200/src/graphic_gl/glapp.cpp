@@ -263,33 +263,34 @@ void GLApp::Update(float time)
 		tex_test = tex_pt->texturepath;
 
 		Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));
-		pos_x= tran_pt->Position.x;
-		pos_y = tran_pt->Position.y;
+		pos_x= tran_pt->Position.x/ window->width;
+		pos_y = tran_pt->Position.y/window->height;
 		orientation = tran_pt->Rotation;
 		scaling_x = tran_pt->Scale;
+		
 		
 		//calculate transformation matrix
 		glm::mat3 Scale
 		{
-			scaling_x, 0, 0,
-				0, scaling_x, 0,
-				0, 0, 1
+			scaling_x, 0.0f, 0.0f,
+				0.0f, scaling_x, 0.0f,
+				0.0f, 0.0f, 1.0f
 		};
 		glm::mat3 Rotate
 		{
-			cos(orientation), sin(orientation), 0,
-				-sin(orientation), cos(orientation), 0,
-				0, 0, 1
+			cos(orientation), sin(orientation), 0.0f,
+				-sin(orientation), cos(orientation), 0.0f,
+				0.0f, 0.0f, 1.0f
 		};
 		glm::mat3 Translate
 		{
-			-1, 0, 0,
-			0, -1, 0,
-			pos_x/ window->width, pos_y/window->height, 1
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			pos_x, pos_y, 1.0f
 		};
-
-        mat_test = Scale * Rotate * Translate;
-
+		
+        mat_test = Translate * Scale  * Rotate ;
+		
 
 		glBindTextureUnit(6, tex_test);
 		glBindTexture(GL_TEXTURE_2D, tex_test);
