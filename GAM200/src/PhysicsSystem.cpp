@@ -84,9 +84,15 @@ void PhysicsSystem::Update(float time) {
 			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 		}
 
-		if (input::IsPressedRepeatedly(KEY::w) && p->Y_Velocity != 0.0f) { // Jump. Make sure vertical velocity is 0 first
+		// DEBUG: Normal movement, no jumping for now
+		p->Y_Velocity = 0.0f;
+		if (input::IsPressedRepeatedly(KEY::w)) { // Jump. Make sure vertical velocity is 0 first
 			p->Y_Velocity = 10.0f;
-			std::cout << "Current player velocity: x=" << p->X_Velocity << ", y=" << p->Y_Velocity << std::endl;
+			//std::cout << "Current player velocity: x=" << p->X_Velocity << ", y=" << p->Y_Velocity << std::endl;
+		}
+		if (input::IsPressedRepeatedly(KEY::s)) { // Jump. Make sure vertical velocity is 0 first
+			p->Y_Velocity = -10.0f;
+			//std::cout << "Current player velocity: x=" << p->X_Velocity << ", y=" << p->Y_Velocity << std::endl;
 		}
 		
 		// DEBUG: Output player's position and velocity by holding F
@@ -110,6 +116,10 @@ void PhysicsSystem::Update(float time) {
 
 		if (p == nullptr)
 			continue; // No physics in that object, move along
+
+		// DEBUG: Don't apply gravity to player for now
+		if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) != nullptr)
+			continue;
 
 		// No X acceleration, not needed in the game
 

@@ -42,11 +42,11 @@ void GameLogic::Initialize()
 	std::cout << "test Object 1" << std::endl;
 	testObj = objectFactory->createObject("../test.json");
 	std::cout << "test Object 2" << std::endl;
-	testObj2 = objectFactory->createObject("../test2.json");
+	testObj2 = objectFactory->createObject("../drop-forever.json");
 	std::cout << "test Player" << std::endl;
 	playerObj = objectFactory->createObject("../player.json");
-	std::cout << "test bottom_line" << std::endl;
-	bottom_line = objectFactory->createObject("../bottom_line.json");
+	//std::cout << "test bottom_line" << std::endl;
+	//bottom_line = objectFactory->createObject("../bottom_line.json");
 	//trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));
 	
 	//alternate way to get component without cast
