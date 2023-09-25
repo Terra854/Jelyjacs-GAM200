@@ -20,6 +20,12 @@
 //GLSLShader shdr_img;
 GLuint tex_test;
 glm::mat3 mat_test;
+float pos_x;
+float pos_y;
+float orientation;
+float scaling_x;
+float scaling_y;
+
 //Declarations of shdrpgms models objects map
 std::map<std::string, GLSLShader> GLApp::shdrpgms;
 std::map<std::string, GLApp::GLModel> GLApp::models;
@@ -46,18 +52,8 @@ void GLApp::Initialize()
 	init_shdrpgms();
 	
 	//init_scene();
-	Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(0))->GetComponent(ComponentType::Texture));
-	tex_test = tex_pt->texturepath;
-
-	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(0))->GetComponent(ComponentType::Transform));
-	mat_test = tran_pt->Matrix.ToGlmMat3();
-	mat_test ={ 1,0,0,0,1,0,0,0,1 };
-
-	//print out the matrix
-	std::cout<<"matrix: "<<std::endl;
-	std::cout << mat_test[0][0] << " " << mat_test[0][1] << " " << mat_test[0][2] << std::endl;
-	std::cout << mat_test[1][0] << " " << mat_test[1][1] << " " << mat_test[1][2] << std::endl;
-	std::cout << mat_test[2][0] << " " << mat_test[2][1] << " " << mat_test[2][2] << std::endl;
+	
+	
 	// enable alpha blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -251,11 +247,7 @@ void GLApp::init_shdrpgms() {
 //void GLApp::draw ()
 void GLApp::Update(float time)
 {
-	// update all objects
-	/*for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
-	{
-		obj->second.update();
-	}*/
+
 
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	// clear back buffer as before
@@ -264,58 +256,65 @@ void GLApp::Update(float time)
 	std::stringstream sstr;
 	sstr << window->title << " FPS: " << window->fps;
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
-	//// draw all objects
-	//for (std::map <std::string, GLObject> ::iterator obj = objects.begin(); obj != objects.end(); ++obj)
-	//{
-	//	obj->second.draw();
 
-	//}
-	//glfwSwapBuffers( window->ptr_window);
+	int i = 0;
+	while (i < 3) {
+		Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Texture));
+		tex_test = tex_pt->texturepath;
 
-	glBindTextureUnit(6, tex_test);
-	glBindTexture(GL_TEXTURE_2D, tex_test);
-	glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	// load shader program in use by this object
-	shdrpgms["image"].Use();
-	// bind VAO of this object's model
-	glBindVertexArray(models["square"].vaoid);
-	// copy object's model-to-NDC matrix to vertex shader's
-	// uniform variable uModelToNDC
-	shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test);
+		Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));
+		pos_x= tran_pt->Position.x;
+		pos_y = tran_pt->Position.y;
+		orientation = tran_pt->Rotation;
+		scaling_x = tran_pt->Scale;
+		
+		//calculate transformation matrix
+		glm::mat3 Scale
+		{
+			scaling_x, 0, 0,
+				0, scaling_x, 0,
+				0, 0, 1
+		};
+		glm::mat3 Rotate
+		{
+			cos(orientation), sin(orientation), 0,
+				-sin(orientation), cos(orientation), 0,
+				0, 0, 1
+		};
+		glm::mat3 Translate
+		{
+			-1, 0, 0,
+			0, -1, 0,
+			pos_x/ window->width, pos_y/window->height, 1
+		};
 
-	// tell fragment shader sampler uTex2d will use texture image unit 6
-	GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
-	glUniform1i(tex_loc, 6);
-
-	// call glDrawElements with appropriate arguments
-	glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
-
-	// unbind VAO and unload shader program
-	glBindVertexArray(0);
-	shdrpgms["image"].UnUse();
-
-
-
-
-	shdrpgms["shape"].Use();
-	// bind VAO of this object's model
-	glBindVertexArray(models["triangle"].vaoid);
-	// copy object's model-to-NDC matrix to vertex shader's
-	// uniform variable uModelToNDC
-	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test);
+        mat_test = Scale * Rotate * Translate;
 
 
-	shdrpgms["shape"].SetUniform("uColor", {0.0f,1.0f,0.0f});
-	// tell fragment shader sampler uTex2d will use texture image unit 6
-	//GLuint tex_loc = glGetUniformLocation(shdrpgms["line"].GetHandle(), "uTex2d");
-	//glUniform1i(tex_loc, 6);
+		glBindTextureUnit(6, tex_test);
+		glBindTexture(GL_TEXTURE_2D, tex_test);
+		glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		// load shader program in use by this object
+		shdrpgms["image"].Use();
+		// bind VAO of this object's model
+		glBindVertexArray(models["square"].vaoid);
+		// copy object's model-to-NDC matrix to vertex shader's
+		// uniform variable uModelToNDC
+		shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test);
 
-	// call glDrawElements with appropriate arguments
-	glDrawElements(models["triangle"].primitive_type, models["triangle"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		// tell fragment shader sampler uTex2d will use texture image unit 6
+		GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
+		glUniform1i(tex_loc, 6);
 
-	// unbind VAO and unload shader program
-	glBindVertexArray(0);
-	shdrpgms["shape"].UnUse();
+		// call glDrawElements with appropriate arguments
+		glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+		// unbind VAO and unload shader program
+		glBindVertexArray(0);
+		shdrpgms["image"].UnUse();
+		i ++;
+    }
+
 	
 	glfwSwapBuffers(window->ptr_window);
 }
