@@ -24,18 +24,20 @@ int main() {
 	GLWindow* windows = new GLWindow();
 	Factory* factory = new Factory();
 	PhysicsSystem* physics = new PhysicsSystem();
-	GLApp* graphics = new GLApp();     
 	Audio* audio = new Audio();
+	GLApp* graphics = new GLApp();     
+	
 
 	engine->AddSystem(windows);                  
 	engine->AddSystem(logic);
 	engine->AddSystem(factory);
 	engine->AddSystem(physics);
-	engine->AddSystem(graphics); 
 	engine->AddSystem(audio);
+	engine->AddSystem(graphics);												  // Graphics should always be last
+	
 
 	engine->Initialize();
-	windows->ActivateWindow();                                                    // @GuoChen Window Class nid this function
+	windows->ActivateWindow();                                                   
 	windows->print_specs();
 	engine->GameLoop();
 	//const int targetFPS = 60; // Your desired FPS

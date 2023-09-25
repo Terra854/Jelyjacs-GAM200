@@ -89,9 +89,9 @@ void CoreEngine::GameLoop() {
 		}
 
 		if (log_system_time) {
-			DebugUpdate(Systems["Graphics"], dt, elapsed_time, total_time);
 			DebugUpdate(Systems["Window"], dt, elapsed_time, total_time);
-
+			DebugUpdate(Systems["Graphics"], dt, elapsed_time, total_time);
+			
 			// Output to console for now, will plan to display ingame when the engine can render fonts
 			for (std::pair<std::string, double> p : elapsed_time)
 				std::cout << p.first << " system completed it's update in " << std::fixed << std::setprecision(6) << p.second << " seconds (" << p.second / total_time * 100.0 << "%)" << std::endl;
@@ -101,8 +101,9 @@ void CoreEngine::GameLoop() {
 			log_system_time = false;
 		}
 		else {
-			Systems["Graphics"]->Update(dt);
 			Systems["Window"]->Update(dt);
+			Systems["Graphics"]->Update(dt);
+			
 		}
 	}
 }
