@@ -1,0 +1,41 @@
+﻿  jsoncpp.cpp
+  Audio.cpp
+  Line.cpp
+  file_reader.cpp
+  text_serialization.cpp
+  Collision.cpp
+  Object.cpp
+  Core_Engine.cpp
+C:\Users\g2401\Desktop\csd2400_project\Jelyjacs-GAM200\GAM200\src\Core_Engine.cpp(13,29): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
+          with
+          [
+              _Rep=__int64
+          ]
+C:\Users\g2401\Desktop\csd2400_project\Jelyjacs-GAM200\GAM200\src\Core_Engine.cpp(17,27): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
+          with
+          [
+              _Rep=__int64
+          ]
+C:\Users\g2401\Desktop\csd2400_project\Jelyjacs-GAM200\GAM200\src\Core_Engine.cpp(69,25): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
+          with
+          [
+              _Rep=__int64
+          ]
+  Factory.cpp
+  GameLogic.cpp
+  glapp.cpp
+C:\Users\g2401\Desktop\csd2400_project\Jelyjacs-GAM200\GAM200\src\graphic_gl\glapp.cpp(189,48): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
+C:\Users\g2401\Desktop\csd2400_project\Jelyjacs-GAM200\GAM200\src\graphic_gl\glapp.cpp(190,43): warning C4267: '=': conversion from 'size_t' to 'GLuint', possible loss of data
+  GLWindow.cpp
+  glslshader.cpp
+  input.cpp
+  main.cpp
+  Mat3.cpp
+  PhysicsSystem.cpp
+  Texture.cpp
+  Vec2.cpp
+  Generating Code...
+  GAM200.vcxproj -> C:\Users\g2401\Desktop\csd2400_project\Jelyjacs-GAM200\x64\Debug\GAM200.exe
+          1 file(s) copied.
+          1 file(s) copied.
+          1 file(s) copied.
