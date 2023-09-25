@@ -2,6 +2,7 @@
 #include <Debug.h>
 
 #include <glm/glm.hpp>
+#include <ostream>
 
 struct Vec2
 {
@@ -25,6 +26,9 @@ struct Vec2
 
 	// To be used with OpenGL calls only
 	glm::vec2 ToGlmVec2();
+
+	// For std::cout << vec2_variable
+	friend std::ostream& operator<<(std::ostream& os, const Vec2& vec);
 };
 
 // Binary operators

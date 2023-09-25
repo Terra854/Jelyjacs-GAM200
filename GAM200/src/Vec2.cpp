@@ -46,6 +46,12 @@ Vec2 Vec2::operator-() const
 	return Vec2(-x, -y);
 }
 
+std::ostream& operator<<(std::ostream& os, const Vec2& v)
+{
+	os << "(" << v.x << ", " << v.y << ")";
+	return os;
+}
+
 Vec2 operator+(const Vec2& lhs, const Vec2& rhs)
 {
 	return Vec2(lhs.x + rhs.x, lhs.y + rhs.y);
