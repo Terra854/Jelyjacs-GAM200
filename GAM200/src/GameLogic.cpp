@@ -35,6 +35,10 @@ void GameLogic::Initialize()
 	Object* testObj;
 	Object* testObj2;
 	Object* playerObj;
+	Object* floor1;
+	Object* floor2;
+	Object* floor3;
+
 	Object* bottom_line;
 	//Transform * trans;
 	//Texture* texture;
@@ -45,6 +49,14 @@ void GameLogic::Initialize()
 	testObj2 = objectFactory->createObject("../drop-forever.json");
 	std::cout << "test Player" << std::endl;
 	playerObj = objectFactory->createObject("../player.json");
+	floor1 = objectFactory->createObject("../mapbox.json");
+	floor2 = objectFactory->createObject("../mapbox.json");
+	floor3 = objectFactory->createObject("../mapbox.json");
+	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(4))->GetComponent(ComponentType::Transform));
+	tran_pt->Position.x = 190; // offset objectx
+	tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(5))->GetComponent(ComponentType::Transform)); // change to different obj
+	tran_pt->Position.x = 380;
+	tran_pt->Position.y = -300;
 	//std::cout << "test bottom_line" << std::endl;
 	//bottom_line = objectFactory->createObject("../bottom_line.json");
 	//trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));

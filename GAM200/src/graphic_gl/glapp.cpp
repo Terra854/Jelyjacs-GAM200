@@ -258,7 +258,7 @@ void GLApp::Update(float time)
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
 
 	int i = 0;
-	while (i < 3) {
+	while (i < 6) {
 		Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Texture));
 		tex_test = tex_pt->texturepath;
 
@@ -266,7 +266,8 @@ void GLApp::Update(float time)
 		pos_x= tran_pt->Position.x * 2.0f / window->width;
 		pos_y = tran_pt->Position.y * 2.0f / window->height;
 		orientation = tran_pt->Rotation;
-		scaling_x = tran_pt->Scale;
+		scaling_x = tran_pt->Scale_x;
+		scaling_y = tran_pt->Scale_y;
 		
 		
 		//calculate transformation matrix

@@ -78,10 +78,11 @@ Object* Factory::createObject(const std::string& filename)
 
 			//trans->PrevPosition = trans->Position;
 
-			trans->Scale = component["Properties"]["Scale"].asFloat();
+			trans->Scale_x = component["Properties"]["Scale_x"].asFloat();
+			trans->Scale_y = component["Properties"]["Scale_y"].asFloat();
 			trans->Rotation = component["Properties"]["Rotation"].asFloat();
 
-			trans->Matrix = Mat3Scale(trans->Scale, trans->Scale) * Mat3RotDeg(trans->Rotation) * Mat3Translate(trans->Position.x, trans->Position.y);
+			trans->Matrix = Mat3Scale(trans->Scale_x, trans->Scale_y) * Mat3RotDeg(trans->Rotation) * Mat3Translate(trans->Position.x, trans->Position.y);
 
 			obj->AddComponent(trans);
 		}
