@@ -266,7 +266,6 @@ void GLApp::Update(float time)
 		pos_x= tran_pt->Position.x/ window->width;
 		pos_y = tran_pt->Position.y/window->height;
 		orientation = tran_pt->Rotation;
-		orientation = 0.5f;
 		scaling_x = tran_pt->Scale;
 		
 		
