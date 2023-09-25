@@ -123,6 +123,9 @@
     <ClCompile Include="src\Audio.cpp">
       <Filter>Source Files\Systems\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="src\Assets Manager\asset_manager.cpp">
+      <Filter>Source Files\Miscellanous</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="include\components\PlayerControllable.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets Manager\asset_manager.h">
+      <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,9 +5,9 @@
       "Properties": {
         "Position": {
           "x": 0.0,
-          "y": 0.0
+          "y": -350.0
         },
-        "Scale_x": 0.05,
+        "Scale_x": 0.1, 
 	"Scale_y": 0.1,
         "Rotation": 0.0
       }
@@ -23,20 +23,8 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "../Asset/Picture/test4.png"
+        "texturepath": "../Asset/Picture/mapbox.png"
       }
-    },
-    {
-      "Type": "Physics",
-      "Properties": {
-        "X_Velocity": 0.0,
-        "Y_Velocity": 0.0,
-        "Y_Acceleration": 0.0,
-        "Mass": 0.0
-      }
-    },
-    {
-      "Type": "Player"
     }
   ]
 }

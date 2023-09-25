@@ -12,7 +12,8 @@ public:
 
 	Vec2 Position;
 	Vec2 PrevPosition;
-	float Scale;
+	float Scale_x;
+	float Scale_y;
 	float Rotation;
 	Mat3 Matrix;
 
@@ -24,7 +25,8 @@ public:
 	{
 		streamGet( stream , Position.x);
 		streamGet(stream, Position.y);
-		streamGet(stream, Scale);
+		streamGet(stream, Scale_x);
+		streamGet(stream, Scale_y);
 		streamGet(stream, Rotation);
 	}
 
