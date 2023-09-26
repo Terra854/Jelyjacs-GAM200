@@ -5,11 +5,16 @@
 #include "Line.h"
 #include "Vec2.h"
 #include "AABB.h"
+#include "components/Body.h"
 
-const int COLLISION_LEFT = 0x00000001; //0001
-const int COLLISION_RIGHT = 0x00000002; //0010
-const int COLLISION_TOP = 0x00000004; //0100
-const int COLLISION_BOTTOM = 0x00000008; //1000
+
+const int COLLISION_NONE = 0; //0000
+const int COLLISION_LEFT = 1; //0001
+const int COLLISION_RIGHT = 2; //0010
+const int COLLISION_TOP = 4; //0100
+const int COLLISION_BOTTOM = 8; //1000
+
+class Rectangular;
 
 namespace Collision {
 	bool Check_Circle_Line(const Circle& circle,
@@ -34,20 +39,11 @@ namespace Collision {
 		Vec2& normalAtCollision,
 		float& interTime);
 
-	int Check_Rect_Line(float PosX,
-		float PosY,
-		float scaleX,
-		float scaleY,
-		const Line& line);
-
 	bool Check_AABB_AABB(const AABB& aabb1,
 		const Vec2& vel1,
 		const AABB& aabb2,
 		const Vec2& vel2,
 		float dt);
 
-	void Response_Object_Line(const Vec2& ptInter,
-		const Vec2& normal,
-		Vec2& ptEnd,
-		Vec2& reflected);
+	int Check_Rect_Rect(const Rectangular* rect1, const Rectangular* rect2);
 }

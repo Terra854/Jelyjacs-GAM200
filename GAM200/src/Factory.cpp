@@ -122,8 +122,7 @@ Object* Factory::createObject(const std::string& filename)
 		else if (type == "Physics") {
 			Physics* p = (Physics*)((ComponentCreator<Physics>*) componentMap["Physics"])->Create();
 
-			p->X_Velocity = component["Properties"]["X_Velocity"].asFloat();
-			p->Y_Velocity = component["Properties"]["Y_Velocity"].asFloat();
+			p->Velocity = Vec2(component["Properties"]["X_Velocity"].asFloat(), component["Properties"]["Y_Velocity"].asFloat());
 			p->Y_Acceleration = component["Properties"]["Y_Acceleration"].asFloat();
 			p->Mass = component["Properties"]["Mass"].asFloat();
 

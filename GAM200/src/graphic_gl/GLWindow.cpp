@@ -30,7 +30,7 @@ GLWindow* window = NULL;
 
 //fps control
 bool fps_control = true; // change to false to test fps without control
-double time_per_frame = 1.0 / 60.0;
+double time_per_frame = 1.0 / 180.0;
 /*
 constructor
 */

@@ -8,8 +8,7 @@ public:
 	//centre position of bodies
 	Physics() : Component() {};
 
-	float X_Velocity;
-	float Y_Velocity;
+	Vec2 Velocity;
 	float Y_Acceleration;
 	float Mass;
 

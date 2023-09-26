@@ -220,7 +220,7 @@ void GLApp::Update(float time)
 
 	//draw objects
 	int i = 0;
-	while (i < 6) {
+	while (i < 5) {
 		Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Texture));
 		tex_test = tex_pt->texturepath;
 

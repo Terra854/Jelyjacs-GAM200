@@ -45,18 +45,27 @@ void GameLogic::Initialize()
 	
 	std::cout << "test Object 1" << std::endl;
 	testObj = objectFactory->createObject("../test.json");
-	std::cout << "test Object 2" << std::endl;
-	testObj2 = objectFactory->createObject("../drop-forever.json");
-	std::cout << "test Player" << std::endl;
-	playerObj = objectFactory->createObject("../player.json");
+	//std::cout << "test Object 2" << std::endl;
+	//testObj2 = objectFactory->createObject("../drop-forever.json");
 	floor1 = objectFactory->createObject("../mapbox.json");
 	floor2 = objectFactory->createObject("../mapbox.json");
 	floor3 = objectFactory->createObject("../mapbox.json");
-	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(4))->GetComponent(ComponentType::Transform));
+	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Transform));
 	tran_pt->Position.x = 190; // offset objectx
-	tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(5))->GetComponent(ComponentType::Transform)); // change to different obj
+	// @Sen Chuan if you move position like that, remember to call these 2 functions cause collision
+	// box still using the old position
+	Rectangular* rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Body)); // @Sen Chuan
+	rect_pt->Initialize(); // @Sen Chuan
+
+	tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Transform)); // change to different obj
 	tran_pt->Position.x = 380;
 	tran_pt->Position.y = -300;
+
+	rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Body));
+	rect_pt->Initialize();
+
+	std::cout << "test Player" << std::endl;
+	playerObj = objectFactory->createObject("../player.json");
 	//std::cout << "test bottom_line" << std::endl;
 	//bottom_line = objectFactory->createObject("../bottom_line.json");
 	//trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));

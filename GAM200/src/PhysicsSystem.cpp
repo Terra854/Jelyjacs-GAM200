@@ -10,21 +10,12 @@
 #include <components/PlayerControllable.h>
 #include <input.h>
 
-Vec2 interPt, normalAtCollision;
-float interTime = 0.0f;
+//Vec2 interPt, normalAtCollision;
+//float interTime = 0.0f;
+
+// Old version of Check_Collision, might be deleted at some point
 
 /*
-* This function is meant to update the gravity of a game object.
-* In the future, this will be changed to take in a game object struct
-* once we implement that in the game state update function.
-*/
-/*
-void gravityUpdate(int* objYVelocity)
-{
-	*objYVelocity = gravity * frameTime + *objYVelocity;
-}
-*/
-
 bool Check_Collision(Body* b1, Body* b2, float dt) {
 
 	// Circle and Line
@@ -45,11 +36,60 @@ bool Check_Collision(Body* b1, Body* b2, float dt) {
 
 	// 2 Rectangles
 	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
-		return Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, dt);
+		if (Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, interPt, normalAtCollision, interTime)){
+			int flag = Collision::Check_Rect_Rect((Rectangular*)b1, (Rectangular*)b2);
+			return true;
+		}
 	}
 
 	else {
 		return false; // Unsupported collision
+	}
+}
+*/
+int Check_Collision(Body* b1, Body* b2, float dt) {
+	// 2 Rectangles
+	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
+		if (Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, dt))
+			return Collision::Check_Rect_Rect((Rectangular*)b1, (Rectangular*)b2);
+	}
+	else {
+		return false; // Unsupported collision
+	}
+	return false;
+}
+
+void Response_Collision(int flag, Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
+	// 2 Rectangles
+	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
+		if (flag & COLLISION_LEFT) {
+			t1->Position.x = t1->PrevPosition.x;
+		}
+		if (flag & COLLISION_RIGHT) {
+			t1->Position.x = t1->PrevPosition.x;
+		}
+		if (flag & COLLISION_TOP) {
+			p1->Velocity.y = 0.0f;
+			t1->Position.y = t1->PrevPosition.y;
+		}
+		if (flag & COLLISION_BOTTOM) {
+			p1->Velocity.y = 0.0f;
+			t1->Position.y = t1->PrevPosition.y;
+		}
+	}
+}
+
+// Recalculate collision data
+void RecalculateBody(Transform* t, Body* b) {
+	// Recalculate AABB for rectangles
+	if (b->GetShape() == Shape::Rectangle) {
+		((Rectangular*)b)->aabb.min = t->Position - Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
+		((Rectangular*)b)->aabb.max = t->Position + Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
+	}
+
+	// Recalculate Center for rectangles
+	else if (b->GetShape() == Shape::Circle) {
+		((Circular*)b)->circle.center = t->Position;
 	}
 }
 
@@ -71,36 +111,23 @@ void PhysicsSystem::Update(float time) {
 		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
 		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
 
-		p->X_Velocity = 0.0f; // Reset velocity
-		
-		//ALL THE input::IsPressed() IS BROKEN SOMEHOW IN THIS FUNCTION :/
+		p->Velocity.x = 0.0f; // Reset velocity
 
+		// Move right
 		if (input::IsPressedRepeatedly(KEY::d)) {
-			p->X_Velocity += 10.0f;
-			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
-		}
-		if (input::IsPressedRepeatedly(KEY::a)) {
-			p->X_Velocity -= 10.0f;
+			p->Velocity.x += 15000.0f * time;
 			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 		}
 
-		// DEBUG: Normal movement, no jumping for now
-		p->Y_Velocity = 0.0f;
-		if (input::IsPressedRepeatedly(KEY::w)) { // Jump. Make sure vertical velocity is 0 first
-			p->Y_Velocity = 10.0f;
-			//std::cout << "Current player velocity: x=" << p->X_Velocity << ", y=" << p->Y_Velocity << std::endl;
-		}
-		if (input::IsPressedRepeatedly(KEY::s)) { // Jump. Make sure vertical velocity is 0 first
-			p->Y_Velocity = -10.0f;
-			//std::cout << "Current player velocity: x=" << p->X_Velocity << ", y=" << p->Y_Velocity << std::endl;
-		}
-		
-		// DEBUG: Output player's position and velocity by holding F
-		if (input::IsPressed(KEY::f) || input::IsPressedRepeatedly(KEY::f)) {
-			std::cout << "======================================================================================" << std::endl;
+		// Move left
+		if (input::IsPressedRepeatedly(KEY::a)) {
+			p->Velocity.x -= 15000.0f * time;
 			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
-			std::cout << "Current player velocity: x=" << p->X_Velocity << ", y=" << p->Y_Velocity << std::endl;
-			std::cout << "Current player acceleration: y=" << p->Y_Acceleration << std::endl;
+		}
+
+		// Jump. Make sure vertical velocity is 0 first
+		if (input::IsPressedRepeatedly(KEY::w) && p->Velocity.y == 0.0f) {
+			p->Velocity.y = 2500.0f;
 		}
 
 		break; // There should only be one object that is player controlled for now
@@ -108,25 +135,22 @@ void PhysicsSystem::Update(float time) {
 
 	// Update velocity for each object
 	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-	//for (const std::pair<const unsigned int, Object*>& pair : gameObjFactory->objMap) {
-		Physics *p = (Physics*) obj->second->GetComponent(ComponentType::Physics);
-
-		// DEBUG: Print address to stdout
-		//std::cout << t << std::endl;
+		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
 
 		if (p == nullptr)
 			continue; // No physics in that object, move along
 
 		// DEBUG: Don't apply gravity to player for now
-		if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) != nullptr)
-			continue;
+		//if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) != nullptr)
+			//continue;
 
 		// No X acceleration, not needed in the game
 
-		p->Y_Velocity = gravity * time + p->Y_Velocity; // Apply gravity
+		// Apply gravity
+		p->Y_Acceleration = gravity * time;
+		p->Velocity.y += p->Y_Acceleration;
 
-		//p->Y_Velocity += p->Y_Acceleration * time;
-		p->Y_Velocity *= 0.95f; // Account for air resistance
+		p->Velocity.y *= 0.95f; // Account for air resistance
 	}
 
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
@@ -138,22 +162,30 @@ void PhysicsSystem::Update(float time) {
 			continue; // No physics or body in that object, move along
 
 		// Save current position to previous position
-		t->PrevPosition = t->Position;
+		if (Vec2Distance(t->PrevPosition, t->Position) >= 1.0f) {
+			t->PrevPosition = t->Position;
+		}
 
-		if (p->X_Velocity == 0.f && p->Y_Velocity == 0.f)
+		if (p->Velocity.x == 0.f && p->Velocity.y == 0.f)
 			continue; // No movement, so no need to calculate collision.
 
-		bool hasCollided = false;
+		// Calculate new position
+		t->Position += p->Velocity * time;
+
+		RecalculateBody(t, b);
 
 		for (Factory::objectIDMap::iterator anotherobj = objectFactory->objectMap.begin(); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
 
 			if (obj == anotherobj)
 				continue; // Can't collide with yourself
 
-			if ((Body*)anotherobj->second->GetComponent(ComponentType::Body) == nullptr)
+			Body* b2 = (Body*)anotherobj->second->GetComponent(ComponentType::Body);
+
+			if (b2 == nullptr)
 				continue; // No body in the other object, no way it's collidable
 
-			if (Check_Collision((Body*)obj->second->GetComponent(ComponentType::Body), (Body*)anotherobj->second->GetComponent(ComponentType::Body), time)) {
+			if (int flag = Check_Collision(b, b2, time)) {
+
 				/*
 				// DEBUG
 				std::cout << "A collision has occured between ";
@@ -182,38 +214,17 @@ void PhysicsSystem::Update(float time) {
 				}
 				std::cout << std::endl;
 				*/
-				hasCollided = true;
-			}
-		}
 
-		if (hasCollided) {
-			// For now, set all velocity to 0
-			p->X_Velocity = 0.f;
-			p->Y_Velocity = 0.f;
-		} else {
-			t->Position.x += p->X_Velocity;
-			t->Position.y += p->Y_Velocity;
-		}
+				/*
+				// DEBUG: Print out collision flags
+				std::cout << "FLAG: " << flag <<
+					" LEFT: " << ((flag & COLLISION_LEFT) ? "YES" : "NO") <<
+					" RIGHT: " << ((flag & COLLISION_RIGHT) ? "YES" : "NO") <<
+					" TOP: " << ((flag & COLLISION_TOP) ? "YES" : "NO") <<
+					" BOTTOM: " << ((flag & COLLISION_BOTTOM) ? "YES" : "NO") << std::endl;
+				*/
 
-		// Recalculate collision data inside each object
-		for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-			Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
-			Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
-
-			if (b == nullptr || t == nullptr)
-				continue; // Collision not enabled for that object, move along
-
-			// Only recalculate if position and previous position are not the same
-			if (t->Position != t->PrevPosition) {
-				Vec2 pos = ((Transform*)obj->second->GetComponent(ComponentType::Transform))->Position;
-
-				if (b->GetShape() == Shape::Rectangle) {
-					((Rectangular*)b)->aabb.min = pos - Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
-					((Rectangular*)b)->aabb.max = pos + Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
-				}
-				else if (b->GetShape() == Shape::Circle) {
-					((Circular*)b)->circle.center = pos;
-				}
+				Response_Collision(flag, t, b, p, (Transform*)anotherobj->second->GetComponent(ComponentType::Transform), b2);
 			}
 		}
 	}

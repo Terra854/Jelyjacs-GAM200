@@ -2,6 +2,7 @@
 #include "Collision.h"
 
 #include <algorithm>
+#include <components/Body.h>
 
 namespace Collision {
 
@@ -245,7 +246,6 @@ namespace Collision {
 
 	/*
 		This function checks if a given rectangle intersects with a line via AABB.
-		NOTE: Currently untested, so don't know if it works atm.
 	*/
 	bool Check_AABB_Line(const AABB& aabb,
 		const Vec2& ptEnd,
@@ -315,98 +315,7 @@ namespace Collision {
 		return false;  // no intersection
 	}
 
-	bool PointLineCollision(const Vec2& point, const Line& line) {
-		// Get the line segment vector and the point-to-start vector
-		Vec2 lineVec = line.Pt1() - line.Pt0();
-		Vec2 pointVec = point - line.Pt0();
-
-		// Compute the projection of pointVec onto lineVec
-		float projLength = pointVec.x * lineVec.x + pointVec.y * lineVec.y;
-		if (projLength < 0 || projLength > lineVec.x * lineVec.x + lineVec.y * lineVec.y)
-			return false;  // point is outside the line segment
-
-		float projLenPerp = pointVec.x * lineVec.y - pointVec.y * lineVec.x;
-		// Here, you can use a threshold to check for "close enough" collision.
-		return abs(projLenPerp) <= 1.0e-6; // Very small threshold
-	}
-
-	/*
-		This function checks which side of a given rectangle intersects with a line via hotspot checking
-		via PointLineCollision
-
-		Should use Check_AABB_Line first to see if collision actually occured
-
-		NOTE: Currently untested, so don't know if it works atm.
-		TODO: Check for collision at the corners
-	*/
-	int Check_Rect_Line(float PosX, float PosY, float scaleX, float scaleY, const Line& line)
-	{
-		Vec2 point;
-		int flag = 0;
-
-		/************************
-			Left
-		************************/
-		point.x = PosX - scaleX / 2;
-		point.y = PosY + scaleY / 4;
-
-		if (PointLineCollision(point, line)) {
-			flag |= COLLISION_LEFT;
-		}
-
-		point.y = PosY - scaleY / 4;
-		if (PointLineCollision(point, line)) {
-			flag |= COLLISION_LEFT;
-		}
-
-		/************************
-			Right
-		************************/
-		point.x = PosX + scaleX / 2;
-		point.y = PosY + scaleY / 4;
-
-		if (PointLineCollision(point, line)) {
-			flag |= COLLISION_RIGHT;
-		}
-
-		point.y = PosY - scaleY / 4;
-		if (PointLineCollision(point, line)) {
-			flag |= COLLISION_RIGHT;
-		}
-
-		/************************
-			Top
-		************************/
-		point.x = PosX + scaleX / 4;
-		point.y = PosY + scaleY / 2;
-
-		if (PointLineCollision(point, line)) {
-			flag |= COLLISION_TOP;
-		}
-
-		point.x = PosX - scaleX / 4;
-		if (PointLineCollision(point, line)) {
-			flag |= COLLISION_TOP;
-		}
-
-		/************************
-			Bottom
-		************************/
-		point.x = PosX + scaleX / 4;
-		point.y = PosY - scaleY / 2;
-
-		if (PointLineCollision(point, line)) {
-			flag |= COLLISION_BOTTOM;
-		}
-
-		point.x = PosX - scaleX / 4;
-		if (PointLineCollision(point, line)) {
-			flag |= COLLISION_BOTTOM;
-		}
-
-		return flag;
-	}
-
+	
 	/*
 		This function checks if a given rectangle intersects with another rectangle via AABB.
 		NOTE: Currently untested, so don't know if it works atm.
@@ -439,7 +348,7 @@ namespace Collision {
 		Step 5: Otherwise the rectangles intersect
 
 		*/
-
+		
 		// Step 1
 		if (aabb1.max.x < aabb2.min.x || aabb1.max.y < aabb2.min.y || aabb1.min.x > aabb2.max.x || aabb1.min.y > aabb2.max.y) {
 
@@ -489,21 +398,84 @@ namespace Collision {
 		}
 		// Step 5
 		return true;
+		
+	}
+	
+	bool PointRectCollision(const Vec2& point, const Rectangular* rect)
+	{
+		// Using the AABB properties to determine the boundaries
+		return (point.x >= rect->aabb.min.x && point.x <= rect->aabb.max.x
+			&& point.y >= rect->aabb.min.y && point.y <= rect->aabb.max.y);
 	}
 
 	/*
-		This function calculates the new direction of a rectangle or circle after colliding with a line
+		This function checks which side of a given rectangle intersects with another rectangle via hotspot checking
+		via PointRectCollision using AABB data
+
+		Should use Check_AABB_AABB first to see if collision actually occured
 	*/
-	void Response_Object_Line(const Vec2& ptInter,
-		const Vec2& normal,
-		Vec2& ptEnd,
-		Vec2& reflected)
+	int Check_Rect_Rect(const Rectangular* rect1, const Rectangular* rect2)
 	{
-		Vec2 penetration = ptEnd - ptInter;
-		reflected = penetration - 2.f * Vec2DotProduct(penetration, normal) * normal;
+		Vec2 point;
+		int flag = 0;
 
-		reflected = Vec2Normalize(reflected);
+		int num_hotspots = 5; // Number of hotspots to check, applies to all sides
 
-		ptEnd = ptInter + reflected * Vec2Length(penetration);
+		float height = rect1->aabb.max.y - rect1->aabb.min.y;
+		float length = rect1->aabb.max.x - rect1->aabb.min.x;
+
+		/************************
+			Left
+		************************/
+		point.x = rect1->aabb.min.x;
+
+		for (int i = 1; i <= num_hotspots; i++) {
+			point.y = rect1->aabb.min.y + (height / (num_hotspots + 1) * i);
+			if (PointRectCollision(point, rect2)) {
+				flag |= COLLISION_LEFT;
+				break;
+			}
+		}
+
+		/************************
+			Right
+		************************/
+		point.x = rect1->aabb.max.x;
+
+		for (int i = 1; i <= num_hotspots; i++) {
+			point.y = rect1->aabb.min.y + (height / (num_hotspots + 1) * i);
+			if (PointRectCollision(point, rect2)) {
+				flag |= COLLISION_RIGHT;
+				break;
+			}
+		}
+
+		/************************
+			Top
+		************************/
+		point.y = rect1->aabb.max.y;
+
+		for (int i = 1; i <= num_hotspots; i++) {
+			point.x = rect1->aabb.min.x + (length / (num_hotspots + 1) * i);
+			if (PointRectCollision(point, rect2)) {
+				flag |= COLLISION_TOP;
+				break;
+			}
+		}
+
+		/************************
+			Bottom
+		************************/
+		point.y = rect1->aabb.min.y;
+
+		for (int i = 1; i <= num_hotspots; i++) {
+			point.x = rect1->aabb.min.x + (length / (num_hotspots + 1) * i);
+			if (PointRectCollision(point, rect2)) {
+				flag |= COLLISION_BOTTOM;
+				break;
+			}
+		}
+
+		return flag;
 	}
 }
