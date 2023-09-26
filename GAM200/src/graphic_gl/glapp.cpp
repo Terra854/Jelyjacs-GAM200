@@ -206,6 +206,29 @@ void GLApp::init_shdrpgms() {
 	std::cout << "test shader program: " << "shape-shdrpgm" << std::endl;
 }
 
+glm::mat3 Getmatrix(glm::vec2 position, glm::vec2 scale, float rotation) {
+	glm::mat3 Scale
+	{
+		scale.x, 0.0f, 0.0f,
+			0.0f, scale.y, 0.0f,
+			0.0f, 0.0f, 1.0f
+	};
+	glm::mat3 Rotate
+	{
+		cos(rotation), sin(rotation), 0.0f,
+			-sin(rotation), cos(rotation), 0.0f,
+			0.0f, 0.0f, 1.0f
+	};
+	glm::mat3 Translate
+	{
+		1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			position.x, position.y, 1.0f
+	};
+
+	glm::mat3 mat = Translate * Rotate * Scale;
+	return mat;
+}
 
 void GLApp::Update(float time)
 {
@@ -239,7 +262,7 @@ void GLApp::Update(float time)
 			std::cout<<"graphics_debug" << std::endl;
 		}
 		//calculate transformation matrix
-		glm::mat3 Scale
+		/*glm::mat3 Scale
 		{
 			scaling_x, 0.0f, 0.0f,
 				0.0f, scaling_y, 0.0f,
@@ -256,9 +279,9 @@ void GLApp::Update(float time)
 			1.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f,
 			pos_x, pos_y, 1.0f
-		};
+		};*/
 		
-        mat_test =   Translate   * Rotate * Scale;
+        mat_test =   Getmatrix({pos_x,pos_y}, {scaling_x, scaling_y}, orientation);
 		
 		if (graphics_debug && i>=1) {
 			shdrpgms["shape"].Use();
@@ -279,8 +302,9 @@ void GLApp::Update(float time)
 				Physics* phy_pt = static_cast<Physics*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Physics));
 				float Vx = phy_pt->Velocity.x;
 				float Vy = phy_pt->Velocity.y;
-				
 				orientation = atan2(Vy, Vx);
+				glm::vec2 pos_circle = { pos_x + Vx, pos_y + Vy };
+
 				float scale_line = sqrt(Vx * Vx + Vy * Vy) / 1000;
 				glm::mat3 Scale
 				{
