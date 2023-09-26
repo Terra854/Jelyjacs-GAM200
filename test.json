@@ -4,11 +4,11 @@
       "Type": "Transform",
       "Properties": {
         "Position": {
-          "x": 100.0,
-          "y": 100.0
+          "x": 0.0,
+          "y": 0.0
         },
-        "Scale_x": 1.0,
-	"Scale_y": 1.0,
+        "Scale_x": 1920.0,
+	      "Scale_y": 1080.0,
         "Rotation": 0.0
       }
     },
