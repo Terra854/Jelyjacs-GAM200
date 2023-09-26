@@ -13,6 +13,13 @@
 //Vec2 interPt, normalAtCollision;
 //float interTime = 0.0f;
 
+int collision_flag;
+
+// A workaround to prevent sticking onto the top of the walls
+float top_collision_cooldown = 0.f;
+
+
+
 // Old version of Check_Collision, might be deleted at some point
 
 /*
@@ -37,7 +44,7 @@ bool Check_Collision(Body* b1, Body* b2, float dt) {
 	// 2 Rectangles
 	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
 		if (Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, interPt, normalAtCollision, interTime)){
-			int flag = Collision::Check_Rect_Rect((Rectangular*)b1, (Rectangular*)b2);
+			int collision_flag = Collision::Check_Rect_Rect((Rectangular*)b1, (Rectangular*)b2);
 			return true;
 		}
 	}
@@ -59,20 +66,20 @@ int Check_Collision(Body* b1, Body* b2, float dt) {
 	return false;
 }
 
-void Response_Collision(int flag, Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
+void Response_Collision(int collision_flag, Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
-		if (flag & COLLISION_LEFT) {
+		if (collision_flag & COLLISION_LEFT) {
 			t1->Position.x = t1->PrevPosition.x;
 		}
-		if (flag & COLLISION_RIGHT) {
+		if (collision_flag & COLLISION_RIGHT) {
 			t1->Position.x = t1->PrevPosition.x;
 		}
-		if (flag & COLLISION_TOP) {
+		if (collision_flag & COLLISION_TOP) {
+			top_collision_cooldown = 0.1f;
 			p1->Velocity.y = 0.0f;
-			t1->Position.y = t1->PrevPosition.y;
 		}
-		if (flag & COLLISION_BOTTOM) {
+		if (collision_flag & COLLISION_BOTTOM) {
 			p1->Velocity.y = 0.0f;
 			t1->Position.y = t1->PrevPosition.y;
 		}
@@ -102,6 +109,8 @@ void PhysicsSystem::Initialize() {
 }
 
 void PhysicsSystem::Update(float time) {
+	top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= time : 0.0f;
+
 	// Update velocity for player
 	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 
@@ -126,7 +135,7 @@ void PhysicsSystem::Update(float time) {
 		}
 
 		// Jump. Make sure vertical velocity is 0 first
-		if (input::IsPressedRepeatedly(KEY::w) && p->Velocity.y == 0.0f) {
+		if (input::IsPressedRepeatedly(KEY::w) && p->Velocity.y == 0.0f && top_collision_cooldown == 0.0f) {
 			p->Velocity.y = 2500.0f;
 		}
 
@@ -184,7 +193,7 @@ void PhysicsSystem::Update(float time) {
 			if (b2 == nullptr)
 				continue; // No body in the other object, no way it's collidable
 
-			if (int flag = Check_Collision(b, b2, time)) {
+			if (collision_flag = Check_Collision(b, b2, time)) {
 
 				/*
 				// DEBUG
@@ -217,14 +226,14 @@ void PhysicsSystem::Update(float time) {
 
 				/*
 				// DEBUG: Print out collision flags
-				std::cout << "FLAG: " << flag <<
-					" LEFT: " << ((flag & COLLISION_LEFT) ? "YES" : "NO") <<
-					" RIGHT: " << ((flag & COLLISION_RIGHT) ? "YES" : "NO") <<
-					" TOP: " << ((flag & COLLISION_TOP) ? "YES" : "NO") <<
-					" BOTTOM: " << ((flag & COLLISION_BOTTOM) ? "YES" : "NO") << std::endl;
+				std::cout << "FLAG: " << collision_flag <<
+					" LEFT: " << ((collision_flag & COLLISION_LEFT) ? "YES" : "NO") <<
+					" RIGHT: " << ((collision_flag & COLLISION_RIGHT) ? "YES" : "NO") <<
+					" TOP: " << ((collision_flag & COLLISION_TOP) ? "YES" : "NO") <<
+					" BOTTOM: " << ((collision_flag & COLLISION_BOTTOM) ? "YES" : "NO") << std::endl;
 				*/
 
-				Response_Collision(flag, t, b, p, (Transform*)anotherobj->second->GetComponent(ComponentType::Transform), b2);
+				Response_Collision(collision_flag, t, b, p, (Transform*)anotherobj->second->GetComponent(ComponentType::Transform), b2);
 			}
 		}
 	}
