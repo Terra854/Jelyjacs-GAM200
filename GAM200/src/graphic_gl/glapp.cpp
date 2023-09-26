@@ -16,8 +16,6 @@
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
 //test
-
-//GLSLShader shdr_img;
 GLuint tex_test;
 glm::mat3 mat_test;
 float pos_x;
@@ -51,7 +49,6 @@ void GLApp::Initialize()
 	init_models();
 	init_shdrpgms();
 	
-	//init_scene();
 	
 	
 	// enable alpha blending
@@ -208,55 +205,20 @@ void GLApp::init_shdrpgms() {
 }
 
 
-//void GLApp::GLObject::update()
-//{
-//	//std::cout<< position.x<<position.y << std::endl;
-//
-//	glm::mat3 Scale
-//	{
-//		scaling.x, 0, 0,
-//			0, scaling.y, 0,
-//			0, 0, 1
-//	};
-//
-//	glm::mat3 Rotate
-//	{
-//		cos(orientation), sin(orientation), 0,
-//			-sin(orientation), cos(orientation), 0,
-//			0, 0, 1
-//	};
-//
-//	glm::mat3 Translate
-//	{
-//		1, 0, 0,
-//		0, 1, 0,
-//		position.x, position.y, 1
-//	};
-//
-//	mdl_to_ndc_xform =  Scale* Translate * Rotate;
-//	static int i = 0;
-//	if(i< 3)
-//	{
-//		std::cout << mdl_to_ndc_xform[0][0] << " " << mdl_to_ndc_xform[0][1] << " " << mdl_to_ndc_xform[0][2] << std::endl;
-//		std::cout << mdl_to_ndc_xform[1][0] << " " << mdl_to_ndc_xform[1][1] << " " << mdl_to_ndc_xform[1][2] << std::endl;
-//		std::cout << mdl_to_ndc_xform[2][0] << " " << mdl_to_ndc_xform[2][1] << " " << mdl_to_ndc_xform[2][2] << std::endl;
-//		i++;
-//	}
-//	
-//}
-//void GLApp::draw ()
 void GLApp::Update(float time)
 {
 
-
+	//clear screen
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-	// clear back buffer as before
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	//update window
 	std::stringstream sstr;
 	sstr << window->title << " FPS: " << window->fps;
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
 
+
+	//draw objects
 	int i = 0;
 	while (i < 6) {
 		Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Texture));
@@ -266,10 +228,11 @@ void GLApp::Update(float time)
 		pos_x= tran_pt->Position.x * 2.0f / window->width;
 		pos_y = tran_pt->Position.y * 2.0f / window->height;
 		orientation = tran_pt->Rotation;
-		scaling_x = tran_pt->Scale_x;
-		scaling_y = tran_pt->Scale_y;
-		
-		
+		scaling_x = tran_pt->Scale_x / window->width;
+		scaling_y = tran_pt->Scale_y / window->height;
+		std::cout<< "object "<< i << std::endl;
+		std::cout<< "scaling_x " << tran_pt->Scale_x << std::endl;
+		std::cout << "scaling_y " << tran_pt->Scale_y << std::endl;
 		//calculate transformation matrix
 		glm::mat3 Scale
 		{
@@ -290,7 +253,7 @@ void GLApp::Update(float time)
 			pos_x, pos_y, 1.0f
 		};
 		
-        mat_test = Translate * Scale  * Rotate ;
+        mat_test =   Translate   * Rotate *Scale;
 		
 
 		glBindTextureUnit(6, tex_test);
@@ -363,7 +326,7 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 	std::vector<std::pair<GLenum, std::string>> shdr_files
 	{
 		std::make_pair(GL_VERTEX_SHADER, vtx_shdr),
-			std::make_pair(GL_FRAGMENT_SHADER, frg_shdr)
+		std::make_pair(GL_FRAGMENT_SHADER, frg_shdr)
 	};
 
 	GLSLShader shdr_pgm;
