@@ -230,9 +230,7 @@ void GLApp::Update(float time)
 		orientation = tran_pt->Rotation;
 		scaling_x = tran_pt->Scale_x / window->width;
 		scaling_y = tran_pt->Scale_y / window->height;
-		std::cout<< "object "<< i << std::endl;
-		std::cout<< "scaling_x " << tran_pt->Scale_x << std::endl;
-		std::cout << "scaling_y " << tran_pt->Scale_y << std::endl;
+		
 		//calculate transformation matrix
 		glm::mat3 Scale
 		{
