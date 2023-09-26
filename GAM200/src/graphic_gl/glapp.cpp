@@ -274,7 +274,7 @@ void GLApp::Update(float time)
 		glm::mat3 Scale
 		{
 			scaling_x, 0.0f, 0.0f,
-				0.0f, scaling_x, 0.0f,
+				0.0f, scaling_y, 0.0f,
 				0.0f, 0.0f, 1.0f
 		};
 		glm::mat3 Rotate
