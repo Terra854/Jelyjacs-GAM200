@@ -1,5 +1,5 @@
 #include <Debug.h>
-
+#include <cmath>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h> // for access to OpenGL API declarations 
@@ -15,6 +15,10 @@
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
+//debug
+bool graphics_debug{ false };
+glm::vec3 circle_color{ 0.0f, 0.0f, 1.0f };
+glm::vec3 line_color{ 0.0f, 1.0f, 0.0f };
 //test
 GLuint tex_test;
 glm::mat3 mat_test;
@@ -30,10 +34,8 @@ std::map<std::string, GLApp::GLModel> GLApp::models;
 //std::map<std::string, GLApp::GLObject> GLApp::objects;
 std::map<std::string, GLuint> GLApp::textures;
 
-// Animation size 
-GLuint images{ 0 };
 
-glm::mat3 trans;
+
 //Global pointer to GLApp
 GLApp* app = NULL;
 GLApp::GLApp()
@@ -220,7 +222,7 @@ void GLApp::Update(float time)
 
 	//draw objects
 	int i = 0;
-	while (i < 5) {
+	while (i < 6) {
 		Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Texture));
 		tex_test = tex_pt->texturepath;
 
@@ -231,6 +233,11 @@ void GLApp::Update(float time)
 		scaling_x = tran_pt->Scale_x / window->width;
 		scaling_y = tran_pt->Scale_y / window->height;
 		
+		if (input::IsPressed(KEY::z))
+		{
+			graphics_debug = !graphics_debug;
+			std::cout<<"graphics_debug" << std::endl;
+		}
 		//calculate transformation matrix
 		glm::mat3 Scale
 		{
@@ -251,30 +258,91 @@ void GLApp::Update(float time)
 			pos_x, pos_y, 1.0f
 		};
 		
-        mat_test =   Translate   * Rotate *Scale;
+        mat_test =   Translate   * Rotate * Scale;
 		
+		if (graphics_debug && i>=1) {
+			shdrpgms["shape"].Use();
+			// bind VAO of this object's model
+			glBindVertexArray(models["square"].vaoid);
+			// copy object's model-to-NDC matrix to vertex shader's
+			// uniform variable uModelToNDC
+			shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test);
+			shdrpgms["shape"].SetUniform("uColor", circle_color);
+			// call glDrawElements with appropriate arguments
+			glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
 
-		glBindTextureUnit(6, tex_test);
-		glBindTexture(GL_TEXTURE_2D, tex_test);
-		glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-		// load shader program in use by this object
-		shdrpgms["image"].Use();
-		// bind VAO of this object's model
-		glBindVertexArray(models["square"].vaoid);
-		// copy object's model-to-NDC matrix to vertex shader's
-		// uniform variable uModelToNDC
-		shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test);
+			// unbind VAO and unload shader program
+			glBindVertexArray(0);
+			shdrpgms["shape"].UnUse();
 
-		// tell fragment shader sampler uTex2d will use texture image unit 6
-		GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
-		glUniform1i(tex_loc, 6);
+			if (i == 5) {
+				Physics* phy_pt = static_cast<Physics*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Physics));
+				float Vx = phy_pt->Velocity.x;
+				float Vy = phy_pt->Velocity.y;
+				
+				orientation = atan2(Vy, Vx);
+				float scale_line = sqrt(Vx * Vx + Vy * Vy) / 1000;
+				glm::mat3 Scale
+				{
+					scale_line, 0.0f, 0.0f,
+						0.0f, scale_line, 0.0f,
+						0.0f, 0.0f, 1.0f
+				};
+				glm::mat3 Rotate
+				{
+					cos(orientation), sin(orientation), 0.0f,
+						-sin(orientation), cos(orientation), 0.0f,
+						0.0f, 0.0f, 1.0f
+				};
+				glm::mat3 Translate
+				{
+					1.0f, 0.0f, 0.0f,
+						0.0f, 1.0f, 0.0f,
+						pos_x, pos_y, 1.0f
+				};
 
-		// call glDrawElements with appropriate arguments
-		glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+				mat_test = Translate * Rotate * Scale;
+				//draw line
+				shdrpgms["shape"].Use();
+				// bind VAO of this object's model
+				glBindVertexArray(models["line"].vaoid);
+				// copy object's model-to-NDC matrix to vertex shader's
+				// uniform variable uModelToNDC
+				shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test);
+				shdrpgms["shape"].SetUniform("uColor", line_color);
+				// call glDrawElements with appropriate arguments
+				glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
 
-		// unbind VAO and unload shader program
-		glBindVertexArray(0);
-		shdrpgms["image"].UnUse();
+				// unbind VAO and unload shader program
+				glBindVertexArray(0);
+				shdrpgms["shape"].UnUse();
+
+			}
+
+		}
+		else {
+			glBindTextureUnit(6, tex_test);
+			glBindTexture(GL_TEXTURE_2D, tex_test);
+			glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+			// load shader program in use by this object
+			shdrpgms["image"].Use();
+			// bind VAO of this object's model
+			glBindVertexArray(models["square"].vaoid);
+			// copy object's model-to-NDC matrix to vertex shader's
+			// uniform variable uModelToNDC
+			shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test);
+
+			// tell fragment shader sampler uTex2d will use texture image unit 6
+			GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
+			glUniform1i(tex_loc, 6);
+
+			// call glDrawElements with appropriate arguments
+			glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+			// unbind VAO and unload shader program
+			glBindVertexArray(0);
+			shdrpgms["image"].UnUse();
+		}
 		i ++;
     }
 

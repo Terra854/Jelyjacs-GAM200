@@ -100,6 +100,14 @@ void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
 	{
 		buttons[at(KEY::f)].SetKeyState(action);
 	}
+	case GLFW_KEY_Z:
+	{
+		buttons[at(KEY::z)].SetKeyState(action);
+	}
+	case GLFW_KEY_X:
+	{
+		buttons[at(KEY::x)].SetKeyState(action);
+	}
 	}
 	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
 	{

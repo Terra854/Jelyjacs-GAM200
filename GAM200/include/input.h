@@ -11,6 +11,8 @@ enum class KEY
 	d,
 	p,
 	f,
+	z,
+	x,
 	mouseL,
 	mouseR,
 	total

@@ -12,12 +12,14 @@
 #include <GL/glew.h> // for access to OpenGL API declarations 
 #include <GLFW/glfw3.h>
 #include <glslshader.h>
+#include <input.h>
 #include <iostream>
 #include <list>
 #include <Interface_System.h>
 #include <Factory.h>
 #include <components/Texture.h>
 #include <components/Transform.h>
+#include <components/Physics.h>
 class GLApp : public ISystems
 {
 public:

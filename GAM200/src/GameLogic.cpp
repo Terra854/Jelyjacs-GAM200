@@ -46,7 +46,7 @@ void GameLogic::Initialize()
 	std::cout << "test Object 1" << std::endl;
 	testObj = objectFactory->createObject("../test.json");
 	//std::cout << "test Object 2" << std::endl;
-	//testObj2 = objectFactory->createObject("../drop-forever.json");
+	testObj2 = objectFactory->createObject("../drop-forever.json");
 	floor1 = objectFactory->createObject("../mapbox.json");
 	floor2 = objectFactory->createObject("../mapbox.json");
 	floor3 = objectFactory->createObject("../mapbox.json");
