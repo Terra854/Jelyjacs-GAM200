@@ -9,6 +9,7 @@
 #include <components/Physics.h>
 #include <components/PlayerControllable.h>
 #include <input.h>
+#include <Audio.h> // Direct call the audio functions cause messaging system is not ready
 
 //Vec2 interPt, normalAtCollision;
 //float interTime = 0.0f;
@@ -126,17 +127,27 @@ void PhysicsSystem::Update(float time) {
 		if (input::IsPressedRepeatedly(KEY::d)) {
 			p->Velocity.x += 15000.0f * time;
 			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
+			if (p->Velocity.y == 0.f)
+				audio->startWalking();
 		}
 
 		// Move left
 		if (input::IsPressedRepeatedly(KEY::a)) {
 			p->Velocity.x -= 15000.0f * time;
 			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
+			if (p->Velocity.y == 0.f)
+				audio->startWalking();
+		}
+
+		// Stop the walking audio if the player is neither walking nor on solid ground
+		if ((!(input::IsPressedRepeatedly(KEY::d)) && !(input::IsPressedRepeatedly(KEY::a))) || p->Velocity.y != 0.f){
+			audio->stopWalking();
 		}
 
 		// Jump. Make sure vertical velocity is 0 first
 		if (input::IsPressedRepeatedly(KEY::w) && p->Velocity.y == 0.0f && top_collision_cooldown == 0.0f) {
 			p->Velocity.y = 2500.0f;
+			audio->playJump();
 		}
 
 		break; // There should only be one object that is player controlled for now
@@ -182,6 +193,7 @@ void PhysicsSystem::Update(float time) {
 		t->Position += p->Velocity * time;
 
 		RecalculateBody(t, b);
+
 
 		for (Factory::objectIDMap::iterator anotherobj = objectFactory->objectMap.begin(); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
 
@@ -234,6 +246,9 @@ void PhysicsSystem::Update(float time) {
 				*/
 
 				Response_Collision(collision_flag, t, b, p, (Transform*)anotherobj->second->GetComponent(ComponentType::Transform), b2);
+			}
+			else {
+				
 			}
 		}
 	}
