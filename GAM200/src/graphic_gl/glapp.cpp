@@ -20,26 +20,10 @@ bool graphics_debug{ false };
 glm::vec3 box_color{ 0.0f, 0.0f, 1.0f };
 glm::vec3 line_color{ 0.0f, 1.0f, 0.0f };
 
-//rotation and scaling
-bool graphics_rotate{ false };
-bool graphics_scale{ false };
-
-//test
-GLuint tex_test;
-glm::mat3 mat_test;
-float pos_x;
-float pos_y;
-float orientation;
-float scaling_x;
-float scaling_y;
 
 //Declarations of shdrpgms models objects map
 std::map<std::string, GLSLShader> GLApp::shdrpgms;
 std::map<std::string, GLApp::GLModel> GLApp::models;
-//std::map<std::string, GLApp::GLObject> GLApp::objects;
-std::map<std::string, GLuint> GLApp::textures;
-
-
 
 //Global pointer to GLApp
 GLApp* app = NULL;
@@ -48,6 +32,9 @@ GLApp::GLApp()
 	app = this;
 }
 
+/*
+* Initialize() is called once, at program start.
+*/
 void GLApp::Initialize()
 {
 	glClearColor(1.f, 1.f, 1.f, 1.f);
@@ -56,13 +43,14 @@ void GLApp::Initialize()
 	init_models();
 	init_shdrpgms();
 	
-	
-	
 	// enable alpha blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+/*
+* get all he models from the list.txt file and store them in the models map
+*/
 void GLApp::init_models() {
 	//open list of meshes
 	std::ifstream ifs{ "../meshes/list.txt", std::ios::in };
@@ -74,10 +62,14 @@ void GLApp::init_models() {
 	}
 	ifs.seekg(0, std::ios::beg);
 	std::string line;
+	//get models from list
 	while (getline(ifs, line)) {
+		//get model name
 		std::istringstream line_model_name{ line };
 		std::string model_name;
 		line_model_name >> model_name;
+
+		//check if model already exists
 		if (models.find(model_name) == models.end()) {
 			GLModel Model;
 			std::ifstream ifs_msh{ "../meshes/" + model_name + ".msh", std::ios::in };
@@ -95,7 +87,7 @@ void GLApp::init_models() {
 			std::string mesh_name;
 			line_sstm_mesh >> obj_prefix >> mesh_name;
 
-
+			//get model data
 			std::vector < float > pos_vtx;
 			std::vector < float > clr_vtx;
 			std::vector < float > tex_coor;
@@ -198,8 +190,8 @@ void GLApp::init_models() {
 			glBindVertexArray(0);
 
 			Model.vaoid = vao;
-			Model.primitive_cnt = gl_tri_primitives.size();
-			Model.draw_cnt = gl_tri_primitives.size();
+			Model.primitive_cnt = (unsigned int)gl_tri_primitives.size();
+			Model.draw_cnt = (unsigned int)gl_tri_primitives.size();
 			models[model_name] = Model;
 
 			//delete vbo, ebo
@@ -211,6 +203,9 @@ void GLApp::init_models() {
 	}
 }
 
+/*
+* get all he shader programs
+*/
 void GLApp::init_shdrpgms() {
 
 	insert_shdrpgm("image", "../shaders/image.vert", "../shaders/image.frag");
@@ -219,6 +214,9 @@ void GLApp::init_shdrpgms() {
 	std::cout << "test shader program: " << "shape-shdrpgm" << std::endl;
 }
 
+/*
+* calculate the matrix of a object
+*/
 glm::mat3 Getmatrix(glm::vec2 position, glm::vec2 scale, float rotation) {
 	glm::mat3 Scale
 	{
@@ -243,6 +241,9 @@ glm::mat3 Getmatrix(glm::vec2 position, glm::vec2 scale, float rotation) {
 	return mat;
 }
 
+/*
+* update and draw objects
+*/
 void GLApp::Update(float time)
 {
 
@@ -259,11 +260,29 @@ void GLApp::Update(float time)
 	//draw objects
 	int i = 0;
 	while (i < 6) {
+		GLuint tex_test;
+		glm::mat3 mat_test;
+		float pos_x;
+		float pos_y;
+		float orientation;
+		float scaling_x;
+		float scaling_y;
+
+		//get texture		
 		Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Texture));
 		tex_test = tex_pt->texturepath;
-
+		
+		//get orientation
 		Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));
 		orientation = tran_pt->Rotation;
+
+		//check debug
+		if (input::IsPressed(KEY::p))
+		{
+			graphics_debug = !graphics_debug;
+			std::cout << "graphics_debug" << std::endl;
+		}
+
 		//if debug mode get pos and scale from body component
 		if (graphics_debug && i >= 2) {
 			Rectangular* rec_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Body));
@@ -281,13 +300,8 @@ void GLApp::Update(float time)
 			scaling_x = tran_pt->Scale_x / window->width;
 			scaling_y = tran_pt->Scale_y / window->height;
 		}
-		if (input::IsPressed(KEY::p))
-		{
-			graphics_debug = !graphics_debug;
-			std::cout<<"graphics_debug" << std::endl;
-		}
 		
-		
+		//get matrix
         mat_test =   Getmatrix({pos_x,pos_y}, {scaling_x, scaling_y}, orientation);
 		
 		if (graphics_debug && i>=2) {
@@ -305,17 +319,22 @@ void GLApp::Update(float time)
 			glBindVertexArray(0);
 			shdrpgms["shape"].UnUse();
 
+			// draw movement line for player
 			if (i == 5) {
+				//get velocity
 				Physics* phy_pt = static_cast<Physics*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Physics));
 				float Vx = phy_pt->Velocity.x;
 				float Vy = phy_pt->Velocity.y;
-				orientation = atan2(Vy, Vx);
-				//glm::vec2 pos_circle = { pos_x + Vx, pos_y + Vy };
 
+				//calculate rotation
+				orientation = atan2(Vy, Vx);
+				
+				//get slcae of line based on length of line
 				float scale_line_x = sqrt(Vx * Vx + Vy * Vy) / 1920;
 				float scale_line_y = sqrt(Vx * Vx + Vy * Vy) / 1080;
 				
 				mat_test = Getmatrix({ pos_x,pos_y}, {scale_line_x, scale_line_y}, orientation);
+				
 				//draw line
 				shdrpgms["shape"].Use();
 				// bind VAO of this object's model
@@ -334,6 +353,7 @@ void GLApp::Update(float time)
 
 		}
 		else {
+			// draw object with textuer
 			glBindTextureUnit(6, tex_test);
 			glBindTexture(GL_TEXTURE_2D, tex_test);
 			glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -363,16 +383,21 @@ void GLApp::Update(float time)
 	glfwSwapBuffers(window->ptr_window);
 }
 
-
+/*
+* clean up
+*/
 void GLApp::cleanup()
 {
 }
 
-
+/*
+* read png file
+*/
 GLuint GLApp::setup_texobj(const char* pathname)
 {
 	int width{ }, height{  }, image_channels;
 
+	// load image data from file into client memory
 	unsigned char* ptr_texels = stbi_load(pathname, &width, &height, &image_channels, STBI_rgb_alpha);
 	if (!ptr_texels)
 	{
@@ -399,7 +424,9 @@ GLuint GLApp::setup_texobj(const char* pathname)
 	return texobj_hdl;
 }
 
-
+/*
+*  load shader program and store it in map
+*/
 void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr)
 {
 	std::vector<std::pair<GLenum, std::string>> shdr_files
