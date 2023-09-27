@@ -54,7 +54,7 @@ void CoreEngine::GameLoop() {
 	auto m_EndFrame = m_BeginFrame + invFpsLimit;
 	unsigned frame_count_per_second = 0;
 	auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
-	float dt = 1.f / 60.f;
+	float dt = 1.f / fps_set;
 	std::cout << "########################################################" << std::endl;
 	std::cout << "Press F to print out frametime performance information" << std::endl;
 	std::cout << "for the current frame" << std::endl;
@@ -128,6 +128,7 @@ void CoreEngine::GameLoop() {
 		if (time_in_seconds > prev_time_in_seconds)
 		{
 			window->fps = frame_count_per_second;
+			dt = 1.f / frame_count_per_second;
 			//std::cout << frame_count_per_second << " frames per second\n";				// For Frame Rate Per Second Display
 			frame_count_per_second = 0;
 			prev_time_in_seconds = time_in_seconds;
