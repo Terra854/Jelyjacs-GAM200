@@ -271,11 +271,11 @@ void GLApp::Update(float time)
 		float scaling_y;
 
 		//get texture		
-		Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Texture));
+		Texture* tex_pt = static_cast<Texture*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Texture));
 		tex_test = tex_pt->texturepath;
 		
 		//get orientation
-		Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));
+		Transform* tran_pt = static_cast<Transform*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Transform));
 		orientation = tran_pt->Rotation;
 
 		//check debug
@@ -286,8 +286,8 @@ void GLApp::Update(float time)
 		}
 
 		//if debug mode get pos and scale from body component
-		if (graphics_debug && i >= 2) {
-			Rectangular* rec_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Body));
+		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
+			Rectangular* rec_pt = static_cast<Rectangular*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body));
 
 			if (rec_pt == nullptr)
 				break; // Don't continue if there is no body component
@@ -310,7 +310,7 @@ void GLApp::Update(float time)
 		//get matrix
         mat_test =   Getmatrix({pos_x,pos_y}, {scaling_x, scaling_y}, orientation);
 		
-		if (graphics_debug && i >= 2) {
+		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
 			shdrpgms["shape"].Use();
 			// bind VAO of this object's model
 			glBindVertexArray(models["square"].vaoid);
