@@ -239,7 +239,7 @@ glm::mat3 Getmatrix(glm::vec2 position, glm::vec2 scale, float rotation) {
 			position.x, position.y, 1.0f
 	};
 
-	glm::mat3 mat = Translate * Rotate * Scale;
+	glm::mat3 mat = Translate  * Scale * Rotate;
 	return mat;
 }
 
@@ -258,14 +258,14 @@ void GLApp::Update(float time)
 
 	//draw objects
 	int i = 0;
-	while (i < 7) {
+	while (i < 6) {
 		Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Texture));
 		tex_test = tex_pt->texturepath;
 
 		Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));
 		orientation = tran_pt->Rotation;
 		//if debug mode get pos and scale from body component
-		if (graphics_debug && i >= 1) {
+		if (graphics_debug && i >= 2) {
 			Rectangular* rec_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Body));
 			Vec2 botleft = rec_pt->aabb.min;
 			Vec2 topright = rec_pt->aabb.max;
@@ -290,7 +290,7 @@ void GLApp::Update(float time)
 		
         mat_test =   Getmatrix({pos_x,pos_y}, {scaling_x, scaling_y}, orientation);
 		
-		if (graphics_debug && i>=1) {
+		if (graphics_debug && i>=2) {
 			shdrpgms["shape"].Use();
 			// bind VAO of this object's model
 			glBindVertexArray(models["square"].vaoid);
@@ -330,7 +330,6 @@ void GLApp::Update(float time)
 				// unbind VAO and unload shader program
 				glBindVertexArray(0);
 				shdrpgms["shape"].UnUse();
-
 			}
 
 		}
