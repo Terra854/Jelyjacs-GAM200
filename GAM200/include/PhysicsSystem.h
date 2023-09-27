@@ -20,5 +20,6 @@ public:
 	~PhysicsSystem() {};
 	virtual void Initialize();
 	virtual void Update(float time);
+	virtual void MessageRelay(Message* msg);
 	virtual std::string SystemName() { return "Physics"; }
 };

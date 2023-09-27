@@ -14,6 +14,7 @@ public:
 	void startWalking();
 	void stopWalking();
 	void playJump();
+	void stopJump();
 private:
 	FMOD::System* system;
 	FMOD::System* sound;

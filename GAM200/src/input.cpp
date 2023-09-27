@@ -131,11 +131,18 @@ void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
 		buttons[at(KEY::right)].SetKeyState(action);
 		break;
 	}
+	case GLFW_KEY_ESCAPE:
+	{
+		buttons[at(KEY::esc)].SetKeyState(action);
+		break;
 	}
+	}
+	/*
 	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
 	{
 		glfwSetWindowShouldClose(pWin, GLFW_TRUE);
 	}
+	*/
 }
 
 void MouseButtonCallBack(GLFWwindow* pWin, int button, int action, int mod)

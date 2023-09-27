@@ -12,10 +12,11 @@
 #include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
-#include <Movement.h>
+//#include <Movement.h>
+#include <Audio.h>
 
 Object* scale_and_rotate;
-
+Object* playerObj;
 void GameLogic::MessageRelay(Message* msg) {
 	if(msg->messageId == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
@@ -35,7 +36,6 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
 	
 	Object* testObj;
-	Object* playerObj;
 	Object* floor1;
 	Object* floor2;
 	Object* floor3;
@@ -92,23 +92,60 @@ void GameLogic::Initialize()
 }
 
 void GameLogic::Update(float time) {
+
+	// If press esc button, quit the game
+	if (input::IsPressed(KEY::esc)) {
+		Message msg(MessageID::MessageIDType::Quit);
+		engine->Broadcast(&msg);
+	}
+	//Movement for Player
+	// If button Pressed, changed velocity
+	Physics* p = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
+	p->Velocity.x = 0.0f;
+	bool moving = false;
 	if (input::IsPressed(KEY::w)) {
 		MovementKey msg(up);
 		engine->Broadcast(&msg);
+
+		p->Velocity.y = 2500.0f;
+		audio->playJump();
 	}
-	if (input::IsPressed(KEY::a)) {
+	if (input::IsPressedRepeatedly(KEY::a)) {
 		MovementKey msg(left);
 		engine->Broadcast(&msg);
+
+		p->Velocity.x -= 17500.0f * time;
+		//std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
+		moving = true;
 	}
-	if (input::IsPressed(KEY::s)) {
+	/*
+	if (input::IsPressedRepeatedly(KEY::s)) {
 		MovementKey msg(down);
 		engine->Broadcast(&msg);
-	}
-	if (input::IsPressed(KEY::d)) {
+	}*/
+	if (input::IsPressedRepeatedly(KEY::d)) {
 		MovementKey msg(right);
 		engine->Broadcast(&msg);
+
+		p->Velocity.x += 17500.0f * time;
+		moving = true;
 	}
 
+	if ((p->Velocity.y == 0.f) && moving) {
+		audio->startWalking();
+	}
+	else {
+		audio->stopWalking();
+	}
+	// Printing Player Position by pressing s
+	if (input::IsPressed(KEY::p)) {
+		Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
+		std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
+	}
+
+
+
+	// Rotation of an object
 	Transform* t = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
 
 	if (input::IsPressedRepeatedly(KEY::up)) {
