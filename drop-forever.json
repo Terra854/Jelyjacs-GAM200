@@ -23,7 +23,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "../Asset/Picture/mapbox.png"
+        "texturepath": "mapbox.png"
       }
     }
     
