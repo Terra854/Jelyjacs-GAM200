@@ -1,3 +1,5 @@
+#include <Precompile.h>
+#include<GLWindow.h>
 #include <Debug.h>
 #include "Core_Engine.h"
 #include <chrono>
@@ -33,10 +35,6 @@ CoreEngine::~CoreEngine() {
 void CoreEngine::Initialize() {
 	std::cout << "Initialising " << Systems["Window"]->SystemName() << std::endl;
 	Systems["Window"]->Initialize(); // Must initialize Window first
-	//for (const std::pair<std::string, ISystems*>& sys : Systems) {
-	//	if(sys.first != "Window")
-	//		std::cout << sys.second->SystemName() << std::endl;
-	//}
 	for (const std::pair<std::string, ISystems*>& sys : Systems) { // Then initialize all other systems
 		if (sys.first != "Window") { // Window already initialized, do not do it again
 			// printing system name for debugging purposes
@@ -50,40 +48,47 @@ void CoreEngine::Initialize() {
 
 void CoreEngine::GameLoop() {
 	bool log_system_time = false;
+	int fps_set = 60;
+	auto invFpsLimit = std::chrono::round<std::chrono::system_clock::duration>(std::chrono::duration<double>{ 1. / fps_set }); // 1/60
+	auto m_BeginFrame = std::chrono::system_clock::now();
+	auto m_EndFrame = m_BeginFrame + invFpsLimit;
+	unsigned frame_count_per_second = 0;
+	auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
+	float dt = 1.f / 60.f;
 	std::cout << "########################################################" << std::endl;
-	std::cout << "Press P to print out frametime performance information" << std::endl;
+	std::cout << "Press F to print out frametime performance information" << std::endl;
 	std::cout << "for the current frame" << std::endl;
 	//std::cout << "game window is the active window first and then press P" << std::endl;
 	std::cout << "########################################################" << std::endl;
 
 	while (game_active) {
-		// Toggle P key to enable performance viewer
-		if (input::IsPressed(KEY::p)) {
+		
+		// Toggle F key to enable performance viewer
+		if (input::IsPressed(KEY::f)) {
 			log_system_time = !log_system_time;
 			//std::cout << "Performance viewer is now " << (log_system_time ? "ON" : "OFF. Press P to switch it on again\n(make sure the game window is the active window first)") << std::endl;
 		}
-
+		/*
 		//Get the current time from chrono in milliseconds
 		auto now = std::chrono::system_clock::now();
 		auto duration = now.time_since_epoch();
 		long long current_time = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
-		/*
+		
 		//Convert it to the time passed since the last frame (in seconds)
-		const int FPS = 60;
-		const int framedelay = 1000 / 60;
-		*/
-		float dt = (last_update) ? (float)(current_time - last_update) / 1000.0f : 0.f;
-		/*
-		if (framedelay > dt) {
-			float time_left = framedelay - dt;
-			std::this_thread::sleep_for(time_left);
+		const float FPS = 60;
+		const float frame_time = 1.0f / FPS;
+		
+		float dt = static_cast<float>(current_time - last_update) / 1000.f;
+		
+		if (frame_time > dt) {
+			long long time_left = frame_time - dt;
+			std::this_thread::sleep_for(std::chrono::milliseconds(time_left));
 		}
-		*/
-		//float dt = 0.1f;
+
 		//Update the when the last update started
 		last_update = current_time;
-
+		*/
 		// DEBUG: Calculate the time it takes for each system to complete it'sys update
 		std::map<std::string, double> elapsed_time;
 		double total_time = 0.0;
@@ -113,8 +118,23 @@ void CoreEngine::GameLoop() {
 		else {
 			Systems["Window"]->Update(dt);
 			Systems["Graphics"]->Update(dt);
-			
+
 		}
+		auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
+		++frame_count_per_second;
+
+		// This part keeps the frame rate.
+		std::this_thread::sleep_until(m_EndFrame);
+		if (time_in_seconds > prev_time_in_seconds)
+		{
+			window->fps = frame_count_per_second;
+			//std::cout << frame_count_per_second << " frames per second\n";				// For Frame Rate Per Second Display
+			frame_count_per_second = 0;
+			prev_time_in_seconds = time_in_seconds;
+		}
+		
+		m_BeginFrame = m_EndFrame;
+		m_EndFrame = m_BeginFrame + invFpsLimit;
 	}
 }
 void CoreEngine::AddSystem(ISystems* sys) {

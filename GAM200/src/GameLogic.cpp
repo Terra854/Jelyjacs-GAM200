@@ -18,10 +18,13 @@
 Object* scale_and_rotate;
 Object* playerObj;
 void GameLogic::MessageRelay(Message* msg) {
+	// For Movement Key Display
+	/*
 	if(msg->messageId == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
 		std::cout << temp->dir << std::endl;
 	}
+	*/
 }
 void GameLogic::Initialize()
 {

@@ -221,5 +221,8 @@
     <ClInclude Include="src\Assets Manager\asset_manager.h">
       <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
+    <ClInclude Include="include\Precompile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
