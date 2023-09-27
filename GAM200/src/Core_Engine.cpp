@@ -10,11 +10,11 @@ CoreEngine* CORE = NULL;
 
 // DEBUG: To log how long does each system needs to finish updating
 void DebugUpdate(ISystems* sys, const float& dt, std::map<std::string, double>& elapsed_time, double& total_time) {
-	unsigned start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	long long start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	sys->Update(dt);
 	//Printing System name for debugging purposes
 	std::cout << sys->SystemName() << " is updating" << std::endl;
-	unsigned end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	long long end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	elapsed_time[sys->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
 	total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 }
@@ -66,7 +66,7 @@ void CoreEngine::GameLoop() {
 		//Get the current time from chrono in milliseconds
 		auto now = std::chrono::system_clock::now();
 		auto duration = now.time_since_epoch();
-		unsigned current_time = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+		long long current_time = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
 		//Convert it to the time passed since the last frame (in seconds)
 		float dt = (last_update) ? (float)(current_time - last_update) / 1000.0f : 0.f;
