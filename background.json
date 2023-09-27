@@ -15,7 +15,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "../Asset/Picture/img_1.png"
+        "texturepath": "../Asset/Picture/BGWithoutPlatforms.png"
       }
     }
   ]

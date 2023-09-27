@@ -43,8 +43,8 @@ void GameLogic::Initialize()
 	//Transform * trans;
 	//Texture* texture;
 	
-	std::cout << "test Object 1" << std::endl;
-	testObj = objectFactory->createObject("../test.json");
+	std::cout << "Background" << std::endl;
+	testObj = objectFactory->createObject("../background.json");
 	//std::cout << "test Object 2" << std::endl;
 	testObj2 = objectFactory->createObject("../drop-forever.json");
 	floor1 = objectFactory->createObject("../mapbox.json");
