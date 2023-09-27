@@ -28,9 +28,7 @@ GLFWwindow* GLWindow::ptr_window;
 //Global Pointer to Window System
 GLWindow* window = NULL;
 
-//fps control
-bool fps_control = true; // change to false to test fps without control
-double maxfps = 60.0; // max fps
+
 /*
 constructor
 */
@@ -57,13 +55,7 @@ GLWindow::GLWindow() {
 }
 
 /*  _________________________________________________________________________ */
-/*! init
-
-@param GLint width
-@param GLint height
-Dimensions of window requested by program
-
-
+/*! initialize GLFW and GLEW
 */
 
 void GLWindow::Initialize() {
@@ -120,13 +112,14 @@ void GLWindow::Initialize() {
 
 }
 
+/*
+* upate event and detect close button
+*/
 void GLWindow::Update(float time)
 {
     glfwPollEvents();
 
-    // Part 2
-    //GLWindow::update_time(1.0);
-    //fps = time * 3600;
+   
     // Check if the close button or alt + f4 is pressed
     if (glfwWindowShouldClose(ptr_window)) {
         Message msg(MessageID::MessageIDType::Quit);
@@ -144,14 +137,6 @@ void GLWindow::ActivateWindow()
 
 /*  _________________________________________________________________________ */
 /*! cleanup
-
-@param none
-
-@return none
-
-For now, there are no resources allocated by the application program.
-The only task is to have GLFW return resources back to the system and
-gracefully terminate.
 */
 void GLWindow::cleanup() {
 
@@ -207,48 +192,7 @@ void GLWindow::fbsize_cb(GLFWwindow* ptr_win, int wwidth, int hheight) {
    
 }
 
-/*  _________________________________________________________________________*/
-/*! update_time
 
-@param double
-fps_calc_interval: the interval (in seconds) at which fps is to be
-calculated
-
-This function must be called once per game loop. It uses GLFW's time functions
-to compute:
-1. the interval in seconds between each frame
-2. the frames per second every "1 / maxfps" seconds
-*/
-/*
-void GLWindow::update_time(double fps_calc_interval) {
-    // get elapsed time (in seconds) between previous and current frames
-    static double prev_time = glfwGetTime();
-    double curr_time = glfwGetTime();
-    delta_time = curr_time - prev_time;
-    prev_time = curr_time;
-
-    // fps calculations
-    static double count = 0.0; // number of game loop iterations
-    static double start_time = glfwGetTime();
-
-    // get elapsed time since very beginning (in seconds) ...
-    double elapsed_time = curr_time - start_time;
-    if (fps_control) {
-        // sleep for the remaining time if frame was rendered too fast
-        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(((1.0 / maxfps) - delta_time) * 1000)));
-    }
-    ++count;
-
-    // update fps at least every 10 seconds ...
-    fps_calc_interval = (fps_calc_interval < 0.0) ? 0.0 : fps_calc_interval;
-    fps_calc_interval = (fps_calc_interval > 10.0) ? 10.0 : fps_calc_interval;
-    if (elapsed_time > fps_calc_interval) {
-        GLWindow::fps = count / elapsed_time;
-        start_time = curr_time;
-        count = 0.0;
-    }
-}
-*/
 /*  _________________________________________________________________________*/
 /*! print_specs()
 
