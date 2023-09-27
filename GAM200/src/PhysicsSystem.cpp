@@ -160,10 +160,6 @@ void PhysicsSystem::Update(float time) {
 		if (p == nullptr)
 			continue; // No physics in that object, move along
 
-		// DEBUG: Don't apply gravity to player for now
-		//if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) != nullptr)
-			//continue;
-
 		// No X acceleration, not needed in the game
 
 		// Apply gravity
@@ -212,8 +208,8 @@ void PhysicsSystem::Update(float time) {
 				std::cout << "A collision has occured between ";
 				switch (((Body*)obj->second->GetComponent(ComponentType::Body))->GetShape()) {
 				case Shape::Rectangle:
-						std::cout << "a rectangle ";
-						break;
+					std::cout << "a rectangle ";
+					break;
 				case Shape::Circle:
 					std::cout << "a circle ";
 					break;

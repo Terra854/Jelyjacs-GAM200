@@ -318,7 +318,9 @@ namespace Collision {
 	
 	/*
 		This function checks if a given rectangle intersects with another rectangle via AABB.
-		NOTE: Currently untested, so don't know if it works atm.
+
+		Will be used as fallback if Check_Rect_Rect becomes too compute intensive later on.
+		If that is the case, Check_Rect_Rect will be called only if this function detects a collision
 	*/
 	bool Check_AABB_AABB(const AABB& aabb1, const Vec2& vel1,
 		const AABB& aabb2, const Vec2& vel2, float dt)
@@ -412,7 +414,8 @@ namespace Collision {
 		This function checks which side of a given rectangle intersects with another rectangle via hotspot checking
 		via PointRectCollision using AABB data
 
-		Should use Check_AABB_AABB first to see if collision actually occured
+		Check_AABB_AABB can be used as fallback if hotspot collision becomes too compute intensive later on with
+		the option to call this function when AABB detects collision
 	*/
 	int Check_Rect_Rect(const Rectangular* rect1, const Rectangular* rect2)
 	{
