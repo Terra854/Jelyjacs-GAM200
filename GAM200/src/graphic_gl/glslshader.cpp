@@ -1,4 +1,3 @@
-#include <Debug.h>
 /* !
 @file    glslshader.h
 @author  pghali@digipen.edu
@@ -14,6 +13,7 @@ Please see the class declaration for information about these functions.
 
 *//*__________________________________________________________________________*/
 #include <glslshader.h>
+#include <Debug.h>
 
 GLint
 GLSLShader::GetUniformLocation(GLchar const *name) {

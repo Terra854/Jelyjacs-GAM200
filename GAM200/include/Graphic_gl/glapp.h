@@ -29,11 +29,9 @@ public:
 	virtual void Initialize() ;
 	virtual void Update(float time);
 	virtual std::string SystemName() { return "Graphics"; }
-	//static void update();
-	//static void draw();
+	
 	static void cleanup();
 
-	static void init_scene();
 	static void init_models();
 	static void init_shdrpgms();
 
@@ -58,28 +56,11 @@ public:
 		GLsizei width, height;
 	};
 
-	//struct GLObject
-	//{
-	//	glm::vec2 scaling{ };
-	//	float orientation;
-	//	glm::vec2 position{ };
-	//	//glm::vec3 color{ 0 };
-	//	glm::mat3 mdl_xform{ };
-	//	glm::mat3 mdl_to_ndc_xform{ };
-
-	//	std::map<std::string, GLApp::GLModel>::iterator mdl_ref;
-	//	std::map<std::string, GLSLShader>::iterator shd_ref;
-	//	std::map<std::string, GLuint>::iterator tex_ref;
-
-	//	void update();
-	//	void draw() const;
-	//};
 
 
 	static std::map<std::string, GLSLShader> shdrpgms; // singleton
 	static std::map<std::string, GLModel> models; // singleton
-	//static std::map<std::string, GLObject> objects; // singleton
-	static std::map<std::string, GLuint> textures;
+	
 };
 extern GLApp* app;
 #endif /* GLAPP_H */
