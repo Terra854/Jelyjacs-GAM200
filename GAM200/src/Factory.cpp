@@ -10,6 +10,7 @@
 #include "components/Body.h"
 #include "components/Physics.h"
 #include "components/PlayerControllable.h"
+#include "Assets Manager/asset_manager.h"
 
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
@@ -87,9 +88,15 @@ Object* Factory::createObject(const std::string& filename)
 			obj->AddComponent(trans);
 		}
 		else if (type == "Texture") {
-			GLuint texturepath = app->setup_texobj(component["Properties"]["texturepath"].asCString());
-			Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(texturepath);
-			obj->AddComponent(tex);
+			std::map<std::string, GLuint>::iterator it = textures.find(component["Properties"]["texturepath"].asString());
+			if (it == textures.end())
+				std::cout << "Missing Texture!" << std::endl;
+			else
+			{
+				GLuint texturepath = it->second;
+				Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(texturepath);
+				obj->AddComponent(tex);
+			}			
 		}
 		else if (type == "Body") {
 			std::string shape = component["Shape"].asString();

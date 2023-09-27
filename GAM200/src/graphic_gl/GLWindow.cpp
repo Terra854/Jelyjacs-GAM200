@@ -30,7 +30,7 @@ GLWindow* window = NULL;
 
 //fps control
 bool fps_control = true; // change to false to test fps without control
-double time_per_frame = 1.0 / 180.0;
+double maxfps = 240.0; // max fps
 /*
 constructor
 */
@@ -214,7 +214,7 @@ calculated
 This function must be called once per game loop. It uses GLFW's time functions
 to compute:
 1. the interval in seconds between each frame
-2. the frames per second every "fps_calc_interval" seconds
+2. the frames per second every "1 / maxfps" seconds
 */
 void GLWindow::update_time(double fps_calc_interval) {
     // get elapsed time (in seconds) between previous and current frames
@@ -231,7 +231,7 @@ void GLWindow::update_time(double fps_calc_interval) {
     double elapsed_time = curr_time - start_time;
     if (fps_control) {
         // sleep for the remaining time if frame was rendered too fast
-        std::this_thread::sleep_for(std::chrono::milliseconds((int)((time_per_frame-delta_time) * 1000)));
+        std::this_thread::sleep_for(std::chrono::milliseconds((int)(((1.0 / maxfps) - delta_time) * 1000)));
     }
     ++count;
 

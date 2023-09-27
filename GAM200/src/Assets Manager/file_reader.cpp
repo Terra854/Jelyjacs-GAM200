@@ -1,3 +1,6 @@
+
+// FILE IS CURRENTLY UNUSE AND UNTESTED, IGNORE THIS FILE
+
 #include <Debug.h>
 #include "file_reader.h"
 #include "text_serialization.h"
