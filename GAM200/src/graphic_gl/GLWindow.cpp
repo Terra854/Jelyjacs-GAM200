@@ -30,7 +30,7 @@ GLWindow* window = NULL;
 
 //fps control
 bool fps_control = true; // change to false to test fps without control
-double maxfps = 240.0; // max fps
+double maxfps = 60.0; // max fps
 /*
 constructor
 */
