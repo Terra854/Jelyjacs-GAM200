@@ -1,11 +1,7 @@
-
-
-/*                                                                      guard
------------------------------------------------------------------------------ */
 #ifndef GLAPP_H
 #define GLAPP_H
 
-/*                                                                   includes
+/*                                                                  
 ----------------------------------------------------------------------------- */
 #include <Debug.h>
 
@@ -38,10 +34,10 @@ public:
 	// container for shader programs and helper function(s) ...
 	struct GLModel
 	{
-		GLenum		primitive_type{ 0 };		// which OpenGL primitive to be rendered?
-		GLuint		primitive_cnt{  };			// added for tutorial 2
-		GLuint		vaoid{ 0 };					// same as tutorial 1
-		GLuint		draw_cnt{ 0 };				// added for tutorial 2
+		GLenum		primitive_type{ 0 };		
+		GLuint		primitive_cnt{  };			
+		GLuint		vaoid{ 0 };					
+		GLuint		draw_cnt{ 0 };				
 		GLSLShader	shdr_pgm;
 		GLuint 	    texobj{ 0 };
 		const char* texfile{ nullptr };
@@ -58,8 +54,8 @@ public:
 
 
 
-	static std::map<std::string, GLSLShader> shdrpgms; // singleton
-	static std::map<std::string, GLModel> models; // singleton
+	static std::map<std::string, GLSLShader> shdrpgms; 
+	static std::map<std::string, GLModel> models;
 	
 };
 extern GLApp* app;

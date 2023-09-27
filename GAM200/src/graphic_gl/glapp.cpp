@@ -336,8 +336,8 @@ void GLApp::Update(float time)
 				orientation = atan2(Vy, Vx);
 				
 				//get slcae of line based on length of line
-				float scale_line_x = sqrt(Vx * Vx + Vy * Vy) / 1920;
-				float scale_line_y = sqrt(Vx * Vx + Vy * Vy) / 1080;
+				float scale_line_x = sqrt(Vx * Vx + Vy * Vy) / window->width /2;
+				float scale_line_y = sqrt(Vx * Vx + Vy * Vy) / window->height /2;
 				
 				mat_test = Getmatrix({ pos_x,pos_y}, {scale_line_x, scale_line_y}, orientation);
 				
@@ -393,6 +393,16 @@ void GLApp::Update(float time)
 */
 void GLApp::cleanup()
 {
+	//delete all models
+	for (auto& model : models)
+	{
+		glDeleteVertexArrays(1, &model.second.vaoid);
+	}
+	//delete all shader programs
+	for (auto& shdrpgm : shdrpgms)
+	{
+		glDeleteProgram(shdrpgm.second.GetHandle());
+	}
 }
 
 /*

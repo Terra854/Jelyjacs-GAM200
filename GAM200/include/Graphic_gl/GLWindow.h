@@ -1,18 +1,3 @@
-/*!
-@file    GLWindow.h
-@author  pghali@digipen.edu, g.chen@digipen.edu
-@date    10/06/2023
-
-This file contains the declaration of namespace Helper that encapsulates the
-functionality required to create an OpenGL context using GLFW; use GLEW
-to load OpenGL extensions; initialize OpenGL state; and finally initialize
-the OpenGL application by calling initalization functions associated with
-objects participating in the application.
-
-*//*__________________________________________________________________________*/
-
-/*                                                                      guard
------------------------------------------------------------------------------ */
 #ifndef GLHELPER_H
 #define GLHELPER_H
 
@@ -42,7 +27,7 @@ public:
   // callbacks ...
   static void error_cb(int error, char const* description);
   static void fbsize_cb(GLFWwindow *ptr_win, int wwidth, int hheight);
-  // I/O callbacks ...
+ 
   
   //static void update_time(double fpsCalcInt = 1.0);
   static void print_specs();
