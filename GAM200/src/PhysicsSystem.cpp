@@ -74,6 +74,20 @@ int Check_Collision(Body* b1, Body* b2, float dt) {
 // If collide on the left or right, unable to move
 // If collide from the top ...
 // If collide from the bottom ...
+// Recalculate collision data
+void RecalculateBody(Transform* t, Body* b) {
+	// Recalculate AABB for rectangles
+	if (b->GetShape() == Shape::Rectangle) {
+		((Rectangular*)b)->aabb.min = t->Position - Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
+		((Rectangular*)b)->aabb.max = t->Position + Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
+	}
+
+	// Recalculate Center for rectangles
+	else if (b->GetShape() == Shape::Circle) {
+		((Circular*)b)->circle.center = t->Position;
+	}
+}
+
 void Response_Collision(int collision_flag, Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
@@ -90,21 +104,8 @@ void Response_Collision(int collision_flag, Transform* t1, Body* b1, Physics* p1
 		if (collision_flag & COLLISION_BOTTOM) {
 			p1->Velocity.y = 0.0f;
 			t1->Position.y = t1->PrevPosition.y;
+			RecalculateBody(t1, b1);
 		}
-	}
-}
-
-// Recalculate collision data
-void RecalculateBody(Transform* t, Body* b) {
-	// Recalculate AABB for rectangles
-	if (b->GetShape() == Shape::Rectangle) {
-		((Rectangular*)b)->aabb.min = t->Position - Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
-		((Rectangular*)b)->aabb.max = t->Position + Vec2(((Rectangular*)b)->width / 2, ((Rectangular*)b)->height / 2);
-	}
-
-	// Recalculate Center for rectangles
-	else if (b->GetShape() == Shape::Circle) {
-		((Circular*)b)->circle.center = t->Position;
 	}
 }
 
@@ -117,6 +118,13 @@ void PhysicsSystem::Initialize() {
 }
 
 void PhysicsSystem::Update(float time) {
+
+	// If there is a sudden lag spike, the physics will act weird
+	// In that case, do not update for this cycle
+	if (time > 0.05f) {
+		return;
+	}
+
 	top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= time : 0.0f;
 
 	// Update velocity for player
@@ -188,9 +196,7 @@ void PhysicsSystem::Update(float time) {
 			continue; // No physics or body in that object, move along
 
 		// Save current position to previous position
-		if (Vec2Distance(t->PrevPosition, t->Position) >= 1.0f) {
-			t->PrevPosition = t->Position;
-		}
+		t->PrevPosition = t->Position;
 
 		if (p->Velocity.x == 0.f && p->Velocity.y == 0.f)
 			continue; // No movement, so no need to calculate collision.
@@ -241,7 +247,7 @@ void PhysicsSystem::Update(float time) {
 				}
 				std::cout << std::endl;
 				*/
-
+				
 				/*
 				// DEBUG: Print out collision flags
 				std::cout << "FLAG: " << collision_flag <<
