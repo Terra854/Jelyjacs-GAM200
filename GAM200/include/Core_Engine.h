@@ -23,13 +23,14 @@ public:
 	void DeleteSystem();
 	void Broadcast(Message *msg);
 
-	// checking if game is active
-	bool game_active;
+	
 private:
 	// Map of Systems
 	std::unordered_map<std::string, ISystems*> Systems;
 	// For frame time
 	long long last_update;
+	// checking if game is active
+	bool game_active;
 };
 
 // To quit the game

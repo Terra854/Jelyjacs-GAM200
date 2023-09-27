@@ -30,7 +30,7 @@ GLWindow* window = NULL;
 
 //fps control
 bool fps_control = true; // change to false to test fps without control
-double maxfps = 240.0; // max fps
+double maxfps = 60.0; // max fps
 /*
 constructor
 */
@@ -125,11 +125,14 @@ void GLWindow::Update(float time)
     glfwPollEvents();
 
     // Part 2
-    GLWindow::update_time(1.0);
-    
+    //GLWindow::update_time(1.0);
+    //fps = time * 3600;
     // Check if the close button or alt + f4 is pressed
-    if (glfwWindowShouldClose(ptr_window))
-        engine->game_active = false; // Tells the engine to terminate
+    if (glfwWindowShouldClose(ptr_window)) {
+        Message msg(MessageID::MessageIDType::Quit);
+        engine->Broadcast(&msg);
+        //engine->game_active = false; // Tells the engine to terminate
+    }
 }
 
 
@@ -216,6 +219,7 @@ to compute:
 1. the interval in seconds between each frame
 2. the frames per second every "1 / maxfps" seconds
 */
+/*
 void GLWindow::update_time(double fps_calc_interval) {
     // get elapsed time (in seconds) between previous and current frames
     static double prev_time = glfwGetTime();
@@ -231,7 +235,7 @@ void GLWindow::update_time(double fps_calc_interval) {
     double elapsed_time = curr_time - start_time;
     if (fps_control) {
         // sleep for the remaining time if frame was rendered too fast
-        std::this_thread::sleep_for(std::chrono::milliseconds((int)(((1.0 / maxfps) - delta_time) * 1000)));
+        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(((1.0 / maxfps) - delta_time) * 1000)));
     }
     ++count;
 
@@ -244,7 +248,7 @@ void GLWindow::update_time(double fps_calc_interval) {
         count = 0.0;
     }
 }
-
+*/
 /*  _________________________________________________________________________*/
 /*! print_specs()
 

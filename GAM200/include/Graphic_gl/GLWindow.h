@@ -44,7 +44,7 @@ public:
   static void fbsize_cb(GLFWwindow *ptr_win, int wwidth, int hheight);
   // I/O callbacks ...
   
-  static void update_time(double fpsCalcInt = 1.0);
+  //static void update_time(double fpsCalcInt = 1.0);
   static void print_specs();
 
 

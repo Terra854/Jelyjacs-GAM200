@@ -20,10 +20,13 @@ Object* playerObj;
 Object* dynamic_collision;
 
 void GameLogic::MessageRelay(Message* msg) {
+	// For Movement Key Display
+	/*
 	if (msg->messageId == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
 		std::cout << temp->dir << std::endl;
 	}
+	*/
 }
 void GameLogic::Initialize()
 {
@@ -181,10 +184,10 @@ void GameLogic::Update(float time) {
 		t->Scale_y = t->Scale_y >= 1.0f ? t->Scale_y - 1.0f : 0.f;
 	}
 	if (input::IsPressedRepeatedly(KEY::left)) {
-		t->Rotation -= 0.01f;
+		t->Rotation += 0.01f;
 	}
 	if (input::IsPressedRepeatedly(KEY::right)) {
-		t->Rotation += 0.01f;
+		t->Rotation -= 0.01f;
 	}
 
 	// Dynamic collision
