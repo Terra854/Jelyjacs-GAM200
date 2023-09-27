@@ -116,8 +116,8 @@ void GameLogic::Update(float time) {
 		t->Scale_y += 1.0f;
 	}
 	if (input::IsPressedRepeatedly(KEY::down)) {
-		t->Scale_x -= 1.0f;
-		t->Scale_y -= 1.0f;
+		t->Scale_x = t->Scale_x >= 1.0f ? t->Scale_x - 1.0f : 0.f;
+		t->Scale_y = t->Scale_y >= 1.0f ? t->Scale_y - 1.0f : 0.f;
 	}
 	if (input::IsPressedRepeatedly(KEY::left)) {
 		t->Rotation -= 0.01f;
