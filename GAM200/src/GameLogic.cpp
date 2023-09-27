@@ -35,13 +35,10 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
 	
 	Object* testObj;
-	Object* testObj2;
 	Object* playerObj;
 	Object* floor1;
 	Object* floor2;
 	Object* floor3;
-
-	Object* bottom_line;
 	//Transform * trans;
 	//Texture* texture;
 	

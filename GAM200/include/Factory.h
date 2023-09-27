@@ -46,7 +46,7 @@ public:
 
 	void AddComponentCreator(const std::string& name, BaseComponentCreator* creator);
 
-	int NumberOfObjects() {	return objectMap.size();}
+	size_t NumberOfObjects() {	return objectMap.size();}
 
 	friend class PhysicsSystem; // Needed to apply physics onto each object
 private:
