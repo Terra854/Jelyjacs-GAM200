@@ -29,7 +29,7 @@ private:
 	// Map of Systems
 	std::unordered_map<std::string, ISystems*> Systems;
 	// For frame time
-	unsigned last_update;
+	long long last_update;
 };
 
 // To quit the game
