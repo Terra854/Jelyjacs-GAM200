@@ -88,9 +88,12 @@ void RecalculateBody(Transform* t, Body* b) {
 	}
 }
 
-void Response_Collision(int collision_flag, Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
+void Response_Collision(Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
+
+		int collision_flag = ((Rectangular*)b1)->collision_flag;
+
 		if (collision_flag & COLLISION_LEFT) {
 			t1->Position.x = t1->PrevPosition.x;
 		}
@@ -100,12 +103,15 @@ void Response_Collision(int collision_flag, Transform* t1, Body* b1, Physics* p1
 		if (collision_flag & COLLISION_TOP) {
 			top_collision_cooldown = 0.1f;
 			p1->Velocity.y = 0.0f;
+			t1->Position.y = ((Rectangular*)b2)->aabb.min.y - (((Rectangular*)b1)->height / 2);
 		}
 		if (collision_flag & COLLISION_BOTTOM) {
 			p1->Velocity.y = 0.0f;
-			t1->Position.y = t1->PrevPosition.y;
-			RecalculateBody(t1, b1);
+			t1->Position.y = ((Rectangular*)b2)->aabb.max.y + (((Rectangular*)b1)->height / 2);
 		}
+
+		if (collision_flag)
+			RecalculateBody(t1, b1);
 	}
 }
 
@@ -195,6 +201,9 @@ void PhysicsSystem::Update(float time) {
 		if (p == nullptr || b == nullptr)
 			continue; // No physics or body in that object, move along
 
+		if (b->GetShape() == Shape::Rectangle)
+			((Rectangular*)b)->collision_flag = 0;
+
 		// Save current position to previous position
 		t->PrevPosition = t->Position;
 
@@ -247,17 +256,7 @@ void PhysicsSystem::Update(float time) {
 				}
 				std::cout << std::endl;
 				*/
-				
-				/*
-				// DEBUG: Print out collision flags
-				std::cout << "FLAG: " << collision_flag <<
-					" LEFT: " << ((collision_flag & COLLISION_LEFT) ? "YES" : "NO") <<
-					" RIGHT: " << ((collision_flag & COLLISION_RIGHT) ? "YES" : "NO") <<
-					" TOP: " << ((collision_flag & COLLISION_TOP) ? "YES" : "NO") <<
-					" BOTTOM: " << ((collision_flag & COLLISION_BOTTOM) ? "YES" : "NO") << std::endl;
-				*/
-
-				Response_Collision(collision_flag, t, b, p, (Transform*)anotherobj->second->GetComponent(ComponentType::Transform), b2);
+				Response_Collision(t, b, p, (Transform*)anotherobj->second->GetComponent(ComponentType::Transform), b2);
 			}
 			else {
 				

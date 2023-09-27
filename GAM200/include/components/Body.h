@@ -31,6 +31,7 @@ public:
 	}
 	AABB aabb;
 	float width, height;
+	int collision_flag;
 
 	virtual void Initialize() override {
 		Object* o = GetOwner();

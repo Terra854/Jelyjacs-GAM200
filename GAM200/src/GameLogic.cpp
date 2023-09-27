@@ -17,8 +17,10 @@
 
 Object* scale_and_rotate;
 Object* playerObj;
+Object* dynamic_collision;
+
 void GameLogic::MessageRelay(Message* msg) {
-	if(msg->messageId == MessageID::Movement) {
+	if (msg->messageId == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
 		std::cout << temp->dir << std::endl;
 	}
@@ -34,14 +36,14 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Line", new ComponentCreator<Lines>());
 	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
 	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
-	
+
 	Object* testObj;
 	Object* floor1;
 	Object* floor2;
 	Object* floor3;
 	//Transform * trans;
 	//Texture* texture;
-	
+
 	std::cout << "Background" << std::endl;
 	testObj = objectFactory->createObject("../background.json");
 	scale_and_rotate = objectFactory->createObject("../scale-and-rotate.json");
@@ -66,17 +68,36 @@ void GameLogic::Initialize()
 
 	std::cout << "test Player" << std::endl;
 	playerObj = objectFactory->createObject("../player.json");
+
+	// Floor
+	for (int i = 0; i < 40; i++) {
+		Object* floor = objectFactory->createObject("../mapbox.json");
+		Transform* floor_t = static_cast<Transform*>(floor->GetComponent(ComponentType::Transform));
+		floor_t->Position = { -1000.0f + (static_cast<Transform*>(floor->GetComponent(ComponentType::Transform))->Scale_x * (float)i), -500.0f };
+		Rectangular* floor_b = static_cast<Rectangular*>(floor->GetComponent(ComponentType::Body)); // @Sen Chuan
+		floor_b->Initialize();
+	}
+
+	// Dynamic collision
+	dynamic_collision = objectFactory->createObject("../mapbox.json");
+	Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
+	dynamic_collision_t->Position = { -1000.0f , -446.0f };
+	Rectangular* dynamic_collision_b = static_cast<Rectangular*>(dynamic_collision->GetComponent(ComponentType::Body));
+	dynamic_collision_b->Initialize();
+	Physics* p = new Physics();
+	dynamic_collision->AddComponent(p);
+
 	//std::cout << "test bottom_line" << std::endl;
 	//bottom_line = objectFactory->createObject("../bottom_line.json");
 	//trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));
-	
+
 	//alternate way to get component without cast
 	//trans = testObj->GetComponent_NoCast<Transform>(ComponentTypeId::CT_Transform);
 	//trans->Mass = 0.5f;
 	//Getting a Object pointer with the game object ID
 	//testObj = objectFactory->getObjectWithID(0);
 	//texture = static_cast<Texture*>(testObj->GetComponent(ComponentType::Texture));
-	
+
 	//Broken code. DO NOT REMOVE YET - Jonathan
 	/*
 	gameObjFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Transform));
@@ -107,14 +128,17 @@ void GameLogic::Update(float time) {
 		MovementKey msg(up);
 		engine->Broadcast(&msg);
 
-		p->Velocity.y = 2500.0f;
-		audio->playJump();
+		//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
+		if (p->Velocity.y == 0.0f) {
+			p->Velocity.y = 2500.0f;
+			audio->playJump();
+		}
 	}
 	if (input::IsPressedRepeatedly(KEY::a)) {
 		MovementKey msg(left);
 		engine->Broadcast(&msg);
 
-		p->Velocity.x -= 17500.0f * time;
+		p->Velocity.x -= 500.0f;
 		//std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 		moving = true;
 	}
@@ -127,7 +151,8 @@ void GameLogic::Update(float time) {
 		MovementKey msg(right);
 		engine->Broadcast(&msg);
 
-		p->Velocity.x += 17500.0f * time;
+		p->Velocity.x += 500.0f;
+		//std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 		moving = true;
 	}
 
@@ -136,14 +161,13 @@ void GameLogic::Update(float time) {
 	}
 	else {
 		audio->stopWalking();
+		moving = false;
 	}
 	// Printing Player Position by pressing s
 	if (input::IsPressed(KEY::p)) {
 		Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 		std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
 	}
-
-
 
 	// Rotation of an object
 	Transform* t = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
@@ -162,5 +186,22 @@ void GameLogic::Update(float time) {
 	if (input::IsPressedRepeatedly(KEY::right)) {
 		t->Rotation += 0.01f;
 	}
-	
+
+	// Dynamic collision
+
+	Physics* dynamic_collision_p = static_cast<Physics*>(dynamic_collision->GetComponent(ComponentType::Physics));
+	dynamic_collision_p->Velocity.x = 200.0f;
+	Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
+	dynamic_collision_t->Position.x = dynamic_collision_t->Position.x < 1000.0f ? dynamic_collision_t->Position.x : -1000.0f;
+
+	/*
+	// DEBUG: Print out collision flags
+	int c_flag = static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag;
+	std::cout << "FLAG: " << c_flag <<
+		" LEFT: " << ((c_flag & COLLISION_LEFT) ? "YES" : "NO") <<
+		" RIGHT: " << ((c_flag & COLLISION_RIGHT) ? "YES" : "NO") <<
+		" TOP: " << ((c_flag & COLLISION_TOP) ? "YES" : "NO") <<
+		" BOTTOM: " << ((c_flag & COLLISION_BOTTOM) ? "YES" : "NO") << std::endl;
+	std::cout << "#####################################################################" << std::endl;
+	*/
 }

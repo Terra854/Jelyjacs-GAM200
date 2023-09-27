@@ -414,7 +414,7 @@ namespace Collision {
 		Should use Check_AABB_AABB first to see if collision actually occured first as using this function directly
 		can be compute intensive when processing hundreds of objects
 	*/
-	int Check_Rect_Rect(const Rectangular* rect1, const Rectangular* rect2)
+	int Check_Rect_Rect(Rectangular* rect1, const Rectangular* rect2)
 	{
 		Vec2 point;
 		int flag = 0;
@@ -476,6 +476,7 @@ namespace Collision {
 			}
 		}
 
+		rect1->collision_flag = flag;
 		return flag;
 	}
 }
