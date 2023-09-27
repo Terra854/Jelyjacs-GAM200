@@ -17,8 +17,13 @@
 ----------------------------------------------------------------------------- */
 //debug
 bool graphics_debug{ false };
-glm::vec3 circle_color{ 0.0f, 0.0f, 1.0f };
+glm::vec3 box_color{ 0.0f, 0.0f, 1.0f };
 glm::vec3 line_color{ 0.0f, 1.0f, 0.0f };
+
+//rotation and scaling
+bool graphics_rotate{ false };
+bool graphics_scale{ false };
+
 //test
 GLuint tex_test;
 glm::mat3 mat_test;
@@ -79,7 +84,7 @@ void GLApp::init_models() {
 			if (!ifs_msh)
 			{
 				std::cout << "ERROR: Unable to open mesh file: "
-					<< "model_test" << "\n";
+					<< model_name << "\n";
 				exit(EXIT_FAILURE);
 			}
 			ifs_msh.seekg(0, std::ios::beg);
@@ -149,6 +154,14 @@ void GLApp::init_models() {
 						gl_tri_primitives.push_back(glushort_data);
 					}
 					Model.primitive_type = GL_TRIANGLE_FAN;
+				}
+				if (obj_prefix == 'p')
+				{
+					while (line_sstm_mdl >> glushort_data)
+					{
+						gl_tri_primitives.push_back(glushort_data);
+					}
+					Model.primitive_type = GL_POINTS;
 				}
 			}
 			// Set VAO
@@ -226,7 +239,7 @@ glm::mat3 Getmatrix(glm::vec2 position, glm::vec2 scale, float rotation) {
 			position.x, position.y, 1.0f
 	};
 
-	glm::mat3 mat = Translate * Rotate * Scale;
+	glm::mat3 mat = Translate  * Scale * Rotate;
 	return mat;
 }
 
@@ -237,7 +250,7 @@ void GLApp::Update(float time)
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//update window
+	//update window bar
 	std::stringstream sstr;
 	sstr << window->title << " FPS: " << window->fps;
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
@@ -245,52 +258,46 @@ void GLApp::Update(float time)
 
 	//draw objects
 	int i = 0;
-	while (i < 7) {
+	while (i < 6) {
 		Texture* tex_pt = static_cast<Texture*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Texture));
 		tex_test = tex_pt->texturepath;
 
 		Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));
-		pos_x= tran_pt->Position.x * 2.0f / window->width;
-		pos_y = tran_pt->Position.y * 2.0f / window->height;
 		orientation = tran_pt->Rotation;
-		scaling_x = tran_pt->Scale_x / window->width;
-		scaling_y = tran_pt->Scale_y / window->height;
-		
-		if (input::IsPressed(KEY::z))
+		//if debug mode get pos and scale from body component
+		if (graphics_debug && i >= 2) {
+			Rectangular* rec_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Body));
+			Vec2 botleft = rec_pt->aabb.min;
+			Vec2 topright = rec_pt->aabb.max;
+			pos_x = (botleft.x + topright.x) / window->width;
+			pos_y = (botleft.y + topright.y)  / window->height;
+			scaling_x = (topright.x - botleft.x)  / window->width;
+			scaling_y = (topright.y - botleft.y)  / window->height;
+		}
+		else {
+			//else get pos and scale from transform component
+			pos_x = tran_pt->Position.x * 2.0f / window->width;
+			pos_y = tran_pt->Position.y * 2.0f / window->height;
+			scaling_x = tran_pt->Scale_x / window->width;
+			scaling_y = tran_pt->Scale_y / window->height;
+		}
+		if (input::IsPressed(KEY::p))
 		{
 			graphics_debug = !graphics_debug;
 			std::cout<<"graphics_debug" << std::endl;
 		}
-		//calculate transformation matrix
-		/*glm::mat3 Scale
-		{
-			scaling_x, 0.0f, 0.0f,
-				0.0f, scaling_y, 0.0f,
-				0.0f, 0.0f, 1.0f
-		};
-		glm::mat3 Rotate
-		{
-			cos(orientation), sin(orientation), 0.0f,
-				-sin(orientation), cos(orientation), 0.0f,
-				0.0f, 0.0f, 1.0f
-		};
-		glm::mat3 Translate
-		{
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			pos_x, pos_y, 1.0f
-		};*/
+		
 		
         mat_test =   Getmatrix({pos_x,pos_y}, {scaling_x, scaling_y}, orientation);
 		
-		if (graphics_debug && i>=1) {
+		if (graphics_debug && i>=2) {
 			shdrpgms["shape"].Use();
 			// bind VAO of this object's model
 			glBindVertexArray(models["square"].vaoid);
 			// copy object's model-to-NDC matrix to vertex shader's
 			// uniform variable uModelToNDC
 			shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test);
-			shdrpgms["shape"].SetUniform("uColor", circle_color);
+			shdrpgms["shape"].SetUniform("uColor", box_color);
 			// call glDrawElements with appropriate arguments
 			glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
 
@@ -303,29 +310,12 @@ void GLApp::Update(float time)
 				float Vx = phy_pt->Velocity.x;
 				float Vy = phy_pt->Velocity.y;
 				orientation = atan2(Vy, Vx);
-				glm::vec2 pos_circle = { pos_x + Vx, pos_y + Vy };
+				//glm::vec2 pos_circle = { pos_x + Vx, pos_y + Vy };
 
-				float scale_line = sqrt(Vx * Vx + Vy * Vy) / 1000;
-				glm::mat3 Scale
-				{
-					scale_line, 0.0f, 0.0f,
-						0.0f, scale_line, 0.0f,
-						0.0f, 0.0f, 1.0f
-				};
-				glm::mat3 Rotate
-				{
-					cos(orientation), sin(orientation), 0.0f,
-						-sin(orientation), cos(orientation), 0.0f,
-						0.0f, 0.0f, 1.0f
-				};
-				glm::mat3 Translate
-				{
-					1.0f, 0.0f, 0.0f,
-						0.0f, 1.0f, 0.0f,
-						pos_x, pos_y, 1.0f
-				};
-
-				mat_test = Translate * Rotate * Scale;
+				float scale_line_x = sqrt(Vx * Vx + Vy * Vy) / 1920;
+				float scale_line_y = sqrt(Vx * Vx + Vy * Vy) / 1080;
+				
+				mat_test = Getmatrix({ pos_x,pos_y}, {scale_line_x, scale_line_y}, orientation);
 				//draw line
 				shdrpgms["shape"].Use();
 				// bind VAO of this object's model
@@ -340,7 +330,6 @@ void GLApp::Update(float time)
 				// unbind VAO and unload shader program
 				glBindVertexArray(0);
 				shdrpgms["shape"].UnUse();
-
 			}
 
 		}
@@ -433,32 +422,3 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 	GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
 }
 
-
-
-//void GLApp::GLObject::draw() const
-//{
-//	glBindTextureUnit(6, tex_ref->second);
-//	glBindTexture(GL_TEXTURE_2D, tex_ref->second);
-//	glTextureSubImage2D(tex_ref->second, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-//	// load shader program in use by this object
-//	shd_ref->second.Use();
-//	// bind VAO of this object's model
-//	glBindVertexArray(mdl_ref->second.vaoid);
-//	// copy object's model-to-NDC matrix to vertex shader's
-//	// uniform variable uModelToNDC
-//	shd_ref->second.SetUniform("uModel_to_NDC", mdl_to_ndc_xform);
-//
-//	// tell fragment shader sampler uTex2d will use texture image unit 6
-//	GLuint tex_loc = glGetUniformLocation(mdl_ref->second.shdr_pgm.GetHandle(), "uTex2d");
-//	glUniform1i(tex_loc, 6);
-//
-//	// call glDrawElements with appropriate arguments
-//	glDrawElements(mdl_ref->second.primitive_type, mdl_ref->second.draw_cnt, GL_UNSIGNED_SHORT, 0);
-//
-//	// unbind VAO and unload shader program
-//	glBindVertexArray(0);
-//	shd_ref->second.UnUse();
-//
-//
-//	
-//}

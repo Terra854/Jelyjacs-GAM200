@@ -20,6 +20,7 @@
 #include <components/Texture.h>
 #include <components/Transform.h>
 #include <components/Physics.h>
+#include <components/Body.h>
 class GLApp : public ISystems
 {
 public:

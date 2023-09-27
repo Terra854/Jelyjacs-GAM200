@@ -23,7 +23,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "../Asset/Picture/test4.png"
+        "texturepath": "test4.png"
       }
     },
     {

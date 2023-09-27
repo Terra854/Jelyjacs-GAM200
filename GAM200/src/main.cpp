@@ -9,6 +9,7 @@
 #include <debug.h>
 #include <GameLogic.h>
 #include <Audio.h>
+#include <../src/Assets Manager/asset_manager.h>
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet 
 
@@ -24,11 +25,13 @@ int main() {
 	GLWindow* windows = new GLWindow();
 	Factory* factory = new Factory();
 	PhysicsSystem* physics = new PhysicsSystem();
+	AssetManager* assetmanager = new AssetManager();
 	Audio* audio = new Audio();
 	GLApp* graphics = new GLApp();     
 	
 
-	engine->AddSystem(windows);                  
+	engine->AddSystem(windows);         
+	engine->AddSystem(assetmanager);
 	engine->AddSystem(logic);
 	engine->AddSystem(factory);
 	engine->AddSystem(physics);

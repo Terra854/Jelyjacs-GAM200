@@ -49,7 +49,7 @@ void GameLogic::Initialize()
 	testObj = objectFactory->createObject("../background.json");
 	scale_and_rotate = objectFactory->createObject("../scale-and-rotate.json");
 	//std::cout << "test Object 2" << std::endl;
-	testObj2 = objectFactory->createObject("../drop-forever.json");
+	//testObj2 = objectFactory->createObject("../drop-forever.json");
 	floor1 = objectFactory->createObject("../mapbox.json");
 	floor2 = objectFactory->createObject("../mapbox.json");
 	floor3 = objectFactory->createObject("../mapbox.json");

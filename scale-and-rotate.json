@@ -15,7 +15,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "../Asset/Picture/scale-and-rotate.png"
+        "texturepath": "scale-and-rotate.png"
       }
     }
   ]
