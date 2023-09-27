@@ -125,7 +125,7 @@ void PhysicsSystem::Update(float time) {
 
 		// Move right
 		if (input::IsPressedRepeatedly(KEY::d)) {
-			p->Velocity.x += 15000.0f * time;
+			p->Velocity.x += 17500.0f * time;
 			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 			if (p->Velocity.y == 0.f)
 				audio->startWalking();
@@ -133,7 +133,7 @@ void PhysicsSystem::Update(float time) {
 
 		// Move left
 		if (input::IsPressedRepeatedly(KEY::a)) {
-			p->Velocity.x -= 15000.0f * time;
+			p->Velocity.x -= 17500.0f * time;
 			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 			if (p->Velocity.y == 0.f)
 				audio->startWalking();
