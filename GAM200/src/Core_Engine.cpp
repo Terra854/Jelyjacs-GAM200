@@ -3,8 +3,9 @@
 #include <chrono>
 #include <iostream>
 #include <iomanip>
-#include "input.h"
+#include <input.h>
 #include <map>
+#include <thread>
 
 CoreEngine* CORE = NULL;
 
@@ -48,7 +49,6 @@ void CoreEngine::Initialize() {
 
 
 void CoreEngine::GameLoop() {
-
 	bool log_system_time = false;
 	std::cout << "########################################################" << std::endl;
 	std::cout << "Press P to print out frametime performance information" << std::endl;
@@ -68,8 +68,18 @@ void CoreEngine::GameLoop() {
 		auto duration = now.time_since_epoch();
 		long long current_time = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
+		/*
 		//Convert it to the time passed since the last frame (in seconds)
+		const int FPS = 60;
+		const int framedelay = 1000 / 60;
+		*/
 		float dt = (last_update) ? (float)(current_time - last_update) / 1000.0f : 0.f;
+		/*
+		if (framedelay > dt) {
+			float time_left = framedelay - dt;
+			std::this_thread::sleep_for(time_left);
+		}
+		*/
 		//float dt = 0.1f;
 		//Update the when the last update started
 		last_update = current_time;
@@ -124,6 +134,5 @@ void CoreEngine::Broadcast(Message* msg) {
 	for (const std::pair<std::string, ISystems*>& sys : Systems) {
 		sys.second->MessageRelay(msg);
 	}
-	
 }
 

@@ -55,6 +55,10 @@ bool Check_Collision(Body* b1, Body* b2, float dt) {
 	}
 }
 */
+
+// Check if both bodies are rectangular
+// If they are, use Check AABB with AABB function and return collision flag.
+// If return false means no collision
 int Check_Collision(Body* b1, Body* b2, float dt) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
@@ -67,6 +71,9 @@ int Check_Collision(Body* b1, Body* b2, float dt) {
 	return false;
 }
 
+// If collide on the left or right, unable to move
+// If collide from the top ...
+// If collide from the bottom ...
 void Response_Collision(int collision_flag, Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
@@ -113,6 +120,8 @@ void PhysicsSystem::Update(float time) {
 	top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= time : 0.0f;
 
 	// Update velocity for player
+	// Check all the objects, if it have the player controllable component, change its physics
+	/*
 	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 
 		if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) == nullptr)
@@ -149,9 +158,10 @@ void PhysicsSystem::Update(float time) {
 			p->Velocity.y = 2500.0f;
 			audio->playJump();
 		}
-
+		
 		break; // There should only be one object that is player controlled for now
 	}
+	*/
 
 	// Update velocity for each object
 	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
@@ -247,5 +257,11 @@ void PhysicsSystem::Update(float time) {
 				
 			}
 		}
+	}
+}
+
+void PhysicsSystem::MessageRelay(Message* msg) {
+	if (msg->messageId == MessageID::Collide) {
+
 	}
 }

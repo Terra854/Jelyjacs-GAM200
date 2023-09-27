@@ -1,6 +1,6 @@
 #pragma once
 #include <Debug.h>
-
+#include <message.h>
 #include <GLFW/glfw3.h>
 
 enum class KEY
@@ -19,8 +19,29 @@ enum class KEY
 	down,
 	left,
 	right,
+	esc,
 	total
 };
+/*
+class EscapeExit : public Message {
+	EscapeExit() : Message(MessageID::Quit) {}
+};
+*/
+
+enum Movement_direction {
+	none = 0,
+	up,
+	down,
+	left,
+	right
+};
+class MovementKey : public Message {
+public:
+	MovementKey() : Message(MessageID::Movement), dir(none) {}
+	MovementKey(Movement_direction key) : Message(MessageID::Movement), dir(key) {}
+	Movement_direction dir;
+};
+
 
 namespace input
 {
