@@ -15,6 +15,10 @@ enum class KEY
 	x,
 	mouseL,
 	mouseR,
+	up,
+	down,
+	left,
+	right,
 	total
 };
 
