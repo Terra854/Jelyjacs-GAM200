@@ -1,0 +1,22 @@
+{
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale_x": 1920.0,
+	      "Scale_y": 1080.0,
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "../Asset/Picture/BGWithoutPlatforms.png"
+      }
+    }
+  ]
+}

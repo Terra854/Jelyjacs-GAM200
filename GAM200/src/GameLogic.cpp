@@ -14,6 +14,8 @@
 #include <message.h>
 #include <Movement.h>
 
+Object* scale_and_rotate;
+
 void GameLogic::MessageRelay(Message* msg) {
 	if(msg->messageId == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
@@ -43,8 +45,9 @@ void GameLogic::Initialize()
 	//Transform * trans;
 	//Texture* texture;
 	
-	std::cout << "test Object 1" << std::endl;
-	testObj = objectFactory->createObject("../test.json");
+	std::cout << "Background" << std::endl;
+	testObj = objectFactory->createObject("../background.json");
+	scale_and_rotate = objectFactory->createObject("../scale-and-rotate.json");
 	//std::cout << "test Object 2" << std::endl;
 	testObj2 = objectFactory->createObject("../drop-forever.json");
 	floor1 = objectFactory->createObject("../mapbox.json");
@@ -107,6 +110,23 @@ void GameLogic::Update(float time) {
 	if (input::IsPressed(KEY::d)) {
 		MovementKey msg(right);
 		engine->Broadcast(&msg);
+	}
+
+	Transform* t = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
+
+	if (input::IsPressedRepeatedly(KEY::up)) {
+		t->Scale_x += 1.0f;
+		t->Scale_y += 1.0f;
+	}
+	if (input::IsPressedRepeatedly(KEY::down)) {
+		t->Scale_x -= 1.0f;
+		t->Scale_y -= 1.0f;
+	}
+	if (input::IsPressedRepeatedly(KEY::left)) {
+		t->Rotation -= 0.01f;
+	}
+	if (input::IsPressedRepeatedly(KEY::right)) {
+		t->Rotation += 0.01f;
 	}
 	
 }

@@ -74,39 +74,62 @@ void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
 	case GLFW_KEY_W:
 	{
 		buttons[at(KEY::w)].SetKeyState(action);
+		break;
 	}
-	break;
 	case GLFW_KEY_A:
 	{
 		buttons[at(KEY::a)].SetKeyState(action);
+		break;
 	}
-	break;
 	case GLFW_KEY_S:
 	{
 		buttons[at(KEY::s)].SetKeyState(action);
+		break;
 	}
-	break;
 	case GLFW_KEY_D:
 	{
 		buttons[at(KEY::d)].SetKeyState(action);
+		break;
 	}
-	break;
 	case GLFW_KEY_P:
 	{
 		buttons[at(KEY::p)].SetKeyState(action);
+		break;
 	}
-	break;
 	case GLFW_KEY_F:
 	{
 		buttons[at(KEY::f)].SetKeyState(action);
+		break;
 	}
 	case GLFW_KEY_Z:
 	{
 		buttons[at(KEY::z)].SetKeyState(action);
+		break;
 	}
 	case GLFW_KEY_X:
 	{
 		buttons[at(KEY::x)].SetKeyState(action);
+		break;
+	}
+	case GLFW_KEY_UP:
+	{
+		buttons[at(KEY::up)].SetKeyState(action);
+		break;
+	}
+	case GLFW_KEY_DOWN:
+	{
+		buttons[at(KEY::down)].SetKeyState(action);
+		break;
+	}
+	case GLFW_KEY_LEFT:
+	{
+		buttons[at(KEY::left)].SetKeyState(action);
+		break;
+	}
+	case GLFW_KEY_RIGHT:
+	{
+		buttons[at(KEY::right)].SetKeyState(action);
+		break;
 	}
 	}
 	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
