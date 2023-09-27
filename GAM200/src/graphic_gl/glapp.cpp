@@ -12,6 +12,7 @@
 #include <vector>
 #include <random>
 #include <chrono>
+#include <components/PlayerControllable.h>
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
@@ -258,8 +259,9 @@ void GLApp::Update(float time)
 
 
 	//draw objects
-	int i = 0;
-	while (i < 6) {
+	//int i = 0;
+	//while (i < 6) {
+	for (long i = 0; i < (long) objectFactory->NumberOfObjects(); i++) {
 		GLuint tex_test;
 		glm::mat3 mat_test;
 		float pos_x;
@@ -286,6 +288,10 @@ void GLApp::Update(float time)
 		//if debug mode get pos and scale from body component
 		if (graphics_debug && i >= 2) {
 			Rectangular* rec_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Body));
+
+			if (rec_pt == nullptr)
+				break; // Don't continue if there is no body component
+
 			Vec2 botleft = rec_pt->aabb.min;
 			Vec2 topright = rec_pt->aabb.max;
 			pos_x = (botleft.x + topright.x) / window->width;
@@ -304,7 +310,7 @@ void GLApp::Update(float time)
 		//get matrix
         mat_test =   Getmatrix({pos_x,pos_y}, {scaling_x, scaling_y}, orientation);
 		
-		if (graphics_debug && i>=2) {
+		if (graphics_debug && i >= 2) {
 			shdrpgms["shape"].Use();
 			// bind VAO of this object's model
 			glBindVertexArray(models["square"].vaoid);
@@ -320,7 +326,7 @@ void GLApp::Update(float time)
 			shdrpgms["shape"].UnUse();
 
 			// draw movement line for player
-			if (i == 5) {
+			if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 				//get velocity
 				Physics* phy_pt = static_cast<Physics*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Physics));
 				float Vx = phy_pt->Velocity.x;
@@ -376,7 +382,6 @@ void GLApp::Update(float time)
 			glBindVertexArray(0);
 			shdrpgms["image"].UnUse();
 		}
-		i ++;
     }
 
 	
