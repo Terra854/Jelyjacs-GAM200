@@ -120,10 +120,10 @@ void GameLogic::Update(float time) {
 		t->Scale_y = t->Scale_y >= 1.0f ? t->Scale_y - 1.0f : 0.f;
 	}
 	if (input::IsPressedRepeatedly(KEY::left)) {
-		t->Rotation -= 0.01f;
+		t->Rotation += 0.01f;
 	}
 	if (input::IsPressedRepeatedly(KEY::right)) {
-		t->Rotation += 0.01f;
+		t->Rotation -= 0.01f;
 	}
 	
 }
