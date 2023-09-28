@@ -16,8 +16,8 @@ namespace MessageID {
 class Message
 {
 public:
-	Message() { messageId = MessageID::MessageIDType::None; }
-	Message(MessageID::MessageIDType id) : messageId(id) {};
-	MessageID::MessageIDType messageId;
+	Message() { message_id = MessageID::MessageIDType::None; }
+	Message(MessageID::MessageIDType id) : message_id(id) {};
+	MessageID::MessageIDType message_id;
 	virtual ~Message() {};
 };

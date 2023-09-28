@@ -1,3 +1,12 @@
+/* !
+@file    glapp.cpp
+@author  g.chen@digipen.edu
+@date    28/09/2023
+
+Graphic system for the engine
+includes all the functions to draw objects
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <cmath>
 #include <glm/gtc/type_ptr.hpp>
@@ -16,8 +25,8 @@
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
-//debug
-bool graphics_debug{ false };
+//debug 
+bool graphics_debug{ false };//press p to activate debug mode
 glm::vec3 box_color{ 0.0f, 0.0f, 1.0f };
 glm::vec3 line_color{ 0.0f, 1.0f, 0.0f };
 

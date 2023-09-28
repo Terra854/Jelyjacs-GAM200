@@ -1,10 +1,16 @@
-#include <Debug.h>
 /*!
+@file    GLWindow.cpp
+@author  g.chen@digipen.edu
+@date    28/09/2023
+
+Window system for the engine
+includes all the functions to create and update the window
 
 *//*__________________________________________________________________________*/
 
 /*                                                                   includes
 ----------------------------------------------------------------------------- */
+#include <Debug.h>
 #include <GLWindow.h>
 #include <iostream>
 #include "input.h"
