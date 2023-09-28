@@ -62,13 +62,13 @@ void GameLogic::Initialize()
 	//Texture* texture;
 
 	std::cout << "Background" << std::endl;
-	testObj = objectFactory->createObject("../background.json");
-	scale_and_rotate = objectFactory->createObject("../scale-and-rotate.json");
+	testObj = objectFactory->createObject("../Asset/Objects/background.json");
+	scale_and_rotate = objectFactory->createObject("../Asset/Objects/scale-and-rotate.json");
 	//std::cout << "test Object 2" << std::endl;
 	//testObj2 = objectFactory->createObject("../drop-forever.json");
-	floor1 = objectFactory->createObject("../mapbox.json");
-	floor2 = objectFactory->createObject("../mapbox.json");
-	floor3 = objectFactory->createObject("../mapbox.json");
+	floor1 = objectFactory->createObject("../Asset/Objects/mapbox.json");
+	floor2 = objectFactory->createObject("../Asset/Objects/mapbox.json");
+	floor3 = objectFactory->createObject("../Asset/Objects/mapbox.json");
 	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Transform));
 
 	// offset objects
@@ -87,19 +87,19 @@ void GameLogic::Initialize()
 	rect_pt->Initialize();
 
 	std::cout << "test Player" << std::endl;
-	playerObj = objectFactory->createObject("../player.json");
+	playerObj = objectFactory->createObject("../Asset/Objects/player.json");
 
 	// Floor
-	for (int i = 0; i < 40; i++) {
-		Object* floor = objectFactory->createObject("../mapbox.json");
+	for (int i = 0; i < 44; i++) {
+		Object* floor = objectFactory->createObject("../Asset/Objects/mapbox.json");
 		Transform* floor_t = static_cast<Transform*>(floor->GetComponent(ComponentType::Transform));
-		floor_t->Position = { -1000.0f + (static_cast<Transform*>(floor->GetComponent(ComponentType::Transform))->Scale_x * (float)i), -500.0f };
+		floor_t->Position = { -1100.0f + (static_cast<Transform*>(floor->GetComponent(ComponentType::Transform))->Scale_x * (float)i), -500.0f };
 		Rectangular* floor_b = static_cast<Rectangular*>(floor->GetComponent(ComponentType::Body)); // @Sen Chuan
 		floor_b->Initialize();
 	}
 
 	// Dynamic collision
-	dynamic_collision = objectFactory->createObject("../mapbox.json");
+	dynamic_collision = objectFactory->createObject("../Asset/Objects/mapbox.json");
 	Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
 	dynamic_collision_t->Position = { -1000.0f , -446.0f };
 	Rectangular* dynamic_collision_b = static_cast<Rectangular*>(dynamic_collision->GetComponent(ComponentType::Body));
@@ -162,7 +162,7 @@ void GameLogic::Update(float time) {
 		engine->Broadcast(&msg);
 		//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 		if (p->Velocity.y == 0.0f) {
-			p->Velocity.y = 2500.0f;
+			p->Velocity.y = 1500.0f;
 			audio->playJump();
 		}
 	}
@@ -179,6 +179,11 @@ void GameLogic::Update(float time) {
 		moving = true;
 	}
 
+	// Let the player loop around the window
+	Transform* t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
+	t->Position.x = t->Position.x > 1000.0f ? -1000.0f : t->Position.x;
+	t->Position.x = t->Position.x < -1000.0f ? 1000.0f : t->Position.x;
+
 	// Audio for Character Movement
 	if ((p->Velocity.y == 0.f) && moving) {
 		audio->startWalking();
@@ -188,39 +193,31 @@ void GameLogic::Update(float time) {
 		moving = false;
 	}
 
-
 	// Printing Player Position by pressing Z
 	if (input::IsPressed(KEY::z)) {
 		Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 		std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
 	}
 
-
-
 	// Rotation of an object
-	Transform* t = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
+	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
 
 	if (input::IsPressedRepeatedly(KEY::up)) {
-		t->Scale_x += 1.0f;
-		t->Scale_y += 1.0f;
+		t2->Scale_x += 1.0f;
+		t2->Scale_y += 1.0f;
 	}
 	if (input::IsPressedRepeatedly(KEY::down)) {
-		t->Scale_x = t->Scale_x >= 1.0f ? t->Scale_x - 1.0f : 0.f;
-		t->Scale_y = t->Scale_y >= 1.0f ? t->Scale_y - 1.0f : 0.f;
+		t2->Scale_x = t2->Scale_x >= 1.0f ? t2->Scale_x - 1.0f : 0.f;
+		t2->Scale_y = t2->Scale_y >= 1.0f ? t2->Scale_y - 1.0f : 0.f;
 	}
 	if (input::IsPressedRepeatedly(KEY::left)) {
-		t->Rotation += 0.01f;
+		t2->Rotation += 0.01f;
 	}
 	if (input::IsPressedRepeatedly(KEY::right)) {
-		t->Rotation -= 0.01f;
+		t2->Rotation -= 0.01f;
 	}
 
-
-
-
-
 	// Dynamic collision
-
 	Physics* dynamic_collision_p = static_cast<Physics*>(dynamic_collision->GetComponent(ComponentType::Physics));
 	dynamic_collision_p->Velocity.x = 200.0f;
 	Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));

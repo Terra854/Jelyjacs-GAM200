@@ -1,9 +1,9 @@
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Audio.cpp
+@author	Tan Yee Ann
 @date	28/9/2023
 
-
+This file contains the definitions of the functions that are part of the Audio system
 *//*__________________________________________________________________________*/
 #include "Audio.h"
 
@@ -31,11 +31,13 @@ void Audio::Initialize(){
         exit(-1);
     }
 
+    // Load sounds
     system->createSound("../Asset/Sounds/Jump.wav", FMOD_DEFAULT, 0, &jump);
     system->createSound("../Asset/Sounds/Footsteps.wav", FMOD_LOOP_NORMAL, 0, &walking);
 
     system->playSound(walking, 0, false, &channel);
 
+    // Let other systems have access to this system
     audio = this;
 }
 

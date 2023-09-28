@@ -1,6 +1,6 @@
 /* !
 @file    Factory.cpp
-@author  w.jiahowjonathan@digipen.edu
+@author  Jonathan Woo Jia How
 @date   28/9/2023
 
 This file contains the definition of class Factory that helps to create gmae objects
@@ -197,81 +197,13 @@ void Factory::destroyAllObjects()
 	objectMap.clear();
 }
 
+//Creates a game object with no components
 Object* Factory::createEmptyObject()
 {
 	Object* obj = new Object();
 	assignIdToObject(obj);
 	return obj;
 }
-
-//  This creates an object from a text file. This is old code
-//  Will be purged at some point
-
-/*
-Object* Factory::buildFromFile(const std::string& filename)
-{
-	//Open text file in read mode
-	TextSerialization textStream;
-	textStream.openFileRead(filename);
-
-	// Make sure stream is valid
-	if (textStream.isGood())
-	{
-		// Create new game object to hold components
-		Object* gameObj = new Object();
-		std::string componentName;
-
-		while (textStream.isGood())
-		{
-			// Read componentName
-			textStream.readString(componentName);
-
-			// Find the component Creator
-			componentCreatorMap::iterator it = componentMap.find(componentName);
-			if (it != componentMap.end())
-			{
-				// Create Component by using the interface
-				ComponentCreator* creator = it->second;
-				Component* component = creator->Create();
-
-				/* commented out to test the streamGet way of serialization
-				*
-				GameComponent* testComponent = component;
-				// Add component to composition
-				gameObj->AddComponent(creator->typeId, component);
-				if (componentName == "Transform")
-				{
-					Transform* trans = static_cast<Transform*>(testComponent);
-
-					Vec2 pos;
-					streamGet(textStream, pos.x);
-					streamGet(textStream, pos.y);
-
-					trans->Position = pos;
-
-					float scale;
-					streamGet(textStream, scale);
-					trans->Scale = scale;
-
-					float rotation;
-					streamGet(textStream, rotation);
-					trans->Rotation = rotation;
-
-				} */
-/*
-				streamGet(textStream, *component);
-				gameObj->AddComponent(creator->typeId, component);
-
-			}
-		}
-		// Id and initialize game object
-		assignIdToObject(gameObj);
-
-		return gameObj;
-	}
-	std::cout << "textstream not good" << std::endl;
-	return NULL;
-}*/
 
 //This gives a game object an ID tag which can be used to find that same game object
 void Factory::assignIdToObject(Object* gameObj)
@@ -281,6 +213,7 @@ void Factory::assignIdToObject(Object* gameObj)
 	++nextObjectId;
 }
 
+//Returns a game object from the map with a specific id
 Object* Factory::getObjectWithID(long id)
 {
 	objectIDMap::iterator it = objectMap.find(id);

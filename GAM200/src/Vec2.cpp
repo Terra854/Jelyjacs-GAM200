@@ -1,9 +1,9 @@
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Vec2.cpp
+@author	Tan Yee Ann
 @date	28/9/2023
 
-
+This file contains the definitions of the member functions in the Vec2 class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Vec2.h"
@@ -53,6 +53,7 @@ Vec2 Vec2::operator-() const
 	return Vec2(-x, -y);
 }
 
+// Mostly for debugging via std::cout
 std::ostream& operator<<(std::ostream& os, const Vec2& v)
 {
 	os << "(" << v.x << ", " << v.y << ")";
@@ -84,6 +85,7 @@ Vec2 operator/(const Vec2& lhs, float rhs)
 	return Vec2(lhs.x / rhs, lhs.y / rhs);
 }
 
+
 bool operator==(const Vec2& lhs, const Vec2& rhs)
 {
 	return (lhs.x == rhs.x && lhs.y == rhs.y);
@@ -94,6 +96,7 @@ bool operator!=(const Vec2& lhs, const Vec2& rhs)
 	return (lhs.x != rhs.x || lhs.y != rhs.y);
 }
 
+// Converts the vector for use in OpenGL calls
 glm::vec2 Vec2::ToGlmVec2() {
 	return glm::vec2(x, y);
 }

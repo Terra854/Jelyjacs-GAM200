@@ -1,9 +1,10 @@
 #pragma once
 /* !
-@file
-@author
+@file	asset_manager.h
+@author	Tay Sen Chuan (t.senchuan@digipen.edu)
 @date	28/9/2023
 
+This file contains the declaration of class AssetManager.
 
 *//*__________________________________________________________________________*/
 #include <Debug.h>

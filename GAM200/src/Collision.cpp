@@ -1,9 +1,9 @@
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Collision.cpp
+@author	Tan Yee Ann
 @date	28/9/2023
 
-
+This file contains functions to calculate collisions between the different game objects
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Collision.h"
@@ -407,6 +407,9 @@ namespace Collision {
 		
 	}
 	
+	/*
+		This function checks to see if a point is colliding with a rectangle
+	*/
 	bool PointRectCollision(const Vec2& point, const Rectangular* rect)
 	{
 		// Using the AABB properties to determine the boundaries

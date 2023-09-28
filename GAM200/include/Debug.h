@@ -1,13 +1,16 @@
 #pragma once
 /* !
-@file
+@file	Debug.h
 @author	t.yeeann@digipen.edu
 @date	28/9/2023
 
+This file contains preprocessor macros that when enabled, tell you where exactly
+the memory leaks come from on exiting the program. This is only available for 
+debug builds only.
 
+Note that this will only be able to detect leaks for objects that is directly
+created inside this project and even so, may not be able to map all heap allocations
 *//*__________________________________________________________________________*/
-// This will tell you where exactly the memory leaks come from on exiting the program
-// Limited to debug builds only and if the object is directly created inside this project
 
 #if defined(DEBUG) | defined(_DEBUG)
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )

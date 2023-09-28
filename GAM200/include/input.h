@@ -1,10 +1,11 @@
 #pragma once
 /* !
-@file
-@author
+@file	input.h
+@author	Yeo Jia Ming, Luke Goh
 @date	28/9/2023
 
-
+This file contains declarations for the input manager functions.
+To detect mouse/keyboard key presses and mouse position.
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <message.h>

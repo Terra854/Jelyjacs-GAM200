@@ -1,6 +1,6 @@
 /*!
 @file    shape.frag
-@author  g.chen@digipen.edu
+@author  Guo CHen (g.chen@digipen.edu)
 @date    14/09/2023
 
 This file contains the fragment shader for the shape program.

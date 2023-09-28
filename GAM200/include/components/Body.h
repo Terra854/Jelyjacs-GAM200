@@ -1,10 +1,11 @@
 #pragma once
 /* !
-@file
-@author	
+@file	Body.h
+@author	Yeo Jia Ming
 @date	28/9/2023
 
-
+This file contains declarations for the body component class
+Body, as a shape contains the hitbox collision outline of the object.
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 

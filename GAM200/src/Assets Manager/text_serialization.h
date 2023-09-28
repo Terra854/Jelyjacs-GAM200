@@ -1,9 +1,10 @@
 #pragma once
 /* !
-@file
-@author
+@file	text_serialization.h
+@author	Tay Sen Chuan (t.senchuan@digipen.edu)
 @date	28/9/2023
 
+This file contains the declaration of the class TextSerialization.
 
 *//*__________________________________________________________________________*/
 #include <Debug.h>

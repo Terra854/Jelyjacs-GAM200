@@ -1,9 +1,9 @@
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Mat3.cpp
+@author	Tan Yee Ann
 @date	28/9/2023
 
-
+This file contains the definitions of the member functions in the Mat3 class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Mat3.h"
@@ -58,9 +58,12 @@ Mat3& Mat3::operator*=(const Mat3& rhs)
 	return *this;
 }
 
+// Converts the matrix for use in OpenGL calls
 glm::mat3 Mat3::ToGlmMat3()
 {
-	return glm::mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+	// glm's mat3 and this mat3 orders the elements differently
+	// glm's mat3 is column-major while this mat3 is row-major
+	return glm::mat3(m00, m10, m20, m01, m11, m21, m02, m12, m22);
 }
 
 Mat3 operator*(const Mat3& lhs, const Mat3& rhs)

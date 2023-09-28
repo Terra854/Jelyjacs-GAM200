@@ -1,9 +1,9 @@
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	PhysicsSystem.cpp
+@author	Tan Yee Ann
 @date	28/9/2023
 
-
+This file contains the definitions of the functions that are part of the Physics system
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <Factory.h>
@@ -95,6 +95,7 @@ void RecalculateBody(Transform* t, Body* b) {
 	}
 }
 
+// Objects responding to collision
 void Response_Collision(Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
@@ -195,19 +196,17 @@ void PhysicsSystem::Update(float time) {
 
 		// Apply gravity
 		p->Y_Acceleration = gravity;
-		p->Velocity.y += (p->Y_Acceleration - 0.75 * p->Velocity.y) * time; // Account for air resistance
+		p->Velocity.y += (float) (p->Y_Acceleration - 0.75 * p->Velocity.y) * time; // Account for air resistance
 	}
 
+	// Loop through each object to see if it's colliding with something
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
 		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
 		Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
 
 		if (p == nullptr || b == nullptr)
-			continue; // No physics or body in that object, move along
-
-		if (b->GetShape() == Shape::Rectangle)
-			((Rectangular*)b)->collision_flag = 0;
+			continue; // No physics or body in this object, move to next object
 
 		// Save current position to previous position
 		t->PrevPosition = t->Position;
@@ -215,11 +214,14 @@ void PhysicsSystem::Update(float time) {
 		if (p->Velocity.x == 0.f && p->Velocity.y == 0.f)
 			continue; // No movement, so no need to calculate collision.
 
+		// Reset collision flags
+		if (b->GetShape() == Shape::Rectangle)
+			((Rectangular*)b)->collision_flag = 0;
+
 		// Calculate new position
 		t->Position += p->Velocity * time;
 
 		RecalculateBody(t, b);
-
 
 		for (Factory::objectIDMap::iterator anotherobj = objectFactory->objectMap.begin(); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
 

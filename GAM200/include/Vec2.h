@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Vec2.h
+@author	Tan Yee Ann
 @date	28/9/2023
 
-
+This file contains the declaration for the Vec2 class used to represent a 2D vector
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 

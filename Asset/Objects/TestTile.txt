@@ -1,6 +1,0 @@
-Transform
-50 50
-30
-0
-Texture
-test.png

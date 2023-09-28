@@ -1,9 +1,11 @@
 #pragma once
 /* !
-@file
-@author
+@file	serialization.h
+@author	Tay Sen Chuan (t.senchuan@digipen.edu)
 @date	28/9/2023
 
+This file contains the declartion of the serialization class. It also includes some
+template functions for reading and writing with text files.
 
 *//*__________________________________________________________________________*/
 #include <Debug.h>

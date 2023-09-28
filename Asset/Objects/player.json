@@ -23,7 +23,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "test4.png"
+        "texturepath": "player.png"
       }
     },
     {

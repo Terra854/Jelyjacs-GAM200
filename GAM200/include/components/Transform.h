@@ -1,10 +1,11 @@
 #pragma once
 /* !
-@file
-@author
+@file	Transform.h
+@author	Yeo Jia Ming
 @date	28/9/2023
 
-
+This file contains the declarations and implementations for the transform component class.
+Transform contains the information needed for graphics to render the object
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 
@@ -27,14 +28,6 @@ public:
 	virtual void Initialize() override
 	{
 
-	}
-	virtual void Serialize(Serialization& stream) override
-	{
-		streamGet( stream , Position.x);
-		streamGet(stream, Position.y);
-		streamGet(stream, Scale_x);
-		streamGet(stream, Scale_y);
-		streamGet(stream, Rotation);
 	}
 
 	virtual ComponentType TypeId() const override { return ComponentType::Transform; }

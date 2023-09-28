@@ -1,6 +1,6 @@
 /*!
 @file    image.frag
-@author  g.chen@digipen.edu
+@author  Guo CHen (g.chen@digipen.edu)
 @date    14/09/2023
 
 Fragment shader image
