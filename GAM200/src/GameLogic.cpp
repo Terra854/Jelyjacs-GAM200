@@ -64,13 +64,13 @@ void GameLogic::Initialize()
 	//Texture* texture;
 
 	std::cout << "Background" << std::endl;
-	testObj = objectFactory->createObject("../background.json");
-	scale_and_rotate = objectFactory->createObject("../scale-and-rotate.json");
+	testObj = objectFactory->createObject("../Asset/Objects/background.json");
+	scale_and_rotate = objectFactory->createObject("../Asset/Objects/scale-and-rotate.json");
 	//std::cout << "test Object 2" << std::endl;
 	//testObj2 = objectFactory->createObject("../drop-forever.json");
-	floor1 = objectFactory->createObject("../mapbox.json");
-	floor2 = objectFactory->createObject("../mapbox.json");
-	floor3 = objectFactory->createObject("../mapbox.json");
+	floor1 = objectFactory->createObject("../Asset/Objects/mapbox.json");
+	floor2 = objectFactory->createObject("../Asset/Objects/mapbox.json");
+	floor3 = objectFactory->createObject("../Asset/Objects/mapbox.json");
 	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Transform));
 
 	// offset objects
@@ -89,11 +89,11 @@ void GameLogic::Initialize()
 	rect_pt->Initialize();
 
 	std::cout << "test Player" << std::endl;
-	playerObj = objectFactory->createObject("../player.json");
+	playerObj = objectFactory->createObject("../Asset/Objects/player.json");
 
 	// Floor
 	for (int i = 0; i < 40; i++) {
-		Object* floor = objectFactory->createObject("../mapbox.json");
+		Object* floor = objectFactory->createObject("../Asset/Objects/mapbox.json");
 		Transform* floor_t = static_cast<Transform*>(floor->GetComponent(ComponentType::Transform));
 		floor_t->Position = { -1000.0f + (static_cast<Transform*>(floor->GetComponent(ComponentType::Transform))->Scale_x * (float)i), -500.0f };
 		Rectangular* floor_b = static_cast<Rectangular*>(floor->GetComponent(ComponentType::Body)); // @Sen Chuan
@@ -101,7 +101,7 @@ void GameLogic::Initialize()
 	}
 
 	// Dynamic collision
-	dynamic_collision = objectFactory->createObject("../mapbox.json");
+	dynamic_collision = objectFactory->createObject("../Asset/Objects/mapbox.json");
 	Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
 	dynamic_collision_t->Position = { -1000.0f , -446.0f };
 	Rectangular* dynamic_collision_b = static_cast<Rectangular*>(dynamic_collision->GetComponent(ComponentType::Body));
