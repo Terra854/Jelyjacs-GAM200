@@ -1,9 +1,10 @@
 /* !
-@file
-@author
+@file	input.cpp
+@author	Yeo Jia Ming
 @date	28/9/2023
 
-
+This file contains the implementations for input manager.
+To detect mouse/keyboard key presses and mouse position.
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "input.h"

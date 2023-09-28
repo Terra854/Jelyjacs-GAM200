@@ -1,10 +1,12 @@
 #pragma once
 /* !
-@file
-@author
+@file	Component.h
+@author	Yeo Jia Ming
 @date	28/9/2023
 
-
+The file contains declarations and implmentations for the component class,
+which is a base class for other specific types of game components to derive from.
+Contains a pointer to the object that the particualr game component is a part of.
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "../../src/Assets Manager/serialization.h"

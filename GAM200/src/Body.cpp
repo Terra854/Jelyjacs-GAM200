@@ -1,10 +1,11 @@
 #pragma once
 /* !
-@file
-@author
+@file	Body.cpp
+@author	Yeo Jia Ming
 @date	28/9/2023
 
-
+This file contains implementations for Body component class.
+Body, as a shape contains the hitbox collision outline of the object.
 *//*__________________________________________________________________________*/
 #include "../include/components/Body.h"
 

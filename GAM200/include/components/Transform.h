@@ -1,10 +1,11 @@
 #pragma once
 /* !
-@file
-@author
+@file	Transform.h
+@author	Yeo Jia Ming
 @date	28/9/2023
 
-
+This file contains the declarations and implementations for the transform component class.
+Transform contains the information needed for graphics to render the object
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 
