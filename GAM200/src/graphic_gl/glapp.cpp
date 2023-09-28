@@ -1,3 +1,12 @@
+/* !
+@file    glapp.cpp
+@author  g.chen@digipen.edu
+@date    28/09/2023
+
+Graphic system for the engine
+includes all the functions to draw objects
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <cmath>
 #include <glm/gtc/type_ptr.hpp>
