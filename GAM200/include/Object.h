@@ -1,10 +1,13 @@
 #pragma once
 /* !
-@file
-@author
+@file	Object.h
+@author	Yeo Jia Ming
 @date	28/9/2023
 
-
+This file contains the declarations for the game object functions.
+Contains member functions to add components into an object,
+retrieve a specific component from the object,
+and an id to defferntiate one object from another.
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Component.h"

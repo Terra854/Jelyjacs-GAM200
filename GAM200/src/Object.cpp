@@ -1,9 +1,11 @@
 /* !
-@file
-@author
+@file	Object.cpp
+@author	Yeo Jia Ming
 @date	28/9/2023
 
-
+This file contains the implementation for the game objects.
+Contains member functions to add components into an object, 
+and retrieve a specific component from the object.
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Object.h"
