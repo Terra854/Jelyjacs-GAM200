@@ -187,10 +187,8 @@ void PhysicsSystem::Update(float time) {
 		// No X acceleration, not needed in the game
 
 		// Apply gravity
-		p->Y_Acceleration = gravity * time;
-		p->Velocity.y += p->Y_Acceleration;
-
-		p->Velocity.y *= 0.95f; // Account for air resistance
+		p->Y_Acceleration = gravity;
+		p->Velocity.y += (p->Y_Acceleration - 0.75 * p->Velocity.y) * time; // Account for air resistance
 	}
 
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
