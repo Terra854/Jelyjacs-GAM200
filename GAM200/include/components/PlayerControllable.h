@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	PlayerControllable.h
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
-
+This file contains the declaration for the PlayerControllable component class
 *//*__________________________________________________________________________*/
 #include "Component.h"
 

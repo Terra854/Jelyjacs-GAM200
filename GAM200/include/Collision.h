@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Collision.cpp
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
-
+This file contains the declarations of functions that are defined in Collision.cpp
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 

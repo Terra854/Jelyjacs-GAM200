@@ -1,9 +1,9 @@
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Audio.cpp
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
-
+This file contains the definitions of the functions that are part of the Audio system
 *//*__________________________________________________________________________*/
 #include "Audio.h"
 

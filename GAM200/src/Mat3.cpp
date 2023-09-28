@@ -1,9 +1,9 @@
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Mat3.cpp
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
-
+This file contains the definitions of the member functions in the Mat3 class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Mat3.h"

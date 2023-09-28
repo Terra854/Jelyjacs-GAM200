@@ -1,9 +1,9 @@
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Line.cpp
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
-
+This file contains the definitions of the member functions in the Line class
 *//*__________________________________________________________________________*/
 #include "Line.h"
 #include <Debug.h>

@@ -1,9 +1,9 @@
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Collision.cpp
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
-
+This file contains functions to calculate collisions between the different game objects
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Collision.h"

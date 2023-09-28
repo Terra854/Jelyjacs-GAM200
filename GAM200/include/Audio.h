@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Audio.h
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
-
+This file contains the declaration for the Audio system class
 *//*__________________________________________________________________________*/
 #include <Interface_System.h>
 #include <fmod.hpp>

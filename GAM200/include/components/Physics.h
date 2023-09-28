@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file    
-@author	t.yeeann@digipen.edu
+@file	Physics.h
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
-
+This file contains the declaration for the Physics component class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Object.h"
@@ -12,7 +12,6 @@
 class Physics : public Component
 {
 public:
-	//centre position of bodies
 	Physics() : Component() {};
 
 	Vec2 Velocity;

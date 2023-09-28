@@ -1,10 +1,11 @@
 #pragma once
 /* !
-@file
-@author	t.yeeann@digipen.edu
+@file	Line.h
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
-
+This file contains the declaration for the Line class that represents a line
+for collision detection purposes
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 
