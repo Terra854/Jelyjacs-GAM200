@@ -1,3 +1,15 @@
+/* !
+@file    Factory.cpp
+@author  w.jiahowjonathan@digipen.edu
+@date   28/9/2023
+
+This file contains the definition of class Factory that helps to create gmae objects
+according to object files. Game objects are represented as Object and the gmae objects
+function as containers for components which are independent classes that give certain
+the game objects different properties in the game world. Every game object has a unique
+ID aand is stored as part of a private map
+*//*__________________________________________________________________________*/
+
 #include <json/json.h> // External libraries - put those headers before Debug.h
 
 #include <Debug.h>

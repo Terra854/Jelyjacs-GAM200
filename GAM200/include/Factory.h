@@ -1,15 +1,18 @@
 #pragma once
 #include <Debug.h>
 
-/*
-* This is the declaration of the game fatory class.
-* It helps to create game objects in the game loop.
-* Game objects are represented by Object which is defined in Compositiion
-* Game objects are containers for components which are themselves containers for data
-* The code works off the data found in the data of game object components.
-* Every game object is also given a unique ID number called long which is assigned to them at creation time
-* Every game object is also added to map and to access a specific game object in that map, you must have the object's ID
-*/
+/* !
+@file    Factory.h
+@author  w.jiahowjonathan@digipen.edu
+@date   28/9/2023
+
+This file contains the declaration of class Factory that helps to create gmae objects
+according to object files. Game objects are represented as Object and the gmae objects
+function as containers for components which are independent classes that give certain
+the game objects different properties in the game world. Every game object has a unique
+ID aand is stored as part of a private map
+*//*__________________________________________________________________________*/
+
 #include "Interface_System.h"
 #include "Object.h"
 #include "Mat3.h"
