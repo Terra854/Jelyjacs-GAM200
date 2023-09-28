@@ -1,8 +1,11 @@
 /* !
-@file
-@author
+@file	asset_manager.cpp
+@author	Tay Sen Chuan (t.senchuan@digipen.edu)
 @date	28/9/2023
 
+This file contains the definition of class AssetManager. It will look through all the folder
+where the assets are stored and load them, before storing them into a std::map container
+to be referenced from when needed.
 
 *//*__________________________________________________________________________*/
 #include "asset_manager.h"
