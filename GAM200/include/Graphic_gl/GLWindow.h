@@ -1,6 +1,14 @@
+/*!
+@file    GLWindow.h
+@author  g.chen@digipen.edu
+@date    28/09/2023
+
+Window system for the engine
+includes all the functions to create and update the window
+
+*//*__________________________________________________________________________*/
 #ifndef GLHELPER_H
 #define GLHELPER_H
-
 /*                                                                   includes
 ----------------------------------------------------------------------------- */
 #include <Debug.h>

@@ -1,8 +1,16 @@
-#ifndef GLAPP_H
-#define GLAPP_H
+/* !
+@file    glapp.h
+@author  g.chen@digipen.edu
+@date    28/09/2023
 
+Graphic system for the engine
+includes all the functions to draw objects
+
+*//*__________________________________________________________________________*/
 /*                                                                  
 ----------------------------------------------------------------------------- */
+#ifndef GLAPP_H
+#define GLAPP_H
 #include <Debug.h>
 
 #include <GL/glew.h> // for access to OpenGL API declarations 
@@ -28,6 +36,7 @@ public:
 	
 	static void cleanup();
 
+	//initial functions
 	static void init_models();
 	static void init_shdrpgms();
 
@@ -43,17 +52,13 @@ public:
 		const char* texfile{ nullptr };
 
 	};
-	
+
+	//helper function for loading png files
 	static GLuint setup_texobj(const char*);
+	//helper function set up shader program
 	static void insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr);
-	struct GLViewport
-	{
-		GLint x, y;
-		GLsizei width, height;
-	};
-
-
-
+	
+	// container for shader programs and models
 	static std::map<std::string, GLSLShader> shdrpgms; 
 	static std::map<std::string, GLModel> models;
 	
