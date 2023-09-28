@@ -1,6 +1,6 @@
 /* !
 @file    glapp.cpp
-@author  g.chen@digipen.edu
+@author  Guo Chen (g.chen@digipen.edu)
 @date    28/09/2023
 
 Graphic system for the engine
