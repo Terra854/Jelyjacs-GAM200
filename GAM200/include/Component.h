@@ -32,8 +32,6 @@ public:
 	//to initialise remainng game components not set from text file
 	virtual void Initialize() {};
 
-	//for serialization to know how far to read in text file to get all the variables of this game component
-	virtual void Serialize(Serialization& stream) {};
 
 	///to get the object that this component is part of
 	Object* GetOwner() { return Base; }
