@@ -28,14 +28,6 @@ public:
 	{
 
 	}
-	virtual void Serialize(Serialization& stream) override
-	{
-		streamGet( stream , Position.x);
-		streamGet(stream, Position.y);
-		streamGet(stream, Scale_x);
-		streamGet(stream, Scale_y);
-		streamGet(stream, Rotation);
-	}
 
 	virtual ComponentType TypeId() const override { return ComponentType::Transform; }
 };

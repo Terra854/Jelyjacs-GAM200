@@ -17,8 +17,6 @@ class Texture : public Component
 public:
 	Texture(unsigned int _texturepath) : Component(), texturepath(_texturepath){}
 
-	virtual void Serialize(Serialization& stream) override;
-
 	virtual ComponentType TypeId() const override { return ComponentType::Texture; }
 
 	// Path to file for texture
