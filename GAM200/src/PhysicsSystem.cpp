@@ -1,6 +1,6 @@
 /* !
 @file	PhysicsSystem.cpp
-@author	Tan Yee Ann (t.yeeann@digipen.edu)
+@author	Tan Yee Ann
 @date	28/9/2023
 
 This file contains the definitions of the functions that are part of the Physics system

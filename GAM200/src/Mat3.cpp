@@ -1,6 +1,6 @@
 /* !
 @file	Mat3.cpp
-@author	Tan Yee Ann (t.yeeann@digipen.edu)
+@author	Tan Yee Ann
 @date	28/9/2023
 
 This file contains the definitions of the member functions in the Mat3 class

@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Mat3.h
-@author	Tan Yee Ann (t.yeeann@digipen.edu)
+@author	Tan Yee Ann
 @date	28/9/2023
 
 This file contains the declaration for the Mat3 class used to represent a 3x3 matrix

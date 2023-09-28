@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Physics.h
-@author	Tan Yee Ann (t.yeeann@digipen.edu)
+@author	Tan Yee Ann
 @date	28/9/2023
 
 This file contains the declaration for the Physics component class
