@@ -1,16 +1,6 @@
-#pragma once
-/* !
-@file
-@author
-@date	28/9/2023
-
-
-*//*__________________________________________________________________________*/
-#include <Debug.h>
-
 /* !
 @file    Factory.h
-@author  w.jiahowjonathan@digipen.edu
+@author  Jonathan Woo Jia How
 @date   28/9/2023
 
 This file contains the declaration of class Factory that helps to create gmae objects
@@ -20,6 +10,8 @@ the game objects different properties in the game world. Every game object has a
 ID aand is stored as part of a private map
 *//*__________________________________________________________________________*/
 
+#pragma once
+#include <Debug.h>
 #include "Interface_System.h"
 #include "Object.h"
 #include "Mat3.h"
@@ -33,42 +25,57 @@ ID aand is stored as part of a private map
 class Factory : public ISystems
 {
 public:
+	//Ctor
 	Factory();
+	//Dtor
 	~Factory();
 
+	// This creates a game object using the variables from the json file
+// This will be what is used to create game objects in the game loop
 	Object* createObject(const std::string& filename);
 
+	//This doesn't destroy the game object instantly but will set it to be destroyed in the update loop
 	void destroyObject(Object* object);
 
+	//This deletes all objects to be deleted
 	virtual void Update(float time);
 
 	virtual std::string SystemName() { return "Factory"; };
 
+	//This destroys all game objects
 	void destroyAllObjects();
 
+	//Creates a game object with no components
 	Object* createEmptyObject();
 
-	//Object* buildFromFile(const std::string& filename);
-
+	//This gives a game object an ID tag which can be used to find that same game object
 	void assignIdToObject(Object* object);
 
+	//Returns a game object from the map with a specific id
 	Object* getObjectWithID(long id);
 
+	//This adds a new component creator which is necessary for the creation of game objects
+//Call this at the very start of the game loop in Intialize
 	void AddComponentCreator(const std::string& name, BaseComponentCreator* creator);
 
+	//Returns the total number of game objects created by this game factory
 	size_t NumberOfObjects() {	return objectMap.size();}
 
 	friend class PhysicsSystem; // Needed to apply physics onto each object
 private:
+	//ID to assign to the next game object created
 	unsigned nextObjectId;
 
 	//to map the component name in object text file to component type
 	typedef std::map< std::string, BaseComponentCreator*> componentCreatorMap;
 	componentCreatorMap componentMap;
 
+	//Map of all the game objects created
+	//Associated with an ID to return them when needed
 	typedef std::map<unsigned, Object*> objectIDMap;
 	objectIDMap objectMap;
 
+	//Set of game objects to be deleted every frame
 	std::set<Object*> gameObjsToBeDeleted;
 };
 
