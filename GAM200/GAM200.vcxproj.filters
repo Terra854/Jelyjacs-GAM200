@@ -78,9 +78,6 @@
     <ClCompile Include="src\input.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
-    <ClCompile Include="src\Assets Manager\file_reader.cpp">
-      <Filter>Source Files\Miscellanous</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphic_gl\glapp.cpp">
       <Filter>Source Files\Systems\Graphics</Filter>
     </ClCompile>
@@ -155,9 +152,6 @@
     <ClInclude Include="include\input.h">
       <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
-    <ClInclude Include="src\Assets Manager\file_reader.h">
-      <Filter>Header Files\Miscellanous</Filter>
-    </ClInclude>
     <ClInclude Include="src\Assets Manager\serialization.h">
       <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
@@ -205,9 +199,6 @@
     </ClInclude>
     <ClInclude Include="include\Graphic_gl\GLWindow.h">
       <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Movement.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Audio.h">
       <Filter>Header Files\Systems\Audio</Filter>
