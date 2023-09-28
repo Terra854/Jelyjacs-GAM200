@@ -164,7 +164,7 @@ void GameLogic::Update(float time) {
 		engine->Broadcast(&msg);
 		//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 		if (p->Velocity.y == 0.0f) {
-			p->Velocity.y = 2500.0f;
+			p->Velocity.y = 1500.0f;
 			audio->playJump();
 		}
 	}

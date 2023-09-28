@@ -31,11 +31,13 @@ void Audio::Initialize(){
         exit(-1);
     }
 
+    // Load sounds
     system->createSound("../Asset/Sounds/Jump.wav", FMOD_DEFAULT, 0, &jump);
     system->createSound("../Asset/Sounds/Footsteps.wav", FMOD_LOOP_NORMAL, 0, &walking);
 
     system->playSound(walking, 0, false, &channel);
 
+    // Let other systems have access to this system
     audio = this;
 }
 

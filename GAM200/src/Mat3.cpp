@@ -58,6 +58,7 @@ Mat3& Mat3::operator*=(const Mat3& rhs)
 	return *this;
 }
 
+// Converts the matrix for use in OpenGL calls
 glm::mat3 Mat3::ToGlmMat3()
 {
 	// glm's mat3 and this mat3 orders the elements differently
