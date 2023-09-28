@@ -407,6 +407,9 @@ namespace Collision {
 		
 	}
 	
+	/*
+		This function checks to see if a point is colliding with a rectangle
+	*/
 	bool PointRectCollision(const Vec2& point, const Rectangular* rect)
 	{
 		// Using the AABB properties to determine the boundaries
