@@ -123,7 +123,7 @@
     <ClCompile Include="src\Assets Manager\asset_manager.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
-    <ClCompile Include="Body.cpp">
+    <ClCompile Include="src\Body.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
