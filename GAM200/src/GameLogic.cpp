@@ -141,7 +141,7 @@ void GameLogic::Initialize()
 void GameLogic::Update(float time) {
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
-		std::cout << "Mouse Position is :  X = " << input::GetMouseX << ", Y = " << input::GetMouseY << std::endl;
+		std::cout << "Mouse Position is :  X = " << input::GetMouseX() << ", Y = " << input::GetMouseY() << std::endl;
 		Message_Handler msg(MessageID::Event_Type::MouseClick);
 		engine->Broadcast(&msg);
 	}
