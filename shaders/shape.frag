@@ -1,3 +1,12 @@
+/*!
+@file    shape.frag
+@author  g.chen@digipen.edu
+@date    14/09/2023
+
+This file contains the fragment shader for the shape program.
+color is passed in as a uniform
+*//*__________________________________________________________________________*/
+
 #version 450 core
 
 uniform vec3 uColor;

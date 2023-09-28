@@ -1,3 +1,12 @@
+/*!
+@file    shape.vert
+@author  g.chen@digipen.edu
+@date    14/09/2023
+
+Vertex shader shape
+Transforms the vertex position from model space to normalized device coordinates (NDC).
+*//*__________________________________________________________________________*/
+
 #version 450 core
 
 layout (location=0) in vec2 aVertexPosition;

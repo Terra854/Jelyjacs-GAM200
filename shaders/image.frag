@@ -1,11 +1,12 @@
 /*!
-@file    my-tutorial-5.frag
-@author  pghali@digipen.edu, g.chen@digipen.edu
-@date    10/06/2023
+@file    image.frag
+@author  g.chen@digipen.edu
+@date    14/09/2023
 
-Fragment shader for tutorial 4.
-The shader performs different operations based on the value of uShaderMode. 
+Fragment shader image
+Texture handler will be passed in as a uniform variable
 *//*__________________________________________________________________________*/
+
 #version 450 core
 
 layout (location=1) in vec2 vTexCoord;

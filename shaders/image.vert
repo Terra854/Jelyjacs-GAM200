@@ -1,11 +1,12 @@
 /*!
-@file    my-tutorial-5.vert
-@author  pghali@digipen.edu, g.chen@digipen.edu
-@date    10/06/2023
+@file    image.vert
+@author  g.chen@digipen.edu
+@date    14/09/2023
 
-Vertex shader for tutorial 4.
+Vertex shader image
 Transforms the vertex position from model space to normalized device coordinates (NDC).
 *//*__________________________________________________________________________*/
+
 #version 450 core
 
 layout (location=0) in vec2 aVertexPosition;
