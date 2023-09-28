@@ -16,7 +16,6 @@ std::map<std::string, GLuint> textures;
 // Looked through the asset file and load all assets
 void AssetManager::Initialize()
 {
-
 	std::cout << "File List: " << std::endl;
 
 	if (std::filesystem::exists(pathtexture))
@@ -29,8 +28,6 @@ void AssetManager::Initialize()
 	}
 	else
 		std::cout << pathtexture << " does not exist!" << std::endl;
-
-
 }
 
 void AssetManager::Free()
@@ -59,10 +56,6 @@ void AssetManager::loadassets()
 		textures.emplace(filename.string(), textureuint);
 		std::cout << "Added to list: " << filename.string() << std::endl;
 	}
-
-
-
-
 }
 
 

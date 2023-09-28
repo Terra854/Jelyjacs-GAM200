@@ -1,7 +1,7 @@
 /* !
-@file    Factory.h
-@author  Jonathan Woo Jia How
-@date   28/9/2023
+@file   Factory.h
+@author Jonathan Woo Jia How
+@date	28/9/2023
 
 This file contains the declaration of class Factory that helps to create gmae objects
 according to object files. Game objects are represented as Object and the gmae objects
@@ -31,7 +31,7 @@ public:
 	~Factory();
 
 	// This creates a game object using the variables from the json file
-// This will be what is used to create game objects in the game loop
+	// This will be what is used to create game objects in the game loop
 	Object* createObject(const std::string& filename);
 
 	//This doesn't destroy the game object instantly but will set it to be destroyed in the update loop

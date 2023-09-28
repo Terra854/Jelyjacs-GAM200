@@ -145,12 +145,6 @@ void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
 		break;
 	}
 	}
-	/*
-	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
-	{
-		glfwSetWindowShouldClose(pWin, GLFW_TRUE);
-	}
-	*/
 }
 
 void MouseButtonCallBack(GLFWwindow* pWin, int button, int action, int mod)

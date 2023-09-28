@@ -17,25 +17,16 @@ This file contains the declaration of class AssetManager.
 
 class AssetManager : public ISystems
 {
-	public:
-
-
+public:
 	virtual void Initialize();
 	virtual void Free();
 	virtual void Update(float dt);
 	virtual std::string SystemName();
 	void loadassets();
 
-
-
-
-
-
 	// These data shouldn't be modified at all
-	private:
+private:
 	std::filesystem::path pathtexture = "../Asset/Picture";
-	//std::filesystem::path audio;
-	//std::filesystem::path fonts;
 };
 
 extern std::map<std::string, GLuint> textures;

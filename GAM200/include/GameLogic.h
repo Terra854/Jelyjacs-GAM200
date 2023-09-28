@@ -1,6 +1,6 @@
 #pragma once
 /* !
-@file GameLogic.h
+@file	GameLogic.h
 @author Luke Goh
 @date	28/9/2023
 
@@ -14,10 +14,6 @@ This file contains the declaration for the Game Logic system class
 class GameLogic : public ISystems
 {
 public:
-	//Constructor to initialise pointer
-	// It's broken, will be purged in the future
-	//GameLogic();
-	//~GameLogic();
 	virtual void MessageRelay(Message_Handler* msg);
 	virtual void Initialize();
 	void Update(float time);

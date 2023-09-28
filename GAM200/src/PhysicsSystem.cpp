@@ -16,52 +16,12 @@ This file contains the definitions of the functions that are part of the Physics
 #include <components/Physics.h>
 #include <components/PlayerControllable.h>
 #include <input.h>
-#include <Audio.h> // Direct call the audio functions cause messaging system is not ready
-
-//Vec2 interPt, normalAtCollision;
-//float interTime = 0.0f;
+#include <Audio.h>
 
 int collision_flag;
 
 // A workaround to prevent sticking onto the top of the walls
 float top_collision_cooldown = 0.f;
-
-
-
-// Old version of Check_Collision, might be deleted at some point
-
-/*
-bool Check_Collision(Body* b1, Body* b2, float dt) {
-
-	// Circle and Line
-	if (typeid(*b1) == typeid(Circular) && typeid(*b2) == typeid(Lines)) {
-		return Collision::Check_Circle_Line(((Circular*)b1)->circle, ((Transform*)b1)->Position, ((Lines*)b2)->line, interPt, normalAtCollision, interTime);
-	}
-	if (typeid(*b1) == typeid(Lines) && typeid(*b2) == typeid(Circular)) {
-		return Collision::Check_Circle_Line(((Circular*)b2)->circle, ((Transform*)b2)->Position, ((Lines*)b1)->line, interPt, normalAtCollision, interTime);
-	}
-
-	// Rectangle and Line
-	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Lines)) {
-		return Collision::Check_AABB_Line(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Lines*)b2)->line, interPt, normalAtCollision, interTime);
-	}
-	else if (typeid(*b1) == typeid(Lines) && typeid(*b2) == typeid(Rectangular)) {
-		return Collision::Check_AABB_Line(((Rectangular*)b2)->aabb, ((Transform*)b2)->Position, ((Lines*)b1)->line, interPt, normalAtCollision, interTime);
-	}
-
-	// 2 Rectangles
-	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
-		if (Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, interPt, normalAtCollision, interTime)){
-			int collision_flag = Collision::Check_Rect_Rect((Rectangular*)b1, (Rectangular*)b2);
-			return true;
-		}
-	}
-
-	else {
-		return false; // Unsupported collision
-	}
-}
-*/
 
 // Check if both bodies are rectangular
 // If they are, use Check AABB with AABB function and return collision flag.
@@ -141,50 +101,6 @@ void PhysicsSystem::Update(float time) {
 
 	top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= time : 0.0f;
 
-	// Update velocity for player
-	// Check all the objects, if it have the player controllable component, change its physics
-	/*
-	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-
-		if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) == nullptr)
-			continue; // That object is not controlled by the player, move to the next object
-
-		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
-		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
-
-		p->Velocity.x = 0.0f; // Reset velocity
-
-		// Move right
-		if (input::IsPressedRepeatedly(KEY::d)) {
-			p->Velocity.x += 17500.0f * time;
-			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
-			if (p->Velocity.y == 0.f)
-				audio->startWalking();
-		}
-
-		// Move left
-		if (input::IsPressedRepeatedly(KEY::a)) {
-			p->Velocity.x -= 17500.0f * time;
-			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
-			if (p->Velocity.y == 0.f)
-				audio->startWalking();
-		}
-
-		// Stop the walking audio if the player is neither walking nor on solid ground
-		if ((!(input::IsPressedRepeatedly(KEY::d)) && !(input::IsPressedRepeatedly(KEY::a))) || p->Velocity.y != 0.f){
-			audio->stopWalking();
-		}
-
-		// Jump. Make sure vertical velocity is 0 first
-		if (input::IsPressedRepeatedly(KEY::w) && p->Velocity.y == 0.0f && top_collision_cooldown == 0.0f) {
-			p->Velocity.y = 2500.0f;
-			audio->playJump();
-		}
-		
-		break; // There should only be one object that is player controlled for now
-	}
-	*/
-
 	// Update velocity for each object
 	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
@@ -234,35 +150,6 @@ void PhysicsSystem::Update(float time) {
 				continue; // No body in the other object, no way it's collidable
 
 			if (collision_flag = Check_Collision(b, b2, time)) {
-
-				/*
-				// DEBUG
-				std::cout << "A collision has occured between ";
-				switch (((Body*)obj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case Shape::Rectangle:
-					std::cout << "a rectangle ";
-					break;
-				case Shape::Circle:
-					std::cout << "a circle ";
-					break;
-				case Shape::Line:
-					std::cout << "a line ";
-					break;
-				}
-				std::cout << "and ";
-				switch (((Body*)anotherobj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case Shape::Rectangle:
-					std::cout << "a rectangle.";
-					break;
-				case Shape::Circle:
-					std::cout << "a circle.";
-					break;
-				case Shape::Line:
-					std::cout << "a line.";
-					break;
-				}
-				std::cout << std::endl;
-				*/
 				Response_Collision(t, b, p, (Transform*)anotherobj->second->GetComponent(ComponentType::Transform), b2);
 			}
 			else {

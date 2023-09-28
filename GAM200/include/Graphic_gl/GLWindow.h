@@ -21,7 +21,7 @@ includes all the functions to create and update the window
 
 /*  _________________________________________________________________________ */
 class GLWindow : public ISystems
-  
+
 {
 public:
 	GLWindow();
@@ -32,20 +32,18 @@ public:
 	static void ActivateWindow();
 	static void cleanup();
 
-  // callbacks ...
-  static void error_cb(int error, char const* description);
-  static void fbsize_cb(GLFWwindow *ptr_win, int wwidth, int hheight);
- 
-  
-  //static void update_time(double fpsCalcInt = 1.0);
-  static void print_specs();
+	// callbacks ...
+	static void error_cb(int error, char const* description);
+	static void fbsize_cb(GLFWwindow* ptr_win, int wwidth, int hheight);
 
+	//static void update_time(double fpsCalcInt = 1.0);
+	static void print_specs();
 
-  static GLint width, height;
-  static GLdouble fps;
-  static GLdouble delta_time; // time taken to complete most recent game loop
-  static std::string title;
-  static GLFWwindow *ptr_window;
+	static GLint width, height;
+	static GLdouble fps;
+	static GLdouble delta_time; // time taken to complete most recent game loop
+	static std::string title;
+	static GLFWwindow* ptr_window;
 };
 
 enum class Gamestate {

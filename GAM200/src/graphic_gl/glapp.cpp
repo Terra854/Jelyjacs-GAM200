@@ -52,7 +52,7 @@ void GLApp::Initialize()
 	glViewport(0, 0, window->width, window->height);
 	init_models();
 	init_shdrpgms();
-	
+
 	// enable alpha blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -176,7 +176,6 @@ void GLApp::init_models() {
 			glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(),
 				sizeof(glm::vec2) * tex_coor.size(), tex_coor.data());
 
-
 			glCreateVertexArrays(1, &vao);
 
 			glEnableVertexArrayAttrib(vao, 0);
@@ -214,7 +213,7 @@ void GLApp::init_models() {
 }
 
 /*
-* get all he shader programs
+* get all the shader programs
 */
 void GLApp::init_shdrpgms() {
 
@@ -241,9 +240,7 @@ void GLApp::Update(float time)
 
 
 	//draw objects
-	//int i = 0;
-	//while (i < 6) {
-	for (long i = 0; i < (long) objectFactory->NumberOfObjects(); i++) {
+	for (long i = 0; i < (long)objectFactory->NumberOfObjects(); i++) {
 		GLuint tex_test;
 		Mat3 mat_test;
 		float pos_x;
@@ -255,7 +252,7 @@ void GLApp::Update(float time)
 		//get texture		
 		Texture* tex_pt = static_cast<Texture*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Texture));
 		tex_test = tex_pt->texturepath;
-		
+
 		//get orientation
 		Transform* tran_pt = static_cast<Transform*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Transform));
 		orientation = tran_pt->Rotation;
@@ -277,9 +274,9 @@ void GLApp::Update(float time)
 			Vec2 botleft = rec_pt->aabb.min;
 			Vec2 topright = rec_pt->aabb.max;
 			pos_x = (botleft.x + topright.x) / window->width;
-			pos_y = (botleft.y + topright.y)  / window->height;
-			scaling_x = (topright.x - botleft.x)  / window->width;
-			scaling_y = (topright.y - botleft.y)  / window->height;
+			pos_y = (botleft.y + topright.y) / window->height;
+			scaling_x = (topright.x - botleft.x) / window->width;
+			scaling_y = (topright.y - botleft.y) / window->height;
 		}
 		else {
 			//else get pos and scale from transform component
@@ -288,10 +285,10 @@ void GLApp::Update(float time)
 			scaling_x = tran_pt->Scale_x / window->width;
 			scaling_y = tran_pt->Scale_y / window->height;
 		}
-		
+
 		//get matrix
 		mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
-		
+
 		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
 			shdrpgms["shape"].Use();
 			// bind VAO of this object's model
@@ -316,13 +313,13 @@ void GLApp::Update(float time)
 
 				//calculate rotation
 				orientation = atan2(Vy, Vx);
-				
+
 				//get slcae of line based on length of line
-				float scale_line_x = sqrt(Vx * Vx + Vy * Vy) / window->width /2;
-				float scale_line_y = sqrt(Vx * Vx + Vy * Vy) / window->height /2;
-				
+				float scale_line_x = sqrt(Vx * Vx + Vy * Vy) / window->width / 2;
+				float scale_line_y = sqrt(Vx * Vx + Vy * Vy) / window->height / 2;
+
 				mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scale_line_x, scale_line_y) * Mat3RotRad(orientation);
-				
+
 				//draw line
 				shdrpgms["shape"].Use();
 				// bind VAO of this object's model
@@ -364,9 +361,9 @@ void GLApp::Update(float time)
 			glBindVertexArray(0);
 			shdrpgms["image"].UnUse();
 		}
-    }
+	}
 
-	
+
 	glfwSwapBuffers(window->ptr_window);
 }
 

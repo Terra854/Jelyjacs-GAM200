@@ -8,7 +8,6 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Debug.h>
 #include "GameLogic.h"
 #include <iostream>
-//#include "Assets Manager/file_reader.h"
 #include "Factory.h"
 #include "ComponentCreator.h"
 #include "components/Transform.h"
@@ -19,7 +18,6 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
-//#include <Movement.h>
 #include <Audio.h>
 
 Object* scale_and_rotate;
@@ -58,14 +56,10 @@ void GameLogic::Initialize()
 	Object* floor1;
 	Object* floor2;
 	Object* floor3;
-	//Transform * trans;
-	//Texture* texture;
 
 	std::cout << "Background" << std::endl;
 	testObj = objectFactory->createObject("../Asset/Objects/background.json");
 	scale_and_rotate = objectFactory->createObject("../Asset/Objects/scale-and-rotate.json");
-	//std::cout << "test Object 2" << std::endl;
-	//testObj2 = objectFactory->createObject("../drop-forever.json");
 	floor1 = objectFactory->createObject("../Asset/Objects/mapbox.json");
 	floor2 = objectFactory->createObject("../Asset/Objects/mapbox.json");
 	floor3 = objectFactory->createObject("../Asset/Objects/mapbox.json");
@@ -74,10 +68,8 @@ void GameLogic::Initialize()
 	// offset objects
 	tran_pt->Position.x = 190;
 
-	// @Sen Chuan if you move position like that, remember to call these 2 functions cause collision
-	// box still using the old position
-	Rectangular* rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Body)); // @Sen Chuan
-	rect_pt->Initialize(); // @Sen Chuan
+	Rectangular* rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Body));
+	rect_pt->Initialize();
 
 	tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Transform)); // change to different obj
 	tran_pt->Position.x = 380;
@@ -106,30 +98,6 @@ void GameLogic::Initialize()
 	dynamic_collision_b->Initialize();
 	Physics* p = new Physics();
 	dynamic_collision->AddComponent(p);
-
-	//std::cout << "test bottom_line" << std::endl;
-	//bottom_line = objectFactory->createObject("../bottom_line.json");
-	//trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));
-
-	//alternate way to get component without cast
-	//trans = testObj->GetComponent_NoCast<Transform>(ComponentTypeId::CT_Transform);
-	//trans->Mass = 0.5f;
-	//Getting a Object pointer with the game object ID
-	//testObj = objectFactory->getObjectWithID(0);
-	//texture = static_cast<Texture*>(testObj->GetComponent(ComponentType::Texture));
-
-	//Broken code. DO NOT REMOVE YET - Jonathan
-	/*
-	gameObjFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Transform));
-
-	ComponentCreatorType<Transform> transformComponetCreator(ComponentTypeId::CT_Transform);
-	ComponentCreator* transformPtr = transformComponetCreator;
-
-	objFactory gameObjFactory;
-	std::string transform = "Transform";
-
-	gameObjFactory.AddComponentCreator(transform, transformPtr);
-	*/
 }
 
 /******************************************************************************
@@ -150,17 +118,14 @@ void GameLogic::Update(float time) {
 		engine->Broadcast(&msg);
 	}
 
-
 	// Movement for Player
 	// If button Pressed, changed velocity
-	// 
 	Physics* p = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 	p->Velocity.x = 0.0f;
 	bool moving = false;
 	if (input::IsPressed(KEY::w)) {
 		MovementKey msg(up);
 		engine->Broadcast(&msg);
-		//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 		if (p->Velocity.y == 0.0f) {
 			p->Velocity.y = 1500.0f;
 			audio->playJump();
@@ -222,15 +187,4 @@ void GameLogic::Update(float time) {
 	dynamic_collision_p->Velocity.x = 200.0f;
 	Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
 	dynamic_collision_t->Position.x = dynamic_collision_t->Position.x < 1000.0f ? dynamic_collision_t->Position.x : -1000.0f;
-
-	/*
-	// DEBUG: Print out collision flags
-	int c_flag = static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag;
-	std::cout << "FLAG: " << c_flag <<
-		" LEFT: " << ((c_flag & COLLISION_LEFT) ? "YES" : "NO") <<
-		" RIGHT: " << ((c_flag & COLLISION_RIGHT) ? "YES" : "NO") <<
-		" TOP: " << ((c_flag & COLLISION_TOP) ? "YES" : "NO") <<
-		" BOTTOM: " << ((c_flag & COLLISION_BOTTOM) ? "YES" : "NO") << std::endl;
-	std::cout << "#####################################################################" << std::endl;
-	*/
 }

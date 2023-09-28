@@ -30,11 +30,6 @@ enum class KEY
 	esc,
 	total
 };
-/*
-class EscapeExit : public Message_Handler {
-	EscapeExit() : Message_Handler(MessageID::Quit) {}
-};
-*/
 
 enum Movement_direction {
 	none = 0,

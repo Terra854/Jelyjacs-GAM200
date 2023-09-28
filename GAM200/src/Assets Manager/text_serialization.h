@@ -15,7 +15,6 @@ This file contains the declaration of the class TextSerialization.
 class TextSerialization : public Serialization
 {
 public:
-
 	std::fstream stream;
 	virtual bool openFileRead(const std::string& file); // Open stream for reading
 	virtual bool openFileWrite(const std::string& file); // Open stream for writing (overwrites existing)

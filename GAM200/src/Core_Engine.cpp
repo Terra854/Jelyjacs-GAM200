@@ -6,7 +6,7 @@
 This file contains the definitions of the functions that are part of the Core Engine
 *//*__________________________________________________________________________*/
 #include <Precompile.h>
-#include<GLWindow.h>
+#include <GLWindow.h>
 #include <Debug.h>
 #include "Core_Engine.h"
 #include <chrono>
@@ -119,7 +119,6 @@ void CoreEngine::GameLoop() {
 	std::cout << "########################################################" << std::endl;
 	std::cout << "Press F to print out frametime performance information" << std::endl;
 	std::cout << "for the current frame" << std::endl;
-	//std::cout << "game window is the active window first and then press P" << std::endl;
 	std::cout << "########################################################" << std::endl;
 
 
