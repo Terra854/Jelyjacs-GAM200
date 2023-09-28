@@ -1,9 +1,9 @@
 /* !
-@file
-@author
+@file GameLogic.cpp
+@author Luke Goh
 @date	28/9/2023
 
-
+This file contains the definitions of the functions that are part of the Game Logic system
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "GameLogic.h"

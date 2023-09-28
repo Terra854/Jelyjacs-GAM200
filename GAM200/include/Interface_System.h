@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file
-@author
+@file Interface_System.h
+@author Luke Goh
 @date	28/9/2023
 
-
+This file contains the declaration for the Interface_system class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <string>

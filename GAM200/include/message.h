@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file
-@author
+@file message.h
+@author Luke Goh
 @date	28/9/2023
 
-
+This file contains the declaration for the Message Handler class and an enum of Event_Types
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 

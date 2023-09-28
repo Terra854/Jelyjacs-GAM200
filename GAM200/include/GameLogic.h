@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file
-@author
+@file GameLogic.h
+@author Luke Goh
 @date	28/9/2023
 
-
+This file contains the declaration for the Game Logic system class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 

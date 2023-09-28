@@ -1,9 +1,9 @@
 ﻿/* !
-@file
-@author
+@file main.cpp
+@author Luke Goh
 @date	28/9/2023
 
-
+This file contains the main function.
 *//*__________________________________________________________________________*/
 #include <Core_Engine.h>
 #include <Factory.h>
