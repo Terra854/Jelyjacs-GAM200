@@ -16,8 +16,8 @@
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
-//debug
-bool graphics_debug{ false };
+//debug 
+bool graphics_debug{ false };//press p to activate debug mode
 glm::vec3 box_color{ 0.0f, 0.0f, 1.0f };
 glm::vec3 line_color{ 0.0f, 1.0f, 0.0f };
 
