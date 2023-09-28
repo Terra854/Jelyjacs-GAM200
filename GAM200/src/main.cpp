@@ -1,4 +1,11 @@
-﻿#include <Core_Engine.h>
+﻿/* !
+@file
+@author
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
+#include <Core_Engine.h>
 #include <Factory.h>
 #include <glapp.h>
 #include <GLWindow.h>

@@ -1,3 +1,10 @@
+/* !
+@file
+@author
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
 #include <Precompile.h>
 #include<GLWindow.h>
 #include <Debug.h>

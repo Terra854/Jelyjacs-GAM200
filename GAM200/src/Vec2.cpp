@@ -1,3 +1,10 @@
+/* !
+@file
+@author	t.yeeann@digipen.edu
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Vec2.h"
 

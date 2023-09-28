@@ -1,4 +1,11 @@
 #pragma once
+/* !
+@file
+@author
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <message.h>
 #include <GLFW/glfw3.h>

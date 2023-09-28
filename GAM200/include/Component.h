@@ -1,4 +1,11 @@
 #pragma once
+/* !
+@file
+@author
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "../../src/Assets Manager/serialization.h"
 #include <Object.h>
