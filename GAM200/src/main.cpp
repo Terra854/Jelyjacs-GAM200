@@ -1,11 +1,16 @@
-﻿#include <Core_Engine.h>
+﻿/* !
+@file
+@author
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
+#include <Core_Engine.h>
 #include <Factory.h>
 #include <glapp.h>
 #include <GLWindow.h>
 #include <PhysicsSystem.h>
 #include <iostream>
-//#include <chrono>
-//#include <thread>
 #include <debug.h>
 #include <GameLogic.h>
 #include <Audio.h>
@@ -20,6 +25,7 @@ int main() {
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	#endif
 
+	// Initialise Pointer to Systems
 	engine = new CoreEngine();
 	GameLogic* logic = new GameLogic();
 	GLWindow* windows = new GLWindow();
@@ -29,7 +35,7 @@ int main() {
 	Audio* audio = new Audio();
 	GLApp* graphics = new GLApp();     
 	
-
+	// Add System to the engine 
 	engine->AddSystem(windows);         
 	engine->AddSystem(assetmanager);
 	engine->AddSystem(logic);
@@ -38,23 +44,14 @@ int main() {
 	engine->AddSystem(audio);
 	engine->AddSystem(graphics);												  // Graphics should always be last
 	
-
+	// Initialize and Start Game Loop
 	engine->Initialize();
 	windows->ActivateWindow();                                                   
 	windows->print_specs();
 	engine->GameLoop();
-	//const int targetFPS = 60; // Your desired FPS
-	//const std::chrono::milliseconds frameDuration(1000 / targetFPS);
-	//auto frameStart = std::chrono::high_resolution_clock::now();
 
-	/*
-	auto frameEnd = std::chrono::high_resolution_clock::now();
-	auto frameTime = std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd - frameStart);
-
-	if (frameTime < frameDuration) {
-		 std::this_thread::sleep_for(frameDuration - frameTime);
-	}
-	*/
+	// Free Engine
 	delete engine;
 	return 0;
 }
+

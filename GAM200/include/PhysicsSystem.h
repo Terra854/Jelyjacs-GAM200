@@ -1,4 +1,11 @@
 #pragma once
+/* !
+@file
+@author	t.yeeann@digipen.edu
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 
 #include <Interface_System.h>
@@ -20,6 +27,6 @@ public:
 	~PhysicsSystem() {};
 	virtual void Initialize();
 	virtual void Update(float time);
-	virtual void MessageRelay(Message* msg);
+	virtual void MessageRelay(Message_Handler* msg);
 	virtual std::string SystemName() { return "Physics"; }
 };

@@ -1,3 +1,10 @@
+/* !
+@file
+@author	t.yeeann@digipen.edu
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <Factory.h>
 #include <PhysicsSystem.h>
@@ -263,8 +270,8 @@ void PhysicsSystem::Update(float time) {
 	}
 }
 
-void PhysicsSystem::MessageRelay(Message* msg) {
-	if (msg->messageId == MessageID::Collide) {
+void PhysicsSystem::MessageRelay(Message_Handler* msg) {
+	if (msg->GetMessage() == MessageID::Collide) {
 
 	}
 }

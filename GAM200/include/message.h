@@ -1,8 +1,19 @@
 #pragma once
+/* !
+@file
+@author
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 
+/****************************************************************************
+* MessageID
+*  - Different types of Events that systems need to communicate around
+*****************************************************************************/
 namespace MessageID {
-	enum MessageIDType
+	enum Event_Type
 	{
 		None,
 		Quit,
@@ -12,12 +23,24 @@ namespace MessageID {
 		MouseClick
 	};
 }
-
-class Message
+/****************************************************************************
+* Message Handler
+* - Parent Class for Messages
+* - Store message
+*  - Allow system to read the message but not edit it
+*****************************************************************************/
+class Message_Handler
 {
 public:
-	Message() { messageId = MessageID::MessageIDType::None; }
-	Message(MessageID::MessageIDType id) : messageId(id) {};
-	MessageID::MessageIDType messageId;
-	virtual ~Message() {};
+	// Default Constructor
+	Message_Handler() { message = MessageID::Event_Type::None; }
+
+	// Constructor
+	Message_Handler(MessageID::Event_Type event) : message(event) {};
+
+	// Function to get message
+	MessageID::Event_Type GetMessage() { return message; }
+
+private:
+	MessageID::Event_Type message;
 };

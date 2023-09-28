@@ -152,10 +152,10 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
+    <ClCompile Include="Body.cpp" />
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Line.cpp" />
-    <ClCompile Include="src\Assets Manager\file_reader.cpp" />
     <ClCompile Include="src\Assets Manager\text_serialization.cpp" />
     <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\Object.cpp" />
@@ -199,10 +199,8 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClInclude Include="include\message.h" />
     <ClInclude Include="include\PhysicsSystem.h" />
     <ClInclude Include="include\Vec2.h" />
-    <ClInclude Include="include\Movement.h" />
     <ClInclude Include="include\Precompile.h" />
     <ClInclude Include="src\Assets Manager\asset_manager.h" />
-    <ClInclude Include="src\Assets Manager\file_reader.h" />
     <ClInclude Include="src\Assets Manager\serialization.h" />
     <ClInclude Include="src\Assets Manager\text_serialization.h" />
   </ItemGroup>

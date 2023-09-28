@@ -128,7 +128,7 @@ void GLWindow::Update(float time)
    
     // Check if the close button or alt + f4 is pressed
     if (glfwWindowShouldClose(ptr_window)) {
-        Message msg(MessageID::MessageIDType::Quit);
+        Message_Handler msg(MessageID::Event_Type::Quit);
         engine->Broadcast(&msg);
         //engine->game_active = false; // Tells the engine to terminate
     }

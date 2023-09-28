@@ -1,5 +1,11 @@
 #pragma once
+/* !
+@file
+@author	t.yeeann@digipen.edu
+@date	28/9/2023
 
+
+*//*__________________________________________________________________________*/
 #include "Component.h"
 
 // Nothing for now, just letting the system know that this object is

@@ -1,4 +1,11 @@
 #pragma once
+/* !
+@file
+@author
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 
 #include "Interface_System.h"
@@ -11,7 +18,7 @@ public:
 	// It's broken, will be purged in the future
 	//GameLogic();
 	//~GameLogic();
-	virtual void MessageRelay(Message* msg);
+	virtual void MessageRelay(Message_Handler* msg);
 	virtual void Initialize();
 	void Update(float time);
 	virtual std::string SystemName() { return "Game_Logic"; }

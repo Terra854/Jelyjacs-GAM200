@@ -1,4 +1,11 @@
 #pragma once
+/* !
+@file
+@author
+@date	28/9/2023
+
+
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <message.h>
 #include <GLFW/glfw3.h>
@@ -23,8 +30,8 @@ enum class KEY
 	total
 };
 /*
-class EscapeExit : public Message {
-	EscapeExit() : Message(MessageID::Quit) {}
+class EscapeExit : public Message_Handler {
+	EscapeExit() : Message_Handler(MessageID::Quit) {}
 };
 */
 
@@ -35,10 +42,10 @@ enum Movement_direction {
 	left,
 	right
 };
-class MovementKey : public Message {
+class MovementKey : public Message_Handler {
 public:
-	MovementKey() : Message(MessageID::Movement), dir(none) {}
-	MovementKey(Movement_direction key) : Message(MessageID::Movement), dir(key) {}
+	MovementKey() : Message_Handler(MessageID::Movement), dir(none) {}
+	MovementKey(Movement_direction key) : Message_Handler(MessageID::Movement), dir(key) {}
 	Movement_direction dir;
 };
 
