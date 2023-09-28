@@ -225,33 +225,6 @@ void GLApp::init_shdrpgms() {
 }
 
 /*
-* calculate the matrix of a object
-*/
-glm::mat3 Getmatrix(glm::vec2 position, glm::vec2 scale, float rotation) {
-	glm::mat3 Scale
-	{
-		scale.x, 0.0f, 0.0f,
-			0.0f, scale.y, 0.0f,
-			0.0f, 0.0f, 1.0f
-	};
-	glm::mat3 Rotate
-	{
-		cos(rotation), sin(rotation), 0.0f,
-			-sin(rotation), cos(rotation), 0.0f,
-			0.0f, 0.0f, 1.0f
-	};
-	glm::mat3 Translate
-	{
-		1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			position.x, position.y, 1.0f
-	};
-
-	glm::mat3 mat = Translate  * Scale * Rotate;
-	return mat;
-}
-
-/*
 * update and draw objects
 */
 void GLApp::Update(float time)
@@ -272,7 +245,7 @@ void GLApp::Update(float time)
 	//while (i < 6) {
 	for (long i = 0; i < (long) objectFactory->NumberOfObjects(); i++) {
 		GLuint tex_test;
-		glm::mat3 mat_test;
+		Mat3 mat_test;
 		float pos_x;
 		float pos_y;
 		float orientation;
@@ -317,7 +290,7 @@ void GLApp::Update(float time)
 		}
 		
 		//get matrix
-        mat_test =   Getmatrix({pos_x,pos_y}, {scaling_x, scaling_y}, orientation);
+		mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
 		
 		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
 			shdrpgms["shape"].Use();
@@ -325,7 +298,7 @@ void GLApp::Update(float time)
 			glBindVertexArray(models["square"].vaoid);
 			// copy object's model-to-NDC matrix to vertex shader's
 			// uniform variable uModelToNDC
-			shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test);
+			shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
 			shdrpgms["shape"].SetUniform("uColor", box_color);
 			// call glDrawElements with appropriate arguments
 			glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
@@ -348,7 +321,7 @@ void GLApp::Update(float time)
 				float scale_line_x = sqrt(Vx * Vx + Vy * Vy) / window->width /2;
 				float scale_line_y = sqrt(Vx * Vx + Vy * Vy) / window->height /2;
 				
-				mat_test = Getmatrix({ pos_x,pos_y}, {scale_line_x, scale_line_y}, orientation);
+				mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scale_line_x, scale_line_y) * Mat3RotRad(orientation);
 				
 				//draw line
 				shdrpgms["shape"].Use();
@@ -356,7 +329,7 @@ void GLApp::Update(float time)
 				glBindVertexArray(models["line"].vaoid);
 				// copy object's model-to-NDC matrix to vertex shader's
 				// uniform variable uModelToNDC
-				shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test);
+				shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
 				shdrpgms["shape"].SetUniform("uColor", line_color);
 				// call glDrawElements with appropriate arguments
 				glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
@@ -378,7 +351,7 @@ void GLApp::Update(float time)
 			glBindVertexArray(models["square"].vaoid);
 			// copy object's model-to-NDC matrix to vertex shader's
 			// uniform variable uModelToNDC
-			shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test);
+			shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
 
 			// tell fragment shader sampler uTex2d will use texture image unit 6
 			GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
