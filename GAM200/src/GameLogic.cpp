@@ -22,7 +22,7 @@ Object* dynamic_collision;
 void GameLogic::MessageRelay(Message* msg) {
 	// For Movement Key Display
 	/*
-	if (msg->messageId == MessageID::Movement) {
+	if (msg->message_id == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
 		std::cout << temp->dir << std::endl;
 	}
