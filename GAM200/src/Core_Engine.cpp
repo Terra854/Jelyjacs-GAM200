@@ -78,6 +78,7 @@ void CoreEngine::Debug_Update() {
 	long long start_system_time, end_system_time;
 	std::map<std::string, double> elapsed_time;
 	double total_time = 0.0;
+	std::cout << "########################################################################################" << std::endl;
 
 	for (const std::pair<std::string, ISystems*>& sys : Systems) {
 		if (sys.first != "Window" && sys.first != "Graphics") {
@@ -93,12 +94,14 @@ void CoreEngine::Debug_Update() {
 	Systems["Window"]->Update();
 	Systems["Graphics"]->Update();
 
+	std::cout << "########################################################################################" << std::endl;
+
 	// Output to console for now, will plan to display ingame when the engine can render fonts
 	for (std::pair<std::string, double> p : elapsed_time)
 		std::cout << p.first << " system completed it's update in " << std::fixed << std::setprecision(6) << p.second << " seconds (" << p.second / total_time * 100.0 << "%)" << std::endl;
 
 	std::cout << "Total time taken for this frame: " << std::fixed << std::setprecision(6) << total_time << " seconds." << std::endl;
-	std::cout << "Frame Rate is " << time << std::endl;
+	std::cout << "Frame Rate is " << 1.0f / dt << " FPS" << std::endl;
 	std::cout << "########################################################################################" << std::endl;
 
 }
