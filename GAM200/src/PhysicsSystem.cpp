@@ -195,7 +195,7 @@ void PhysicsSystem::Update(float time) {
 
 		// Apply gravity
 		p->Y_Acceleration = gravity;
-		p->Velocity.y += (p->Y_Acceleration - 0.75 * p->Velocity.y) * time; // Account for air resistance
+		p->Velocity.y += (float) (p->Y_Acceleration - 0.75 * p->Velocity.y) * time; // Account for air resistance
 	}
 
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
