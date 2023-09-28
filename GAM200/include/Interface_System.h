@@ -15,15 +15,20 @@ class ISystems {
 public:
 	ISystems() {};
 	virtual ~ISystems() {};
+
 	//Messaging System for inter System communication
-	virtual void MessageRelay(Message* msg) {};
+	virtual void MessageRelay(Message_Handler* msg) {};
+
 	// System Initialization
 	virtual void Initialize(){};
+
 	// System Update
-	virtual void Update(float time)=0;
+	virtual void Update(float time) = 0;
+
+
 	// System freeing resources
 	virtual void Free(){};
 
-	//For Debugging
+	//For Debugging, getting System Name
 	virtual std::string SystemName() { return "ISystems (If you are seeing this, you need to implement SystemName() inside yor component)"; };
 };

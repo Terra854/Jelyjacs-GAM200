@@ -22,28 +22,36 @@ public:
 
 	// Initialize all the system
 	void Initialize();
+
+	// Update all the System and FPS
+	void Update(const float& dt);
+
+	// Debug Update function
+	void Debug_Update(const float& dt);
+
 	// Main Game Loop - looping all the system updates
 	void GameLoop();
+
 	// Add the system into the map
 	void AddSystem(ISystems* sys);
-	// Loop for systems to send messages to each other.
+
+	// Delete all the system from the map
 	void DeleteSystem();
-	void Broadcast(Message *msg);
+
+	// Broadcast messages to system
+	// Acts as a MessageRelay for Core Engine
+	void Broadcast(Message_Handler *msg);
 
 	
 private:
-	// Map of Systems
+	// Map of Systems (Container)
 	std::unordered_map<std::string, ISystems*> Systems;
-	// For frame time
-	long long last_update;
-	// checking if game is active
-	bool game_active;
-};
 
-// To quit the game
-class MessageQuit : public Message {
-public:
-	MessageQuit() : Message(MessageID::Quit) {};
+	// FPS
+	unsigned core_fps;
+
+	// Checking if game is active
+	bool game_active;
 };
 
 extern CoreEngine* engine;

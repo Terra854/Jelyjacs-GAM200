@@ -270,8 +270,8 @@ void PhysicsSystem::Update(float time) {
 	}
 }
 
-void PhysicsSystem::MessageRelay(Message* msg) {
-	if (msg->message_id == MessageID::Collide) {
+void PhysicsSystem::MessageRelay(Message_Handler* msg) {
+	if (msg->GetMessage() == MessageID::Collide) {
 
 	}
 }

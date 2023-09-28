@@ -8,7 +8,7 @@
 #include <Debug.h>
 #include "GameLogic.h"
 #include <iostream>
-#include "Assets Manager/file_reader.h"
+//#include "Assets Manager/file_reader.h"
 #include "Factory.h"
 #include "ComponentCreator.h"
 #include "components/Transform.h"
@@ -26,15 +26,24 @@ Object* scale_and_rotate;
 Object* playerObj;
 Object* dynamic_collision;
 
-void GameLogic::MessageRelay(Message* msg) {
+/******************************************************************************
+* MessageRelay
+* - Get Message and React Accordingly
+* - For Movement Keys Debug
+*******************************************************************************/
+void GameLogic::MessageRelay(Message_Handler* msg) {
 	// For Movement Key Display
 	/*
-	if (msg->message_id == MessageID::Movement) {
+	if (msg->message == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
 		std::cout << temp->dir << std::endl;
 	}
 	*/
 }
+/******************************************************************************
+* Initialize
+* - Initialize Objects and their Components
+*******************************************************************************/
 void GameLogic::Initialize()
 {
 	// In order to use the game object factory, we need to register the components we want to use first like this
@@ -63,7 +72,10 @@ void GameLogic::Initialize()
 	floor2 = objectFactory->createObject("../mapbox.json");
 	floor3 = objectFactory->createObject("../mapbox.json");
 	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Transform));
-	tran_pt->Position.x = 190; // offset objectx
+
+	// offset objects
+	tran_pt->Position.x = 190;
+
 	// @Sen Chuan if you move position like that, remember to call these 2 functions cause collision
 	// box still using the old position
 	Rectangular* rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Body)); // @Sen Chuan
@@ -122,22 +134,34 @@ void GameLogic::Initialize()
 	*/
 }
 
+/******************************************************************************
+* Update
+* - Update Logic when there is user input
+*******************************************************************************/
 void GameLogic::Update(float time) {
+	// If Left Click, show mouse position
+	if (input::IsPressed(KEY::mouseL)) {
+		std::cout << "Mouse Position is :  X = " << input::GetMouseX << ", Y = " << input::GetMouseY << std::endl;
+		Message_Handler msg(MessageID::Event_Type::MouseClick);
+		engine->Broadcast(&msg);
+	}
 
 	// If press esc button, quit the game
 	if (input::IsPressed(KEY::esc)) {
-		Message msg(MessageID::MessageIDType::Quit);
+		Message_Handler msg(MessageID::Event_Type::Quit);
 		engine->Broadcast(&msg);
 	}
-	//Movement for Player
+
+
+	// Movement for Player
 	// If button Pressed, changed velocity
+	// 
 	Physics* p = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 	p->Velocity.x = 0.0f;
 	bool moving = false;
 	if (input::IsPressed(KEY::w)) {
 		MovementKey msg(up);
 		engine->Broadcast(&msg);
-
 		//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 		if (p->Velocity.y == 0.0f) {
 			p->Velocity.y = 2500.0f;
@@ -147,25 +171,17 @@ void GameLogic::Update(float time) {
 	if (input::IsPressedRepeatedly(KEY::a)) {
 		MovementKey msg(left);
 		engine->Broadcast(&msg);
-
 		p->Velocity.x -= 500.0f;
-		//std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 		moving = true;
 	}
-	/*
-	if (input::IsPressedRepeatedly(KEY::s)) {
-		MovementKey msg(down);
-		engine->Broadcast(&msg);
-	}*/
 	if (input::IsPressedRepeatedly(KEY::d)) {
 		MovementKey msg(right);
 		engine->Broadcast(&msg);
-
 		p->Velocity.x += 500.0f;
-		//std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 		moving = true;
 	}
 
+	// Audio for Character Movement
 	if ((p->Velocity.y == 0.f) && moving) {
 		audio->startWalking();
 	}
@@ -173,11 +189,15 @@ void GameLogic::Update(float time) {
 		audio->stopWalking();
 		moving = false;
 	}
-	// Printing Player Position by pressing s
-	if (input::IsPressed(KEY::p)) {
+
+
+	// Printing Player Position by pressing Z
+	if (input::IsPressed(KEY::z)) {
 		Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 		std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
 	}
+
+
 
 	// Rotation of an object
 	Transform* t = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
@@ -196,6 +216,10 @@ void GameLogic::Update(float time) {
 	if (input::IsPressedRepeatedly(KEY::right)) {
 		t->Rotation -= 0.01f;
 	}
+
+
+
+
 
 	// Dynamic collision
 
