@@ -31,7 +31,7 @@ public:
 	GLApp();
 	~GLApp() {}
 	virtual void Initialize() ;
-	virtual void Update(float time);
+	virtual void Update();
 	virtual std::string SystemName() { return "Graphics"; }
 	
 	static void cleanup();

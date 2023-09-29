@@ -27,7 +27,7 @@ public:
 	GLWindow();
 	~GLWindow() {};
 	virtual void Initialize();
-	virtual void Update(float time);
+	virtual void Update();
 	virtual std::string SystemName() { return "Window"; };
 	static void ActivateWindow();
 	static void cleanup();

@@ -22,7 +22,7 @@ class AssetManager : public ISystems
 
 	virtual void Initialize();
 	virtual void Free();
-	virtual void Update(float dt);
+	virtual void Update();
 	virtual std::string SystemName();
 	void loadassets();
 

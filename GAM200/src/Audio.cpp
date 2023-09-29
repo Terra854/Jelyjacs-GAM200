@@ -41,7 +41,7 @@ void Audio::Initialize(){
     audio = this;
 }
 
-void Audio::Update(float time){
+void Audio::Update(){
     system->update();
 }
 

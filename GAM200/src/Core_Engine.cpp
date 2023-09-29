@@ -56,14 +56,14 @@ void CoreEngine::Initialize() {
 * - Update all the Systems
 *  - Update Windows and Graphics Last
 *******************************************************************************/
-void CoreEngine::Update(const float& dt) {
+void CoreEngine::Update() {
 	for (const std::pair<std::string, ISystems*>& sys : Systems) {
 		if (sys.first != "Window" && sys.first != "Graphics") {
-			sys.second->Update(dt);
+			sys.second->Update();
 		}
 	}
-	Systems["Window"]->Update(dt);
-	Systems["Graphics"]->Update(dt);
+	Systems["Window"]->Update();
+	Systems["Graphics"]->Update();
 }
 
 /********************************************************************************
@@ -80,7 +80,7 @@ void CoreEngine::Debug_Update(const float& dt) {
 	for (const std::pair<std::string, ISystems*>& sys : Systems) {
 		if (sys.first != "Window" && sys.first != "Graphics") {
 			start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-			sys.second->Update(dt);
+			sys.second->Update();
 			std::cout << sys.second->SystemName() << " is updating" << std::endl;
 			end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 			elapsed_time[sys.second->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
@@ -88,8 +88,8 @@ void CoreEngine::Debug_Update(const float& dt) {
 		}
 	}
 
-	Systems["Window"]->Update(dt);
-	Systems["Graphics"]->Update(dt);
+	Systems["Window"]->Update();
+	Systems["Graphics"]->Update();
 
 	// Output to console for now, will plan to display ingame when the engine can render fonts
 	for (std::pair<std::string, double> p : elapsed_time)
@@ -126,7 +126,7 @@ void CoreEngine::GameLoop() {
 	// Game Loop
 	while (game_active) {
 		// Toggle Button to Display Debug Information on Console
-		input::IsPressed(KEY::f) ? Debug_Update(dt) : Update(dt);
+		input::IsPressed(KEY::f) ? Debug_Update(dt) : Update();
 
 		auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
 		++core_fps;

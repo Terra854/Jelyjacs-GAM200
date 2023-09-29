@@ -14,7 +14,7 @@ class Audio : public ISystems {
 public:
 	~Audio();
 	virtual void Initialize();
-	virtual void Update(float time) override;
+	virtual void Update() override;
 	virtual std::string SystemName() { return "Audio"; }
 
 	void startWalking();
