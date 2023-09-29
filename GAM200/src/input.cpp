@@ -77,6 +77,10 @@ int at(KEY index)
 
 void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
 {
+	(void)pWin;
+	(void)scancode;
+	(void)mod;
+
 	switch (key)
 	{
 	case GLFW_KEY_W:
@@ -155,6 +159,8 @@ void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
 
 void MouseButtonCallBack(GLFWwindow* pWin, int button, int action, int mod)
 {
+	(void)pWin;
+	(void)mod;
 	switch (button)
 	{
 	case GLFW_MOUSE_BUTTON_1:
@@ -171,6 +177,7 @@ void MouseButtonCallBack(GLFWwindow* pWin, int button, int action, int mod)
 
 void MousePosCallBack(GLFWwindow* pWin, double xpos, double ypos)
 {
+	(void)pWin;
 	mouse.x = xpos;
 	mouse.y = ypos;
 }
