@@ -17,13 +17,13 @@ public:
 	virtual ~ISystems() {};
 
 	//Messaging System for inter System communication
-	virtual void MessageRelay(Message_Handler* msg) {};
+	virtual void MessageRelay(Message_Handler*) {};
 
 	// System Initialization
 	virtual void Initialize(){};
 
 	// System Update
-	virtual void Update(float time) = 0;
+	virtual void Update() = 0;
 
 
 	// System freeing resources

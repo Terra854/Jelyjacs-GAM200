@@ -104,7 +104,7 @@ void GameLogic::Initialize()
 * Update
 * - Update Logic when there is user input
 *******************************************************************************/
-void GameLogic::Update(float time) {
+void GameLogic::Update() {
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
 		std::cout << "Mouse Position is :  X = " << input::GetMouseX() << ", Y = " << input::GetMouseY() << std::endl;

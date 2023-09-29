@@ -169,7 +169,7 @@ void Factory::destroyObject(Object* obj)
 }
 
 //This deletes all objects to be deleted
-void Factory::Update(float dt) {
+void Factory::Update() {
 	std::set<Object*>::iterator it = gameObjsToBeDeleted.begin();
 	for (; it != gameObjsToBeDeleted.end(); ++it)
 	{

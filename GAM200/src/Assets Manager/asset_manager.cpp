@@ -40,9 +40,9 @@ std::string AssetManager::SystemName()
 	return "AssetManager";
 }
 
-void AssetManager::Update(float dt)
+void AssetManager::Update()
 {
-
+	
 }
 
 // Load all assets in the different paths (might be changed to specific type of assets)

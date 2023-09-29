@@ -24,7 +24,7 @@ public:
 	void Initialize();
 
 	// Update all the System and FPS
-	void Update(const float& dt);
+	void Update();
 
 	// Debug Update function
 	void Debug_Update(const float& dt);

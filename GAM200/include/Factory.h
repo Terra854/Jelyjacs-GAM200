@@ -38,7 +38,7 @@ public:
 	void destroyObject(Object* object);
 
 	//This deletes all objects to be deleted
-	virtual void Update(float time);
+	virtual void Update();
 
 	virtual std::string SystemName() { return "Factory"; };
 

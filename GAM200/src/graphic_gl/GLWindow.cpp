@@ -121,7 +121,7 @@ void GLWindow::Initialize() {
 /*
 * upate event and detect close button
 */
-void GLWindow::Update(float time)
+void GLWindow::Update()
 {
     (void) time;
     glfwPollEvents();

@@ -91,7 +91,7 @@ void PhysicsSystem::Initialize() {
 
 }
 
-void PhysicsSystem::Update(float time) {
+void PhysicsSystem::Update() {
 
 	// If there is a sudden lag spike, the physics will act weird
 	// In that case, do not update for this cycle

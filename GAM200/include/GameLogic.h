@@ -16,7 +16,7 @@ class GameLogic : public ISystems
 public:
 	virtual void MessageRelay(Message_Handler* msg);
 	virtual void Initialize();
-	void Update(float time);
+	void Update();
 	virtual std::string SystemName() { return "Game_Logic"; }
 };
 

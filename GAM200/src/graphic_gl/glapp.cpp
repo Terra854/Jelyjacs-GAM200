@@ -226,7 +226,7 @@ void GLApp::init_shdrpgms() {
 /*
 * update and draw objects
 */
-void GLApp::Update(float time)
+void GLApp::Update()
 {
 
 	//clear screen
