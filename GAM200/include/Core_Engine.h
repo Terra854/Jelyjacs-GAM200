@@ -27,7 +27,7 @@ public:
 	void Update();
 
 	// Debug Update function
-	void Debug_Update(const float& dt);
+	void Debug_Update();
 
 	// Main Game Loop - looping all the system updates
 	void GameLoop();
@@ -42,6 +42,9 @@ public:
 	// Acts as a MessageRelay for Core Engine
 	void Broadcast(Message_Handler *msg);
 
+
+	float GetDt() { return dt; }
+
 	
 private:
 	// Map of Systems (Container)
@@ -49,6 +52,9 @@ private:
 
 	// FPS
 	unsigned core_fps;
+
+	// DT
+	float dt;
 
 	// Checking if game is active
 	bool game_active;

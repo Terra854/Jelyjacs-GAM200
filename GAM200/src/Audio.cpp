@@ -7,7 +7,7 @@ This file contains the definitions of the functions that are part of the Audio s
 *//*__________________________________________________________________________*/
 #include "Audio.h"
 
-Audio* audio;
+Audio* audio = nullptr;
 
 Audio::~Audio(){
     system->close();

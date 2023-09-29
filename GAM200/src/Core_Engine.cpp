@@ -24,6 +24,7 @@ CoreEngine* CORE = NULL;
 *******************************************************************************/
 CoreEngine::CoreEngine() {
 	core_fps = 60;
+	dt = 1.f / static_cast<float>(core_fps);
 	game_active = true;
 	CORE = this;
 }
@@ -72,7 +73,8 @@ void CoreEngine::Update() {
 * - Loop through all the systems and check the duration of each system update
 * - Use microseconds for more accuracy
 ********************************************************************************/
-void CoreEngine::Debug_Update(const float& dt) {
+void CoreEngine::Debug_Update() {
+	float time = GetDt();
 	long long start_system_time, end_system_time;
 	std::map<std::string, double> elapsed_time;
 	double total_time = 0.0;
@@ -96,7 +98,7 @@ void CoreEngine::Debug_Update(const float& dt) {
 		std::cout << p.first << " system completed it's update in " << std::fixed << std::setprecision(6) << p.second << " seconds (" << p.second / total_time * 100.0 << "%)" << std::endl;
 
 	std::cout << "Total time taken for this frame: " << std::fixed << std::setprecision(6) << total_time << " seconds." << std::endl;
-	std::cout << "Frame Rate is " << dt << std::endl;
+	std::cout << "Frame Rate is " << time << std::endl;
 	std::cout << "########################################################################################" << std::endl;
 
 }
@@ -113,7 +115,6 @@ void CoreEngine::GameLoop() {
 	auto m_BeginFrame = std::chrono::system_clock::now();
 	auto m_EndFrame = m_BeginFrame + invFpsLimit;
 	auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
-	float dt = 1.f / core_fps;
 
 	// Console Debug Instructions
 	std::cout << "########################################################" << std::endl;
@@ -126,7 +127,7 @@ void CoreEngine::GameLoop() {
 	// Game Loop
 	while (game_active) {
 		// Toggle Button to Display Debug Information on Console
-		input::IsPressed(KEY::f) ? Debug_Update(dt) : Update();
+		input::IsPressed(KEY::f) ? Debug_Update() : Update();
 
 		auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
 		++core_fps;

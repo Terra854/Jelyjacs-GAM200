@@ -10,6 +10,7 @@ This file contains the definitions of the functions that are part of the Physics
 #include <PhysicsSystem.h>
 #include <components/Body.h>
 #include <Interface_System.h>
+#include <Core_Engine.h>
 #include <typeinfo>
 #include <string>
 #include <iostream>
@@ -133,13 +134,14 @@ void PhysicsSystem::Initialize() {
 
 void PhysicsSystem::Update() {
 
+	float dt = engine->GetDt();
 	// If there is a sudden lag spike, the physics will act weird
 	// In that case, do not update for this cycle
-	if (time > 0.05f) {
+	if (dt > 0.05f) {
 		return;
 	}
 
-	top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= time : 0.0f;
+	top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= dt : 0.0f;
 
 	// Update velocity for player
 	// Check all the objects, if it have the player controllable component, change its physics
@@ -156,7 +158,7 @@ void PhysicsSystem::Update() {
 
 		// Move right
 		if (input::IsPressedRepeatedly(KEY::d)) {
-			p->Velocity.x += 17500.0f * time;
+			p->Velocity.x += 17500.0f * dt;
 			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 			if (p->Velocity.y == 0.f)
 				audio->startWalking();
@@ -164,7 +166,7 @@ void PhysicsSystem::Update() {
 
 		// Move left
 		if (input::IsPressedRepeatedly(KEY::a)) {
-			p->Velocity.x -= 17500.0f * time;
+			p->Velocity.x -= 17500.0f * dt;
 			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
 			if (p->Velocity.y == 0.f)
 				audio->startWalking();
@@ -196,7 +198,7 @@ void PhysicsSystem::Update() {
 
 		// Apply gravity
 		p->Y_Acceleration = gravity;
-		p->Velocity.y += (float) (p->Y_Acceleration - 0.75 * p->Velocity.y) * time; // Account for air resistance
+		p->Velocity.y += (float) (p->Y_Acceleration - 0.75 * p->Velocity.y) * dt; // Account for air resistance
 	}
 
 	// Loop through each object to see if it's colliding with something
@@ -219,7 +221,7 @@ void PhysicsSystem::Update() {
 			((Rectangular*)b)->collision_flag = 0;
 
 		// Calculate new position
-		t->Position += p->Velocity * time;
+		t->Position += p->Velocity * dt;
 
 		RecalculateBody(t, b);
 
@@ -233,7 +235,7 @@ void PhysicsSystem::Update() {
 			if (b2 == nullptr)
 				continue; // No body in the other object, no way it's collidable
 
-			if (collision_flag = Check_Collision(b, b2, time)) {
+			if (collision_flag = Check_Collision(b, b2, dt)) {
 
 				/*
 				// DEBUG
