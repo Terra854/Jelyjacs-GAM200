@@ -98,6 +98,7 @@ void RecalculateBody(Transform* t, Body* b) {
 
 // Objects responding to collision
 void Response_Collision(Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
+	(void)t2;
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
 
