@@ -123,6 +123,7 @@ void GLWindow::Initialize() {
 */
 void GLWindow::Update(float time)
 {
+    (void) time;
     glfwPollEvents();
 
    
