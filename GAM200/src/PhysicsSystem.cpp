@@ -10,6 +10,7 @@ This file contains the definitions of the functions that are part of the Physics
 #include <PhysicsSystem.h>
 #include <components/Body.h>
 #include <Interface_System.h>
+#include <Core_Engine.h>
 #include <typeinfo>
 #include <string>
 #include <iostream>
@@ -93,13 +94,14 @@ void PhysicsSystem::Initialize() {
 
 void PhysicsSystem::Update() {
 
+	float dt = engine->GetDt();
 	// If there is a sudden lag spike, the physics will act weird
 	// In that case, do not update for this cycle
-	if (time > 0.05f) {
+	if (dt > 0.05f) {
 		return;
 	}
 
-	top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= time : 0.0f;
+	top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= dt : 0.0f;
 
 	// Update velocity for each object
 	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
@@ -112,7 +114,7 @@ void PhysicsSystem::Update() {
 
 		// Apply gravity
 		p->Y_Acceleration = gravity;
-		p->Velocity.y += (float) (p->Y_Acceleration - 0.75 * p->Velocity.y) * time; // Account for air resistance
+		p->Velocity.y += (float) (p->Y_Acceleration - 0.75 * p->Velocity.y) * dt; // Account for air resistance
 	}
 
 	// Loop through each object to see if it's colliding with something
@@ -135,7 +137,7 @@ void PhysicsSystem::Update() {
 			((Rectangular*)b)->collision_flag = 0;
 
 		// Calculate new position
-		t->Position += p->Velocity * time;
+		t->Position += p->Velocity * dt;
 
 		RecalculateBody(t, b);
 
