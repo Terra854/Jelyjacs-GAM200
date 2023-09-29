@@ -174,12 +174,12 @@ void Factory::Update() {
 	for (; it != gameObjsToBeDeleted.end(); ++it)
 	{
 		Object* obj = *it;
-		objectIDMap::iterator it = objectMap.find(obj->ObjectId);
-		if (it != objectMap.end())
+		objectIDMap::iterator gameObjectInMap = objectMap.find(obj->ObjectId);
+		if (gameObjectInMap != objectMap.end())
 		{
 			//Delete it and remove its entry in the Id map
 			delete obj;
-			objectMap.erase(it);
+			objectMap.erase(gameObjectInMap);
 		}
 	}
 	//All objects to be delete have been deleted
