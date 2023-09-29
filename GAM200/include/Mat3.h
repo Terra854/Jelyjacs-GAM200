@@ -12,6 +12,10 @@ This file contains the declaration for the Mat3 class used to represent a 3x3 ma
 
 struct Mat3
 {
+	#ifdef _MSC_VER
+	// Supress warning: nonstandard extension used : nameless struct/union
+	#pragma warning( disable : 4201 )
+	#endif
 	union {
 		struct
 		{

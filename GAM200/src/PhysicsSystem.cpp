@@ -57,29 +57,27 @@ void RecalculateBody(Transform* t, Body* b) {
 }
 
 // Objects responding to collision
-void Response_Collision(Transform* t1, Body* b1, Physics* p1, Transform* t2, Body* b2) {
+void Response_Collision(Transform* t1, Body* b1, Physics* p1, Body* b2) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
 
-		int collision_flag = ((Rectangular*)b1)->collision_flag;
-
-		if (collision_flag & COLLISION_LEFT) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT) {
 			t1->Position.x = t1->PrevPosition.x;
 		}
-		if (collision_flag & COLLISION_RIGHT) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT) {
 			t1->Position.x = t1->PrevPosition.x;
 		}
-		if (collision_flag & COLLISION_TOP) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
 			top_collision_cooldown = 0.1f;
 			p1->Velocity.y = 0.0f;
 			t1->Position.y = ((Rectangular*)b2)->aabb.min.y - (((Rectangular*)b1)->height / 2);
 		}
-		if (collision_flag & COLLISION_BOTTOM) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_BOTTOM) {
 			p1->Velocity.y = 0.0f;
 			t1->Position.y = ((Rectangular*)b2)->aabb.max.y + (((Rectangular*)b1)->height / 2);
 		}
 
-		if (collision_flag)
+		if (((Rectangular*)b1)->collision_flag)
 			RecalculateBody(t1, b1);
 	}
 }

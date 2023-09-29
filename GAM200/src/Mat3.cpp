@@ -45,15 +45,15 @@ Mat3& Mat3::operator=(const Mat3& rhs)
 
 Mat3& Mat3::operator*=(const Mat3& rhs)
 {
-	float m[3][3]{};
+	float temp_m[3][3]{};
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			for (int k = 0; k < 3; k++)
-				m[i][j] += this->m2[i][k] * rhs.m2[k][j];
+				temp_m[i][j] += this->m2[i][k] * rhs.m2[k][j];
 
 	for (int i = 0; i < 9; i++)
-		this->m2[i / 3][i % 3] = m[i / 3][i % 3];
+		this->m2[i / 3][i % 3] = temp_m[i / 3][i % 3];
 
 	return *this;
 }
