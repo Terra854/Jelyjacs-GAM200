@@ -1,6 +1,6 @@
 /*!
 @file    GLWindow.cpp
-@author  Guo Chen (g.chen@digipen.edu)
+@author  Guo Chen (g.chen@digipen.edu).  pghali@digipen.edu
 @date    28/09/2023
 
 Window system for the engine
@@ -153,6 +153,8 @@ void GLWindow::cleanup() {
 /*  _________________________________________________________________________ */
 /*! error_cb
 
+@ wrote by pghali@digipen.edu
+
 @param int
 GLFW error code
 
@@ -173,6 +175,8 @@ void GLWindow::error_cb(int error, char const* description) {
 
 /*  _________________________________________________________________________ */
 /*! fbsize_cb
+* 
+@ wrote by pghali@digipen.edu
 
 @param GLFWwindow*
 Handle to window that is being resized
@@ -201,6 +205,8 @@ void GLWindow::fbsize_cb(GLFWwindow* ptr_win, int wwidth, int hheight) {
 
 /*  _________________________________________________________________________*/
 /*! print_specs()
+* 
+* @ wrote by pghali@digipen.edu
 
 @param none
 
