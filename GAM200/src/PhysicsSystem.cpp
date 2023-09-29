@@ -149,8 +149,9 @@ void PhysicsSystem::Update() {
 			if (b2 == nullptr)
 				continue; // No body in the other object, no way it's collidable
 
-			if (collision_flag = Check_Collision(b, b2, time)) {
-				Response_Collision(t, b, p, (Transform*)anotherobj->second->GetComponent(ComponentType::Transform), b2);
+			collision_flag = Check_Collision(b, b2, dt);
+			if (collision_flag) {
+				Response_Collision(t, b, p, b2);
 			}
 			else {
 				

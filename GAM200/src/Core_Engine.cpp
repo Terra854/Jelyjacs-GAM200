@@ -101,7 +101,7 @@ void CoreEngine::Debug_Update() {
 		std::cout << p.first << " system completed it's update in " << std::fixed << std::setprecision(6) << p.second << " seconds (" << p.second / total_time * 100.0 << "%)" << std::endl;
 
 	std::cout << "Total time taken for this frame: " << std::fixed << std::setprecision(6) << total_time << " seconds." << std::endl;
-	std::cout << "Frame Rate is " << 1.0f / dt << " FPS" << std::endl;
+	std::cout << "Frame Rate is " << 1.0f / time << " FPS" << std::endl;
 	std::cout << "########################################################################################" << std::endl;
 
 }
