@@ -32,7 +32,7 @@ int main() {
 	Factory* factory = new Factory();
 	PhysicsSystem* physics = new PhysicsSystem();
 	AssetManager* assetmanager = new AssetManager();
-	Audio* audio = new Audio();
+	audio = new Audio(); // declared in Audio.h
 	GLApp* graphics = new GLApp();     
 	
 	// Add System to the engine 
