@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file
-@author
+@file	ComponentCreator.h
+@author	Yeo Jia Ming
 @date	28/9/2023
 
-
+This file contains functions to create components based on component type
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 
