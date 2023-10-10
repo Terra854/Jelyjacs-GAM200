@@ -292,6 +292,10 @@ void GLApp::Update()
 		//get matrix
 		mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
 		
+
+		// matrix after camrea
+		mat_test = camera2D->world_to_ndc * mat_test;
+
 		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
 			shdrpgms["shape"].Use();
 			// bind VAO of this object's model

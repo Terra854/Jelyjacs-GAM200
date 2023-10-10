@@ -123,6 +123,9 @@
     <ClCompile Include="src\Body.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphic_gl\Camera.cpp">
+      <Filter>Source Files\Systems\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -214,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="include\Precompile.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphic_gl\Camera.h">
+      <Filter>Header Files\Systems\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -21,10 +21,13 @@ includes all the functions to draw objects
 #include <list>
 #include <Interface_System.h>
 #include <Factory.h>
+#include <Camera.h>
 #include <components/Texture.h>
 #include <components/Transform.h>
 #include <components/Physics.h>
 #include <components/Body.h>
+#include <Mat3.h>
+#include <Vec2.h>
 class GLApp : public ISystems
 {
 public:
@@ -62,6 +65,9 @@ public:
 	static std::map<std::string, GLSLShader> shdrpgms; 
 	static std::map<std::string, GLModel> models;
 	
+	class camera {
+		Vec2 pos;
+	};
 };
 extern GLApp* app;
-#endif /* GLAPP_H */
+#endif  /*GLAPP_H */
