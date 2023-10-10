@@ -326,7 +326,7 @@ void GLApp::Update()
 				float scale_line_y = sqrt(Vx * Vx + Vy * Vy) / window->height /2;
 				
 				mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scale_line_x, scale_line_y) * Mat3RotRad(orientation);
-				
+				mat_test = camera2D->world_to_ndc * mat_test;
 				//draw line
 				shdrpgms["shape"].Use();
 				// bind VAO of this object's model
