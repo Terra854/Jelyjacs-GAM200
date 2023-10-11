@@ -198,6 +198,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClInclude Include="include\ImGui\imconfig.h" />
     <ClInclude Include="include\ImGui\imgui.h" />
     <ClInclude Include="include\ImGui\imgui_impl_opengl3.h" />
+    <ClInclude Include="include\ImGui\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="include\ImGui\imgui_impl_win32.h" />
     <ClInclude Include="include\ImGui\imgui_internal.h" />
     <ClInclude Include="include\ImGui\imstb_rectpack.h" />
