@@ -15,14 +15,17 @@ This file contains the definitions of the functions that are part of the Core En
 #include <input.h>
 #include <map>
 #include <thread>
+#include "ImGui/imgui.h";
+#include "ImGui/imgui_impl_win32.h";
+#include "ImGui/imgui_impl_opengl3.h";
 
 CoreEngine* CORE = NULL;
-
 /******************************************************************************
 * Default Constructor
 * - Initialise Class Variables and Extern Class Pointer
 *******************************************************************************/
-CoreEngine::CoreEngine() {
+CoreEngine::CoreEngine() 
+{
 	core_fps = 60;
 	dt = 1.f / static_cast<float>(core_fps);
 	game_active = true;
@@ -40,11 +43,24 @@ CoreEngine::~CoreEngine() {
 * Initialize
 * - Initializing all the Systems 
 *******************************************************************************/
-void CoreEngine::Initialize() {
+void CoreEngine::Initialize() 
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+	ImGui_ImplWin32_InitForOpenGL(hwnd);
+	ImGui_ImplOpenGL3_Init();
+
 	std::cout << "Initialising " << Systems["Window"]->SystemName() << std::endl;
 	Systems["Window"]->Initialize(); // Must initialize Window first
-	for (const std::pair<std::string, ISystems*>& sys : Systems) { // Then initialize all other systems
-		if (sys.first != "Window") { // Window already initialized, do not do it again
+	for (const std::pair<std::string, ISystems*>& sys : Systems) 
+	{ // Then initialize all other systems
+		if (sys.first != "Window") 
+		{ // Window already initialized, do not do it again
 			// printing system name for debugging purposes
 			std::cout << "Initialising " << sys.second->SystemName() << std::endl;
 			sys.second->Initialize();
@@ -57,9 +73,12 @@ void CoreEngine::Initialize() {
 * - Update all the Systems
 *  - Update Windows and Graphics Last
 *******************************************************************************/
-void CoreEngine::Update() {
-	for (const std::pair<std::string, ISystems*>& sys : Systems) {
-		if (sys.first != "Window" && sys.first != "Graphics") {
+void CoreEngine::Update() 
+{
+	for (const std::pair<std::string, ISystems*>& sys : Systems) 
+	{
+		if (sys.first != "Window" && sys.first != "Graphics") 
+		{
 			sys.second->Update();
 		}
 	}
@@ -73,15 +92,18 @@ void CoreEngine::Update() {
 * - Loop through all the systems and check the duration of each system update
 * - Use microseconds for more accuracy
 ********************************************************************************/
-void CoreEngine::Debug_Update() {
+void CoreEngine::Debug_Update() 
+{
 	float time = GetDt();
 	long long start_system_time, end_system_time;
 	std::map<std::string, double> elapsed_time;
 	double total_time = 0.0;
 	std::cout << "########################################################################################" << std::endl;
 
-	for (const std::pair<std::string, ISystems*>& sys : Systems) {
-		if (sys.first != "Window" && sys.first != "Graphics") {
+	for (const std::pair<std::string, ISystems*>& sys : Systems) 
+	{
+		if (sys.first != "Window" && sys.first != "Graphics") 
+		{
 			start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 			sys.second->Update();
 			std::cout << sys.second->SystemName() << " is updating" << std::endl;
@@ -112,7 +134,8 @@ void CoreEngine::Debug_Update() {
 * - When Game is Active
 * - Calculate FPS and Update Systems
 ********************************************************************************/
-void CoreEngine::GameLoop() {
+void CoreEngine::GameLoop() 
+{
 	// FPS Variables
 	auto invFpsLimit = std::chrono::round<std::chrono::system_clock::duration>(std::chrono::duration<double>{ 1. / static_cast<double>(core_fps) }); // 1/60
 	auto m_BeginFrame = std::chrono::system_clock::now();
@@ -128,7 +151,14 @@ void CoreEngine::GameLoop() {
 
 
 	// Game Loop
-	while (game_active) {
+	while (game_active)
+	{
+		// Start the Dear ImGui frame
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow();
+
 		// Toggle Button to Display Debug Information on Console
 		input::IsPressed(KEY::f) ? Debug_Update() : Update();
 
@@ -157,14 +187,16 @@ void CoreEngine::GameLoop() {
 * AddSystem
 * - Add the system into the system container
 ********************************************************************************/
-void CoreEngine::AddSystem(ISystems* sys) {
+void CoreEngine::AddSystem(ISystems* sys)
+{
 	Systems[sys->SystemName()] = sys;
 }
 /********************************************************************************
 * DeleteSystem
 * - Delete all the systems from the system container
 ********************************************************************************/
-void CoreEngine::DeleteSystem() {
+void CoreEngine::DeleteSystem() 
+{
 	for (const std::pair<std::string, ISystems*>& sys : Systems)
 		delete sys.second;
 }
@@ -173,13 +205,16 @@ void CoreEngine::DeleteSystem() {
 * Broadcast
 * - Broadcast Messages to all the systems
 ********************************************************************************/
-void CoreEngine::Broadcast(Message_Handler* msg) {
+void CoreEngine::Broadcast(Message_Handler* msg) 
+{
 	// Set Game_mode to 0 to stop loop
-	if (msg->GetMessage() == MessageID::Quit) {
+	if (msg->GetMessage() == MessageID::Quit) 
+	{
 		game_active = false;
 	}
 	// Loop Messaging System
-	for (const std::pair<std::string, ISystems*>& sys : Systems) {
+	for (const std::pair<std::string, ISystems*>& sys : Systems) 
+	{
 		sys.second->MessageRelay(msg);
 	}
 }
