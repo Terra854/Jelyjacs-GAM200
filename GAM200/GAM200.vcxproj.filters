@@ -144,9 +144,6 @@
     <ClCompile Include="src\ImGui\imgui_impl_opengl3.cpp">
       <Filter>Source Files\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui\imgui_impl_win32.cpp">
-      <Filter>Source Files\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="src\ImGui\imgui_tables.cpp">
       <Filter>Source Files\ImGui</Filter>
     </ClCompile>
@@ -258,9 +255,6 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imgui_impl_opengl3.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ImGui\imgui_impl_win32.h">
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imgui_internal.h">

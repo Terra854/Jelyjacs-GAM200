@@ -163,7 +163,6 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClCompile Include="src\ImGui\imgui_draw.cpp" />
     <ClCompile Include="src\ImGui\imgui_impl_glfw.cpp" />
     <ClCompile Include="src\ImGui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="src\ImGui\imgui_tables.cpp" />
     <ClCompile Include="src\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="src\Line.cpp" />
@@ -201,7 +200,6 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClInclude Include="include\ImGui\imgui_impl_glfw.h" />
     <ClInclude Include="include\ImGui\imgui_impl_opengl3.h" />
     <ClInclude Include="include\ImGui\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="include\ImGui\imgui_impl_win32.h" />
     <ClInclude Include="include\ImGui\imgui_internal.h" />
     <ClInclude Include="include\ImGui\imstb_rectpack.h" />
     <ClInclude Include="include\ImGui\imstb_textedit.h" />
