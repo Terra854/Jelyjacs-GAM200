@@ -16,7 +16,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <map>
 #include <thread>
 #include "ImGui/imgui.h";
-#include "ImGui/imgui_impl_win32.h";
+#include "ImGui/imgui_impl_glfw.h";
 #include "ImGui/imgui_impl_opengl3.h";
 
 CoreEngine* CORE = NULL;
@@ -36,6 +36,9 @@ CoreEngine::CoreEngine()
 * - Deallocate all the systems
 *******************************************************************************/
 CoreEngine::~CoreEngine() {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 	DeleteSystem();
 }
 
@@ -45,16 +48,6 @@ CoreEngine::~CoreEngine() {
 *******************************************************************************/
 void CoreEngine::Initialize() 
 {
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
-	ImGui_ImplWin32_InitForOpenGL(hwnd);
-	ImGui_ImplOpenGL3_Init();
-
 	std::cout << "Initialising " << Systems["Window"]->SystemName() << std::endl;
 	Systems["Window"]->Initialize(); // Must initialize Window first
 	for (const std::pair<std::string, ISystems*>& sys : Systems) 
@@ -66,6 +59,17 @@ void CoreEngine::Initialize()
 			sys.second->Initialize();
 		}
 	}
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplGlfw_InitForOpenGL(window->ptr_window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+	ImGui_ImplOpenGL3_Init();
 }
 
 /******************************************************************************
@@ -153,11 +157,15 @@ void CoreEngine::GameLoop()
 	// Game Loop
 	while (game_active)
 	{
+		// (Your code calls glfwPollEvents())
+		// ...
 		// Start the Dear ImGui frame
+		glfwPollEvents();
+
 		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplWin32_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow(); // Show demo window! :)
 
 		// Toggle Button to Display Debug Information on Console
 		input::IsPressed(KEY::f) ? Debug_Update() : Update();
@@ -177,6 +185,12 @@ void CoreEngine::GameLoop()
 			prev_time_in_seconds = time_in_seconds;
 		}
 		
+		// Rendering
+// (Your code clears your framebuffer, renders your other stuff etc.)
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		// (Your code calls glfwSwapBuffers() etc.)
+
 		// Updating Frame Times
 		m_BeginFrame = m_EndFrame;
 		m_EndFrame = m_BeginFrame + invFpsLimit;

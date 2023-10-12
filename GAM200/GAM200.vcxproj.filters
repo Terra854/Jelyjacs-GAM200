@@ -153,6 +153,9 @@
     <ClCompile Include="src\ImGui\imgui_widgets.cpp">
       <Filter>Source Files\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\ImGui\imgui_impl_glfw.cpp">
+      <Filter>Source Files\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -273,6 +276,9 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="include\ImGui\imgui_impl_opengl3_loader.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImGui\imgui_impl_glfw.h">
       <Filter>ImGui</Filter>
     </ClInclude>
   </ItemGroup>
