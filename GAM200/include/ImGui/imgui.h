@@ -1873,7 +1873,7 @@ enum ImGuiCond_
 // We call C++ constructor on own allocated memory via the placement "new(ptr) Type()" syntax.
 // Defining a custom placement new() with a custom parameter allows us to bypass including <new> which on some platforms complains when user has disabled exceptions.
 //-----------------------------------------------------------------------------
-
+#undef new
 struct ImNewWrapper {};
 inline void* operator new(size_t, ImNewWrapper, void* ptr) { return ptr; }
 inline void  operator delete(void*, ImNewWrapper, void*)   {} // This is only required so we can use the symmetrical new()
