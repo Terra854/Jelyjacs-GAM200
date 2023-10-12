@@ -91,8 +91,20 @@ void CoreEngine::Debug_Update() {
 		}
 	}
 
+	start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	Systems["Window"]->Update();
+	std::cout << Systems["Window"]->SystemName() << " is updating" << std::endl;
+	end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	elapsed_time[Systems["Window"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
+	total_time += (double)(end_system_time - start_system_time) / 1000000.0;
+
+	start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	Systems["Graphics"]->Update();
+	std::cout << Systems["Graphics"]->SystemName() << " is updating" << std::endl;
+	end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	elapsed_time[Systems["Graphics"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
+	total_time += (double)(end_system_time - start_system_time) / 1000000.0;
+
 
 	std::cout << "########################################################################################" << std::endl;
 
