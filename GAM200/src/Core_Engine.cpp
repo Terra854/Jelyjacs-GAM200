@@ -20,6 +20,8 @@ This file contains the definitions of the functions that are part of the Core En
 #include "ImGui/imgui_impl_opengl3.h";
 
 CoreEngine* CORE = NULL;
+ImVec4 clear_color;
+
 /******************************************************************************
 * Default Constructor
 * - Initialise Class Variables and Extern Class Pointer
@@ -35,7 +37,8 @@ CoreEngine::CoreEngine()
 * Destructor
 * - Deallocate all the systems
 *******************************************************************************/
-CoreEngine::~CoreEngine() {
+CoreEngine::~CoreEngine() 
+{
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
@@ -70,6 +73,9 @@ void CoreEngine::Initialize()
 	// Setup Platform/Renderer backends
 	ImGui_ImplGlfw_InitForOpenGL(window->ptr_window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
 	ImGui_ImplOpenGL3_Init();
+
+	
+	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 }
 
 /******************************************************************************
@@ -167,6 +173,10 @@ void CoreEngine::GameLoop()
 		ImGui::NewFrame();
 		ImGui::ShowDemoWindow(); // Show demo window! :)
 
+		ImGui::Begin("Test");
+		ImGui::Text("Testing text");
+		ImGui::End();
+
 		// Toggle Button to Display Debug Information on Console
 		input::IsPressed(KEY::f) ? Debug_Update() : Update();
 
@@ -188,9 +198,23 @@ void CoreEngine::GameLoop()
 		// Rendering
 // (Your code clears your framebuffer, renders your other stuff etc.)
 		ImGui::Render();
+		
+		//int display_w, display_h;
+		//glfwGetFramebufferSize(window->ptr_window, &display_w, &display_h);
+		//glViewport(0, 0, display_w, display_h);
+		//glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		//glClear(GL_COLOR_BUFFER_BIT);
+		
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		// (Your code calls glfwSwapBuffers() etc.)
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
+		}
 
+		glfwSwapBuffers(window->ptr_window);
 		// Updating Frame Times
 		m_BeginFrame = m_EndFrame;
 		m_EndFrame = m_BeginFrame + invFpsLimit;

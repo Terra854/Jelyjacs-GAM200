@@ -9,7 +9,7 @@ Camera::Camera() {
 
 
 void Camera::Initialize() {
-	scale = { 3.f,3.f};
+	scale = { 1.f,1.f};
 }
 
 void Camera::Update() {
