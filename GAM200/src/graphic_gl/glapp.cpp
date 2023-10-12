@@ -371,7 +371,7 @@ void GLApp::Update()
     }
 
 	
-	glfwSwapBuffers(window->ptr_window);
+	//glfwSwapBuffers(window->ptr_window);
 }
 
 /*
