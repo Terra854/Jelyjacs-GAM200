@@ -15,10 +15,14 @@ This file contains the definitions of the functions that are part of the Core En
 #include <input.h>
 #include <map>
 #include <thread>
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_impl_glfw.h>
+#include <Imgui/imgui_impl_opengl3.h>
+/*
 #include "ImGui/imgui.h";
 #include "ImGui/imgui_impl_glfw.h";
 #include "ImGui/imgui_impl_opengl3.h";
-
+*/
 CoreEngine* CORE = NULL;
 ImVec4 clear_color;
 
