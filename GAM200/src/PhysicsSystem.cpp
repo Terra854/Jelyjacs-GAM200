@@ -196,7 +196,8 @@ void PhysicsSystem::Update() {
 
 		// Apply gravity
 		p->Y_Acceleration = gravity;
-		p->Velocity.y += (float) (p->Y_Acceleration - 0.75 * p->Velocity.y) * dt; // Account for air resistance
+		p->Velocity.y += p->Y_Acceleration * dt; 
+		p->Velocity.y *= 0.99f; // Account for air resistance
 	}
 
 	// Loop through each object to see if it's colliding with something
