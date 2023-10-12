@@ -404,3 +404,6 @@ FodyWeavers.xsd
 # Personal doxygen stuff
 GAM200/docs
 Doxyfile
+
+# Config files
+*.ini

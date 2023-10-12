@@ -24,10 +24,10 @@ public:
 	void Initialize();
 
 	// Update all the System and FPS
-	void Update();
+	//void Update();
 
 	// Debug Update function
-	void Debug_Update();
+	//void Debug_Update();
 
 	// Main Game Loop - looping all the system updates
 	void GameLoop();

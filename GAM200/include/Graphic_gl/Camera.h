@@ -23,6 +23,7 @@ class Camera : public ISystems
 
 	virtual void Initialize();
 	virtual void Update();
+	virtual std::string SystemName() { return "Camera"; }
 
 };
 extern Camera* camera2D;

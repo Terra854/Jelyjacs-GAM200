@@ -43,3 +43,4 @@ void Camera::Update() {
 	world_to_ndc = Mat3Scale(scale.x, scale.y)*Mat3Translate(position.x, position.y);
 
 }
+
