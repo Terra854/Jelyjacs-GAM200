@@ -23,7 +23,7 @@ CoreEngine* CORE = NULL;
 * - Initialise Class Variables and Extern Class Pointer
 *******************************************************************************/
 CoreEngine::CoreEngine() {
-	core_fps = 60;
+	core_fps = 240;
 	dt = 1.f / static_cast<float>(core_fps);
 	game_active = true;
 	CORE = this;
