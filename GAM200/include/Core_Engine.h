@@ -44,6 +44,8 @@ public:
 
 
 	float GetDt() { return dt; }
+	float Get_FPS() { return core_fps; }
+	float Get_Fixed_DT() { return fixed_dt; }
 
 	
 private:
@@ -52,6 +54,8 @@ private:
 
 	// FPS
 	unsigned core_fps;
+
+	double fixed_dt;
 
 	// DT
 	float dt;

@@ -32,7 +32,8 @@ ImVec4 clear_color;
 *******************************************************************************/
 CoreEngine::CoreEngine()
 {
-	core_fps = 60;
+	fixed_dt = 60;
+	core_fps = fixed_dt;
 	dt = 1.f / static_cast<float>(core_fps);
 	game_active = true;
 	CORE = this;
@@ -166,9 +167,12 @@ void CoreEngine::Debug_Update()
 void CoreEngine::GameLoop()
 {
 	// FPS Variables
-	auto invFpsLimit = std::chrono::round<std::chrono::system_clock::duration>(std::chrono::duration<double>{ 1. / static_cast<double>(core_fps) }); // 1/60
+	int numofsteps = 0;
+	double accumulator = 0.0;
+
+	auto invFpsLimit = std::chrono::round<std::chrono::system_clock::duration>(std::chrono::duration<double>{ 1. / fixed_dt }); // 1/60
 	auto m_BeginFrame = std::chrono::system_clock::now();
-	auto m_EndFrame = m_BeginFrame + invFpsLimit;
+	std::chrono::time_point<std::chrono::system_clock> m_EndFrame;
 	auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
 
 	// Console Debug Instructions
@@ -228,7 +232,13 @@ void CoreEngine::GameLoop()
 				//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 			}
 		}
-
+		/***************************************************************************************************************************************
+		
+		
+														Drawing
+		
+		
+		*****************************************************************************************************************************************/
 		//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		Update(Systems["Graphics"]);
 		//Systems["Graphics"]->Update();
@@ -253,28 +263,13 @@ void CoreEngine::GameLoop()
 
 		ImGui::Text("############################################################");
 		ImGui::Text("Total time taken for this frame: %.6f seconds.", total_time);
-		ImGui::Text("Frame Rate is: %.6f FPS", 1.0f / dt);
+		ImGui::Text("Frame Rate is: %.6f FPS", dt * 3600.f);
 
 		ImGui::End();
 
 		elapsed_time.clear();
 		total_time = 0.0;
 
-
-		auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
-		++core_fps;
-
-		// Delay until set frame time
-		std::this_thread::sleep_until(m_EndFrame);
-
-		// Update delta_time every second
-		if (time_in_seconds > prev_time_in_seconds)
-		{
-			window->fps = core_fps;				// For printing FPS on Window Title
-			dt = 1.f / core_fps;
-			core_fps = 0;
-			prev_time_in_seconds = time_in_seconds;
-		}
 
 		// Rendering
 // (Your code clears your framebuffer, renders your other stuff etc.)
@@ -296,6 +291,29 @@ void CoreEngine::GameLoop()
 		}
 
 		glfwSwapBuffers(window->ptr_window);
+
+
+		// FPS Calculation
+		//auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
+		m_EndFrame = std::chrono::system_clock::now();
+		dt = std::chrono::duration<float>(m_EndFrame - m_BeginFrame).count();			// Delta Time
+		core_fps = dt * 3600.f;															// FPS
+		window->fps = core_fps;
+		accumulator += dt;																// Accumulator
+		while (accumulator >= fixed_dt)													// Fixed Time Step - for physics
+		{
+			accumulator -= fixed_dt;
+			numofsteps++;
+		}
+		/*
+		// Update delta_time every second
+		if (time_in_seconds > prev_time_in_seconds)
+		{
+			std::cout << "FPS: " << dt << std::endl;
+			prev_time_in_seconds = time_in_seconds;
+		}
+		*/
+
 		// Updating Frame Times
 		m_BeginFrame = m_EndFrame;
 		m_EndFrame = m_BeginFrame + invFpsLimit;

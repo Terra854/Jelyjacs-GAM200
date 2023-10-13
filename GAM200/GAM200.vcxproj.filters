@@ -248,5 +248,8 @@
     <ClInclude Include="include\Graphic_gl\Camera.h">
       <Filter>Header Files\Systems\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\GameStateManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

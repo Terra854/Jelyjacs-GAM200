@@ -195,6 +195,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClInclude Include="include\GameLogic.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\Factory.h" />
+    <ClInclude Include="include\GameStateManager.h" />
     <ClInclude Include="include\Graphic_gl\Camera.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\Interface_System.h" />
