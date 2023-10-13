@@ -50,6 +50,8 @@ public:
 
 	void GuiRender(ImGuiIO& io);
 
+	void DestroyGui();
+
 	float GetDt() { return dt; }
 	float Get_FPS() { return core_fps; }
 	float Get_Fixed_DT() { return fixed_dt; }

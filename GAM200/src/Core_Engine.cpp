@@ -42,9 +42,7 @@ CoreEngine::CoreEngine()
 *******************************************************************************/
 CoreEngine::~CoreEngine()
 {
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	DestroyGui();
 	DeleteSystem();
 }
 
@@ -187,10 +185,6 @@ void CoreEngine::GameLoop()
 	// Game Loop
 	while (game_active)
 	{
-		// (Your code calls glfwPollEvents())
-		// ...
-		// Start the Dear ImGui frame
-
 		NewGuiFrame();
 
 		// Toggle Button to Display Debug Information in IMGui
@@ -254,10 +248,6 @@ void CoreEngine::GameLoop()
 
 		elapsed_time.clear();
 		total_time = 0.0;
-
-
-		// Rendering
-// (Your code clears your framebuffer, renders your other stuff etc.)
 
 		GuiRender(io);
 
@@ -367,4 +357,11 @@ void CoreEngine::GuiRender(ImGuiIO& io)
 	}
 
 	glfwSwapBuffers(window->ptr_window);
+}
+
+void CoreEngine::DestroyGui()
+{
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 }
