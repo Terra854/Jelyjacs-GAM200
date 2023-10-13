@@ -15,13 +15,10 @@ This file contains the definitions of the functions that are part of the Core En
 #include <input.h>
 #include <map>
 #include <thread>
+#include "EngineHud.h"
 
-/*
-#include "ImGui/imgui.h";
-#include "ImGui/imgui_impl_glfw.h";
-#include "ImGui/imgui_impl_opengl3.h";
-*/
 CoreEngine* CORE = NULL;
+EngineHud hud;
 ImVec4 clear_color;
 
 /******************************************************************************
@@ -42,7 +39,6 @@ CoreEngine::CoreEngine()
 *******************************************************************************/
 CoreEngine::~CoreEngine()
 {
-	DestroyGui();
 	DeleteSystem();
 }
 
@@ -178,14 +174,14 @@ void CoreEngine::GameLoop()
 	//std::cout << "game window is the active window first and then press P" << std::endl;
 	//std::cout << "########################################################" << std::endl;
 
-	ImGuiIO& io = StartGui();
+	ImGuiIO& io = hud.StartGui();
 
 	bool show_performance_viewer = true;
 
 	// Game Loop
 	while (game_active)
 	{
-		NewGuiFrame();
+		hud.NewGuiFrame();
 
 		// Toggle Button to Display Debug Information in IMGui
 		if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
@@ -249,7 +245,7 @@ void CoreEngine::GameLoop()
 		elapsed_time.clear();
 		total_time = 0.0;
 
-		GuiRender(io);
+		hud.GuiRender(io);
 
 		// FPS Calculation
 		//auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
@@ -313,7 +309,7 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 		sys.second->MessageRelay(msg);
 	}
 }
-
+/*
 ImGuiIO& CoreEngine::StartGui()
 {
 	IMGUI_CHECKVERSION();
@@ -365,3 +361,4 @@ void CoreEngine::DestroyGui()
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
+*/
