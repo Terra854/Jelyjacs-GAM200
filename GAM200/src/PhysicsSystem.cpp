@@ -27,7 +27,10 @@ int collision_flag;
 // A workaround to prevent sticking onto the top of the walls
 float top_collision_cooldown = 0.f;
 
-
+// For fixed physics
+float accumulator = 0.f;
+float fixed_dt = 1.f / 60.f;
+int num_of_steps = 0;
 
 // Old version of Check_Collision, might be deleted at some point
 
@@ -97,14 +100,14 @@ void RecalculateBody(Transform* t, Body* b) {
 }
 
 // Objects responding to collision
-void Response_Collision(Transform* t1, Body* b1, Physics* p1, Body* b2) {
+void Response_Collision(Transform* t1, Body* b1, Physics* p1, Body* b2, Physics* p2) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
 
-		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
 			t1->Position.x = t1->PrevPosition.x;
 		}
-		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
 			t1->Position.x = t1->PrevPosition.x;
 		}
 		if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
@@ -115,6 +118,12 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1, Body* b2) {
 		if (((Rectangular*)b1)->collision_flag & COLLISION_BOTTOM) {
 			p1->Velocity.y = 0.0f;
 			t1->Position.y = ((Rectangular*)b2)->aabb.max.y + (((Rectangular*)b1)->height / 2);
+
+			// For objects on moving platforms
+			if (p2 != nullptr && !(((Rectangular*)b1)->collision_flag & COLLISION_LEFT) && !(((Rectangular*)b1)->collision_flag & COLLISION_RIGHT)) {
+				t1->Position.x += p2->Velocity.x * fixed_dt;
+				t1->Position.y += p2->Velocity.y * fixed_dt; // Will need to test platforms that move vertically
+			}
 		}
 
 		if (((Rectangular*)b1)->collision_flag)
@@ -129,10 +138,6 @@ PhysicsSystem::PhysicsSystem() {
 void PhysicsSystem::Initialize() {
 
 }
-
-float accumulator = 0.f;
-float fixed_dt = 1.f / 60.f;
-int num_of_steps = 0;
 
 void PhysicsSystem::Update() {
 
@@ -277,7 +282,7 @@ void PhysicsSystem::Update() {
 					}
 					std::cout << std::endl;
 					*/
-					Response_Collision(t, b, p, b2);
+					Response_Collision(t, b, p, b2, (Physics*)anotherobj->second->GetComponent(ComponentType::Physics));
 				}
 				else {
 
