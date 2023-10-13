@@ -130,145 +130,158 @@ void PhysicsSystem::Initialize() {
 
 }
 
+float accumulator = 0.f;
+float fixed_dt = 1.f / 60.f;
+int num_of_steps = 0;
+
 void PhysicsSystem::Update() {
 
-	float dt = engine->GetDt();
-	// If there is a sudden lag spike, the physics will act weird
-	// In that case, do not update for this cycle
-	if (dt > 0.05f) {
+	accumulator += engine->GetDt();
+	
+	// Only run the physics code if fixed_dt has passed 
+	if (accumulator < fixed_dt) {
 		return;
 	}
 
-	top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= dt : 0.0f;
-
-	// Update velocity for player
-	// Check all the objects, if it have the player controllable component, change its physics
-	/*
-	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-
-		if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) == nullptr)
-			continue; // That object is not controlled by the player, move to the next object
-
-		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
-		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
-
-		p->Velocity.x = 0.0f; // Reset velocity
-
-		// Move right
-		if (input::IsPressedRepeatedly(KEY::d)) {
-			p->Velocity.x += 17500.0f * dt;
-			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
-			if (p->Velocity.y == 0.f)
-				audio->startWalking();
-		}
-
-		// Move left
-		if (input::IsPressedRepeatedly(KEY::a)) {
-			p->Velocity.x -= 17500.0f * dt;
-			std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
-			if (p->Velocity.y == 0.f)
-				audio->startWalking();
-		}
-
-		// Stop the walking audio if the player is neither walking nor on solid ground
-		if ((!(input::IsPressedRepeatedly(KEY::d)) && !(input::IsPressedRepeatedly(KEY::a))) || p->Velocity.y != 0.f){
-			audio->stopWalking();
-		}
-
-		// Jump. Make sure vertical velocity is 0 first
-		if (input::IsPressedRepeatedly(KEY::w) && p->Velocity.y == 0.0f && top_collision_cooldown == 0.0f) {
-			p->Velocity.y = 2500.0f;
-			audio->playJump();
-		}
-		
-		break; // There should only be one object that is player controlled for now
-	}
-	*/
-
-	// Update velocity for each object
-	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
-
-		if (p == nullptr)
-			continue; // No physics in that object, move along
-
-		// No X acceleration, not needed in the game
-
-		// Apply gravity
-		p->Y_Acceleration = gravity;
-		p->Velocity.y += p->Y_Acceleration * dt; 
-		p->Velocity.y *= 0.99f; // Account for air resistance
+	// Check and see how many loops the physics needs to update
+	while (accumulator > fixed_dt) {
+		num_of_steps++;
+		accumulator -= fixed_dt;
 	}
 
-	// Loop through each object to see if it's colliding with something
-	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
-		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
-		Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
+	// Loop the physics code
+	for (; num_of_steps; num_of_steps--) {
+		top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= fixed_dt : 0.0f;
 
-		if (p == nullptr || b == nullptr)
-			continue; // No physics or body in this object, move to next object
+		// Update velocity for player
+		// Check all the objects, if it have the player controllable component, change its physics
+		/*
+		for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 
-		// Save current position to previous position
-		t->PrevPosition = t->Position;
+			if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) == nullptr)
+				continue; // That object is not controlled by the player, move to the next object
 
-		if (p->Velocity.x == 0.f && p->Velocity.y == 0.f)
-			continue; // No movement, so no need to calculate collision.
+			Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
+			Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
 
-		// Reset collision flags
-		if (b->GetShape() == Shape::Rectangle)
-			((Rectangular*)b)->collision_flag = 0;
+			p->Velocity.x = 0.0f; // Reset velocity
 
-		// Calculate new position
-		t->Position += p->Velocity * dt;
-
-		RecalculateBody(t, b);
-
-		for (Factory::objectIDMap::iterator anotherobj = objectFactory->objectMap.begin(); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
-
-			if (obj == anotherobj)
-				continue; // Can't collide with yourself
-
-			Body* b2 = (Body*)anotherobj->second->GetComponent(ComponentType::Body);
-
-			if (b2 == nullptr)
-				continue; // No body in the other object, no way it's collidable
-
-			collision_flag = Check_Collision(b, b2, dt);
-			if (collision_flag) {
-
-				/*
-				// DEBUG
-				std::cout << "A collision has occured between ";
-				switch (((Body*)obj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case Shape::Rectangle:
-					std::cout << "a rectangle ";
-					break;
-				case Shape::Circle:
-					std::cout << "a circle ";
-					break;
-				case Shape::Line:
-					std::cout << "a line ";
-					break;
-				}
-				std::cout << "and ";
-				switch (((Body*)anotherobj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case Shape::Rectangle:
-					std::cout << "a rectangle.";
-					break;
-				case Shape::Circle:
-					std::cout << "a circle.";
-					break;
-				case Shape::Line:
-					std::cout << "a line.";
-					break;
-				}
-				std::cout << std::endl;
-				*/
-				Response_Collision(t, b, p, b2);
+			// Move right
+			if (input::IsPressedRepeatedly(KEY::d)) {
+				p->Velocity.x += 17500.0f * dt;
+				std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
+				if (p->Velocity.y == 0.f)
+					audio->startWalking();
 			}
-			else {
-				
+
+			// Move left
+			if (input::IsPressedRepeatedly(KEY::a)) {
+				p->Velocity.x -= 17500.0f * dt;
+				std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
+				if (p->Velocity.y == 0.f)
+					audio->startWalking();
+			}
+
+			// Stop the walking audio if the player is neither walking nor on solid ground
+			if ((!(input::IsPressedRepeatedly(KEY::d)) && !(input::IsPressedRepeatedly(KEY::a))) || p->Velocity.y != 0.f){
+				audio->stopWalking();
+			}
+
+			// Jump. Make sure vertical velocity is 0 first
+			if (input::IsPressedRepeatedly(KEY::w) && p->Velocity.y == 0.0f && top_collision_cooldown == 0.0f) {
+				p->Velocity.y = 2500.0f;
+				audio->playJump();
+			}
+
+			break; // There should only be one object that is player controlled for now
+		}
+		*/
+
+		// Update velocity for each object
+		for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
+			Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
+
+			if (p == nullptr)
+				continue; // No physics in that object, move along
+
+			// No X acceleration, not needed in the game
+
+			// Apply gravity
+			p->Y_Acceleration = gravity;
+			p->Velocity.y += p->Y_Acceleration * fixed_dt;
+			p->Velocity.y *= 0.99f; // Account for air resistance
+		}
+
+		// Loop through each object to see if it's colliding with something
+		for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
+			Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
+			Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
+			Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
+
+			if (p == nullptr || b == nullptr)
+				continue; // No physics or body in this object, move to next object
+
+			// Save current position to previous position
+			t->PrevPosition = t->Position;
+
+			if (p->Velocity.x == 0.f && p->Velocity.y == 0.f)
+				continue; // No movement, so no need to calculate collision.
+
+			// Reset collision flags
+			if (b->GetShape() == Shape::Rectangle)
+				((Rectangular*)b)->collision_flag = 0;
+
+			// Calculate new position
+			t->Position += p->Velocity * fixed_dt;
+
+			RecalculateBody(t, b);
+
+			for (Factory::objectIDMap::iterator anotherobj = objectFactory->objectMap.begin(); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
+
+				if (obj == anotherobj)
+					continue; // Can't collide with yourself
+
+				Body* b2 = (Body*)anotherobj->second->GetComponent(ComponentType::Body);
+
+				if (b2 == nullptr)
+					continue; // No body in the other object, no way it's collidable
+
+				collision_flag = Check_Collision(b, b2, fixed_dt);
+				if (collision_flag) {
+
+					/*
+					// DEBUG
+					std::cout << "A collision has occured between ";
+					switch (((Body*)obj->second->GetComponent(ComponentType::Body))->GetShape()) {
+					case Shape::Rectangle:
+						std::cout << "a rectangle ";
+						break;
+					case Shape::Circle:
+						std::cout << "a circle ";
+						break;
+					case Shape::Line:
+						std::cout << "a line ";
+						break;
+					}
+					std::cout << "and ";
+					switch (((Body*)anotherobj->second->GetComponent(ComponentType::Body))->GetShape()) {
+					case Shape::Rectangle:
+						std::cout << "a rectangle.";
+						break;
+					case Shape::Circle:
+						std::cout << "a circle.";
+						break;
+					case Shape::Line:
+						std::cout << "a line.";
+						break;
+					}
+					std::cout << std::endl;
+					*/
+					Response_Collision(t, b, p, b2);
+				}
+				else {
+
+				}
 			}
 		}
 	}
