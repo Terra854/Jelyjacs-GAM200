@@ -62,9 +62,9 @@ private:
 	std::unordered_map<std::string, ISystems*> Systems;
 
 	// FPS
-	unsigned core_fps;
+	float core_fps;
 
-	double fixed_dt;
+	float fixed_dt;
 
 	// DT
 	float dt;

@@ -188,8 +188,6 @@ void CoreEngine::GameLoop()
 
 		//show_performance_viewer ? Debug_Update() : Update();
 
-		float time = GetDt();
-
 		for (const std::pair<std::string, ISystems*>& sys : Systems)
 		{
 			if (sys.first != "Window" && sys.first != "Graphics")
@@ -238,7 +236,7 @@ void CoreEngine::GameLoop()
 
 		ImGui::Text("############################################################");
 		ImGui::Text("Total time taken for this frame: %.6f seconds.", total_time);
-		ImGui::Text("Frame Rate is: %.6f FPS", dt * 3600.f);
+		ImGui::Text("Frame Rate is: %.6f FPS", core_fps);
 
 		ImGui::End();
 
@@ -251,7 +249,7 @@ void CoreEngine::GameLoop()
 		//auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
 		m_EndFrame = std::chrono::system_clock::now();
 		dt = std::chrono::duration<float>(m_EndFrame - m_BeginFrame).count();			// Delta Time
-		core_fps = dt * 3600.f;															// FPS
+		core_fps = 1.f / dt;															// FPS
 		window->fps = core_fps;
 		accumulator += dt;																// Accumulator
 		while (accumulator >= fixed_dt)													// Fixed Time Step - for physics
