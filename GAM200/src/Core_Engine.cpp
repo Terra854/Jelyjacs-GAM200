@@ -162,10 +162,9 @@ void CoreEngine::GameLoop()
 	int numofsteps = 0;
 	double accumulator = 0.0;
 
-	auto invFpsLimit = std::chrono::round<std::chrono::system_clock::duration>(std::chrono::duration<double>{ 1. / fixed_dt }); // 1/60
-	auto m_BeginFrame = std::chrono::system_clock::now();
-	std::chrono::time_point<std::chrono::system_clock> m_EndFrame;
-	auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
+	//auto invFpsLimit = std::chrono::round<std::chrono::system_clock::duration>(std::chrono::duration<double>{ 1. / fixed_dt }); // 1/60
+	//std::chrono::time_point<std::chrono::system_clock> m_EndFrame;
+	//auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
 
 	// Console Debug Instructions
 	//std::cout << "########################################################" << std::endl;
@@ -181,6 +180,7 @@ void CoreEngine::GameLoop()
 	// Game Loop
 	while (game_active)
 	{
+		auto m_BeginFrame = std::chrono::system_clock::now();
 		hud.NewGuiFrame();
 
 		// Toggle Button to Display Debug Information in IMGui
@@ -247,7 +247,7 @@ void CoreEngine::GameLoop()
 
 		// FPS Calculation
 		//auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
-		m_EndFrame = std::chrono::system_clock::now();
+		auto m_EndFrame = std::chrono::system_clock::now();
 		dt = std::chrono::duration<float>(m_EndFrame - m_BeginFrame).count();			// Delta Time
 		core_fps = 1.f / dt;															// FPS
 		window->fps = core_fps;
@@ -267,8 +267,8 @@ void CoreEngine::GameLoop()
 		*/
 
 		// Updating Frame Times
-		m_BeginFrame = m_EndFrame;
-		m_EndFrame = m_BeginFrame + invFpsLimit;
+		//m_BeginFrame = m_EndFrame;
+		//m_EndFrame = m_BeginFrame + invFpsLimit;
 	}
 }
 
