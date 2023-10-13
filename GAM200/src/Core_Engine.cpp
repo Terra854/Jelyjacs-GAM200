@@ -15,9 +15,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <input.h>
 #include <map>
 #include <thread>
-#include <ImGui/imgui.h>
-#include <ImGui/imgui_impl_glfw.h>
-#include <Imgui/imgui_impl_opengl3.h>
+
 /*
 #include "ImGui/imgui.h";
 #include "ImGui/imgui_impl_glfw.h";
@@ -182,16 +180,7 @@ void CoreEngine::GameLoop()
 	//std::cout << "game window is the active window first and then press P" << std::endl;
 	//std::cout << "########################################################" << std::endl;
 
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
-
-	// Setup Platform/Renderer backends
-	ImGui_ImplGlfw_InitForOpenGL(window->ptr_window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-	ImGui_ImplOpenGL3_Init();
+	ImGuiIO& io = StartGui();
 
 	bool show_performance_viewer = true;
 
@@ -201,17 +190,8 @@ void CoreEngine::GameLoop()
 		// (Your code calls glfwPollEvents())
 		// ...
 		// Start the Dear ImGui frame
-		glfwPollEvents();
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow(); // Show demo window! :)
-
-		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Once);
-		ImGui::Begin("Help");
-		ImGui::Text("Sample text");
-		ImGui::End();
+		NewGuiFrame();
 
 		// Toggle Button to Display Debug Information in IMGui
 		if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
@@ -253,6 +233,11 @@ void CoreEngine::GameLoop()
 		//elapsed_time[Systems["Window"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
 		//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 
+		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Once);
+		ImGui::Begin("Help");
+		ImGui::Text("Sample text");
+		ImGui::End();
+
 		ImGui::SetNextWindowSize(ImVec2(500, 220));
 
 		ImGui::SetNextWindowPos(ImVec2(0, 50), ImGuiCond_Once);
@@ -273,25 +258,8 @@ void CoreEngine::GameLoop()
 
 		// Rendering
 // (Your code clears your framebuffer, renders your other stuff etc.)
-		ImGui::Render();
 
-		//int display_w, display_h;
-		//glfwGetFramebufferSize(window->ptr_window, &display_w, &display_h);
-		//glViewport(0, 0, display_w, display_h);
-		//glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-		//glClear(GL_COLOR_BUFFER_BIT);
-
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			GLFWwindow* backup_current_context = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
-		}
-
-		glfwSwapBuffers(window->ptr_window);
-
+		GuiRender(io);
 
 		// FPS Calculation
 		//auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
@@ -356,3 +324,47 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 	}
 }
 
+ImGuiIO& CoreEngine::StartGui()
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplGlfw_InitForOpenGL(window->ptr_window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+	ImGui_ImplOpenGL3_Init();
+	return io;
+}
+
+void CoreEngine::NewGuiFrame(bool showDemo)
+{
+	glfwPollEvents();
+
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	if (showDemo)
+	{
+		ImGui::ShowDemoWindow(); // Show demo window! :)
+	}
+}
+
+void CoreEngine::GuiRender(ImGuiIO& io)
+{
+	ImGui::Render();
+
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		GLFWwindow* backup_current_context = glfwGetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		glfwMakeContextCurrent(backup_current_context);
+	}
+
+	glfwSwapBuffers(window->ptr_window);
+}

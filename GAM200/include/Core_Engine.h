@@ -12,7 +12,9 @@ This file contains the declaration for the Core Engine class
 #include "Interface_System.h"
 #include <message.h>
 #include <unordered_map>
-
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_impl_glfw.h>
+#include <Imgui/imgui_impl_opengl3.h>
 
 class CoreEngine {
 public:
@@ -42,6 +44,11 @@ public:
 	// Acts as a MessageRelay for Core Engine
 	void Broadcast(Message_Handler *msg);
 
+	ImGuiIO& StartGui();
+
+	void NewGuiFrame(bool showDemo = true);
+
+	void GuiRender(ImGuiIO& io);
 
 	float GetDt() { return dt; }
 	float Get_FPS() { return core_fps; }
