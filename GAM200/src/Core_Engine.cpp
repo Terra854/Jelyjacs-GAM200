@@ -29,7 +29,7 @@ CoreEngine::CoreEngine()
 {
 	fixed_dt = 60;
 	core_fps = fixed_dt;
-	dt = 1.f / static_cast<float>(core_fps);
+	dt = 1.f / core_fps;
 	game_active = true;
 	CORE = this;
 }
