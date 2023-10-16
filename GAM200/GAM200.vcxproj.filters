@@ -153,6 +153,15 @@
     <ClCompile Include="src\ImGui\imgui_widgets.cpp">
       <Filter>Source Files\External Libraries\IMGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\EngineHud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameStateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestStage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -249,6 +258,15 @@
       <Filter>Header Files\Systems\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\GameStateManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EngineHud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameStateList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TestStage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
