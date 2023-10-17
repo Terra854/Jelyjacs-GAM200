@@ -162,6 +162,9 @@
     <ClCompile Include="src\TestStage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SceneLoader.cpp">
+      <Filter>Source Files\Miscellanous</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -218,9 +221,6 @@
     <ClInclude Include="include\components\Body.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\components\Texture.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="include\components\Transform.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -268,6 +268,12 @@
     </ClInclude>
     <ClInclude Include="include\TestStage.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Texture.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneLoader.h">
+      <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

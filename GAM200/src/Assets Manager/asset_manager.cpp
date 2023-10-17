@@ -12,6 +12,7 @@ to be referenced from when needed.
 #include <iostream>
 
 std::map<std::string, GLuint> textures;
+std::map<std::string, bool> prefabs;
 
 // Looked through the asset file and load all assets
 void AssetManager::Initialize()
@@ -29,6 +30,15 @@ void AssetManager::Initialize()
 	}
 	else
 		std::cout << pathtexture << " does not exist!" << std::endl;
+
+	// Create a list of object prefabs, that will be used for scene loading
+	std::cout << "Prefab object list: " << std::endl;
+	if (std::filesystem::exists(objectprefabs))
+	{
+		createprefablist();
+	}
+	else
+		std::cout << objectprefabs << " does not exist!" << std::endl;
 
 
 }
@@ -65,7 +75,15 @@ void AssetManager::loadassets()
 
 }
 
-
+void AssetManager::createprefablist()
+{
+	for (const auto& list : std::filesystem::directory_iterator(objectprefabs))
+	{
+		std::filesystem::path filename = list.path().filename();
+		textures.emplace(filename.string(), false);
+		std::cout << "Added to list: " << filename.string() << std::endl;
+	}
+}
 
 
 

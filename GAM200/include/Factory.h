@@ -54,6 +54,9 @@ public:
 	//Returns a game object from the map with a specific id
 	Object* getObjectWithID(long id);
 
+	//This clones a game object
+	Object* cloneObject(Object* object);
+
 	//This adds a new component creator which is necessary for the creation of game objects
 //Call this at the very start of the game loop in Intialize
 	void AddComponentCreator(const std::string& name, BaseComponentCreator* creator);

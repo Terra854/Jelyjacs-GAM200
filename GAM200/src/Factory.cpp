@@ -227,6 +227,14 @@ Object* Factory::getObjectWithID(long id)
 	}
 }
 
+//This clones an object
+Object* Factory::cloneObject(Object* object)
+{
+	Object* obj = createEmptyObject();
+	//wip clone all components
+	return obj;
+}
+
 //This adds a new component creator which is necessary for the creation of game objects
 //Call this at the very start of the game loop in Intialize
 void Factory::AddComponentCreator(const std::string& name, BaseComponentCreator* creator)
