@@ -28,12 +28,12 @@ int main() {
 
 	// Initialise Pointer to Systems
 	engine = new CoreEngine();
-	GameLogic* logic = new GameLogic();
 	GLWindow* windows = new GLWindow();
 	Factory* factory = new Factory();
 	PhysicsSystem* physics = new PhysicsSystem();
 	AssetManager* assetmanager = new AssetManager();
 	audio = new Audio(); // declared in Audio.h
+	GameLogic* logic = new GameLogic();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();     
 
