@@ -254,11 +254,21 @@ void GLApp::Update()
 
 		//get texture		
 		Texture* tex_pt = static_cast<Texture*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Texture));
-		tex_test = tex_pt->texturepath;
+		
+		// skip to next object if there is no texture
+		if (!tex_pt)
+			continue;
+		else
+			tex_test = tex_pt->texturepath;
 		
 		//get orientation
 		Transform* tran_pt = static_cast<Transform*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Transform));
-		orientation = tran_pt->Rotation;
+		
+		// skip to next object if there is no transformation
+		if (!tran_pt)
+			continue;
+		else
+			orientation = tran_pt->Rotation;
 
 		//check debug
 		if (input::IsPressed(KEY::p))
