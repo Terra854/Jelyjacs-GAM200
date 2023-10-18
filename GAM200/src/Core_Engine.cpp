@@ -186,6 +186,8 @@ void CoreEngine::GameLoop()
 	ImGuiIO& io = hud.StartGui();
 
 	bool show_performance_viewer = true;
+	int xPos = 0;
+	int yPos = 0;
 
 	// Game Loop
 	while (current != GS_QUIT)
@@ -250,9 +252,12 @@ void CoreEngine::GameLoop()
 		ImGui::End();
 
 		ImGui::Begin("Level editor");
-		if (ImGui::Button("Create"))
+
+		ImGui::InputInt("Input x position of object", &xPos);
+		ImGui::InputInt("Input y position of object", &yPos);
+		if (ImGui::Button("Create box"))
 		{
-			createObject(100, 100, "../Asset/Objects/mapbox.json");
+			createObject(xPos, yPos, "../Asset/Objects/mapbox.json");
 		}
 		ImGui::End();
 
