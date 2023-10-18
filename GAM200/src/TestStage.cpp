@@ -4,7 +4,7 @@
 #include <Collision.h>
 #include <components/Physics.h>
 #include <input.h>
-
+#include <SceneLoader.h>
 
 Object* scale_and_rotate;
 Object* dynamic_collision;
@@ -29,6 +29,12 @@ void TestStage_Initialize() {
 	floor1 = objectFactory->createObject("../Asset/Objects/mapbox.json");
 	floor2 = objectFactory->createObject("../Asset/Objects/mapbox.json");
 	floor3 = objectFactory->createObject("../Asset/Objects/mapbox.json");
+
+	Object* testclone;
+	testclone = objectFactory->cloneObject(floor3);
+
+	LoadScene("../Asset/Levels/testscene.json");
+
 	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Transform));
 
 	// offset objects

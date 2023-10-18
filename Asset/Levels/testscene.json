@@ -3,30 +3,27 @@
   "Objects": [
     {
       "Prefabs": "mapbox.json",
-      "Properties": {
+      "Type": "Transform",
         "Position": {
           "x": 0.0,
           "y": 0.0
         }
-      }
     },
     {
       "Prefabs": "mapbox.json",
-      "Properties": {
+      "Type": "Transform",
         "Position": {
           "x": 100.0,
-          "y": 0.0
+          "y": -30.0
         }
-      }
     },
     {
       "Prefabs": "mapbox.json",
-      "Properties": {
+      "Type": "Transform",
         "Position": {
-          "x": 200.0,
-          "y": 54.0
+          "x": -100.0,
+          "y": 30.0
         }
-      }
     }
   ]
 }

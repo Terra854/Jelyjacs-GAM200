@@ -6,7 +6,6 @@
 
 This file contains the declaration 
 *//*__________________________________________________________________________*/
-#include <json/json.h>
 #include <string>
 
 void LoadScene(std::string);

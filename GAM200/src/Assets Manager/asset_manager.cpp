@@ -12,12 +12,11 @@ to be referenced from when needed.
 #include <iostream>
 
 std::map<std::string, GLuint> textures;
-std::map<std::string, bool> prefabs;
+std::map<std::string, long> prefabs;
 
 // Looked through the asset file and load all assets
 void AssetManager::Initialize()
 {
-
 	std::cout << "File List: " << std::endl;
 
 	if (std::filesystem::exists(pathtexture))
@@ -80,9 +79,31 @@ void AssetManager::createprefablist()
 	for (const auto& list : std::filesystem::directory_iterator(objectprefabs))
 	{
 		std::filesystem::path filename = list.path().filename();
-		textures.emplace(filename.string(), false);
-		std::cout << "Added to list: " << filename.string() << std::endl;
+		prefabs.emplace(filename.string(), -1);
+		std::cout << "Added to list: " << filename.string() <<  std::endl;
 	}
+}
+
+GLuint AssetManager::textureval(std::string)
+{
+
+	return GLuint();
+}
+
+long AssetManager::prefabsval(std::string)
+{
+
+	return 0;
+}
+
+void AssetManager::updateprefab(std::string)
+{
+
+}
+
+std::string AssetManager::objectprefabsval()
+{
+	return objectprefabs.string();
 }
 
 

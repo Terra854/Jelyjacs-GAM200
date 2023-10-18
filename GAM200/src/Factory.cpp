@@ -231,7 +231,93 @@ Object* Factory::getObjectWithID(long id)
 Object* Factory::cloneObject(Object* object)
 {
 	Object* obj = createEmptyObject();
-	//wip clone all components
+	// Clone all components (specific copying might be better to be at their component itself)
+	for (const std::pair<ComponentType, Component*>& c : object->Components)
+	{
+		// Copy transform data
+		if (c.first == ComponentType::Transform) 
+		{
+			Transform* trans = (Transform*)((ComponentCreator<Transform>*) componentMap["Transform"])->Create();
+			Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+
+			trans->Position.x = tran_pt->Position.x;
+			trans->Position.y = tran_pt->Position.y;
+
+			trans->PrevPosition = tran_pt->PrevPosition;
+
+			trans->Scale_x = tran_pt->Scale_x;
+			trans->Scale_y = tran_pt->Scale_y;
+			trans->Rotation = tran_pt->Rotation;
+
+			trans->Matrix = tran_pt->Matrix;
+
+			// Forced move cloned object by y + 100 for testing
+			trans->Position.x -= 100;
+			trans->Position.y += 100;
+
+			obj->AddComponent(trans);
+		}
+
+		// Copy texture data
+		else if (c.first == ComponentType::Texture)
+		{
+			Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(NULL);
+			Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
+
+			tex->texturepath = tex_pt->texturepath;
+			obj->AddComponent(tex);
+		}
+		// Clone body data
+		else if (c.first == ComponentType::Body)
+		{
+			Body* body_pt = static_cast<Body*>(object->GetComponent(ComponentType::Body));
+			
+			if (body_pt->GetShape() == Shape::Rectangle) {
+				Rectangular* r = (Rectangular*)((ComponentCreator<Rectangular>*) componentMap["Rectangle"])->Create();
+
+				r->width = ((Rectangular*)body_pt)->width;
+				r->height = ((Rectangular*)body_pt)->height;
+				r->aabb = ((Rectangular*)body_pt)->aabb;
+				r->collision_flag = ((Rectangular*)body_pt)->collision_flag;
+
+				obj->AddComponent(r);
+			}
+			else if (body_pt->GetShape() == Shape::Circle) {
+				Circular* c = (Circular*)((ComponentCreator<Circular>*) componentMap["Circular"])->Create();
+
+				c->circle = ((Circular*)body_pt)->circle;
+
+				obj->AddComponent(c);
+			}
+			else if (body_pt->GetShape() == Shape::Line) {
+				Lines* l = (Lines*)((ComponentCreator<Lines>*) componentMap["Line"])->Create();
+
+				l->line = ((Lines*)body_pt)->line;
+
+				obj->AddComponent(l);
+			}
+		}
+		// Clone physics data
+		else if (c.first == ComponentType::Physics)
+		{
+			Physics* p = (Physics*)((ComponentCreator<Physics>*) componentMap["Physics"])->Create();
+			Physics* p_pt = static_cast<Physics*>(object->GetComponent(ComponentType::Physics));
+
+			p->Velocity = p_pt->Velocity;
+			p->Y_Acceleration = p_pt->Y_Acceleration;
+			p->Mass = p_pt->Mass;
+
+			obj->AddComponent(p);
+		}
+		// Clone player controllable data
+		if (c.first == ComponentType::PlayerControllable)
+		{
+			PlayerControllable* p = (PlayerControllable*)((ComponentCreator<PlayerControllable>*) componentMap["Player"])->Create();
+			obj->AddComponent(p);
+		}
+	}
+
+	obj->Intialize();
 	return obj;
 }
 
