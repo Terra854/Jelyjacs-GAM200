@@ -202,6 +202,91 @@ void PhysicsSystem::Update() {
 		}
 		*/
 
+		/* Uniform grid */
+
+
+		// All values here will need to eventually be read from the level files
+		int level_width = 1920;
+		int level_height = 1080;
+		int start_width = -(level_width / 2);
+		int start_height = -(level_height / 2);
+		int end_width = (level_width / 2);
+		int end_height = (level_height / 2);
+
+		int num_of_partitions_per_side = 6;
+
+
+		// 1st vector is for width
+		// 2nd vector is for height
+		// 3rd vector is for all the objects inside the grid
+		std::vector<std::vector<std::vector<Object*>>> uniform_grid;
+
+		uniform_grid.resize(num_of_partitions_per_side + 2); // + 2 to factor in objects that can be just outside the viewable area
+		for (std::vector<std::vector<Object*>>& v : uniform_grid) {
+			v.resize(num_of_partitions_per_side + 2); // + 2 to factor in objects that can be just outside the viewable area
+		}
+
+		for (int w = start_width; w < end_width; w += level_width / num_of_partitions_per_side) {
+			for (int h = start_height; h < end_height; h += level_height / num_of_partitions_per_side) {
+
+			}
+		}
+
+		for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
+			Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
+
+			if (b == nullptr)
+				continue; // No physics or body in this object, move to next object
+
+			if (b->GetShape() == Shape::Rectangle) {
+
+				Vec2 p = ((Rectangular*)b)->aabb.P0();
+
+				int w_index = (int)p.x / (level_width / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
+				int h_index = (int)p.y / (level_height / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
+
+				//std::vector<Object*>& selected_vector = uniform_grid[w_index][h_index];
+
+				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
+					uniform_grid[w_index][h_index].push_back(obj->second);
+				}
+
+				p = ((Rectangular*)b)->aabb.P1();
+
+				w_index = (int)p.x / (level_width / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
+				h_index = (int)p.y / (level_height / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
+
+				//selected_vector = uniform_grid[w_index][h_index];
+
+				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
+					uniform_grid[w_index][h_index].push_back(obj->second);
+				}
+
+				p = ((Rectangular*)b)->aabb.P2();
+
+				w_index = (int)p.x / (level_width / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
+				h_index = (int)p.y / (level_height / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
+
+				//selected_vector = uniform_grid[w_index][h_index];
+
+				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
+					uniform_grid[w_index][h_index].push_back(obj->second);
+				}
+
+				p = ((Rectangular*)b)->aabb.P3();
+
+				w_index = (int)p.x / (level_width / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
+				h_index = (int)p.y / (level_height / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
+
+				//selected_vector = uniform_grid[w_index][h_index];
+
+				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
+					uniform_grid[w_index][h_index].push_back(obj->second);
+				}
+
+			}
+		}
+
 		// Update velocity for each object
 		for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 			Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
@@ -289,6 +374,8 @@ void PhysicsSystem::Update() {
 				}
 			}
 		}
+
+		uniform_grid.clear();
 	}
 }
 
