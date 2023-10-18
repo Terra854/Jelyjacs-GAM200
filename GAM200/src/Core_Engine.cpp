@@ -18,6 +18,9 @@ This file contains the definitions of the functions that are part of the Core En
 #include "EngineHud.h"
 #include <GameStateManager.h>
 #include <GameStateList.h>
+#include <Object.h>
+#include <Factory.h>
+#include <Collision.h>
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
@@ -64,8 +67,9 @@ void CoreEngine::Initialize()
 			sys.second->Initialize();
 		}
 	}
-	
+	std::cout << "Number of game objects(pre): " << objectFactory->NumberOfObjects() << "\n";
 
+	std::cout << "Number of game objects(post): " << objectFactory->NumberOfObjects() << "\n";
 
 	clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 }
@@ -245,6 +249,23 @@ void CoreEngine::GameLoop()
 
 		ImGui::End();
 
+		ImGui::Begin("Level editor");
+		if (ImGui::Button("Create"))
+		{
+			createObject(100, 100, "../Asset/Objects/mapbox.json");
+		}
+		ImGui::End();
+
+		ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
+		ImGui::Begin("Game objects");
+		ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
+		{
+			Object* object = objectFactory->getObjectWithID(i);
+			ImGui::Text("Object number %d", i);
+		}
+		ImGui::End();
+
 		elapsed_time.clear();
 		total_time = 0.0;
 
@@ -315,4 +336,13 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 	{
 		sys.second->MessageRelay(msg);
 	}
+}
+
+void CoreEngine::createObject(int posX, int posY, std::string objectName)
+{
+	Object* testingObject = objectFactory->createObject(objectName);
+	long testingObjectID = testingObject->GetId();
+	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(testingObjectID))->GetComponent(ComponentType::Transform));
+	tran_pt->Position.x = posX;
+	tran_pt->Position.y = posY;
 }

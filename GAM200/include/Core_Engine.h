@@ -43,15 +43,9 @@ public:
 	// Broadcast messages to system
 	// Acts as a MessageRelay for Core Engine
 	void Broadcast(Message_Handler *msg);
-	/*
-	ImGuiIO& StartGui();
 
-	void NewGuiFrame(bool showDemo = true);
+	void createObject(int posX, int posY, std::string objectName);
 
-	void GuiRender(ImGuiIO& io);
-
-	void DestroyGui();
-	*/
 	float GetDt() { return dt; }
 	float Get_FPS() { return core_fps; }
 	float Get_Fixed_DT() { return fixed_dt; }
