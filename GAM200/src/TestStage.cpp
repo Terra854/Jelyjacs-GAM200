@@ -74,19 +74,6 @@ void TestStage_Initialize() {
 	//Getting a Object pointer with the game object ID
 	//testObj = objectFactory->getObjectWithID(0);
 	//texture = static_cast<Texture*>(testObj->GetComponent(ComponentType::Texture));
-
-	//Broken code. DO NOT REMOVE YET - Jonathan
-	/*
-	gameObjFactory->AddComponentCreator("Transform", new ComponentCreatorType<Transform>(ComponentTypeId::CT_Transform));
-
-	ComponentCreatorType<Transform> transformComponetCreator(ComponentTypeId::CT_Transform);
-	ComponentCreator* transformPtr = transformComponetCreator;
-
-	objFactory gameObjFactory;
-	std::string transform = "Transform";
-
-	gameObjFactory.AddComponentCreator(transform, transformPtr);
-	*/
 }
 void TestStage_Update() {
 	// Rotation of an object
