@@ -277,27 +277,13 @@ void GLApp::Update()
 			std::cout << "graphics_debug" << std::endl;
 		}
 
-		//if debug mode get pos and scale from body component
-		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
-			Rectangular* rec_pt = static_cast<Rectangular*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body));
-
-			if (rec_pt == nullptr)
-				break; // Don't continue if there is no body component
-
-			Vec2 botleft = rec_pt->aabb.min;
-			Vec2 topright = rec_pt->aabb.max;
-			pos_x = (botleft.x + topright.x) / window->width;
-			pos_y = (botleft.y + topright.y)  / window->height;
-			scaling_x = (topright.x - botleft.x)  / window->width;
-			scaling_y = (topright.y - botleft.y)  / window->height;
-		}
-		else {
-			//else get pos and scale from transform component
-			pos_x = tran_pt->Position.x * 2.0f / window->width;
-			pos_y = tran_pt->Position.y * 2.0f / window->height;
-			scaling_x = tran_pt->Scale_x / window->width;
-			scaling_y = tran_pt->Scale_y / window->height;
-		}
+		
+		// get pos and scale from transform component
+		pos_x = tran_pt->Position.x * 2.0f / window->width;
+		pos_y = tran_pt->Position.y * 2.0f / window->height;
+		scaling_x = tran_pt->Scale_x / window->width;
+		scaling_y = tran_pt->Scale_y / window->height;
+		
 		
 		//get matrix
 		mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
@@ -306,20 +292,43 @@ void GLApp::Update()
 		// matrix after camrea
 		mat_test = camera2D->world_to_ndc * mat_test;
 
-		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
-			shdrpgms["shape"].Use();
-			// bind VAO of this object's model
-			glBindVertexArray(models["square"].vaoid);
-			// copy object's model-to-NDC matrix to vertex shader's
-			// uniform variable uModelToNDC
-			shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-			shdrpgms["shape"].SetUniform("uColor", box_color);
-			// call glDrawElements with appropriate arguments
-			glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		// draw image
+		// draw object with textuer
+		glBindTextureUnit(6, tex_test);
+		glBindTexture(GL_TEXTURE_2D, tex_test);
+		glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		// load shader program in use by this object
+		shdrpgms["image"].Use();
+		// bind VAO of this object's model
+		glBindVertexArray(models["square"].vaoid);
+		// copy object's model-to-NDC matrix to vertex shader's
+		// uniform variable uModelToNDC
+		shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
 
-			// unbind VAO and unload shader program
-			glBindVertexArray(0);
-			shdrpgms["shape"].UnUse();
+		// tell fragment shader sampler uTex2d will use texture image unit 6
+		GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
+		glUniform1i(tex_loc, 6);
+
+		// call glDrawElements with appropriate arguments
+		glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+		// unbind VAO and unload shader program
+		glBindVertexArray(0);
+		shdrpgms["image"].UnUse();
+
+		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
+
+			Rectangular* rec_pt = static_cast<Rectangular*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body));
+
+			if (rec_pt == nullptr)
+				break; // Don't continue if there is no body component
+
+			Vec2 botleft = rec_pt->aabb.min;
+			Vec2 topright = rec_pt->aabb.max;
+			drawline(Vec2(topright.x, botleft.y), botleft);
+			drawline(topright, Vec2(topright.x, botleft.y));
+			drawline(topright, Vec2(botleft.x, topright.y));
+			drawline(Vec2(botleft.x, topright.y),botleft);
 
 			// draw movement line for player
 			if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
@@ -354,34 +363,8 @@ void GLApp::Update()
 			}
 
 		}
-		else {
-			// draw object with textuer
-			glBindTextureUnit(6, tex_test);
-			glBindTexture(GL_TEXTURE_2D, tex_test);
-			glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-			// load shader program in use by this object
-			shdrpgms["image"].Use();
-			// bind VAO of this object's model
-			glBindVertexArray(models["square"].vaoid);
-			// copy object's model-to-NDC matrix to vertex shader's
-			// uniform variable uModelToNDC
-			shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-
-			// tell fragment shader sampler uTex2d will use texture image unit 6
-			GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
-			glUniform1i(tex_loc, 6);
-
-			// call glDrawElements with appropriate arguments
-			glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
-
-			// unbind VAO and unload shader program
-			glBindVertexArray(0);
-			shdrpgms["image"].UnUse();
-		}
+		
     }
-
-	
-	//glfwSwapBuffers(window->ptr_window);
 }
 
 /*
@@ -460,3 +443,33 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 	GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
 }
 
+void GLApp::drawline(Vec2 start, Vec2 end) {
+	float pos_x;
+	float pos_y;
+	float orientation;
+	float scaling_x;
+	float scaling_y;
+	orientation = atan2(start.y - end.y, start.x - end.x);
+	scaling_x = (end.x - start.x) * 2 / window->width;
+	scaling_y = (end.y - start.y) * 2 / window->height;
+	pos_x = start.x * 2.0f / window->width;
+	pos_y = start.y * 2.0f / window->height;
+
+	Mat3 mat_test;
+	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
+	mat_test = camera2D->world_to_ndc * mat_test;
+	//draw line
+	shdrpgms["shape"].Use();
+	// bind VAO of this object's model
+	glBindVertexArray(models["line"].vaoid);
+	// copy object's model-to-NDC matrix to vertex shader's
+	// uniform variable uModelToNDC
+	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	shdrpgms["shape"].SetUniform("uColor", box_color);
+	// call glDrawElements with appropriate arguments
+	glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+	// unbind VAO and unload shader program
+	glBindVertexArray(0);
+	shdrpgms["shape"].UnUse();
+}
