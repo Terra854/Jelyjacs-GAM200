@@ -78,6 +78,7 @@ Object* Factory::createObject(const std::string& filename)
 	// Now parse the file to populate the object with components
 
 	Object* obj = new Object();
+	obj->name = (*jsonObject)["Name"].asString();
 
 	for (const auto& component : (*jsonObject)["Components"]) {
 		std::string type = component["Type"].asString();

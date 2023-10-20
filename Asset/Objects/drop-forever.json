@@ -1,4 +1,5 @@
 {
+  "Name": "drop-forever",
   "Components": [
     {
       "Type": "Transform",
@@ -8,7 +9,7 @@
           "y": 500.0
         },
         "Scale_x": 108,
-	      "Scale_y": 108,
+        "Scale_y": 108,
         "Rotation": 0.0
       }
     },
@@ -26,6 +27,6 @@
         "texturepath": "mapbox.png"
       }
     }
-    
+
   ]
 }

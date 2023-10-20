@@ -1,4 +1,5 @@
 {
+  "Name": "Background",
   "Components": [
     {
       "Type": "Transform",
@@ -8,7 +9,7 @@
           "y": 0.0
         },
         "Scale_x": 1921.0,
-	      "Scale_y": 1080.0,
+        "Scale_y": 1080.0,
         "Rotation": 0.0
       }
     },

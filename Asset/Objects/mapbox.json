@@ -1,4 +1,5 @@
 {
+  "Name": "Floor",
   "Components": [
     {
       "Type": "Transform",
@@ -7,8 +8,8 @@
           "x": 0.0,
           "y": -350.0
         },
-        "Scale_x": 54.0, 
-	      "Scale_y": 54.0,
+        "Scale_x": 54.0,
+        "Scale_y": 54.0,
         "Rotation": 0.0
       }
     },

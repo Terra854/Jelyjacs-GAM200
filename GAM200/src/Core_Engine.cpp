@@ -232,14 +232,10 @@ void CoreEngine::GameLoop()
 		//end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		//elapsed_time[Systems["Window"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
 		//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
-		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Once);
-		ImGui::Begin("Help");
-		ImGui::Text("Sample text");
-		ImGui::End();
 
 		ImGui::SetNextWindowSize(ImVec2(500, 220));
 
-		ImGui::SetNextWindowPos(ImVec2(0, 50), ImGuiCond_Once);
+		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Once);
 		ImGui::Begin("DEBUG: Performance Viewer");
 
 		for (std::pair<std::string, double> p : elapsed_time)
@@ -267,7 +263,11 @@ void CoreEngine::GameLoop()
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
 			Object* object = objectFactory->getObjectWithID(i);
-			ImGui::Text("Object number %d", i);
+
+			if (!object->GetName().empty())
+				ImGui::Text("%s", object->GetName().c_str());
+			else
+				ImGui::Text("Object number %d", i);
 		}
 		ImGui::End();
 

@@ -37,6 +37,9 @@ public:
 	///Get the game object's Id
 	long GetId() { return ObjectId; }
 
+	//Get the object's name
+	std::string GetName() { return name; }
+
 private:
 	//contains all components of the current object
 	std::unordered_map<ComponentType, Component*> Components;
@@ -45,5 +48,7 @@ private:
 	//Objects.
 	long ObjectId;
 
+	//A unique name for each object used to name objects
+	std::string name;
 };
 
