@@ -7,7 +7,7 @@
 This file contains the declaration for the Core Engine class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
-
+#include <GL/glew.h>
 // Core Engine that manage all systems in game. Update and destroying them.
 #include "Interface_System.h"
 #include <message.h>
@@ -50,6 +50,7 @@ public:
 	float Get_FPS() { return core_fps; }
 	float Get_Fixed_DT() { return fixed_dt; }
 
+	bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 	
 private:
 	// Map of Systems (Container)

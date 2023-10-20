@@ -275,5 +275,8 @@
     <ClInclude Include="include\SceneLoader.h">
       <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
+    <ClInclude Include="include\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
