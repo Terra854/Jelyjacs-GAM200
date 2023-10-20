@@ -135,11 +135,68 @@ PhysicsSystem::PhysicsSystem() {
 
 }
 
-void PhysicsSystem::Initialize() {
 
+// 1st vector is for width
+// 2nd vector is for height
+// 3rd vector is for all the objects inside the grid
+std::vector<std::vector<std::vector<Object*>>> uniform_grid;
+
+void PhysicsSystem::Initialize() {
+	uniform_grid.resize(1);
+	uniform_grid[0].resize(1);
+	uniform_grid[0][0].resize(1);
 }
 
+
 void PhysicsSystem::Update() {
+
+	// DEBUG: Print out the uniform grid
+	ImGui::SetNextWindowSize(ImVec2(0, 0));
+	ImGui::SetNextWindowPos(ImVec2(900, 100), ImGuiCond_Once);
+	ImGui::Begin("DEBUG: Uniform Grid");
+
+	char addString[512];
+	char buffer[2048];
+	
+	// Print separator
+	buffer[0] = '\0';
+	for (int i = 0; i < uniform_grid.size() + 1; ++i) {
+		strcat_s(buffer, "--------");
+	}
+	///ImGui::Text("----------------------------------------------------------------------------------------------------\n");
+	ImGui::Text(buffer);
+
+	// Print rows
+	for (int y = uniform_grid[0].size() - 1; y >=0 ; --y) {
+		sprintf_s(buffer, "%4d   ", y);
+		for (int x = 0; x < uniform_grid.size(); ++x) {
+			sprintf_s(addString, "|%4zu   ", uniform_grid[x][y].size());
+			strcat_s(buffer, addString);
+			//ImGui::Text("| %4zu ", uniform_grid[x][y].size());  // %zu format specifier is for size_t
+		}
+		strcat_s(buffer, "|");
+
+		ImGui::Text(buffer);
+
+		// Print separator
+		buffer[0] = '\0';
+		for (int i = 0; i < uniform_grid.size() + 1; ++i) {
+			strcat_s(buffer, "--------");
+		}
+		ImGui::Text(buffer);
+	}
+
+	// Print the column header below
+	sprintf_s(buffer, "       ");
+	for (int i = 0; i < uniform_grid.size(); ++i) {
+		sprintf_s(addString, "|%4d   ", i);
+		strcat_s(buffer, addString);
+	}
+	strcat_s(buffer, "|");
+
+	ImGui::Text(buffer);
+
+	ImGui::End();
 
 	accumulator += engine->GetDt();
 	
@@ -156,6 +213,9 @@ void PhysicsSystem::Update() {
 
 	// Loop the physics code
 	for (; num_of_steps; num_of_steps--) {
+		
+		uniform_grid.clear();
+
 		top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= fixed_dt : 0.0f;
 
 		// Update velocity for player
@@ -204,32 +264,27 @@ void PhysicsSystem::Update() {
 
 		/* Uniform grid */
 
-
 		// All values here will need to eventually be read from the level files
 		int level_width = 1920;
 		int level_height = 1080;
-		int start_width = -(level_width / 2);
-		int start_height = -(level_height / 2);
-		int end_width = (level_width / 2);
-		int end_height = (level_height / 2);
+		int num_of_partitions_per_side = 12;
 
-		int num_of_partitions_per_side = 6;
+		//factor in objects that can be just outside the viewable area
+		int extra_grids_per_side = num_of_partitions_per_side / 6;
+		extra_grids_per_side = extra_grids_per_side ? extra_grids_per_side : 1;
 
+		int num_of_grids_per_side = num_of_partitions_per_side + (2 * extra_grids_per_side);
+		int total_grid_width = level_width / num_of_partitions_per_side * num_of_grids_per_side;
+		int total_grid_height = level_height / num_of_partitions_per_side * num_of_grids_per_side;
 
-		// 1st vector is for width
-		// 2nd vector is for height
-		// 3rd vector is for all the objects inside the grid
-		std::vector<std::vector<std::vector<Object*>>> uniform_grid;
+		int start_width = -(total_grid_width / 2);
+		int start_height = -(total_grid_height / 2);
+		int end_width = (total_grid_width / 2);
+		int end_height = (total_grid_height / 2);
 
-		uniform_grid.resize(num_of_partitions_per_side + 2); // + 2 to factor in objects that can be just outside the viewable area
+		uniform_grid.resize(num_of_grids_per_side);
 		for (std::vector<std::vector<Object*>>& v : uniform_grid) {
-			v.resize(num_of_partitions_per_side + 2); // + 2 to factor in objects that can be just outside the viewable area
-		}
-
-		for (int w = start_width; w < end_width; w += level_width / num_of_partitions_per_side) {
-			for (int h = start_height; h < end_height; h += level_height / num_of_partitions_per_side) {
-
-			}
+			v.resize(num_of_grids_per_side);
 		}
 
 		for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
@@ -242,10 +297,12 @@ void PhysicsSystem::Update() {
 
 				Vec2 p = ((Rectangular*)b)->aabb.P0();
 
-				int w_index = (int)p.x / (level_width / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
-				int h_index = (int)p.y / (level_height / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
-
-				//std::vector<Object*>& selected_vector = uniform_grid[w_index][h_index];
+				int w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				if (p.x < 0.f)
+					w_index--;
+				int h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				if (p.y < 0.f)
+					h_index--;
 
 				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
 					uniform_grid[w_index][h_index].push_back(obj->second);
@@ -253,10 +310,12 @@ void PhysicsSystem::Update() {
 
 				p = ((Rectangular*)b)->aabb.P1();
 
-				w_index = (int)p.x / (level_width / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
-				h_index = (int)p.y / (level_height / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
-
-				//selected_vector = uniform_grid[w_index][h_index];
+				w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				if (p.x < 0.f)
+					w_index--;
+				h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				if (p.y < 0.f)
+					h_index--;
 
 				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
 					uniform_grid[w_index][h_index].push_back(obj->second);
@@ -264,10 +323,12 @@ void PhysicsSystem::Update() {
 
 				p = ((Rectangular*)b)->aabb.P2();
 
-				w_index = (int)p.x / (level_width / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
-				h_index = (int)p.y / (level_height / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
-
-				//selected_vector = uniform_grid[w_index][h_index];
+				w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				if (p.x < 0.f)
+					w_index--;
+				h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				if (p.y < 0.f)
+					h_index--;
 
 				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
 					uniform_grid[w_index][h_index].push_back(obj->second);
@@ -275,10 +336,12 @@ void PhysicsSystem::Update() {
 
 				p = ((Rectangular*)b)->aabb.P3();
 
-				w_index = (int)p.x / (level_width / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
-				h_index = (int)p.y / (level_height / num_of_partitions_per_side) + (num_of_partitions_per_side / 2);
-
-				//selected_vector = uniform_grid[w_index][h_index];
+				w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				if (p.x < 0.f)
+					w_index--;
+				h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				if (p.y < 0.f)
+					h_index--;
 
 				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
 					uniform_grid[w_index][h_index].push_back(obj->second);
@@ -374,8 +437,6 @@ void PhysicsSystem::Update() {
 				}
 			}
 		}
-
-		uniform_grid.clear();
 	}
 }
 

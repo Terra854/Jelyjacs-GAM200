@@ -240,7 +240,7 @@ void CoreEngine::GameLoop()
 		ImGui::SetNextWindowSize(ImVec2(500, 220));
 
 		ImGui::SetNextWindowPos(ImVec2(0, 50), ImGuiCond_Once);
-		ImGui::Begin("Performance Viewer");
+		ImGui::Begin("DEBUG: Performance Viewer");
 
 		for (std::pair<std::string, double> p : elapsed_time)
 			ImGui::Text("%s system completed it's update in %.6f seconds (%.2f%%)", p.first.c_str(), p.second, (p.second / total_time * 100.0));
