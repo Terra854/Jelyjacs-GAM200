@@ -24,6 +24,10 @@ const int COLLISION_BOTTOM = 8; //1000
 class Rectangular;
 
 namespace Collision {
+
+	extern std::vector<std::vector<std::vector<Object*>>> uniform_grid;
+
+	/*
 	bool Check_Circle_Line(const Circle& circle,
 		const Vec2& ptEnd,
 		const Line& lineSeg,
@@ -45,6 +49,7 @@ namespace Collision {
 		Vec2& interPt,
 		Vec2& normalAtCollision,
 		float& interTime);
+	*/
 
 	bool Check_AABB_AABB(const AABB& aabb1,
 		const Vec2& vel1,

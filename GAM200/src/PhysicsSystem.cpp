@@ -135,16 +135,10 @@ PhysicsSystem::PhysicsSystem() {
 
 }
 
-
-// 1st vector is for width
-// 2nd vector is for height
-// 3rd vector is for all the objects inside the grid
-std::vector<std::vector<std::vector<Object*>>> uniform_grid;
-
 void PhysicsSystem::Initialize() {
-	uniform_grid.resize(1);
-	uniform_grid[0].resize(1);
-	uniform_grid[0][0].resize(1);
+	Collision::uniform_grid.resize(1);
+	Collision::uniform_grid[0].resize(1);
+	Collision::uniform_grid[0][0].resize(1);
 }
 
 
@@ -160,17 +154,17 @@ void PhysicsSystem::Update() {
 	
 	// Print separator
 	buffer[0] = '\0';
-	for (int i = 0; i < uniform_grid.size() + 1; ++i) {
+	for (int i = 0; i < Collision::uniform_grid.size() + 1; ++i) {
 		strcat_s(buffer, "--------");
 	}
 	///ImGui::Text("----------------------------------------------------------------------------------------------------\n");
 	ImGui::Text(buffer);
 
 	// Print rows
-	for (int y = uniform_grid[0].size() - 1; y >=0 ; --y) {
+	for (int y = Collision::uniform_grid[0].size() - 1; y >=0 ; --y) {
 		sprintf_s(buffer, "%4d   ", y);
-		for (int x = 0; x < uniform_grid.size(); ++x) {
-			sprintf_s(addString, "|%4zu   ", uniform_grid[x][y].size());
+		for (int x = 0; x < Collision::uniform_grid.size(); ++x) {
+			sprintf_s(addString, "|%4zu   ", Collision::uniform_grid[x][y].size());
 			strcat_s(buffer, addString);
 			//ImGui::Text("| %4zu ", uniform_grid[x][y].size());  // %zu format specifier is for size_t
 		}
@@ -180,7 +174,7 @@ void PhysicsSystem::Update() {
 
 		// Print separator
 		buffer[0] = '\0';
-		for (int i = 0; i < uniform_grid.size() + 1; ++i) {
+		for (int i = 0; i < Collision::uniform_grid.size() + 1; ++i) {
 			strcat_s(buffer, "--------");
 		}
 		ImGui::Text(buffer);
@@ -188,7 +182,7 @@ void PhysicsSystem::Update() {
 
 	// Print the column header below
 	sprintf_s(buffer, "       ");
-	for (int i = 0; i < uniform_grid.size(); ++i) {
+	for (int i = 0; i < Collision::uniform_grid.size(); ++i) {
 		sprintf_s(addString, "|%4d   ", i);
 		strcat_s(buffer, addString);
 	}
@@ -214,7 +208,7 @@ void PhysicsSystem::Update() {
 	// Loop the physics code
 	for (; num_of_steps; num_of_steps--) {
 		
-		uniform_grid.clear();
+		Collision::uniform_grid.clear();
 
 		top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= fixed_dt : 0.0f;
 
@@ -267,7 +261,7 @@ void PhysicsSystem::Update() {
 		// All values here will need to eventually be read from the level files
 		int level_width = 1920;
 		int level_height = 1080;
-		int num_of_partitions_per_side = 12;
+		int num_of_partitions_per_side = 6;
 
 		//factor in objects that can be just outside the viewable area
 		int extra_grids_per_side = num_of_partitions_per_side / 6;
@@ -277,13 +271,8 @@ void PhysicsSystem::Update() {
 		int total_grid_width = level_width / num_of_partitions_per_side * num_of_grids_per_side;
 		int total_grid_height = level_height / num_of_partitions_per_side * num_of_grids_per_side;
 
-		int start_width = -(total_grid_width / 2);
-		int start_height = -(total_grid_height / 2);
-		int end_width = (total_grid_width / 2);
-		int end_height = (total_grid_height / 2);
-
-		uniform_grid.resize(num_of_grids_per_side);
-		for (std::vector<std::vector<Object*>>& v : uniform_grid) {
+		Collision::uniform_grid.resize(num_of_grids_per_side);
+		for (std::vector<std::vector<Object*>>& v : Collision::uniform_grid) {
 			v.resize(num_of_grids_per_side);
 		}
 
@@ -304,8 +293,8 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
-				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
-					uniform_grid[w_index][h_index].push_back(obj->second);
+				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
+					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 				}
 
 				p = ((Rectangular*)b)->aabb.P1();
@@ -317,8 +306,8 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
-				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
-					uniform_grid[w_index][h_index].push_back(obj->second);
+				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
+					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 				}
 
 				p = ((Rectangular*)b)->aabb.P2();
@@ -330,8 +319,8 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
-				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
-					uniform_grid[w_index][h_index].push_back(obj->second);
+				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
+					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 				}
 
 				p = ((Rectangular*)b)->aabb.P3();
@@ -343,8 +332,8 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
-				if (std::find(uniform_grid[w_index][h_index].begin(), uniform_grid[w_index][h_index].end(), obj->second) == uniform_grid[w_index][h_index].end()) {
-					uniform_grid[w_index][h_index].push_back(obj->second);
+				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
+					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 				}
 
 			}
@@ -388,7 +377,7 @@ void PhysicsSystem::Update() {
 			t->Position += p->Velocity * fixed_dt;
 
 			RecalculateBody(t, b);
-
+			/*
 			for (Factory::objectIDMap::iterator anotherobj = objectFactory->objectMap.begin(); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
 
 				if (obj == anotherobj)
@@ -429,11 +418,39 @@ void PhysicsSystem::Update() {
 						break;
 					}
 					std::cout << std::endl;
-					*/
+					
 					Response_Collision(t, b, p, b2, (Physics*)anotherobj->second->GetComponent(ComponentType::Physics));
 				}
 				else {
 
+				}
+			}*/
+
+			for (const auto& width_grid : Collision::uniform_grid) {
+				for (const auto& grid : width_grid) {
+					if (grid.size() < 2)
+						continue; // Skip if there is 1 or less object as there is no way a collision can occur in the grid
+					for (const auto& current_obj : grid) {
+						if (obj->second == current_obj) { // Is the object in the grid?
+							for (const auto& anotherobj : grid) {
+								if (obj->second == anotherobj)
+									continue; // Can't collide with yourself
+
+								Body* b2 = (Body*)anotherobj->GetComponent(ComponentType::Body);
+
+								if (b2 == nullptr)
+									continue; // No body in the other object, no way it's collidable
+
+								collision_flag = Check_Collision(b, b2, fixed_dt);
+								if (collision_flag) {
+									Response_Collision(t, b, p, b2, (Physics*)anotherobj->GetComponent(ComponentType::Physics));
+								}
+								else {
+
+								}
+							}
+						}
+					}
 				}
 			}
 		}

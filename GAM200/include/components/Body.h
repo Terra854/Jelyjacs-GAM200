@@ -39,7 +39,7 @@ public:
 	}
 	AABB aabb;
 	float width, height;
-	int collision_flag;
+	int collision_flag = 0;
 
 	virtual void Initialize() override;
 

@@ -14,12 +14,18 @@ This file contains functions to calculate collisions between the different game 
 namespace Collision {
 
 	/*
-		CIRCLE COLLISIONS
+		UNIFORM GRID
 	*/
 
+	// 1st vector is for width
+	// 2nd vector is for height
+	// 3rd vector is for all the objects inside the grid
+	std::vector<std::vector<std::vector<Object*>>> uniform_grid;
+
 	/*
-		This function calculates whether a given circle is colliding with a given line
-	*/
+	//CIRCLE COLLISIONS
+
+	//This function calculates whether a given circle is colliding with a given line
 	bool Check_Circle_Line(const Circle& circle,
 		const Vec2& ptEnd,
 		const Line& lineSeg,
@@ -97,9 +103,7 @@ namespace Collision {
 		return false; // no intersection
 	}
 
-	/*
-		This function calculates whether a given circle is colliding with the edge of a given line
-	*/
+	//This function calculates whether a given circle is colliding with the edge of a given line
 	bool Check_Circle_LineEdge(bool withinBothLines,
 		const Circle& circle,
 		const Vec2& ptEnd,
@@ -247,13 +251,9 @@ namespace Collision {
 		return false;// no collision
 	}
 
-	/*
-		RECTANGLE COLLISIONS
-	*/
+	//RECTANGLE COLLISIONS
 
-	/*
-		This function checks if a given rectangle intersects with a line via AABB.
-	*/
+	//This function checks if a given rectangle intersects with a line via AABB.
 	bool Check_AABB_Line(const AABB& aabb,
 		const Vec2& ptEnd,
 		const Line& lineSeg,
@@ -321,8 +321,13 @@ namespace Collision {
 		}
 		return false;  // no intersection
 	}
+	*/
 
-	
+
+	/*
+		RECTANGLE COLLISIONS
+	*/
+
 	/*
 		This function checks if a given rectangle intersects with another rectangle via AABB.
 	*/
