@@ -102,6 +102,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Body.cpp" />
+    <ClCompile Include="src\DebugGui.cpp" />
     <ClCompile Include="src\EngineHud.cpp" />
     <ClCompile Include="src\GameStateManager.cpp" />
     <ClCompile Include="src\graphic_gl\Camera.cpp" />
@@ -141,6 +142,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClInclude Include="include\ComponentCreator.h" />
     <ClInclude Include="include\Core_Engine.h" />
     <ClInclude Include="include\Debug.h" />
+    <ClInclude Include="include\DebugGui.h" />
     <ClInclude Include="include\EngineHud.h" />
     <ClInclude Include="include\GameLogic.h" />
     <ClInclude Include="include\Component.h" />

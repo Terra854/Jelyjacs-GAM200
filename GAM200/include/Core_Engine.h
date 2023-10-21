@@ -50,6 +50,7 @@ public:
 	float Get_FPS() { return core_fps; }
 	float Get_Fixed_DT() { return fixed_dt; }
 
+	friend class DebugGui; // For displaying performance info
 	
 private:
 	// Map of Systems (Container)
@@ -65,6 +66,9 @@ private:
 
 	// Checking if game is active
 	bool game_active;
+
+	// For displaying performance information
+	bool displayPerformanceInfo = false;
 };
 
 extern CoreEngine* engine;

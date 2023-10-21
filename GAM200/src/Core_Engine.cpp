@@ -233,19 +233,22 @@ void CoreEngine::GameLoop()
 		//elapsed_time[Systems["Window"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
 		//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 
-		ImGui::SetNextWindowSize(ImVec2(500, 220));
+		
 
-		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Once);
-		ImGui::Begin("DEBUG: Performance Viewer");
+		if (displayPerformanceInfo) {
+			ImGui::SetNextWindowSize(ImVec2(0, 0));
+			ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
+			ImGui::Begin("DEBUG: Performance Viewer", &displayPerformanceInfo);
 
-		for (std::pair<std::string, double> p : elapsed_time)
-			ImGui::Text("%s system completed it's update in %.6f seconds (%.2f%%)", p.first.c_str(), p.second, (p.second / total_time * 100.0));
+			for (std::pair<std::string, double> p : elapsed_time)
+				ImGui::Text("%s system completed it's update in %.6f seconds (%.2f%%)", p.first.c_str(), p.second, (p.second / total_time * 100.0));
 
-		ImGui::Text("############################################################");
-		ImGui::Text("Total time taken for this frame: %.6f seconds.", total_time);
-		ImGui::Text("Frame Rate is: %.6f FPS", core_fps);
+			ImGui::Text("############################################################");
+			ImGui::Text("Total time taken for this frame: %.6f seconds.", total_time);
+			ImGui::Text("Frame Rate is: %.6f FPS", core_fps);
 
-		ImGui::End();
+			ImGui::End();
+		}
 
 		ImGui::Begin("Level editor");
 

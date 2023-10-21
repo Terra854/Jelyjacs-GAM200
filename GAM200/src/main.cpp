@@ -15,6 +15,7 @@ This file contains the main function.
 #include <GameLogic.h>
 #include <Audio.h>
 #include <Camera.h>
+#include <DebugGui.h>
 #include <../src/Assets Manager/asset_manager.h>
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet 
@@ -36,6 +37,7 @@ int main() {
 	GameLogic* logic = new GameLogic();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();     
+	DebugGui* debug_gui = new DebugGui();
 
 	
 	// Add System to the engine 
@@ -46,6 +48,7 @@ int main() {
 	engine->AddSystem(physics);
 	engine->AddSystem(audio);
 	engine->AddSystem(camera);
+	engine->AddSystem(debug_gui);
 	engine->AddSystem(graphics);												  // Graphics should always be last
 	
 	// Initialize and Start Game Loop
