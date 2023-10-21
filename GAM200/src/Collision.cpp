@@ -440,7 +440,7 @@ namespace Collision {
 		point.x = rect1->aabb.min.x;
 
 		for (int i = 1; i <= num_hotspots; i++) {
-			point.y = rect1->aabb.min.y + (height / num_hotspots * i);
+			point.y = rect1->aabb.min.y + (height / (num_hotspots + 1) * i);
 			if (PointRectCollision(point, rect2)) {
 				flag |= COLLISION_LEFT;
 				break;
@@ -453,7 +453,7 @@ namespace Collision {
 		point.x = rect1->aabb.max.x;
 
 		for (int i = 1; i <= num_hotspots; i++) {
-			point.y = rect1->aabb.min.y + (height / num_hotspots * i);
+			point.y = rect1->aabb.min.y + (height / (num_hotspots + 1) * i);
 			if (PointRectCollision(point, rect2)) {
 				flag |= COLLISION_RIGHT;
 				break;
@@ -466,7 +466,7 @@ namespace Collision {
 		point.y = rect1->aabb.max.y;
 
 		for (int i = 1; i <= num_hotspots; i++) {
-			point.x = rect1->aabb.min.x + (length / num_hotspots * i);
+			point.x = rect1->aabb.min.x + (length / (num_hotspots + 1) * i);
 			if (PointRectCollision(point, rect2)) {
 				flag |= COLLISION_TOP;
 				break;
@@ -479,7 +479,7 @@ namespace Collision {
 		point.y = rect1->aabb.min.y;
 
 		for (int i = 1; i <= num_hotspots; i++) {
-			point.x = rect1->aabb.min.x + (length / num_hotspots * i);
+			point.x = rect1->aabb.min.x + (length / (num_hotspots + 1) * i);
 			if (PointRectCollision(point, rect2)) {
 				flag |= COLLISION_BOTTOM;
 				break;
