@@ -16,8 +16,6 @@ This file contains the definitions of the functions that are part of the Core En
 #include <map>
 #include <thread>
 #include "EngineHud.h"
-#include <GameStateManager.h>
-#include <GameStateList.h>
 #include <Object.h>
 #include <Factory.h>
 #include <Collision.h>
@@ -55,8 +53,6 @@ void CoreEngine::Initialize()
 {
 	// Initialize all the Systems
 	std::cout << "Initialising " << Systems["Window"]->SystemName() << std::endl;
-	GSM_Initialize(GS_TEST);
-	GSM_Update();
 	Systems["Window"]->Initialize(); // Must initialize Window first
 	for (const std::pair<std::string, ISystems*>& sys : Systems)
 	{ // Then initialize all other systems
@@ -190,7 +186,7 @@ void CoreEngine::GameLoop()
 	int yPos = 0;
 
 	// Game Loop
-	while (current != GS_QUIT)
+	while (game_active)
 	{
 		auto m_BeginFrame = std::chrono::system_clock::now();
 		hud.NewGuiFrame();
@@ -333,7 +329,6 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 	// Set Game_mode to 0 to stop loop
 	if (msg->GetMessage() == MessageID::Quit)
 	{
-		current = GS_QUIT;
 		game_active = false;
 	}
 	// Loop Messaging System

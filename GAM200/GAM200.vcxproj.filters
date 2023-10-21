@@ -156,12 +156,6 @@
     <ClCompile Include="src\EngineHud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameStateManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TestStage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\SceneLoader.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
@@ -257,16 +251,7 @@
     <ClInclude Include="include\Graphic_gl\Camera.h">
       <Filter>Header Files\Systems\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\GameStateManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\EngineHud.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GameStateList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TestStage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\components\Texture.h">
