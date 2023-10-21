@@ -71,6 +71,8 @@ void LoadScene(std::string filename)
 		obj->Intialize();
 
 	}
+
+	delete jsonObject;
 }
 
 
