@@ -66,9 +66,6 @@ private:
 
 	// Checking if game is active
 	bool game_active;
-
-	// For displaying performance information
-	bool displayPerformanceInfo = false;
 };
 
 extern CoreEngine* engine;

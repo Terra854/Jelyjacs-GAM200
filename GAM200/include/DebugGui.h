@@ -9,6 +9,8 @@
 class DebugGui : public ISystems
 {
 public:
+	void DebugUniformGrid();
+	void DebugPerformanceViewer();
 	//Constructor to initialise pointer
 	// It's broken, will be purged in the future
 	virtual void Initialize();
