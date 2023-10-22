@@ -19,6 +19,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <Object.h>
 #include <Factory.h>
 #include <Collision.h>
+#include <DebugGui.h>
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
@@ -99,16 +100,19 @@ void CoreEngine::Update()
 
 // Variables that will be needed by Update and GameLoop
 long long start_system_time, end_system_time;
-std::map<std::string, double> elapsed_time;
-double total_time = 0.0;
+//std::map<std::string, double> elapsed_time;
+//double total_time = 0.0;
 
 void Update(ISystems* sys)
 {
 	start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	sys->Update();
 	end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	elapsed_time[sys->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
-	total_time += (double)(end_system_time - start_system_time) / 1000000.0;
+	//elapsed_time[sys->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
+	//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
+
+	debug_gui->SetSystemElapsedTime(sys->SystemName(), (double)(end_system_time - start_system_time) / 1000000.0);
+	debug_gui->AddTotalTime((double)(end_system_time - start_system_time) / 1000000.0);
 }
 
 
@@ -198,7 +202,7 @@ void CoreEngine::GameLoop()
 
 		for (const std::pair<std::string, ISystems*>& sys : Systems)
 		{
-			if (sys.first != "Window" && sys.first != "Graphics")
+			if (sys.first != "Window" && sys.first != "Graphics" && sys.first != "DebugGui")
 			{
 				//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 				Update(sys.second);
@@ -230,7 +234,7 @@ void CoreEngine::GameLoop()
 		//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 
 		
-
+		/*
 		if (displayPerformanceInfo) {
 			ImGui::SetNextWindowSize(ImVec2(0, 0));
 			ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
@@ -245,7 +249,9 @@ void CoreEngine::GameLoop()
 
 			ImGui::End();
 		}
+		*/
 
+		Update(Systems["DebugGui"]);
 		ImGui::Begin("Level editor");
 
 		ImGui::InputInt("Input x position of object", &xPos);
@@ -270,8 +276,9 @@ void CoreEngine::GameLoop()
 		}
 		ImGui::End();
 
-		elapsed_time.clear();
-		total_time = 0.0;
+
+		debug_gui->ClearSystemElapsedTime();
+		debug_gui->SetTotalTime(0.0);
 
 		hud.GuiRender(io);
 

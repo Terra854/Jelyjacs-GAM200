@@ -3,6 +3,7 @@
 #include <Collision.h>
 #include <Core_Engine.h>
 
+DebugGui* debug_gui = nullptr; // declared in DebugGui.cpp
 bool showUniformGrid = false;
 
 void DebugUniformGrid() {
@@ -59,6 +60,10 @@ void DoNothing() {
 
 }
 
+void DebugGui::Initialize() {
+	total_time = 0.0;
+}
+
 void DebugGui::Update(){
     if (ImGui::BeginMainMenuBar())
     {
@@ -68,12 +73,32 @@ void DebugGui::Update(){
         }
         if (ImGui::BeginMenu("Window"))
         {
-            if (ImGui::MenuItem("Performance Viewer")) { engine->displayPerformanceInfo = true; }
+            if (ImGui::MenuItem("Performance Viewer")) {
+				engine->displayPerformanceInfo = true;
+				
+				
+				
+			}
 			if (ImGui::MenuItem("Uniform Grid")) { showUniformGrid = true; }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
     }
 
+	if (engine->displayPerformanceInfo) {
+		ImGui::SetNextWindowSize(ImVec2(0, 0));
+		ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
+		ImGui::Begin("DEBUG: Performance Viewer");
+
+		for (std::pair<std::string, double> p : System_elapsed_time)
+			ImGui::Text("%s system completed it's update in %.6f seconds (%.2f%%)", p.first.c_str(), p.second, (p.second / total_time * 100.0));
+
+		ImGui::Text("############################################################");
+		ImGui::Text("Total time taken for this frame: %.6f seconds.", total_time);
+		float fps = engine->Get_FPS();
+		ImGui::Text("Frame Rate is: %.6f FPS", fps);
+
+		ImGui::End();
+	}
 	showUniformGrid ? DebugUniformGrid() : DoNothing();
 }

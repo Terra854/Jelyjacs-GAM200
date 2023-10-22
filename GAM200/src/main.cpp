@@ -37,7 +37,7 @@ int main() {
 	GameLogic* logic = new GameLogic();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();     
-	DebugGui* debug_gui = new DebugGui();
+	debug_gui = new DebugGui();
 
 	
 	// Add System to the engine 
