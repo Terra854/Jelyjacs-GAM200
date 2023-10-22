@@ -95,8 +95,7 @@ void DebugGui::Update(){
 
 		ImGui::Text("############################################################");
 		ImGui::Text("Total time taken for this frame: %.6f seconds.", total_time);
-		float fps = engine->Get_FPS();
-		ImGui::Text("Frame Rate is: %.6f FPS", fps);
+		ImGui::Text("Frame Rate is: %.6f FPS", engine->Get_FPS());
 
 		ImGui::End();
 	}
