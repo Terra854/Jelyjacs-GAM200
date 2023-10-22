@@ -39,7 +39,7 @@ void DebugGui::DebugUniformGrid() {
 			ImGui::Text("--------");
 			ImGui::SameLine(0, 0);
 		}
-		ImGui::Text("--------");
+		ImGui::Text("");
 	}
 
 	// Print the column header below
