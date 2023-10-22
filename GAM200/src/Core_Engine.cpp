@@ -267,25 +267,23 @@ void CoreEngine::GameLoop()
 		ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
 		ImGui::Begin("Game objects");
 		ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+		static int selected = -1;
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
 			Object* object = objectFactory->getObjectWithID(i);
+			char buf[32];
+			if (object->GetName().empty())
+				sprintf_s(buf, "Object %d", static_cast<int>(i));
+			else 
+				sprintf_s(buf, "%s %d", object->GetName().c_str(), static_cast<int>(i));
 
-			if (!object->GetName().empty())
-				ImGui::Selectable(object->GetName().c_str());
-			else {
-				std::stringstream ss;
-				ss << "Object number " << i;
-				std::string s = ss.str();
-				ImGui::Selectable(s.c_str());
-			}
-
+			// Creating button for each object
+			if (ImGui::Selectable(buf, selected == static_cast<int>(i)))
+				selected = i;
 		}
 		ImGui::End();
 
-		debug_gui->ClearSystemElapsedTime();
-		debug_gui->SetTotalTime(0.0);
-
+		debug_gui->ClearAll();
 		hud.GuiRender(io);
 
 		// FPS Calculation
@@ -306,8 +304,8 @@ void CoreEngine::GameLoop()
 		// Update delta_time every second
 		if (time_in_seconds > prev_time_in_seconds)
 		{
-			std::cout << "FPS: " << core_fps << std::endl;
-			std::cout << "DT: " << dt << std::endl;
+			//std::cout << "FPS: " << core_fps << std::endl;
+			//std::cout << "DT: " << dt << std::endl;
 			prev_time_in_seconds = time_in_seconds;
 		}
 	
