@@ -20,6 +20,7 @@ This file contains the main function.
 #include <../src/Assets Manager/asset_manager.h>
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
+ThreadPool* thread_pool;
 
 int main() {
 	
