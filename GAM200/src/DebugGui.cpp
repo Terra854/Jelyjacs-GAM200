@@ -100,5 +100,7 @@ void DebugGui::Update(){
 
 		ImGui::End();
 	}
+
+
 	showUniformGrid ? DebugUniformGrid() : DoNothing();
 }

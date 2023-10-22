@@ -20,6 +20,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <Factory.h>
 #include <Collision.h>
 #include <DebugGui.h>
+#include <sstream>
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
@@ -256,6 +257,7 @@ void CoreEngine::GameLoop()
 
 		ImGui::InputInt("Input x position of object", &xPos);
 		ImGui::InputInt("Input y position of object", &yPos);
+		//ImGui::ImageButton("../Asset/Textures/mapbox.png", ImVec2(50, 50));
 		if (ImGui::Button("Create box"))
 		{
 			createObject(xPos, yPos, "../Asset/Objects/mapbox.json");
@@ -270,12 +272,16 @@ void CoreEngine::GameLoop()
 			Object* object = objectFactory->getObjectWithID(i);
 
 			if (!object->GetName().empty())
-				ImGui::Text("%s", object->GetName().c_str());
-			else
-				ImGui::Text("Object number %d", i);
+				ImGui::Selectable(object->GetName().c_str());
+			else {
+				std::stringstream ss;
+				ss << "Object number " << i;
+				std::string s = ss.str();
+				ImGui::Selectable(s.c_str());
+			}
+
 		}
 		ImGui::End();
-
 
 		debug_gui->ClearSystemElapsedTime();
 		debug_gui->SetTotalTime(0.0);
