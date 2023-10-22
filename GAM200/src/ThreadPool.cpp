@@ -1,7 +1,7 @@
 #include <ThreadPool.h>
 
 void ThreadPool::Initialize() {
-    num_of_threads = 4;
+    num_of_threads = std::thread::hardware_concurrency();
     for (size_t i = 0; i < num_of_threads; ++i) {
         workers.emplace_back([this, i] { this->workerThread(i); });
     }
