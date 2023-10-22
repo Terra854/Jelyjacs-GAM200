@@ -16,9 +16,10 @@ This file contains the main function.
 #include <Audio.h>
 #include <Camera.h>
 #include <DebugGui.h>
+#include <ThreadPool.h>
 #include <../src/Assets Manager/asset_manager.h>
 
-CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet 
+CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
 
 int main() {
 	
@@ -26,7 +27,7 @@ int main() {
 	#if defined(DEBUG) | defined(_DEBUG)
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	#endif
-
+	
 	// Initialise Pointer to Systems
 	engine = new CoreEngine();
 	GLWindow* windows = new GLWindow();
@@ -38,10 +39,11 @@ int main() {
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();     
 	debug_gui = new DebugGui();
-
+	thread_pool = new ThreadPool();
 	
 	// Add System to the engine 
-	engine->AddSystem(windows);         
+	engine->AddSystem(windows);
+	engine->AddSystem(thread_pool);
 	engine->AddSystem(assetmanager);
 	engine->AddSystem(logic);
 	engine->AddSystem(factory);
@@ -55,6 +57,7 @@ int main() {
 	engine->Initialize();
 	windows->ActivateWindow();                                                   
 	windows->print_specs();
+
 	engine->GameLoop();
 
 	// Free Engine
