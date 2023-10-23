@@ -188,8 +188,9 @@ void CoreEngine::GameLoop()
 	ImGuiIO& io = hud.StartGui();
 
 	bool show_performance_viewer = true;
-	int xPos = 0;
-	int yPos = 0;
+	bool objectProperties = false;
+	float xPos = 0;
+	float yPos = 0;
 
 	// Game Loop
 	while (game_active)
@@ -257,8 +258,8 @@ void CoreEngine::GameLoop()
 		Update(Systems["DebugGui"]);
 		ImGui::Begin("Level editor");
 
-		ImGui::InputInt("Input x position of object", &xPos);
-		ImGui::InputInt("Input y position of object", &yPos);
+		ImGui::InputFloat("Input x position of object", &xPos);
+		ImGui::InputFloat("Input y position of object", &yPos);
 		//ImGui::ImageButton("../Asset/Textures/mapbox.png", ImVec2(50, 50));
 		if (ImGui::Button("Create box"))
 		{
@@ -269,22 +270,49 @@ void CoreEngine::GameLoop()
 		ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
 		ImGui::Begin("Game objects");
 		ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+		char objectPropertiesName[32];
 		static int selected = -1;
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
-			Object* object = objectFactory->getObjectWithID(i);
+			Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
 			char buf[32];
-			if (object->GetName().empty())
+			if (object->GetName().empty()) {
 				sprintf_s(buf, "Object %d", static_cast<int>(i));
+			}
 			else 
 				sprintf_s(buf, "%s %d", object->GetName().c_str(), static_cast<int>(i));
 
 			// Creating button for each object
-			if (ImGui::Selectable(buf, selected == static_cast<int>(i)))
-				selected = i;
+			if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
+				selected = static_cast<int>(i);
+				strcpy_s(objectPropertiesName, buf);
+				objectProperties = true;
+				
+			}
 		}
 		ImGui::End();
-
+		
+		if (objectProperties) {
+			Object* object = objectFactory->getObjectWithID(selected);
+			ComponentType componentsarr[20];
+			int size;
+			const char* componentNames[] = {"Transform", "Texture", "Body", "Physics", "PlayerControllable"};
+			ImGui::Begin(objectPropertiesName, &objectProperties);
+			
+			ImGui::Text("Object ID: %d", object->GetId());
+			ImGui::Text("Object Name: %s", object->GetName().c_str());
+			ImGui::Text("Number of components: %d", object->GetNumComponents());
+			object->getKeysToArray(componentsarr, size);
+			std::cout << "Size: " << size << "\n";
+			for (int i = 0; i < size; i++)
+			{	
+				ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
+			}
+			
+			ImGui::End();
+			
+		}
+		
 		debug_gui->ClearAll();
 		hud.GuiRender(io);
 
@@ -354,7 +382,7 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 	}
 }
 
-void CoreEngine::createObject(int posX, int posY, std::string objectName)
+void CoreEngine::createObject(float posX, float posY, std::string objectName)
 {
 	Object* testingObject = objectFactory->createObject(objectName);
 	long testingObjectID = testingObject->GetId();

@@ -24,7 +24,7 @@ void DebugGui::DebugUniformGrid() {
 	}
 
 	// Print rows
-	for (int y = Collision::uniform_grid[0].size() - 1; y >= 0; --y) {
+	for (int y = static_cast<int>(Collision::uniform_grid[0].size() - 1); y >= 0; --y) {
 		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "%4d   ", y);
 		for (int x = 0; x < Collision::uniform_grid.size(); ++x) {
 			ImGui::SameLine(0, 0);
