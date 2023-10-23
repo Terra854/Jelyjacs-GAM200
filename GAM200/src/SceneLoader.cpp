@@ -42,20 +42,18 @@ void LoadScene(std::string filename)
 		std::string objprefabs = component["Prefabs"].asString();
 		Object* obj;
 		// Create object if doesn't exist
-		if (prefabs[objprefabs] == -1)
+		if (AssetManager::prefabsval(objprefabs) == -1)
 		{
 			// Create object
-			AssetManager temp;
-			std::string tempobjprefabs =  temp.objectprefabsval() + "/" + objprefabs;
+			std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
 			obj = objectFactory->createObject(tempobjprefabs);
 
-			prefabs[objprefabs] = obj->GetId();
-			std::cout << prefabs[objprefabs];
+			AssetManager::updateprefab(objprefabs, obj->GetId());
 		}
 		else
 		// clone object
 		{
-			obj = objectFactory->cloneObject(objectFactory->getObjectWithID(prefabs[objprefabs]));
+			obj = objectFactory->cloneObject(objectFactory->getObjectWithID(AssetManager::prefabsval(objprefabs)));
 		}
 
 		// Read extra data to update object
@@ -67,6 +65,9 @@ void LoadScene(std::string filename)
 			tran_pt->Position.x = component["Position"]["x"].asFloat();
 			tran_pt->Position.y = component["Position"]["y"].asFloat();
 		}
+
+		// Add here to read oher types of data if necessary WIP
+
 
 		obj->Intialize();
 
