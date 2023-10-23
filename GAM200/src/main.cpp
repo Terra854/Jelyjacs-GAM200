@@ -38,7 +38,8 @@ int main() {
 	audio = new Audio(); // declared in Audio.h
 	GameLogic* logic = new GameLogic();
 	Camera* camera = new Camera();
-	GLApp* graphics = new GLApp();     
+	GLApp* graphics = new GLApp();
+	GLApp::Leveleditor* leveleditor = new GLApp::Leveleditor();
 	debug_gui = new DebugGui();
 	thread_pool = new ThreadPool();
 	

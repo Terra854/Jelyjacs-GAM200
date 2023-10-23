@@ -8,6 +8,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <Precompile.h>
 #include<GLWindow.h>
 #include <Debug.h>
+#include <GLApp.h>
 #include "Core_Engine.h"
 #include <chrono>
 #include <iostream>
@@ -169,6 +170,7 @@ void CoreEngine::Debug_Update()
 ********************************************************************************/
 void CoreEngine::GameLoop()
 {
+	editor->set_num({ 14,14 });
 	// FPS Variables
 	int numofsteps = 0;
 	double accumulator = 0.0;
@@ -310,7 +312,6 @@ void CoreEngine::GameLoop()
 		}
 
 		ImGui::End();
-
 		debug_gui->ClearAll();
 		hud.GuiRender(io);
 

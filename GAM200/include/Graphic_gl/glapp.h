@@ -71,11 +71,15 @@ public:
 	
 	class Leveleditor {
 	public:
-		Leveleditor(Vec2(scale)) :scale(scale) {};
+		Leveleditor();
 		Vec2 scale_window{ 800.0f,800.0f };
-		Vec2 scale{  };
+		void set_num(Vec2 num_) { num = num_; }
 		void drawleveleditor();
+		Vec2 num{0,0};
+		float box_size{0};
+
 	};
 };
 extern GLApp* app;
+extern GLApp::Leveleditor* editor;
 #endif  /*GLAPP_H */

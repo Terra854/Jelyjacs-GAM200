@@ -25,8 +25,14 @@ includes all the functions to draw objects
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
-// data for level editor
-GLApp::Leveleditor level_editor({ 12, 12 });
+// 
+
+GLApp::Leveleditor::Leveleditor()
+{
+	set_num({ 12, 12 });
+	editor = this;
+}
+GLApp::Leveleditor* editor;
 glm::vec3 box_color_editor{ 0.0f, 0.5f, 0.5f };
 
 //debug 
@@ -45,6 +51,7 @@ GLApp::GLApp()
 {
 	app = this;
 }
+
 
 /*
 * Initialize() is called once, at program start.
@@ -236,7 +243,7 @@ void GLApp::Update()
 	//clear screen
 	glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-	level_editor.drawleveleditor();
+	editor->drawleveleditor();
 	
 	
 
@@ -482,14 +489,16 @@ void GLApp::drawline(Vec2 start, Vec2 end) {
 
 void GLApp::Leveleditor::drawleveleditor()
 {
-	float box_size = scale_window.x / scale.x;
+	if(num.x>num.y)
+	box_size = scale_window.x / num.x;
+	else box_size = scale_window.y / num.y;
 	Vec2 scaling = { box_size / window->width, box_size / window->height };
 	Vec2 pos_botleft = {
 		(box_size-scale_window.x) / window->width,
 		(box_size-scale_window.y) / window->height
 	};
-	for (int i = 0; i < scale.x; i++) {
-		for (int j = 0; j < scale.y; j++) {
+	for (int i = 0; i < num.x; i++) {
+		for (int j = 0; j < num.y; j++) {
 			Vec2 pos = pos_botleft + Vec2(i * box_size * 2 / window->width, j * box_size * 2 / window->height);
 			Mat3 mat_test = Mat3Translate(pos.x, pos.y) * Mat3Scale(scaling.x, scaling.y);
 			shdrpgms["shape"].Use();
