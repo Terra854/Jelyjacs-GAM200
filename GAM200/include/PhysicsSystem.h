@@ -7,7 +7,7 @@
 This file contains the declaration for the Physics system class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
-
+#include <components/Body.h>
 #include <Interface_System.h>
 
 const float gravity = -3000.0f;
@@ -21,3 +21,5 @@ public:
 	virtual void MessageRelay(Message_Handler* msg);
 	virtual std::string SystemName() { return "Physics"; }
 };
+
+void RecalculateBody(Transform* t, Body* b);

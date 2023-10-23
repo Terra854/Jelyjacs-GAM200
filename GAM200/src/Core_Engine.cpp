@@ -22,6 +22,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <DebugGui.h>
 #include <sstream>
 #include "Font.h"
+#include <PhysicsSystem.h>
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
@@ -308,8 +309,8 @@ void CoreEngine::GameLoop()
 				ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
 			}
 			Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-			ImGui::SliderFloat("Change Object X-Axis", &tran_pt->Position.x, -960.f, 960.f);
-			ImGui::SliderFloat("Change Object Y-Axis", &tran_pt->Position.y, -540.f, 540.f);
+			if (ImGui::SliderFloat("Change Object X-Axis", &tran_pt->Position.x, -960.f, 960.f) || ImGui::SliderFloat("Change Object Y-Axis", &tran_pt->Position.y, -540.f, 540.f))
+				RecalculateBody(tran_pt, static_cast<Body*>(object->GetComponent(ComponentType::Body)));
 			ImGui::End();
 			
 		}
