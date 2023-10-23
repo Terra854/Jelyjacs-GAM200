@@ -14,6 +14,7 @@ This file contains the main function.
 #include <debug.h>
 #include <GameLogic.h>
 #include <Audio.h>
+#include <Font.h>
 #include <Camera.h>
 #include <DebugGui.h>
 #include <ThreadPool.h>
@@ -37,6 +38,7 @@ int main() {
 	AssetManager* assetmanager = new AssetManager();
 	audio = new Audio(); // declared in Audio.h
 	GameLogic* logic = new GameLogic();
+	Font* font = new Font();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();     
 	debug_gui = new DebugGui();
@@ -50,6 +52,7 @@ int main() {
 	engine->AddSystem(factory);
 	engine->AddSystem(physics);
 	engine->AddSystem(audio);
+	engine->AddSystem(font);
 	engine->AddSystem(camera);
 	engine->AddSystem(debug_gui);
 	engine->AddSystem(graphics);												  // Graphics should always be last

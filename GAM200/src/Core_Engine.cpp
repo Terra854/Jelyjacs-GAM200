@@ -21,6 +21,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <Collision.h>
 #include <DebugGui.h>
 #include <sstream>
+#include "Font.h"
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
@@ -222,6 +223,7 @@ void CoreEngine::GameLoop()
 		*****************************************************************************************************************************************/
 		//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		Update(Systems["Graphics"]);
+		DrawText("Testing ", 500, 200, 1);
 		//Systems["Graphics"]->Update();
 		//end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		//elapsed_time[Systems["Graphics"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
