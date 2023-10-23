@@ -69,8 +69,12 @@ public:
 	static std::map<std::string, GLModel> models;
 	
 	
-	class camera {
-		Vec2 pos;
+	class Leveleditor {
+	public:
+		Leveleditor(Vec2(scale)) :scale(scale) {};
+		Vec2 scale_window{ 800.0f,800.0f };
+		Vec2 scale{  };
+		void drawleveleditor();
 	};
 };
 extern GLApp* app;
