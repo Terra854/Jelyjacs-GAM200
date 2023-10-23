@@ -85,6 +85,7 @@ void DebugGui::Update(){
     {
         if (ImGui::BeginMenu("File"))
         {
+			if (ImGui::MenuItem("Exit")) { engine->game_active = false; }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Window"))
