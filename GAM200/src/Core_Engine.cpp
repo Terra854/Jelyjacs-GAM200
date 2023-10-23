@@ -283,6 +283,32 @@ void CoreEngine::GameLoop()
 		}
 		ImGui::End();
 
+		ImGui::Begin("Game object creation");
+		static int select = -1;
+		for (int n = 0; n < 5; n++)
+		{
+			char buf[32];
+			sprintf_s(buf, "Object %d", n);
+			if (ImGui::Selectable(buf, select == n))
+				select = n;
+		}
+		
+		if (select > -1)
+		{
+			if ((input::GetMouseX() > 560 && input::GetMouseX() < 1360) && (input::GetMouseY() > 115 && input::GetMouseY() < 920))
+			{
+				if (input::IsPressed(KEY::mouseL))
+				{
+					double xpos = input::GetMouseX();
+					double ypos = input::GetMouseY();
+
+					//std::cout << "Object will be placed\n";
+				}
+			}
+		}
+
+		ImGui::End();
+
 		debug_gui->ClearAll();
 		hud.GuiRender(io);
 

@@ -237,7 +237,7 @@ void GLApp::Update()
 	glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	level_editor.drawleveleditor();
-	return;
+	
 	
 
 	//update window bar
