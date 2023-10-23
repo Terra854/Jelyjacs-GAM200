@@ -8,7 +8,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-bool DrawText(std::string const& text, float posX, float posY, float scale);
+//rgb values range: 0 to 1
+bool DrawText(std::string const& text, float posX, float posY, float scale, float red = 1, float green = 1, float blue = 1);
 
 class Font : public ISystems
 {

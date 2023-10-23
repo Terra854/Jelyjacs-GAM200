@@ -117,7 +117,7 @@ void Font::Initialize()
         glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-
+        shdr_pgm.UnUse();
 }
 
 
@@ -162,15 +162,16 @@ void RenderText(std::string text, float x, float y, float scale, glm::ivec3 colo
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+    shdr_pgm.UnUse();
 }
 
-bool DrawText(std::string const& text, float posX, float posY, float scale)
+bool DrawText(std::string const& text, float posX, float posY, float scale , float red , float green , float blue)
 {
     if (posX<0 || posX>window->width || posY<0 || posY>window->height)
     {
         return false;
     }
-    RenderText(text, posX, posY, scale, glm::vec3(1, 1, 1));
+    RenderText(text, posX, posY, scale, glm::vec3(red,green,blue));
     return true;
 }
 
