@@ -275,9 +275,9 @@ void CoreEngine::GameLoop()
 			Object* object = objectFactory->getObjectWithID(i);
 			char buf[32];
 			if (object->GetName().empty())
-				sprintf_s(buf, "Object %d", static_cast<int>(i));
+				sprintf_s(buf, "[%d] Object", static_cast<int>(i));
 			else 
-				sprintf_s(buf, "%s %d", object->GetName().c_str(), static_cast<int>(i));
+				sprintf_s(buf, "[%d] %s", static_cast<int>(i), object->GetName().c_str());
 
 			// Creating button for each object
 			if (ImGui::Selectable(buf, selected == static_cast<int>(i)))
