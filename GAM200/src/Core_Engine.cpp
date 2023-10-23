@@ -301,7 +301,9 @@ void CoreEngine::GameLoop()
 				{
 					double xpos = input::GetMouseX();
 					double ypos = input::GetMouseY();
-
+					int xOffset = (xpos / 67.0) + ((int)xpos % 67);
+					int yOffset = (ypos / 67.0) + ((int)ypos % 67);
+					createObject(-370 + (xOffset * 67), 370 + (yOffset * 67), "../Asset/Objects/mapbox.json");
 					//std::cout << "Object will be placed\n";
 				}
 			}
