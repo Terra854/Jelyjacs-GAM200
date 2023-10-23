@@ -193,9 +193,34 @@ void CoreEngine::GameLoop()
 	float xPos = 0;
 	float yPos = 0;
 
+	/* Level Editor */
+
+	GLuint level_editor_fb, level_editor_texture;
+
+	// Create the framebuffer
+	glGenFramebuffers(1, &level_editor_fb);
+	glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
+
+	// Create the texture to which we'll render
+	glGenTextures(1, &level_editor_texture);
+	glBindTexture(GL_TEXTURE_2D, level_editor_texture);
+
+	// Set up the texture with high resolution
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window->width, window->height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+	// Set texture parameters, including mipmap
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Attach the texture to the framebuffer
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, level_editor_texture, 0);
+
+	/* End Level Editor */
+
 	// Game Loop
 	while (game_active)
 	{
+		
 		auto m_BeginFrame = std::chrono::system_clock::now();
 		hud.NewGuiFrame();
 
@@ -224,20 +249,40 @@ void CoreEngine::GameLoop()
 		
 		*****************************************************************************************************************************************/
 		//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		
+
+		/* For rendering into imgui window */
+
+		glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
+		
 		Update(Systems["Graphics"]);
 		DrawText("Testing Font", 500, 200, 1);
-		//Systems["Graphics"]->Update();
-		//end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-		//elapsed_time[Systems["Graphics"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
-		//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 
-		//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind the framebuffer
+
+		// Generate mipmaps after rendering to the high-resolution texture
+		glBindTexture(GL_TEXTURE_2D, level_editor_texture);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		/* End rendering into imgui window */
+
+		// For the main screen 
+		Update(Systems["Graphics"]);
+		DrawText("Testing Font", 500, 200, 1);
+
+		// If not rendering main screen, clear it, otherwise ImGui is going to have afterimages
+		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Use the desired clear color
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		Update(Systems["Window"]);
-		//Systems["Window"]->Update();
-		//end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-		//elapsed_time[Systems["Window"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
-		//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 
+		// Display the game inside the ImGui window
+		ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
+		ImGui::Begin("Game Runtime (This for the level editor)");
+		ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
+		ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize);
+		ImGui::End();
 		
 		/*
 		if (displayPerformanceInfo) {
@@ -348,6 +393,8 @@ void CoreEngine::GameLoop()
 		//m_BeginFrame = m_EndFrame;
 		//m_EndFrame = m_BeginFrame + invFpsLimit;
 	}
+	glDeleteFramebuffers(1, &level_editor_fb);
+	glDeleteTextures(1, &level_editor_texture);
 }
 
 /********************************************************************************
