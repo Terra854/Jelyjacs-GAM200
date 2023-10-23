@@ -308,7 +308,9 @@ void CoreEngine::GameLoop()
 			{	
 				ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
 			}
-			
+			Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+			ImGui::SliderFloat("Change Object X-Axis", &tran_pt->Position.x, -960.f, 960.f);
+			ImGui::SliderFloat("Change Object Y-Axis", &tran_pt->Position.y, -540.f, 540.f);
 			ImGui::End();
 			
 		}
