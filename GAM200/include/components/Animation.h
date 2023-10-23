@@ -1,3 +1,4 @@
+#pragma once
 #include <Debug.h>
 #include <string>
 #include <vector>
@@ -11,11 +12,12 @@ enum AnimationType
 	Run,
 	Jump
 };
-class Animation2D : public Component
+class Animation : public Component
 {
-	public:
-	Animation2D() : Component() {};
-
+public:
+	Animation() : Component() {};
+	void Initialize() override;
+	GLuint animation_tex_obj;
+	std::map<AnimationType, std::vector<glm::vec4>> frame_map;
 	std::map<AnimationType, std::vector<GLuint>> animation;
-
 };

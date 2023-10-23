@@ -168,6 +168,9 @@
     <ClCompile Include="src\Font.cpp">
       <Filter>Source Files\Systems\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -276,6 +279,9 @@
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="include\Font.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Animation.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>

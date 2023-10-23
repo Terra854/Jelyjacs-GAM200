@@ -152,6 +152,10 @@ Object* Factory::createObject(const std::string& filename)
 			PlayerControllable* p = (PlayerControllable*)((ComponentCreator<PlayerControllable>*) componentMap["Player"])->Create();
 			obj->AddComponent(p);
 		}
+		else if (type == "Animation")
+		{
+
+		}
 	}
 
 	// Run the initilization routines for each component (if there is any)
