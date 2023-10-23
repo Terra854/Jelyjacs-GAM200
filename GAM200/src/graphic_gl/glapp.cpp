@@ -26,7 +26,7 @@ includes all the functions to draw objects
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
 // data for level editor
-GLApp::Leveleditor level_editor({ 10, 10 });
+GLApp::Leveleditor level_editor({ 12, 12 });
 glm::vec3 box_color_editor{ 0.0f, 0.5f, 0.5f };
 
 //debug 
@@ -233,11 +233,12 @@ void GLApp::init_shdrpgms() {
 */
 void GLApp::Update()
 {
-	level_editor.drawleveleditor();
-	return;
 	//clear screen
 	glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+	level_editor.drawleveleditor();
+	return;
+	
 
 	//update window bar
 	std::stringstream sstr;
