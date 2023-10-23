@@ -29,6 +29,12 @@ public:
 	//if object does not contain that component, returns null
 	Component* GetComponent(ComponentType typeID);
 
+	void getKeysToArray(ComponentType keys[], int& size) const {
+		size = 0;
+		for (const auto& pair : Components) {
+			keys[size++] = pair.first;
+		}
+	}
 	///adds a component to be a part of the object by adding it into the component map
 	void AddComponent(Component* component);
 
@@ -39,6 +45,8 @@ public:
 
 	//Get the object's name
 	std::string GetName() { return name; }
+
+	int GetNumComponents() { return static_cast<int>(Components.size()); }
 
 private:
 	//contains all components of the current object
