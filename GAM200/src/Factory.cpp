@@ -101,12 +101,14 @@ Object* Factory::createObject(const std::string& filename)
 			obj->AddComponent(trans);
 		}
 		else if (type == "Texture") {
-			std::map<std::string, GLuint>::iterator it = textures.find(component["Properties"]["texturepath"].asString());
-			if (it == textures.end())
+
+			bool exist = AssetManager::texturecheckexist(component["Properties"]["texturepath"].asString());
+
+			if (!exist)
 				std::cout << "Missing Texture!" << std::endl;
 			else
 			{
-				GLuint texturepath = it->second;
+				GLuint texturepath = AssetManager::textureval(component["Properties"]["texturepath"].asString());
 				Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(texturepath);
 				obj->AddComponent(tex);
 			}			
@@ -232,6 +234,10 @@ Object* Factory::getObjectWithID(long id)
 Object* Factory::cloneObject(Object* object)
 {
 	Object* obj = createEmptyObject();
+
+	// Clone the object name
+	obj->name = object->GetName();
+
 	// Clone all components (specific copying might be better to be at their component itself)
 	for (const std::pair<ComponentType, Component*>& c : object->Components)
 	{

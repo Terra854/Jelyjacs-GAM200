@@ -44,12 +44,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include;$(SolutionDir)lib\imgui-1.87</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)lib\fmod\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include;$(SolutionDir)lib\imgui-1.87;$(SolutionDir)lib\freetype\include</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)lib\fmod\lib;$(SolutionDir)lib\freetype;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)lib\fmod\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include;;$(SolutionDir)lib\freetype\include</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)lib\fmod\lib;$(SolutionDir)lib\freetype;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -64,7 +64,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;freetype.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3.dll" "$(TargetDir)glfw3.dll" /Y
@@ -89,7 +89,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;freetype.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3.dll" "$(TargetDir)glfw3.dll" /Y
@@ -104,6 +104,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClCompile Include="src\Body.cpp" />
     <ClCompile Include="src\DebugGui.cpp" />
     <ClCompile Include="src\EngineHud.cpp" />
+    <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\graphic_gl\Camera.cpp" />
     <ClCompile Include="src\ImGui\imgui.cpp" />
     <ClCompile Include="src\ImGui\imgui_demo.cpp" />
@@ -143,6 +144,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClInclude Include="include\Debug.h" />
     <ClInclude Include="include\DebugGui.h" />
     <ClInclude Include="include\EngineHud.h" />
+    <ClInclude Include="include\Font.h" />
     <ClInclude Include="include\GameLogic.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\Factory.h" />

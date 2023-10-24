@@ -27,6 +27,9 @@ public:
 	virtual Shape GetShape() = 0;
 	virtual void Initialize() override {};
 	virtual ComponentType TypeId() const override { return ComponentType::Body; }
+
+	// Record down the grids the object is in. 1st is width, 2nd is height
+	std::vector<std::pair<int, int>> inGrid;
 };
 
 // Rectangle Object

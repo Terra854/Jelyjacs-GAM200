@@ -44,7 +44,7 @@ public:
 	// Acts as a MessageRelay for Core Engine
 	void Broadcast(Message_Handler *msg);
 
-	void createObject(int posX, int posY, std::string objectName);
+	void createObject(float posX, float posY, std::string objectName);
 
 	float GetDt() { return dt; }
 	float Get_FPS() { return core_fps; }

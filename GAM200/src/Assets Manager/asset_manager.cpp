@@ -11,8 +11,12 @@ to be referenced from when needed.
 #include "asset_manager.h"
 #include <iostream>
 
-std::map<std::string, GLuint> textures;
-std::map<std::string, long> prefabs;
+// Creating of static data members
+std::filesystem::path AssetManager::pathtexture = "../Asset/Picture";
+std::filesystem::path AssetManager::objectprefabs = "../Asset/Objects";
+
+std::map<std::string, GLuint> AssetManager::textures;
+std::map<std::string, long> AssetManager::prefabs;
 
 // Looked through the asset file and load all assets
 void AssetManager::Initialize()
@@ -84,21 +88,28 @@ void AssetManager::createprefablist()
 	}
 }
 
-GLuint AssetManager::textureval(std::string)
+bool AssetManager::texturecheckexist(std::string str)
 {
-
-	return GLuint();
+	std::map<std::string, GLuint>::iterator it = textures.find(str);
+	if (it == textures.end())
+		return false;
+	else
+		return true;
 }
 
-long AssetManager::prefabsval(std::string)
+GLuint AssetManager::textureval(std::string str)
 {
-
-	return 0;
+	return textures[str];
 }
 
-void AssetManager::updateprefab(std::string)
+long AssetManager::prefabsval(std::string str)
 {
+	return prefabs[str];
+}
 
+void AssetManager::updateprefab(std::string str, long val)
+{
+	prefabs[str] = val;
 }
 
 std::string AssetManager::objectprefabsval()

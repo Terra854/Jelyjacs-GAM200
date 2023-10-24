@@ -2,28 +2,386 @@
   "SceneName": "Level1",
   "Objects": [
     {
-      "Prefabs": "mapbox.json",
-      "Type": "Transform",
-        "Position": {
-          "x": 0.0,
-          "y": 0.0
-        }
+      "Prefabs": "background.json"
+    },
+    {
+      "Prefabs": "mapbox.json"
     },
     {
       "Prefabs": "mapbox.json",
       "Type": "Transform",
-        "Position": {
-          "x": 100.0,
-          "y": -30.0
-        }
+      "Position": {
+        //"x": 0,
+        "y": 190.0
+      }
     },
     {
       "Prefabs": "mapbox.json",
       "Type": "Transform",
-        "Position": {
-          "x": -100.0,
-          "y": 30.0
-        }
+      "Position": {
+        "x": 380.0,
+        "y": -300.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 100.0,
+        "y": -30.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -100.0,
+        "y": 30.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -1100.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -1046.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -992.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -938.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -884.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -830.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -776.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -722.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -668.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -614.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -560.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -506.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -452.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -398.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -344.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -290.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -236.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -182.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -128.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -74.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -20.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -1100.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 34.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 88.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 142.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 196.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 250.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 304.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 358.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 412.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 466.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 520.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 574.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 628.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 682.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 736.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 790.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 844.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 898.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 952.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 1006.0,
+        "y": -500.0
+      }
+    },
+    {
+      "Prefabs": "mapbox.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 1060.0,
+        "y": -500.0
+      }
     }
   ]
 }

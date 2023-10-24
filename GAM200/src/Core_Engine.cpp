@@ -22,6 +22,8 @@ This file contains the definitions of the functions that are part of the Core En
 #include <Collision.h>
 #include <DebugGui.h>
 #include <sstream>
+#include "Font.h"
+#include <PhysicsSystem.h>
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
@@ -197,9 +199,34 @@ void CoreEngine::GameLoop()
 	std::vector<int> boxesFilled(numOfBoxes, 0);
 	std::cout << boxesFilled.capacity();
 
+	/* Level Editor */
+
+	GLuint level_editor_fb, level_editor_texture;
+
+	// Create the framebuffer
+	glGenFramebuffers(1, &level_editor_fb);
+	glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
+
+	// Create the texture to which we'll render
+	glGenTextures(1, &level_editor_texture);
+	glBindTexture(GL_TEXTURE_2D, level_editor_texture);
+
+	// Set up the texture with high resolution
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window->width, window->height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+	// Set texture parameters, including mipmap
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Attach the texture to the framebuffer
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, level_editor_texture, 0);
+
+	/* End Level Editor */
+
 	// Game Loop
 	while (game_active)
 	{
+		
 		auto m_BeginFrame = std::chrono::system_clock::now();
 		hud.NewGuiFrame();
 
@@ -228,19 +255,40 @@ void CoreEngine::GameLoop()
 		
 		*****************************************************************************************************************************************/
 		//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		
+
+		/* For rendering into imgui window */
+
+		glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
+		
 		Update(Systems["Graphics"]);
-		//Systems["Graphics"]->Update();
-		//end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-		//elapsed_time[Systems["Graphics"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
-		//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
+		DrawText("Testing Font", 500, 200, 1);
 
-		//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind the framebuffer
+
+		// Generate mipmaps after rendering to the high-resolution texture
+		glBindTexture(GL_TEXTURE_2D, level_editor_texture);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		/* End rendering into imgui window */
+
+		// For the main screen 
+		Update(Systems["Graphics"]);
+		DrawText("Testing Font", 500, 200, 1);
+
+		// If not rendering main screen, clear it, otherwise ImGui is going to have afterimages
+		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Use the desired clear color
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		Update(Systems["Window"]);
-		//Systems["Window"]->Update();
-		//end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-		//elapsed_time[Systems["Window"]->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
-		//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 
+		// Display the game inside the ImGui window
+		ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
+		ImGui::Begin("Game Runtime (This for the level editor)");
+		ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
+		ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::End();
 		
 		/*
 		if (displayPerformanceInfo) {
@@ -262,8 +310,8 @@ void CoreEngine::GameLoop()
 		Update(Systems["DebugGui"]);
 		ImGui::Begin("Level editor");
 
-		ImGui::InputInt("Input x position of object", &xPos);
-		ImGui::InputInt("Input y position of object", &yPos);
+		ImGui::InputFloat("Input x position of object", &xPos);
+		ImGui::InputFloat("Input y position of object", &yPos);
 		//ImGui::ImageButton("../Asset/Textures/mapbox.png", ImVec2(50, 50));
 		if (ImGui::Button("Create box"))
 		{
@@ -274,15 +322,16 @@ void CoreEngine::GameLoop()
 		ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
 		ImGui::Begin("Game objects");
 		ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+		char objectPropertiesName[32];
 		static int selected = -1;
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
-			Object* object = objectFactory->getObjectWithID(i);
+			Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
 			char buf[32];
 			if (object->GetName().empty())
-				sprintf_s(buf, "Object %d", static_cast<int>(i));
+				sprintf_s(buf, "[%d] Object", static_cast<int>(i));
 			else 
-				sprintf_s(buf, "%s %d", object->GetName().c_str(), static_cast<int>(i));
+				sprintf_s(buf, "[%d] %s", static_cast<int>(i), object->GetName().c_str());
 
 			// Creating button for each object
 			if (ImGui::Selectable(buf, selected == static_cast<int>(i)))
@@ -360,6 +409,8 @@ void CoreEngine::GameLoop()
 		//m_BeginFrame = m_EndFrame;
 		//m_EndFrame = m_BeginFrame + invFpsLimit;
 	}
+	glDeleteFramebuffers(1, &level_editor_fb);
+	glDeleteTextures(1, &level_editor_texture);
 }
 
 /********************************************************************************
@@ -398,7 +449,7 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 	}
 }
 
-void CoreEngine::createObject(int posX, int posY, std::string objectName)
+void CoreEngine::createObject(float posX, float posY, std::string objectName)
 {
 	Object* testingObject = objectFactory->createObject(objectName);
 	long testingObjectID = testingObject->GetId();
