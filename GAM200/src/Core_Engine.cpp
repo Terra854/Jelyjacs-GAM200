@@ -281,7 +281,7 @@ void CoreEngine::GameLoop()
 		ImGui::Begin("Game Runtime (This for the level editor)");
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
-		ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize);
+		ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 		
 		/*
