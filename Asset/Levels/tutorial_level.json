@@ -21,62 +21,6 @@
       }
     },
     {
-      "Prefabs": "platform_21.json",
-      "Type": "Transform",
-      "Position": {
-        "x": 87.0,
-        "y": -290.0
-      }
-    },
-    {
-      "Prefabs": "platform_21.json",
-      "Type": "Transform",
-      "Position": {
-        "x": -169.0,
-        "y": -290.0
-      }
-    },
-    {
-      "Prefabs": "platform_21.json",
-      "Type": "Transform",
-      "Position": {
-        "x": -531.0,
-        "y": -200.0
-      }
-    },
-    {
-      "Prefabs": "platform_21.json",
-      "Type": "Transform",
-      "Position": {
-        "x": -531.0,
-        "y": 118.0
-      }
-    },
-    {
-      "Prefabs": "platform_23.json",
-      "Type": "Transform",
-      "Position": {
-        "x": 557.0,
-        "y": 244.0
-      }
-    },
-    {
-      "Prefabs": "platform_23.json",
-      "Type": "Transform",
-      "Position": {
-        "x": 429.0,
-        "y": 346.0
-      }
-    },
-    {
-      "Prefabs": "platform_23.json",
-      "Type": "Transform",
-      "Position": {
-        "x": -275.0,
-        "y": 54.0
-      }
-    },
-    {
       "Prefabs": "platform_1.json",
       "Type": "Transform",
       "Position": {
@@ -161,7 +105,7 @@
       "Type": "Transform",
       "Position": {
         "x": 429.0,
-        "y": -116.0
+        "y": 116.0
       }
     },
     {
@@ -528,6 +472,14 @@
       "Prefabs": "platform_11.json",
       "Type": "Transform",
       "Position": {
+        "x": -67.0,
+        "y": 374.0
+      }
+    },
+    {
+      "Prefabs": "platform_11.json",
+      "Type": "Transform",
+      "Position": {
         "x": -131.0,
         "y": 374.0
       }
@@ -544,7 +496,7 @@
       "Prefabs": "platform_11.json",
       "Type": "Transform",
       "Position": {
-        "x": 381.0,
+        "x": -260.0,
         "y": 374.0
       }
     },
@@ -569,6 +521,182 @@
       "Type": "Transform",
       "Position": {
         "x": -467.0,
+        "y": 374.0
+      }
+    },
+    {
+      "Prefabs": "platform_16.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 87.0,
+        "y": -162.0
+      }
+    },
+    {
+      "Prefabs": "platform_16.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -169.0,
+        "y": -200.0
+      }
+    },
+    {
+      "Prefabs": "platform_18.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -211.0,
+        "y": -10.0
+      }
+    },
+    {
+      "Prefabs": "platform_20.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -531.0,
+        "y": 374.0
+      }
+    },
+    {
+      "Prefabs": "platform_20.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -531.0,
+        "y": 54.0
+      }
+    },
+    {
+      "Prefabs": "platform_21.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 87.0,
+        "y": -290.0
+      }
+    },
+    {
+      "Prefabs": "platform_21.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -169.0,
+        "y": -290.0
+      }
+    },
+    {
+      "Prefabs": "platform_21.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -531.0,
+        "y": -200.0
+      }
+    },
+    {
+      "Prefabs": "platform_21.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -531.0,
+        "y": 118.0
+      }
+    },
+    {
+      "Prefabs": "platform_23.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 557.0,
+        "y": 244.0
+      }
+    },
+    {
+      "Prefabs": "platform_23.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 429.0,
+        "y": 374.0
+      }
+    },
+    {
+      "Prefabs": "platform_23.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -275.0,
+        "y": 54.0
+      }
+    },
+    {
+      "Prefabs": "platform_24.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 557.0,
+        "y": 116.0
+      }
+    },
+    {
+      "Prefabs": "platform_24.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 429.0,
+        "y": -290.0
+      }
+    },
+    {
+      "Prefabs": "platform_24.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 23.0,
+        "y": -290.0
+      }
+    },
+    {
+      "Prefabs": "platform_25.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 45.0,
+        "y": 118.0
+      }
+    },
+    {
+      "Prefabs": "platform_25.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -19.0,
+        "y": 118.0
+      }
+    },
+    {
+      "Prefabs": "platform_25.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -83.0,
+        "y": 118.0
+      }
+    },
+    {
+      "Prefabs": "platform_25.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -147.0,
+        "y": 118.0
+      }
+    },
+    {
+      "Prefabs": "platform_28.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -323.0,
+        "y": 310.0
+      }
+    },
+    {
+      "Prefabs": "platform_29.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 109.0,
+        "y": 118.0
+      }
+    },
+    {
+      "Prefabs": "platform_c1.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -323.0,
         "y": 374.0
       }
     }

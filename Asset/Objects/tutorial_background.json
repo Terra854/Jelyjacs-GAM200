@@ -5,8 +5,8 @@
       "Type": "Transform",
       "Properties": {
         "Position": {
-          "x": 0.0,
-          "y": 0.0
+          "x": -31.0,
+          "y": 31.5
         },
         "Scale_x": 1282.0,
         "Scale_y": 720.0,
@@ -16,7 +16,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "tutorial_background.png"
+        "texturepath": "tutorial_background_2.png"
       }
     }
   ]
