@@ -192,8 +192,9 @@ void CoreEngine::GameLoop()
 	ImGuiIO& io = hud.StartGui();
 
 	bool show_performance_viewer = true;
-	int xPos = 0;
-	int yPos = 0;
+	bool objectProperties = false;
+	float xPos = 0;
+	float yPos = 0;
 	int numOfBoxes = editor->num.x * editor->num.y;
 	std::cout << "Number of boxes " << numOfBoxes << std::endl;
 	std::vector<int> boxesFilled(numOfBoxes, 0);
@@ -262,7 +263,7 @@ void CoreEngine::GameLoop()
 		glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
 		
 		Update(Systems["Graphics"]);
-		DrawText("Testing Font", 500, 200, 1);
+		//DrawText("Testing Font", 500, 200, 1);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind the framebuffer
 
@@ -274,7 +275,7 @@ void CoreEngine::GameLoop()
 
 		// For the main screen 
 		Update(Systems["Graphics"]);
-		DrawText("Testing Font", 500, 200, 1);
+		//DrawText("Testing Font", 500, 200, 1);
 
 		// If not rendering main screen, clear it, otherwise ImGui is going to have afterimages
 		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Use the desired clear color
@@ -330,14 +331,43 @@ void CoreEngine::GameLoop()
 			char buf[32];
 			if (object->GetName().empty())
 				sprintf_s(buf, "[%d] Object", static_cast<int>(i));
-			else 
+			else
 				sprintf_s(buf, "[%d] %s", static_cast<int>(i), object->GetName().c_str());
 
 			// Creating button for each object
-			if (ImGui::Selectable(buf, selected == static_cast<int>(i)))
-				selected = i;
+			if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
+				selected = static_cast<int>(i);
+				strcpy_s(objectPropertiesName, buf);
+				objectProperties = true;
+
+			}
 		}
 		ImGui::End();
+
+		if (objectProperties) {
+			Object* object = objectFactory->getObjectWithID(selected);
+			ComponentType componentsarr[20];
+			int size;
+			const char* componentNames[] = { "Transform", "Texture", "Body", "Physics", "PlayerControllable" };
+			ImGui::Begin(objectPropertiesName, &objectProperties);
+
+			ImGui::Text("Object ID: %d", object->GetId());
+			ImGui::Text("Object Name: %s", object->GetName().c_str());
+			ImGui::Text("Number of components: %d", object->GetNumComponents());
+			object->getKeysToArray(componentsarr, size);
+			std::cout << "Size: " << size << "\n";
+			for (int i = 0; i < size; i++)
+			{
+				ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
+			}
+			Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+			ImGui::SliderFloat("Change Object X-Axis", &tran_pt->Position.x, -960.f, 960.f);
+			ImGui::SliderFloat("Change Object Y-Axis", &tran_pt->Position.y, -540.f, 540.f);
+			if (object->GetComponent(ComponentType::Body) != nullptr)
+				RecalculateBody(tran_pt, static_cast<Body*>(object->GetComponent(ComponentType::Body)));
+			ImGui::End();
+
+		}
 
 		ImGui::Begin("Game object creation");
 		static int select = -1;
