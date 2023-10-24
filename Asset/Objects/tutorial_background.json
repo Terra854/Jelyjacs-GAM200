@@ -16,7 +16,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "tutorial_background_2.png"
+        "texturepath": "tutorial_background.png"
       }
     }
   ]
