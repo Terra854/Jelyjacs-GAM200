@@ -54,6 +54,9 @@ public:
 	//Returns a game object from the map with a specific id
 	Object* getObjectWithID(long id);
 
+	//Returns the player object from the map
+	Object* getPlayerObject();
+
 	//This clones a game object
 	Object* cloneObject(Object* object);
 

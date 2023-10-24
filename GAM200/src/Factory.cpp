@@ -230,6 +230,16 @@ Object* Factory::getObjectWithID(long id)
 	}
 }
 
+// Returns the player object from the map
+Object* Factory::getPlayerObject()
+{
+	for (auto& obj : objectMap) {
+		if (obj.second->GetComponent(ComponentType::PlayerControllable))
+			return obj.second; // There can only be 1 player object at this time
+	}
+	return nullptr;
+}
+
 //This clones an object
 Object* Factory::cloneObject(Object* object)
 {

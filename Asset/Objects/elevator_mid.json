@@ -1,0 +1,23 @@
+{
+  "Name": "elevator_mid",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale_x": 64.0,
+        "Scale_y": 64.0,
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "elevator_mid.png"
+      }
+    }
+  ]
+}

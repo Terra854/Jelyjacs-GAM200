@@ -58,7 +58,7 @@ void GameLogic::Initialize()
 
 	LoadScene("../Asset/Levels/tutorial_level.json");
 
-	playerObj = objectFactory->getObjectWithID(1);
+	playerObj = objectFactory->getPlayerObject();
 
 	/*
 	Object* testObj;
