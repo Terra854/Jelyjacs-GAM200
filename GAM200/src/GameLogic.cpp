@@ -63,36 +63,46 @@ void GameLogic::Initialize()
 	//Texture* texture;
 
 	std::cout << "Background" << std::endl;
-	testObj = objectFactory->createObject("../Asset/Objects/background.json");
-	scale_and_rotate = objectFactory->createObject("../Asset/Objects/scale-and-rotate.json");
+	//testObj = objectFactory->createObject("../Asset/Objects/background.json");
+	//scale_and_rotate = objectFactory->createObject("../Asset/Objects/scale-and-rotate.json");
 	//std::cout << "test Object 2" << std::endl;
 	//testObj2 = objectFactory->createObject("../drop-forever.json");
-	floor1 = objectFactory->createObject("../Asset/Objects/mapbox.json");
-	floor2 = objectFactory->createObject("../Asset/Objects/mapbox.json");
-	floor3 = objectFactory->createObject("../Asset/Objects/mapbox.json");
-
-	Object* testclone;
-	testclone = objectFactory->cloneObject(floor3);
 
 	LoadScene("../Asset/Levels/testscene.json");
+	//floor1 = objectFactory->createObject("../Asset/Objects/mapbox.json");
+	//floor2 = objectFactory->createObject("../Asset/Objects/mapbox.json");
+	floor3 = objectFactory->createObject("../Asset/Objects/mapbox.json");
+	Transform* tran_pt = static_cast<Transform*>(floor3->GetComponent(ComponentType::Transform)); // change to different obj
+	tran_pt->Position.x = 210;
+	Rectangular* rect_pt = static_cast<Rectangular*>(floor3->GetComponent(ComponentType::Body));
+	rect_pt->Initialize();
 
-	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Transform));
+	// Test cloning
+	Object* testclone;
+	testclone = objectFactory->cloneObject(floor3);
+	tran_pt = static_cast<Transform*>(testclone->GetComponent(ComponentType::Transform)); // change to different obj
+	tran_pt->Position.x = -160;
+	tran_pt->Position.y = -250;
+	rect_pt = static_cast<Rectangular*>(testclone->GetComponent(ComponentType::Body));
+	rect_pt->Initialize();
+
+	//Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Transform));
 
 	// offset objects
-	tran_pt->Position.x = 190;
+	//tran_pt->Position.x = 190;
 
 	// @Sen Chuan if you move position like that, remember to call these 2 functions cause collision
 	// box still using the old position
-	Rectangular* rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Body)); // @Sen Chuan
-	rect_pt->Initialize(); // @Sen Chuan
+	//Rectangular* rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Body)); // @Sen Chuan
+	//rect_pt->Initialize(); // @Sen Chuan
 
-	tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Transform)); // change to different obj
-	tran_pt->Position.x = 380;
-	tran_pt->Position.y = -300;
+	//tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Transform)); // change to different obj
+	//tran_pt->Position.x = 380;
+	//tran_pt->Position.y = -300;
 
-	rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Body));
-	rect_pt->Initialize();
-
+	//rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Body));
+	//rect_pt->Initialize();
+	/*
 	// Floor
 	for (int i = 0; i < 44; i++) {
 		Object* floor = objectFactory->createObject("../Asset/Objects/mapbox.json");
@@ -100,7 +110,7 @@ void GameLogic::Initialize()
 		floor_t->Position = { -1100.0f + (static_cast<Transform*>(floor->GetComponent(ComponentType::Transform))->Scale_x * (float)i), -500.0f };
 		Rectangular* floor_b = static_cast<Rectangular*>(floor->GetComponent(ComponentType::Body)); // @Sen Chuan
 		floor_b->Initialize();
-	}
+	}*/
 
 	// Dynamic collision
 	dynamic_collision = objectFactory->createObject("../Asset/Objects/mapbox.json");
@@ -193,6 +203,7 @@ void GameLogic::Update() {
 		std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
 	}
 
+	/*
 	// Rotation of an object
 	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
 
@@ -210,6 +221,7 @@ void GameLogic::Update() {
 	if (input::IsPressedRepeatedly(KEY::right)) {
 		t2->Rotation -= 0.01f;
 	}
+	*/
 
 	// Dynamic collision
 	Physics* dynamic_collision_p = static_cast<Physics*>(dynamic_collision->GetComponent(ComponentType::Physics));
