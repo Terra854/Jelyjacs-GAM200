@@ -27,6 +27,7 @@ CoreEngine* CORE = NULL;
 EngineHud hud;
 ImVec4 clear_color;
 
+
 /******************************************************************************
 * Default Constructor
 * - Initialise Class Variables and Extern Class Pointer
@@ -191,6 +192,10 @@ void CoreEngine::GameLoop()
 	bool show_performance_viewer = true;
 	int xPos = 0;
 	int yPos = 0;
+	int numOfBoxes = editor->num.x * editor->num.y;
+	std::cout << "Number of boxes " << numOfBoxes << std::endl;
+	std::vector<int> boxesFilled(numOfBoxes, 0);
+	std::cout << boxesFilled.capacity();
 
 	// Game Loop
 	while (game_active)
@@ -297,7 +302,6 @@ void CoreEngine::GameLoop()
 		
 		if (select > -1)
 		{
-			
 			if ((input::GetMouseX() > 560 && input::GetMouseX() < 1360) && (input::GetMouseY() > 115 && input::GetMouseY() < 920))
 			{
 				double xpos = input::GetMouseX() - 960.0;
@@ -308,7 +312,12 @@ void CoreEngine::GameLoop()
 					int xOffset = ((xpos - (-400)) / editor->box_size);
 					int yOffset = ((ypos - 420) / editor->box_size);
 					std::cout << "xOffset is " << xOffset << " yOffset is " << yOffset << std::endl;
-					createObject(-370 + (xOffset * editor->box_size), 370 + (yOffset * editor->box_size), "../Asset/Objects/mapbox.json");
+					if (boxesFilled[xOffset - (yOffset * editor->num.y)] == 0)
+					{
+						createObject(-370 + (xOffset * editor->box_size), 370 + (yOffset * editor->box_size), "../Asset/Objects/mapbox.json");
+						boxesFilled[xOffset - (yOffset * editor->num.y)] = 1;
+					}
+
 					std::cout << "Object will be placed at " << xpos << " and " << ypos << std::endl;
 				}
 
