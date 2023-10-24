@@ -15,9 +15,10 @@ enum AnimationType
 class Animation : public Component
 {
 public:
-	Animation() : Component() {};
+	Animation();
 	void Initialize() override;
 	GLuint animation_tex_obj;
+	GLApp::GLModel setup_texobj_animation(float x, float y, float z, float w, bool right);
 	std::map<AnimationType, std::vector<glm::vec4>> frame_map;
-	std::map<AnimationType, std::vector<GLuint>> animation;
+	std::map<AnimationType, std::vector<GLApp::GLModel>> animation_Map;
 };
