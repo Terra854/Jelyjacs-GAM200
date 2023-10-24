@@ -1,3 +1,4 @@
+#include <Debug.h>
 #include "Font.h"
 
 Font* font = NULL;
