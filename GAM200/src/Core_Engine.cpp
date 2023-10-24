@@ -297,16 +297,24 @@ void CoreEngine::GameLoop()
 		
 		if (select > -1)
 		{
+			
 			if ((input::GetMouseX() > 560 && input::GetMouseX() < 1360) && (input::GetMouseY() > 115 && input::GetMouseY() < 920))
 			{
+				double xpos = input::GetMouseX() - 960.0;
+				double ypos = 540.0 - input::GetMouseY();
+				//std::cout << "xpos is " << xpos << " ypos is " << ypos << std::endl;
 				if (input::IsPressed(KEY::mouseL))
 				{
-					double xpos = input::GetMouseX();
-					double ypos = input::GetMouseY();
-					int xOffset = (xpos / 67.0) + ((int)xpos % 67);
-					int yOffset = (ypos / 67.0) + ((int)ypos % 67);
-					createObject(-370 + (xOffset * 67), 370 - (yOffset * 67), "../Asset/Objects/mapbox.json");
-					//std::cout << "Object will be placed\n";
+					int xOffset = ((xpos - (-400)) / editor->box_size);
+					int yOffset = ((ypos - 420) / editor->box_size);
+					std::cout << "xOffset is " << xOffset << " yOffset is " << yOffset << std::endl;
+					createObject(-370 + (xOffset * editor->box_size), 370 + (yOffset * editor->box_size), "../Asset/Objects/mapbox.json");
+					std::cout << "Object will be placed at " << xpos << " and " << ypos << std::endl;
+				}
+
+				if (input::IsPressed(KEY::mouseR))
+				{
+					createObject(0, 0, "../Asset/Objects/mapbox.json");
 				}
 			}
 		}
