@@ -234,6 +234,10 @@ Object* Factory::getObjectWithID(long id)
 Object* Factory::cloneObject(Object* object)
 {
 	Object* obj = createEmptyObject();
+
+	// Clone the object name
+	obj->name = object->GetName();
+
 	// Clone all components (specific copying might be better to be at their component itself)
 	for (const std::pair<ComponentType, Component*>& c : object->Components)
 	{
