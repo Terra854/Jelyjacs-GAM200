@@ -1,4 +1,5 @@
 #include "EngineHud.h"
+#include <Debug.h>
 
 EngineHud::~EngineHud()
 {

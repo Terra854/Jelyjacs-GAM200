@@ -1,4 +1,5 @@
 #include <DebugGui.h>
+#include <Debug.h>
 #include <ImGui/imgui.h>
 #include <Collision.h>
 #include <Core_Engine.h>

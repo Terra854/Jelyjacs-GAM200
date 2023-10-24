@@ -7,6 +7,7 @@ This file contains the definitions
 *//*__________________________________________________________________________*/
 #include <json/json.h>
 
+#include <Debug.h>
 #include "Assets Manager/asset_manager.h"
 #include "SceneLoader.h"
 #include <fstream>
