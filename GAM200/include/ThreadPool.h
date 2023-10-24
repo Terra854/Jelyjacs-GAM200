@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Debug.h>
 #include <Interface_System.h>
 #include <vector>
 #include <queue>
