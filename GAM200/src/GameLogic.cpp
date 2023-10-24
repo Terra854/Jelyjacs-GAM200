@@ -55,6 +55,12 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
 	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
 
+
+	LoadScene("../Asset/Levels/tutorial_level.json");
+
+	playerObj = objectFactory->getObjectWithID(1);
+
+	/*
 	Object* testObj;
 	Object* floor1;
 	Object* floor2;
@@ -102,7 +108,7 @@ void GameLogic::Initialize()
 
 	//rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Body));
 	//rect_pt->Initialize();
-	/*
+	
 	// Floor
 	for (int i = 0; i < 44; i++) {
 		Object* floor = objectFactory->createObject("../Asset/Objects/mapbox.json");
@@ -110,7 +116,7 @@ void GameLogic::Initialize()
 		floor_t->Position = { -1100.0f + (static_cast<Transform*>(floor->GetComponent(ComponentType::Transform))->Scale_x * (float)i), -500.0f };
 		Rectangular* floor_b = static_cast<Rectangular*>(floor->GetComponent(ComponentType::Body)); // @Sen Chuan
 		floor_b->Initialize();
-	}*/
+	}
 
 	// Dynamic collision
 	dynamic_collision = objectFactory->createObject("../Asset/Objects/mapbox.json");
@@ -133,7 +139,7 @@ void GameLogic::Initialize()
 	//texture = static_cast<Texture*>(testObj->GetComponent(ComponentType::Texture));
 	std::cout << "test Player" << std::endl;
 	playerObj = objectFactory->createObject("../Asset/Objects/player.json");
-	
+	*/
 }
 
 /******************************************************************************
@@ -224,10 +230,10 @@ void GameLogic::Update() {
 	*/
 
 	// Dynamic collision
-	Physics* dynamic_collision_p = static_cast<Physics*>(dynamic_collision->GetComponent(ComponentType::Physics));
-	dynamic_collision_p->Velocity.x = 200.0f;
-	Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
-	dynamic_collision_t->Position.x = dynamic_collision_t->Position.x < 1000.0f ? dynamic_collision_t->Position.x : -1000.0f;
+	//Physics* dynamic_collision_p = static_cast<Physics*>(dynamic_collision->GetComponent(ComponentType::Physics));
+	//dynamic_collision_p->Velocity.x = 200.0f;
+	//Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
+	//dynamic_collision_t->Position.x = dynamic_collision_t->Position.x < 1000.0f ? dynamic_collision_t->Position.x : -1000.0f;
 
 	/*
 	// DEBUG: Print out collision flags
