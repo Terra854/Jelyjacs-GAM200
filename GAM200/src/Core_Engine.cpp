@@ -189,6 +189,7 @@ void CoreEngine::GameLoop()
 
 	ImGuiIO& io = hud.StartGui();
 
+	bool debug_gui_active = true;
 	bool show_performance_viewer = true;
 	bool objectProperties = false;
 	bool tempstorage = 1;
@@ -255,24 +256,18 @@ void CoreEngine::GameLoop()
 		*****************************************************************************************************************************************/
 		//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		
-		bool debug_gui_active = true;
+		
 
+		if (input::IsPressed(KEY::p)) { debug_gui_active = !debug_gui_active; }
 		if (debug_gui_active) {
 
-			/* For rendering into imgui window */
-			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
-
-			Update(Systems["Graphics"]);
-			DrawText("Testing Font", 500, 200, 1);
-			Update(Systems["Window"]);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
+			
 
 			// Generate mipmaps after rendering to the high-resolution texture
 			glBindTexture(GL_TEXTURE_2D, level_editor_texture);
 			glGenerateMipmap(GL_TEXTURE_2D);
 
-			/* End rendering into imgui window */
+			// End rendering into imgui window 
 
 			Update(Systems["DebugGui"]);
 
@@ -285,90 +280,103 @@ void CoreEngine::GameLoop()
 			ImGui::End();
 
 			ImGui::Begin("Level editor");
-
-			ImGui::InputFloat("Input x position of object", &xPos);
-			ImGui::InputFloat("Input y position of object", &yPos);
-			//ImGui::ImageButton("../Asset/Textures/mapbox.png", ImVec2(50, 50));
-			if (ImGui::Button("Create box"))
-			{
-				createObject(xPos, yPos, "../Asset/Objects/mapbox.json");
-			}
-			ImGui::End();
-
-			ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
-			ImGui::Begin("Game objects");
-			ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
-			char objectPropertiesName[32];
-			static int selected = -1;
-			for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
-			{
-				Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
-				char buf[32];
-				if (object->GetName().empty())
-					sprintf_s(buf, "[%d] Object", static_cast<int>(i));
-				else
-					sprintf_s(buf, "[%d] %s", static_cast<int>(i), object->GetName().c_str());
-
-				// Creating button for each object
-				if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
-					selected = static_cast<int>(i);
-					strcpy_s(objectPropertiesName, buf);
-					objectProperties = true;
-
-				}
-			}
-			ImGui::End();
-
-			if (objectProperties) {
-				Object* object = objectFactory->getObjectWithID(selected);
-				ComponentType componentsarr[20];
-				int size;
-				const char* componentNames[] = { "Transform", "Texture", "Body", "Physics", "PlayerControllable" };
-				ImGui::Begin(objectPropertiesName, &objectProperties);
-
-				ImGui::Text("Object ID: %d", object->GetId());
-				ImGui::Text("Object Name: %s", object->GetName().c_str());
-				ImGui::Text("Number of components: %d", object->GetNumComponents());
-				object->getKeysToArray(componentsarr, size);
-				std::cout << "Size: " << size << "\n";
-				for (int i = 0; i < size; i++)
+			if (ImGui::CollapsingHeader("Create object")) {
+				ImGui::InputFloat("Input x position of object", &xPos);
+				ImGui::InputFloat("Input y position of object", &yPos);
+				//ImGui::ImageButton("../Asset/Textures/mapbox.png", ImVec2(50, 50));
+				if (ImGui::Button("Create box"))
 				{
-					ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
+					createObject(xPos, yPos, "../Asset/Objects/mapbox.json");
 				}
-				Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-				// Not working
-				/*
-				Vec2 botleft = { tran_pt->Position.x - tran_pt->Scale_x / 2, tran_pt->Position.y - tran_pt->Scale_y / 2 };
-				Vec2 topright = { tran_pt->Position.x + tran_pt->Scale_x / 2, tran_pt->Position.y + tran_pt->Scale_y / 2 };
-				app->drawline({ botleft.x,botleft.y }, { botleft.x,topright.y });
-				app->drawline({ botleft.x,topright.y }, { topright.x,topright.y });
-				app->drawline({ topright.x,topright.y }, { topright.x,botleft.y });
-				app->drawline({ topright.x,botleft.y }, { botleft.x,botleft.y });
-				*/
-				ImGui::Text("Object Position: (%.2f, %.2f)", tran_pt->Position.x, tran_pt->Position.y);
-				if (tempstorage) {
-					pos_x = tran_pt->Position.x;
-					pos_y = tran_pt->Position.y;
-					std::cout << "pos_x: " << pos_x << "\n";
-					std::cout << "pos_y: " << pos_y << "\n";
-					tempstorage = 0;
-				}
-				std::cout << "pos_x: " << pos_x << "\n";
-				std::cout << "pos_y: " << pos_y << "\n";
-				ImGui::SliderFloat("Change Object X-Axis", &tran_pt->Position.x, -960.f, 960.f);
-				ImGui::SliderFloat("Change Object Y-Axis", &tran_pt->Position.y, -540.f, 540.f);
-				if (ImGui::Button("Revert")) {
-					tran_pt->Position = { pos_x, pos_y };
-				}
-				if (object->GetComponent(ComponentType::Body) != nullptr)
-					RecalculateBody(tran_pt, static_cast<Body*>(object->GetComponent(ComponentType::Body)));
-				ImGui::End();
+			}
+			//ImGui::End();
 
+			//ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
+			if (ImGui::CollapsingHeader("Current Object List")) {
+				ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+				char objectPropertiesName[32];
+				static int selected = -1;
+				for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
+				{
+					Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
+					char buf[32];
+					if (object->GetName().empty())
+						sprintf_s(buf, "[%d] Object", static_cast<int>(i));
+					else
+						sprintf_s(buf, "[%d] %s", static_cast<int>(i), object->GetName().c_str());
+
+					// Creating button for each object
+					if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
+						selected = static_cast<int>(i);
+						strcpy_s(objectPropertiesName, buf);
+						if (objectProperties == true) { tempstorage = 1; }
+						objectProperties = true;
+
+					}
+				}
+				if (objectProperties) {
+					Object* object = objectFactory->getObjectWithID(selected);
+					ComponentType componentsarr[20];
+					int size;
+					const char* componentNames[] = { "Transform", "Texture", "Body", "Physics", "PlayerControllable" };
+					ImGui::SetNextWindowPos(ImVec2(300, 40), ImGuiCond_Once);
+					ImGui::Begin(objectPropertiesName, &objectProperties);
+
+					ImGui::Text("Object ID: %d", object->GetId());
+					ImGui::Text("Object Name: %s", object->GetName().c_str());
+					ImGui::Text("Number of components: %d", object->GetNumComponents());
+					object->getKeysToArray(componentsarr, size);
+					for (int i = 0; i < size; i++)
+					{
+						ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
+					}
+					Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+					// Not working
+					/*
+					Vec2 botleft = { tran_pt->Position.x - tran_pt->Scale_x / 2, tran_pt->Position.y - tran_pt->Scale_y / 2 };
+					Vec2 topright = { tran_pt->Position.x + tran_pt->Scale_x / 2, tran_pt->Position.y + tran_pt->Scale_y / 2 };
+					app->drawline({ botleft.x,botleft.y }, { botleft.x,topright.y });
+					app->drawline({ botleft.x,topright.y }, { topright.x,topright.y });
+					app->drawline({ topright.x,topright.y }, { topright.x,botleft.y });
+					app->drawline({ topright.x,botleft.y }, { botleft.x,botleft.y });
+					*/
+					ImGui::Text("Object Position:");
+					ImGui::Text("x = %.2f, y = %.2f", tran_pt->Position.x, tran_pt->Position.y);
+					if (tempstorage) {
+						pos_x = tran_pt->Position.x;
+						pos_y = tran_pt->Position.y;
+						tempstorage = 0;
+					}
+					ImGui::Text("Change Object X-Axis");
+					ImGui::SliderFloat("##", &tran_pt->Position.x, -960.f, 960.f);
+					ImGui::Text("Change Object Y-Axis");
+					ImGui::SliderFloat("##", &tran_pt->Position.y, -540.f, 540.f);
+					if (ImGui::Button("Revert")) {
+						tran_pt->Position = { pos_x, pos_y };
+					}
+					if (object->GetComponent(ComponentType::Body) != nullptr)
+						RecalculateBody(tran_pt, static_cast<Body*>(object->GetComponent(ComponentType::Body)));
+					ImGui::End();
+
+				}
+				else {
+					tempstorage = 1;
+					pos_x = 0;
+					pos_y = 0;
+				}
 			}
-			else {
-				tempstorage = 1;
-				pos_x = 0;
-			}
+			ImGui::End();
+
+			
+
+			// For rendering into imgui window 
+			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
+
+			Update(Systems["Graphics"]);
+			DrawText("Testing Font", 500, 200, 1);
+			Update(Systems["Window"]);
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
 		}
 		else {
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window

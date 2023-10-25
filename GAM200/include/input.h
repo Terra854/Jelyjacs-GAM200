@@ -17,6 +17,7 @@ enum class KEY
 	a,
 	s,
 	d,
+	l,
 	p,
 	f,
 	z,
