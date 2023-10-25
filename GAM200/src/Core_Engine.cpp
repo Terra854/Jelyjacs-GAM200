@@ -228,7 +228,7 @@ void CoreEngine::GameLoop()
 	{
 		
 		auto m_BeginFrame = std::chrono::system_clock::now();
-		hud.NewGuiFrame();
+		hud.NewGuiFrame(0);
 
 		// Toggle Button to Display Debug Information in IMGui
 		if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
@@ -296,23 +296,28 @@ void CoreEngine::GameLoop()
 				ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
 				char objectPropertiesName[32];
 				static int selected = -1;
-				for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
+				if (ImGui::BeginTable("split", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 				{
-					Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
-					char buf[32];
-					if (object->GetName().empty())
-						sprintf_s(buf, "[%d] Object", static_cast<int>(i));
-					else
-						sprintf_s(buf, "[%d] %s", static_cast<int>(i), object->GetName().c_str());
+					for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
+					{
+						ImGui::TableNextColumn();
+						Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
+						char buf[32];
+						if (object->GetName().empty())
+							sprintf_s(buf, "%d) Object", static_cast<int>(i));
+						else
+							sprintf_s(buf, "%d) %s", static_cast<int>(i), object->GetName().c_str());
 
-					// Creating button for each object
-					if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
-						selected = static_cast<int>(i);
-						strcpy_s(objectPropertiesName, buf);
-						if (objectProperties == true) { tempstorage = 1; }
-						objectProperties = true;
+						// Creating button for each object
+						if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
+							selected = static_cast<int>(i);
+							strcpy_s(objectPropertiesName, buf);
+							if (objectProperties == true) { tempstorage = 1; }
+							objectProperties = true;
 
+						}
 					}
+					ImGui::EndTable();
 				}
 				if (objectProperties) {
 					Object* object = objectFactory->getObjectWithID(selected);
@@ -332,14 +337,14 @@ void CoreEngine::GameLoop()
 					}
 					Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 					// Not working
-					/*
+					
 					Vec2 botleft = { tran_pt->Position.x - tran_pt->Scale_x / 2, tran_pt->Position.y - tran_pt->Scale_y / 2 };
 					Vec2 topright = { tran_pt->Position.x + tran_pt->Scale_x / 2, tran_pt->Position.y + tran_pt->Scale_y / 2 };
 					app->drawline({ botleft.x,botleft.y }, { botleft.x,topright.y });
 					app->drawline({ botleft.x,topright.y }, { topright.x,topright.y });
 					app->drawline({ topright.x,topright.y }, { topright.x,botleft.y });
 					app->drawline({ topright.x,botleft.y }, { botleft.x,botleft.y });
-					*/
+					
 					ImGui::Text("Object Position:");
 					ImGui::Text("x = %.2f, y = %.2f", tran_pt->Position.x, tran_pt->Position.y);
 					if (tempstorage) {
@@ -377,6 +382,7 @@ void CoreEngine::GameLoop()
 			Update(Systems["Window"]);
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
+			hud.GuiRender(io);
 		}
 		else {
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
@@ -387,7 +393,7 @@ void CoreEngine::GameLoop()
 		}
 
 		debug_gui->ClearAll();
-		hud.GuiRender(io);
+		
 
 		// FPS Calculation
 		auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
