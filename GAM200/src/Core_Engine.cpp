@@ -337,14 +337,14 @@ void CoreEngine::GameLoop()
 					}
 					Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 					// Not working
-					
+					/*
 					Vec2 botleft = { tran_pt->Position.x - tran_pt->Scale_x / 2, tran_pt->Position.y - tran_pt->Scale_y / 2 };
 					Vec2 topright = { tran_pt->Position.x + tran_pt->Scale_x / 2, tran_pt->Position.y + tran_pt->Scale_y / 2 };
 					app->drawline({ botleft.x,botleft.y }, { botleft.x,topright.y });
 					app->drawline({ botleft.x,topright.y }, { topright.x,topright.y });
 					app->drawline({ topright.x,topright.y }, { topright.x,botleft.y });
 					app->drawline({ topright.x,botleft.y }, { botleft.x,botleft.y });
-					
+					*/
 					ImGui::Text("Object Position:");
 					ImGui::Text("x = %.2f, y = %.2f", tran_pt->Position.x, tran_pt->Position.y);
 					if (tempstorage) {
@@ -354,11 +354,18 @@ void CoreEngine::GameLoop()
 					}
 					ImGui::Text("Change Object X-Axis");
 					ImGui::SliderFloat("##", &tran_pt->Position.x, -960.f, 960.f);
+
 					ImGui::Text("Change Object Y-Axis");
 					ImGui::SliderFloat("##", &tran_pt->Position.y, -540.f, 540.f);
 					if (ImGui::Button("Revert")) {
 						tran_pt->Position = { pos_x, pos_y };
 					}
+					/*
+					if (ImGui::Button("Delete Object")) {
+						objectFactory->destroyObject(objectFactory->getObjectWithID(object->GetId()));
+						objectProperties = false;
+					}
+					*/
 					if (object->GetComponent(ComponentType::Body) != nullptr)
 						RecalculateBody(tran_pt, static_cast<Body*>(object->GetComponent(ComponentType::Body)));
 					ImGui::End();
