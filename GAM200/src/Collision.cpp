@@ -491,7 +491,7 @@ namespace Collision {
 			}
 		}
 
-		rect1->collision_flag = flag;
+		rect1->collision_flag |= flag;
 		return flag;
 	}
 }

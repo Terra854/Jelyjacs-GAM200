@@ -100,33 +100,33 @@ void RecalculateBody(Transform* t, Body* b) {
 }
 
 // Objects responding to collision
-void Response_Collision(Transform* t1, Body* b1, Physics* p1, Body* b2, Physics* p2) {
+void Response_Collision(int flag, Transform* t1, Body* b1, Physics* p1, Body* b2, Physics* p2) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
 
-		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
+		if (flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
 			t1->Position.x = t1->PrevPosition.x;
 		}
-		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
+		if (flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
 			t1->Position.x = t1->PrevPosition.x;
 		}
-		if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
+		if (flag & COLLISION_TOP) {
 			top_collision_cooldown = 0.1f;
 			p1->Velocity.y = 0.0f;
 			t1->Position.y = ((Rectangular*)b2)->aabb.min.y - (((Rectangular*)b1)->height / 2);
 		}
-		if (((Rectangular*)b1)->collision_flag & COLLISION_BOTTOM) {
+		if (flag & COLLISION_BOTTOM) {
 			p1->Velocity.y = 0.0f;
 			t1->Position.y = ((Rectangular*)b2)->aabb.max.y + (((Rectangular*)b1)->height / 2);
 
 			// For objects on moving platforms
-			if (p2 != nullptr && !(((Rectangular*)b1)->collision_flag & COLLISION_LEFT) && !(((Rectangular*)b1)->collision_flag & COLLISION_RIGHT)) {
+			if (p2 != nullptr && !(flag & COLLISION_LEFT) && !(flag & COLLISION_RIGHT)) {
 				t1->Position.x += p2->Velocity.x * fixed_dt;
 				t1->Position.y += p2->Velocity.y * fixed_dt; // Will need to test platforms that move vertically
 			}
 		}
 
-		if (((Rectangular*)b1)->collision_flag)
+		if (flag)
 			RecalculateBody(t1, b1);
 	}
 }
@@ -422,7 +422,7 @@ void PhysicsSystem::Update() {
 
 				collision_flag = Check_Collision(b, b2, fixed_dt);
 				if (collision_flag) {
-					Response_Collision(t, b, p, b2, (Physics*)anotherobj->GetComponent(ComponentType::Physics));
+					Response_Collision(collision_flag, t, b, p, b2, (Physics*)anotherobj->GetComponent(ComponentType::Physics));
 				}
 				else {
 
