@@ -9,6 +9,7 @@
 class DebugGui : public ISystems
 {
 public:
+	void ShowDockSpace(bool* p_open);
 	void DebugUniformGrid();
 	void DebugPerformanceViewer();
 	//Constructor to initialise pointer

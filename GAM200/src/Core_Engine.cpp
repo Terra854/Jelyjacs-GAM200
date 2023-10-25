@@ -250,119 +250,106 @@ void CoreEngine::GameLoop()
 		*****************************************************************************************************************************************/
 		//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		
+		bool debug_gui_active = true;
 
-		/* For rendering into imgui window */
+		if (debug_gui_active) {
 
-		glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
-		
-		Update(Systems["Graphics"]);
-		DrawText("Testing Font", 500, 200, 1);
+			/* For rendering into imgui window */
+			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0); // Unbind the framebuffer
+			Update(Systems["Graphics"]);
+			DrawText("Testing Font", 500, 200, 1);
+			Update(Systems["Window"]);
 
-		// Generate mipmaps after rendering to the high-resolution texture
-		glBindTexture(GL_TEXTURE_2D, level_editor_texture);
-		glGenerateMipmap(GL_TEXTURE_2D);
+			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
 
-		/* End rendering into imgui window */
+			// Generate mipmaps after rendering to the high-resolution texture
+			glBindTexture(GL_TEXTURE_2D, level_editor_texture);
+			glGenerateMipmap(GL_TEXTURE_2D);
 
-		// For the main screen 
-		Update(Systems["Graphics"]);
-		DrawText("Testing Font", 500, 200, 1);
+			/* End rendering into imgui window */
 
-		// If not rendering main screen, clear it, otherwise ImGui is going to have afterimages
-		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Use the desired clear color
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			Update(Systems["DebugGui"]);
 
-		Update(Systems["Window"]);
-
-		// Display the game inside the ImGui window
-		ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
-		ImGui::Begin("Game Runtime (This for the level editor)");
-		ImVec2 windowSize = ImGui::GetWindowSize();
-		ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
-		ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
-		ImGui::End();
-		
-		/*
-		if (displayPerformanceInfo) {
-			ImGui::SetNextWindowSize(ImVec2(0, 0));
-			ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
-			ImGui::Begin("DEBUG: Performance Viewer", &displayPerformanceInfo);
-
-			for (std::pair<std::string, double> p : elapsed_time)
-				ImGui::Text("%s system completed it's update in %.6f seconds (%.2f%%)", p.first.c_str(), p.second, (p.second / total_time * 100.0));
-
-			ImGui::Text("############################################################");
-			ImGui::Text("Total time taken for this frame: %.6f seconds.", total_time);
-			ImGui::Text("Frame Rate is: %.6f FPS", core_fps);
-
+			// Display the game inside the ImGui window
+			ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
+			ImGui::Begin("Game Runtime (This for the level editor)");
+			ImVec2 windowSize = ImGui::GetWindowSize();
+			ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
+			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 			ImGui::End();
-		}
-		*/
 
-		Update(Systems["DebugGui"]);
-		ImGui::Begin("Level editor");
+			ImGui::Begin("Level editor");
 
-		ImGui::InputFloat("Input x position of object", &xPos);
-		ImGui::InputFloat("Input y position of object", &yPos);
-		//ImGui::ImageButton("../Asset/Textures/mapbox.png", ImVec2(50, 50));
-		if (ImGui::Button("Create box"))
-		{
-			createObject(xPos, yPos, "../Asset/Objects/mapbox.json");
-		}
-		ImGui::End();
-
-		ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
-		ImGui::Begin("Game objects");
-		ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
-		char objectPropertiesName[32];
-		static int selected = -1;
-		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
-		{
-			Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
-			char buf[32];
-			if (object->GetName().empty())
-				sprintf_s(buf, "[%d] Object", static_cast<int>(i));
-			else 
-				sprintf_s(buf, "[%d] %s", static_cast<int>(i), object->GetName().c_str());
-
-			// Creating button for each object
-			if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
-				selected = static_cast<int>(i);
-				strcpy_s(objectPropertiesName, buf);
-				objectProperties = true;
-				
+			ImGui::InputFloat("Input x position of object", &xPos);
+			ImGui::InputFloat("Input y position of object", &yPos);
+			//ImGui::ImageButton("../Asset/Textures/mapbox.png", ImVec2(50, 50));
+			if (ImGui::Button("Create box"))
+			{
+				createObject(xPos, yPos, "../Asset/Objects/mapbox.json");
 			}
-		}
-		ImGui::End();
-		
-		if (objectProperties) {
-			Object* object = objectFactory->getObjectWithID(selected);
-			ComponentType componentsarr[20];
-			int size;
-			const char* componentNames[] = {"Transform", "Texture", "Body", "Physics", "PlayerControllable"};
-			ImGui::Begin(objectPropertiesName, &objectProperties);
-			
-			ImGui::Text("Object ID: %d", object->GetId());
-			ImGui::Text("Object Name: %s", object->GetName().c_str());
-			ImGui::Text("Number of components: %d", object->GetNumComponents());
-			object->getKeysToArray(componentsarr, size);
-			std::cout << "Size: " << size << "\n";
-			for (int i = 0; i < size; i++)
-			{	
-				ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
-			}
-			Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-			ImGui::SliderFloat("Change Object X-Axis", &tran_pt->Position.x, -960.f, 960.f);
-			ImGui::SliderFloat("Change Object Y-Axis", &tran_pt->Position.y, -540.f, 540.f);
-			if (object->GetComponent(ComponentType::Body) != nullptr)
-				RecalculateBody(tran_pt, static_cast<Body*>(object->GetComponent(ComponentType::Body)));
 			ImGui::End();
-			
+
+			ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
+			ImGui::Begin("Game objects");
+			ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+			char objectPropertiesName[32];
+			static int selected = -1;
+			for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
+			{
+				Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
+				char buf[32];
+				if (object->GetName().empty())
+					sprintf_s(buf, "[%d] Object", static_cast<int>(i));
+				else
+					sprintf_s(buf, "[%d] %s", static_cast<int>(i), object->GetName().c_str());
+
+				// Creating button for each object
+				if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
+					selected = static_cast<int>(i);
+					strcpy_s(objectPropertiesName, buf);
+					objectProperties = true;
+
+				}
+			}
+			ImGui::End();
+
+			if (objectProperties) {
+				Object* object = objectFactory->getObjectWithID(selected);
+				ComponentType componentsarr[20];
+				int size;
+				const char* componentNames[] = { "Transform", "Texture", "Body", "Physics", "PlayerControllable" };
+				ImGui::Begin(objectPropertiesName, &objectProperties);
+
+				ImGui::Text("Object ID: %d", object->GetId());
+				ImGui::Text("Object Name: %s", object->GetName().c_str());
+				ImGui::Text("Number of components: %d", object->GetNumComponents());
+				object->getKeysToArray(componentsarr, size);
+				std::cout << "Size: " << size << "\n";
+				for (int i = 0; i < size; i++)
+				{
+					ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
+				}
+				Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+				ImGui::SliderFloat("Change Object X-Axis", &tran_pt->Position.x, -960.f, 960.f);
+				ImGui::SliderFloat("Change Object Y-Axis", &tran_pt->Position.y, -540.f, 540.f);
+				if (object->GetComponent(ComponentType::Body) != nullptr)
+					RecalculateBody(tran_pt, static_cast<Body*>(object->GetComponent(ComponentType::Body)));
+				ImGui::End();
+
+			}
+
+			debug_gui->ClearAll();
 		}
-		
-		debug_gui->ClearAll();
+		else {
+			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
+
+			Update(Systems["Graphics"]);
+			DrawText("Testing Font", 500, 200, 1);
+			Update(Systems["Window"]);
+		}
+
+
 		hud.GuiRender(io);
 
 		// FPS Calculation

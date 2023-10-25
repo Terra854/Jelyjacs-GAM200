@@ -8,6 +8,8 @@ DebugGui* debug_gui = nullptr; // declared in DebugGui.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
 
+bool dock_space = true; // Always must be on for level editor
+
 void DebugGui::DebugUniformGrid() {
 	// DEBUG: Print out the uniform grid
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
@@ -81,23 +83,59 @@ void DebugGui::Initialize() {
 	total_time = 0.0;
 }
 
-void DebugGui::Update(){
-    if (ImGui::BeginMainMenuBar())
-    {
-        if (ImGui::BeginMenu("File"))
-        {
+void DebugGui::Update() {
+
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->WorkPos);
+	ImGui::SetNextWindowSize(viewport->WorkSize);
+	ImGui::SetNextWindowViewport(viewport->ID);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	
+	ImGui::Begin("DockSpace Demo", &dock_space, window_flags);
+
+	ImGui::PopStyleVar(3);
+
+	// Submit the DockSpace
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("level_editor_dockspace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+	else
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		ImGui::Text("ERROR: Docking is not enabled! See Demo > Configuration.");
+		ImGui::Text("Set io.ConfigFlags |= ImGuiConfigFlags_DockingEnable in your code, or ");
+		ImGui::SameLine(0.0f, 0.0f);
+		if (ImGui::SmallButton("click here"))
+			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	}
+
+
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
 			if (ImGui::MenuItem("Exit")) { engine->game_active = false; }
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Window"))
-        {
-            if (ImGui::MenuItem("Performance Viewer")) { showPerformanceInfo = true;}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Window"))
+		{
+			if (ImGui::MenuItem("Performance Viewer")) { showPerformanceInfo = true; }
 			if (ImGui::MenuItem("Uniform Grid")) { showUniformGrid = true; }
-            ImGui::EndMenu();
-        }
-        ImGui::EndMainMenuBar();
-    }
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
 
 	showUniformGrid ? DebugUniformGrid() : DoNothing();
 	showPerformanceInfo ? DebugPerformanceViewer() : DoNothing();
+
 }
