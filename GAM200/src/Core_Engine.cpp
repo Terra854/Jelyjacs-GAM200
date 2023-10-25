@@ -397,6 +397,7 @@ void CoreEngine::GameLoop()
 			Update(Systems["Graphics"]);
 			DrawText("Testing Font", 500, 200, 1);
 			Update(Systems["Window"]);
+			hud.GuiRender(io);
 		}
 
 		debug_gui->ClearAll();

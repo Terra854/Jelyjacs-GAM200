@@ -105,9 +105,11 @@ void Response_Collision(int flag, Transform* t1, Body* b1, Physics* p1, Body* b2
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
 
 		if (flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
+			p1->Velocity.x = 0.0f;
 			t1->Position.x = t1->PrevPosition.x;
 		}
 		if (flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
+			p1->Velocity.x = 0.0f;
 			t1->Position.x = t1->PrevPosition.x;
 		}
 		if (flag & COLLISION_TOP) {
