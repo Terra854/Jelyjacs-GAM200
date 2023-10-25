@@ -365,6 +365,7 @@ void GLApp::Update()
 		}
 		
     }
+	
 }
 
 /*
@@ -449,9 +450,10 @@ void GLApp::drawline(Vec2 start, Vec2 end) {
 	float orientation;
 	float scaling_x;
 	float scaling_y;
-	orientation = atan2(start.y - end.y, start.x - end.x);
-	scaling_x = (end.x - start.x) * 2 / window->width;
-	scaling_y = (end.y - start.y) * 2 / window->height;
+	orientation = atan2(end.y - start.y, end.x - start.x);
+
+	scaling_x = abs(end.x - start.x) * 2 / window->width;
+	scaling_y = abs(end.y - start.y) * 2 / window->height;
 	pos_x = start.x * 2.0f / window->width;
 	pos_y = start.y * 2.0f / window->height;
 
