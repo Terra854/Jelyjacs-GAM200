@@ -408,6 +408,15 @@ void CoreEngine::GameLoop()
 		}
 
 		ImGui::End();
+
+		GLuint test = app->setup_texobj("../Asset/Picture/test_animation.png");
+		ImGui::Begin("Picture test");
+		ImGui::SetCursorPos({ 100,100 });
+		ImGui::Image((void*)(intptr_t)test, ImVec2(108.0f, 108.0f),ImVec2(0,0), ImVec2(0.333, 0.333));
+		ImGui::SetCursorPos({ 200,100 });
+		ImGui::Image((void*)(intptr_t)test, ImVec2(108.0f, 108.0f), ImVec2(0.3333, 0), ImVec2(0.666, 0.333));
+		ImGui::End();
+
 		debug_gui->ClearAll();
 		hud.GuiRender(io);
 
