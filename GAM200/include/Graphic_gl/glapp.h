@@ -61,7 +61,7 @@ public:
 	//helper function set up shader program
 	static void insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr);
 	
-	static void drawline(Vec2 start, Vec2 end);
+	void drawline(Vec2 start, Vec2 end);
 
 	//helper function set up model
 	// container for shader programs and models

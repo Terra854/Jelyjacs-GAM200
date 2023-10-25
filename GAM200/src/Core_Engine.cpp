@@ -23,6 +23,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <sstream>
 #include "Font.h"
 #include <PhysicsSystem.h>
+#include <glapp.h>
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
@@ -190,6 +191,10 @@ void CoreEngine::GameLoop()
 
 	bool show_performance_viewer = true;
 	bool objectProperties = false;
+	bool tempstorage = 1;
+	float pos_x = 0;
+	float pos_y = 0;
+
 	float xPos = 0;
 	float yPos = 0;
 
@@ -331,15 +336,39 @@ void CoreEngine::GameLoop()
 					ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
 				}
 				Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+				// Not working
+				/*
+				Vec2 botleft = { tran_pt->Position.x - tran_pt->Scale_x / 2, tran_pt->Position.y - tran_pt->Scale_y / 2 };
+				Vec2 topright = { tran_pt->Position.x + tran_pt->Scale_x / 2, tran_pt->Position.y + tran_pt->Scale_y / 2 };
+				app->drawline({ botleft.x,botleft.y }, { botleft.x,topright.y });
+				app->drawline({ botleft.x,topright.y }, { topright.x,topright.y });
+				app->drawline({ topright.x,topright.y }, { topright.x,botleft.y });
+				app->drawline({ topright.x,botleft.y }, { botleft.x,botleft.y });
+				*/
+				ImGui::Text("Object Position: (%.2f, %.2f)", tran_pt->Position.x, tran_pt->Position.y);
+				if (tempstorage) {
+					pos_x = tran_pt->Position.x;
+					pos_y = tran_pt->Position.y;
+					std::cout << "pos_x: " << pos_x << "\n";
+					std::cout << "pos_y: " << pos_y << "\n";
+					tempstorage = 0;
+				}
+				std::cout << "pos_x: " << pos_x << "\n";
+				std::cout << "pos_y: " << pos_y << "\n";
 				ImGui::SliderFloat("Change Object X-Axis", &tran_pt->Position.x, -960.f, 960.f);
 				ImGui::SliderFloat("Change Object Y-Axis", &tran_pt->Position.y, -540.f, 540.f);
+				if (ImGui::Button("Revert")) {
+					tran_pt->Position = { pos_x, pos_y };
+				}
 				if (object->GetComponent(ComponentType::Body) != nullptr)
 					RecalculateBody(tran_pt, static_cast<Body*>(object->GetComponent(ComponentType::Body)));
 				ImGui::End();
 
 			}
-
-			debug_gui->ClearAll();
+			else {
+				tempstorage = 1;
+				pos_x = 0;
+			}
 		}
 		else {
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
@@ -349,7 +378,7 @@ void CoreEngine::GameLoop()
 			Update(Systems["Window"]);
 		}
 
-
+		debug_gui->ClearAll();
 		hud.GuiRender(io);
 
 		// FPS Calculation
