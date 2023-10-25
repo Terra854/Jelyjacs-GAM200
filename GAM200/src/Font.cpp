@@ -53,7 +53,7 @@ void Font::Initialize()
 
         // load font as face
         FT_Face face;
-        if (FT_New_Face(ft, "../Asset/Fonts/Roboto-Regular.ttf", 0, &face)) {
+        if (FT_New_Face(ft, "../Asset/Fonts/Aldrich-Regular.ttf", 0, &face)) {
             std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
         }
         else {
