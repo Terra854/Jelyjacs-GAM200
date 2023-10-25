@@ -22,6 +22,7 @@ ID aand is stored as part of a private map
 #include "components/Body.h"
 #include "components/Physics.h"
 #include "components/PlayerControllable.h"
+#include "components/Animation.h"
 #include "Assets Manager/asset_manager.h"
 
 /*
@@ -154,7 +155,59 @@ Object* Factory::createObject(const std::string& filename)
 		}
 		else if (type == "Animation")
 		{
+			Animation* a = (Animation*)((ComponentCreator<Animation>*) componentMap["Animation"])->Create();
 
+			// Set texture
+			std::map<std::string, GLuint>::iterator it = textures.find(component["Properties"]["texturepath"].asString());
+			if (it == textures.end())
+				std::cout << "Missing Texture!" << std::endl;
+			else
+				a->animation_tex_obj = it->second;
+
+			a->frame_rate = component["Properties"]["framerate"].asFloat();
+			int framecount = component["Properties"]["frame"].asInt();
+
+			// Create frame_map
+			for (int j = 0; j < AnimationType::End; j++)
+			{
+				std::string animationtype;
+				switch (j)
+				{
+					case AnimationType::Idle:
+						animationtype = "idle";
+						break;
+					case AnimationType::Run:
+						animationtype = "run";
+						break;
+					case AnimationType::Jump:
+						animationtype = "jump";
+						break;
+					default:
+						animationtype = "error";
+						break;
+				}
+
+				AnimationType frametype = static_cast<AnimationType>(j);
+				std::vector<GLApp::GLModel> animationmodel;
+
+				// Ensure AnimationType exist before gathering data into animation_map
+				if (component["Properties"].isMember(animationtype))
+				{
+					for (int i = 0; i < framecount; i++)
+					{
+						int pos = i * 4; // 4 is due to each frame needing 4 position therefore it will always be fixed
+
+						GLApp::GLModel model = a->setup_texobj_animation(component["Properties"][animationtype][pos].asFloat(), component["Properties"][animationtype][pos + 1].asFloat(),
+							component["Properties"][animationtype][pos + 2].asFloat(), component["Properties"][animationtype][pos + 3].asFloat(), true);
+
+						animationmodel.push_back(model);
+					}
+				}
+
+				a->animation_Map.emplace(frametype, animationmodel);
+			}
+
+			obj->AddComponent(a);
 		}
 	}
 

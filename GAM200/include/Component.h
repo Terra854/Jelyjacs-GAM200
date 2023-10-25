@@ -20,7 +20,8 @@ enum class ComponentType
 	Texture,
 	Body,
 	Physics,
-	PlayerControllable
+	PlayerControllable,
+	Animation
 };
 
 class Component

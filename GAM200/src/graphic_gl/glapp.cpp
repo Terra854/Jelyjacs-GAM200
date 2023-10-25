@@ -22,6 +22,7 @@ includes all the functions to draw objects
 #include <random>
 #include <chrono>
 #include <components/PlayerControllable.h>
+#include <components/Animation.h>
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
@@ -255,9 +256,15 @@ void GLApp::Update()
 		//get texture		
 		Texture* tex_pt = static_cast<Texture*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Texture));
 		
-		// skip to next object if there is no texture
+		// skip to next object if there is no texture, then check for animation
 		if (!tex_pt)
-			continue;
+		{
+			Animation* ani_pt = static_cast<Animation*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Animation));
+			if (!ani_pt)
+				continue;
+			else
+				tex_test = ani_pt->animation_tex_obj;
+		}
 		else
 			tex_test = tex_pt->texturepath;
 		
