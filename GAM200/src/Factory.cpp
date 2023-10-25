@@ -14,6 +14,7 @@ ID aand is stored as part of a private map
 
 #include <Debug.h>
 #include "Factory.h"
+#include "Assets Manager/json_serialization.h"
 #include "Assets Manager/text_serialization.h"
 #include "Vec2.h"
 #include "components/Transform.h"
@@ -58,43 +59,34 @@ Factory::~Factory()
 Object* Factory::createObject(const std::string& filename)
 {
 	// Check if the given file exists
-	std::ifstream jsonFile(filename);
-	if (!jsonFile.is_open()) {
-		std::cerr << "Could not open file: " << filename << std::endl;
-		return NULL;
-	}
-
-	Json::Value* jsonObject = new Json::Value;;
-	Json::Reader reader;
-
-	// Check if the given file is a valid json file
-	if (!reader.parse(jsonFile, *jsonObject)) {
-		std::cout << "Failed to parse JSON" << std::endl;
-		jsonFile.close();
-		return NULL;
-	}
-	jsonFile.close();
+	JsonSerialization jsonobj;
+	jsonobj.openFileRead(filename);
 
 	// Now parse the file to populate the object with components
 
 	Object* obj = new Object();
-	obj->name = (*jsonObject)["Name"].asString();
+	//obj->name = (*jsonObject)["Name"].asString();
+	jsonobj.readString(obj->name, "Name");
 
-	for (const auto& component : (*jsonObject)["Components"]) {
-		std::string type = component["Type"].asString();
+	for (auto& component : jsonobj.read("Components")) {
+		
+		JsonSerialization jsonloop;
+		jsonloop.jsonObject = &component;
+
+		std::string type;
+		jsonloop.readString(type, "Type");
 
 		if (type == "Transform") {
 
 			Transform* trans = (Transform*)((ComponentCreator<Transform>*) componentMap["Transform"])->Create();
+			//trans->JsonSerialize(jsonloop);
 
-			trans->Position.x = component["Properties"]["Position"]["x"].asFloat();
-			trans->Position.y = component["Properties"]["Position"]["y"].asFloat();
+			jsonloop.readFloat(trans->Position.x, "Properties", "Position", "x");
+			jsonloop.readFloat(trans->Position.y, "Properties", "Position", "y");
 
-			//trans->PrevPosition = trans->Position;
-
-			trans->Scale_x = component["Properties"]["Scale_x"].asFloat();
-			trans->Scale_y = component["Properties"]["Scale_y"].asFloat();
-			trans->Rotation = component["Properties"]["Rotation"].asFloat();
+			jsonloop.readFloat(trans->Scale_x, "Properties", "Scale_x");
+			jsonloop.readFloat(trans->Scale_y, "Properties", "Scale_y");
+			jsonloop.readFloat(trans->Rotation, "Properties", "Rotation");
 
 			trans->Matrix = Mat3Scale(trans->Scale_x, trans->Scale_y) * Mat3RotDeg(trans->Rotation) * Mat3Translate(trans->Position.x, trans->Position.y);
 
@@ -102,13 +94,15 @@ Object* Factory::createObject(const std::string& filename)
 		}
 		else if (type == "Texture") {
 
-			bool exist = AssetManager::texturecheckexist(component["Properties"]["texturepath"].asString());
+			std::string path;
+			jsonloop.readString(path, "Properties", "texturepath");
+			bool exist = AssetManager::texturecheckexist(path);
 
 			if (!exist)
 				std::cout << "Missing Texture!" << std::endl;
 			else
 			{
-				GLuint texturepath = AssetManager::textureval(component["Properties"]["texturepath"].asString());
+				GLuint texturepath = AssetManager::textureval(path);
 				Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(texturepath);
 				obj->AddComponent(tex);
 			}			
@@ -161,7 +155,8 @@ Object* Factory::createObject(const std::string& filename)
 
 	// Add the new object to objectMap and clean up
 	assignIdToObject(obj);
-	delete jsonObject;
+	//delete jsonObject;
+	jsonobj.closeFile();
 	return obj;
 }
 

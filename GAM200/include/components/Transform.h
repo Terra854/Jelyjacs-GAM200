@@ -11,7 +11,6 @@ Transform contains the information needed for graphics to render the object
 
 #include "Vec2.h"
 #include "Object.h"
-#include "../../src/Assets Manager/serialization.h"
 class Transform : public Component
 {
 public:
@@ -29,6 +28,16 @@ public:
 	{
 
 	}
+
+	/*virtual void JsonSerialize(JsonSerialization obj) override
+	{
+		obj.readFloat(Position.x, "Properties", "Position", "x");
+		obj.readFloat(Position.y, "Properties", "Position", "y");
+
+		obj.readFloat(Scale_x, "Properties", "Scale_x");
+		obj.readFloat(Scale_y, "Properties", "Scale_y");
+		obj.readFloat(Rotation, "Properties", "Rotation");
+	}*/
 
 	virtual ComponentType TypeId() const override { return ComponentType::Transform; }
 };

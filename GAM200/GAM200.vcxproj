@@ -100,6 +100,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
+    <ClCompile Include="src\Assets Manager\json_serialization.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Body.cpp" />
     <ClCompile Include="src\DebugGui.cpp" />
@@ -167,6 +168,7 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
     <ClInclude Include="include\Vec2.h" />
     <ClInclude Include="include\Precompile.h" />
     <ClInclude Include="src\Assets Manager\asset_manager.h" />
+    <ClInclude Include="src\Assets Manager\json_serialization.h" />
     <ClInclude Include="src\Assets Manager\serialization.h" />
     <ClInclude Include="src\Assets Manager\text_serialization.h" />
   </ItemGroup>

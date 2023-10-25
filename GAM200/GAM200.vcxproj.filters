@@ -168,6 +168,9 @@
     <ClCompile Include="src\Font.cpp">
       <Filter>Source Files\Systems\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Assets Manager\json_serialization.cpp">
+      <Filter>Source Files\Miscellanous</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -277,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="include\Font.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets Manager\json_serialization.h">
+      <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

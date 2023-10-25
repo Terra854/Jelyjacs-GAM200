@@ -8,9 +8,11 @@ The file contains declarations and implmentations for the component class,
 which is a base class for other specific types of game components to derive from.
 Contains a pointer to the object that the particualr game component is a part of.
 *//*__________________________________________________________________________*/
+
 #include <Debug.h>
-#include "../../src/Assets Manager/serialization.h"
 #include <Object.h>
+#include "../src/Assets Manager/serialization.h"
+//#include "../../src/Assets Manager/json_serialization.h"
 
 //different types of game components to differentiate
 enum class ComponentType
@@ -34,6 +36,8 @@ public:
 	//to initialise remainng game components not set from text file
 	virtual void Initialize() {};
 
+	//to allow serialization to occur
+	//virtual void JsonSerialize(JsonSerialization obj) {};
 
 	///to get the object that this component is part of
 	Object* GetOwner() { return Base; }
