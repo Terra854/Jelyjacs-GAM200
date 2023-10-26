@@ -67,6 +67,8 @@ public:
 	//Returns the total number of game objects created by this game factory
 	size_t NumberOfObjects() {	return objectMap.size();}
 
+	Object* FindObject(std::string name);
+
 	friend class PhysicsSystem; // Needed to apply physics onto each object
 private:
 	//ID to assign to the next game object created

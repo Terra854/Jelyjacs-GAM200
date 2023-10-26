@@ -25,6 +25,7 @@ ID aand is stored as part of a private map
 #include "components/PlayerControllable.h"
 #include "components/Animation.h"
 #include "Assets Manager/asset_manager.h"
+#include "Object.h"
 
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
@@ -400,4 +401,24 @@ Object* Factory::cloneObject(Object* object)
 void Factory::AddComponentCreator(const std::string& name, BaseComponentCreator* creator)
 {
 	componentMap[name] = creator;
+}
+
+Object* Factory::FindObject(std::string name)
+{
+	if (objectMap.empty())
+	{
+		return nullptr;
+	}
+	auto it = objectMap.begin();
+	while (it != objectMap.end())
+	{
+		Object* testObject = it->second;
+		std::string objectName = testObject->GetName();
+		if (objectName == name)
+		{
+			return testObject;
+		}
+	}
+
+	return nullptr;
 }
