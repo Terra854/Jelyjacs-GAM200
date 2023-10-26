@@ -278,7 +278,7 @@ void GLApp::Update()
 			orientation = tran_pt->Rotation;
 
 		//check debug
-		if (input::IsPressed(KEY::p))
+		if (input::IsPressed(KEY::l))
 		{
 			graphics_debug = !graphics_debug;
 			std::cout << "graphics_debug" << std::endl;

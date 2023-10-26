@@ -123,6 +123,11 @@ void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
 		buttons[at(KEY::x)].SetKeyState(action);
 		break;
 	}
+	case GLFW_KEY_L:
+	{
+		buttons[at(KEY::l)].SetKeyState(action);
+		break;
+	}
 	case GLFW_KEY_UP:
 	{
 		buttons[at(KEY::up)].SetKeyState(action);
