@@ -22,6 +22,9 @@ public:
 	virtual void Initialize();
 	void Update();
 	virtual std::string SystemName() { return "Game_Logic"; }
+private:
+
+	//std::vector<BehaviourFCT> behaviours;
 };
 
 extern GameLogic* Logic;

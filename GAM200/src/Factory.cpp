@@ -418,8 +418,8 @@ Object* Factory::FindObject(std::string name)
 	{
 		return nullptr;
 	}
-	auto it = objectMap.begin();
-	while (it != objectMap.end())
+	
+	for (auto it = objectMap.begin(); it != objectMap.end(); it++)
 	{
 		Object* testObject = it->second;
 		std::string objectName = testObject->GetName();
