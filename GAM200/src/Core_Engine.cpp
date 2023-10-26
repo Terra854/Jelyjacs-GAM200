@@ -221,6 +221,10 @@ void CoreEngine::GameLoop()
 	// Attach the texture to the framebuffer
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, level_editor_texture, 0);
 
+	// Generate mipmaps after rendering to the high-resolution texture
+	glBindTexture(GL_TEXTURE_2D, level_editor_texture);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
 	/* End Level Editor */
 
 	// Game Loop
@@ -262,14 +266,20 @@ void CoreEngine::GameLoop()
 		if (debug_gui_active) {
 
 			
-
-			// Generate mipmaps after rendering to the high-resolution texture
-			glBindTexture(GL_TEXTURE_2D, level_editor_texture);
-			glGenerateMipmap(GL_TEXTURE_2D);
-			//here
 			
+			// For rendering into imgui window 
+			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
+
+			Update(Systems["Graphics"]);
+			DrawText("Testing Font", 500, 200, 1);
+			Update(Systems["Window"]);
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
+			// End rendering into imgui window 
 
 			Update(Systems["DebugGui"]);
+
+			ImGui::ShowDemoWindow();
 
 			// Display the game inside the ImGui window
 			ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
@@ -377,17 +387,6 @@ void CoreEngine::GameLoop()
 			}
 			ImGui::End();
 
-			
-
-			// For rendering into imgui window 
-			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
-
-			Update(Systems["Graphics"]);
-			DrawText("Testing Font", 500, 200, 1);
-			Update(Systems["Window"]);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
-			// End rendering into imgui window 
 			hud.GuiRender(io);
 		}
 		else {

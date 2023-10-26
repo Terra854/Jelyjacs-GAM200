@@ -64,9 +64,12 @@ void DebugGui::DebugPerformanceViewer() {
 	ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
 	ImGui::Begin("DEBUG: Performance Viewer", &showPerformanceInfo);
 
-	for (std::pair<std::string, double> p : System_elapsed_time)
-		ImGui::Text("%s system completed it's update in %.6f seconds (%.2f%%)", p.first.c_str(), p.second, (p.second / total_time * 100.0));
-
+	for (std::pair<std::string, double> p : System_elapsed_time) {
+		ImGui::Text("%s system completed it's update in %.6f seconds", p.first.c_str(), p.second);
+		ImGui::ProgressBar(p.second / total_time, ImVec2(0.0f, 0.0f), "");
+		ImGui::SameLine();
+		ImGui::Text("%.2f%%", p.second / total_time * 100.0);
+	}
 	ImGui::Text("############################################################");
 	ImGui::Text("Total time taken for this frame: %.6f seconds.", total_time);
 	float fps = engine->Get_FPS();
