@@ -27,6 +27,7 @@ Object* scale_and_rotate;
 Object* playerObj;
 Object* MovingPlatform;
 Object* dynamic_collision;
+bool moving_platform_direction = false;
 
 /******************************************************************************
 * MessageRelay
@@ -60,7 +61,7 @@ void GameLogic::Initialize()
 	LoadScene("../Asset/Levels/tutorial_level.json");
 
 	playerObj = objectFactory->getPlayerObject();
-	MovingPlatform = objectFactory->getObjectWithID(2);
+	MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
 
 	/*
 	Object* testObj;
@@ -126,8 +127,8 @@ void GameLogic::Initialize()
 	dynamic_collision_t->Position = { -1000.0f , -446.0f };
 	Rectangular* dynamic_collision_b = static_cast<Rectangular*>(dynamic_collision->GetComponent(ComponentType::Body));
 	dynamic_collision_b->Initialize();
-	Physics* p = new Physics();
-	dynamic_collision->AddComponent(p);
+	Physics* player_physics = new Physics();
+	dynamic_collision->AddComponent(player_physics);
 
 	//std::cout << "test bottom_line" << std::endl;
 	//bottom_line = objectFactory->createObject("../bottom_line.json");
@@ -166,38 +167,39 @@ void GameLogic::Update() {
 	// Movement for Player
 	// If button Pressed, changed velocity
 	// 
-	Physics* p = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
-	p->Velocity.x = 0.0f;
+	Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
+	player_physics->Velocity.x = 0.0f;
 	bool moving = false;
 	if (input::IsPressed(KEY::w)) {
 		MovementKey msg(up);
 		engine->Broadcast(&msg);
 		//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
-		if (p->Velocity.y == 0.0f) {
-			p->Velocity.y = 1000.0f;
+		if (player_physics->Velocity.y == 0.0f) {
+			player_physics->Velocity.y = 1000.0f;
 			audio->playJump();
 		}
 	}
 	if (input::IsPressedRepeatedly(KEY::a)) {
 		MovementKey msg(left);
 		engine->Broadcast(&msg);
-		p->Velocity.x -= 500.0f;
+		player_physics->Velocity.x -= 500.0f;
 		moving = true;
 	}
 	if (input::IsPressedRepeatedly(KEY::d)) {
 		MovementKey msg(right);
 		engine->Broadcast(&msg);
-		p->Velocity.x += 500.0f;
+		player_physics->Velocity.x += 500.0f;
 		moving = true;
 	}
 
 	// Let the player loop around the window
+	/*
 	Transform* t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 	t->Position.x = t->Position.x > 1000.0f ? -1000.0f : t->Position.x;
 	t->Position.x = t->Position.x < -1000.0f ? 1000.0f : t->Position.x;
-
+	*/
 	// Audio for Character Movement
-	if ((p->Velocity.y == 0.f) && moving) {
+	if ((player_physics->Velocity.y == 0.f) && moving) {
 		audio->startWalking();
 	}
 	else {
@@ -206,13 +208,35 @@ void GameLogic::Update() {
 	}
 
 	// Printing Player Position by pressing Z
+	/*
 	if (input::IsPressed(KEY::z)) {
 		Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 		std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
 	}
+	*/
 
-
-
+	//Movement for Moving Platform
+	
+	Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
+	Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));
+	moving_platform_physics->Velocity.x = 0.0f;
+	float moving_platform_speed;
+	//bool moving_platform_direction;
+	
+	// if the platform reach the max/min height, change direction
+	if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
+		moving_platform_direction = true;
+	}
+	if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
+		moving_platform_direction = false;			
+	}
+	moving_platform_speed = moving_platform_direction ? -40.0f : 100.0f;
+	moving_platform_physics->Velocity.y = moving_platform_speed;
+	
+	if (input::IsPressed(KEY::z)) {
+		std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
+	}
+	
 	/*
 	// Rotation of an object
 	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));

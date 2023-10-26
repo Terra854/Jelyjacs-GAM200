@@ -290,6 +290,7 @@ void CoreEngine::GameLoop()
 			ImGui::End();
 
 			ImGui::Begin("Level editor");
+			ImGui::Text("Mouse Position: (%.1f,%.1f)", io.MousePos.x, io.MousePos.y);
 			if (ImGui::CollapsingHeader("Create object")) {
 				ImGui::InputFloat("Input x position of object", &xPos);
 				ImGui::InputFloat("Input y position of object", &yPos);
@@ -299,9 +300,7 @@ void CoreEngine::GameLoop()
 					createObject(xPos, yPos, "../Asset/Objects/mapbox.json");
 				}
 			}
-			//ImGui::End();
 
-			//ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Current Object List")) {
 				ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
 				char objectPropertiesName[32];
