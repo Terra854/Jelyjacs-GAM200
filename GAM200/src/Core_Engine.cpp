@@ -266,8 +266,8 @@ void CoreEngine::GameLoop()
 			// Generate mipmaps after rendering to the high-resolution texture
 			glBindTexture(GL_TEXTURE_2D, level_editor_texture);
 			glGenerateMipmap(GL_TEXTURE_2D);
-
-			// End rendering into imgui window 
+			//here
+			
 
 			Update(Systems["DebugGui"]);
 
@@ -352,11 +352,9 @@ void CoreEngine::GameLoop()
 						pos_y = tran_pt->Position.y;
 						tempstorage = 0;
 					}
-					ImGui::Text("Change Object X-Axis");
-					ImGui::SliderFloat("##", &tran_pt->Position.x, -960.f, 960.f);
-
-					ImGui::Text("Change Object Y-Axis");
-					ImGui::SliderFloat("##", &tran_pt->Position.y, -540.f, 540.f);
+					ImGui::Text("Change Object Position");
+					ImGui::SliderFloat("X", &tran_pt->Position.x, -960.f, 960.f);
+					ImGui::SliderFloat("Y", &tran_pt->Position.y, -540.f, 540.f);
 					if (ImGui::Button("Revert")) {
 						tran_pt->Position = { pos_x, pos_y };
 					}
@@ -389,6 +387,7 @@ void CoreEngine::GameLoop()
 			Update(Systems["Window"]);
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
+			// End rendering into imgui window 
 			hud.GuiRender(io);
 		}
 		else {

@@ -25,6 +25,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 
 Object* scale_and_rotate;
 Object* playerObj;
+Object* MovingPlatform;
 Object* dynamic_collision;
 
 /******************************************************************************
@@ -59,6 +60,7 @@ void GameLogic::Initialize()
 	LoadScene("../Asset/Levels/tutorial_level.json");
 
 	playerObj = objectFactory->getPlayerObject();
+	MovingPlatform = objectFactory->getObjectWithID(2);
 
 	/*
 	Object* testObj;
@@ -208,6 +210,8 @@ void GameLogic::Update() {
 		Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 		std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
 	}
+
+
 
 	/*
 	// Rotation of an object
