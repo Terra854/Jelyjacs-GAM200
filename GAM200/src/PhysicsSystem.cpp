@@ -442,7 +442,7 @@ void PhysicsSystem::Update() {
 			}
 		}
 
-		if (collision_has_occured)
+		if (collision_has_occured && b->collision_response)
 			Response_Collision(t, b, p);
 	}
 }
