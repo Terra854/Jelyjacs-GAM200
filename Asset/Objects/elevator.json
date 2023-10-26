@@ -16,6 +16,7 @@
     {
       "Type": "Body",
       "Shape": "Rectangle",
+      "Collision Response":  false,
       "Properties": {
         "width": 110.0,
         "height": 28.0

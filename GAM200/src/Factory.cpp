@@ -113,6 +113,9 @@ Object* Factory::createObject(const std::string& filename)
 			if (shape == "Rectangle") {
 				Rectangular* r = (Rectangular*)((ComponentCreator<Rectangular>*) componentMap["Rectangle"])->Create();
 
+				if (component.isMember("Collision Response"))
+					r->collision_response = component["Collision Response"].asBool();
+
 				r->width = component["Properties"]["width"].asFloat();
 				r->height = component["Properties"]["height"].asFloat();
 
@@ -120,6 +123,9 @@ Object* Factory::createObject(const std::string& filename)
 			}
 			else if (shape == "Circle") {
 				Circular* c = (Circular*)((ComponentCreator<Circular>*) componentMap["Circular"])->Create();
+
+				if (component.isMember("Collision Response"))
+					c->collision_response = component["Collision Response"].asBool();
 
 				c->circle.radius = component["Properties"]["radius"].asFloat();
 				c->circle.center.x = component["Properties"]["center"]["x"].asFloat();
@@ -129,6 +135,9 @@ Object* Factory::createObject(const std::string& filename)
 			}
 			else if (shape == "Line") {
 				Lines* l = (Lines*)((ComponentCreator<Lines>*) componentMap["Line"])->Create();
+
+				if (component.isMember("Collision Response"))
+					l->collision_response = component["Collision Response"].asBool();
 
 				l->line.SetPt0({ component["Properties"]["start"]["x"].asFloat(), component["Properties"]["start"]["y"].asFloat() });
 				l->line.SetPt1({ component["Properties"]["end"]["x"].asFloat(), component["Properties"]["end"]["y"].asFloat() });

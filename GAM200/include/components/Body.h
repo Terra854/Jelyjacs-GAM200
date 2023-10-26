@@ -28,6 +28,8 @@ public:
 	virtual void Initialize() override {};
 	virtual ComponentType TypeId() const override { return ComponentType::Body; }
 
+	bool collision_response = true; // Set to false for moving platforms
+
 	// Record down the grids the object is in. 1st is width, 2nd is height
 	std::vector<std::pair<int, int>> inGrid;
 };
@@ -42,11 +44,25 @@ public:
 	}
 	AABB aabb;
 	float width, height;
+
 	int collision_flag = 0;
+	                              // get from the other object's
+	float top_collision = 0.f;    // bottom y
+	float bottom_collision = 0.f; // top y
+	float left_collision = 0.f;   // right x
+	float right_collision = 0.f;  // left x
 
 	virtual void Initialize() override;
 
 	virtual Shape GetShape() override;
+
+	void ResetCollisionFlags() {
+		collision_flag = 0;
+		top_collision = 0.f;
+		bottom_collision = 0.f;
+		left_collision = 0.f;
+		right_collision = 0.f;
+	}
 };
 
 // Circle Object

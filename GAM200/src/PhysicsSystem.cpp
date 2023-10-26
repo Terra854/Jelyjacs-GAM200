@@ -70,11 +70,13 @@ bool Check_Collision(Body* b1, Body* b2, float dt) {
 // Check if both bodies are rectangular
 // If they are, use Check AABB with AABB function and return collision flag.
 // If return false means no collision
-int Check_Collision(Body* b1, Body* b2, float dt) {
+bool Check_Collision(Body* b1, Body* b2, float dt) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
-		if (Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, dt))
-			return Collision::Check_Rect_Rect((Rectangular*)b1, (Rectangular*)b2);
+		if (Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, dt)) {
+			Collision::Check_Rect_Rect((Rectangular*)b1, (Rectangular*)b2);
+			return true;
+		}
 	}
 	else {
 		return false; // Unsupported collision
@@ -100,35 +102,35 @@ void RecalculateBody(Transform* t, Body* b) {
 }
 
 // Objects responding to collision
-void Response_Collision(int flag, Transform* t1, Body* b1, Physics* p1, Body* b2, Physics* p2) {
+void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 	// 2 Rectangles
-	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
+	if (typeid(*b1) == typeid(Rectangular)) {
 
-		if (flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
 			p1->Velocity.x = 0.0f;
-			t1->Position.x = t1->PrevPosition.x;
+			t1->Position.x = ((Rectangular*)b1)->left_collision + (((Rectangular*)b1)->width / 2);
 		}
-		if (flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
 			p1->Velocity.x = 0.0f;
-			t1->Position.x = t1->PrevPosition.x;
+			t1->Position.x = ((Rectangular*)b1)->right_collision - (((Rectangular*)b1)->width / 2);
 		}
-		if (flag & COLLISION_TOP) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
 			top_collision_cooldown = 0.1f;
 			p1->Velocity.y = 0.0f;
-			t1->Position.y = ((Rectangular*)b2)->aabb.min.y - (((Rectangular*)b1)->height / 2);
+			t1->Position.y = ((Rectangular*)b1)->top_collision - (((Rectangular*)b1)->height / 2);
 		}
-		if (flag & COLLISION_BOTTOM) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_BOTTOM) {
 			p1->Velocity.y = 0.0f;
-			t1->Position.y = ((Rectangular*)b2)->aabb.max.y + (((Rectangular*)b1)->height / 2);
+			t1->Position.y = ((Rectangular*)b1)->bottom_collision + (((Rectangular*)b1)->height / 2);
 
 			// For objects on moving platforms
-			if (p2 != nullptr && !(flag & COLLISION_LEFT) && !(flag & COLLISION_RIGHT)) {
-				t1->Position.x += p2->Velocity.x * fixed_dt;
-				t1->Position.y += p2->Velocity.y * fixed_dt; // Will need to test platforms that move vertically
-			}
+			//if (p2 != nullptr && !(flag & COLLISION_LEFT) && !(flag & COLLISION_RIGHT)) {
+			//	t1->Position.x += p2->Velocity.x * fixed_dt;
+			//	t1->Position.y += p2->Velocity.y * fixed_dt; // Will need to test platforms that move vertically
+			//}
 		}
 
-		if (flag)
+		if (((Rectangular*)b1)->collision_flag)
 			RecalculateBody(t1, b1);
 	}
 }
@@ -329,7 +331,7 @@ void PhysicsSystem::Update() {
 
 		// Reset collision flags
 		if (b->GetShape() == Shape::Rectangle)
-			((Rectangular*)b)->collision_flag = 0;
+			((Rectangular*)b)->ResetCollisionFlags();
 
 		// Calculate new position
 		t->Position += p->Velocity * fixed_dt;
@@ -412,6 +414,9 @@ void PhysicsSystem::Update() {
 			}
 		}
 		*/
+
+		bool collision_has_occured = false;
+
 		for (const auto& grid : b->inGrid) {
 			for (const auto& anotherobj : Collision::uniform_grid[grid.first][grid.second]) {
 				if (obj->second == anotherobj)
@@ -422,15 +427,23 @@ void PhysicsSystem::Update() {
 				if (b2 == nullptr)
 					continue; // No body in the other object, no way it's collidable
 
-				collision_flag = Check_Collision(b, b2, fixed_dt);
-				if (collision_flag) {
-					Response_Collision(collision_flag, t, b, p, b2, (Physics*)anotherobj->GetComponent(ComponentType::Physics));
-				}
-				else {
+				//Check_Collision(b, b2, fixed_dt);
+				//if (collision_flag) {
+				//	Response_Collision(collision_flag, t, b, p, b2, (Physics*)anotherobj->GetComponent(ComponentType::Physics));
+				//}
+				//else {
 
+				//}
+				
+				if (Check_Collision(b, b2, fixed_dt)) {
+					collision_has_occured = true;
 				}
+
 			}
 		}
+
+		if (collision_has_occured)
+			Response_Collision(t, b, p);
 	}
 }
 

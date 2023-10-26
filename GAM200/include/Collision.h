@@ -57,5 +57,5 @@ namespace Collision {
 		const Vec2& vel2,
 		float dt);
 
-	int Check_Rect_Rect(Rectangular* rect1, const Rectangular* rect2);
+	void Check_Rect_Rect(Rectangular* rect1, const Rectangular* rect2);
 }
