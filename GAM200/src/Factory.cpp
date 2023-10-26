@@ -153,12 +153,17 @@ Object* Factory::createObject(const std::string& filename)
 		{
 			Animation* a = (Animation*)((ComponentCreator<Animation>*) componentMap["Animation"])->Create();
 
-			// Set texture
-			std::map<std::string, GLuint>::iterator it = textures.find(component["Properties"]["texturepath"].asString());
-			if (it == textures.end())
-				std::cout << "Missing Texture!" << std::endl;
+			std::string path;
+			jsonloop.readString(path, "Properties", "texturepath");
+			bool exist = AssetManager::texturecheckexist(path);
+			if (!exist)
+			{
+				std::cout << "Missing Animation Texture!" << std::endl;
+			}
 			else
-				a->animation_tex_obj = it->second;
+			{
+				a->animation_tex_obj = AssetManager::textureval(path);
+			}
 
 			a->frame_rate = component["Properties"]["framerate"].asFloat();
 			int framecount = component["Properties"]["frame"].asInt();
