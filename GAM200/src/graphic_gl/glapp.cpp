@@ -493,9 +493,9 @@ void GLApp::Leveleditor::drawleveleditor()
 	box_size = scale_window.x / num.x;
 	else box_size = scale_window.y / num.y;
 	Vec2 scaling = { box_size / window->width, box_size / window->height };
-	Vec2 pos_botleft = {
-		(box_size-scale_window.x) / window->width,
-		(box_size-scale_window.y) / window->height
+	pos_botleft = {
+		(-box_size * ( num.x - 1)) / window->width,
+		(-box_size * ( num.y - 1)) / window->height
 	};
 	for (int i = 0; i < num.x; i++) {
 		for (int j = 0; j < num.y; j++) {
@@ -514,7 +514,7 @@ void GLApp::Leveleditor::drawleveleditor()
 			// unbind VAO and unload shader program
 			glBindVertexArray(0);
 			shdrpgms["shape"].UnUse();
-			Vec2 botleft = { i*box_size - scale_window.x/2 , j*box_size - scale_window.y/2 };
+			Vec2 botleft = { (i-num.x/2)*box_size, (j-num.y/2)*box_size };
 			Vec2 topright = {botleft.x+box_size,botleft.y+box_size };
 			drawline(Vec2(topright.x, botleft.y), botleft);
 			drawline(topright, Vec2(topright.x, botleft.y));
