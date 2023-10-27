@@ -32,10 +32,14 @@ void Audio::Initialize(){
     }
 
     // Load sounds
+    system->createSound("../Asset/Sounds/Game_Background.wav", FMOD_LOOP_NORMAL, 0, &game_background);
+    system->playSound(game_background, 0, false, &background);
+    background->setVolume(0.2f);
+
     system->createSound("../Asset/Sounds/Jump.wav", FMOD_DEFAULT, 0, &jump);
     system->createSound("../Asset/Sounds/Footsteps.wav", FMOD_LOOP_NORMAL, 0, &walking);
-
     system->playSound(walking, 0, false, &channel);
+    channel->setVolume(0.0);
 
     // Let other systems have access to this system
     audio = this;

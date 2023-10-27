@@ -69,7 +69,8 @@
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3.dll" "$(TargetDir)glfw3.dll" /Y
 copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew32.dll" /Y
-copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y</Command>
+copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y
+copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -94,7 +95,8 @@ copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y</Command>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3.dll" "$(TargetDir)glfw3.dll" /Y
 copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew32.dll" /Y
-copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y</Command>
+copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y
+copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
