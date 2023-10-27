@@ -305,8 +305,9 @@ void CoreEngine::GameLoop()
 				static int selected = -1;
 				if (ImGui::BeginTable("split", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 				{
-					for (size_t i = 0; i < objectFactory->GetNextId(); i++)
+					for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 					{
+						
 						if (objectFactory->getObjectWithID(i) == nullptr)
 						{
 							continue;
