@@ -24,10 +24,10 @@ public:
 private:
 	FMOD::System* system;
 	FMOD::System* sound;
-	FMOD::Channel *channel, *channel2;
+	FMOD::Channel *background, *channel, *channel2;
 	FMOD_RESULT result;
 
-	FMOD::Sound *walking, *jump;
+	FMOD::Sound *walking, *jump, *game_background;
 
 	bool isPlayingWalking = false;
 };
