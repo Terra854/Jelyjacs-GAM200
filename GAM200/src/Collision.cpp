@@ -429,7 +429,7 @@ namespace Collision {
 		Should use Check_AABB_AABB first to see if collision actually occured first as using this function directly
 		can be compute intensive when processing hundreds of objects
 	*/
-	void Check_Rect_Rect(Rectangular* rect1, const Rectangular* rect2)
+	void Check_Rect_Rect(Rectangular* rect1, Rectangular* rect2)
 	{
 		Vec2 point;
 		int flag = 0;
@@ -448,7 +448,7 @@ namespace Collision {
 			point.y = rect1->aabb.min.y + (height / (num_hotspots + 1) * i);
 			if (PointRectCollision(point, rect2)) {
 				flag |= COLLISION_LEFT;
-				rect1->left_collision = rect2->aabb.max.x;
+				rect1->left_collision = rect2->GetOwner();
 				break;
 			}
 		}
@@ -462,7 +462,7 @@ namespace Collision {
 			point.y = rect1->aabb.min.y + (height / (num_hotspots + 1) * i);
 			if (PointRectCollision(point, rect2)) {
 				flag |= COLLISION_RIGHT;
-				rect1->right_collision = rect2->aabb.min.x;
+				rect1->right_collision = rect2->GetOwner();
 				break;
 			}
 		}
@@ -476,7 +476,7 @@ namespace Collision {
 			point.x = rect1->aabb.min.x + (length / (num_hotspots + 1) * i);
 			if (PointRectCollision(point, rect2)) {
 				flag |= COLLISION_TOP;
-				rect1->top_collision = rect2->aabb.min.y;
+				rect1->top_collision = rect2->GetOwner();
 				break;
 			}
 		}
@@ -490,7 +490,7 @@ namespace Collision {
 			point.x = rect1->aabb.min.x + (length / (num_hotspots + 1) * i);
 			if (PointRectCollision(point, rect2)) {
 				flag |= COLLISION_BOTTOM;
-				rect1->bottom_collision = rect2->aabb.max.y;
+				rect1->bottom_collision = rect2->GetOwner();
 				break;
 			}
 		}

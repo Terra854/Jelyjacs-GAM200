@@ -46,11 +46,12 @@ public:
 	float width, height;
 
 	int collision_flag = 0;
-	                              // get from the other object's
-	float top_collision = 0.f;    // bottom y
-	float bottom_collision = 0.f; // top y
-	float left_collision = 0.f;   // right x
-	float right_collision = 0.f;  // left x
+	
+	// Get link to the object that is colliding with this object
+	Object* top_collision = nullptr;    // get from the other object's bottom y
+	Object* bottom_collision = nullptr; // get from the other object's top y
+	Object* left_collision = nullptr;   // get from the other object's right x
+	Object* right_collision = nullptr;  // get from the other object's left x
 
 	virtual void Initialize() override;
 
@@ -58,10 +59,10 @@ public:
 
 	void ResetCollisionFlags() {
 		collision_flag = 0;
-		top_collision = 0.f;
-		bottom_collision = 0.f;
-		left_collision = 0.f;
-		right_collision = 0.f;
+		top_collision = nullptr;
+		bottom_collision = nullptr;
+		left_collision = nullptr;
+		right_collision = nullptr;
 	}
 };
 
