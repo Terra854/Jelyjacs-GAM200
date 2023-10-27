@@ -20,7 +20,11 @@ public:
 	void Initialize() override;
 
 	AnimationType current_type=AnimationType::Idle;
-	float frame_rate;
+	AnimationType previous_type=AnimationType::Idle;
+	float frame_rate{};
+	float frame_count{};
+	int frame_num{};
+
 	GLuint animation_tex_obj;
 	GLApp::GLModel setup_texobj_animation(float x, float y, float z, float w, bool right);
 

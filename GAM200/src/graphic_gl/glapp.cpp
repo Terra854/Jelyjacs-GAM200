@@ -240,15 +240,12 @@ void GLApp::Update()
 	sstr << window->title << " FPS: " << window->fps;
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
 
-	static float frame_count = 0.f;
-	static int frame_num = 0;
 	//draw objects
 	//int i = 0;
 	//while (i < 6) {
 	for (long i = 0; i < (long) objectFactory->NumberOfObjects(); i++) {
 		GLuint tex_test;
 		Animation* ani_pt = nullptr;
-		
 		Mat3 mat_test;
 		float pos_x;
 		float pos_y;
@@ -330,11 +327,13 @@ void GLApp::Update()
 		}
 		else {
 			// draw object with animation
-			if (frame_count >= ani_pt->frame_rate) {
-				frame_count = 0.f;
-				frame_num++;
-				if (frame_num >= ani_pt->animation_Map[AnimationType::Idle].size())
-					frame_num = 0;
+			if(ani_pt->current_type != ani_pt->previous_type)
+				ani_pt->frame_num = 0;
+			else if (ani_pt->frame_count >= ani_pt->frame_rate) {
+				ani_pt->frame_count = 0.f;
+				ani_pt->frame_num++;
+				if (ani_pt->frame_num >= ani_pt->animation_Map[AnimationType::Idle].size())
+					ani_pt->frame_num = 0;
 			}
 
 			glBindTextureUnit(6, tex_test);
@@ -343,7 +342,7 @@ void GLApp::Update()
 			// load shader program in use by this object
 			shdrpgms["image"].Use();
 			// bind VAO of this object's model
-			glBindVertexArray(ani_pt->animation_Map[ani_pt->current_type][frame_num].vaoid);
+			glBindVertexArray(ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].vaoid);
 			// copy object's model-to-NDC matrix to vertex shader's
 			// uniform variable uModelToNDC
 			shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
@@ -353,11 +352,13 @@ void GLApp::Update()
 			glUniform1i(tex_loc, 6);
 
 			// call glDrawElements with appropriate arguments
-			glDrawElements(ani_pt->animation_Map[ani_pt->current_type][frame_num].primitive_type, ani_pt->animation_Map[ani_pt->current_type][frame_num].draw_cnt, GL_UNSIGNED_SHORT, 0);
+			glDrawElements(ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].primitive_type, ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 			// unbind VAO and unload shader program
 			glBindVertexArray(0);
 			shdrpgms["image"].UnUse();
+			ani_pt->previous_type = ani_pt->current_type;
+			ani_pt->frame_count += engine->GetDt();
 		}
 		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
 
@@ -409,7 +410,7 @@ void GLApp::Update()
 		
     }
 	
-	frame_count += engine->GetDt();
+	
 }
 
 /*
