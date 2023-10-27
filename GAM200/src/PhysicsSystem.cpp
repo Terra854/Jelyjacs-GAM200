@@ -108,26 +108,34 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 
 		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
 			p1->Velocity.x = 0.0f;
-			t1->Position.x = ((Rectangular*)b1)->left_collision + (((Rectangular*)b1)->width / 2);
+			t1->Position.x = ((Rectangular*)((Rectangular*)b1)->left_collision->GetComponent(ComponentType::Body))->aabb.max.x + (((Rectangular*)b1)->width / 2);
 		}
 		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
 			p1->Velocity.x = 0.0f;
-			t1->Position.x = ((Rectangular*)b1)->right_collision - (((Rectangular*)b1)->width / 2);
+			t1->Position.x = ((Rectangular*)((Rectangular*)b1)->right_collision->GetComponent(ComponentType::Body))->aabb.min.x - (((Rectangular*)b1)->width / 2);
 		}
 		if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
 			top_collision_cooldown = 0.1f;
 			p1->Velocity.y = 0.0f;
-			t1->Position.y = ((Rectangular*)b1)->top_collision - (((Rectangular*)b1)->height / 2);
+			t1->Position.y = ((Rectangular*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Body))->aabb.min.y - (((Rectangular*)b1)->height / 2);
+
+			// For objects on moving platforms
+			if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics)) != nullptr ) {
+				if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y < 0.f) { // Check to see if the platform is going down
+					p1->Velocity.y += ((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y + (gravity * fixed_dt); // Inherit the platform's velocity and add gravity
+					t1->Position.y += p1->Velocity.y * fixed_dt;
+				}
+			}
 		}
 		if (((Rectangular*)b1)->collision_flag & COLLISION_BOTTOM) {
 			p1->Velocity.y = 0.0f;
-			t1->Position.y = ((Rectangular*)b1)->bottom_collision + (((Rectangular*)b1)->height / 2);
+			t1->Position.y = ((Rectangular*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Body))->aabb.max.y + (((Rectangular*)b1)->height / 2);
 
 			// For objects on moving platforms
-			//if (p2 != nullptr && !(flag & COLLISION_LEFT) && !(flag & COLLISION_RIGHT)) {
-			//	t1->Position.x += p2->Velocity.x * fixed_dt;
-			//	t1->Position.y += p2->Velocity.y * fixed_dt; // Will need to test platforms that move vertically
-			//}
+			if (((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics)) != nullptr && !(((Rectangular*)b1)->collision_flag & COLLISION_LEFT) && !(((Rectangular*)b1)->collision_flag & COLLISION_RIGHT)) {
+				t1->Position.x += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.x * fixed_dt;
+				t1->Position.y += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.y * fixed_dt;
+			}
 		}
 
 		if (((Rectangular*)b1)->collision_flag)
