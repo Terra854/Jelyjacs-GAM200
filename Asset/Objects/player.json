@@ -25,7 +25,7 @@
       "Type": "Animation",
       "Properties": {
         "texturepath": "test_animation.png",
-        "framerate": 1.0,
+        "framerate": 0.1,
         "frame": 3,
         "idle": [0.0, 0.0, 0.33333, 0.33333,
                  0.33333, 0.0, 0.66666, 0.33333,

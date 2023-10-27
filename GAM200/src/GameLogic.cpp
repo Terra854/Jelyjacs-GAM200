@@ -16,6 +16,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include "components/Body.h"
 #include "components/Physics.h"
 #include "components/PlayerControllable.h"
+#include "components/Animation.h"
 #include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
@@ -175,7 +176,9 @@ void GameLogic::Update() {
 	// If button Pressed, changed velocity
 	if (playerObj != nullptr) {
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
+		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
 		player_physics->Velocity.x = 0.0f;
+		player_animation->current_type = AnimationType::Idle;
 		bool moving = false;
 		if (input::IsPressed(KEY::w)) {
 			MovementKey msg(up);
@@ -191,12 +194,17 @@ void GameLogic::Update() {
 			engine->Broadcast(&msg);
 			player_physics->Velocity.x -= 500.0f;
 			moving = true;
+			player_animation->current_type = AnimationType::Run;
 		}
 		if (input::IsPressedRepeatedly(KEY::d)) {
 			MovementKey msg(right);
 			engine->Broadcast(&msg);
 			player_physics->Velocity.x += 500.0f;
 			moving = true;
+			player_animation->current_type = AnimationType::Run;
+		}
+		if (player_physics->Velocity.y != 0.0f) {
+			player_animation->current_type = AnimationType::Jump;
 		}
 
 		// Let the player loop around the window

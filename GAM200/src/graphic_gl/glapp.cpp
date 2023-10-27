@@ -343,7 +343,7 @@ void GLApp::Update()
 			// load shader program in use by this object
 			shdrpgms["image"].Use();
 			// bind VAO of this object's model
-			glBindVertexArray(ani_pt->animation_Map[AnimationType::Idle][frame_num].vaoid);
+			glBindVertexArray(ani_pt->animation_Map[ani_pt->current_type][frame_num].vaoid);
 			// copy object's model-to-NDC matrix to vertex shader's
 			// uniform variable uModelToNDC
 			shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
@@ -353,7 +353,7 @@ void GLApp::Update()
 			glUniform1i(tex_loc, 6);
 
 			// call glDrawElements with appropriate arguments
-			glDrawElements(ani_pt->animation_Map[AnimationType::Idle][frame_num].primitive_type, ani_pt->animation_Map[AnimationType::Idle][frame_num].draw_cnt, GL_UNSIGNED_SHORT, 0);
+			glDrawElements(ani_pt->animation_Map[ani_pt->current_type][frame_num].primitive_type, ani_pt->animation_Map[ani_pt->current_type][frame_num].draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 			// unbind VAO and unload shader program
 			glBindVertexArray(0);
