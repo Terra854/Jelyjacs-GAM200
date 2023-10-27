@@ -14,8 +14,14 @@ void Camera::Initialize() {
 
 void Camera::Update() {
 	// loop through all objects and find the player
-	for (long i = 0; i < (long)objectFactory->NumberOfObjects(); i++) {
+	for (long i = 0; i < (long)objectFactory->NumberOfObjects(); i++) 
+	{
 		// if the object is a player
+		if (objectFactory->getObjectWithID(i) == nullptr)
+		{
+			continue;
+		}
+
 		if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 			// get the player's position
 			Transform* trans = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));

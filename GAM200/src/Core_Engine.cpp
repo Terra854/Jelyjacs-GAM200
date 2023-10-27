@@ -307,6 +307,10 @@ void CoreEngine::GameLoop()
 				{
 					for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 					{
+						if (objectFactory->getObjectWithID(i) == nullptr)
+						{
+							continue;
+						}
 						ImGui::TableNextColumn();
 						Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
 						char buf[32];
@@ -326,7 +330,12 @@ void CoreEngine::GameLoop()
 					}
 					ImGui::EndTable();
 				}
-				if (objectProperties) {
+				if (objectProperties) 
+				{
+					if (objectFactory->getObjectWithID(selected) == nullptr)
+					{
+						continue;
+					}
 					Object* object = objectFactory->getObjectWithID(selected);
 					ComponentType componentsarr[20];
 					int size;
@@ -365,6 +374,11 @@ void CoreEngine::GameLoop()
 					if (ImGui::Button("Revert")) {
 						tran_pt->Position = { pos_x, pos_y };
 					}
+					if (ImGui::Button("Delete"))
+					{
+						objectFactory->destroyObject(object); 
+					}
+
 					/*
 					if (ImGui::Button("Delete Object")) {
 						objectFactory->destroyObject(objectFactory->getObjectWithID(object->GetId()));

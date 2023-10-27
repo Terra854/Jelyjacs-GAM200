@@ -243,7 +243,12 @@ void GLApp::Update()
 	//draw objects
 	//int i = 0;
 	//while (i < 6) {
-	for (long i = 0; i < (long) objectFactory->NumberOfObjects(); i++) {
+	for (long i = 0; i < (long) objectFactory->NumberOfObjects(); i++) 
+	{
+		if (objectFactory->getObjectWithID(i) == nullptr)
+		{
+			continue;
+		}
 		GLuint tex_test;
 		Animation* ani_pt = nullptr;
 		Mat3 mat_test;
