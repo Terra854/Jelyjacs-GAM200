@@ -377,14 +377,8 @@ void CoreEngine::GameLoop()
 					if (ImGui::Button("Delete"))
 					{
 						objectFactory->destroyObject(object); 
-					}
-
-					/*
-					if (ImGui::Button("Delete Object")) {
-						objectFactory->destroyObject(objectFactory->getObjectWithID(object->GetId()));
 						objectProperties = false;
 					}
-					*/
 					if (object->GetComponent(ComponentType::Body) != nullptr)
 						RecalculateBody(tran_pt, static_cast<Body*>(object->GetComponent(ComponentType::Body)));
 					ImGui::End();
