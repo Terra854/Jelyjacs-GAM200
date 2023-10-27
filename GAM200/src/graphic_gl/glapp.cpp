@@ -243,7 +243,7 @@ void GLApp::Update()
 	//draw objects
 	//int i = 0;
 	//while (i < 6) {
-	for (long i = 0; i < (long) objectFactory->NumberOfObjects(); i++) 
+	for (long i = 0; i < (long) objectFactory->GetNextId(); i++) 
 	{
 		if (objectFactory->getObjectWithID(i) == nullptr)
 		{
