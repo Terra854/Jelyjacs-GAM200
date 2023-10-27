@@ -150,6 +150,13 @@ void GameLogic::Initialize()
 * - Update Logic when there is user input
 *******************************************************************************/
 void GameLogic::Update() {
+
+	/*
+	for (auto& it : behaviourComponents)
+	{
+		behaviours[it->GetBehaviourIndex()]->updateBehaviour(it->GetOwner);
+	}
+	*/
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
 		std::cout << "Mouse Position is :  X = " << input::GetMouseX() << ", Y = " << input::GetMouseY() << std::endl;
@@ -166,77 +173,77 @@ void GameLogic::Update() {
 
 	// Movement for Player
 	// If button Pressed, changed velocity
-	// 
-	Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
-	player_physics->Velocity.x = 0.0f;
-	bool moving = false;
-	if (input::IsPressed(KEY::w)) {
-		MovementKey msg(up);
-		engine->Broadcast(&msg);
-		//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
-		if (player_physics->Velocity.y == 0.0f) {
-			player_physics->Velocity.y = 1000.0f;
-			audio->playJump();
+	if (playerObj != nullptr) {
+		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
+		player_physics->Velocity.x = 0.0f;
+		bool moving = false;
+		if (input::IsPressed(KEY::w)) {
+			MovementKey msg(up);
+			engine->Broadcast(&msg);
+			//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
+			if (player_physics->Velocity.y == 0.0f) {
+				player_physics->Velocity.y = 1000.0f;
+				audio->playJump();
+			}
+		}
+		if (input::IsPressedRepeatedly(KEY::a)) {
+			MovementKey msg(left);
+			engine->Broadcast(&msg);
+			player_physics->Velocity.x -= 500.0f;
+			moving = true;
+		}
+		if (input::IsPressedRepeatedly(KEY::d)) {
+			MovementKey msg(right);
+			engine->Broadcast(&msg);
+			player_physics->Velocity.x += 500.0f;
+			moving = true;
+		}
+
+		// Let the player loop around the window
+		/*
+		Transform* t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
+		t->Position.x = t->Position.x > 1000.0f ? -1000.0f : t->Position.x;
+		t->Position.x = t->Position.x < -1000.0f ? 1000.0f : t->Position.x;
+		*/
+		// Audio for Character Movement
+		if ((player_physics->Velocity.y == 0.f) && moving) {
+			audio->startWalking();
+		}
+		else {
+			audio->stopWalking();
+			moving = false;
+		}
+
+		// Printing Player Position by pressing Z
+		/*
+		if (input::IsPressed(KEY::z)) {
+			Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
+			std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
+		}
+		*/
+	}
+	//Movement for Moving Platform
+	if (MovingPlatform != nullptr) {
+		Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
+		Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));
+		moving_platform_physics->Velocity.x = 0.0f;
+		float moving_platform_speed;
+		//bool moving_platform_direction;
+
+		// if the platform reach the max/min height, change direction
+		if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
+			moving_platform_direction = true;
+		}
+		if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
+			moving_platform_direction = false;
+		}
+		moving_platform_speed = moving_platform_direction ? -40.0f : 100.0f;
+		moving_platform_physics->Velocity.y = moving_platform_speed;
+
+		if (input::IsPressed(KEY::z)) {
+			std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
 		}
 	}
-	if (input::IsPressedRepeatedly(KEY::a)) {
-		MovementKey msg(left);
-		engine->Broadcast(&msg);
-		player_physics->Velocity.x -= 500.0f;
-		moving = true;
-	}
-	if (input::IsPressedRepeatedly(KEY::d)) {
-		MovementKey msg(right);
-		engine->Broadcast(&msg);
-		player_physics->Velocity.x += 500.0f;
-		moving = true;
-	}
-
-	// Let the player loop around the window
-	/*
-	Transform* t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-	t->Position.x = t->Position.x > 1000.0f ? -1000.0f : t->Position.x;
-	t->Position.x = t->Position.x < -1000.0f ? 1000.0f : t->Position.x;
-	*/
-	// Audio for Character Movement
-	if ((player_physics->Velocity.y == 0.f) && moving) {
-		audio->startWalking();
-	}
-	else {
-		audio->stopWalking();
-		moving = false;
-	}
-
-	// Printing Player Position by pressing Z
-	/*
-	if (input::IsPressed(KEY::z)) {
-		Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-		std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
-	}
-	*/
-
-	//Movement for Moving Platform
-	
-	Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
-	Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));
-	moving_platform_physics->Velocity.x = 0.0f;
-	float moving_platform_speed;
-	//bool moving_platform_direction;
-	
-	// if the platform reach the max/min height, change direction
-	if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
-		moving_platform_direction = true;
-	}
-	if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
-		moving_platform_direction = false;			
-	}
-	moving_platform_speed = moving_platform_direction ? -40.0f : 100.0f;
-	moving_platform_physics->Velocity.y = moving_platform_speed;
-	
-	if (input::IsPressed(KEY::z)) {
-		std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
-	}
-	
 	/*
 	// Rotation of an object
 	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));

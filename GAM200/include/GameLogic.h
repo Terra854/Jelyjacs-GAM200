@@ -21,10 +21,12 @@ public:
 	virtual void MessageRelay(Message_Handler* msg);
 	virtual void Initialize();
 	void Update();
+	//void AddBehaviour(BehaviourFCT* behaviour);
 	virtual std::string SystemName() { return "Game_Logic"; }
 private:
 
-	//std::vector<BehaviourFCT> behaviours;
+	//std::vector<BehaviourFCT*> behaviours;
+	//std::vector<BehaviourComponent*> behaviourComponents;
 };
 
 extern GameLogic* Logic;

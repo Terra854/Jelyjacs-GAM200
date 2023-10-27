@@ -279,8 +279,6 @@ void CoreEngine::GameLoop()
 
 			Update(Systems["DebugGui"]);
 
-			ImGui::ShowDemoWindow();
-
 			// Display the game inside the ImGui window
 			ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
 			ImGui::Begin("Game Runtime (This for the level editor)");
