@@ -241,7 +241,7 @@ void Factory::destroyObject(Object* obj)
 //This deletes all objects to be deleted
 void Factory::Update() {
 	long temp_id;
-	bool delete_flag = false;
+	//bool delete_flag = false;
 	std::set<Object*>::iterator it = gameObjsToBeDeleted.begin();
 	for (; it != gameObjsToBeDeleted.end(); ++it)
 	{
@@ -253,21 +253,16 @@ void Factory::Update() {
 			//Delete it and remove its entry in the Id map
 			delete obj;
 			objectMap.erase(gameObjectInMap);
-			delete_flag = true;
 			
-			
+			nextObjectId--;
+
+			// Move all the next objects id down by one
+			for (int i = temp_id; i < nextObjectId; i++) {
+				objectMap[i] = objectMap[i + 1];
+				objectMap[i + 1]->ObjectId--;
+				objectMap.erase(i + 1);
+			}
 		}
-	}
-	// Buggy : Deleting an object will cause the another object to be deleted
-	if (delete_flag)
-	{	
-		for (objectIDMap::iterator iter = objectMap.find(temp_id+1); iter != objectMap.end(); ++iter)
-		{
-			std::cout << "decrementing" << std::endl;
-			iter->second->ObjectId--;
-			std::cout << iter->second->ObjectId << std::endl;
-		}
-		nextObjectId--;
 	}
 	
 	//All objects to be delete have been deleted
