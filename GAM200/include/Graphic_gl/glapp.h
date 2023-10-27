@@ -26,6 +26,7 @@ includes all the functions to draw objects
 #include <components/Transform.h>
 #include <components/Physics.h>
 #include <components/Body.h>
+#include <Core_Engine.h>
 #include <Mat3.h>
 #include <Vec2.h>
 class GLApp : public ISystems

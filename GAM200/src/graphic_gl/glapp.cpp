@@ -27,7 +27,7 @@ includes all the functions to draw objects
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
 //debug 
-bool graphics_debug{ false };//press p to activate debug mode
+bool graphics_debug{ false };//press l to activate debug mode
 glm::vec3 box_color{ 0.0f, 1.0f, 1.0f };
 glm::vec3 line_color{ 0.0f, 1.0f, 0.0f };
 
@@ -240,26 +240,30 @@ void GLApp::Update()
 	sstr << window->title << " FPS: " << window->fps;
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
 
-
+	static float frame_count = 0.f;
+	static int frame_num = 0;
 	//draw objects
 	//int i = 0;
 	//while (i < 6) {
 	for (long i = 0; i < (long) objectFactory->NumberOfObjects(); i++) {
 		GLuint tex_test;
+		Animation* ani_pt = nullptr;
+		
 		Mat3 mat_test;
 		float pos_x;
 		float pos_y;
 		float orientation;
 		float scaling_x;
 		float scaling_y;
-
+		bool texture_bool = true;
 		//get texture		
 		Texture* tex_pt = static_cast<Texture*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Texture));
 		
 		// skip to next object if there is no texture, then check for animation
 		if (!tex_pt)
 		{
-			Animation* ani_pt = static_cast<Animation*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Animation));
+			texture_bool = false;
+			ani_pt = static_cast<Animation*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Animation));
 			if (!ani_pt)
 				continue;
 			else
@@ -299,30 +303,62 @@ void GLApp::Update()
 		// matrix after camrea
 		mat_test = camera2D->world_to_ndc * mat_test;
 
-		// draw image
-		// draw object with textuer
-		glBindTextureUnit(6, tex_test);
-		glBindTexture(GL_TEXTURE_2D, tex_test);
-		glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-		// load shader program in use by this object
-		shdrpgms["image"].Use();
-		// bind VAO of this object's model
-		glBindVertexArray(models["square"].vaoid);
-		// copy object's model-to-NDC matrix to vertex shader's
-		// uniform variable uModelToNDC
-		shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+		// draw image with texture
+		if (texture_bool) {
+			// draw object with textuer
+			glBindTextureUnit(6, tex_test);
+			glBindTexture(GL_TEXTURE_2D, tex_test);
+			glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+			// load shader program in use by this object
+			shdrpgms["image"].Use();
+			// bind VAO of this object's model
+			glBindVertexArray(models["square"].vaoid);
+			// copy object's model-to-NDC matrix to vertex shader's
+			// uniform variable uModelToNDC
+			shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
 
-		// tell fragment shader sampler uTex2d will use texture image unit 6
-		GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
-		glUniform1i(tex_loc, 6);
+			// tell fragment shader sampler uTex2d will use texture image unit 6
+			GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
+			glUniform1i(tex_loc, 6);
 
-		// call glDrawElements with appropriate arguments
-		glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+			// call glDrawElements with appropriate arguments
+			glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
 
-		// unbind VAO and unload shader program
-		glBindVertexArray(0);
-		shdrpgms["image"].UnUse();
+			// unbind VAO and unload shader program
+			glBindVertexArray(0);
+			shdrpgms["image"].UnUse();
+		}
+		else {
+			// draw object with animation
+			if (frame_count >= ani_pt->frame_rate) {
+				frame_count = 0.f;
+				frame_num++;
+				if (frame_num >= ani_pt->animation_Map[AnimationType::Idle].size())
+					frame_num = 0;
+			}
 
+			glBindTextureUnit(6, tex_test);
+			glBindTexture(GL_TEXTURE_2D, tex_test);
+			glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+			// load shader program in use by this object
+			shdrpgms["image"].Use();
+			// bind VAO of this object's model
+			glBindVertexArray(ani_pt->animation_Map[AnimationType::Idle][frame_num].vaoid);
+			// copy object's model-to-NDC matrix to vertex shader's
+			// uniform variable uModelToNDC
+			shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+
+			// tell fragment shader sampler uTex2d will use texture image unit 6
+			GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
+			glUniform1i(tex_loc, 6);
+
+			// call glDrawElements with appropriate arguments
+			glDrawElements(ani_pt->animation_Map[AnimationType::Idle][frame_num].primitive_type, ani_pt->animation_Map[AnimationType::Idle][frame_num].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+			// unbind VAO and unload shader program
+			glBindVertexArray(0);
+			shdrpgms["image"].UnUse();
+		}
 		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
 
 			Rectangular* rec_pt = static_cast<Rectangular*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body));
@@ -373,6 +409,7 @@ void GLApp::Update()
 		
     }
 	
+	frame_count += engine->GetDt();
 }
 
 /*
