@@ -89,6 +89,15 @@ void LevelEditor::ObjectProperties(){
 		ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().x * 0.25f));
 		ImGui::Image(NULL, ImGui::GetContentRegionAvail());
 		ImGui::EndChild();
+
+		ImGui::SameLine();
+
+		ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().x * 0.25f));
+
+		ImGui::Text("Select an object to view or edit it's");
+		ImGui::Text("properties");
+
+		ImGui::EndChild();
 		ImGui::End();
 
 		return;
@@ -156,12 +165,18 @@ void LevelEditor::ObjectProperties(){
 	ImGui::SameLine();
 
 	//ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, ImGui::GetContentRegionAvail().x * 0.5f));
-	ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x * 0.75f, ImGui::GetContentRegionAvail().x * 0.25f));
+	ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().x * 0.25f));
 
 	ImGui::Text("Object ID: %d", object->GetId());
 	ImGui::Text("Object Name: %s", object->GetName().c_str());
 	ImGui::Text("Number of components: %d", object->GetNumComponents());
 	
+	if (ImGui::Button("Delete"))
+	{
+		objectFactory->destroyObject(object);
+		selected = -1;
+	}
+
 	ImGui::EndChild();
 
 	if (te != nullptr) {
@@ -458,14 +473,6 @@ void LevelEditor::ObjectProperties(){
 			ImGui::Text("Nothing right now");
 		}
 	}
-
-
-	if (ImGui::Button("Delete"))
-	{
-		objectFactory->destroyObject(object);
-		selected = -1;
-	}
-
 	ImGui::End();
 }
 
