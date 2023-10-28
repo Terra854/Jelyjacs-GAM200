@@ -506,12 +506,12 @@ int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
 {
 	if (axis == Axis::X)
 	{
-		int xPos = gridPos + 960;
+		int xPos = gridPos + static_cast<int>(window->width/2);
 		return xPos;
 	}
 	else if (axis == Axis::Y)
 	{
-		int yPos = 520 - gridPos;
+		int yPos = static_cast<int>(window->height / 2) - gridPos;
 		return yPos;
 	}
 }
@@ -519,12 +519,12 @@ int CoreEngine::convertMousePosToGridPos(Axis axis)
 {
 	if (axis == Axis::X)
 	{
-		int xPos = input::GetMouseX() - 960.0;
+		int xPos = input::GetMouseX() - static_cast<int>(window->width / 2);
 		return xPos;
 	}
 	else if (axis == Axis::Y)
 	{
-		int yPos = 520.0 - input::GetMouseY();
+		int yPos = static_cast<int>(window->height / 2) - input::GetMouseY();
 		return yPos;
 	}
 }
