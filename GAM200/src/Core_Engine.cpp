@@ -425,15 +425,21 @@ void CoreEngine::GameLoop()
 		GLuint tileset = app->setup_texobj("../Asset/Picture/TileSheet.png");
 		ImGui::Begin("Tileset");
 		ImGui::SetCursorPos({ 0, 0 });
-		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.090909, 0.111111), ImVec2(0.181818, 0.222222));
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(128.0f, 128.0f), ImVec2(0.090909, 0.111111), ImVec2(0.181818, 0.222222));
+		ImGui::SetCursorPos({ 128, 0 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(128.0f, 128.0f), ImVec2(0.181818, 0.111111), ImVec2(0.272727, 0.222222));
 		ImGui::SetCursorPos({ 256, 0 });
-		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.181818, 0.111111), ImVec2(0.272727, 0.222222));
-		ImGui::SetCursorPos({ 512, 0 });
-		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.272727, 0.111111), ImVec2(0.363636, 0.222222));
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(128.0f, 128.0f), ImVec2(0.272727, 0.111111), ImVec2(0.363636, 0.222222));
+		ImGui::SetCursorPos({ 0, 128 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(128.0f, 128.0f), ImVec2(0.090909, 0.222222), ImVec2(0.181818, 0.333333));
+		ImGui::SetCursorPos({ 256, 128 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(128.0f, 128.0f), ImVec2(0.272727, 0.222222), ImVec2(0.363636, 0.333333));
 		ImGui::SetCursorPos({ 0, 256 });
-		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.090909, 0.222222), ImVec2(0.181818, 0.333333));
-		ImGui::SetCursorPos({ 512, 256 });
-		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.272727, 0.222222), ImVec2(0.363636, 0.333333));
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(128.0f, 128.0f), ImVec2(0.090909, 0.333333), ImVec2(0.181818, 0.444444));
+		ImGui::SetCursorPos({ 128, 256 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(128.0f, 128.0f), ImVec2(0.181818, 0.333333), ImVec2(0.272727, 0.444444));
+		ImGui::SetCursorPos({ 256, 256 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(128.0f, 128.0f), ImVec2(0.272727, 0.333333), ImVec2(0.363636, 0.444444));
 		ImGui::End();
 
 		debug_gui->ClearAll();
