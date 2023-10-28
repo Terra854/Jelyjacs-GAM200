@@ -26,6 +26,7 @@ public:
 
 	AnimationType current_type=AnimationType::Idle;
 	AnimationType previous_type=AnimationType::Idle;
+	bool face_right = true;
 	bool jump_fixed = false;
 	int jump_fixed_frame = 0;
 	float frame_rate{};

@@ -26,7 +26,7 @@
       "Properties": {
         "texturepath": "Finn.png",
         "jumpfixframe": 6,
-        "framerate": 0.1,
+        "framerate": 0.5,
         "frame": [13, 4],
         "idle": [8, 1],
         "push": [9, 2],

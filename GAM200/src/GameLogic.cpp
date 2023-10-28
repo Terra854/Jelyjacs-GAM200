@@ -178,7 +178,8 @@ void GameLogic::Update() {
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
 		player_physics->Velocity.x = 0.0f;
-		player_animation->current_type = AnimationType::Idle;
+		if(player_animation->face_right)player_animation->current_type = AnimationType::Idle;
+		else player_animation->current_type = AnimationType::Idle_left;
 		bool moving = false;
 		if (input::IsPressed(KEY::w)) {
 			MovementKey msg(up);
@@ -194,18 +195,26 @@ void GameLogic::Update() {
 			engine->Broadcast(&msg);
 			player_physics->Velocity.x -= 500.0f;
 			moving = true;
-			player_animation->current_type = AnimationType::Run;
+			player_animation->face_right = false;
+			player_animation->current_type = AnimationType::Run_left;
 		}
 		if (input::IsPressedRepeatedly(KEY::d)) {
 			MovementKey msg(right);
 			engine->Broadcast(&msg);
 			player_physics->Velocity.x += 500.0f;
 			moving = true;
+			player_animation->face_right = true;
 			player_animation->current_type = AnimationType::Run;
 		}
+		
 		if (player_physics->Velocity.y != 0.0f) {
-			player_animation->current_type = AnimationType::Jump;
+			player_animation->jump_fixed = true;
+			
+			if (player_animation->face_right)player_animation->current_type = AnimationType::Jump;
+			else player_animation->current_type = AnimationType::Jump_left;
 		}
+		else player_animation->jump_fixed = false;
+			
 
 		// Let the player loop around the window
 		/*
