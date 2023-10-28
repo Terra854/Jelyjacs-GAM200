@@ -24,29 +24,34 @@ class AssetManager : public ISystems
 	virtual void Free();
 	virtual void Update();
 	virtual std::string SystemName();
-	void loadassets();
+	void loadtextures();
+	void loadanimations();
 	void createprefablist();
 
 	// Access value
 	static bool texturecheckexist(std::string str);
 	static GLuint textureval(std::string str);
+
+	static bool animationcheckexist(std::string str);
+	static GLuint animationval(std::string str);
+
 	static long prefabsval(std::string str);
 	static void updateprefab(std::string str, long val);
 
 	static std::string objectprefabsval();
 
-
-
 	// These data shouldn't be modified unless file location is changed
 	private:
 	// Location initialize in asset_manager.cpp
 	static std::filesystem::path pathtexture;
+	static std::filesystem::path pathanimations;
 	static std::filesystem::path objectprefabs;
 	//std::filesystem::path audio;
 	//std::filesystem::path fonts;
 
 	// Asset Manager private data
 	static std::map<std::string, GLuint> textures;
+	static std::map<std::string, GLuint> animations;
 	static std::map<std::string, long> prefabs;
 };
 

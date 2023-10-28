@@ -9,11 +9,13 @@
 enum AnimationType
 {
 	Idle,
-	Run,
+	Push,
 	Jump,
+	Run,
 	Idle_left,
-	Run_left,
+	Push_left,
 	Jump_left,
+	Run_left,
 	End // This should always be the last type
 };
 class Animation : public Component
@@ -24,6 +26,7 @@ public:
 
 	AnimationType current_type=AnimationType::Idle;
 	AnimationType previous_type=AnimationType::Idle;
+	bool face_right = true;
 	bool jump_fixed = false;
 	int jump_fixed_frame = 0;
 	float frame_rate{};
