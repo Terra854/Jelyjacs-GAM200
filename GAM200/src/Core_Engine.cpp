@@ -381,8 +381,39 @@ void CoreEngine::GameLoop()
 		
 		if (select > -1)
 		{
-			if ((input::GetMouseX() > 560 && input::GetMouseX() < 1360) && (input::GetMouseY() > 115 && input::GetMouseY() < 920))
+			int leftXpos = -(editor->box_size * editor->num.x / 2);
+			int rightXpos = (editor->box_size * editor->num.x / 2);
+			int topYpos = (editor->box_size * editor->num.y / 2);
+			int bottomYpos = -(editor->box_size * editor->num.y / 2);
+
+			if (checkIfMouseIsWithinGrid(leftXpos, rightXpos, topYpos, bottomYpos))
 			{
+				double xpos = input::GetMouseX() - 960.0;
+				double ypos = 540.0 - input::GetMouseY();
+				if (input::IsPressed(KEY::mouseL))
+				{
+					int xOffset = ((xpos - (-400)) / editor->box_size);
+					int yOffset = ((ypos - 420) / editor->box_size);
+					std::cout << "xOffset is " << xOffset << " yOffset is " << yOffset << std::endl;
+					if (boxesFilled[xOffset - (yOffset * editor->num.y)] == 0)
+					{
+						createObject(-370 + (xOffset * editor->box_size), 370 + (yOffset * editor->box_size), "../Asset/Objects/mapbox.json");
+						boxesFilled[xOffset - (yOffset * editor->num.y)] = 1;
+					}
+
+					std::cout << "Object will be placed at " << xpos << " and " << ypos << std::endl;
+				}
+
+				if (input::IsPressed(KEY::mouseR))
+				{
+					createObject(0, 0, "../Asset/Objects/mapbox.json");
+				}
+			}
+
+			/*
+			if ()
+			{
+				std::cout << "test\n";
 				double xpos = input::GetMouseX() - 960.0;
 				double ypos = 540.0 - input::GetMouseY();
 				//std::cout << "xpos is " << xpos << " ypos is " << ypos << std::endl;
@@ -405,17 +436,18 @@ void CoreEngine::GameLoop()
 					createObject(0, 0, "../Asset/Objects/mapbox.json");
 				}
 			}
+			*/
 		}
 
 		ImGui::End();
 
-		GLuint test = app->setup_texobj("../Asset/Picture/test_animation.png");
-		ImGui::Begin("Picture test");
-		ImGui::SetCursorPos({ 100,100 });
-		ImGui::Image((void*)(intptr_t)test, ImVec2(108.0f, 108.0f),ImVec2(0,0), ImVec2(0.333, 0.333));
-		ImGui::SetCursorPos({ 200,100 });
-		ImGui::Image((void*)(intptr_t)test, ImVec2(108.0f, 108.0f), ImVec2(0.3333, 0), ImVec2(0.666, 0.333));
-		ImGui::End();
+		//GLuint test = app->setup_texobj("../Asset/Picture/test_animation.png");
+		//ImGui::Begin("Picture test");
+		//ImGui::SetCursorPos({ 100,100 });
+		//ImGui::Image((void*)(intptr_t)test, ImVec2(108.0f, 108.0f),ImVec2(0,0), ImVec2(0.333, 0.333));
+		//ImGui::SetCursorPos({ 200,100 });
+		//ImGui::Image((void*)(intptr_t)test, ImVec2(108.0f, 108.0f), ImVec2(0.3333, 0), ImVec2(0.666, 0.333));
+		//ImGui::End();
 
 		debug_gui->ClearAll();
 		hud.GuiRender(io);
@@ -495,4 +527,57 @@ void CoreEngine::createObject(float posX, float posY, std::string objectName)
 	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(testingObjectID))->GetComponent(ComponentType::Transform));
 	tran_pt->Position.x = posX;
 	tran_pt->Position.y = posY;
+}
+
+int CoreEngine::convertGridToWorldPos(int gridPos, std::string axis)
+{
+	if (axis != "x" && axis != "X" && axis != "y" && axis != "Y")
+	{
+		return 0.0f;
+	}
+
+	if (axis == "x" || axis == "X")
+	{
+		int xPos = gridPos + 960;
+		return xPos;
+	}
+	else if (axis == "y" || axis == "Y")
+	{
+		int yPos = 520 - gridPos;
+		return yPos;
+	}
+}
+
+bool CoreEngine::checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int bottomY)
+{
+	int leftXPos = convertGridToWorldPos(leftX, "x");
+	int rightXPos = convertGridToWorldPos(rightX, "x");
+	int topYPos = convertGridToWorldPos(topY, "y");
+	int bottomYPos = convertGridToWorldPos(bottomY, "y");
+
+	if (input::GetMouseX() < (double)leftXPos)
+	{
+		std::cout << "Mouse too far left\n";
+		return false;
+	}
+
+	if (input::GetMouseX() > (double)rightXPos)
+	{
+		std::cout << "Mouse too far right\n";
+		return false;
+	}
+
+	if (input::GetMouseY() < (double)topYPos)
+	{
+		std::cout << "Mouse too far up\n";
+		return false;
+	}
+
+	if (input::GetMouseY() > (double)bottomYPos)
+	{
+		std::cout << "Mouse too far down\n";
+		return false;
+	}
+
+	return true;
 }
