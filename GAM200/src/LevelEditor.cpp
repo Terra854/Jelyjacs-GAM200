@@ -5,6 +5,7 @@
 #include <Core_Engine.h>
 #include <Factory.h>
 #include <components/Texture.h>
+#include <components/Animation.h>
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -88,16 +89,45 @@ void LevelEditor::ObjectProperties(){
 	Transform* tr = (Transform*)object->GetComponent(ComponentType::Transform);
 	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
 	Body* b = (Body*)object->GetComponent(ComponentType::Body);
-	Physics* p = (Physics*)object->GetComponent(ComponentType::Physics);
+	Physics* ph = (Physics*)object->GetComponent(ComponentType::Physics);
+	PlayerControllable* pc = (PlayerControllable*)object->GetComponent(ComponentType::PlayerControllable);
+	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
 
 
-	ImGui::SetNextWindowPos(ImVec2(300, 40), ImGuiCond_Once);
+
+	ImGui::SetNextWindowSize(ImVec2(450, 0)); 
 	sprintf_s(buffer, "Properties for %s", object->GetName().c_str());
 	ImGui::Begin(buffer);
 
 	ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().x * 0.25f));
 
-	if (te != nullptr)
+	if (a != nullptr){
+		
+		/* TODO: Idk where the textures for the animations are stored */
+
+		unsigned int anim = a->animation_Map[a->current_type][a->frame_num].texobj;
+
+		if (tr->Scale.x > tr->Scale.y) {
+			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
+			ImGui::Dummy(ImVec2(0, padding));
+			ImGui::Image((void*)(intptr_t)anim, ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
+		}
+		else if (tr->Scale.x == tr->Scale.y)
+			ImGui::Image((void*)(intptr_t)anim, ImGui::GetContentRegionAvail());
+		else {
+			float padding = ImGui::GetContentRegionAvail().x * (tr->Scale.x / tr->Scale.y) * 0.5f;
+			ImGui::Dummy(ImVec2(padding, 0));
+			ImGui::SameLine();
+			ImGui::Image((void*)(intptr_t)anim, ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+		}
+
+		ImGui::SetCursorPos(ImVec2(0, 0));
+		ImGui::Text("There is");
+		ImGui::Text("animation");
+		ImGui::Text("idk how to");
+		ImGui::Text("draw it here");
+	}
+	else if (te != nullptr) {
 		if (tr->Scale.x > tr->Scale.y) {
 			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
 			ImGui::Dummy(ImVec2(0, padding));
@@ -111,8 +141,12 @@ void LevelEditor::ObjectProperties(){
 			ImGui::SameLine();
 			ImGui::Image((void*)(intptr_t)te->texturepath, ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
 		}
-	else
-		ImGui::Text("This object has no texture");
+	}
+	else {
+		ImGui::Text("This object has");
+		ImGui::Text("no texture or");
+		ImGui::Text("animations");
+	}
 	ImGui::EndChild();
 
 	ImGui::SameLine();
@@ -126,17 +160,23 @@ void LevelEditor::ObjectProperties(){
 	
 	ImGui::EndChild();
 
+	if (te != nullptr) {
+		if (ImGui::CollapsingHeader("Texture")) {
+			ImGui::Text("Nothing right now");
+		}
+	}
+
+	if (a != nullptr) {
+		if (ImGui::CollapsingHeader("Animation")) {
+			ImGui::Text("Nothing right now");
+		}
+	}
+
 	if (tr != nullptr) {
 		if (ImGui::CollapsingHeader("Transform")) {
 			ImGui::Text("Position: %.5f, %.5f", tr->Position.x, tr->Position.y);
 			ImGui::Text("Rotation: %.5f", tr->Rotation);
 			ImGui::Text("Scale: %.5f, %.5f", tr->Scale.x, tr->Scale.y);
-		}
-	}
-
-	if (te != nullptr) {
-		if (ImGui::CollapsingHeader("Texture")) {
-			ImGui::Text("Nothing right now");
 		}
 	}
 
@@ -191,7 +231,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::BeginChild("CollisionTop", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 26.f));
 
 				// Calculate the text's size
-				sprintf_s(buffer, "CollisionTop");
+				sprintf_s(buffer, "Top");
 				text = buffer;
 				textSizeX = ImGui::CalcTextSize(text.c_str());
 
@@ -200,7 +240,14 @@ void LevelEditor::ObjectProperties(){
 				ImGui::SetCursorPos(textPosX);
 
 				// Render the text
+				if (r->top_collision != nullptr)
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+
 				ImGui::Text("%s", text.c_str());
+				
+				if (r->top_collision != nullptr)
+					ImGui::PopStyleColor();
+				
 				ImGui::EndChild();
 
 				ImGui::SameLine();
@@ -244,7 +291,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::BeginChild("CollisionLeft", square);
 
 				// Calculate the text's size
-				sprintf_s(buffer, "CollisionLeft");
+				sprintf_s(buffer, "Left");
 				text = buffer;
 				textSizeX = ImGui::CalcTextSize(text.c_str());
 
@@ -253,7 +300,14 @@ void LevelEditor::ObjectProperties(){
 				ImGui::SetCursorPos(textPosX);
 
 				// Render the text
+				if (r->left_collision != nullptr)
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+
 				ImGui::Text("%s", text.c_str());
+
+				if (r->left_collision != nullptr)
+					ImGui::PopStyleColor();
+
 				ImGui::EndChild();
 
 				ImGui::SameLine();
@@ -267,7 +321,7 @@ void LevelEditor::ObjectProperties(){
 				ImVec2 p1 = ImVec2(p0.x + square.x, p0.y + square.y); // Scale square to child size
 
 				// Draw the square
-				draw_list->AddRectFilled(p0, p1, IM_COL32(255, 255, 255, 255)); // Red filled square
+				draw_list->AddRectFilled(p0, p1, IM_COL32(255, 255, 255, 255));
 				ImGui::EndChild();
 
 				ImGui::SameLine();
@@ -277,7 +331,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::BeginChild("CollisionRight", square);
 
 				// Calculate the text's size
-				sprintf_s(buffer, "CollisionRight");
+				sprintf_s(buffer, "Right");
 				text = buffer;
 				textSizeX = ImGui::CalcTextSize(text.c_str());
 
@@ -286,7 +340,14 @@ void LevelEditor::ObjectProperties(){
 				ImGui::SetCursorPos(textPosX);
 
 				// Render the text
+				if (r->right_collision != nullptr)
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+				
 				ImGui::Text("%s", text.c_str());
+
+				if (r->right_collision != nullptr)
+					ImGui::PopStyleColor();
+
 				ImGui::EndChild();
 
 				/*** ROW 3 ***/
@@ -328,7 +389,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::BeginChild("CollisionBottom", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 26.f));
 
 				// Calculate the text's size
-				sprintf_s(buffer, "CollisionBottom");
+				sprintf_s(buffer, "Bottom");
 				text = buffer;
 				textSizeX = ImGui::CalcTextSize(text.c_str());
 
@@ -337,7 +398,14 @@ void LevelEditor::ObjectProperties(){
 				ImGui::SetCursorPos(textPosX);
 
 				// Render the text
+				if (r->bottom_collision != nullptr)
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+
 				ImGui::Text("%s", text.c_str());
+
+				if (r->bottom_collision != nullptr)
+					ImGui::PopStyleColor();
+
 				ImGui::EndChild();
 
 				ImGui::SameLine();
@@ -375,9 +443,15 @@ void LevelEditor::ObjectProperties(){
 		}
 	}
 
-	if (p != nullptr) {
+	if (ph != nullptr) {
 		if (ImGui::CollapsingHeader("Physics")) {
-			ImGui::Text("Velocity: %.5f, %.5f", p->Velocity.x, p->Velocity.y);
+			ImGui::Text("Velocity: %.5f, %.5f", ph->Velocity.x, ph->Velocity.y);
+		}
+	}
+
+	if (pc != nullptr) {
+		if (ImGui::CollapsingHeader("PlayerControllable")) {
+			ImGui::Text("Nothing right now");
 		}
 	}
 
