@@ -19,10 +19,8 @@ public:
 
 	Vec2 Position;
 	Vec2 PrevPosition;
-	float Scale_x;
-	float Scale_y;
+	Vec2 Scale;
 	float Rotation;
-	Mat3 Matrix;
 
 	virtual void Initialize() override
 	{

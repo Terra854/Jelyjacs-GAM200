@@ -16,7 +16,7 @@ This file contains the main function.
 #include <Audio.h>
 #include <Font.h>
 #include <Camera.h>
-#include <DebugGui.h>
+#include <LevelEditor.h>
 #include <ThreadPool.h>
 #include <../src/Assets Manager/asset_manager.h>
 
@@ -41,7 +41,7 @@ int main() {
 	Font* font = new Font();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();     
-	debug_gui = new DebugGui();
+	level_editor = new LevelEditor();
 	thread_pool = new ThreadPool();
 	
 	// Add System to the engine 
@@ -54,7 +54,7 @@ int main() {
 	engine->AddSystem(audio);
 	engine->AddSystem(font);
 	engine->AddSystem(camera);
-	engine->AddSystem(debug_gui);
+	engine->AddSystem(level_editor);
 	engine->AddSystem(graphics);												  // Graphics should always be last
 	
 	// Initialize and Start Game Loop

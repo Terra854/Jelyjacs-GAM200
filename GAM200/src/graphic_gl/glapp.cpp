@@ -252,11 +252,9 @@ void GLApp::Update()
 		GLuint tex_test;
 		Animation* ani_pt = nullptr;
 		Mat3 mat_test;
-		float pos_x;
-		float pos_y;
+		Vec2 pos;
 		float orientation;
-		float scaling_x;
-		float scaling_y;
+		Vec2 scaling;
 		bool texture_bool = true;
 		//get texture		
 		Texture* tex_pt = static_cast<Texture*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Texture));
@@ -292,14 +290,14 @@ void GLApp::Update()
 
 		
 		// get pos and scale from transform component
-		pos_x = tran_pt->Position.x * 2.0f / window->width;
-		pos_y = tran_pt->Position.y * 2.0f / window->height;
-		scaling_x = tran_pt->Scale_x / window->width;
-		scaling_y = tran_pt->Scale_y / window->height;
+		pos.x = tran_pt->Position.x * 2.0f / window->width;
+		pos.y = tran_pt->Position.y * 2.0f / window->height;
+		scaling.x = tran_pt->Scale.x / window->width;
+		scaling.y = tran_pt->Scale.y / window->height;
 		
 		
 		//get matrix
-		mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
+		mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotRad(orientation);
 		
 
 		// matrix after camrea
@@ -389,10 +387,9 @@ void GLApp::Update()
 				orientation = atan2(Vy, Vx);
 				
 				//get slcae of line based on length of line
-				float scale_line_x = sqrt(Vx * Vx + Vy * Vy) / window->width /2;
-				float scale_line_y = sqrt(Vx * Vx + Vy * Vy) / window->height /2;
+				Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width / 2, sqrt(Vx * Vx + Vy * Vy) / window->height / 2 };
 				
-				mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scale_line_x, scale_line_y) * Mat3RotRad(orientation);
+				mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
 				mat_test = camera2D->world_to_ndc * mat_test;
 				//draw line
 				shdrpgms["shape"].Use();

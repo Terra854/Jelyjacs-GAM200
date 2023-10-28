@@ -98,9 +98,19 @@ Mat3 Mat3Translate(float x, float y)
 	return Mat3({ 1.f, 0.f, x, 0.f, 1.f, y, 0.f, 0.f, 1.f });
 }
 
+Mat3 Mat3Translate(Vec2 v)
+{
+	return Mat3({ 1.f, 0.f, v.x, 0.f, 1.f, v.y, 0.f, 0.f, 1.f });
+}
+
 Mat3 Mat3Scale(float x, float y)
 {
 	return Mat3({ x, 0.f, 0.f, 0.f, y, 0.f, 0.f, 0.f, 1.f });
+}
+
+Mat3 Mat3Scale(Vec2 v)
+{
+	return Mat3({ v.x, 0.f, 0.f, 0.f, v.y, 0.f, 0.f, 0.f, 1.f });
 }
 
 Mat3 Mat3RotRad(float angle)

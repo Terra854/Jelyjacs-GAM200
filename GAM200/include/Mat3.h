@@ -51,8 +51,10 @@ Vec2 operator* (const Mat3& pMtx, const Vec2& rhs);
 Mat3 Mat3Identity();
 
 Mat3 Mat3Translate(float x, float y);
+Mat3 Mat3Translate(Vec2 v);
 
 Mat3 Mat3Scale(float x, float y);
+Mat3 Mat3Scale(Vec2 v);
 
 Mat3 Mat3RotRad(float angle);
 

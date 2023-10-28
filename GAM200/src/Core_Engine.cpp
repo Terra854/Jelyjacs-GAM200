@@ -19,7 +19,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <Object.h>
 #include <Factory.h>
 #include <Collision.h>
-#include <DebugGui.h>
+#include <LevelEditor.h>
 #include <sstream>
 #include "Font.h"
 #include <PhysicsSystem.h>
@@ -115,8 +115,8 @@ void Update(ISystems* sys)
 	//elapsed_time[sys->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
 	//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 
-	debug_gui->SetSystemElapsedTime(sys->SystemName(), (double)(end_system_time - start_system_time) / 1000000.0);
-	debug_gui->AddTotalTime((double)(end_system_time - start_system_time) / 1000000.0);
+	level_editor->SetSystemElapsedTime(sys->SystemName(), (double)(end_system_time - start_system_time) / 1000000.0);
+	level_editor->AddTotalTime((double)(end_system_time - start_system_time) / 1000000.0);
 }
 
 
@@ -241,7 +241,7 @@ void CoreEngine::GameLoop()
 
 		for (const std::pair<std::string, ISystems*>& sys : Systems)
 		{
-			if (sys.first != "Window" && sys.first != "Graphics" && sys.first != "DebugGui")
+			if (sys.first != "Window" && sys.first != "Graphics" && sys.first != "LevelEditor")
 			{
 				//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 				Update(sys.second);
@@ -277,7 +277,7 @@ void CoreEngine::GameLoop()
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
 			// End rendering into imgui window 
 
-			Update(Systems["DebugGui"]);
+			Update(Systems["LevelEditor"]);
 
 			// Display the game inside the ImGui window
 			ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
@@ -404,7 +404,7 @@ void CoreEngine::GameLoop()
 			hud.GuiRender(io);
 		}
 
-		debug_gui->ClearAll();
+		level_editor->ClearAll();
 		
 
 		// FPS Calculation

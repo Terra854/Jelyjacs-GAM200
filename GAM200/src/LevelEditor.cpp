@@ -1,26 +1,23 @@
-#include <DebugGui.h>
+#include <LevelEditor.h>
 #include <Debug.h>
 #include <ImGui/imgui.h>
 #include <Collision.h>
 #include <Core_Engine.h>
+#include <Factory.h>
+#include <components/Texture.h>
 
-DebugGui* debug_gui = nullptr; // declared in DebugGui.cpp
+LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
 
 bool dock_space = true; // Always must be on for level editor
 
-void DebugGui::DebugUniformGrid() {
+void LevelEditor::DebugUniformGrid() {
 	// DEBUG: Print out the uniform grid
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
 	ImGui::SetNextWindowPos(ImVec2(900, 100), ImGuiCond_Once);
 	ImGui::Begin("DEBUG: Uniform Grid", &showUniformGrid);
 
-	char addString[512];
-	char buffer[2048];
-
-	// Print separator
-	buffer[0] = '\0';
 	for (int i = 0; i < Collision::uniform_grid.size() + 1; ++i) {
 		ImGui::SameLine(0, 0);
 		ImGui::Text("--------");
@@ -59,7 +56,7 @@ void DebugGui::DebugUniformGrid() {
 	ImGui::End();
 }
 
-void DebugGui::DebugPerformanceViewer() {
+void LevelEditor::DebugPerformanceViewer() {
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
 	ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
 	ImGui::Begin("DEBUG: Performance Viewer", &showPerformanceInfo);
@@ -78,15 +75,91 @@ void DebugGui::DebugPerformanceViewer() {
 	ImGui::End();
 }
 
+int selected = -1;
+
+void LevelEditor::ObjectProperties(){
+	Object* object = objectFactory->getObjectWithID(selected);
+	ComponentType componentsarr[20];
+	int size;
+	const char* componentNames[] = { "Transform", "Texture", "Body", "Physics", "PlayerControllable" };
+
+	char buffer[100];
+
+
+	ImGui::SetNextWindowPos(ImVec2(300, 40), ImGuiCond_Once);
+	sprintf_s(buffer, "Properties for %s", object->GetName().c_str());
+	ImGui::Begin(buffer);
+
+	ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, ImGui::GetContentRegionAvail().x * 0.5f));
+	
+	Texture* te = (Texture*) object->GetComponent(ComponentType::Texture);
+	Transform* tr = (Transform*)object->GetComponent(ComponentType::Transform);
+
+	if (te != nullptr)
+		ImGui::Image((void*)(intptr_t)te->texturepath, ImGui::GetContentRegionAvail());
+	ImGui::EndChild();
+
+	ImGui::Text("Object ID: %d", object->GetId());
+	ImGui::Text("Object Name: %s", object->GetName().c_str());
+	ImGui::Text("Number of components: %d", object->GetNumComponents());
+	object->getKeysToArray(componentsarr, size);
+	for (int i = 0; i < size; i++)
+	{
+		ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
+	}
+	Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+	
+	ImGui::Text("Object Position:");
+	ImGui::Text("x = %.2f, y = %.2f", tran_pt->Position.x, tran_pt->Position.y);
+
+	if (ImGui::Button("Delete"))
+	{
+		objectFactory->destroyObject(object);
+		selected = -1;
+	}
+
+	ImGui::End();
+}
+
+void LevelEditor::ListOfObjects() {
+
+	ImGui::Begin("Object List");
+	if (ImGui::BeginTable("split", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
+	{
+		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
+		{
+
+			if (objectFactory->getObjectWithID(i) == nullptr)
+			{
+				continue;
+			}
+			ImGui::TableNextColumn();
+			Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
+			char buf[32];
+			if (object->GetName().empty())
+				sprintf_s(buf, "%d) Object", static_cast<int>(i));
+			else
+				sprintf_s(buf, "%d) %s", static_cast<int>(i), object->GetName().c_str());
+
+			// Creating button for each object
+			if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
+				selected = static_cast<int>(i);
+			}
+		}
+		ImGui::EndTable();
+	}
+	ImGui::End();
+}
+
 void DoNothing() {
 
 }
 
-void DebugGui::Initialize() {
+void LevelEditor::Initialize() {
 	total_time = 0.0;
 }
 
-void DebugGui::Update() {
+void LevelEditor::Update() {
 
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
@@ -121,6 +194,7 @@ void DebugGui::Update() {
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	}
 
+	ImGui::ShowDemoWindow();
 
 	if (ImGui::BeginMenuBar())
 	{
@@ -140,5 +214,10 @@ void DebugGui::Update() {
 
 	showUniformGrid ? DebugUniformGrid() : DoNothing();
 	showPerformanceInfo ? DebugPerformanceViewer() : DoNothing();
+
+	ListOfObjects();
+
+	if (selected >= 0)
+		ObjectProperties();
 
 }

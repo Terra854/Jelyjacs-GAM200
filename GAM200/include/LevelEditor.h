@@ -6,17 +6,19 @@
 #include <map>
 
 
-class DebugGui : public ISystems
+class LevelEditor : public ISystems
 {
 public:
 	void ShowDockSpace(bool* p_open);
 	void DebugUniformGrid();
 	void DebugPerformanceViewer();
+	void ObjectProperties();
+	void ListOfObjects();
 	//Constructor to initialise pointer
 	// It's broken, will be purged in the future
 	virtual void Initialize();
 	void Update();
-	virtual std::string SystemName() { return "DebugGui"; }
+	virtual std::string SystemName() { return "LevelEditor"; }
 
 	void SetSystemElapsedTime(std::string name, double time) { System_elapsed_time[name] = time; }
 	//void ClearSystemElapsedTime() { System_elapsed_time.clear(); }
@@ -28,4 +30,4 @@ private:
 	double total_time;
 };
 
-extern DebugGui* debug_gui; // declared in DebugGui.cpp
+extern LevelEditor* level_editor; // declared in LevelEditor.cpp

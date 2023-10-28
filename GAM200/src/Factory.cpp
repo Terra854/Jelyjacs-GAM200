@@ -86,11 +86,9 @@ Object* Factory::createObject(const std::string& filename)
 			jsonloop.readFloat(trans->Position.x, "Properties", "Position", "x");
 			jsonloop.readFloat(trans->Position.y, "Properties", "Position", "y");
 
-			jsonloop.readFloat(trans->Scale_x, "Properties", "Scale_x");
-			jsonloop.readFloat(trans->Scale_y, "Properties", "Scale_y");
+			jsonloop.readFloat(trans->Scale.x, "Properties", "Scale_x");
+			jsonloop.readFloat(trans->Scale.y, "Properties", "Scale_y");
 			jsonloop.readFloat(trans->Rotation, "Properties", "Rotation");
-
-			trans->Matrix = Mat3Scale(trans->Scale_x, trans->Scale_y) * Mat3RotDeg(trans->Rotation) * Mat3Translate(trans->Position.x, trans->Position.y);
 
 			obj->AddComponent(trans);
 		}
@@ -343,11 +341,8 @@ Object* Factory::cloneObject(Object* object)
 
 			trans->PrevPosition = tran_pt->PrevPosition;
 
-			trans->Scale_x = tran_pt->Scale_x;
-			trans->Scale_y = tran_pt->Scale_y;
+			trans->Scale = tran_pt->Scale;
 			trans->Rotation = tran_pt->Rotation;
-
-			trans->Matrix = tran_pt->Matrix;
 
 			// Forced move cloned object by y + 100 for testing
 			trans->Position.x -= 100;

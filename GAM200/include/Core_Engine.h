@@ -50,7 +50,7 @@ public:
 	float Get_FPS() { return core_fps; }
 	float Get_Fixed_DT() { return fixed_dt; }
 
-	friend class DebugGui; // For displaying performance info
+	friend class LevelEditor; // For displaying performance info
 	
 private:
 	// Map of Systems (Container)

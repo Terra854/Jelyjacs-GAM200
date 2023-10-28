@@ -159,7 +159,7 @@
     <ClCompile Include="src\SceneLoader.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
-    <ClCompile Include="src\DebugGui.cpp">
+    <ClCompile Include="src\LevelEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ThreadPool.cpp">
@@ -275,7 +275,7 @@
     <ClInclude Include="include\SceneLoader.h">
       <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
-    <ClInclude Include="include\DebugGui.h">
+    <ClInclude Include="include\LevelEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ThreadPool.h">
