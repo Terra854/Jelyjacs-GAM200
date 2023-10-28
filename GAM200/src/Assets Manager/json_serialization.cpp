@@ -55,34 +55,75 @@ bool JsonSerialization::closeFile()
 }
 
 // Use to read the next interger
-void JsonSerialization::readInt(int& i, std::string param1, std::string param2)
+void JsonSerialization::readInt(int& i, std::string param1, std::string param2, int pos)
 {
-	i = (*jsonObject)[param1][param2].asInt();
+	if (pos == -1)
+		i = (*jsonObject)[param1][param2].asInt();
+	else
+		i = (*jsonObject)[param1][param2][pos].asInt();
 }
 
 // Use to read the next float
-void JsonSerialization::readFloat(float& f, std::string param1, std::string param2)
+void JsonSerialization::readFloat(float& f, std::string param1, std::string param2, int pos)
 {
-	f = (*jsonObject)[param1][param2].asFloat();
+	if (pos == -1)
+		f = (*jsonObject)[param1][param2].asFloat();
+	else
+		f = (*jsonObject)[param1][param2][pos].asFloat();
 }
 
 // Use to read the next float
-void JsonSerialization::readFloat(float& f, std::string param1, std::string param2, std::string param3)
+void JsonSerialization::readFloat(float& f, std::string param1, std::string param2, std::string param3, int pos)
 {
-	f = (*jsonObject)[param1][param2][param3].asFloat();
+	if (pos == -1)
+		f = (*jsonObject)[param1][param2][param3].asFloat();
+	else
+		f = (*jsonObject)[param1][param2][param3][pos].asFloat();
 }
 
 // Use to read the next string
-void JsonSerialization::readString(std::string& str, std::string param)
+void JsonSerialization::readString(std::string& str, std::string param, int pos)
 {
-	str = (*jsonObject)[param].asString();
+	if (pos == -1)
+		str = (*jsonObject)[param].asString();
+	else
+		str = (*jsonObject)[param][pos].asString();
 }
 
-void JsonSerialization::readString(std::string& str, std::string param1, std::string param2)
+// Use to read the next string
+void JsonSerialization::readString(std::string& str, std::string param1, std::string param2, int pos)
 {
-	str = (*jsonObject)[param1][param2].asString();
+	if (pos == -1)
+		str = (*jsonObject)[param1][param2].asString();
+	else
+		str = (*jsonObject)[param1][param2][pos].asString();
 }
 
+void JsonSerialization::readBool(bool& val, std::string param, int pos)
+{
+	if (pos == -1)
+		val = (*jsonObject)[param].asBool();
+	else
+		val = (*jsonObject)[param][pos].asBool();
+}
+
+bool JsonSerialization::isMember(std::string str)
+{
+	if ((*jsonObject).isMember(str))
+		return true;
+	else
+		return false;
+}
+
+bool JsonSerialization::isMember(std::string str, std::string param)
+{
+	if ((*jsonObject)[param].isMember(str))
+		return true;
+	else
+		return false;
+}
+
+// For for-loop range usage
 auto JsonSerialization::read(std::string str) -> decltype((*jsonObject)[str])
 {
 	return (*jsonObject)[str];

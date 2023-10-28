@@ -152,6 +152,14 @@ std::string AssetManager::objectprefabsval()
 	return objectprefabs.string();
 }
 
+void AssetManager::cleanprefab()
+{
+	for (auto it = prefabs.begin(); it != prefabs.end(); it++)
+	{
+		it->second = -1;
+	}
+}
+
 
 
 

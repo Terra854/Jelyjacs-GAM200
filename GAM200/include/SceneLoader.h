@@ -4,7 +4,7 @@
 @author	Tay Sen Chuan
 @date	
 
-This file contains the declaration 
+This file contains the declaration for loading scenes
 *//*__________________________________________________________________________*/
 #include <string>
 

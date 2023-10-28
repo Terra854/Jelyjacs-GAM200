@@ -39,6 +39,7 @@ class AssetManager : public ISystems
 	static void updateprefab(std::string str, long val);
 
 	static std::string objectprefabsval();
+	static void cleanprefab();
 
 	// These data shouldn't be modified unless file location is changed
 	private:

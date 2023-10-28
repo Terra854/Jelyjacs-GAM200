@@ -24,12 +24,15 @@ public:
 	virtual bool closeFile(); // Close and delete jsonObject
 
 	// Read/Write from the file stream
-	virtual void readInt(int& i, std::string param1, std::string param2);
-	virtual void readFloat(float& f, std::string param1, std::string param2);
-	virtual void readFloat(float& f, std::string param1, std::string param2, std::string param3);
-	virtual void readString(std::string& str, std::string param);
-	virtual void readString(std::string& str, std::string param1, std::string param2);
+	virtual void readInt(int& i, std::string param1, std::string param2, int pos = -1);
+	virtual void readFloat(float& f, std::string param1, std::string param2, int pos = -1);
+	virtual void readFloat(float& f, std::string param1, std::string param2, std::string param3, int pos = -1);
+	virtual void readString(std::string& str, std::string param, int pos = -1);
+	virtual void readString(std::string& str, std::string param1, std::string param2, int pos = -1);
+	virtual void readBool(bool& val, std::string param, int pos = -1);
 
+	virtual bool isMember(std::string str);
+	virtual bool isMember(std::string str, std::string param);
 	auto read(std::string str) -> decltype((*jsonObject)[str]);
 	//virtual void writeInt(int& i);
 	//virtual void writeFloat(float& f);

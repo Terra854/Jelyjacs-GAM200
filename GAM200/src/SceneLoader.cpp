@@ -3,44 +3,36 @@
 @author	Tay Sen Chuan
 @date	
 
-This file contains the definitions 
+This file contains the definitions for loading scenes
 *//*__________________________________________________________________________*/
-#include <json/json.h>
 
 #include <Debug.h>
 #include "Assets Manager/asset_manager.h"
+#include "Assets Manager/json_serialization.h"
 #include "SceneLoader.h"
 #include <fstream>
 #include <iostream>
 
 void LoadScene(std::string filename)
 {
+	// Reset value of prefab when loading new scene (prevents wrong cloning due to deleted objs)
+	AssetManager::cleanprefab();
+
 	// Check if the given file exists
-	std::ifstream jsonFile(filename);
-	if (!jsonFile.is_open()) {
-		std::cerr << "Could not load scene file: " << filename << std::endl;
-		return;
-	}
+	JsonSerialization jsonobj;
+	jsonobj.openFileRead(filename);
 
-	Json::Value* jsonObject = new Json::Value;;
-	Json::Reader reader;
-
-	// Check if the given file is a valid json file
-	if (!reader.parse(jsonFile, *jsonObject)) {
-		std::cout << "Failed to parse JSON" << std::endl;
-		jsonFile.close();
-		return;
-	}
-	jsonFile.close();
-
-	// Now parse the file to populate the object with components
-
-	std::string levelname = (*jsonObject)["SceneName"].asString();
+	std::string levelname;
+	jsonobj.readString(levelname, "SceneName");
 	std::cout << "Loading Scene: " << levelname << std::endl;
 
-	for (const auto& component : (*jsonObject)["Objects"]) 
+	for (auto& component : jsonobj.read("Objects"))
 	{
-		std::string objprefabs = component["Prefabs"].asString();
+		JsonSerialization jsonloop;
+		jsonloop.jsonObject = &component;
+
+		std::string objprefabs;
+		jsonloop.readString(objprefabs, "Prefabs");
 		Object* obj;
 		// Create object if doesn't exist
 		if (AssetManager::prefabsval(objprefabs) == -1)
@@ -58,13 +50,14 @@ void LoadScene(std::string filename)
 		}
 
 		// Read extra data to update object
-		std::string type = component["Type"].asString();
+		std::string type;
+		jsonloop.readString(type, "Type");
 
 		if (type == "Transform")
 		{
 			Transform* tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-			tran_pt->Position.x = component["Position"]["x"].asFloat();
-			tran_pt->Position.y = component["Position"]["y"].asFloat();
+			jsonloop.readFloat(tran_pt->Position.x, "Position", "x");
+			jsonloop.readFloat(tran_pt->Position.y, "Position", "y");
 		}
 
 		// Add here to read oher types of data if necessary WIP
@@ -74,7 +67,7 @@ void LoadScene(std::string filename)
 
 	}
 
-	delete jsonObject;
+	jsonobj.closeFile();
 }
 
 
