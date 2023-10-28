@@ -85,32 +85,302 @@ void LevelEditor::ObjectProperties(){
 
 	char buffer[100];
 
+	Transform* tr = (Transform*)object->GetComponent(ComponentType::Transform);
+	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
+	Body* b = (Body*)object->GetComponent(ComponentType::Body);
+	Physics* p = (Physics*)object->GetComponent(ComponentType::Physics);
+
 
 	ImGui::SetNextWindowPos(ImVec2(300, 40), ImGuiCond_Once);
 	sprintf_s(buffer, "Properties for %s", object->GetName().c_str());
 	ImGui::Begin(buffer);
 
-	ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, ImGui::GetContentRegionAvail().x * 0.5f));
-	
-	Texture* te = (Texture*) object->GetComponent(ComponentType::Texture);
-	Transform* tr = (Transform*)object->GetComponent(ComponentType::Transform);
+	ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().x * 0.25f));
 
 	if (te != nullptr)
-		ImGui::Image((void*)(intptr_t)te->texturepath, ImGui::GetContentRegionAvail());
+		if (tr->Scale.x > tr->Scale.y) {
+			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
+			ImGui::Dummy(ImVec2(0, padding));
+			ImGui::Image((void*)(intptr_t)te->texturepath, ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
+		}
+		else if (tr->Scale.x == tr->Scale.y)
+			ImGui::Image((void*)(intptr_t)te->texturepath, ImGui::GetContentRegionAvail());
+		else {
+			float padding = ImGui::GetContentRegionAvail().x * (tr->Scale.x / tr->Scale.y) * 0.5f;
+			ImGui::Dummy(ImVec2(padding, 0));
+			ImGui::SameLine();
+			ImGui::Image((void*)(intptr_t)te->texturepath, ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+		}
+	else
+		ImGui::Text("This object has no texture");
 	ImGui::EndChild();
+
+	ImGui::SameLine();
+
+	//ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, ImGui::GetContentRegionAvail().x * 0.5f));
+	ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x * 0.75f, ImGui::GetContentRegionAvail().x * 0.25f));
 
 	ImGui::Text("Object ID: %d", object->GetId());
 	ImGui::Text("Object Name: %s", object->GetName().c_str());
 	ImGui::Text("Number of components: %d", object->GetNumComponents());
-	object->getKeysToArray(componentsarr, size);
-	for (int i = 0; i < size; i++)
-	{
-		ImGui::Text("Component ID: %s", componentNames[static_cast<int>(object->GetComponent(componentsarr[i])->TypeId()) - 1]);
-	}
-	Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 	
-	ImGui::Text("Object Position:");
-	ImGui::Text("x = %.2f, y = %.2f", tran_pt->Position.x, tran_pt->Position.y);
+	ImGui::EndChild();
+
+	if (tr != nullptr) {
+		if (ImGui::CollapsingHeader("Transform")) {
+			ImGui::Text("Position: %.5f, %.5f", tr->Position.x, tr->Position.y);
+			ImGui::Text("Rotation: %.5f", tr->Rotation);
+			ImGui::Text("Scale: %.5f, %.5f", tr->Scale.x, tr->Scale.y);
+		}
+	}
+
+	if (te != nullptr) {
+		if (ImGui::CollapsingHeader("Texture")) {
+			ImGui::Text("Nothing right now");
+		}
+	}
+
+	if (b != nullptr) {
+		if (ImGui::CollapsingHeader("Body")) {
+			if (b->GetShape() == Shape::Rectangle) {
+				Rectangular* r = (Rectangular*)b;
+				ImGui::Text("AABB Width: %.5f", r->width);
+				ImGui::Text("AABB Height: %.5f", r->height);
+
+				ImGui::SeparatorText("AABB Collision");
+
+				/*** ROW 1 ***/
+
+				/* P3 */
+
+				ImGui::BeginChild("P3", ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, 26.f));
+
+				// Get the child window's size
+				ImVec2 childSize = ImGui::GetWindowSize();
+
+				// Calculate the text's size
+				sprintf_s(buffer, "P3: x: %.5f", r->aabb.P3().x);
+				std::string text = buffer;
+				ImVec2 textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position to bottom right minus the text size
+				ImVec2 textPosX = ImVec2(childSize.x - textSizeX.x, 0);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				// Calculate the text's size
+				sprintf_s(buffer, "y: %.5f", r->aabb.P3().y);
+				text = buffer;
+				ImVec2 textSizeY = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				ImVec2 textPosY = ImVec2(childSize.x - textSizeY.x, textSizeX.y);
+				ImGui::SetCursorPos(textPosY);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+				/* TOP COLLISION */
+
+				ImGui::BeginChild("CollisionTop", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 26.f));
+
+				// Calculate the text's size
+				sprintf_s(buffer, "CollisionTop");
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2((childSize.x - textSizeX.x) * 0.5f, textSizeX.y);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+				/* P2 */
+
+				ImGui::BeginChild("P2", ImVec2(0.f, 26.f));
+
+				// Calculate the text's size
+				sprintf_s(buffer, "P2: x: %.5f", r->aabb.P2().x);
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2(0, 0);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				// Calculate the text's size
+				sprintf_s(buffer, "    y: %.5f", r->aabb.P2().y);
+				text = buffer;
+				textSizeY = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position to bottom right minus the text size
+				textPosY = ImVec2(0, textSizeX.y);
+				ImGui::SetCursorPos(textPosY);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				ImGui::EndChild();
+
+				/*** ROW 2 ***/
+
+				ImVec2 square = ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, ImGui::GetContentRegionAvail().x * 0.333333f);
+
+				/* LEFT COLLISION */
+
+				ImGui::BeginChild("CollisionLeft", square);
+
+				// Calculate the text's size
+				sprintf_s(buffer, "CollisionLeft");
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2(square.x - textSizeX.x, (square.y - textSizeX.y) * 0.5f);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+				/* SQUARE */
+
+				ImGui::BeginChild("SquareVis", square);
+				ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+				ImVec2 p0 = ImGui::GetCursorScreenPos(); // Current cursor position as the top-left
+				ImVec2 p1 = ImVec2(p0.x + square.x, p0.y + square.y); // Scale square to child size
+
+				// Draw the square
+				draw_list->AddRectFilled(p0, p1, IM_COL32(255, 255, 255, 255)); // Red filled square
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+				/* RIGHT COLLISION */
+
+				ImGui::BeginChild("CollisionRight", square);
+
+				// Calculate the text's size
+				sprintf_s(buffer, "CollisionRight");
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2(0, (square.y - textSizeX.y) * 0.5f);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+				ImGui::EndChild();
+
+				/*** ROW 3 ***/
+
+				/* P0 */
+
+				ImGui::BeginChild("P0", ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, 26.f));
+
+				// Calculate the text's size
+				sprintf_s(buffer, "P0: x: %.5f", r->aabb.P0().x);
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position to bottom right minus the text size
+				textPosX = ImVec2(childSize.x - textSizeX.x, 0);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				// Calculate the text's size
+				sprintf_s(buffer, "y: %.5f", r->aabb.P0().y);
+				text = buffer;
+				textSizeY = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosY = ImVec2(childSize.x - textSizeY.x, textSizeX.y);
+				ImGui::SetCursorPos(textPosY);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+				/* BOTTOM COLLISION */
+
+				ImGui::BeginChild("CollisionBottom", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 26.f));
+
+				// Calculate the text's size
+				sprintf_s(buffer, "CollisionBottom");
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2((childSize.x - textSizeX.x) * 0.5f, 0);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+				/* P1 */
+
+				ImGui::BeginChild("P1", ImVec2(0.f, 26.f));
+
+				// Calculate the text's size
+				sprintf_s(buffer, "P1: x: %.5f", r->aabb.P1().x);
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2(0, 0);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				// Calculate the text's size
+				sprintf_s(buffer, "    y: %.5f", r->aabb.P1().y);
+				text = buffer;
+				textSizeY = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position to bottom right minus the text size
+				textPosY = ImVec2(0, textSizeX.y);
+				ImGui::SetCursorPos(textPosY);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				ImGui::EndChild();
+			}
+		}
+	}
+
+	if (p != nullptr) {
+		if (ImGui::CollapsingHeader("Physics")) {
+			ImGui::Text("Velocity: %.5f, %.5f", p->Velocity.x, p->Velocity.y);
+		}
+	}
+
 
 	if (ImGui::Button("Delete"))
 	{
