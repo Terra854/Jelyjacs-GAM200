@@ -79,12 +79,22 @@ void LevelEditor::DebugPerformanceViewer() {
 int selected = -1;
 
 void LevelEditor::ObjectProperties(){
-	Object* object = objectFactory->getObjectWithID(selected);
-	ComponentType componentsarr[20];
-	int size;
-	const char* componentNames[] = { "Transform", "Texture", "Body", "Physics", "PlayerControllable" };
 
+	ImGui::SetNextWindowSize(ImVec2(450, 0));
 	char buffer[100];
+
+	ImGui::Begin("Object Properties");
+
+	if (selected == -1) {
+		ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().x * 0.25f));
+		ImGui::Image(NULL, ImGui::GetContentRegionAvail());
+		ImGui::EndChild();
+		ImGui::End();
+
+		return;
+	}
+
+	Object* object = objectFactory->getObjectWithID(selected);
 
 	Transform* tr = (Transform*)object->GetComponent(ComponentType::Transform);
 	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
@@ -92,12 +102,6 @@ void LevelEditor::ObjectProperties(){
 	Physics* ph = (Physics*)object->GetComponent(ComponentType::Physics);
 	PlayerControllable* pc = (PlayerControllable*)object->GetComponent(ComponentType::PlayerControllable);
 	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
-
-
-
-	ImGui::SetNextWindowSize(ImVec2(450, 0)); 
-	sprintf_s(buffer, "Properties for %s", object->GetName().c_str());
-	ImGui::Begin(buffer);
 
 	ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().x * 0.25f));
 
@@ -561,7 +565,6 @@ void LevelEditor::Update() {
 
 	ListOfObjects();
 
-	if (selected >= 0)
-		ObjectProperties();
+	ObjectProperties();
 
 }
