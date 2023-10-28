@@ -329,7 +329,7 @@ void GLApp::Update()
 			glBindVertexArray(0);
 			shdrpgms["image"].UnUse();
 		}
-		else {
+		else {	
 			// draw object with animation
 			if(ani_pt->current_type != ani_pt->previous_type&&!ani_pt->jump_fixed)
 				ani_pt->frame_num = 0;
