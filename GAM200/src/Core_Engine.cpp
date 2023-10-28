@@ -394,8 +394,8 @@ void CoreEngine::GameLoop()
 				std::cout << "Mouse y position for grid: " << ypos << "\n";
 				if (input::IsPressed(KEY::mouseL))
 				{
-					int xOffset = ((xpos - (leftXpos)) / editor->box_size);
-					int yOffset = ((ypos - topYpos) / editor->box_size);
+					int xOffset = (xpos - leftXpos) / editor->box_size;
+					int yOffset = (ypos - topYpos) / editor->box_size;
 					if (boxesFilled[xOffset - (yOffset * editor->num.y)] == 0)
 					{
 						createObject(-370 + (xOffset * editor->box_size), 370 + (yOffset * editor->box_size), "../Asset/Objects/mapbox.json");
@@ -421,6 +421,20 @@ void CoreEngine::GameLoop()
 		//ImGui::SetCursorPos({ 200,100 });
 		//ImGui::Image((void*)(intptr_t)test, ImVec2(108.0f, 108.0f), ImVec2(0.3333, 0), ImVec2(0.666, 0.333));
 		//ImGui::End();
+
+		GLuint tileset = app->setup_texobj("../Asset/Picture/TileSheet.png");
+		ImGui::Begin("Tileset");
+		ImGui::SetCursorPos({ 0, 0 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.090909, 0.111111), ImVec2(0.181818, 0.222222));
+		ImGui::SetCursorPos({ 256, 0 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.181818, 0.111111), ImVec2(0.272727, 0.222222));
+		ImGui::SetCursorPos({ 512, 0 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.272727, 0.111111), ImVec2(0.363636, 0.222222));
+		ImGui::SetCursorPos({ 0, 256 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.090909, 0.222222), ImVec2(0.181818, 0.333333));
+		ImGui::SetCursorPos({ 512, 256 });
+		ImGui::Image((void*)(intptr_t)tileset, ImVec2(256.0f, 256.0f), ImVec2(0.272727, 0.222222), ImVec2(0.363636, 0.333333));
+		ImGui::End();
 
 		debug_gui->ClearAll();
 		hud.GuiRender(io);
