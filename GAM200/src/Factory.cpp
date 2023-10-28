@@ -64,10 +64,7 @@ Object* Factory::createObject(const std::string& filename)
 	JsonSerialization jsonobj;
 	jsonobj.openFileRead(filename);
 
-	// Now parse the file to populate the object with components
-
 	Object* obj = new Object();
-	//obj->name = (*jsonObject)["Name"].asString();
 	jsonobj.readString(obj->name, "Name");
 
 	for (auto& component : jsonobj.read("Components")) {
@@ -81,7 +78,6 @@ Object* Factory::createObject(const std::string& filename)
 		if (type == "Transform") {
 
 			Transform* trans = (Transform*)((ComponentCreator<Transform>*) componentMap["Transform"])->Create();
-			//trans->JsonSerialize(jsonloop);
 
 			jsonloop.readFloat(trans->Position.x, "Properties", "Position", "x");
 			jsonloop.readFloat(trans->Position.y, "Properties", "Position", "y");
@@ -108,38 +104,47 @@ Object* Factory::createObject(const std::string& filename)
 			}			
 		}
 		else if (type == "Body") {
-			std::string shape = component["Shape"].asString();
+			std::string shape;
+			jsonloop.readString(shape, "Shape");
 			if (shape == "Rectangle") {
 				Rectangular* r = (Rectangular*)((ComponentCreator<Rectangular>*) componentMap["Rectangle"])->Create();
 
-				if (component.isMember("Collision Response"))
-					r->collision_response = component["Collision Response"].asBool();
+				if (jsonloop.isMember("Collision Response"))
+					jsonloop.readBool(r->collision_response, "Collision Response");
 
-				r->width = component["Properties"]["width"].asFloat();
-				r->height = component["Properties"]["height"].asFloat();
+				jsonloop.readFloat(r->width, "Properties", "width");
+				jsonloop.readFloat(r->height, "Properties", "height");
 
 				obj->AddComponent(r);
 			}
 			else if (shape == "Circle") {
 				Circular* c = (Circular*)((ComponentCreator<Circular>*) componentMap["Circular"])->Create();
 
-				if (component.isMember("Collision Response"))
-					c->collision_response = component["Collision Response"].asBool();
+				if (jsonloop.isMember("Collision Response"))
+					jsonloop.readBool(c->collision_response, "Collision Response");
 
-				c->circle.radius = component["Properties"]["radius"].asFloat();
-				c->circle.center.x = component["Properties"]["center"]["x"].asFloat();
-				c->circle.center.y = component["Properties"]["center"]["y"].asFloat();
+				jsonloop.readFloat(c->circle.radius, "Properties", "radius");
+				jsonloop.readFloat(c->circle.center.x, "Properties", "radius", "x");
+				jsonloop.readFloat(c->circle.center.y, "Properties", "radius", "y");
 
 				obj->AddComponent(c);
 			}
 			else if (shape == "Line") {
 				Lines* l = (Lines*)((ComponentCreator<Lines>*) componentMap["Line"])->Create();
+				
+				if (jsonloop.isMember("Collision Response"))
+					jsonloop.readBool(l->collision_response, "Collision Response");
 
-				if (component.isMember("Collision Response"))
-					l->collision_response = component["Collision Response"].asBool();
+				float x;
+				float y;
 
-				l->line.SetPt0({ component["Properties"]["start"]["x"].asFloat(), component["Properties"]["start"]["y"].asFloat() });
-				l->line.SetPt1({ component["Properties"]["end"]["x"].asFloat(), component["Properties"]["end"]["y"].asFloat() });
+				jsonloop.readFloat(x, "Properties", "start", "x");
+				jsonloop.readFloat(y, "Properties", "start", "y");
+				l->line.SetPt0({ x, y });
+
+				jsonloop.readFloat(x, "Properties", "end", "x");
+				jsonloop.readFloat(y, "Properties", "end", "y");
+				l->line.SetPt1({ x, y });
 
 				obj->AddComponent(l);
 			}
@@ -147,9 +152,15 @@ Object* Factory::createObject(const std::string& filename)
 		else if (type == "Physics") {
 			Physics* p = (Physics*)((ComponentCreator<Physics>*) componentMap["Physics"])->Create();
 
-			p->Velocity = Vec2(component["Properties"]["X_Velocity"].asFloat(), component["Properties"]["Y_Velocity"].asFloat());
-			p->Y_Acceleration = component["Properties"]["Y_Acceleration"].asFloat();
-			p->Mass = component["Properties"]["Mass"].asFloat();
+			float x;
+			float y;
+
+			jsonloop.readFloat(x, "Properties", "X_Velocity");
+			jsonloop.readFloat(y, "Properties", "Y_Velocity");
+			p->Velocity = Vec2(x, y);
+
+			jsonloop.readFloat(p->Y_Acceleration, "Properties", "Y_Acceleration");
+			jsonloop.readFloat(p->Mass, "Properties", "Mass");
 
 			obj->AddComponent(p);
 		}
@@ -173,13 +184,15 @@ Object* Factory::createObject(const std::string& filename)
 				a->animation_tex_obj = AssetManager::animationval(path);
 			}
 
-			a->frame_rate = component["Properties"]["framerate"].asFloat();
+			jsonloop.readFloat(a->frame_rate, "Properties", "framerate");
 
-			if (component["Properties"].isMember("jumpfixframe"))
-				a->jump_fixed_frame = component["Properties"]["jumpfixframe"].asFloat();
+			if (jsonloop.isMember("jumpfixframe", "Properties"))
+				jsonloop.readInt(a->jump_fixed_frame, "Properties", "jumpfixframe");
 
-			float col = component["Properties"]["frame"][0].asFloat();
-			float row = component["Properties"]["frame"][1].asFloat();
+			float col;
+			float row;
+			jsonloop.readFloat(col, "Properties", "frame", 0);
+			jsonloop.readFloat(row, "Properties", "frame", 1);
 
 			bool faceright = true;
 
@@ -231,18 +244,19 @@ Object* Factory::createObject(const std::string& filename)
 				std::vector<GLApp::GLModel> animationmodel;
 
 				// Ensure AnimationType exist before gathering data into animation_map
-				if (component["Properties"].isMember(animationtype))
+				
+				if (jsonloop.isMember(animationtype, "Properties"))
 				{
-
-					float framecol = component["Properties"][animationtype][0].asFloat();
-					float framerow = component["Properties"][animationtype][1].asFloat();
+					float framecol;
+					float framerow;
+					jsonloop.readFloat(framecol, "Properties", animationtype, 0);
+					jsonloop.readFloat(framerow, "Properties", animationtype, 1);
 
 					for (int i = 0; i < framecol; i++)
 					{
 						GLApp::GLModel model = a->setup_texobj_animation(i/col, (framerow-1)/row, (i+1)/col, framerow/row ,faceright);
 						animationmodel.push_back(model);
 					}
-
 				}
 
 				a->animation_Map.emplace(frametype, animationmodel);
