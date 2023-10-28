@@ -159,7 +159,6 @@ Object* Factory::createObject(const std::string& filename)
 			jsonloop.readFloat(y, "Properties", "Y_Velocity");
 			p->Velocity = Vec2(x, y);
 
-			jsonloop.readFloat(p->Y_Acceleration, "Properties", "Y_Acceleration");
 			jsonloop.readFloat(p->Mass, "Properties", "Mass");
 
 			obj->AddComponent(p);
