@@ -165,18 +165,25 @@ Object* Factory::createObject(const std::string& filename)
 
 			std::string path;
 			jsonloop.readString(path, "Properties", "texturepath");
-			bool exist = AssetManager::texturecheckexist(path);
+			bool exist = AssetManager::animationcheckexist(path);
 			if (!exist)
 			{
 				std::cout << "Missing Animation Texture!" << std::endl;
 			}
 			else
 			{
-				a->animation_tex_obj = AssetManager::textureval(path);
+				a->animation_tex_obj = AssetManager::animationval(path);
 			}
 
 			a->frame_rate = component["Properties"]["framerate"].asFloat();
-			int framecount = component["Properties"]["frame"].asInt();
+
+			if (component["Properties"].isMember("jumpfixframe"))
+				a->jump_fixed_frame = component["Properties"]["jumpfixframe"].asFloat();
+
+			float col = component["Properties"]["frame"][0].asFloat();
+			float row = component["Properties"]["frame"][1].asFloat();
+
+			bool faceright = true;
 
 			// Create frame_map
 			for (int j = 0; j < AnimationType::End; j++)
@@ -186,15 +193,39 @@ Object* Factory::createObject(const std::string& filename)
 				{
 					case AnimationType::Idle:
 						animationtype = "idle";
+						faceright = true;
 						break;
-					case AnimationType::Run:
-						animationtype = "run";
+					case AnimationType::Push:
+						animationtype = "push";
+						faceright = true;
 						break;
 					case AnimationType::Jump:
 						animationtype = "jump";
+						faceright = true;
+						break;
+					case AnimationType::Run:
+						animationtype = "run";
+						faceright = true;
+						break;
+					case AnimationType::Idle_left:
+						animationtype = "idle";
+						faceright = false;
+						break;
+					case AnimationType::Push_left:
+						animationtype = "push";
+						faceright = false;
+						break;
+					case AnimationType::Jump_left:
+						animationtype = "jump";
+						faceright = false;
+						break;
+					case AnimationType::Run_left:
+						animationtype = "run";
+						faceright = false;
 						break;
 					default:
 						animationtype = "error";
+						faceright = true;
 						break;
 				}
 
@@ -204,15 +235,16 @@ Object* Factory::createObject(const std::string& filename)
 				// Ensure AnimationType exist before gathering data into animation_map
 				if (component["Properties"].isMember(animationtype))
 				{
-					for (int i = 0; i < framecount; i++)
+
+					float framecol = component["Properties"][animationtype][0].asFloat();
+					float framerow = component["Properties"][animationtype][1].asFloat();
+
+					for (int i = 0; i < framecol; i++)
 					{
-						int pos = i * 4; // 4 is due to each frame needing 4 position therefore it will always be fixed
-
-						GLApp::GLModel model = a->setup_texobj_animation(component["Properties"][animationtype][pos].asFloat(), component["Properties"][animationtype][pos + 1].asFloat(),
-							component["Properties"][animationtype][pos + 2].asFloat(), component["Properties"][animationtype][pos + 3].asFloat(), true);
-
+						GLApp::GLModel model = a->setup_texobj_animation(i/col, (framerow-1)/row, (i+1)/col, framerow/row ,faceright);
 						animationmodel.push_back(model);
 					}
+
 				}
 
 				a->animation_Map.emplace(frametype, animationmodel);
@@ -408,10 +440,21 @@ Object* Factory::cloneObject(Object* object)
 			obj->AddComponent(p);
 		}
 		// Clone player controllable data
-		if (c.first == ComponentType::PlayerControllable)
+		else if (c.first == ComponentType::PlayerControllable)
 		{
 			PlayerControllable* p = (PlayerControllable*)((ComponentCreator<PlayerControllable>*) componentMap["Player"])->Create();
 			obj->AddComponent(p);
+		}
+		// Clone Animations data
+		else if (c.first == ComponentType::Animation)
+		{
+			Animation* ani = (Animation*)((ComponentCreator<Animation>*) componentMap["Animation"])->Create();
+			Animation* ani_tmp = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
+
+			ani->animation_tex_obj = ani_tmp->animation_tex_obj;
+			ani->animation_Map = ani_tmp->animation_Map;
+			
+			obj->AddComponent(ani);
 		}
 	}
 

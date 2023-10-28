@@ -13,9 +13,11 @@ to be referenced from when needed.
 
 // Creating of static data members
 std::filesystem::path AssetManager::pathtexture = "../Asset/Picture";
+std::filesystem::path AssetManager::pathanimations = "../Asset/Animation";
 std::filesystem::path AssetManager::objectprefabs = "../Asset/Objects";
 
 std::map<std::string, GLuint> AssetManager::textures;
+std::map<std::string, GLuint> AssetManager::animations;
 std::map<std::string, long> AssetManager::prefabs;
 
 // Looked through the asset file and load all assets
@@ -29,7 +31,18 @@ void AssetManager::Initialize()
 		{
 			std::cout << list.path() << std::endl;
 		}
-		loadassets(); // Will either be moved or turned into texture specific loader
+		loadtextures();
+	}
+	else
+		std::cout << pathtexture << " does not exist!" << std::endl;
+
+	if (std::filesystem::exists(pathanimations))
+	{
+		for (const auto& list : std::filesystem::directory_iterator(pathanimations))
+		{
+			std::cout << list.path() << std::endl;
+		}
+		loadanimations();
 	}
 	else
 		std::cout << pathtexture << " does not exist!" << std::endl;
@@ -61,8 +74,8 @@ void AssetManager::Update()
 	
 }
 
-// Load all assets in the different paths (might be changed to specific type of assets)
-void AssetManager::loadassets()
+// Load all textures
+void AssetManager::loadtextures()
 {
 	GLuint textureuint;
 	for (const auto& list : std::filesystem::directory_iterator(pathtexture))
@@ -72,10 +85,18 @@ void AssetManager::loadassets()
 		textures.emplace(filename.string(), textureuint);
 		std::cout << "Added to list: " << filename.string() << std::endl;
 	}
+}
 
-
-
-
+void AssetManager::loadanimations()
+{
+	GLuint textureuint;
+	for (const auto& list : std::filesystem::directory_iterator(pathanimations))
+	{
+		textureuint = GLApp::setup_texobj(list.path().string().c_str());
+		std::filesystem::path filename = list.path().filename();
+		animations.emplace(filename.string(), textureuint);
+		std::cout << "Added to list: " << filename.string() << std::endl;
+	}
 }
 
 void AssetManager::createprefablist()
@@ -100,6 +121,20 @@ bool AssetManager::texturecheckexist(std::string str)
 GLuint AssetManager::textureval(std::string str)
 {
 	return textures[str];
+}
+
+bool AssetManager::animationcheckexist(std::string str)
+{
+	std::map<std::string, GLuint>::iterator it = animations.find(str);
+	if (it == animations.end())
+		return false;
+	else
+		return true;
+}
+
+GLuint AssetManager::animationval(std::string str)
+{
+	return animations[str];
 }
 
 long AssetManager::prefabsval(std::string str)
