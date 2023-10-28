@@ -148,7 +148,6 @@ Object* Factory::createObject(const std::string& filename)
 			Physics* p = (Physics*)((ComponentCreator<Physics>*) componentMap["Physics"])->Create();
 
 			p->Velocity = Vec2(component["Properties"]["X_Velocity"].asFloat(), component["Properties"]["Y_Velocity"].asFloat());
-			p->Y_Acceleration = component["Properties"]["Y_Acceleration"].asFloat();
 			p->Mass = component["Properties"]["Mass"].asFloat();
 
 			obj->AddComponent(p);
@@ -429,7 +428,6 @@ Object* Factory::cloneObject(Object* object)
 			Physics* p_pt = static_cast<Physics*>(object->GetComponent(ComponentType::Physics));
 
 			p->Velocity = p_pt->Velocity;
-			p->Y_Acceleration = p_pt->Y_Acceleration;
 			p->Mass = p_pt->Mass;
 
 			obj->AddComponent(p);

@@ -15,7 +15,6 @@ public:
 	Physics() : Component() {};
 
 	Vec2 Velocity;
-	float Y_Acceleration;
 	float Mass;
 
 	virtual void Initialize() override

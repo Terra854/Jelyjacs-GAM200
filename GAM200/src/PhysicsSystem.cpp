@@ -314,11 +314,10 @@ void PhysicsSystem::Update() {
 		if (p == nullptr)
 			continue; // No physics in that object, move along
 
-		// No X acceleration, not needed in the game
+		// No acceleration, not needed in the game
 
 		// Apply gravity
-		p->Y_Acceleration = gravity;
-		p->Velocity.y += p->Y_Acceleration * fixed_dt;
+		p->Velocity.y += gravity * fixed_dt;
 		p->Velocity.y *= 0.99f; // Account for air resistance
 	}
 
