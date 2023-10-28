@@ -388,13 +388,14 @@ void CoreEngine::GameLoop()
 
 			if (checkIfMouseIsWithinGrid(leftXpos, rightXpos, topYpos, bottomYpos))
 			{
-				double xpos = input::GetMouseX() - 960.0;
-				double ypos = 540.0 - input::GetMouseY();
+				int xpos = convertMousePosToGridPos(Axis::X);
+				int ypos = convertMousePosToGridPos(Axis::Y);
+				std::cout << "Mouse x position for grid: " << xpos << "\n";
+				std::cout << "Mouse y position for grid: " << ypos << "\n";
 				if (input::IsPressed(KEY::mouseL))
 				{
-					int xOffset = ((xpos - (-400)) / editor->box_size);
-					int yOffset = ((ypos - 420) / editor->box_size);
-					std::cout << "xOffset is " << xOffset << " yOffset is " << yOffset << std::endl;
+					int xOffset = ((xpos - (leftXpos)) / editor->box_size);
+					int yOffset = ((ypos - topYpos) / editor->box_size);
 					if (boxesFilled[xOffset - (yOffset * editor->num.y)] == 0)
 					{
 						createObject(-370 + (xOffset * editor->box_size), 370 + (yOffset * editor->box_size), "../Asset/Objects/mapbox.json");
@@ -409,34 +410,6 @@ void CoreEngine::GameLoop()
 					createObject(0, 0, "../Asset/Objects/mapbox.json");
 				}
 			}
-
-			/*
-			if ()
-			{
-				std::cout << "test\n";
-				double xpos = input::GetMouseX() - 960.0;
-				double ypos = 540.0 - input::GetMouseY();
-				//std::cout << "xpos is " << xpos << " ypos is " << ypos << std::endl;
-				if (input::IsPressed(KEY::mouseL))
-				{
-					int xOffset = ((xpos - (-400)) / editor->box_size);
-					int yOffset = ((ypos - 420) / editor->box_size);
-					std::cout << "xOffset is " << xOffset << " yOffset is " << yOffset << std::endl;
-					if (boxesFilled[xOffset - (yOffset * editor->num.y)] == 0)
-					{
-						createObject(-370 + (xOffset * editor->box_size), 370 + (yOffset * editor->box_size), "../Asset/Objects/mapbox.json");
-						boxesFilled[xOffset - (yOffset * editor->num.y)] = 1;
-					}
-
-					std::cout << "Object will be placed at " << xpos << " and " << ypos << std::endl;
-				}
-
-				if (input::IsPressed(KEY::mouseR))
-				{
-					createObject(0, 0, "../Asset/Objects/mapbox.json");
-				}
-			}
-			*/
 		}
 
 		ImGui::End();
@@ -529,31 +502,39 @@ void CoreEngine::createObject(float posX, float posY, std::string objectName)
 	tran_pt->Position.y = posY;
 }
 
-int CoreEngine::convertGridToWorldPos(int gridPos, std::string axis)
+int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
 {
-	if (axis != "x" && axis != "X" && axis != "y" && axis != "Y")
-	{
-		return 0.0f;
-	}
-
-	if (axis == "x" || axis == "X")
+	if (axis == Axis::X)
 	{
 		int xPos = gridPos + 960;
 		return xPos;
 	}
-	else if (axis == "y" || axis == "Y")
+	else if (axis == Axis::Y)
 	{
 		int yPos = 520 - gridPos;
+		return yPos;
+	}
+}
+int CoreEngine::convertMousePosToGridPos(Axis axis)
+{
+	if (axis == Axis::X)
+	{
+		int xPos = input::GetMouseX() - 960.0;
+		return xPos;
+	}
+	else if (axis == Axis::Y)
+	{
+		int yPos = 520.0 - input::GetMouseY();
 		return yPos;
 	}
 }
 
 bool CoreEngine::checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int bottomY)
 {
-	int leftXPos = convertGridToWorldPos(leftX, "x");
-	int rightXPos = convertGridToWorldPos(rightX, "x");
-	int topYPos = convertGridToWorldPos(topY, "y");
-	int bottomYPos = convertGridToWorldPos(bottomY, "y");
+	int leftXPos = convertGridToWorldPos(leftX, Axis::X);
+	int rightXPos = convertGridToWorldPos(rightX, Axis::X);
+	int topYPos = convertGridToWorldPos(topY, Axis::Y);
+	int bottomYPos = convertGridToWorldPos(bottomY, Axis::Y);
 
 	if (input::GetMouseX() < (double)leftXPos)
 	{
