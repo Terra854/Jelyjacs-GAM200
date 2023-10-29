@@ -17,6 +17,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include "components/Physics.h"
 #include "components/PlayerControllable.h"
 #include "components/Animation.h"
+#include "components/Event.h"
 #include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
@@ -57,6 +58,7 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Line", new ComponentCreator<Lines>());
 	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
 	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
+	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
 
 
 	LoadScene("../Asset/Levels/tutorial_level.json");
