@@ -40,7 +40,8 @@ int main() {
 	GameLogic* logic = new GameLogic();
 	Font* font = new Font();
 	Camera* camera = new Camera();
-	GLApp* graphics = new GLApp();     
+	GLApp* graphics = new GLApp();
+	GLApp::Leveleditor* leveleditor = new GLApp::Leveleditor();
 	level_editor = new LevelEditor();
 	thread_pool = new ThreadPool();
 	

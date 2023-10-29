@@ -62,7 +62,7 @@ public:
 	//helper function set up shader program
 	static void insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr);
 	
-	void drawline(Vec2 start, Vec2 end);
+	static void drawline(Vec2 start, Vec2 end);
 
 	//helper function set up model
 	// container for shader programs and models
@@ -70,9 +70,18 @@ public:
 	static std::map<std::string, GLModel> models;
 	
 	
-	class camera {
-		Vec2 pos;
+	class Leveleditor {
+	public:
+		Leveleditor();
+		Vec2 scale_window{ 800.0f,800.0f };
+		Vec2 pos_botleft{};
+		void set_num(Vec2 num_) { num = num_; }
+		void drawleveleditor();
+		Vec2 num{ 0,0 };
+		float box_size{ 0 };
+
 	};
 };
 extern GLApp* app;
+extern GLApp::Leveleditor* editor;
 #endif  /*GLAPP_H */
