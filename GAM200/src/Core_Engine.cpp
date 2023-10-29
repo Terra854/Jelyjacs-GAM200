@@ -483,3 +483,64 @@ void CoreEngine::createObject(float posX, float posY, std::string objectName)
 	tran_pt->Position.x = posX;
 	tran_pt->Position.y = posY;
 }
+
+int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
+{
+	if (axis == Axis::X)
+	{
+		int xPos = gridPos + static_cast<int>(window->width / 2);
+		return xPos;
+	}
+	else if (axis == Axis::Y)
+	{
+		int yPos = static_cast<int>(window->height / 2) - gridPos;
+		return yPos;
+	}
+}
+int CoreEngine::convertMousePosToGridPos(Axis axis)
+{
+	if (axis == Axis::X)
+	{
+		int xPos = input::GetMouseX() - static_cast<int>(window->width / 2);
+		return xPos;
+	}
+	else if (axis == Axis::Y)
+	{
+		int yPos = static_cast<int>(window->height / 2) - input::GetMouseY();
+		return yPos;
+	}
+}
+
+bool CoreEngine::checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int bottomY)
+{
+	int leftXPos = convertGridToWorldPos(leftX, Axis::X);
+	int rightXPos = convertGridToWorldPos(rightX, Axis::X);
+	int topYPos = convertGridToWorldPos(topY, Axis::Y);
+	int bottomYPos = convertGridToWorldPos(bottomY, Axis::Y);
+
+	if (input::GetMouseX() < (double)leftXPos)
+	{
+		std::cout << "Mouse too far left\n";
+		return false;
+	}
+
+	if (input::GetMouseX() > (double)rightXPos)
+	{
+		std::cout << "Mouse too far right\n";
+		return false;
+	}
+
+	if (input::GetMouseY() < (double)topYPos)
+	{
+		std::cout << "Mouse too far up\n";
+		return false;
+	}
+
+	if (input::GetMouseY() > (double)bottomYPos)
+	{
+		std::cout << "Mouse too far down\n";
+		return false;
+	}
+
+	return true;
+}
