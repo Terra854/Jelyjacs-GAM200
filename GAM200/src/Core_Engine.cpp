@@ -172,7 +172,8 @@ void CoreEngine::Debug_Update()
 ********************************************************************************/
 void CoreEngine::GameLoop()
 {
-
+	int numOfBoxes = editor->num.x * editor->num.y;
+	std::cout << "Number of boxes " << numOfBoxes << std::endl;
 	std::vector<int> boxesFilled(numOfBoxes, 0);
 	std::cout << boxesFilled.capacity();
 	// FPS Variables
