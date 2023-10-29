@@ -115,30 +115,24 @@ void LevelEditor::ObjectProperties(){
 	ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().x * 0.25f));
 
 	if (a != nullptr){
-		
-		/* TODO: Idk where the textures for the animations are stored */
+		GLint width, height;
 
-		unsigned int anim = a->animation_Map[a->current_type][a->frame_num].texobj;
+		// Bind the texture
+		glBindTexture(GL_TEXTURE_2D, a->animation_tex_obj);
 
-		if (tr->Scale.x > tr->Scale.y) {
-			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
-			ImGui::Dummy(ImVec2(0, padding));
-			ImGui::Image((void*)(intptr_t)anim, ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
-		}
-		else if (tr->Scale.x == tr->Scale.y)
-			ImGui::Image((void*)(intptr_t)anim, ImGui::GetContentRegionAvail());
-		else {
-			float padding = ImGui::GetContentRegionAvail().x * (tr->Scale.x / tr->Scale.y) * 0.5f;
-			ImGui::Dummy(ImVec2(padding, 0));
-			ImGui::SameLine();
-			ImGui::Image((void*)(intptr_t)anim, ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
-		}
+		// Get the texture width
+		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
 
-		ImGui::SetCursorPos(ImVec2(0, 0));
-		ImGui::Text("There is");
-		ImGui::Text("animation");
-		ImGui::Text("idk how to");
-		ImGui::Text("draw it here");
+		// Get the texture height
+		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+
+		// Unbind the texture
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		ImVec2 uv0 = { (float)a->frame_num * 128.f / (float) width, (float)a->current_type * 128.f / (float)height };
+		ImVec2 uv1 = { uv0.x + (128.f / (float)width), uv0.y + (128.f / (float)height)};
+
+		ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImGui::GetContentRegionAvail(), uv0, uv1);
 	}
 	else if (te != nullptr) {
 		if (tr->Scale.x > tr->Scale.y) {
@@ -188,6 +182,37 @@ void LevelEditor::ObjectProperties(){
 	if (a != nullptr) {
 		if (ImGui::CollapsingHeader("Animation")) {
 			ImGui::Text("Nothing right now");
+
+			GLint width, height;
+
+			// Bind the texture
+			glBindTexture(GL_TEXTURE_2D, a->animation_tex_obj);
+
+			// Get the texture width
+			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+
+			// Get the texture height
+			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+
+			// Unbind the texture
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			ImGui::SeparatorText("Sprite Sheet");
+
+			if (width > height) {
+				ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImVec2(ImGui::GetContentRegionAvail().x, (float)height / (float)width * ImGui::GetContentRegionAvail().x));
+			}
+			else if (width == height)
+				ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImGui::GetContentRegionAvail());
+			else {
+				ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImVec2((float)width / (float)height * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().x));
+			}
+
+			ImGui::SeparatorText("Values");
+
+			ImGui::Text("Current Type: %d", a->current_type);
+			ImGui::Text("Frane Number: %d", a->frame_num);
+
 		}
 	}
 
