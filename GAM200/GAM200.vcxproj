@@ -101,7 +101,6 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
-    <ClCompile Include="include\components\Event.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
     <ClCompile Include="src\Assets Manager\json_serialization.cpp" />
