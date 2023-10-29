@@ -241,7 +241,7 @@ void PhysicsSystem::Update() {
 		for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 			Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
 
-			if (b == nullptr)
+			if (b == nullptr || !b->active)
 				continue; // No physics or body in this object, move to next object
 
 			b->inGrid.clear();
