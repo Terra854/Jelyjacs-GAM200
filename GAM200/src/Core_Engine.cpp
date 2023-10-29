@@ -286,10 +286,19 @@ void CoreEngine::GameLoop()
 			Update(Systems["LevelEditor"]);
 
 			// Display the game inside the ImGui window
-			ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
+			ImGui::SetNextWindowSize(ImVec2(1280, 720), ImGuiCond_Always);
 			ImGui::Begin("Game Runtime (This for the level editor)");
 			ImVec2 windowSize = ImGui::GetWindowSize();
-			ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
+			//ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
+			ImVec2 displaySize;
+			if (windowSize.y < (windowSize.x / 16.f * 9.f)) {
+				ImGui::SetCursorPos(ImVec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 20.f));
+				displaySize = ImVec2(windowSize.y * 16.f / 9.f, windowSize.y - 40.f);
+			}
+			else {
+				ImGui::SetCursorPos(ImVec2(10.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f));
+				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f) - 40.f);
+			}
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 			ImGui::End();
 
@@ -445,7 +454,6 @@ void CoreEngine::GameLoop()
 			}
 
 			ImGui::End();
-			*/
 
 
 			ImGui::Begin("Tileset");
@@ -536,6 +544,7 @@ void CoreEngine::GameLoop()
 			ImGui::SetCursorPos({ 512, 320 });
 			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181f, 0.666666f), ImVec2(0.909090f, 0.777777f));
 			ImGui::End();
+			*/
 
 			hud.GuiRender(io);
 		}
