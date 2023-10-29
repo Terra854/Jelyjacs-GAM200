@@ -330,18 +330,30 @@ void GLApp::Update()
 			shdrpgms["image"].UnUse();
 		}
 		else {	
-			// draw object with animation
-			if(ani_pt->current_type != ani_pt->previous_type&&!ani_pt->jump_fixed)
+			// if is player
+			if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
+				// draw object with animation
+				if (ani_pt->current_type != ani_pt->previous_type && !ani_pt->jump_fixed)
+					ani_pt->frame_num = 0;
+				else if (ani_pt->frame_count >= ani_pt->frame_rate) {
+					ani_pt->frame_count = 0.f;
+					ani_pt->frame_num++;
+					if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
+						ani_pt->frame_num = 0;
+				}
+				if (ani_pt->jump_fixed) {
+					if (ani_pt->frame_num >= ani_pt->jump_fixed_frame)
+						ani_pt->frame_num = ani_pt->jump_fixed_frame;
+				}
+			}
+			// object animation
+			if(ani_pt->current_type != ani_pt->previous_type )
 				ani_pt->frame_num = 0;
 			else if (ani_pt->frame_count >= ani_pt->frame_rate) {
 				ani_pt->frame_count = 0.f;
 				ani_pt->frame_num++;
 				if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
 					ani_pt->frame_num = 0;
-			}
-			if (ani_pt->jump_fixed) {
-				if(ani_pt->frame_num>= ani_pt->jump_fixed_frame)
-				ani_pt->frame_num = ani_pt->jump_fixed_frame;
 			}
 
 			glBindTextureUnit(6, tex_test);
