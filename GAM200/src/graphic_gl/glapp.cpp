@@ -416,7 +416,6 @@ void GLApp::Update()
 		}
 		
     }
-	editor->drawleveleditor();
 	
 	
 }
