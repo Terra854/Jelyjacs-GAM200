@@ -323,27 +323,31 @@ void PhysicsSystem::Update() {
 		p->Velocity.y *= 0.99f; // Account for air resistance
 	}
 
-	// Loop through each object to see if it's colliding with something
+	// Loop through each object to update positiona and see if it's colliding with something
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
 		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
 		Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
 
-		if (p == nullptr || b == nullptr)
-			continue; // No physics or body in this object, move to next object
+		// For physics
+		if (p != nullptr) {
+		
+			// Save current position to previous position
+			t->PrevPosition = t->Position;
 
-		// Save current position to previous position
-		t->PrevPosition = t->Position;
+			if (p->Velocity.x == 0.f && p->Velocity.y == 0.f)
+				continue; // No movement, so no need to calculate collision.
 
-		if (p->Velocity.x == 0.f && p->Velocity.y == 0.f)
-			continue; // No movement, so no need to calculate collision.
+			// Calculate new position
+			t->Position += p->Velocity * fixed_dt;
+		}
+
+		if (b == nullptr)
+			continue; // No body in this object, move to next object
 
 		// Reset collision flags
 		if (b->GetShape() == Shape::Rectangle)
 			((Rectangular*)b)->ResetCollisionFlags();
-
-		// Calculate new position
-		t->Position += p->Velocity * fixed_dt;
 
 		RecalculateBody(t, b);
 		/*
@@ -451,7 +455,7 @@ void PhysicsSystem::Update() {
 			}
 		}
 
-		if (collision_has_occured && b->collision_response)
+		if (collision_has_occured && b->collision_response && p != nullptr)
 			Response_Collision(t, b, p);
 	}
 }
