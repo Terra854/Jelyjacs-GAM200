@@ -69,6 +69,8 @@ public:
 
 	Object* FindObject(std::string name);
 
+	void DeleteComponent(unsigned id, ComponentType c);
+
 	int GetNextId() { return nextObjectId; };
 
 	friend class PhysicsSystem; // Needed to apply physics onto each object

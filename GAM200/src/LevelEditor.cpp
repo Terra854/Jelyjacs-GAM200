@@ -85,6 +85,23 @@ void LevelEditor::DebugPerformanceViewer() {
 }
 
 int selected = -1;
+int cloneSuccessful = -1;
+
+bool Transform_EditMode = false;
+
+Vec2 edited_position;
+float edited_rotation;
+Vec2 edited_scale;
+
+bool Body_EditMode = false;
+
+float edited_aabb_width;
+float edited_aabb_height;
+
+bool Physics_EditMode = false;
+
+Vec2 edited_velocity;
+bool edited_gravity;
 
 void LevelEditor::ObjectProperties(){
 
@@ -173,24 +190,43 @@ void LevelEditor::ObjectProperties(){
 	ImGui::Text("Object Name: %s", object->GetName().c_str());
 	ImGui::Text("Number of components: %d", object->GetNumComponents());
 	
+	if (ImGui::Button("Clone"))
+	{
+		Object* o = objectFactory->cloneObject(object);
+		selected = o->GetId();
+		cloneSuccessful = selected;
+	}
+
+	ImGui::SameLine();
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
 	if (ImGui::Button("Delete"))
 	{
 		objectFactory->destroyObject(object);
 		selected = -1;
 	}
+	ImGui::PopStyleColor(3);
 
 	ImGui::EndChild();
 
 	if (te != nullptr) {
 		if (ImGui::CollapsingHeader("Texture")) {
 			ImGui::Text("Nothing right now");
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+			if (ImGui::Button("Delete"))
+			{
+				objectFactory->DeleteComponent(object->GetId(), ComponentType::Texture);
+			}
+			ImGui::PopStyleColor(3);
 		}
 	}
 
 	if (a != nullptr) {
 		if (ImGui::CollapsingHeader("Animation")) {
-			ImGui::Text("Nothing right now");
-
 			GLint width, height;
 
 			// Bind the texture
@@ -219,16 +255,56 @@ void LevelEditor::ObjectProperties(){
 			ImGui::SeparatorText("Values");
 
 			ImGui::Text("Current Type: %d", a->current_type);
-			ImGui::Text("Frane Number: %d", a->frame_num);
+			ImGui::Text("Frame Number: %d", a->frame_num);
 
 		}
 	}
 
 	if (tr != nullptr) {
 		if (ImGui::CollapsingHeader("Transform")) {
-			ImGui::Text("Position: %.5f, %.5f", tr->Position.x, tr->Position.y);
-			ImGui::Text("Rotation: %.5f", tr->Rotation);
-			ImGui::Text("Scale: %.5f, %.5f", tr->Scale.x, tr->Scale.y);
+			if (Transform_EditMode)
+			{
+				// Display input fields
+				ImGui::InputFloat2("Position", &(edited_position.x));
+				ImGui::InputFloat("Rotation", &edited_rotation);
+				ImGui::InputFloat2("Scale", &(edited_scale.x));
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done"))
+				{
+					Transform_EditMode = false;
+					tr->Position = edited_position;
+					tr->Rotation = edited_rotation;
+					tr->Scale = edited_scale;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel"))
+				{
+					Transform_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
+			}
+			else
+			{
+				// Display the values as text
+				ImGui::Text("Position: %.5f, %.5f", tr->Position.x, tr->Position.y);
+				ImGui::Text("Rotation: %.5f", tr->Rotation);
+				ImGui::Text("Scale: %.5f, %.5f", tr->Scale.x, tr->Scale.y);
+
+				// Button to enter edit mode
+				if (ImGui::Button("Edit"))
+				{
+					Transform_EditMode = true;
+					edited_position = tr->Position;
+					edited_rotation = tr->Rotation;
+					edited_scale = tr->Scale;
+				}
+			}
 		}
 	}
 
@@ -236,8 +312,57 @@ void LevelEditor::ObjectProperties(){
 		if (ImGui::CollapsingHeader("Body")) {
 			if (b->GetShape() == Shape::Rectangle) {
 				Rectangular* r = (Rectangular*)b;
-				ImGui::Text("AABB Width: %.5f", r->width);
-				ImGui::Text("AABB Height: %.5f", r->height);
+
+				if (Body_EditMode)
+				{
+					// Display input fields
+					ImGui::InputFloat("AABB Width", &edited_aabb_width);
+					ImGui::InputFloat("AABB Height", &edited_aabb_height);
+
+					// Button to exit edit mode
+					if (ImGui::Button("Done"))
+					{
+						Body_EditMode = false;
+						r->width = edited_aabb_width;
+						r->height = edited_aabb_height;
+					}
+
+					ImGui::SameLine();
+
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+					if (ImGui::Button("Cancel"))
+					{
+						Body_EditMode = false;
+					}
+					ImGui::PopStyleColor(3);
+				}
+				else
+				{
+					// Display the values as text
+					ImGui::Text("AABB Width: %.5f", r->width);
+					ImGui::Text("AABB Height: %.5f", r->height);
+
+					// Button to enter edit mode
+					if (ImGui::Button("Edit"))
+					{
+						Body_EditMode = true;
+						edited_aabb_width = r->width;
+						edited_aabb_height = r->height;
+					}
+
+					ImGui::SameLine();
+
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+					if (ImGui::Button("Delete"))
+					{
+						objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
+					}
+					ImGui::PopStyleColor(3);
+				}
 
 				ImGui::SeparatorText("AABB Collision");
 
@@ -497,7 +622,47 @@ void LevelEditor::ObjectProperties(){
 
 	if (ph != nullptr) {
 		if (ImGui::CollapsingHeader("Physics")) {
-			ImGui::Text("Velocity: %.5f, %.5f", ph->Velocity.x, ph->Velocity.y);
+			if (Physics_EditMode)
+			{
+				// Display input fields
+				ImGui::InputFloat2("Velocity", &(edited_velocity.x));
+				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done"))
+				{
+					Physics_EditMode = false;
+					ph->Velocity = edited_velocity;
+					ph->AffectedByGravity = edited_gravity;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel"))
+				{
+					Physics_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
+			}
+			else
+			{
+				// Display the values as text
+				ImGui::Text("Velocity: %.5f, %.5f", ph->Velocity.x, ph->Velocity.y);
+				ImGui::Text("Affected by gravity: ");
+				ImGui::SameLine();
+				ph->AffectedByGravity ? ImGui::Text("true") : ImGui::Text("false");
+
+				// Button to enter edit mode
+				if (ImGui::Button("Edit"))
+				{
+					Physics_EditMode = true;
+					edited_velocity = ph->Velocity;
+					edited_gravity = ph->AffectedByGravity;
+				}
+			}
 		}
 	}
 
@@ -512,8 +677,10 @@ void LevelEditor::ObjectProperties(){
 void LevelEditor::ListOfObjects() {
 
 	ImGui::Begin("Object List");
-	if (ImGui::BeginTable("split", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
+	ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
+
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
 
@@ -535,6 +702,30 @@ void LevelEditor::ListOfObjects() {
 			}
 		}
 		ImGui::EndTable();
+	}
+	ImGui::End();
+}
+
+void ObjectClonedSuccessfully(int i) {
+	ImGui::SetNextWindowPos(ImVec2(window->width / 2, window->height / 2));
+	ImGui::SetNextWindowSize(ImVec2(0, 0));
+	char text[50];
+
+	ImGui::Begin("Clone Successful");
+	sprintf_s(text, "New object ID is: %d", i);
+
+	ImVec2 textSize = ImGui::CalcTextSize(text);
+	ImVec2 windowSize = ImGui::GetWindowSize();
+	ImVec2 textPos = {
+		(windowSize.x - textSize.x) * 0.5f,
+		(windowSize.y - textSize.y) * 0.5f
+	};
+	ImGui::SetCursorPos(textPos);
+	ImGui::Text(text);
+
+	if (ImGui::Button("OK"))
+	{
+		cloneSuccessful = -1;
 	}
 	ImGui::End();
 }
@@ -561,7 +752,7 @@ void LevelEditor::Update() {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	
-	ImGui::Begin("DockSpace Demo", &dock_space, window_flags);
+	ImGui::Begin("DockSpace", &dock_space, window_flags);
 
 	ImGui::PopStyleVar(3);
 
@@ -607,7 +798,12 @@ void LevelEditor::Update() {
 
 	ObjectProperties();
 
+	if (cloneSuccessful > -1) {
+		ObjectClonedSuccessfully(cloneSuccessful);
+	}
 }
+
+/************************************LEVEL EDITOR GRID************************************/
 
 LevelEditorGrid* editor_grid;
 LevelEditorGrid::LevelEditorGrid()

@@ -497,3 +497,9 @@ Object* Factory::FindObject(std::string name)
 
 	return nullptr;
 }
+
+void Factory::DeleteComponent(unsigned id, ComponentType c) {
+	Object* o = getObjectWithID(id);
+	delete o->Components[c];
+	o->Components.erase(c);
+}
