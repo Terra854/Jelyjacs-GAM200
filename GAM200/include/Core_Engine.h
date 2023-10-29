@@ -16,7 +16,14 @@ This file contains the declaration for the Core Engine class
 #include <ImGui/imgui_impl_glfw.h>
 #include <Imgui/imgui_impl_opengl3.h>
 
-class CoreEngine {
+enum Axis
+{
+	X,
+	Y
+};
+
+class CoreEngine 
+{
 public:
 	// Constructor to initiate variables to 0.
 	CoreEngine();
@@ -45,6 +52,10 @@ public:
 	void Broadcast(Message_Handler *msg);
 
 	void createObject(float posX, float posY, std::string objectName);
+
+	int convertGridToWorldPos(int gridPos, Axis axis);
+	int convertMousePosToGridPos(Axis axis);
+	bool checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int bottomY);
 
 	float GetDt() { return dt; }
 	float Get_FPS() { return core_fps; }
