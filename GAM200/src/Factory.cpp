@@ -333,6 +333,7 @@ void Factory::destroyAllObjects()
 	}
 
 	objectMap.clear();
+	nextObjectId = 0;
 }
 
 //Creates a game object with no components

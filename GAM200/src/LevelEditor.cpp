@@ -6,6 +6,8 @@
 #include <Factory.h>
 #include <components/Texture.h>
 #include <components/Animation.h>
+#include <filesystem>
+#include "SceneLoader.h"
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -738,6 +740,8 @@ void LevelEditor::Initialize() {
 	total_time = 0.0;
 }
 
+/************************************LEVEL EDITOR MAIN UPDATE LOOP************************************/
+
 void LevelEditor::Update() {
 
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -779,6 +783,30 @@ void LevelEditor::Update() {
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::BeginMenu("Load Level")) {
+				std::vector<std::string> level_files;
+				const std::string path = "Asset/Levels/";
+
+				try {
+					for (const auto& entry : std::filesystem::directory_iterator(path)) {
+						if (entry.is_regular_file() && entry.path().extension() == ".json") {
+							level_files.push_back(entry.path().filename().string());
+						}
+					}
+
+					// Print the filenames
+					for (const auto& filename : level_files) {
+						if (ImGui::MenuItem(filename.c_str())) {
+							objectFactory->destroyAllObjects();
+							LoadScene(path + filename.c_str());
+						}
+					}
+				}
+				catch (std::filesystem::filesystem_error& e) {
+					std::cerr << e.what() << std::endl;
+				}
+				ImGui::EndMenu();
+			}
 			if (ImGui::MenuItem("Exit")) { engine->game_active = false; }
 			ImGui::EndMenu();
 		}

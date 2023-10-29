@@ -244,6 +244,10 @@ void GameLogic::Update() {
 		*/
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID(i);
+
+			if (obj == nullptr)
+				continue;
+
 			if (obj->GetName() == "piston") {
 				Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 				Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
@@ -273,9 +277,33 @@ void GameLogic::Update() {
 					}
 				}
 			}
+			else if (obj->GetName() == "elevator") {
+				MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
+
+				Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
+				Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));
+				moving_platform_physics->Velocity.x = 0.0f;
+				float moving_platform_speed;
+				//bool moving_platform_direction;
+
+				// if the platform reach the max/min height, change direction
+				if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
+					moving_platform_direction = true;
+				}
+				if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
+					moving_platform_direction = false;
+				}
+				moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
+				moving_platform_physics->Velocity.y = moving_platform_speed;
+
+				if (input::IsPressed(KEY::z)) {
+					std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
+				}
+			}
 		}
 	}
 	//Movement for Moving Platform
+	/*
 	if (objectFactory->FindObject("elevator") != nullptr)
 		MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
 
@@ -300,6 +328,7 @@ void GameLogic::Update() {
 			std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
 		}
 	}
+	*/
 	/*
 	// Rotation of an object
 	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
