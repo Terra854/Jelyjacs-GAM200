@@ -265,6 +265,8 @@ void GameLogic::Update() {
 									Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
 									door_animation->fixed = true;
 									door_animation->current_type = AnimationType::Jump;
+									Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
+									door_body->active = false;
 								}
 							}
 						}
