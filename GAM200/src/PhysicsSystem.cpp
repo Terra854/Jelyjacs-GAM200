@@ -317,7 +317,9 @@ void PhysicsSystem::Update() {
 		// No acceleration, not needed in the game
 
 		// Apply gravity
-		p->Velocity.y += gravity * fixed_dt;
+		if (p->AffectedByGravity)
+			p->Velocity.y += gravity * fixed_dt;
+		
 		p->Velocity.y *= 0.99f; // Account for air resistance
 	}
 

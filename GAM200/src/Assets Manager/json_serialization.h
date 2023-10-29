@@ -30,6 +30,7 @@ public:
 	virtual void readString(std::string& str, std::string param, int pos = -1);
 	virtual void readString(std::string& str, std::string param1, std::string param2, int pos = -1);
 	virtual void readBool(bool& val, std::string param, int pos = -1);
+	virtual void readBool(bool& val, std::string param1, std::string param2, int pos = -1);
 
 	virtual bool isMember(std::string str);
 	virtual bool isMember(std::string str, std::string param);

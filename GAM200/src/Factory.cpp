@@ -161,6 +161,8 @@ Object* Factory::createObject(const std::string& filename)
 
 			jsonloop.readFloat(p->Mass, "Properties", "Mass");
 
+			jsonloop.readBool(p->AffectedByGravity, "Properties", "AffectedByGravity");
+
 			obj->AddComponent(p);
 		}
 		else if (type == "Player") {

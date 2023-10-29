@@ -33,6 +33,7 @@
         "X_Velocity": 0.0,
         "Y_Velocity": 0.0,
         "Y_Acceleration": 0.0,
+        "AffectedByGravity":  false,
         "Mass": 0.0
       }
     }

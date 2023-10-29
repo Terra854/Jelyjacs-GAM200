@@ -107,6 +107,14 @@ void JsonSerialization::readBool(bool& val, std::string param, int pos)
 		val = (*jsonObject)[param][pos].asBool();
 }
 
+void JsonSerialization::readBool(bool& val, std::string param1, std::string param2, int pos)
+{
+	if (pos == -1)
+		val = (*jsonObject)[param1][param2].asBool();
+	else
+		val = (*jsonObject)[param1][param2][pos].asBool();
+}
+
 bool JsonSerialization::isMember(std::string str)
 {
 	if ((*jsonObject).isMember(str))

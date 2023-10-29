@@ -15,6 +15,7 @@ public:
 	Physics() : Component() {};
 
 	Vec2 Velocity;
+	bool AffectedByGravity = true;
 	float Mass;
 
 	virtual void Initialize() override
