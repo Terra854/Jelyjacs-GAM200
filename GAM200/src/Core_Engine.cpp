@@ -172,6 +172,9 @@ void CoreEngine::Debug_Update()
 ********************************************************************************/
 void CoreEngine::GameLoop()
 {
+
+	std::vector<int> boxesFilled(numOfBoxes, 0);
+	std::cout << boxesFilled.capacity();
 	// FPS Variables
 	int numofsteps = 0;
 	double accumulator = 0.0;
