@@ -68,20 +68,6 @@ public:
 	// container for shader programs and models
 	static std::map<std::string, GLSLShader> shdrpgms; 
 	static std::map<std::string, GLModel> models;
-	
-	
-	class Leveleditor {
-	public:
-		Leveleditor();
-		Vec2 scale_window{ 800.0f,800.0f };
-		Vec2 pos_botleft{};
-		void set_num(Vec2 num_) { num = num_; }
-		void drawleveleditor();
-		Vec2 num{ 0,0 };
-		float box_size{ 0 };
-
-	};
 };
 extern GLApp* app;
-extern GLApp::Leveleditor* editor;
 #endif  /*GLAPP_H */

@@ -13,6 +13,14 @@ bool showPerformanceInfo = false;
 
 bool dock_space = true; // Always must be on for level editor
 
+LevelEditor::LevelEditor() {
+	editor_grid = new LevelEditorGrid();
+}
+
+LevelEditor::~LevelEditor() {
+	delete editor_grid;
+}
+
 void LevelEditor::DebugUniformGrid() {
 	// DEBUG: Print out the uniform grid
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
@@ -599,4 +607,50 @@ void LevelEditor::Update() {
 
 	ObjectProperties();
 
+}
+
+LevelEditorGrid* editor_grid;
+LevelEditorGrid::LevelEditorGrid()
+{
+	set_num({ 12, 12 });
+	editor_grid = this;
+}
+
+glm::vec3 box_color_editor{ 0.0f, 0.5f, 0.5f };
+
+void LevelEditorGrid::drawleveleditor()
+{
+	if (num.x > num.y)
+		box_size = scale_window.x / num.x;
+	else box_size = scale_window.y / num.y;
+	Vec2 scaling = { box_size / window->width, box_size / window->height };
+	pos_botleft = {
+		(-box_size * (num.x - 1)) / window->width,
+		(-box_size * (num.y - 1)) / window->height
+	};
+	for (int i = 0; i < num.x; i++) {
+		for (int j = 0; j < num.y; j++) {
+			Vec2 pos = pos_botleft + Vec2(i * box_size * 2 / window->width, j * box_size * 2 / window->height);
+			Mat3 mat_test = Mat3Translate(pos.x, pos.y) * Mat3Scale(scaling.x, scaling.y);
+			app->shdrpgms["shape"].Use();
+			// bind VAO of this object's model
+			glBindVertexArray(app->models["square"].vaoid);
+			// copy object's model-to-NDC matrix to vertex shader's
+			// uniform variable uModelToNDC
+			app->shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+			app->shdrpgms["shape"].SetUniform("uColor", box_color_editor);
+			// call glDrawElements with appropriate arguments
+			glDrawElements(app->models["square"].primitive_type, app->models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+			// unbind VAO and unload shader program
+			glBindVertexArray(0);
+			app->shdrpgms["shape"].UnUse();
+			Vec2 botleft = { (i - num.x / 2) * box_size, (j - num.y / 2) * box_size };
+			Vec2 topright = { botleft.x + box_size,botleft.y + box_size };
+			app->drawline(Vec2(topright.x, botleft.y), botleft);
+			app->drawline(topright, Vec2(topright.x, botleft.y));
+			app->drawline(topright, Vec2(botleft.x, topright.y));
+			app->drawline(Vec2(botleft.x, topright.y), botleft);
+		}
+	}
 }

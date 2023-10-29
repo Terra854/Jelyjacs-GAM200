@@ -172,7 +172,7 @@ void CoreEngine::Debug_Update()
 ********************************************************************************/
 void CoreEngine::GameLoop()
 {
-	int numOfBoxes = editor->num.x * editor->num.y;
+	int numOfBoxes = editor_grid->num.x * editor_grid->num.y;
 	std::cout << "Number of boxes " << numOfBoxes << std::endl;
 	std::vector<int> boxesFilled(numOfBoxes, 0);
 	std::cout << boxesFilled.capacity();
@@ -275,8 +275,10 @@ void CoreEngine::GameLoop()
 			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
 
 			Update(Systems["Graphics"]);
+			
 			DrawText("Testing Font", 500, 200, 1);
 			Update(Systems["Window"]);
+			editor_grid->drawleveleditor();
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
 			// End rendering into imgui window 
@@ -409,10 +411,10 @@ void CoreEngine::GameLoop()
 
 			if (select > -1)
 			{
-				int leftXpos = -(editor->box_size * editor->num.x / 2);
-				int rightXpos = (editor->box_size * editor->num.x / 2);
-				int topYpos = (editor->box_size * editor->num.y / 2);
-				int bottomYpos = -(editor->box_size * editor->num.y / 2);
+				int leftXpos = -(editor_grid->box_size * editor_grid->num.x / 2);
+				int rightXpos = (editor_grid->box_size * editor_grid->num.x / 2);
+				int topYpos = (editor_grid->box_size * editor_grid->num.y / 2);
+				int bottomYpos = -(editor_grid->box_size * editor_grid->num.y / 2);
 
 				if (checkIfMouseIsWithinGrid(leftXpos, rightXpos, topYpos, bottomYpos))
 				{
@@ -422,12 +424,12 @@ void CoreEngine::GameLoop()
 					std::cout << "Mouse y position for grid: " << ypos << "\n";
 					if (input::IsPressed(KEY::mouseL))
 					{
-						int xOffset = (xpos - leftXpos) / editor->box_size;
-						int yOffset = (ypos - topYpos) / editor->box_size;
-						if (boxesFilled[xOffset - (yOffset * editor->num.y)] == 0)
+						int xOffset = (xpos - leftXpos) / editor_grid->box_size;
+						int yOffset = (ypos - topYpos) / editor_grid->box_size;
+						if (boxesFilled[xOffset - (yOffset * editor_grid->num.y)] == 0)
 						{
-							createObject(-370 + (xOffset * editor->box_size), 370 + (yOffset * editor->box_size), "../Asset/Objects/mapbox.json");
-							boxesFilled[xOffset - (yOffset * editor->num.y)] = 1;
+							createObject(-370 + (xOffset * editor_grid->box_size), 370 + (yOffset * editor_grid->box_size), "../Asset/Objects/mapbox.json");
+							boxesFilled[xOffset - (yOffset * editor_grid->num.y)] = 1;
 						}
 
 						std::cout << "Object will be placed at " << xpos << " and " << ypos << std::endl;
@@ -441,6 +443,7 @@ void CoreEngine::GameLoop()
 			}
 
 			ImGui::End();
+
 
 			ImGui::Begin("Tileset");
 			ImGui::SetCursorPos({ 0, 0 });

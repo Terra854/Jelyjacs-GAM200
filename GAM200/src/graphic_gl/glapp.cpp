@@ -26,14 +26,8 @@ includes all the functions to draw objects
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
-GLApp::Leveleditor* editor;
-GLApp::Leveleditor::Leveleditor()
-{
-	set_num({ 12, 12 });
-	editor = this;
-}
 
-glm::vec3 box_color_editor{ 0.0f, 0.5f, 0.5f };
+
 //debug 
 bool graphics_debug{ false };//press l to activate debug mode
 glm::vec3 box_color{ 0.0f, 1.0f, 1.0f };
@@ -374,7 +368,6 @@ void GLApp::Update()
 			ani_pt->previous_type = ani_pt->current_type;
 			ani_pt->frame_count += engine->GetDt();
 		}
-		editor->drawleveleditor();
 		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
 
 			Rectangular* rec_pt = static_cast<Rectangular*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body));
@@ -533,41 +526,4 @@ void GLApp::drawline(Vec2 start, Vec2 end) {
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
 	shdrpgms["shape"].UnUse();
-}
-
-void GLApp::Leveleditor::drawleveleditor()
-{
-	if (num.x > num.y)
-		box_size = scale_window.x / num.x;
-	else box_size = scale_window.y / num.y;
-	Vec2 scaling = { box_size / window->width, box_size / window->height };
-	pos_botleft = {
-		(-box_size * (num.x - 1)) / window->width,
-		(-box_size * (num.y - 1)) / window->height
-	};
-	for (int i = 0; i < num.x; i++) {
-		for (int j = 0; j < num.y; j++) {
-			Vec2 pos = pos_botleft + Vec2(i * box_size * 2 / window->width, j * box_size * 2 / window->height);
-			Mat3 mat_test = Mat3Translate(pos.x, pos.y) * Mat3Scale(scaling.x, scaling.y);
-			shdrpgms["shape"].Use();
-			// bind VAO of this object's model
-			glBindVertexArray(models["square"].vaoid);
-			// copy object's model-to-NDC matrix to vertex shader's
-			// uniform variable uModelToNDC
-			shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-			shdrpgms["shape"].SetUniform("uColor", box_color_editor);
-			// call glDrawElements with appropriate arguments
-			glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
-
-			// unbind VAO and unload shader program
-			glBindVertexArray(0);
-			shdrpgms["shape"].UnUse();
-			Vec2 botleft = { (i - num.x / 2) * box_size, (j - num.y / 2) * box_size };
-			Vec2 topright = { botleft.x + box_size,botleft.y + box_size };
-			drawline(Vec2(topright.x, botleft.y), botleft);
-			drawline(topright, Vec2(topright.x, botleft.y));
-			drawline(topright, Vec2(botleft.x, topright.y));
-			drawline(Vec2(botleft.x, topright.y), botleft);
-		}
-	}
 }
