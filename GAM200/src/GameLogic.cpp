@@ -114,7 +114,7 @@ void GameLogic::Initialize()
 
 	//rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Body));
 	//rect_pt->Initialize();
-	
+
 	// Floor
 	for (int i = 0; i < 44; i++) {
 		Object* floor = objectFactory->createObject("../Asset/Objects/mapbox.json");
@@ -182,7 +182,7 @@ void GameLogic::Update() {
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
 		player_physics->Velocity.x = 0.0f;
-		if(player_animation->face_right)player_animation->current_type = AnimationType::Idle;
+		if (player_animation->face_right)player_animation->current_type = AnimationType::Idle;
 		else player_animation->current_type = AnimationType::Idle_left;
 		bool moving = false;
 		if (input::IsPressed(KEY::w)) {
@@ -210,15 +210,15 @@ void GameLogic::Update() {
 			player_animation->face_right = true;
 			player_animation->current_type = AnimationType::Run;
 		}
-		
+
 		if (player_physics->Velocity.y != 0.0f) {
 			player_animation->jump_fixed = true;
-			
+
 			if (player_animation->face_right)player_animation->current_type = AnimationType::Jump;
 			else player_animation->current_type = AnimationType::Jump_left;
 		}
 		else player_animation->jump_fixed = false;
-			
+
 
 		// Let the player loop around the window
 		/*
@@ -250,31 +250,32 @@ void GameLogic::Update() {
 
 			if (obj->GetName() == "piston") {
 				Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-				Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-				if (player_t->Position.x > piston_t->Position.x) {
-					if (player_t->Position.y > piston_t->Position.y && player_t->Position.y < piston_t->Position.y + 50) {
-						Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
-						piston_animation->fixed = true;
-						if (piston_animation->current_type == AnimationType::Jump)continue;
-						piston_animation->current_type = AnimationType::Jump;
-						Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-						std::cout << "pisotn event linked event:";
-						std::cout<<piston_event->linked_event<<std::endl;
-						//check the door
-						for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
-							Object* obj2 = objectFactory->getObjectWithID(j);
-							if (obj2->GetName() == "door") {
-								Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
-								if (piston_event->linked_event == door_event->linked_event) {
-									Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
-									door_animation->fixed = true;
-									door_animation->current_type = AnimationType::Jump;
-									Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
-									door_body->active = false;
-								}
+				Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
+				//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
+
+				if (piston_b->collision_flag & COLLISION_TOP) {
+					Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+					piston_animation->fixed = true;
+					if (piston_animation->current_type == AnimationType::Jump)continue;
+					piston_animation->current_type = AnimationType::Jump;
+					Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+					std::cout << "pisotn event linked event:";
+					std::cout << piston_event->linked_event << std::endl;
+					//check the door
+					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
+						Object* obj2 = objectFactory->getObjectWithID(j);
+						if (obj2->GetName() == "door") {
+							Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
+							if (piston_event->linked_event == door_event->linked_event) {
+								Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
+								door_animation->fixed = true;
+								door_animation->current_type = AnimationType::Jump;
+								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
+								door_body->active = false;
 							}
 						}
 					}
+
 				}
 			}
 			else if (obj->GetName() == "elevator") {
