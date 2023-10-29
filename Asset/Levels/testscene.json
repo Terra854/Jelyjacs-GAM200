@@ -8,6 +8,14 @@
       "Prefabs": "mapbox.json"
     },
     {
+      "Prefabs": "player.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 50.0,
+        "y": 0.0
+      }
+    },
+    {
       "Prefabs": "mapbox.json",
       "Type": "Transform",
       "Position": {
