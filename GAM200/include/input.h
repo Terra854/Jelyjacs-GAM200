@@ -22,6 +22,7 @@ enum class KEY
 	f,
 	z,
 	x,
+	c,
 	mouseL,
 	mouseR,
 	up,
