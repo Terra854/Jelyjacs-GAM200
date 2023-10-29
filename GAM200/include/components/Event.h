@@ -7,7 +7,7 @@ public:
 	virtual void Initialize() override {}
 
 
-	int linked_event = 1;
+	int linked_event;
 
 	virtual ComponentType TypeId() const override { return ComponentType::Event; }
 };
