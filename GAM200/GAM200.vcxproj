@@ -101,6 +101,7 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
+    <ClCompile Include="include\components\Event.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
     <ClCompile Include="src\Assets Manager\json_serialization.cpp" />
@@ -140,6 +141,7 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
     <ClInclude Include="include\Audio.h" />
     <ClInclude Include="include\components\Animation.h" />
     <ClInclude Include="include\components\Body.h" />
+    <ClInclude Include="include\components\Event.h" />
     <ClInclude Include="include\components\PlayerControllable.h" />
     <ClInclude Include="include\components\Texture.h" />
     <ClInclude Include="include\components\Transform.h" />

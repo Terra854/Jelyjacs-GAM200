@@ -24,6 +24,7 @@ ID aand is stored as part of a private map
 #include "components/Physics.h"
 #include "components/PlayerControllable.h"
 #include "components/Animation.h"
+#include "components/Event.h"
 #include "Assets Manager/asset_manager.h"
 #include "Object.h"
 
@@ -265,6 +266,16 @@ Object* Factory::createObject(const std::string& filename)
 
 			obj->AddComponent(a);
 		}
+		else if (type == "Event")
+		{
+			Event* e = (Event*)((ComponentCreator<Event>*) componentMap["Event"])->Create();
+
+
+
+
+
+			obj->AddComponent(e);
+		}
 	}
 
 	// Run the initilization routines for each component (if there is any)
@@ -391,10 +402,6 @@ Object* Factory::cloneObject(Object* object)
 			trans->Scale = tran_pt->Scale;
 			trans->Rotation = tran_pt->Rotation;
 
-			// Forced move cloned object by y + 100 for testing
-			trans->Position.x -= 100;
-			trans->Position.y += 100;
-
 			obj->AddComponent(trans);
 		}
 
@@ -445,6 +452,7 @@ Object* Factory::cloneObject(Object* object)
 
 			p->Velocity = p_pt->Velocity;
 			p->Mass = p_pt->Mass;
+			p->AffectedByGravity = p_pt->AffectedByGravity;
 
 			obj->AddComponent(p);
 		}
@@ -462,6 +470,8 @@ Object* Factory::cloneObject(Object* object)
 
 			ani->animation_tex_obj = ani_tmp->animation_tex_obj;
 			ani->animation_Map = ani_tmp->animation_Map;
+			ani->frame_rate = ani_tmp->frame_rate;
+			ani->jump_fixed_frame = ani_tmp->jump_fixed_frame;
 			
 			obj->AddComponent(ani);
 		}
