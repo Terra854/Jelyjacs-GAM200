@@ -24,24 +24,27 @@ void Camera::Update() {
 
 		if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 			// get the player's position
-			Transform* trans = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));
+			if (scale.x != 1.f || scale.y != 1.f) {
+				Transform* trans = static_cast<Transform*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Transform));
 			
-			position.x = 0.f - trans->Position.x * 2.0f / window->width;
+				position.x = 0.f - trans->Position.x * 2.0f / window->width;
 			
-			position.y = 0.f - trans->Position.y * 2.0f / window->height;
+				position.y = 0.f - trans->Position.y * 2.0f / window->height;
 			// make sure the camera is not out of bounds
-			if(position.x > 1.f - 1.f/scale.x) {
-				position.x = 1.f - 1.f/scale.x;
-			}
-			else if (position.x < -1.f + 1.f / scale.x) {
-				position.x = -1.f + 1.f / scale.x;
-			}
 			
-			if(position.y > 1.f - 1.f / scale.y) {
-				position.y = 1.f - 1.f / scale.y;
-			}
-			else if (position.y < -1.f + 1.f / scale.y) {
-				position.y = -1.f + 1.f / scale.y;
+				if (position.x > 0.6f - 1.f / scale.x) {
+					position.x = 0.6f - 1.f / scale.x;
+				}
+				else if (position.x < -0.6f + 1.f / scale.x) {
+					position.x = -0.6f + 1.f / scale.x;
+				}
+
+				if (position.y > 0.8f - 1.f / scale.y) {
+					position.y = 0.8f - 1.f / scale.y;
+				}
+				else if (position.y < -0.8f + 1.f / scale.y) {
+					position.y = -0.8f + 1.f / scale.y;
+				}
 			}
 		}
 	}

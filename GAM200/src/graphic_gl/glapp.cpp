@@ -345,9 +345,7 @@ void GLApp::Update()
 					if (ani_pt->frame_num >= ani_pt->jump_fixed_frame)
 						ani_pt->frame_num = ani_pt->jump_fixed_frame;
 				}
-			}
-			// object animation
-			if (!ani_pt->fixed) {
+			}else if (!ani_pt->fixed) {
 				ani_pt->frame_num = 0;
 			}else if (ani_pt->frame_count >= ani_pt->frame_rate) {
 				ani_pt->frame_count = 0.f;
