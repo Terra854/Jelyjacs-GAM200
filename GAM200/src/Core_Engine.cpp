@@ -229,7 +229,7 @@ void CoreEngine::GameLoop()
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	/* End Level Editor */
-
+	GLuint tileset = app->setup_texobj("../Asset/Picture/TileSheet.png");
 	// Game Loop
 	while (game_active)
 	{
