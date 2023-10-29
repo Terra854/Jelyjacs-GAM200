@@ -223,7 +223,7 @@ void CoreEngine::GameLoop()
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, level_editor_texture, 0);
 
 	/* End Level Editor */
-
+	GLuint tileset = app->setup_texobj("../Asset/Picture/TileSheet.png");
 	// Game Loop
 	while (game_active)
 	{
@@ -422,7 +422,6 @@ void CoreEngine::GameLoop()
 		//ImGui::Image((void*)(intptr_t)test, ImVec2(108.0f, 108.0f), ImVec2(0.3333, 0), ImVec2(0.666, 0.333));
 		//ImGui::End();
 
-		GLuint tileset = app->setup_texobj("../Asset/Picture/TileSheet.png");
 		ImGui::Begin("Tileset");
 		ImGui::SetCursorPos({ 0, 0 });
 		ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909, 0.111111), ImVec2(0.181818, 0.222222));
