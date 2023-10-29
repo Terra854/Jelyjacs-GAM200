@@ -632,6 +632,7 @@ void LevelEditorGrid::drawleveleditor()
 		for (int j = 0; j < num.y; j++) {
 			Vec2 pos = pos_botleft + Vec2(i * box_size * 2 / window->width, j * box_size * 2 / window->height);
 			Mat3 mat_test = Mat3Translate(pos.x, pos.y) * Mat3Scale(scaling.x, scaling.y);
+			mat_test = camera2D->world_to_ndc * mat_test;
 			app->shdrpgms["shape"].Use();
 			// bind VAO of this object's model
 			glBindVertexArray(app->models["square"].vaoid);
