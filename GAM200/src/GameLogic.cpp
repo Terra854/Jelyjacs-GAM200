@@ -254,7 +254,7 @@ void GameLogic::Update() {
 		if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
 			moving_platform_direction = false;
 		}
-		moving_platform_speed = moving_platform_direction ? -40.0f : 100.0f;
+		moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
 		moving_platform_physics->Velocity.y = moving_platform_speed;
 
 		if (input::IsPressed(KEY::z)) {
