@@ -69,7 +69,7 @@ void LevelEditor::DebugUniformGrid() {
 
 void LevelEditor::DebugPerformanceViewer() {
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
-	ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
+	//ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
 	ImGui::Begin("DEBUG: Performance Viewer", &showPerformanceInfo);
 
 	for (std::pair<std::string, double> p : System_elapsed_time) {
@@ -831,7 +831,7 @@ void LevelEditor::Update() {
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	}
 
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 	if (ImGui::BeginMenuBar())
 	{
@@ -875,7 +875,9 @@ void LevelEditor::Update() {
 	}
 
 	showUniformGrid ? DebugUniformGrid() : DoNothing();
-	showPerformanceInfo ? DebugPerformanceViewer() : DoNothing();
+	//showPerformanceInfo ? DebugPerformanceViewer() : DoNothing();
+
+	DebugPerformanceViewer();
 
 	ListOfObjects();
 
