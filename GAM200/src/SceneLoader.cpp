@@ -9,8 +9,8 @@ This file contains the definitions for loading scenes
 #include <Debug.h>
 #include "Assets Manager/asset_manager.h"
 #include "Assets Manager/json_serialization.h"
+#include "../include/components/Event.h"
 #include "SceneLoader.h"
-#include <fstream>
 #include <iostream>
 
 void LoadScene(std::string filename)
@@ -58,6 +58,12 @@ void LoadScene(std::string filename)
 			Transform* tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 			jsonloop.readFloat(tran_pt->Position.x, "Position", "x");
 			jsonloop.readFloat(tran_pt->Position.y, "Position", "y");
+		}
+
+		if (jsonloop.isMember("linkedevent"))
+		{
+			Event* event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+			jsonloop.readInt(event_pt->linked_event, "linkedevent");
 		}
 
 		// Add here to read oher types of data if necessary WIP

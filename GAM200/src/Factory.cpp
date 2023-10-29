@@ -270,9 +270,7 @@ Object* Factory::createObject(const std::string& filename)
 		{
 			Event* e = (Event*)((ComponentCreator<Event>*) componentMap["Event"])->Create();
 
-			e->linked_event = 1;
-
-
+			jsonloop.readInt(e->linked_event, "Properties", "linkedevent");
 
 			obj->AddComponent(e);
 		}
