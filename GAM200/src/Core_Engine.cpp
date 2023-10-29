@@ -278,7 +278,7 @@ void CoreEngine::GameLoop()
 			
 			DrawText("Testing Font", 500, 200, 1);
 			Update(Systems["Window"]);
-			editor_grid->drawleveleditor();
+			//editor_grid->drawleveleditor();
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
 			// End rendering into imgui window 
