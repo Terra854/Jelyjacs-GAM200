@@ -97,6 +97,11 @@ Vec2 edited_scale;
 
 bool Body_EditMode = false;
 
+bool edited_active;
+bool edited_collision_response;
+
+bool AABB_EditMode = false;
+
 float edited_aabb_width;
 float edited_aabb_height;
 
@@ -272,7 +277,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::InputFloat2("Scale", &(edited_scale.x));
 
 				// Button to exit edit mode
-				if (ImGui::Button("Done"))
+				if (ImGui::Button("Done##Transform"))
 				{
 					Transform_EditMode = false;
 					tr->Position = edited_position;
@@ -285,7 +290,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-				if (ImGui::Button("Cancel"))
+				if (ImGui::Button("Cancel##Transform"))
 				{
 					Transform_EditMode = false;
 				}
@@ -299,7 +304,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::Text("Scale: %.5f, %.5f", tr->Scale.x, tr->Scale.y);
 
 				// Button to enter edit mode
-				if (ImGui::Button("Edit"))
+				if (ImGui::Button("Edit##Transform"))
 				{
 					Transform_EditMode = true;
 					edited_position = tr->Position;
@@ -312,19 +317,68 @@ void LevelEditor::ObjectProperties(){
 
 	if (b != nullptr) {
 		if (ImGui::CollapsingHeader("Body")) {
+			ImGui::SeparatorText("General Body Settings");
+
+			if (Body_EditMode)
+			{
+				// Display input fields
+				ImGui::Checkbox("Active", &edited_active);
+				ImGui::Checkbox("Respond to collision", &edited_collision_response);
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done##Body"))
+				{
+					Body_EditMode = false;
+					b->active = edited_active;
+					b->collision_response = edited_collision_response;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel##Body"))
+				{
+					Body_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
+			}
+			else
+			{
+				// Display the values as text
+				ImGui::Text("Active: ");
+				ImGui::SameLine();
+				b->active ? ImGui::Text("true") : ImGui::Text("false");
+
+				ImGui::Text("Respond to collision: ");
+				ImGui::SameLine();
+				b->collision_response ? ImGui::Text("true") : ImGui::Text("false");
+
+				// Button to enter edit mode
+				if (ImGui::Button("Edit##Body"))
+				{
+					Body_EditMode = true;
+					edited_active = b->active;
+					edited_collision_response = b->collision_response;
+				}
+			}
+
 			if (b->GetShape() == Shape::Rectangle) {
 				Rectangular* r = (Rectangular*)b;
 
-				if (Body_EditMode)
+				ImGui::SeparatorText("AABB Collision Settings");
+
+				if (AABB_EditMode)
 				{
 					// Display input fields
 					ImGui::InputFloat("AABB Width", &edited_aabb_width);
 					ImGui::InputFloat("AABB Height", &edited_aabb_height);
 
 					// Button to exit edit mode
-					if (ImGui::Button("Done"))
+					if (ImGui::Button("Done##AABB"))
 					{
-						Body_EditMode = false;
+						AABB_EditMode = false;
 						r->width = edited_aabb_width;
 						r->height = edited_aabb_height;
 					}
@@ -334,9 +388,9 @@ void LevelEditor::ObjectProperties(){
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-					if (ImGui::Button("Cancel"))
+					if (ImGui::Button("Cancel##AABB"))
 					{
-						Body_EditMode = false;
+						AABB_EditMode = false;
 					}
 					ImGui::PopStyleColor(3);
 				}
@@ -347,9 +401,9 @@ void LevelEditor::ObjectProperties(){
 					ImGui::Text("AABB Height: %.5f", r->height);
 
 					// Button to enter edit mode
-					if (ImGui::Button("Edit"))
+					if (ImGui::Button("Edit##AABB"))
 					{
-						Body_EditMode = true;
+						AABB_EditMode = true;
 						edited_aabb_width = r->width;
 						edited_aabb_height = r->height;
 					}
@@ -359,7 +413,7 @@ void LevelEditor::ObjectProperties(){
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-					if (ImGui::Button("Delete"))
+					if (ImGui::Button("Delete##AABB"))
 					{
 						objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
 					}
@@ -631,7 +685,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
 
 				// Button to exit edit mode
-				if (ImGui::Button("Done"))
+				if (ImGui::Button("Done##Physics"))
 				{
 					Physics_EditMode = false;
 					ph->Velocity = edited_velocity;
@@ -643,7 +697,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-				if (ImGui::Button("Cancel"))
+				if (ImGui::Button("Cancel##Physics"))
 				{
 					Physics_EditMode = false;
 				}
@@ -658,7 +712,7 @@ void LevelEditor::ObjectProperties(){
 				ph->AffectedByGravity ? ImGui::Text("true") : ImGui::Text("false");
 
 				// Button to enter edit mode
-				if (ImGui::Button("Edit"))
+				if (ImGui::Button("Edit##Physics"))
 				{
 					Physics_EditMode = true;
 					edited_velocity = ph->Velocity;
@@ -797,6 +851,7 @@ void LevelEditor::Update() {
 					// Print the filenames
 					for (const auto& filename : level_files) {
 						if (ImGui::MenuItem(filename.c_str())) {
+							selected = -1;
 							objectFactory->destroyAllObjects();
 							LoadScene(path + filename.c_str());
 						}
