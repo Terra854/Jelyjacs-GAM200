@@ -36,10 +36,13 @@ void Audio::Initialize(){
     system->playSound(game_background, 0, false, &background);
     background->setVolume(0.2f);
 
-    system->createSound("Asset/Sounds/Jump.wav", FMOD_DEFAULT, 0, &jump);
     system->createSound("Asset/Sounds/Footsteps.wav", FMOD_LOOP_NORMAL, 0, &walking);
     system->playSound(walking, 0, false, &channel);
     channel->setVolume(0.0);
+
+
+    system->createSound("Asset/Sounds/Jump.wav", FMOD_DEFAULT, 0, &jump);
+    system->createSound("Asset/Sounds/Sliding_Door_Open.wav", FMOD_DEFAULT, 0, &sliding_door_open);
 
     // Let other systems have access to this system
     audio = this;
@@ -58,6 +61,11 @@ void Audio::stopWalking() {
 }
 
 void Audio::playJump() {
-    system->playSound(jump, 0, false, &channel2);
-    channel2->setVolume(0.2f);
+    system->playSound(jump, 0, false, &sfx);
+    sfx->setVolume(0.2f);
+}
+
+void Audio::playSlidingDoor() {
+    system->playSound(sliding_door_open, 0, false, &sfx);
+    sfx->setVolume(0.2f);
 }
