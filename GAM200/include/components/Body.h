@@ -28,6 +28,7 @@ public:
 	virtual void Initialize() override {};
 	virtual ComponentType TypeId() const override { return ComponentType::Body; }
 
+	bool active = true; // Set to false to temporarily disable collision for this object
 	bool collision_response = true; // Set to false for moving platforms
 
 	// Record down the grids the object is in. 1st is width, 2nd is height

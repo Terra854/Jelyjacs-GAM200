@@ -62,7 +62,7 @@ void GameLogic::Initialize()
 	LoadScene("../Asset/Levels/tutorial_level.json");
 
 	//playerObj = objectFactory->getPlayerObject();
-	MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
+	//MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
 
 	/*
 	Object* testObj;
@@ -242,6 +242,9 @@ void GameLogic::Update() {
 		*/
 	}
 	//Movement for Moving Platform
+	if (objectFactory->FindObject("elevator") != nullptr)
+		MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
+
 	if (MovingPlatform != nullptr) {
 		Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
 		Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));

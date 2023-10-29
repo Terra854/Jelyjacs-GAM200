@@ -342,8 +342,8 @@ void PhysicsSystem::Update() {
 			t->Position += p->Velocity * fixed_dt;
 		}
 
-		if (b == nullptr)
-			continue; // No body in this object, move to next object
+		if (b == nullptr || !b->active)
+			continue; // No body in this object or disabled, move to next object
 
 		// Reset collision flags
 		if (b->GetShape() == Shape::Rectangle)
