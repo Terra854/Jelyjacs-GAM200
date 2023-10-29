@@ -374,6 +374,7 @@ void GLApp::Update()
 			ani_pt->previous_type = ani_pt->current_type;
 			ani_pt->frame_count += engine->GetDt();
 		}
+		editor->drawleveleditor();
 		if (graphics_debug && objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body) != nullptr) {
 
 			Rectangular* rec_pt = static_cast<Rectangular*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Body));
