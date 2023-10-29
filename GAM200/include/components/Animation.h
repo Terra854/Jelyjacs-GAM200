@@ -28,7 +28,12 @@ public:
 	AnimationType previous_type=AnimationType::Idle;
 	bool face_right = true;
 	bool jump_fixed = false;
+
+
 	int jump_fixed_frame = 0;
+
+	bool fixed = false;
+	bool invert = false;
 	float frame_rate{};
 	float frame_count{};
 	int frame_num{};
