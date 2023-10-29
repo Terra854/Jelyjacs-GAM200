@@ -26,6 +26,14 @@ includes all the functions to draw objects
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
+GLApp::Leveleditor* editor;
+GLApp::Leveleditor::Leveleditor()
+{
+	set_num({ 12, 12 });
+	editor = this;
+}
+
+glm::vec3 box_color_editor{ 0.0f, 0.5f, 0.5f };
 //debug 
 bool graphics_debug{ false };//press l to activate debug mode
 glm::vec3 box_color{ 0.0f, 1.0f, 1.0f };
