@@ -270,7 +270,7 @@ Object* Factory::createObject(const std::string& filename)
 		{
 			Event* e = (Event*)((ComponentCreator<Event>*) componentMap["Event"])->Create();
 
-
+			e->linked_event = 1;
 
 
 
@@ -474,6 +474,16 @@ Object* Factory::cloneObject(Object* object)
 			ani->jump_fixed_frame = ani_tmp->jump_fixed_frame;
 			
 			obj->AddComponent(ani);
+		}
+		else if (c.first == ComponentType::Event)
+		{
+			Event* e = (Event*)((ComponentCreator<Event>*) componentMap["Event"])->Create();
+			Event* e_tmp = static_cast<Event*>(object->GetComponent(ComponentType::Event));
+
+
+			e->linked_event = e_tmp->linked_event;
+
+			obj->AddComponent(e);
 		}
 	}
 
