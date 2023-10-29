@@ -61,7 +61,7 @@ void GameLogic::Initialize()
 
 	LoadScene("../Asset/Levels/tutorial_level.json");
 
-	playerObj = objectFactory->getPlayerObject();
+	//playerObj = objectFactory->getPlayerObject();
 	MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
 
 	/*
@@ -174,6 +174,8 @@ void GameLogic::Update() {
 
 	// Movement for Player
 	// If button Pressed, changed velocity
+	playerObj = objectFactory->getPlayerObject();
+
 	if (playerObj != nullptr) {
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
