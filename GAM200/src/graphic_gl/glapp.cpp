@@ -347,14 +347,14 @@ void GLApp::Update()
 				}
 			}
 			// object animation
-			if(ani_pt->current_type != ani_pt->previous_type )
+			if (!ani_pt->fixed) {
 				ani_pt->frame_num = 0;
-			/*else if (ani_pt->frame_count >= ani_pt->frame_rate) {
+			}else if (ani_pt->frame_count >= ani_pt->frame_rate) {
 				ani_pt->frame_count = 0.f;
 				ani_pt->frame_num++;
 				if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
-					ani_pt->frame_num = ani_pt->animation_Map[ani_pt->current_type].size();
-			}*/
+					ani_pt->frame_num = ani_pt->animation_Map[ani_pt->current_type].size()-1;
+			}
 
 			glBindTextureUnit(6, tex_test);
 			glBindTexture(GL_TEXTURE_2D, tex_test);

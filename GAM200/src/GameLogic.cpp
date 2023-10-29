@@ -242,6 +242,36 @@ void GameLogic::Update() {
 			std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
 		}
 		*/
+		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
+			Object* obj = objectFactory->getObjectWithID(i);
+			if (obj->GetName() == "piston") {
+				Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+				Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
+				if (player_t->Position.x > piston_t->Position.x) {
+					if (player_t->Position.y > piston_t->Position.y && player_t->Position.y < piston_t->Position.y + 50) {
+						Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+						piston_animation->fixed = true;
+						if (piston_animation->current_type == AnimationType::Jump)continue;
+						piston_animation->current_type = AnimationType::Jump;
+						Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+						std::cout << "pisotn event linked event:";
+						std::cout<<piston_event->linked_event<<std::endl;
+						//check the door
+						for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
+							Object* obj2 = objectFactory->getObjectWithID(j);
+							if (obj2->GetName() == "door") {
+								Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
+								if (piston_event->linked_event == door_event->linked_event) {
+									Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
+									door_animation->fixed = true;
+									door_animation->current_type = AnimationType::Jump;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	//Movement for Moving Platform
 	if (objectFactory->FindObject("elevator") != nullptr)
