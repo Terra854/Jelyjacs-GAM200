@@ -24,6 +24,7 @@ ID aand is stored as part of a private map
 #include "components/Physics.h"
 #include "components/PlayerControllable.h"
 #include "components/Animation.h"
+#include "components/Event.h"
 #include "Assets Manager/asset_manager.h"
 #include "Object.h"
 
@@ -264,6 +265,16 @@ Object* Factory::createObject(const std::string& filename)
 			}
 
 			obj->AddComponent(a);
+		}
+		else if (type == "Event")
+		{
+			Event* e = (Event*)((ComponentCreator<Event>*) componentMap["Event"])->Create();
+
+
+
+
+
+			obj->AddComponent(e);
 		}
 	}
 

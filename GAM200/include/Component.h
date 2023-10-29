@@ -12,7 +12,6 @@ Contains a pointer to the object that the particualr game component is a part of
 #include <Debug.h>
 #include <Object.h>
 #include "../src/Assets Manager/serialization.h"
-//#include "../../src/Assets Manager/json_serialization.h"
 
 //different types of game components to differentiate
 enum class ComponentType
@@ -23,7 +22,8 @@ enum class ComponentType
 	Body,
 	Physics,
 	PlayerControllable,
-	Animation
+	Animation,
+	Event
 };
 
 class Component
