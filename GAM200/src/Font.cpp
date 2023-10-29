@@ -23,8 +23,8 @@ void Font::Initialize()
 {
 	std::vector<std::pair<GLenum, std::string>> shdr_files
 	{
-		std::make_pair(GL_VERTEX_SHADER, "../shaders/Font.vert"),
-		std::make_pair(GL_FRAGMENT_SHADER, "../shaders/Font.frag")
+		std::make_pair(GL_VERTEX_SHADER, "shaders/Font.vert"),
+		std::make_pair(GL_FRAGMENT_SHADER, "shaders/Font.frag")
 	};
 	
 	shdr_pgm.CompileLinkValidate(shdr_files);
@@ -53,7 +53,7 @@ void Font::Initialize()
 
         // load font as face
         FT_Face face;
-        if (FT_New_Face(ft, "../Asset/Fonts/Aldrich-Regular.ttf", 0, &face)) {
+        if (FT_New_Face(ft, "Asset/Fonts/Aldrich-Regular.ttf", 0, &face)) {
             std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
         }
         else {

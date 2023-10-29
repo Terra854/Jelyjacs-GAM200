@@ -40,7 +40,7 @@ constructor
 */
 GLWindow::GLWindow() {
 
-    std::ifstream ifs("../scenes/config.txt", std::ios::in);
+    std::ifstream ifs("scenes/config.txt", std::ios::in);
     if (!ifs)
     {
         std::cout <<

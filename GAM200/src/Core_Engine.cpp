@@ -230,7 +230,7 @@ void CoreEngine::GameLoop()
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	/* End Level Editor */
-	GLuint tileset = app->setup_texobj("../Asset/Picture/TileSheet.png");
+	GLuint tileset = app->setup_texobj("Asset/Picture/TileSheet.png");
 	// Game Loop
 	while (game_active)
 	{
@@ -298,10 +298,10 @@ void CoreEngine::GameLoop()
 			if (ImGui::CollapsingHeader("Create object")) {
 				ImGui::InputFloat("Input x position of object", &xPos);
 				ImGui::InputFloat("Input y position of object", &yPos);
-				//ImGui::ImageButton("../Asset/Textures/mapbox.png", ImVec2(50, 50));
+				//ImGui::ImageButton("Asset/Textures/mapbox.png", ImVec2(50, 50));
 				if (ImGui::Button("Create box"))
 				{
-					createObject(xPos, yPos, "../Asset/Objects/mapbox.json");
+					createObject(xPos, yPos, "Asset/Objects/mapbox.json");
 				}
 			}
 
@@ -428,7 +428,7 @@ void CoreEngine::GameLoop()
 						int yOffset = (ypos - topYpos) / editor_grid->box_size;
 						if (boxesFilled[xOffset - (yOffset * editor_grid->num.y)] == 0)
 						{
-							createObject(-370 + (xOffset * editor_grid->box_size), 370 + (yOffset * editor_grid->box_size), "../Asset/Objects/mapbox.json");
+							createObject(-370 + (xOffset * editor_grid->box_size), 370 + (yOffset * editor_grid->box_size), "Asset/Objects/mapbox.json");
 							boxesFilled[xOffset - (yOffset * editor_grid->num.y)] = 1;
 						}
 
@@ -437,7 +437,7 @@ void CoreEngine::GameLoop()
 
 					if (input::IsPressed(KEY::mouseR))
 					{
-						createObject(0, 0, "../Asset/Objects/mapbox.json");
+						createObject(0, 0, "Asset/Objects/mapbox.json");
 					}
 				}
 			}

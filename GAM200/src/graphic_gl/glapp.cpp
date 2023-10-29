@@ -66,7 +66,7 @@ void GLApp::Initialize()
 */
 void GLApp::init_models() {
 	//open list of meshes
-	std::ifstream ifs{ "../meshes/list.txt", std::ios::in };
+	std::ifstream ifs{ "meshes/list.txt", std::ios::in };
 	if (!ifs)
 	{
 		std::cout << "ERROR: Unable to open mesh file: "
@@ -85,7 +85,7 @@ void GLApp::init_models() {
 		//check if model already exists
 		if (models.find(model_name) == models.end()) {
 			GLModel Model;
-			std::ifstream ifs_msh{ "../meshes/" + model_name + ".msh", std::ios::in };
+			std::ifstream ifs_msh{ "meshes/" + model_name + ".msh", std::ios::in };
 			if (!ifs_msh)
 			{
 				std::cout << "ERROR: Unable to open mesh file: "
@@ -221,9 +221,9 @@ void GLApp::init_models() {
 */
 void GLApp::init_shdrpgms() {
 
-	insert_shdrpgm("image", "../shaders/image.vert", "../shaders/image.frag");
+	insert_shdrpgm("image", "shaders/image.vert", "shaders/image.frag");
 	std::cout << "test shader program: " << "image-shdrpgm" << std::endl;
-	insert_shdrpgm("shape", "../shaders/shape.vert", "../shaders/shape.frag");
+	insert_shdrpgm("shape", "shaders/shape.vert", "shaders/shape.frag");
 	std::cout << "test shader program: " << "shape-shdrpgm" << std::endl;
 }
 

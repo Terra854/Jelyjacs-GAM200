@@ -61,7 +61,7 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
 
 
-	LoadScene("../Asset/Levels/tutorial_level.json");
+	LoadScene("Asset/Levels/tutorial_level.json");
 
 	//playerObj = objectFactory->getPlayerObject();
 	//MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
