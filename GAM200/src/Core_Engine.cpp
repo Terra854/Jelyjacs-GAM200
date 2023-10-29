@@ -24,6 +24,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include "Font.h"
 #include <PhysicsSystem.h>
 #include <glapp.h>
+#include "GameHud.h"
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
@@ -275,8 +276,7 @@ void CoreEngine::GameLoop()
 			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
 
 			Update(Systems["Graphics"]);
-			
-			DrawText("Testing Font", 500, 200, 1);
+
 			Update(Systems["Window"]);
 			//editor_grid->drawleveleditor();
 
@@ -540,7 +540,7 @@ void CoreEngine::GameLoop()
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
 
 			Update(Systems["Graphics"]);
-			DrawText("Testing Font", 500, 200, 1);
+			gamehud->Draw();
 			Update(Systems["Window"]);
 			hud.GuiRender(io);
 		}

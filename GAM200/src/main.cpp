@@ -19,6 +19,7 @@ This file contains the main function.
 #include <LevelEditor.h>
 #include <ThreadPool.h>
 #include <../src/Assets Manager/asset_manager.h>
+#include "GameHud.h"
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
 ThreadPool* thread_pool;
@@ -39,6 +40,7 @@ int main() {
 	audio = new Audio(); // declared in Audio.h
 	GameLogic* logic = new GameLogic();
 	Font* font = new Font();
+	GameHud* gamehud = new GameHud();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();
 	level_editor = new LevelEditor();
@@ -53,6 +55,7 @@ int main() {
 	engine->AddSystem(physics);
 	engine->AddSystem(audio);
 	engine->AddSystem(font);
+	engine->AddSystem(gamehud);
 	engine->AddSystem(camera);
 	engine->AddSystem(level_editor);
 	engine->AddSystem(graphics);												  // Graphics should always be last
