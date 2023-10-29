@@ -72,7 +72,7 @@ void LevelEditor::DebugPerformanceViewer() {
 
 	for (std::pair<std::string, double> p : System_elapsed_time) {
 		ImGui::Text("%s system completed it's update in %.6f seconds", p.first.c_str(), p.second);
-		ImGui::ProgressBar(p.second / total_time, ImVec2(0.0f, 0.0f), "");
+		ImGui::ProgressBar((float)(p.second / total_time), ImVec2(0.0f, 0.0f), "");
 		ImGui::SameLine();
 		ImGui::Text("%.2f%%", p.second / total_time * 100.0);
 	}
@@ -684,7 +684,7 @@ void LevelEditor::ListOfObjects() {
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
 
-			if (objectFactory->getObjectWithID(i) == nullptr)
+			if (objectFactory->getObjectWithID((long)i) == nullptr)
 			{
 				continue;
 			}
@@ -707,7 +707,7 @@ void LevelEditor::ListOfObjects() {
 }
 
 void ObjectClonedSuccessfully(int i) {
-	ImGui::SetNextWindowPos(ImVec2(window->width / 2, window->height / 2));
+	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f, (float)window->height / 2.f));
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
 	char text[50];
 
@@ -765,7 +765,7 @@ void LevelEditor::Update() {
 	}
 	else
 	{
-		ImGuiIO& io = ImGui::GetIO();
+		io = ImGui::GetIO();
 		ImGui::Text("ERROR: Docking is not enabled! See Demo > Configuration.");
 		ImGui::Text("Set io.ConfigFlags |= ImGuiConfigFlags_DockingEnable in your code, or ");
 		ImGui::SameLine(0.0f, 0.0f);

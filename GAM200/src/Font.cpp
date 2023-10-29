@@ -126,7 +126,7 @@ void RenderText(std::string text, float x, float y, float scale, glm::ivec3 colo
 {
     shdr_pgm.Use();
     // activate corresponding render 
-    glUniform3f(glGetUniformLocation(shdr_pgm.GetHandle(), "textColor"), color.x, color.y, color.z);
+    glUniform3f(glGetUniformLocation(shdr_pgm.GetHandle(), "textColor"), (float)color.x, (float)color.y, (float)color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
