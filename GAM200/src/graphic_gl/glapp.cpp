@@ -396,31 +396,36 @@ void GLApp::Update()
 			if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 				//get velocity
 				Physics* phy_pt = static_cast<Physics*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Physics));
-				float Vx = phy_pt->Velocity.x;
-				float Vy = phy_pt->Velocity.y;
 
-				//calculate rotation
-				orientation = atan2(Vy, Vx);
-				
-				//get slcae of line based on length of line
-				Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width / 2, sqrt(Vx * Vx + Vy * Vy) / window->height / 2 };
-				
-				mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
-				mat_test = camera2D->world_to_ndc * mat_test;
-				//draw line
-				shdrpgms["shape"].Use();
-				// bind VAO of this object's model
-				glBindVertexArray(models["line"].vaoid);
-				// copy object's model-to-NDC matrix to vertex shader's
-				// uniform variable uModelToNDC
-				shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-				shdrpgms["shape"].SetUniform("uColor", line_color);
-				// call glDrawElements with appropriate arguments
-				glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+				// Make sure it's not null pointer before continuing
+				if (phy_pt != nullptr) {
 
-				// unbind VAO and unload shader program
-				glBindVertexArray(0);
-				shdrpgms["shape"].UnUse();
+					float Vx = phy_pt->Velocity.x;
+					float Vy = phy_pt->Velocity.y;
+
+					//calculate rotation
+					orientation = atan2(Vy, Vx);
+
+					//get slcae of line based on length of line
+					Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width / 2, sqrt(Vx * Vx + Vy * Vy) / window->height / 2 };
+
+					mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
+					mat_test = camera2D->world_to_ndc * mat_test;
+					//draw line
+					shdrpgms["shape"].Use();
+					// bind VAO of this object's model
+					glBindVertexArray(models["line"].vaoid);
+					// copy object's model-to-NDC matrix to vertex shader's
+					// uniform variable uModelToNDC
+					shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+					shdrpgms["shape"].SetUniform("uColor", line_color);
+					// call glDrawElements with appropriate arguments
+					glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+					// unbind VAO and unload shader program
+					glBindVertexArray(0);
+					shdrpgms["shape"].UnUse();
+				}
 			}
 
 		}
