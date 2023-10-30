@@ -115,6 +115,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
     <ClCompile Include="src\Assets Manager\json_serialization.cpp" />
     <ClCompile Include="src\Audio.cpp" />
+    <ClCompile Include="src\Behaviour.cpp" />
     <ClCompile Include="src\Body.cpp" />
     <ClCompile Include="src\LevelEditor.cpp" />
     <ClCompile Include="src\EngineHud.cpp" />
@@ -131,6 +132,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Line.cpp" />
     <ClCompile Include="src\Assets Manager\text_serialization.cpp" />
     <ClCompile Include="src\Collision.cpp" />
+    <ClCompile Include="src\LogicScript.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Core_Engine.cpp" />
     <ClCompile Include="src\Factory.cpp" />
@@ -149,6 +151,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
   <ItemGroup>
     <ClInclude Include="include\Audio.h" />
     <ClInclude Include="include\components\Animation.h" />
+    <ClInclude Include="include\components\Behaviour.h" />
     <ClInclude Include="include\components\Body.h" />
     <ClInclude Include="include\components\Event.h" />
     <ClInclude Include="include\components\PlayerControllable.h" />
@@ -165,6 +168,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\Factory.h" />
     <ClInclude Include="include\Graphic_gl\Camera.h" />
+    <ClInclude Include="include\LogicScript.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\Interface_System.h" />
     <ClInclude Include="include\AABB.h" />
