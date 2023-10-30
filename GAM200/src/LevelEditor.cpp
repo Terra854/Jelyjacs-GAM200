@@ -206,10 +206,40 @@ void LevelEditor::ObjectProperties(){
 
 	ImGui::SameLine();
 
+	if (ImGui::Button("Add Component")) {
+		if (b == nullptr || ph == nullptr)
+			ImGui::OpenPopup("AddComponent");
+		else
+			ImGui::OpenPopup("NoComponentsToAdd");
+	}
+
+	if (ImGui::BeginPopup("AddComponent"))
+	{
+		if (b == nullptr)
+			if (ImGui::Selectable("Body")) {
+				object->AddComponent(new Rectangular());
+			}
+
+		if (ph == nullptr)
+			if (ImGui::Selectable("Physics")) {
+				object->AddComponent(new Physics());
+			}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopup("NoComponentsToAdd"))
+	{
+		ImGui::TextDisabled("There isn't any missing components to add");
+		ImGui::EndPopup();
+	}
+
+	ImGui::SameLine();
+
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-	if (ImGui::Button("Delete"))
+	if (ImGui::Button("Delete Object"))
 	{
 		objectFactory->destroyObject(object);
 		selected = -1;
@@ -362,9 +392,21 @@ void LevelEditor::ObjectProperties(){
 					edited_active = b->active;
 					edited_collision_response = b->collision_response;
 				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete##Body"))
+				{
+					objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
+					b = nullptr;
+				}
+				ImGui::PopStyleColor(3);
 			}
 
-			if (b->GetShape() == Shape::Rectangle) {
+			if (b != nullptr && b->GetShape() == Shape::Rectangle) {
 				Rectangular* r = (Rectangular*)b;
 
 				ImGui::SeparatorText("AABB Collision Settings");
@@ -407,17 +449,6 @@ void LevelEditor::ObjectProperties(){
 						edited_aabb_width = r->width;
 						edited_aabb_height = r->height;
 					}
-
-					ImGui::SameLine();
-
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-					if (ImGui::Button("Delete##AABB"))
-					{
-						objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
-					}
-					ImGui::PopStyleColor(3);
 				}
 
 				ImGui::SeparatorText("AABB Collision");
@@ -727,6 +758,7 @@ void LevelEditor::ObjectProperties(){
 				if (ImGui::Button("Delete##Physics"))
 				{
 					objectFactory->DeleteComponent(object->GetId(), ComponentType::Physics);
+					ph = nullptr;
 				}
 				ImGui::PopStyleColor(3);
 			}
