@@ -374,3 +374,8 @@ void GameLogic::Update() {
 	std::cout << "#####################################################################" << std::endl;
 	*/
 }
+
+void GameLogic::AddBehaviour(LogicScript* behaviour)
+{
+	behaviours.push_back(behaviour);
+}

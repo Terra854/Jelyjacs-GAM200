@@ -9,6 +9,8 @@ This file contains the declaration for the Game Logic system class
 #include <Debug.h>
 
 #include "Interface_System.h"
+#include <LogicScript.h>
+#include <components/Behaviour.h>
 
 
 class GameLogic : public ISystems
@@ -21,12 +23,12 @@ public:
 	virtual void MessageRelay(Message_Handler* msg);
 	virtual void Initialize();
 	void Update();
-	//void AddBehaviour(BehaviourFCT* behaviour);
+	void AddBehaviour(LogicScript* behaviour);
 	virtual std::string SystemName() { return "Game_Logic"; }
 private:
 
-	//std::vector<BehaviourFCT*> behaviours;
-	//std::vector<BehaviourComponent*> behaviourComponents;
+	std::vector<LogicScript*> behaviours;
+	std::vector<Behaviour*> behaviourComponents;
 };
 
 extern GameLogic* Logic;

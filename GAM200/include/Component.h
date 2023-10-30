@@ -23,7 +23,8 @@ enum class ComponentType
 	Physics,
 	PlayerControllable,
 	Animation,
-	Event
+	Event,
+	Behaviour
 };
 
 class Component
