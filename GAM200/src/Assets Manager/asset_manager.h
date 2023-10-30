@@ -41,6 +41,8 @@ class AssetManager : public ISystems
 	static std::string objectprefabsval();
 	static void cleanprefab();
 
+	static GLuint gettexture(std::string);
+
 	// Level Editor will need to access the private data
 	friend class LevelEditor;
 
