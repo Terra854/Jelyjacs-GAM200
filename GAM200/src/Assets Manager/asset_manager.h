@@ -41,6 +41,9 @@ class AssetManager : public ISystems
 	static std::string objectprefabsval();
 	static void cleanprefab();
 
+	// Level Editor will need to access the private data
+	friend class LevelEditor;
+
 	// These data shouldn't be modified unless file location is changed
 	private:
 	// Location initialize in asset_manager.cpp

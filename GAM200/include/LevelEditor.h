@@ -14,6 +14,8 @@ public:
 	void DebugPerformanceViewer();
 	void ObjectProperties();
 	void ListOfObjects();
+	void DisplaySelectedTexture();
+	void AssetList();
 	//Constructor to initialise pointer
 	
 	LevelEditor();
