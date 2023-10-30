@@ -23,6 +23,7 @@ includes all the functions to draw objects
 #include <chrono>
 #include <components/PlayerControllable.h>
 #include <components/Animation.h>
+#include <LevelEditor.h>
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
@@ -31,6 +32,8 @@ includes all the functions to draw objects
 //debug 
 bool graphics_debug{ false };//press l to activate debug mode
 glm::vec3 box_color{ 0.0f, 1.0f, 1.0f };
+glm::vec3 red_box_color{ 1.0f, 0.0f, 0.0f };
+glm::vec3 white_box_color{ 1.0f, 1.0f, 1.0f };
 glm::vec3 line_color{ 0.0f, 1.0f, 0.0f };
 
 
@@ -387,11 +390,19 @@ void GLApp::Update()
 
 			Vec2 botleft = rec_pt->aabb.min;
 			Vec2 topright = rec_pt->aabb.max;
-			drawline(Vec2(topright.x, botleft.y), botleft);
-			drawline(topright, Vec2(topright.x, botleft.y));
-			drawline(topright, Vec2(botleft.x, topright.y));
-			drawline(Vec2(botleft.x, topright.y),botleft);
 
+			if (rec_pt->active) {
+				drawline(Vec2(topright.x, botleft.y), botleft, box_color);
+				drawline(topright, Vec2(topright.x, botleft.y), box_color);
+				drawline(topright, Vec2(botleft.x, topright.y), box_color);
+				drawline(Vec2(botleft.x, topright.y), botleft, box_color);
+			}
+			else {
+				drawline(Vec2(topright.x, botleft.y), botleft, red_box_color);
+				drawline(topright, Vec2(topright.x, botleft.y), red_box_color);
+				drawline(topright, Vec2(botleft.x, topright.y), red_box_color);
+				drawline(Vec2(botleft.x, topright.y), botleft, red_box_color);
+			}
 			// draw movement line for player
 			if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 				//get velocity
@@ -428,6 +439,47 @@ void GLApp::Update()
 				}
 			}
 
+		}
+		
+		if (i == level_editor->selected) {
+			Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Animation));
+			Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Texture));
+			Transform* tr = static_cast<Transform*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Transform));
+
+			GLint width, height;
+			Vec2 botleft, topright;
+
+			if (te != nullptr) {
+				// Bind the texture
+				glBindTexture(GL_TEXTURE_2D, te->texturepath);
+
+				// Get the texture width
+				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+
+				// Get the texture height
+				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+
+				// Unbind the texture
+				glBindTexture(GL_TEXTURE_2D, 0);
+
+				botleft = tr->Position + Vec2(-(width / 2.f), -(height / 2.f));
+				topright = tr->Position + Vec2(width / 2.f, height / 2.f);
+
+				drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
+				drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
+				drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
+				drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
+			} else if (a != nullptr) {
+				// TODO: Get the size of the animations
+				// Right now, it's hardcoded to 64x64
+				botleft = tr->Position + Vec2(-32.f, -32.f);
+				topright = tr->Position + Vec2(32.f, 32.f);
+
+				drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
+				drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
+				drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
+				drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
+			}
 		}
 		
     }
@@ -511,7 +563,7 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 	GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
 }
 
-void GLApp::drawline(Vec2 start, Vec2 end) {
+void GLApp::drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	float pos_x;
 	float pos_y;
 	float orientation;
@@ -534,7 +586,7 @@ void GLApp::drawline(Vec2 start, Vec2 end) {
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
 	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-	shdrpgms["shape"].SetUniform("uColor", box_color);
+	shdrpgms["shape"].SetUniform("uColor", color);
 	// call glDrawElements with appropriate arguments
 	glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
 

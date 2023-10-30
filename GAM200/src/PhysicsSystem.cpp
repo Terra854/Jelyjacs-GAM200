@@ -342,7 +342,7 @@ void PhysicsSystem::Update() {
 			t->Position += p->Velocity * fixed_dt;
 		}
 
-		if (b == nullptr || !b->active)
+		if (b == nullptr)
 			continue; // No body in this object or disabled, move to next object
 
 		// Reset collision flags
@@ -350,6 +350,9 @@ void PhysicsSystem::Update() {
 			((Rectangular*)b)->ResetCollisionFlags();
 
 		RecalculateBody(t, b);
+
+		if (!b->active)
+			continue; // Don't calculate collision for this object if active flag is unset
 
 		bool collision_has_occured = false;
 

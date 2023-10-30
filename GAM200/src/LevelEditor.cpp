@@ -86,7 +86,6 @@ void LevelEditor::DebugPerformanceViewer() {
 	ImGui::End();
 }
 
-int selected = -1;
 int cloneSuccessful = -1;
 
 bool Transform_EditMode = false;
@@ -970,10 +969,10 @@ void LevelEditorGrid::drawleveleditor()
 			app->shdrpgms["shape"].UnUse();
 			Vec2 botleft = { (i - num.x / 2) * box_size, (j - num.y / 2) * box_size };
 			Vec2 topright = { botleft.x + box_size,botleft.y + box_size };
-			app->drawline(Vec2(topright.x, botleft.y), botleft);
-			app->drawline(topright, Vec2(topright.x, botleft.y));
-			app->drawline(topright, Vec2(botleft.x, topright.y));
-			app->drawline(Vec2(botleft.x, topright.y), botleft);
+			app->drawline(Vec2(topright.x, botleft.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });
+			app->drawline(topright, Vec2(topright.x, botleft.y), glm::vec3{ 0.0f, 1.0f, 1.0f });
+			app->drawline(topright, Vec2(botleft.x, topright.y), glm::vec3{ 0.0f, 1.0f, 1.0f });
+			app->drawline(Vec2(botleft.x, topright.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });
 		}
 	}
 }
