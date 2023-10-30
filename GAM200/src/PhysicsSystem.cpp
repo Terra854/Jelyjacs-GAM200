@@ -350,83 +350,6 @@ void PhysicsSystem::Update() {
 			((Rectangular*)b)->ResetCollisionFlags();
 
 		RecalculateBody(t, b);
-		/*
-		for (Factory::objectIDMap::iterator anotherobj = objectFactory->objectMap.begin(); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
-
-			if (obj == anotherobj)
-				continue; // Can't collide with yourself
-
-			Body* b2 = (Body*)anotherobj->second->GetComponent(ComponentType::Body);
-
-			if (b2 == nullptr)
-				continue; // No body in the other object, no way it's collidable
-
-			collision_flag = Check_Collision(b, b2, fixed_dt);
-			if (collision_flag) {
-
-				/*
-				// DEBUG
-				std::cout << "A collision has occured between ";
-				switch (((Body*)obj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case Shape::Rectangle:
-					std::cout << "a rectangle ";
-					break;
-				case Shape::Circle:
-					std::cout << "a circle ";
-					break;
-				case Shape::Line:
-					std::cout << "a line ";
-					break;
-				}
-				std::cout << "and ";
-				switch (((Body*)anotherobj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case Shape::Rectangle:
-					std::cout << "a rectangle.";
-					break;
-				case Shape::Circle:
-					std::cout << "a circle.";
-					break;
-				case Shape::Line:
-					std::cout << "a line.";
-					break;
-				}
-				std::cout << std::endl;
-
-				Response_Collision(t, b, p, b2, (Physics*)anotherobj->second->GetComponent(ComponentType::Physics));
-			}
-			else {
-
-			}
-		}*/
-		/*
-		for (const auto& width_grid : Collision::uniform_grid) {
-			for (const auto& grid : width_grid) {
-				if (grid.size() < 2)
-					continue; // Skip if there is 1 or less object as there is no way a collision can occur in the grid
-				for (const auto& current_obj : grid) {
-					if (obj->second == current_obj) { // Is the object in the grid?
-						for (const auto& anotherobj : grid) {
-							if (obj->second == anotherobj)
-								continue; // Can't collide with yourself
-
-							Body* b2 = (Body*)anotherobj->GetComponent(ComponentType::Body);
-
-							if (b2 == nullptr)
-								continue; // No body in the other object, no way it's collidable
-
-							collision_flag = Check_Collision(b, b2, fixed_dt);
-							if (collision_flag) {
-								Response_Collision(t, b, p, b2, (Physics*)anotherobj->GetComponent(ComponentType::Physics));
-							}
-							else {
-
-							}
-						}
-					}
-				}
-			}
-		}
-		*/
 
 		bool collision_has_occured = false;
 
@@ -439,19 +362,10 @@ void PhysicsSystem::Update() {
 
 				if (b2 == nullptr)
 					continue; // No body in the other object, no way it's collidable
-
-				//Check_Collision(b, b2, fixed_dt);
-				//if (collision_flag) {
-				//	Response_Collision(collision_flag, t, b, p, b2, (Physics*)anotherobj->GetComponent(ComponentType::Physics));
-				//}
-				//else {
-
-				//}
 				
 				if (Check_Collision(b, b2, fixed_dt)) {
 					collision_has_occured = true;
 				}
-
 			}
 		}
 
