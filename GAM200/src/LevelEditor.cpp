@@ -6,6 +6,8 @@
 #include <Factory.h>
 #include <components/Texture.h>
 #include <components/Animation.h>
+#include <filesystem>
+#include "SceneLoader.h"
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -72,7 +74,7 @@ void LevelEditor::DebugPerformanceViewer() {
 
 	for (std::pair<std::string, double> p : System_elapsed_time) {
 		ImGui::Text("%s system completed it's update in %.6f seconds", p.first.c_str(), p.second);
-		ImGui::ProgressBar(p.second / total_time, ImVec2(0.0f, 0.0f), "");
+		ImGui::ProgressBar((float)(p.second / total_time), ImVec2(0.0f, 0.0f), "");
 		ImGui::SameLine();
 		ImGui::Text("%.2f%%", p.second / total_time * 100.0);
 	}
@@ -84,7 +86,6 @@ void LevelEditor::DebugPerformanceViewer() {
 	ImGui::End();
 }
 
-int selected = -1;
 int cloneSuccessful = -1;
 
 bool Transform_EditMode = false;
@@ -94,6 +95,11 @@ float edited_rotation;
 Vec2 edited_scale;
 
 bool Body_EditMode = false;
+
+bool edited_active;
+bool edited_collision_response;
+
+bool AABB_EditMode = false;
 
 float edited_aabb_width;
 float edited_aabb_height;
@@ -199,10 +205,40 @@ void LevelEditor::ObjectProperties(){
 
 	ImGui::SameLine();
 
+	if (ImGui::Button("Add Component")) {
+		if (b == nullptr || ph == nullptr)
+			ImGui::OpenPopup("AddComponent");
+		else
+			ImGui::OpenPopup("NoComponentsToAdd");
+	}
+
+	if (ImGui::BeginPopup("AddComponent"))
+	{
+		if (b == nullptr)
+			if (ImGui::Selectable("Body")) {
+				object->AddComponent(new Rectangular());
+			}
+
+		if (ph == nullptr)
+			if (ImGui::Selectable("Physics")) {
+				object->AddComponent(new Physics());
+			}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopup("NoComponentsToAdd"))
+	{
+		ImGui::TextDisabled("There isn't any missing components to add");
+		ImGui::EndPopup();
+	}
+
+	ImGui::SameLine();
+
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-	if (ImGui::Button("Delete"))
+	if (ImGui::Button("Delete Object"))
 	{
 		objectFactory->destroyObject(object);
 		selected = -1;
@@ -270,7 +306,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::InputFloat2("Scale", &(edited_scale.x));
 
 				// Button to exit edit mode
-				if (ImGui::Button("Done"))
+				if (ImGui::Button("Done##Transform"))
 				{
 					Transform_EditMode = false;
 					tr->Position = edited_position;
@@ -283,7 +319,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-				if (ImGui::Button("Cancel"))
+				if (ImGui::Button("Cancel##Transform"))
 				{
 					Transform_EditMode = false;
 				}
@@ -297,7 +333,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::Text("Scale: %.5f, %.5f", tr->Scale.x, tr->Scale.y);
 
 				// Button to enter edit mode
-				if (ImGui::Button("Edit"))
+				if (ImGui::Button("Edit##Transform"))
 				{
 					Transform_EditMode = true;
 					edited_position = tr->Position;
@@ -310,19 +346,80 @@ void LevelEditor::ObjectProperties(){
 
 	if (b != nullptr) {
 		if (ImGui::CollapsingHeader("Body")) {
-			if (b->GetShape() == Shape::Rectangle) {
+			ImGui::SeparatorText("General Body Settings");
+
+			if (Body_EditMode)
+			{
+				// Display input fields
+				ImGui::Checkbox("Active", &edited_active);
+				ImGui::Checkbox("Respond to collision", &edited_collision_response);
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done##Body"))
+				{
+					Body_EditMode = false;
+					b->active = edited_active;
+					b->collision_response = edited_collision_response;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel##Body"))
+				{
+					Body_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
+			}
+			else
+			{
+				// Display the values as text
+				ImGui::Text("Active: ");
+				ImGui::SameLine();
+				b->active ? ImGui::Text("true") : ImGui::Text("false");
+
+				ImGui::Text("Respond to collision: ");
+				ImGui::SameLine();
+				b->collision_response ? ImGui::Text("true") : ImGui::Text("false");
+
+				// Button to enter edit mode
+				if (ImGui::Button("Edit##Body"))
+				{
+					Body_EditMode = true;
+					edited_active = b->active;
+					edited_collision_response = b->collision_response;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete##Body"))
+				{
+					objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
+					b = nullptr;
+				}
+				ImGui::PopStyleColor(3);
+			}
+
+			if (b != nullptr && b->GetShape() == Shape::Rectangle) {
 				Rectangular* r = (Rectangular*)b;
 
-				if (Body_EditMode)
+				ImGui::SeparatorText("AABB Collision Settings");
+
+				if (AABB_EditMode)
 				{
 					// Display input fields
 					ImGui::InputFloat("AABB Width", &edited_aabb_width);
 					ImGui::InputFloat("AABB Height", &edited_aabb_height);
 
 					// Button to exit edit mode
-					if (ImGui::Button("Done"))
+					if (ImGui::Button("Done##AABB"))
 					{
-						Body_EditMode = false;
+						AABB_EditMode = false;
 						r->width = edited_aabb_width;
 						r->height = edited_aabb_height;
 					}
@@ -332,9 +429,9 @@ void LevelEditor::ObjectProperties(){
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-					if (ImGui::Button("Cancel"))
+					if (ImGui::Button("Cancel##AABB"))
 					{
-						Body_EditMode = false;
+						AABB_EditMode = false;
 					}
 					ImGui::PopStyleColor(3);
 				}
@@ -345,23 +442,12 @@ void LevelEditor::ObjectProperties(){
 					ImGui::Text("AABB Height: %.5f", r->height);
 
 					// Button to enter edit mode
-					if (ImGui::Button("Edit"))
+					if (ImGui::Button("Edit##AABB"))
 					{
-						Body_EditMode = true;
+						AABB_EditMode = true;
 						edited_aabb_width = r->width;
 						edited_aabb_height = r->height;
 					}
-
-					ImGui::SameLine();
-
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-					if (ImGui::Button("Delete"))
-					{
-						objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
-					}
-					ImGui::PopStyleColor(3);
 				}
 
 				ImGui::SeparatorText("AABB Collision");
@@ -629,7 +715,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
 
 				// Button to exit edit mode
-				if (ImGui::Button("Done"))
+				if (ImGui::Button("Done##Physics"))
 				{
 					Physics_EditMode = false;
 					ph->Velocity = edited_velocity;
@@ -641,7 +727,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-				if (ImGui::Button("Cancel"))
+				if (ImGui::Button("Cancel##Physics"))
 				{
 					Physics_EditMode = false;
 				}
@@ -656,12 +742,24 @@ void LevelEditor::ObjectProperties(){
 				ph->AffectedByGravity ? ImGui::Text("true") : ImGui::Text("false");
 
 				// Button to enter edit mode
-				if (ImGui::Button("Edit"))
+				if (ImGui::Button("Edit##Physics"))
 				{
 					Physics_EditMode = true;
 					edited_velocity = ph->Velocity;
 					edited_gravity = ph->AffectedByGravity;
 				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete##Physics"))
+				{
+					objectFactory->DeleteComponent(object->GetId(), ComponentType::Physics);
+					ph = nullptr;
+				}
+				ImGui::PopStyleColor(3);
 			}
 		}
 	}
@@ -684,7 +782,7 @@ void LevelEditor::ListOfObjects() {
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
 
-			if (objectFactory->getObjectWithID(i) == nullptr)
+			if (objectFactory->getObjectWithID((long)i) == nullptr)
 			{
 				continue;
 			}
@@ -707,7 +805,7 @@ void LevelEditor::ListOfObjects() {
 }
 
 void ObjectClonedSuccessfully(int i) {
-	ImGui::SetNextWindowPos(ImVec2(window->width / 2, window->height / 2));
+	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f, (float)window->height / 2.f));
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
 	char text[50];
 
@@ -738,6 +836,8 @@ void LevelEditor::Initialize() {
 	total_time = 0.0;
 }
 
+/************************************LEVEL EDITOR MAIN UPDATE LOOP************************************/
+
 void LevelEditor::Update() {
 
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -765,7 +865,7 @@ void LevelEditor::Update() {
 	}
 	else
 	{
-		ImGuiIO& io = ImGui::GetIO();
+		io = ImGui::GetIO();
 		ImGui::Text("ERROR: Docking is not enabled! See Demo > Configuration.");
 		ImGui::Text("Set io.ConfigFlags |= ImGuiConfigFlags_DockingEnable in your code, or ");
 		ImGui::SameLine(0.0f, 0.0f);
@@ -779,6 +879,31 @@ void LevelEditor::Update() {
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::BeginMenu("Load Level")) {
+				std::vector<std::string> level_files;
+				const std::string path = "Asset/Levels/";
+
+				try {
+					for (const auto& entry : std::filesystem::directory_iterator(path)) {
+						if (entry.is_regular_file() && entry.path().extension() == ".json") {
+							level_files.push_back(entry.path().filename().string());
+						}
+					}
+
+					// Print the filenames
+					for (const auto& filename : level_files) {
+						if (ImGui::MenuItem(filename.c_str())) {
+							selected = -1;
+							objectFactory->destroyAllObjects();
+							LoadScene(path + filename.c_str());
+						}
+					}
+				}
+				catch (std::filesystem::filesystem_error& e) {
+					std::cerr << e.what() << std::endl;
+				}
+				ImGui::EndMenu();
+			}
 			if (ImGui::MenuItem("Exit")) { engine->game_active = false; }
 			ImGui::EndMenu();
 		}
@@ -844,10 +969,10 @@ void LevelEditorGrid::drawleveleditor()
 			app->shdrpgms["shape"].UnUse();
 			Vec2 botleft = { (i - num.x / 2) * box_size, (j - num.y / 2) * box_size };
 			Vec2 topright = { botleft.x + box_size,botleft.y + box_size };
-			app->drawline(Vec2(topright.x, botleft.y), botleft);
-			app->drawline(topright, Vec2(topright.x, botleft.y));
-			app->drawline(topright, Vec2(botleft.x, topright.y));
-			app->drawline(Vec2(botleft.x, topright.y), botleft);
+			app->drawline(Vec2(topright.x, botleft.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });
+			app->drawline(topright, Vec2(topright.x, botleft.y), glm::vec3{ 0.0f, 1.0f, 1.0f });
+			app->drawline(topright, Vec2(botleft.x, topright.y), glm::vec3{ 0.0f, 1.0f, 1.0f });
+			app->drawline(Vec2(botleft.x, topright.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });
 		}
 	}
 }

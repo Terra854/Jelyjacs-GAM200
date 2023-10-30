@@ -61,7 +61,7 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
 
 
-	LoadScene("../Asset/Levels/tutorial_level.json");
+	LoadScene("Asset/Levels/tutorial_level.json");
 
 	//playerObj = objectFactory->getPlayerObject();
 	//MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
@@ -114,7 +114,7 @@ void GameLogic::Initialize()
 
 	//rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Body));
 	//rect_pt->Initialize();
-	
+
 	// Floor
 	for (int i = 0; i < 44; i++) {
 		Object* floor = objectFactory->createObject("../Asset/Objects/mapbox.json");
@@ -173,16 +173,22 @@ void GameLogic::Update() {
 		engine->Broadcast(&msg);
 	}
 
+	if (input::IsPressed(KEY::c)) {
+		if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
+			camera2D->scale = { 2.0f, 2.0f };
+		}else camera2D->scale = { 1.0f, 1.0f };
+	}
+
 
 	// Movement for Player
 	// If button Pressed, changed velocity
 	playerObj = objectFactory->getPlayerObject();
 
-	if (playerObj != nullptr) {
+	if (playerObj != nullptr && playerObj->GetComponent(ComponentType::Physics) != nullptr) {
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
 		player_physics->Velocity.x = 0.0f;
-		if(player_animation->face_right)player_animation->current_type = AnimationType::Idle;
+		if (player_animation->face_right)player_animation->current_type = AnimationType::Idle;
 		else player_animation->current_type = AnimationType::Idle_left;
 		bool moving = false;
 		if (input::IsPressed(KEY::w)) {
@@ -210,15 +216,15 @@ void GameLogic::Update() {
 			player_animation->face_right = true;
 			player_animation->current_type = AnimationType::Run;
 		}
-		
+
 		if (player_physics->Velocity.y != 0.0f) {
 			player_animation->jump_fixed = true;
-			
+
 			if (player_animation->face_right)player_animation->current_type = AnimationType::Jump;
 			else player_animation->current_type = AnimationType::Jump_left;
 		}
 		else player_animation->jump_fixed = false;
-			
+
 
 		// Let the player loop around the window
 		/*
@@ -244,36 +250,68 @@ void GameLogic::Update() {
 		*/
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID(i);
+
+			if (obj == nullptr)
+				continue;
+
 			if (obj->GetName() == "piston") {
 				Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-				Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-				if (player_t->Position.x > piston_t->Position.x) {
-					if (player_t->Position.y > piston_t->Position.y && player_t->Position.y < piston_t->Position.y + 50) {
-						Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
-						piston_animation->fixed = true;
-						if (piston_animation->current_type == AnimationType::Jump)continue;
-						piston_animation->current_type = AnimationType::Jump;
-						Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-						std::cout << "pisotn event linked event:";
-						std::cout<<piston_event->linked_event<<std::endl;
-						//check the door
-						for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
-							Object* obj2 = objectFactory->getObjectWithID(j);
-							if (obj2->GetName() == "door") {
-								Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
-								if (piston_event->linked_event == door_event->linked_event) {
-									Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
-									door_animation->fixed = true;
-									door_animation->current_type = AnimationType::Jump;
-								}
+				Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
+				//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
+
+				if (piston_b->collision_flag & COLLISION_TOP) {
+					Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+					piston_animation->fixed = true;
+					if (piston_animation->current_type == AnimationType::Jump)continue;
+					piston_animation->current_type = AnimationType::Jump;
+					Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+					std::cout << "pisotn event linked event:";
+					std::cout << piston_event->linked_event << std::endl;
+					//check the door
+					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
+						Object* obj2 = objectFactory->getObjectWithID(j);
+						if (obj2->GetName() == "door") {
+							Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
+							if (piston_event->linked_event == door_event->linked_event) {
+								audio->playSlidingDoor();
+								Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
+								door_animation->fixed = true;
+								door_animation->current_type = AnimationType::Jump;
+								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
+								door_body->active = false;
 							}
 						}
 					}
+
+				}
+			}
+			else if (obj->GetName() == "elevator") {
+				MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
+
+				Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
+				Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));
+				moving_platform_physics->Velocity.x = 0.0f;
+				float moving_platform_speed;
+				//bool moving_platform_direction;
+
+				// if the platform reach the max/min height, change direction
+				if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
+					moving_platform_direction = true;
+				}
+				if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
+					moving_platform_direction = false;
+				}
+				moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
+				moving_platform_physics->Velocity.y = moving_platform_speed;
+
+				if (input::IsPressed(KEY::z)) {
+					std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
 				}
 			}
 		}
 	}
 	//Movement for Moving Platform
+	/*
 	if (objectFactory->FindObject("elevator") != nullptr)
 		MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
 
@@ -298,6 +336,7 @@ void GameLogic::Update() {
 			std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
 		}
 	}
+	*/
 	/*
 	// Rotation of an object
 	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));

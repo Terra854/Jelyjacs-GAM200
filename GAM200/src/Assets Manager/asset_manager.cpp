@@ -12,9 +12,9 @@ to be referenced from when needed.
 #include <iostream>
 
 // Creating of static data members
-std::filesystem::path AssetManager::pathtexture = "../Asset/Picture";
-std::filesystem::path AssetManager::pathanimations = "../Asset/Animation";
-std::filesystem::path AssetManager::objectprefabs = "../Asset/Objects";
+std::filesystem::path AssetManager::pathtexture = "Asset/Picture";
+std::filesystem::path AssetManager::pathanimations = "Asset/Animation";
+std::filesystem::path AssetManager::objectprefabs = "Asset/Objects";
 
 std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;

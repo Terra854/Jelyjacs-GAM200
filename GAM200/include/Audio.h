@@ -20,14 +20,15 @@ public:
 	void startWalking();
 	void stopWalking();
 	void playJump();
+	void playSlidingDoor();
 	//void stopJump();
 private:
 	FMOD::System* system;
 	FMOD::System* sound;
-	FMOD::Channel *background, *channel, *channel2;
+	FMOD::Channel *background, *channel, *sfx;
 	FMOD_RESULT result;
 
-	FMOD::Sound *walking, *jump, *game_background;
+	FMOD::Sound *walking, *jump, *game_background, *sliding_door_open;
 
 	bool isPlayingWalking = false;
 };

@@ -270,9 +270,7 @@ Object* Factory::createObject(const std::string& filename)
 		{
 			Event* e = (Event*)((ComponentCreator<Event>*) componentMap["Event"])->Create();
 
-
-
-
+			jsonloop.readInt(e->linked_event, "Properties", "linkedevent");
 
 			obj->AddComponent(e);
 		}
@@ -335,6 +333,7 @@ void Factory::destroyAllObjects()
 	}
 
 	objectMap.clear();
+	nextObjectId = 0;
 }
 
 //Creates a game object with no components
@@ -474,6 +473,16 @@ Object* Factory::cloneObject(Object* object)
 			ani->jump_fixed_frame = ani_tmp->jump_fixed_frame;
 			
 			obj->AddComponent(ani);
+		}
+		else if (c.first == ComponentType::Event)
+		{
+			Event* e = (Event*)((ComponentCreator<Event>*) componentMap["Event"])->Create();
+			Event* e_tmp = static_cast<Event*>(object->GetComponent(ComponentType::Event));
+
+
+			e->linked_event = e_tmp->linked_event;
+
+			obj->AddComponent(e);
 		}
 	}
 

@@ -30,6 +30,12 @@
         "idle": [1, 1],
         "jump": [11, 1]
       }
+    },
+    {
+      "Type": "Event",
+      "Properties": {
+        "linkedevent" : 0
+      }
     }
   ]
 }

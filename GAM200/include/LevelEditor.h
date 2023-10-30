@@ -10,7 +10,6 @@
 class LevelEditor : public ISystems
 {
 public:
-	void ShowDockSpace(bool* p_open);
 	void DebugUniformGrid();
 	void DebugPerformanceViewer();
 	void ObjectProperties();
@@ -29,6 +28,9 @@ public:
 	void SetTotalTime(double time) { total_time = time; }
 	void AddTotalTime(double time) { total_time += time; }
 	void ClearAll() { System_elapsed_time.clear();  total_time = 0.0; }
+
+	int selected = -1;
+
 private:
 	std::map<std::string, double> System_elapsed_time;
 	double total_time;

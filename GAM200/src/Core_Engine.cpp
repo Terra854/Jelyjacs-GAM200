@@ -173,7 +173,7 @@ void CoreEngine::Debug_Update()
 ********************************************************************************/
 void CoreEngine::GameLoop()
 {
-	int numOfBoxes = editor_grid->num.x * editor_grid->num.y;
+	int numOfBoxes = (int) (editor_grid->num.x * editor_grid->num.y);
 	std::cout << "Number of boxes " << numOfBoxes << std::endl;
 	std::vector<int> boxesFilled(numOfBoxes, 0);
 	std::cout << boxesFilled.capacity();
@@ -231,7 +231,7 @@ void CoreEngine::GameLoop()
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	/* End Level Editor */
-	GLuint tileset = app->setup_texobj("../Asset/Picture/TileSheet.png");
+	GLuint tileset = app->setup_texobj("Asset/Picture/TileSheet.png");
 	// Game Loop
 	while (game_active)
 	{
@@ -293,15 +293,17 @@ void CoreEngine::GameLoop()
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 			ImGui::End();
 
+			/*
+
 			ImGui::Begin("Level editor");
 			ImGui::Text("Mouse Position: (%.1f,%.1f)", io.MousePos.x, io.MousePos.y);
 			if (ImGui::CollapsingHeader("Create object")) {
 				ImGui::InputFloat("Input x position of object", &xPos);
 				ImGui::InputFloat("Input y position of object", &yPos);
-				//ImGui::ImageButton("../Asset/Textures/mapbox.png", ImVec2(50, 50));
+				//ImGui::ImageButton("Asset/Textures/mapbox.png", ImVec2(50, 50));
 				if (ImGui::Button("Create box"))
 				{
-					createObject(xPos, yPos, "../Asset/Objects/mapbox.json");
+					createObject(xPos, yPos, "Asset/Objects/mapbox.json");
 				}
 			}
 
@@ -360,14 +362,14 @@ void CoreEngine::GameLoop()
 					}
 					Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 					// Not working
-					/*
+					
 					Vec2 botleft = { tran_pt->Position.x - tran_pt->Scale_x / 2, tran_pt->Position.y - tran_pt->Scale_y / 2 };
 					Vec2 topright = { tran_pt->Position.x + tran_pt->Scale_x / 2, tran_pt->Position.y + tran_pt->Scale_y / 2 };
 					app->drawline({ botleft.x,botleft.y }, { botleft.x,topright.y });
 					app->drawline({ botleft.x,topright.y }, { topright.x,topright.y });
 					app->drawline({ topright.x,topright.y }, { topright.x,botleft.y });
 					app->drawline({ topright.x,botleft.y }, { botleft.x,botleft.y });
-					*/
+					
 					ImGui::Text("Object Position:");
 					ImGui::Text("x = %.2f, y = %.2f", tran_pt->Position.x, tran_pt->Position.y);
 					if (tempstorage) {
@@ -428,7 +430,7 @@ void CoreEngine::GameLoop()
 						int yOffset = (ypos - topYpos) / editor_grid->box_size;
 						if (boxesFilled[xOffset - (yOffset * editor_grid->num.y)] == 0)
 						{
-							createObject(-370 + (xOffset * editor_grid->box_size), 370 + (yOffset * editor_grid->box_size), "../Asset/Objects/mapbox.json");
+							createObject(-370 + (xOffset * editor_grid->box_size), 370 + (yOffset * editor_grid->box_size), "Asset/Objects/mapbox.json");
 							boxesFilled[xOffset - (yOffset * editor_grid->num.y)] = 1;
 						}
 
@@ -437,101 +439,102 @@ void CoreEngine::GameLoop()
 
 					if (input::IsPressed(KEY::mouseR))
 					{
-						createObject(0, 0, "../Asset/Objects/mapbox.json");
+						createObject(0, 0, "Asset/Objects/mapbox.json");
 					}
 				}
 			}
 
 			ImGui::End();
+			*/
 
 
 			ImGui::Begin("Tileset");
 			ImGui::SetCursorPos({ 0, 0 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909, 0.111111), ImVec2(0.181818, 0.222222));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909f, 0.111111f), ImVec2(0.181818f, 0.222222f));
 			ImGui::SetCursorPos({ 64, 0 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818, 0.111111), ImVec2(0.272727, 0.222222));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818f, 0.111111f), ImVec2(0.272727f, 0.222222f));
 			ImGui::SetCursorPos({ 128, 0 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727, 0.111111), ImVec2(0.363636, 0.222222));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727f, 0.111111f), ImVec2(0.363636f, 0.222222f));
 			ImGui::SetCursorPos({ 0, 64 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909, 0.222222), ImVec2(0.181818, 0.333333));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909f, 0.222222f), ImVec2(0.181818f, 0.333333f));
 			ImGui::SetCursorPos({ 128, 64 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727, 0.222222), ImVec2(0.363636, 0.333333));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727f, 0.222222f), ImVec2(0.363636f, 0.333333f));
 			ImGui::SetCursorPos({ 0, 128 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909, 0.333333), ImVec2(0.181818, 0.444444));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909f, 0.333333f), ImVec2(0.181818f, 0.444444f));
 			ImGui::SetCursorPos({ 64, 128 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818, 0.333333), ImVec2(0.272727, 0.444444));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818f, 0.333333f), ImVec2(0.272727f, 0.444444f));
 			ImGui::SetCursorPos({ 128, 128 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727, 0.333333), ImVec2(0.363636, 0.444444));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727f, 0.333333f), ImVec2(0.363636f, 0.444444f));
 			ImGui::SetCursorPos({ 0, 192 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909, 0.444444), ImVec2(0.181818, 0.555555));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909f, 0.444444f), ImVec2(0.181818f, 0.555555f));
 			ImGui::SetCursorPos({ 64, 192 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818, 0.444444), ImVec2(0.272727, 0.555555));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818f, 0.444444f), ImVec2(0.272727f, 0.555555f));
 			ImGui::SetCursorPos({ 128, 192 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727, 0.444444), ImVec2(0.363636, 0.555555));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727f, 0.444444f), ImVec2(0.363636f, 0.555555f));
 			ImGui::SetCursorPos({ 0, 256 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909, 0.555555), ImVec2(0.181818, 0.666666));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909f, 0.555555f), ImVec2(0.181818f, 0.666666f));
 			ImGui::SetCursorPos({ 64, 256 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818, 0.555555), ImVec2(0.272727, 0.666666));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818f, 0.555555f), ImVec2(0.272727f, 0.666666f));
 			ImGui::SetCursorPos({ 128, 256 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727, 0.555555), ImVec2(0.363636, 0.666666));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727f, 0.555555f), ImVec2(0.363636f, 0.666666f));
 			ImGui::SetCursorPos({ 0, 320 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909, 0.666666), ImVec2(0.181818, 0.777777));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909f, 0.666666f), ImVec2(0.181818f, 0.777777f));
 			ImGui::SetCursorPos({ 64, 320 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818, 0.666666), ImVec2(0.272727, 0.777777));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818f, 0.666666f), ImVec2(0.272727f, 0.777777f));
 			ImGui::SetCursorPos({ 128, 320 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727, 0.666666), ImVec2(0.363636, 0.777777));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727f, 0.666666f), ImVec2(0.363636f, 0.777777f));
 			ImGui::SetCursorPos({ 0, 384 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909, 0.777777), ImVec2(0.181818, 0.888888));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.090909f, 0.777777f), ImVec2(0.181818f, 0.888888f));
 			ImGui::SetCursorPos({ 64, 384 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818, 0.777777), ImVec2(0.272727, 0.888888));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.181818f, 0.777777f), ImVec2(0.272727f, 0.888888f));
 			ImGui::SetCursorPos({ 128, 384 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727, 0.777777), ImVec2(0.363636, 0.888888));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.272727f, 0.777777f), ImVec2(0.363636f, 0.888888f));
 			ImGui::SetCursorPos({ 192, 192 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.363636, 0.444444), ImVec2(0.454545, 0.555555));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.363636f, 0.444444f), ImVec2(0.454545f, 0.555555f));
 			ImGui::SetCursorPos({ 256, 192 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.454545, 0.444444), ImVec2(0.545454, 0.555555));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.454545f, 0.444444f), ImVec2(0.545454f, 0.555555f));
 			ImGui::SetCursorPos({ 192, 256 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.363636, 0.555555), ImVec2(0.454545, 0.666666));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.363636f, 0.555555f), ImVec2(0.454545f, 0.666666f));
 			ImGui::SetCursorPos({ 256, 256 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.454545, 0.555555), ImVec2(0.545454, 0.666666));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.454545f, 0.555555f), ImVec2(0.545454f, 0.666666f));
 			ImGui::SetCursorPos({ 320, 128 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.545454, 0.333333), ImVec2(0.636363, 0.444444));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.545454f, 0.333333f), ImVec2(0.636363f, 0.444444f));
 			ImGui::SetCursorPos({ 320, 192 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.545454, 0.444444), ImVec2(0.636363, 0.555555));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.545454f, 0.444444f), ImVec2(0.636363f, 0.555555f));
 			ImGui::SetCursorPos({ 320, 256 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.545454, 0.555555), ImVec2(0.636363, 0.666666));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.545454f, 0.555555f), ImVec2(0.636363f, 0.666666f));
 			ImGui::SetCursorPos({ 192, 320 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.363636, 0.666666), ImVec2(0.454545, 0.777777));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.363636f, 0.666666f), ImVec2(0.454545f, 0.777777f));
 			ImGui::SetCursorPos({ 256, 320 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.454545, 0.666666), ImVec2(0.545454, 0.777777));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.454545f, 0.666666f), ImVec2(0.545454f, 0.777777f));
 			ImGui::SetCursorPos({ 320, 320 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.545454, 0.666666), ImVec2(0.636363, 0.777777));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.545454f, 0.666666f), ImVec2(0.636363f, 0.777777f));
 			ImGui::SetCursorPos({ 448, 0 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272, 0.111111), ImVec2(0.818181, 0.222222));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272f, 0.111111f), ImVec2(0.818181f, 0.222222f));
 			ImGui::SetCursorPos({ 512, 0 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181, 0.111111), ImVec2(0.909090, 0.222222));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181f, 0.111111f), ImVec2(0.909090f, 0.222222f));
 			ImGui::SetCursorPos({ 576, 0 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.909090, 0.111111), ImVec2(1, 0.222222));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.909090f, 0.111111f), ImVec2(1.f, 0.222222f));
 			ImGui::SetCursorPos({ 448, 64 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272, 0.222222), ImVec2(0.818181, 0.333333));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272f, 0.222222f), ImVec2(0.818181f, 0.333333f));
 			ImGui::SetCursorPos({ 512, 64 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181, 0.222222), ImVec2(0.909090, 0.333333));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181f, 0.222222f), ImVec2(0.909090f, 0.333333f));
 			ImGui::SetCursorPos({ 448, 128 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272, 0.333333), ImVec2(0.818181, 0.444444));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272f, 0.333333f), ImVec2(0.818181f, 0.444444f));
 			ImGui::SetCursorPos({ 512, 128 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181, 0.333333), ImVec2(0.909090, 0.444444));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181f, 0.333333f), ImVec2(0.909090f, 0.444444f));
 			ImGui::SetCursorPos({ 448, 192 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272, 0.444444), ImVec2(0.818181, 0.555555));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272f, 0.444444f), ImVec2(0.818181f, 0.555555f));
 			ImGui::SetCursorPos({ 512, 192 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181, 0.444444), ImVec2(0.909090, 0.555555));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181f, 0.444444f), ImVec2(0.909090f, 0.555555f));
 			ImGui::SetCursorPos({ 448, 256 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272, 0.555555), ImVec2(0.818181, 0.666666));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272f, 0.555555f), ImVec2(0.818181f, 0.666666f));
 			ImGui::SetCursorPos({ 512, 256 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181, 0.555555), ImVec2(0.909090, 0.666666));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181f, 0.555555f), ImVec2(0.909090f, 0.666666f));
 			ImGui::SetCursorPos({ 448, 320 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272, 0.666666), ImVec2(0.818181, 0.777777));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.727272f, 0.666666f), ImVec2(0.818181f, 0.777777f));
 			ImGui::SetCursorPos({ 512, 320 });
-			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181, 0.666666), ImVec2(0.909090, 0.777777));
+			ImGui::Image((void*)(intptr_t)tileset, ImVec2(64.0f, 64.0f), ImVec2(0.818181f, 0.666666f), ImVec2(0.909090f, 0.777777f));
 			ImGui::End();
 
 			hud.GuiRender(io);

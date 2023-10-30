@@ -24,6 +24,7 @@ public:
 	virtual bool closeFile(); // Close and delete jsonObject
 
 	// Read/Write from the file stream
+	virtual void readInt(int& i, std::string param, int pos = -1);
 	virtual void readInt(int& i, std::string param1, std::string param2, int pos = -1);
 	virtual void readFloat(float& f, std::string param1, std::string param2, int pos = -1);
 	virtual void readFloat(float& f, std::string param1, std::string param2, std::string param3, int pos = -1);

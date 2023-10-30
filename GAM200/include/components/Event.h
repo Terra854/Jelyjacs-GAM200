@@ -4,6 +4,10 @@
 class Event : public Component {
 public:
 	Event() : Component() {};
-	int linked_event = 1;
+	virtual void Initialize() override {}
+
+
+	int linked_event;
+
 	virtual ComponentType TypeId() const override { return ComponentType::Event; }
 };
