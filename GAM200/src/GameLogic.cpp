@@ -184,7 +184,7 @@ void GameLogic::Update() {
 	// If button Pressed, changed velocity
 	playerObj = objectFactory->getPlayerObject();
 
-	if (playerObj != nullptr) {
+	if (playerObj != nullptr && playerObj->GetComponent(ComponentType::Physics) != nullptr) {
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
 		player_physics->Velocity.x = 0.0f;

@@ -718,6 +718,17 @@ void LevelEditor::ObjectProperties(){
 					edited_velocity = ph->Velocity;
 					edited_gravity = ph->AffectedByGravity;
 				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete##Physics"))
+				{
+					objectFactory->DeleteComponent(object->GetId(), ComponentType::Physics);
+				}
+				ImGui::PopStyleColor(3);
 			}
 		}
 	}
