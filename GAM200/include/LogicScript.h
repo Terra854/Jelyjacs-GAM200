@@ -16,7 +16,6 @@ public:
 	}
 	//~LogicScript();
 
-private:
 	InitScript init_script;
 	UpdateScript update_script;
 	ShutdownScript shutdown_script;

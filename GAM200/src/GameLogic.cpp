@@ -25,7 +25,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Audio.h>
 #include <SceneLoader.h>
 
-GameLogic* Logic = nullptr;
+GameLogic* Logic = NULL;
 Object* scale_and_rotate;
 Object* playerObj;
 Object* MovingPlatform;
@@ -34,7 +34,7 @@ bool moving_platform_direction = false;
 
 GameLogic::GameLogic() {
 	Logic = this;
-
+	
 	playerObj = nullptr;
 	MovingPlatform = nullptr;
 	dynamic_collision = nullptr;
@@ -84,12 +84,12 @@ void GameLogic::Initialize()
 *******************************************************************************/
 void GameLogic::Update() {
 
-	/*
+	
 	for (auto& it : behaviourComponents)
 	{
-		behaviours[it->GetBehaviourIndex()]->updateBehaviour(it->GetOwner);
+		behaviours[it->GetIndex()]->update_script(it->GetOwner());
 	}
-	*/
+	
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
 		std::cout << "Mouse Position is :  X = " << input::GetMouseX() << ", Y = " << input::GetMouseY() << std::endl;
