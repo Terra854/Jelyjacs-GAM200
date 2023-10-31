@@ -27,6 +27,7 @@ ID aand is stored as part of a private map
 #include "components/Event.h"
 #include "Assets Manager/asset_manager.h"
 #include "Object.h"
+#include <components/Behaviour.h>
 
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
@@ -277,6 +278,12 @@ Object* Factory::createObject(const std::string& filename)
 
 			obj->AddComponent(e);
 		}
+		else if (type == "Behaviour") 
+		{
+			Behaviour *b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
+
+			obj->AddComponent(b);
+		}
 	}
 
 	// Run the initilization routines for each component (if there is any)
@@ -486,6 +493,11 @@ Object* Factory::cloneObject(Object* object)
 			e->linked_event = e_tmp->linked_event;
 
 			obj->AddComponent(e);
+		}
+		else if (c.first == ComponentType::Behaviour)
+		{
+			Behaviour* b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
+			obj->AddComponent(b);
 		}
 	}
 

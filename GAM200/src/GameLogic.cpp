@@ -59,6 +59,7 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
 	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
 	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
+	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 
 
 	LoadScene("Asset/Levels/tutorial_level.json");
