@@ -66,8 +66,7 @@ void AssetManager::Initialize()
 
 void AssetManager::Free()
 {
-	for (const std::pair<std::string, Object*> &p : prefabs)
-		delete p.second;
+	cleanprefab();
 }
 
 std::string AssetManager::SystemName()
@@ -170,6 +169,9 @@ std::string AssetManager::objectprefabsval()
 
 void AssetManager::cleanprefab()
 {
+	for (const auto& p : prefabs)
+		delete p.second;
+
 	prefabs.clear();
 }
 
