@@ -106,6 +106,7 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
     <ClCompile Include="src\Assets Manager\json_serialization.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Body.cpp" />
+    <ClCompile Include="src\GameHud.cpp" />
     <ClCompile Include="src\LevelEditor.cpp" />
     <ClCompile Include="src\EngineHud.cpp" />
     <ClCompile Include="src\Font.cpp" />
@@ -148,6 +149,7 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
     <ClInclude Include="include\ComponentCreator.h" />
     <ClInclude Include="include\Core_Engine.h" />
     <ClInclude Include="include\Debug.h" />
+    <ClInclude Include="include\GameHud.h" />
     <ClInclude Include="include\LevelEditor.h" />
     <ClInclude Include="include\EngineHud.h" />
     <ClInclude Include="include\Font.h" />
