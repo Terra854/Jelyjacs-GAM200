@@ -426,6 +426,7 @@ Object* Factory::cloneObject(Object* object)
 			if (body_pt->GetShape() == Shape::Rectangle) {
 				Rectangular* r = (Rectangular*)((ComponentCreator<Rectangular>*) componentMap["Rectangle"])->Create();
 
+				r->collision_response = ((Rectangular*)body_pt)->collision_response;
 				r->width = ((Rectangular*)body_pt)->width;
 				r->height = ((Rectangular*)body_pt)->height;
 				r->aabb = ((Rectangular*)body_pt)->aabb;
@@ -436,6 +437,7 @@ Object* Factory::cloneObject(Object* object)
 			else if (body_pt->GetShape() == Shape::Circle) {
 				Circular* c = (Circular*)((ComponentCreator<Circular>*) componentMap["Circular"])->Create();
 
+				c->collision_response = ((Circular*)body_pt)->collision_response;
 				c->circle = ((Circular*)body_pt)->circle;
 
 				obj->AddComponent(c);
@@ -443,6 +445,7 @@ Object* Factory::cloneObject(Object* object)
 			else if (body_pt->GetShape() == Shape::Line) {
 				Lines* l = (Lines*)((ComponentCreator<Lines>*) componentMap["Line"])->Create();
 
+				l->collision_response = ((Lines*)body_pt)->collision_response;
 				l->line = ((Lines*)body_pt)->line;
 
 				obj->AddComponent(l);
