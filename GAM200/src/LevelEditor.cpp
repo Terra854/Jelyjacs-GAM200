@@ -195,7 +195,6 @@ void LevelEditor::ObjectProperties() {
 
 	ImGui::SameLine();
 
-	//ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, ImGui::GetContentRegionAvail().x * 0.5f));
 	ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().x * 0.25f));
 
 	ImGui::Text("Object ID: %d", object->GetId());
@@ -1001,8 +1000,14 @@ void ObjectClonedSuccessfully(int i) {
 void PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
-	if (ImGui::Button("Play/Pause"))
-		engine->setPause();
+	if (engine->isPaused()) {
+		if (ImGui::Button("Play"))
+			engine->setPause();
+	}
+	else {
+		if (ImGui::Button("Pause"))
+			engine->setPause();
+	}
 
 	ImGui::End();
 }

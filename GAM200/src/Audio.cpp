@@ -6,6 +6,7 @@
 This file contains the definitions of the functions that are part of the Audio system
 *//*__________________________________________________________________________*/
 #include "Audio.h"
+#include <Core_Engine.h>
 
 Audio* audio = nullptr;
 
@@ -50,6 +51,8 @@ void Audio::Initialize(){
 
 void Audio::Update(){
     system->update();
+
+    background->setPaused(engine->isPaused());
 }
 
 void Audio::startWalking() {
