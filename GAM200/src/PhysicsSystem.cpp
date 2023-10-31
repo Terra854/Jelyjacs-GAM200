@@ -154,6 +154,10 @@ void PhysicsSystem::Initialize() {
 
 void PhysicsSystem::Update() {
 
+	// Do not update if the game is paused
+	if (engine->isPaused())
+		return;
+
 	accumulator += engine->GetDt();
 
 	// Only run the physics code if fixed_dt has passed 

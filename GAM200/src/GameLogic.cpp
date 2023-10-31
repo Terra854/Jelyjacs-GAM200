@@ -84,6 +84,9 @@ void GameLogic::Initialize()
 *******************************************************************************/
 void GameLogic::Update() {
 
+	// Do not update if the game is paused
+	if (engine->isPaused())
+		return;
 	
 	for (auto& it : behaviourComponents)
 	{

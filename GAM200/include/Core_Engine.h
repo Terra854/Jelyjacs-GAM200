@@ -61,6 +61,10 @@ public:
 	float Get_FPS() { return core_fps; }
 	float Get_Fixed_DT() { return fixed_dt; }
 
+	// Check if the game is paused
+	void setPause() { paused = !paused; }
+	bool isPaused() { return paused; }
+
 	friend class LevelEditor; // For displaying performance info
 	
 private:
@@ -77,6 +81,8 @@ private:
 
 	// Checking if game is active
 	bool game_active;
+
+	bool paused;
 };
 
 extern CoreEngine* engine;

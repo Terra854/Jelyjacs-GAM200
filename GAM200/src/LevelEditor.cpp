@@ -971,10 +971,6 @@ void LevelEditor::AssetList() {
 	ImGui::End();
 }
 
-
-
-
-
 /*
 	This is for a window to pop up telliing that the object has cloned successfully
 */
@@ -999,6 +995,15 @@ void ObjectClonedSuccessfully(int i) {
 	{
 		cloneSuccessful = -1;
 	}
+	ImGui::End();
+}
+
+void PlayPauseGame() {
+	ImGui::Begin("Play/Pause");
+
+	if (ImGui::Button("Play/Pause"))
+		engine->setPause();
+
 	ImGui::End();
 }
 
@@ -1103,6 +1108,8 @@ void LevelEditor::Update() {
 	AssetList();
 
 	DisplaySelectedTexture();
+
+	PlayPauseGame();
 
 	if (cloneSuccessful > -1) {
 		ObjectClonedSuccessfully(cloneSuccessful);

@@ -40,6 +40,7 @@ CoreEngine::CoreEngine()
 	dt = 1.f / core_fps;
 	game_active = true;
 	CORE = this;
+	paused = false;
 }
 /******************************************************************************
 * Destructor
