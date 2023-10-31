@@ -257,6 +257,7 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
+				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
 					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 					b->inGrid.push_back({ w_index, h_index });
@@ -271,6 +272,7 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
+				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
 					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 					b->inGrid.push_back({ w_index, h_index });
@@ -285,6 +287,7 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
+				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
 					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 					b->inGrid.push_back({ w_index, h_index });
@@ -299,6 +302,7 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
+				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
 					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 					b->inGrid.push_back({ w_index, h_index });
