@@ -619,15 +619,6 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 	}
 }
 
-void CoreEngine::createObject(float posX, float posY, std::string objectName)
-{
-	Object* testingObject = objectFactory->createObject(objectName);
-	long testingObjectID = testingObject->GetId();
-	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(testingObjectID))->GetComponent(ComponentType::Transform));
-	tran_pt->Position.x = posX;
-	tran_pt->Position.y = posY;
-}
-
 int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
 {
 	if (axis == Axis::X)

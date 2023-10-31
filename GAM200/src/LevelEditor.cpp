@@ -884,15 +884,15 @@ void LevelEditor::AssetList() {
 		if (ImGui::BeginTabItem("Textures")) {
 			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-			for (const std::pair<std::string, GLuint>& p : AssetManager::textures) {
+			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) {
 				char buffer[256];
-				sprintf_s(buffer, "##%s", p.first.c_str());
+				sprintf_s(buffer, "##%s", t.first.c_str());
 
 				// Start the invisible button
 				
 				if (ImGui::Button(buffer, button_size))
 				{
-					selectedTexture = p;
+					selectedTexture = t;
 					display_selected_texture = true;
 
 				}
@@ -900,21 +900,74 @@ void LevelEditor::AssetList() {
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
 
 				// Image
-				ImGui::Image((void*)(intptr_t)p.second, ImVec2(64, 64));
+				ImGui::Image((void*)(intptr_t)t.second, ImVec2(64, 64));
 
 				// Move to the right of the image without moving to a new line
 				ImGui::SameLine();
 
 				// Text
-				ImGui::Text(p.first.c_str());
+				ImGui::Text(t.first.c_str());
 			}
 
 			ImGui::PopStyleColor();
 			ImGui::EndTabItem();
 		}
-		ImGui::EndTabBar();
 	}
+	if (ImGui::BeginTabItem("Prefabs")) {
+		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+		for (const std::pair<std::string, Object *>& p : AssetManager::prefabs) {
+			char buffer[256];
+			sprintf_s(buffer, "##%s", p.first.c_str());
 
+			// Text and images will be in the above layer
+			if (ImGui::Button(buffer, button_size))
+			{
+				// Nothing right now
+			}
+
+			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
+
+			// Get texture or animation
+			Texture* t = (Texture*)p.second->GetComponent(ComponentType::Texture);
+			Animation* a = (Animation*)p.second->GetComponent(ComponentType::Animation);
+
+			// Image
+			if (t != nullptr)
+				ImGui::Image((void*)(intptr_t)AssetManager::textureval(t->textureName), ImVec2(64, 64));
+			// or Animation
+			else if (a != nullptr) {
+				GLint width, height;
+
+				// Bind the texture
+				glBindTexture(GL_TEXTURE_2D, a->animation_tex_obj);
+
+				// Get the texture width
+				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+
+				// Get the texture height
+				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+
+				// Unbind the texture
+				glBindTexture(GL_TEXTURE_2D, 0);
+
+				ImVec2 uv0 = { (float)a->frame_num * 128.f / (float)width, (float)a->current_type * 128.f / (float)height };
+				ImVec2 uv1 = { uv0.x + (128.f / (float)width), uv0.y + (128.f / (float)height) };
+
+				ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImVec2(64, 64), uv0, uv1);
+			}
+
+			// Move to the right of the image without moving to a new line
+			ImGui::SameLine();
+
+			// Text
+			ImGui::Text(p.second->GetName().c_str());
+		}
+
+		ImGui::PopStyleColor();
+		ImGui::EndTabItem();
+	}
+	ImGui::EndTabBar();
 	ImGui::End();
 }
 

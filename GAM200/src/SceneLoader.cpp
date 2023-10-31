@@ -15,9 +15,7 @@ This file contains the definitions for loading scenes
 
 void LoadScene(std::string filename)
 {
-	// Reset value of prefab when loading new scene (prevents wrong cloning due to deleted objs)
-	AssetManager::cleanprefab();
-
+	
 	// Check if the given file exists
 	JsonSerialization jsonobj;
 	jsonobj.openFileRead(filename);
@@ -34,20 +32,22 @@ void LoadScene(std::string filename)
 		std::string objprefabs;
 		jsonloop.readString(objprefabs, "Prefabs");
 		Object* obj;
-		// Create object if doesn't exist
-		if (AssetManager::prefabsval(objprefabs) == -1)
+		// Create the prefab if it doesn't exist
+		if (AssetManager::prefabsval(objprefabs) == nullptr)
 		{
-			// Create object
+			// Create new prefab
 			std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
-			obj = objectFactory->createObject(tempobjprefabs);
+			Object* newPrefab = objectFactory->createObject(tempobjprefabs);
 
-			AssetManager::updateprefab(objprefabs, obj->GetId());
+			AssetManager::updateprefab(newPrefab->GetName(), newPrefab);
 		}
-		else
-		// clone object
-		{
-			obj = objectFactory->cloneObject(objectFactory->getObjectWithID(AssetManager::prefabsval(objprefabs)));
-		}
+
+		// Create object via cloning the prefab
+		
+		obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
+		
+		// Assign an ID. It will be added to the objectMap
+		objectFactory->assignIdToObject(obj);
 
 		// Read extra data to update object
 		std::string type;
