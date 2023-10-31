@@ -251,7 +251,7 @@ void LevelEditor::ObjectProperties() {
 	ImGui::PopStyleColor(3);
 
 	ImGui::EndChild();
-
+	ImGui::BeginChild("ObjectPropertiesScroll", ImGui::GetContentRegionAvail());
 	// Texture
 	if (te != nullptr) {
 		if (ImGui::CollapsingHeader("Texture")) {
@@ -454,7 +454,42 @@ void LevelEditor::ObjectProperties() {
 				{
 					// Display the values as text
 					ImGui::Text("AABB Width: %.5f", r->width);
+
+					ImGui::SameLine();
+
+					ImGui::Button("-##aabbwidth");
+
+					if (ImGui::IsItemActive()) { // Will run so long as the above button is held
+						r->width -= engine->GetDt() * 2.f;
+						r->width < 0.f ? 0.f : r->width; // Do not go below 0
+					}
+
+					ImGui::SameLine();
+
+					ImGui::Button("+##aabbwidth");
+
+					if (ImGui::IsItemActive()) { // Will run so long as the above button is held
+						r->width += engine->GetDt() * 2.f;
+					}
+
 					ImGui::Text("AABB Height: %.5f", r->height);
+
+					ImGui::SameLine();
+
+					ImGui::Button("-##aabbheight");
+
+					if (ImGui::IsItemActive()) { // Will run so long as the above button is held
+						r->height -= engine->GetDt() * 2.f;
+						r->height < 0.f ? 0.f : r->width; // Do not go below 0
+					}
+
+					ImGui::SameLine();
+
+					ImGui::Button("+##aabbheight");
+
+					if (ImGui::IsItemActive()) { // Will run so long as the above button is held
+						r->height += engine->GetDt() * 2.f;
+					}
 
 					// Button to enter edit mode
 					if (ImGui::Button("Edit##AABB"))
@@ -786,6 +821,8 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Text("Nothing right now");
 		}
 	}
+
+	ImGui::EndChild();
 	ImGui::End();
 }
 
@@ -796,6 +833,7 @@ void LevelEditor::ListOfObjects() {
 
 	ImGui::Begin("Object List");
 	ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
 
@@ -821,6 +859,7 @@ void LevelEditor::ListOfObjects() {
 		}
 		ImGui::EndTable();
 	}
+	ImGui::EndChild();
 	ImGui::End();
 }
 
@@ -881,6 +920,14 @@ void LevelEditor::AssetList() {
 
 	if (ImGui::BeginTabBar("##AssetList")) {
 		if (ImGui::BeginTabItem("Textures")) {
+
+			if (ImGui::Button("Refresh Textures"))
+			{
+				AssetManager::unloadalltextures();
+				AssetManager::loadalltextures();
+
+			}
+			ImGui::BeginChild("AssetListScroll", ImGui::GetContentRegionAvail());
 			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) {
@@ -909,6 +956,7 @@ void LevelEditor::AssetList() {
 			}
 
 			ImGui::PopStyleColor();
+			ImGui::EndChild();
 			ImGui::EndTabItem();
 		}
 	}

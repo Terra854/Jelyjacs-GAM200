@@ -33,7 +33,7 @@ void AssetManager::Initialize()
 		{
 			std::cout << list.path() << std::endl;
 		}
-		loadtextures();
+		loadalltextures();
 	}
 	else
 		std::cout << pathtexture << " does not exist!" << std::endl;
@@ -80,7 +80,7 @@ void AssetManager::Update()
 }
 
 // Load all textures
-void AssetManager::loadtextures()
+void AssetManager::loadalltextures()
 {
 	GLuint textureuint;
 	for (const auto& list : std::filesystem::directory_iterator(pathtexture))
@@ -90,6 +90,15 @@ void AssetManager::loadtextures()
 		textures.emplace(filename.string(), textureuint);
 		std::cout << "Added to list: " << filename.string() << std::endl;
 	}
+}
+
+// Unload all textures
+void AssetManager::unloadalltextures()
+{
+	for (const auto& t : textures) {
+		glDeleteTextures(1, &t.second);
+	}
+	textures.clear();
 }
 
 void AssetManager::loadanimations()

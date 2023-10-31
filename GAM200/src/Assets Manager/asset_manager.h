@@ -24,7 +24,10 @@ public:
 	virtual void Free();
 	virtual void Update();
 	virtual std::string SystemName();
-	void loadtextures();
+
+	static void loadalltextures();
+	static void unloadalltextures();
+	
 	void loadanimations();
 	void createprefablist();
 
