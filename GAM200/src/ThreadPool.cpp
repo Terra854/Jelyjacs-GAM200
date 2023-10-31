@@ -2,7 +2,7 @@
 
 void ThreadPool::Initialize() {
     num_of_threads = std::thread::hardware_concurrency();
-    for (size_t i = 0; i < num_of_threads; ++i) {
+    for (int i = 0; i < num_of_threads; ++i) {
         workers.emplace_back([this, i] { this->workerThread(i); });
     }
 }
@@ -26,7 +26,7 @@ bool ThreadPool::isQueueEmpty() {
 }
 
 int ThreadPool::numOfTasksLeft() {
-    return tasks.size();
+    return (int)tasks.size();
 }
 
 void ThreadPool::workerThread(int i) {

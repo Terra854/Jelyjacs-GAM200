@@ -852,7 +852,7 @@ void LevelEditor::DisplaySelectedTexture() {
 
 		ImGui::SetNextWindowPos(ImVec2((float)window->width * 0.15f, (float)window->height * 0.15f), ImGuiCond_Appearing);
 
-		ImVec2 image_size(width, height);
+		ImVec2 image_size((float) width, (float)height);
 
 		if (width > window->width * 0.3) {
 			image_size = ImVec2((float)window->width * 0.3f, (float)height * ((float)window->width * 0.3f / (float) width));

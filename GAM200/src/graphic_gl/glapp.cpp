@@ -355,7 +355,7 @@ void GLApp::Update()
 				ani_pt->frame_count = 0.f;
 				ani_pt->frame_num++;
 				if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
-					ani_pt->frame_num = ani_pt->animation_Map[ani_pt->current_type].size()-1;
+					ani_pt->frame_num = static_cast<int>(ani_pt->animation_Map[ani_pt->current_type].size()) - 1;
 			}
 
 			glBindTextureUnit(6, tex_test);

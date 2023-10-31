@@ -179,13 +179,13 @@ void GameLogic::Update() {
 		}
 		*/
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
-			Object* obj = objectFactory->getObjectWithID(i);
+			Object* obj = objectFactory->getObjectWithID((long)i);
 
 			if (obj == nullptr)
 				continue;
 
 			if (obj->GetName() == "piston") {
-				Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+				//Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 				Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 				//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 
@@ -199,7 +199,7 @@ void GameLogic::Update() {
 					std::cout << piston_event->linked_event << std::endl;
 					//check the door
 					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
-						Object* obj2 = objectFactory->getObjectWithID(j);
+						Object* obj2 = objectFactory->getObjectWithID((long)j);
 						if (obj2->GetName() == "door") {
 							Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
 							if (piston_event->linked_event == door_event->linked_event) {

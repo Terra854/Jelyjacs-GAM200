@@ -97,11 +97,8 @@ Object* Factory::createObject(const std::string& filename)
 
 			if (!exist) {
 				std::cout << "Missing Texture!" << std::endl;
+				// Attempt to add the texture
 				AssetManager::addtextures(path);
-			}
-			else
-			{
-				GLuint texturepath = AssetManager::textureval(path);
 			}
 				Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(path);
 				obj->AddComponent(tex);
@@ -321,7 +318,7 @@ void Factory::Update() {
 			for (int i = temp_id; i < nextObjectId; i++) {
 				objectMap[i] = objectMap[i + 1];
 				objectMap[i + 1]->ObjectId--;
-				objectMap.erase(i + 1);
+				objectMap.erase((size_t)(i + 1));
 			}
 		}
 	}
@@ -393,10 +390,10 @@ Object* Factory::cloneObject(Object* object)
 	obj->name = object->GetName();
 
 	// Clone all components (specific copying might be better to be at their component itself)
-	for (const std::pair<ComponentType, Component*>& c : object->Components)
+	for (const std::pair<ComponentType, Component*>& component : object->Components)
 	{
 		// Copy transform data
-		if (c.first == ComponentType::Transform) 
+		if (component.first == ComponentType::Transform)
 		{
 			Transform* trans = (Transform*)((ComponentCreator<Transform>*) componentMap["Transform"])->Create();
 			Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
@@ -413,7 +410,7 @@ Object* Factory::cloneObject(Object* object)
 		}
 
 		// Copy texture data
-		else if (c.first == ComponentType::Texture)
+		else if (component.first == ComponentType::Texture)
 		{
 			Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(std::string());
 			Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
@@ -422,7 +419,7 @@ Object* Factory::cloneObject(Object* object)
 			obj->AddComponent(tex);
 		}
 		// Clone body data
-		else if (c.first == ComponentType::Body)
+		else if (component.first == ComponentType::Body)
 		{
 			Body* body_pt = static_cast<Body*>(object->GetComponent(ComponentType::Body));
 			
@@ -452,7 +449,7 @@ Object* Factory::cloneObject(Object* object)
 			}
 		}
 		// Clone physics data
-		else if (c.first == ComponentType::Physics)
+		else if (component.first == ComponentType::Physics)
 		{
 			Physics* p = (Physics*)((ComponentCreator<Physics>*) componentMap["Physics"])->Create();
 			Physics* p_pt = static_cast<Physics*>(object->GetComponent(ComponentType::Physics));
@@ -464,13 +461,13 @@ Object* Factory::cloneObject(Object* object)
 			obj->AddComponent(p);
 		}
 		// Clone player controllable data
-		else if (c.first == ComponentType::PlayerControllable)
+		else if (component.first == ComponentType::PlayerControllable)
 		{
 			PlayerControllable* p = (PlayerControllable*)((ComponentCreator<PlayerControllable>*) componentMap["Player"])->Create();
 			obj->AddComponent(p);
 		}
 		// Clone Animations data
-		else if (c.first == ComponentType::Animation)
+		else if (component.first == ComponentType::Animation)
 		{
 			Animation* ani = (Animation*)((ComponentCreator<Animation>*) componentMap["Animation"])->Create();
 			Animation* ani_tmp = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
@@ -482,7 +479,7 @@ Object* Factory::cloneObject(Object* object)
 			
 			obj->AddComponent(ani);
 		}
-		else if (c.first == ComponentType::Event)
+		else if (component.first == ComponentType::Event)
 		{
 			Event* e = (Event*)((ComponentCreator<Event>*) componentMap["Event"])->Create();
 			Event* e_tmp = static_cast<Event*>(object->GetComponent(ComponentType::Event));
@@ -492,7 +489,7 @@ Object* Factory::cloneObject(Object* object)
 
 			obj->AddComponent(e);
 		}
-		else if (c.first == ComponentType::Behaviour)
+		else if (component.first == ComponentType::Behaviour)
 		{
 			Behaviour* b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
 			obj->AddComponent(b);
@@ -530,7 +527,7 @@ Object* Factory::FindObject(std::string name)
 	return nullptr;
 }
 
-void Factory::DeleteComponent(unsigned id, ComponentType c) {
+void Factory::DeleteComponent(int id, ComponentType c) {
 	Object* o = getObjectWithID(id);
 	delete o->Components[c];
 	o->Components.erase(c);

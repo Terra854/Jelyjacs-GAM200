@@ -195,13 +195,13 @@ void CoreEngine::GameLoop()
 
 	bool debug_gui_active = true;
 	bool show_performance_viewer = true;
-	bool objectProperties = false;
-	bool tempstorage = 1;
-	float pos_x = 0;
-	float pos_y = 0;
+	//bool objectProperties = false;
+	//bool tempstorage = 1;
+	//float pos_x = 0;
+	//float pos_y = 0;
 
-	float xPos = 0;
-	float yPos = 0;
+	//float xPos = 0;
+	//float yPos = 0;
 
 	/* Level Editor */
 
@@ -637,7 +637,7 @@ int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
 		int xPos = gridPos + static_cast<int>(window->width / 2);
 		return xPos;
 	}
-	else if (axis == Axis::Y)
+	else //axis == Axis::Y
 	{
 		int yPos = static_cast<int>(window->height / 2) - gridPos;
 		return yPos;
@@ -647,12 +647,12 @@ int CoreEngine::convertMousePosToGridPos(Axis axis)
 {
 	if (axis == Axis::X)
 	{
-		int xPos = input::GetMouseX() - static_cast<int>(window->width / 2);
+		int xPos = static_cast<int>(input::GetMouseX()) - static_cast<int>(window->width / 2);
 		return xPos;
 	}
-	else if (axis == Axis::Y)
+	else //axis == Axis::Y
 	{
-		int yPos = static_cast<int>(window->height / 2) - input::GetMouseY();
+		int yPos = static_cast<int>(window->height / 2) - static_cast<int>(input::GetMouseY());
 		return yPos;
 	}
 }

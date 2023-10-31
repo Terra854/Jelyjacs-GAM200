@@ -38,7 +38,7 @@ int main() {
 	AssetManager* assetmanager = new AssetManager();
 	audio = new Audio(); // declared in Audio.h
 	Logic = new GameLogic(); // declared in GameLogic.h
-	Font* font = new Font();
+	font = new Font();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();
 	level_editor = new LevelEditor();
