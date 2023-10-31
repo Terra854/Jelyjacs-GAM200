@@ -32,7 +32,7 @@ public:
 
 	// This creates a game object using the variables from the json file
 // This will be what is used to create game objects in the game loop
-	Object* createObject(const std::string& filename);
+	Object* createObject(const std::string& filename, bool addToObjectMap = true);
 
 	//This doesn't destroy the game object instantly but will set it to be destroyed in the update loop
 	void destroyObject(Object* object);

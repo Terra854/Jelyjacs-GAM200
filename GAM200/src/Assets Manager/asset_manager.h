@@ -18,7 +18,8 @@ This file contains the declaration of class AssetManager.
 class AssetManager : public ISystems
 {
 public:
-
+	AssetManager() {};
+	~AssetManager() { Free(); }
 	virtual void Initialize();
 	virtual void Free();
 	virtual void Update();
@@ -34,8 +35,8 @@ public:
 	static bool animationcheckexist(std::string str);
 	static GLuint animationval(std::string str);
 
-	static long prefabsval(std::string str);
-	static void updateprefab(std::string str, long val);
+	static Object* prefabsval(std::string str);
+	static void updateprefab(std::string str, Object* o);
 
 	static std::string objectprefabsval();
 	static void cleanprefab();
@@ -58,7 +59,7 @@ private:
 	// Asset Manager private data
 	static std::map<std::string, GLuint> textures;
 	static std::map<std::string, GLuint> animations;
-	static std::map<std::string, long> prefabs;
+	static std::map<std::string, Object*> prefabs;
 
 	static GLuint missing_texture;
 };

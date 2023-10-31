@@ -18,7 +18,7 @@ std::filesystem::path AssetManager::objectprefabs = "Asset/Objects";
 
 std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;
-std::map<std::string, long> AssetManager::prefabs;
+std::map<std::string, Object*> AssetManager::prefabs;
 
 GLuint AssetManager::missing_texture;
 
@@ -66,7 +66,8 @@ void AssetManager::Initialize()
 
 void AssetManager::Free()
 {
-
+	for (const std::pair<std::string, Object*> &p : prefabs)
+		delete p.second;
 }
 
 std::string AssetManager::SystemName()
@@ -109,7 +110,7 @@ void AssetManager::createprefablist()
 	for (const auto& list : std::filesystem::directory_iterator(objectprefabs))
 	{
 		std::filesystem::path filename = list.path().filename();
-		prefabs.emplace(filename.string(), -1);
+		prefabs.emplace(filename.string(), objectFactory->createObject(list.path().string()));
 		std::cout << "Added to list: " << filename.string() <<  std::endl;
 	}
 }
@@ -147,14 +148,19 @@ GLuint AssetManager::animationval(std::string str)
 	return animations[str];
 }
 
-long AssetManager::prefabsval(std::string str)
+Object* AssetManager::prefabsval(std::string str)
 {
-	return prefabs[str];
+	try {
+		return prefabs.at(str);
+	}
+	catch (std::out_of_range) {
+		return nullptr;
+	}
 }
 
-void AssetManager::updateprefab(std::string str, long val)
+void AssetManager::updateprefab(std::string str, Object* o)
 {
-	prefabs[str] = val;
+	prefabs[str] = o;
 }
 
 std::string AssetManager::objectprefabsval()
@@ -164,10 +170,7 @@ std::string AssetManager::objectprefabsval()
 
 void AssetManager::cleanprefab()
 {
-	for (auto it = prefabs.begin(); it != prefabs.end(); it++)
-	{
-		it->second = -1;
-	}
+	prefabs.clear();
 }
 
 void AssetManager::addtextures(std::string str, GLuint tex)

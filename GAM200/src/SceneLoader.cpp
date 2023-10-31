@@ -35,18 +35,20 @@ void LoadScene(std::string filename)
 		jsonloop.readString(objprefabs, "Prefabs");
 		Object* obj;
 		// Create object if doesn't exist
-		if (AssetManager::prefabsval(objprefabs) == -1)
+		if (AssetManager::prefabsval(objprefabs) == nullptr)
 		{
 			// Create object
 			std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
-			obj = objectFactory->createObject(tempobjprefabs);
+			obj = objectFactory->createObject(tempobjprefabs, false);
 
-			AssetManager::updateprefab(objprefabs, obj->GetId());
+			AssetManager::updateprefab(obj->GetName(), obj);
+
+			//AssetManager::updateprefab(objprefabs, obj);
 		}
 		else
 		// clone object
 		{
-			obj = objectFactory->cloneObject(objectFactory->getObjectWithID(AssetManager::prefabsval(objprefabs)));
+			obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
 		}
 
 		// Read extra data to update object

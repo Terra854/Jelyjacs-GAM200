@@ -59,7 +59,7 @@ Factory::~Factory()
 
 // This creates a game object using the variables from the json file
 // This will be what is used to create game objects in the game loop
-Object* Factory::createObject(const std::string& filename)
+Object* Factory::createObject(const std::string& filename, bool addToObjectMap)
 {
 	// Check if the given file exists
 	JsonSerialization jsonobj;
@@ -282,9 +282,11 @@ Object* Factory::createObject(const std::string& filename)
 	// Run the initilization routines for each component (if there is any)
 	obj->Intialize();
 
-	// Add the new object to objectMap and clean up
-	assignIdToObject(obj);
-	//delete jsonObject;
+	// Add the new object to objectMap if needed
+	if (addToObjectMap)
+		assignIdToObject(obj);
+	
+	// Clean up
 	jsonobj.closeFile();
 	return obj;
 }
