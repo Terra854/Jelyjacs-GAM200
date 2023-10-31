@@ -95,14 +95,17 @@ Object* Factory::createObject(const std::string& filename)
 			jsonloop.readString(path, "Properties", "texturepath");
 			bool exist = AssetManager::texturecheckexist(path);
 
-			if (!exist)
+			if (!exist) {
 				std::cout << "Missing Texture!" << std::endl;
+				AssetManager::addtextures(path);
+			}
 			else
 			{
 				GLuint texturepath = AssetManager::textureval(path);
-				Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(texturepath);
+			}
+				Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(path);
 				obj->AddComponent(tex);
-			}			
+						
 		}
 		else if (type == "Body") {
 			std::string shape;
@@ -407,10 +410,10 @@ Object* Factory::cloneObject(Object* object)
 		// Copy texture data
 		else if (c.first == ComponentType::Texture)
 		{
-			Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(NULL);
+			Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(std::string());
 			Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
 
-			tex->texturepath = tex_pt->texturepath;
+			tex->textureName = tex_pt->textureName;
 			obj->AddComponent(tex);
 		}
 		// Clone body data

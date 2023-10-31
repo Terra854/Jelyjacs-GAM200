@@ -24,6 +24,7 @@ includes all the functions to draw objects
 #include <components/PlayerControllable.h>
 #include <components/Animation.h>
 #include <LevelEditor.h>
+#include "../Assets Manager/asset_manager.h"
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
@@ -275,7 +276,7 @@ void GLApp::Update()
 				tex_test = ani_pt->animation_tex_obj;
 		}
 		else
-			tex_test = tex_pt->texturepath;
+			tex_test = AssetManager::textureval(tex_pt->textureName);
 		
 		//get orientation
 		Transform* tran_pt = static_cast<Transform*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Transform));
@@ -451,7 +452,7 @@ void GLApp::Update()
 
 			if (te != nullptr) {
 				// Bind the texture
-				glBindTexture(GL_TEXTURE_2D, te->texturepath);
+				glBindTexture(GL_TEXTURE_2D, AssetManager::textureval(te->textureName));
 
 				// Get the texture width
 				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
@@ -462,8 +463,10 @@ void GLApp::Update()
 				// Unbind the texture
 				glBindTexture(GL_TEXTURE_2D, 0);
 
-				botleft = tr->Position + Vec2(-(width / 2.f), -(height / 2.f));
-				topright = tr->Position + Vec2(width / 2.f, height / 2.f);
+				//botleft = tr->Position + Vec2(-(width / 2.f), -(height / 2.f));
+				botleft = tr->Position + -tr->Scale / 2.f;
+				//topright = tr->Position + Vec2(width / 2.f, height / 2.f);
+				topright = tr->Position + tr->Scale / 2.f;
 
 				drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
 				drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
@@ -483,8 +486,6 @@ void GLApp::Update()
 		}
 		
     }
-	
-	
 }
 
 /*

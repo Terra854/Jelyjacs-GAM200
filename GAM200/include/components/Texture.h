@@ -16,10 +16,10 @@ Contains an id that is used in graphics to determine which texture to use for th
 class Texture : public Component
 {
 public:
-	Texture(unsigned int _texturepath) : Component(), texturepath(_texturepath){}
+	Texture(std::string _textureName) : Component(), textureName(_textureName){}
 
 	virtual ComponentType TypeId() const override { return ComponentType::Texture; }
 
 	// Path to file for texture
-	unsigned int texturepath;
+	std::string textureName;
 };

@@ -17,8 +17,7 @@ This file contains the declaration of class AssetManager.
 
 class AssetManager : public ISystems
 {
-	public:
-
+public:
 
 	virtual void Initialize();
 	virtual void Free();
@@ -41,11 +40,14 @@ class AssetManager : public ISystems
 	static std::string objectprefabsval();
 	static void cleanprefab();
 
+	// Add textures while the game is running (defaults to missing texture if no textures are provided)
+	static void addtextures(std::string str, GLuint tex = missing_texture);
+
 	// Level Editor will need to access the private data
 	friend class LevelEditor;
 
 	// These data shouldn't be modified unless file location is changed
-	private:
+private:
 	// Location initialize in asset_manager.cpp
 	static std::filesystem::path pathtexture;
 	static std::filesystem::path pathanimations;
@@ -57,6 +59,8 @@ class AssetManager : public ISystems
 	static std::map<std::string, GLuint> textures;
 	static std::map<std::string, GLuint> animations;
 	static std::map<std::string, long> prefabs;
+
+	static GLuint missing_texture;
 };
 
 
