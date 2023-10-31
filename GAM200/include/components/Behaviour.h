@@ -10,7 +10,7 @@ public:
 	//~Behaviour() = default;
 	virtual void Initialize() override {}
 	void SetIndex(const unsigned int& index);
-	inline unsigned int& GetIndex() noexcept;
+	unsigned int& GetIndex() noexcept;
 
 	virtual ComponentType TypeId() const override { return ComponentType::Behaviour; }
 private:
