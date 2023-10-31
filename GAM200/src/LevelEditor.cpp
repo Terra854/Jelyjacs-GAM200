@@ -175,15 +175,15 @@ void LevelEditor::ObjectProperties() {
 		if (tr->Scale.x > tr->Scale.y) {
 			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
 			ImGui::Dummy(ImVec2(0, padding));
-			ImGui::Image((void*)(intptr_t)te->texturepath, ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
+			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
 		}
 		else if (tr->Scale.x == tr->Scale.y)
-			ImGui::Image((void*)(intptr_t)te->texturepath, ImGui::GetContentRegionAvail());
+			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImGui::GetContentRegionAvail());
 		else {
 			float padding = ImGui::GetContentRegionAvail().x * (tr->Scale.x / tr->Scale.y) * 0.5f;
 			ImGui::Dummy(ImVec2(padding, 0));
 			ImGui::SameLine();
-			ImGui::Image((void*)(intptr_t)te->texturepath, ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
 		}
 	}
 	else {
@@ -258,7 +258,7 @@ void LevelEditor::ObjectProperties() {
 		if (ImGui::CollapsingHeader("Texture")) {
 
 			for (const auto& pair : AssetManager::textures) {
-				if (pair.second == te->texturepath) {
+				if (pair.first == te->textureName) {
 					ImGui::Text("Texture: %s", pair.first.c_str());
 				}
 			}

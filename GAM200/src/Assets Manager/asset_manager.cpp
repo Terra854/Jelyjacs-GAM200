@@ -20,6 +20,8 @@ std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;
 std::map<std::string, long> AssetManager::prefabs;
 
+GLuint AssetManager::missing_texture;
+
 // Looked through the asset file and load all assets
 void AssetManager::Initialize()
 {
@@ -46,6 +48,9 @@ void AssetManager::Initialize()
 	}
 	else
 		std::cout << pathtexture << " does not exist!" << std::endl;
+
+	// Load the placeholder for missing textures
+	missing_texture = GLApp::setup_texobj("Asset/missing_texture.png");
 
 	// Create a list of object prefabs, that will be used for scene loading
 	std::cout << "Prefab object list: " << std::endl;
@@ -120,7 +125,12 @@ bool AssetManager::texturecheckexist(std::string str)
 
 GLuint AssetManager::textureval(std::string str)
 {
-	return textures[str];
+	try {
+		return textures.at(str);
+	}
+	catch (std::out_of_range) {
+		return missing_texture;
+	}
 }
 
 bool AssetManager::animationcheckexist(std::string str)
@@ -158,6 +168,11 @@ void AssetManager::cleanprefab()
 	{
 		it->second = -1;
 	}
+}
+
+void AssetManager::addtextures(std::string str, GLuint tex)
+{
+	textures.emplace(str, tex);
 }
 
 
