@@ -25,12 +25,25 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Audio.h>
 #include <SceneLoader.h>
 
+GameLogic* Logic = nullptr;
 Object* scale_and_rotate;
 Object* playerObj;
 Object* MovingPlatform;
 Object* dynamic_collision;
 bool moving_platform_direction = false;
 
+GameLogic::GameLogic() {
+	Logic = this;
+
+	playerObj = nullptr;
+	MovingPlatform = nullptr;
+	dynamic_collision = nullptr;
+	moving_platform_direction = false;
+}
+
+GameLogic::~GameLogic() {
+	
+}
 /******************************************************************************
 * MessageRelay
 * - Get Message and React Accordingly
