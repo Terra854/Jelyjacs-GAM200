@@ -344,10 +344,12 @@ void GLApp::Update()
 						ani_pt->frame_num = 0;
 				}
 				if (ani_pt->jump_fixed) {
+					if(ani_pt->previous_type!= AnimationType::Jump && ani_pt->previous_type != AnimationType::Jump_left)
+						ani_pt->frame_num = 0;
 					if (ani_pt->frame_num >= ani_pt->jump_fixed_frame)
 						ani_pt->frame_num = ani_pt->jump_fixed_frame;
 				}
-			}else if (!ani_pt->fixed) {
+			}else if (!ani_pt->fixed) {//object with animation
 				ani_pt->frame_num = 0;
 			}else if (ani_pt->frame_count >= ani_pt->frame_rate) {
 				ani_pt->frame_count = 0.f;

@@ -94,27 +94,6 @@ void LevelEditor::DebugPerformanceViewer() {
 */
 int cloneSuccessful = -1;
 
-bool Transform_EditMode = false;
-
-Vec2 edited_position;
-float edited_rotation;
-Vec2 edited_scale;
-
-bool Body_EditMode = false;
-
-bool edited_active;
-bool edited_collision_response;
-
-bool AABB_EditMode = false;
-
-float edited_aabb_width;
-float edited_aabb_height;
-
-bool Physics_EditMode = false;
-
-Vec2 edited_velocity;
-bool edited_gravity;
-
 void LevelEditor::ObjectProperties() {
 
 	ImGui::SetNextWindowSize(ImVec2(450, 0));
@@ -139,6 +118,27 @@ void LevelEditor::ObjectProperties() {
 
 		return;
 	}
+
+	static bool Transform_EditMode = false;
+
+	static Vec2 edited_position;
+	static float edited_rotation;
+	static Vec2 edited_scale;
+
+	static bool Body_EditMode = false;
+
+	static bool edited_active;
+	static bool edited_collision_response;
+
+	static bool AABB_EditMode = false;
+
+	static float edited_aabb_width;
+	static float edited_aabb_height;
+
+	static bool Physics_EditMode = false;
+
+	static Vec2 edited_velocity;
+	static bool edited_gravity;
 
 	Object* object = objectFactory->getObjectWithID(selected);
 
@@ -1060,6 +1060,87 @@ void PlayPauseGame() {
 	ImGui::End();
 }
 
+void CameraControl() {
+
+	ImGui::Begin("Camera Control");
+
+	if (camera2D->isFreeCamEnabled()) {
+		if (ImGui::Button("Disable Free Cam")) {
+			camera2D->scale = { 1.f, 1.f };
+			camera2D->position = { 0.f, 0.f };
+			camera2D->toggleFreeCam();
+		}
+	}
+	else {
+		if (ImGui::Button("Enable Free Cam"))
+			camera2D->toggleFreeCam();
+	}
+
+	if (!camera2D->isFreeCamEnabled()) {
+		// Make the button look disabled by reducing its alpha
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+
+		// Make the button unclickable
+		ImGui::BeginDisabled(true);
+	}
+
+	ImGui::SameLine();
+
+	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + 50.f, ImGui::GetCursorPosY()));
+
+	ImGui::Button("Up##CameraControl");
+	if (ImGui::IsItemActive()) { camera2D->position.y -= engine->GetDt() * 2.f; }
+
+	ImGui::SameLine();
+
+	ImGui::Button("Down##CameraControl");
+	if (ImGui::IsItemActive()) { camera2D->position.y += engine->GetDt() * 2.f; }
+
+	ImGui::SameLine();
+
+	ImGui::Button("Left##CameraControl");
+	if (ImGui::IsItemActive()) { camera2D->position.x += engine->GetDt() * 2.f; }
+
+	ImGui::SameLine();
+
+	ImGui::Button("Right##CameraControl");
+	if (ImGui::IsItemActive()) { camera2D->position.x -= engine->GetDt() * 2.f; }
+
+	ImGui::SameLine();
+
+	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + 50.f, ImGui::GetCursorPosY()));
+
+	if(ImGui::Button("Reset to Player##CameraControl")) { camera2D->SetToPlayer(); }
+
+	ImGui::SameLine();
+
+	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + 50.f, ImGui::GetCursorPosY()));
+
+	ImGui::Button("Zoom In##CameraControl");
+	if (ImGui::IsItemActive()) { camera2D->scale *= 1.f + (engine->GetDt() * 1.5f); }
+
+	ImGui::SameLine();
+
+	ImGui::Button("Zoom Out##CameraControl");
+	if (ImGui::IsItemActive()) { camera2D->scale /= 1.f + (engine->GetDt() * 1.5f); }
+
+	ImGui::SameLine();
+
+	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + 50.f, ImGui::GetCursorPosY()));
+
+	if(ImGui::Button("Reset Zoom##CameraControl")) { camera2D->scale = {1.f, 1.f}; }
+
+	if (!camera2D->isFreeCamEnabled()) {
+		// End the disabled section
+		ImGui::EndDisabled();
+
+		// Restore original style
+		ImGui::PopStyleVar();
+	}
+		
+	ImGui::End();
+}
+
 void DoNothing() {
 
 }
@@ -1163,6 +1244,8 @@ void LevelEditor::Update() {
 	DisplaySelectedTexture();
 
 	PlayPauseGame();
+
+	CameraControl();
 
 	if (cloneSuccessful > -1) {
 		ObjectClonedSuccessfully(cloneSuccessful);

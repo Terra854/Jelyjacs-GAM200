@@ -13,6 +13,6 @@ public:
 	unsigned int& GetIndex() noexcept;
 
 	virtual ComponentType TypeId() const override { return ComponentType::Behaviour; }
-private:
+protected:
 	unsigned int behaviour_index;
 };

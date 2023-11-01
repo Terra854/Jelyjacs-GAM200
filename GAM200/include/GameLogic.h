@@ -7,9 +7,9 @@
 This file contains the declaration for the Game Logic system class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
-
-#include "Interface_System.h"
 #include <LogicScript.h>
+#include "Interface_System.h"
+
 #include <components/Behaviour.h>
 
 
@@ -25,8 +25,8 @@ public:
 	void Update();
 	void AddBehaviour(LogicScript* behaviour);
 	virtual std::string SystemName() { return "Game_Logic"; }
-private:
 
+private:
 	std::vector<LogicScript*> behaviours;
 	std::vector<Behaviour*> behaviourComponents;
 };

@@ -6,12 +6,13 @@
 This file contains the definitions of the functions that are part of the Audio system
 *//*__________________________________________________________________________*/
 #include "Audio.h"
+#include "Assets Manager/asset_manager.h"
 #include <Core_Engine.h>
 
 Audio* audio = nullptr;
 
 Audio::~Audio(){
-    system->close();
+    AssetManager::clearsounds();
     system->release();
 }
 
@@ -32,21 +33,29 @@ void Audio::Initialize(){
         exit(-1);
     }
 
+    // Let other systems have access to this system
+    audio = this;
+}
+
+void Audio::setupSound()
+{
     // Load sounds
-    system->createSound("Asset/Sounds/Game_Background.wav", FMOD_LOOP_NORMAL, 0, &game_background);
-    system->playSound(game_background, 0, false, &background);
+    //system->createSound("Asset/Sounds/Game_Background.wav", FMOD_LOOP_NORMAL, 0, &game_background);
+    system->playSound(AssetManager::soundsval("Game_Background.wav"), 0, false, &background);
     background->setVolume(0.2f);
 
-    system->createSound("Asset/Sounds/Footsteps.wav", FMOD_LOOP_NORMAL, 0, &walking);
-    system->playSound(walking, 0, false, &channel);
+    //system->createSound("Asset/Sounds/Footsteps.wav", FMOD_LOOP_NORMAL, 0, &walking);
+    system->playSound(AssetManager::soundsval("Footsteps.wav"), 0, false, &channel);
     channel->setVolume(0.0);
 
 
-    system->createSound("Asset/Sounds/Jump.wav", FMOD_DEFAULT, 0, &jump);
-    system->createSound("Asset/Sounds/Sliding_Door_Open.wav", FMOD_DEFAULT, 0, &sliding_door_open);
+    //system->createSound("Asset/Sounds/Jump.wav", FMOD_DEFAULT, 0, &jump);
+    //system->createSound("Asset/Sounds/Sliding_Door_Open.wav", FMOD_DEFAULT, 0, &sliding_door_open);
+}
 
-    // Let other systems have access to this system
-    audio = this;
+void Audio::createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound)
+{
+    system->createSound(str.c_str(), mode, 0, sound);
 }
 
 void Audio::Update(){
@@ -64,11 +73,11 @@ void Audio::stopWalking() {
 }
 
 void Audio::playJump() {
-    system->playSound(jump, 0, false, &sfx);
+    system->playSound(AssetManager::soundsval("Jump.wav"), 0, false, &sfx);
     sfx->setVolume(0.2f);
 }
 
 void Audio::playSlidingDoor() {
-    system->playSound(sliding_door_open, 0, false, &sfx);
+    system->playSound(AssetManager::soundsval("Sliding_Door_Open.wav"), 0, false, &sfx);
     sfx->setVolume(0.2f);
 }

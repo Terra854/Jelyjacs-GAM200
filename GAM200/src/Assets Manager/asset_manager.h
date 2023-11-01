@@ -12,6 +12,7 @@ This file contains the declaration of class AssetManager.
 #include <string>
 #include <vector>
 #include <filesystem>
+#include "../../include/Audio.h"
 #include "../../include/Interface_System.h"
 #include "../../include/Graphic_gl/glapp.h"
 
@@ -30,6 +31,8 @@ public:
 	
 	void loadanimations();
 	void createprefablist();
+	void loadsounds();
+	static void clearsounds();
 
 	// Access value
 	static bool texturecheckexist(std::string str);
@@ -44,6 +47,8 @@ public:
 	static std::string objectprefabsval();
 	static void cleanprefab();
 
+	static FMOD::Sound* soundsval(std::string str);
+
 	// Add textures while the game is running (defaults to missing texture if no textures are provided)
 	static void addtextures(std::string str, GLuint tex = missing_texture);
 
@@ -56,13 +61,14 @@ private:
 	static std::filesystem::path pathtexture;
 	static std::filesystem::path pathanimations;
 	static std::filesystem::path objectprefabs;
-	//std::filesystem::path audio;
-	//std::filesystem::path fonts;
+	static std::filesystem::path pathaudio;
+	static std::filesystem::path pathfonts;
 
 	// Asset Manager private data
 	static std::map<std::string, GLuint> textures;
 	static std::map<std::string, GLuint> animations;
 	static std::map<std::string, Object*> prefabs;
+	static std::map<std::string, FMOD::Sound*> sounds;
 
 	static GLuint missing_texture;
 };
