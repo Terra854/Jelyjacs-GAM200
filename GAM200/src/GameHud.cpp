@@ -11,7 +11,18 @@ void GameHud::Initialize()
 }
 void GameHud::Update()
 {
-	
+	if (input::IsPressed(KEY::mouseL))
+	{
+		for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
+		{
+			Button* ptr = it->second;
+			if (input::GetMouseX() < ptr->pos1.x || input::GetMouseX() > ptr->pos2.x || input::GetMouseY() < ptr->pos2.y || input::GetMouseY() > ptr->pos1.y)
+			{
+				continue;
+			}
+			std::cout << it->first << " is pressed" << std::endl;
+		}
+	}
 }
 
 void GameHud::create_button(std::string const& text, Button button, float scale)
