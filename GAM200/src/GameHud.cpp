@@ -2,12 +2,12 @@
 #include "Font.h"
 #include "GLApp.h"
 #include "input.h"
-
+#include "Core_Engine.h"
 
 void GameHud::Initialize()
 {
-	create_button("button1", Button(Vec2(700 , 0),200 , 100) , 1);
-	create_button("button2", Button(Vec2(700, -200), 200, 100), 1);
+	create_button("pause", Button(Vec2(700 , 0),200 , 100) , 1);
+	create_button("camera", Button(Vec2(700, -200), 200, 100), 1);
 }
 void GameHud::Update()
 {
@@ -21,6 +21,17 @@ void GameHud::Update()
 				continue;
 			}
 			std::cout << it->first << " is pressed" << std::endl;
+			if (it->first == "pause")
+			{
+				engine->setPause();
+			}
+			else if (it->first == "camera")
+			{
+				if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
+					camera2D->scale = { 2.0f, 2.0f };
+				}
+				else camera2D->scale = { 1.5f, 1.5f };
+			}
 		}
 	}
 }
