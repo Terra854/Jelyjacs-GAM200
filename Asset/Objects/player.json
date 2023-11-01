@@ -39,9 +39,8 @@
       "Properties": {
         "X_Velocity": 0.0,
         "Y_Velocity": 0.0,
-        "Y_Acceleration": 0.0,
         "AffectedByGravity": true,
-        "Mass": 0.0
+        "Mass": 1.0
       }
     },
     {

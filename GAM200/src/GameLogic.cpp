@@ -24,6 +24,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 //#include <Movement.h>
 #include <Audio.h>
 #include <SceneLoader.h>
+#include <PhysicsSystem.h>
 
 GameLogic* Logic = NULL;
 Object* scale_and_rotate;
@@ -123,7 +124,8 @@ void GameLogic::Update() {
 			engine->Broadcast(&msg);
 			//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 			if (player_physics->Velocity.y == 0.0f) {
-				player_physics->Velocity.y = 1000.0f;
+				//player_physics->Velocity.y = 1000.0f;
+				player_physics->Force = 60000.0f + gravity;
 				audio->playJump();
 			}
 		}

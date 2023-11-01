@@ -325,10 +325,13 @@ void PhysicsSystem::Update() {
 		// No acceleration, not needed in the game
 
 		// Apply gravity
-		if (p->AffectedByGravity)
-			p->Velocity.y += gravity * fixed_dt;
-		
+		if (p->AffectedByGravity) {
+			float acceleration = p->Force * (1.f / p->Mass) + gravity;
+			p->Velocity.y += acceleration * fixed_dt;
+		}
 		p->Velocity.y *= 0.99f; // Account for air resistance
+
+		p->Force = 0.0f; // Reset force
 	}
 
 	// Loop through each object to update positiona and see if it's colliding with something
