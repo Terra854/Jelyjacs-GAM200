@@ -15,10 +15,13 @@ to be referenced from when needed.
 std::filesystem::path AssetManager::pathtexture = "Asset/Picture";
 std::filesystem::path AssetManager::pathanimations = "Asset/Animation";
 std::filesystem::path AssetManager::objectprefabs = "Asset/Objects";
+std::filesystem::path AssetManager::pathaudio = "Asset/Sounds";
+std::filesystem::path AssetManager::pathfonts = "Asset/Fonts";
 
 std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;
 std::map<std::string, Object*> AssetManager::prefabs;
+std::map<std::string, FMOD::Sound*> AssetManager::sounds;
 
 GLuint AssetManager::missing_texture;
 
@@ -47,13 +50,12 @@ void AssetManager::Initialize()
 		loadanimations();
 	}
 	else
-		std::cout << pathtexture << " does not exist!" << std::endl;
+		std::cout << pathanimations << " does not exist!" << std::endl;
 
 	// Load the placeholder for missing textures
 	missing_texture = GLApp::setup_texobj("Asset/missing_texture.png");
 
 	// Create a list of object prefabs, that will be used for scene loading
-	std::cout << "Prefab object list: " << std::endl;
 	if (std::filesystem::exists(objectprefabs))
 	{
 		createprefablist();
@@ -62,11 +64,20 @@ void AssetManager::Initialize()
 		std::cout << objectprefabs << " does not exist!" << std::endl;
 
 
+	if (std::filesystem::exists(pathaudio))
+	{
+		loadsounds();
+	}
+	else
+		std::cout << pathaudio << " does not exist!" << std::endl;
+
 }
 
 void AssetManager::Free()
 {
+	// No freeing needed for textures and animations
 	cleanprefab();
+	// Freeing of sound is called in audio.cpp when audio system is destroyed
 }
 
 std::string AssetManager::SystemName()
@@ -121,6 +132,37 @@ void AssetManager::createprefablist()
 		prefabs.emplace(filename.string(), objectFactory->createObject(list.path().string()));
 		std::cout << "Added to list: " << filename.string() <<  std::endl;
 	}
+}
+
+void AssetManager::loadsounds()
+{
+	for (const auto& list : std::filesystem::directory_iterator(pathaudio))
+	{
+		std::cout << "Folders: " << list.path().filename() << std::endl;
+		FMOD_MODE audio_mode;
+		if (list.path().filename() == "looping")
+			audio_mode = FMOD_LOOP_NORMAL;
+		else
+			audio_mode = FMOD_DEFAULT;
+
+		auto inneraudio = std::filesystem::directory_entry(list);
+		for (const auto& innerlist : std::filesystem::directory_iterator(inneraudio))
+		{
+			std::filesystem::path filename = innerlist.path().filename();
+			FMOD::Sound* sound;
+			audio->createSound(innerlist.path().string(), audio_mode, &sound);
+			sounds.emplace(filename.string(), sound);
+			std::cout << "Added to list: " << filename.string() << std::endl;
+		}
+	}
+	audio->setupSound();
+}
+
+void AssetManager::clearsounds()
+{
+	for (const auto& s : sounds)
+		s.second->release();
+	sounds.clear();
 }
 
 bool AssetManager::texturecheckexist(std::string str)
@@ -182,6 +224,16 @@ void AssetManager::cleanprefab()
 		delete p.second;
 
 	prefabs.clear();
+}
+
+FMOD::Sound* AssetManager::soundsval(std::string str)
+{
+	try {
+		return sounds.at(str);
+	}
+	catch (std::out_of_range) {
+		return nullptr;
+	}
 }
 
 void AssetManager::addtextures(std::string str, GLuint tex)

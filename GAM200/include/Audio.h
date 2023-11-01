@@ -17,6 +17,9 @@ public:
 	virtual void Update() override;
 	virtual std::string SystemName() { return "Audio"; }
 
+	void setupSound();
+	void createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound);
+
 	void startWalking();
 	void stopWalking();
 	void playJump();
@@ -28,7 +31,7 @@ private:
 	FMOD::Channel *background, *channel, *sfx;
 	FMOD_RESULT result;
 
-	FMOD::Sound *walking, *jump, *game_background, *sliding_door_open;
+	//FMOD::Sound *walking, *jump, *game_background, *sliding_door_open;
 
 	bool isPlayingWalking = false;
 };

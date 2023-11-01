@@ -47,11 +47,11 @@ int main() {
 	// Add System to the engine 
 	engine->AddSystem(windows);
 	engine->AddSystem(thread_pool);
+	engine->AddSystem(audio);
 	engine->AddSystem(assetmanager);
 	engine->AddSystem(Logic);
 	engine->AddSystem(factory);
 	engine->AddSystem(physics);
-	engine->AddSystem(audio);
 	engine->AddSystem(font);
 	engine->AddSystem(camera);
 	engine->AddSystem(level_editor);
