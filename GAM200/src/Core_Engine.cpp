@@ -24,9 +24,11 @@ This file contains the definitions of the functions that are part of the Core En
 #include "Font.h"
 #include <PhysicsSystem.h>
 #include <glapp.h>
+#include "GameHud.h"
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
+GameHud gamehud;
 ImVec4 clear_color;
 
 /******************************************************************************
@@ -233,16 +235,21 @@ void CoreEngine::GameLoop()
 	/* End Level Editor */
 	GLuint tileset = app->setup_texobj("Asset/Picture/TileSheet.png");
 	// Game Loop
+
+	gamehud.Initialize();
+
 	while (game_active)
 	{
 		
 		auto m_BeginFrame = std::chrono::system_clock::now();
 		hud.NewGuiFrame(0);
+		input::Update();
 
 		// Toggle Button to Display Debug Information in IMGui
 		if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
 
 		//show_performance_viewer ? Debug_Update() : Update();
+
 
 		for (const std::pair<std::string, ISystems*>& sys : Systems)
 		{
@@ -256,6 +263,7 @@ void CoreEngine::GameLoop()
 				//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 			}
 		}
+		
 		/***************************************************************************************************************************************
 		
 		
@@ -277,7 +285,6 @@ void CoreEngine::GameLoop()
 
 			Update(Systems["Graphics"]);
 			
-			DrawText("Testing Font", 500, 200, 1);
 			Update(Systems["Window"]);
 			//editor_grid->drawleveleditor();
 
@@ -555,7 +562,8 @@ void CoreEngine::GameLoop()
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
 
 			Update(Systems["Graphics"]);
-			DrawText("Testing Font", 500, 200, 1);
+			gamehud.Update();
+			gamehud.Draw();
 			Update(Systems["Window"]);
 			hud.GuiRender(io);
 		}

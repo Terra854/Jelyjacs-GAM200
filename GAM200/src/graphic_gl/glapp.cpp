@@ -236,6 +236,12 @@ void GLApp::init_shdrpgms() {
 */
 void GLApp::Update()
 {
+	//check debug
+	if (input::IsPressed(KEY::l))
+	{
+		graphics_debug = !graphics_debug;
+		std::cout << "graphics_debug" << std::endl;
+	}
 
 	//clear screen
 	glClearColor(0.11f, 0.094f, 0.161f, 1.0f);
@@ -287,14 +293,6 @@ void GLApp::Update()
 		else
 			orientation = tran_pt->Rotation;
 
-		//check debug
-		if (input::IsPressed(KEY::l))
-		{
-			graphics_debug = !graphics_debug;
-			std::cout << "graphics_debug" << std::endl;
-		}
-
-		
 		// get pos and scale from transform component
 		pos.x = tran_pt->Position.x * 2.0f / window->width;
 		pos.y = tran_pt->Position.y * 2.0f / window->height;
