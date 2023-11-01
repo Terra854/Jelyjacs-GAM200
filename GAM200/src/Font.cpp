@@ -190,11 +190,11 @@ Font::~Font()
 
 int find_width(std::string const& str)
 {
-    int width{ 0 };
+    int width{};
     for (size_t i = 0; i < str.size(); ++i)
     {
         FT_Load_Char(face, str.at(i), FT_LOAD_RENDER);
         width += face->glyph->advance.x;
     }
-    return (width >> 6);
+    return width>>6;
 }

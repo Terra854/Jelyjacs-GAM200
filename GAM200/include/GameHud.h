@@ -13,7 +13,7 @@ public:
 	class Text
 	{
 	public:
-		Vec2 centre{};
+		Vec2 pos{};
 		float scale;
 		std::string text{};
 	};
