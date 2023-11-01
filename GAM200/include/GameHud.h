@@ -15,6 +15,7 @@ public:
 	public:
 		Vec2 centre{};
 		float scale;
+		std::string text{};
 	};
 	class Button
 	{

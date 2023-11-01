@@ -120,9 +120,15 @@ void Font::Initialize()
         shdr_pgm.UnUse();
 }
 
+void normalise_coord(float& x, float& y)
+{
+    x += window->width / 2.0f;
+    y += window->height / 2.0f;
+}
 
 void RenderText(std::string text, float x, float y, float scale, glm::ivec3 color)
 {
+    normalise_coord(x, y);
     shdr_pgm.Use();
     // activate corresponding render 
     glUniform3f(glGetUniformLocation(shdr_pgm.GetHandle(), "textColor"), (float)color.x, (float)color.y, (float)color.z);
@@ -167,10 +173,6 @@ void RenderText(std::string text, float x, float y, float scale, glm::ivec3 colo
 
 bool DrawText(std::string const& text, float posX, float posY, float scale , float red , float green , float blue)
 {
-    if (posX<0 || posX>window->width || posY<0 || posY>window->height)
-    {
-        return false;
-    }
     RenderText(text, posX, posY, scale, glm::vec3(red,green,blue));
     return true;
 }

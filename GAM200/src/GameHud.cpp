@@ -6,7 +6,7 @@
 
 void GameHud::Initialize()
 {
-	create_button("button1g", Button(Vec2(500 , 0),100 , 50) , 1);
+	create_button("button1", Button(Vec2(500 , 0),100 , 50) , 1);
 }
 void GameHud::Update()
 {
@@ -15,6 +15,7 @@ void GameHud::Update()
 
 void GameHud::create_button(std::string const& text, Button button, float scale)
 {
+	button.string.text = text;
 	button.string.scale = scale;
 	Buttons[text] = new Button{ button };
 }
@@ -37,6 +38,10 @@ GameHud::Button::Button(Vec2 pos, float width, float height)
 
 void GameHud::Draw()
 {
-
+	for (auto it = Buttons.begin() ; it!=Buttons.end(); ++it)
+	{
+		Button* ptr = it->second;
+		DrawText(ptr->string.text, ptr->string.centre.x, ptr->string.centre.y, ptr->string.scale);
+	}
 }
 
