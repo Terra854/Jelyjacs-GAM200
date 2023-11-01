@@ -80,4 +80,5 @@ namespace input
 	/*!	for use in graphics.cpp to initialise GLFW callbacks
 	*/
 	void Init(GLFWwindow* pWin);
+	void Update();
 }

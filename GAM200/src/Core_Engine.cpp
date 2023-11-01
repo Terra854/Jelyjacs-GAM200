@@ -243,11 +243,13 @@ void CoreEngine::GameLoop()
 		
 		auto m_BeginFrame = std::chrono::system_clock::now();
 		hud.NewGuiFrame(0);
+		input::Update();
 
 		// Toggle Button to Display Debug Information in IMGui
 		if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
 
 		//show_performance_viewer ? Debug_Update() : Update();
+
 
 		for (const std::pair<std::string, ISystems*>& sys : Systems)
 		{
@@ -261,6 +263,7 @@ void CoreEngine::GameLoop()
 				//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 			}
 		}
+		
 		/***************************************************************************************************************************************
 		
 		
