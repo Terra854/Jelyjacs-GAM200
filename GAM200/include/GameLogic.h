@@ -7,9 +7,9 @@
 This file contains the declaration for the Game Logic system class
 *//*__________________________________________________________________________*/
 #include <Debug.h>
-
-#include "Interface_System.h"
 #include <LogicScript.h>
+#include "Interface_System.h"
+
 #include <components/Behaviour.h>
 
 
