@@ -180,13 +180,11 @@
     <ClCompile Include="src\LogicScript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< Updated upstream
     <ClCompile Include="src\graphic_gl\Particle.cpp">
       <Filter>Source Files\Systems\Graphics</Filter>
-=======
+	</ClCompile>
     <ClCompile Include="src\TestScript.cpp">
       <Filter>Source Files</Filter>
->>>>>>> Stashed changes
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -313,13 +311,11 @@
     <ClInclude Include="include\components\Behaviour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< Updated upstream
     <ClInclude Include="include\Graphic_gl\Particle.h">
       <Filter>Header Files\Systems\Graphics</Filter>
-=======
+	</ClInclude>
     <ClInclude Include="include\TestScript.h">
       <Filter>Header Files</Filter>
->>>>>>> Stashed changes
     </ClInclude>
   </ItemGroup>
 </Project>
