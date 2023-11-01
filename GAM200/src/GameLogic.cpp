@@ -25,12 +25,25 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Audio.h>
 #include <SceneLoader.h>
 
+GameLogic* Logic = NULL;
 Object* scale_and_rotate;
 Object* playerObj;
 Object* MovingPlatform;
 Object* dynamic_collision;
 bool moving_platform_direction = false;
 
+GameLogic::GameLogic() {
+	Logic = this;
+	
+	playerObj = nullptr;
+	MovingPlatform = nullptr;
+	dynamic_collision = nullptr;
+	moving_platform_direction = false;
+}
+
+GameLogic::~GameLogic() {
+	
+}
 /******************************************************************************
 * MessageRelay
 * - Get Message and React Accordingly
@@ -59,93 +72,10 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
 	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
 	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
+	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 
 
 	LoadScene("Asset/Levels/tutorial_level.json");
-
-	//playerObj = objectFactory->getPlayerObject();
-	//MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
-
-	/*
-	Object* testObj;
-	Object* floor1;
-	Object* floor2;
-	Object* floor3;
-	//Transform * trans;
-	//Texture* texture;
-
-	std::cout << "Background" << std::endl;
-	//testObj = objectFactory->createObject("../Asset/Objects/background.json");
-	//scale_and_rotate = objectFactory->createObject("../Asset/Objects/scale-and-rotate.json");
-	//std::cout << "test Object 2" << std::endl;
-	//testObj2 = objectFactory->createObject("../drop-forever.json");
-
-	LoadScene("../Asset/Levels/testscene.json");
-	//floor1 = objectFactory->createObject("../Asset/Objects/mapbox.json");
-	//floor2 = objectFactory->createObject("../Asset/Objects/mapbox.json");
-	floor3 = objectFactory->createObject("../Asset/Objects/mapbox.json");
-	Transform* tran_pt = static_cast<Transform*>(floor3->GetComponent(ComponentType::Transform)); // change to different obj
-	tran_pt->Position.x = 210;
-	Rectangular* rect_pt = static_cast<Rectangular*>(floor3->GetComponent(ComponentType::Body));
-	rect_pt->Initialize();
-
-	// Test cloning
-	Object* testclone;
-	testclone = objectFactory->cloneObject(floor3);
-	tran_pt = static_cast<Transform*>(testclone->GetComponent(ComponentType::Transform)); // change to different obj
-	tran_pt->Position.x = -160;
-	tran_pt->Position.y = -250;
-	rect_pt = static_cast<Rectangular*>(testclone->GetComponent(ComponentType::Body));
-	rect_pt->Initialize();
-
-	//Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Transform));
-
-	// offset objects
-	//tran_pt->Position.x = 190;
-
-	// @Sen Chuan if you move position like that, remember to call these 2 functions cause collision
-	// box still using the old position
-	//Rectangular* rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(2))->GetComponent(ComponentType::Body)); // @Sen Chuan
-	//rect_pt->Initialize(); // @Sen Chuan
-
-	//tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Transform)); // change to different obj
-	//tran_pt->Position.x = 380;
-	//tran_pt->Position.y = -300;
-
-	//rect_pt = static_cast<Rectangular*>((objectFactory->getObjectWithID(3))->GetComponent(ComponentType::Body));
-	//rect_pt->Initialize();
-
-	// Floor
-	for (int i = 0; i < 44; i++) {
-		Object* floor = objectFactory->createObject("../Asset/Objects/mapbox.json");
-		Transform* floor_t = static_cast<Transform*>(floor->GetComponent(ComponentType::Transform));
-		floor_t->Position = { -1100.0f + (static_cast<Transform*>(floor->GetComponent(ComponentType::Transform))->Scale_x * (float)i), -500.0f };
-		Rectangular* floor_b = static_cast<Rectangular*>(floor->GetComponent(ComponentType::Body)); // @Sen Chuan
-		floor_b->Initialize();
-	}
-
-	// Dynamic collision
-	dynamic_collision = objectFactory->createObject("../Asset/Objects/mapbox.json");
-	Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
-	dynamic_collision_t->Position = { -1000.0f , -446.0f };
-	Rectangular* dynamic_collision_b = static_cast<Rectangular*>(dynamic_collision->GetComponent(ComponentType::Body));
-	dynamic_collision_b->Initialize();
-	Physics* player_physics = new Physics();
-	dynamic_collision->AddComponent(player_physics);
-
-	//std::cout << "test bottom_line" << std::endl;
-	//bottom_line = objectFactory->createObject("../bottom_line.json");
-	//trans = static_cast<Transform*>( testObj->GetComponent(ComponentType::Transform));
-
-	//alternate way to get component without cast
-	//trans = testObj->GetComponent_NoCast<Transform>(ComponentTypeId::CT_Transform);
-	//trans->Mass = 0.5f;
-	//Getting a Object pointer with the game object ID
-	//testObj = objectFactory->getObjectWithID(0);
-	//texture = static_cast<Texture*>(testObj->GetComponent(ComponentType::Texture));
-	std::cout << "test Player" << std::endl;
-	playerObj = objectFactory->createObject("../Asset/Objects/player.json");
-	*/
 }
 
 /******************************************************************************
@@ -154,12 +84,15 @@ void GameLogic::Initialize()
 *******************************************************************************/
 void GameLogic::Update() {
 
-	/*
+	// Do not update if the game is paused
+	if (engine->isPaused())
+		return;
+	
 	for (auto& it : behaviourComponents)
 	{
-		behaviours[it->GetBehaviourIndex()]->updateBehaviour(it->GetOwner);
+		behaviours[it->GetIndex()]->update_script(it->GetOwner());
 	}
-	*/
+	
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
 		std::cout << "Mouse Position is :  X = " << input::GetMouseX() << ", Y = " << input::GetMouseY() << std::endl;
@@ -249,13 +182,13 @@ void GameLogic::Update() {
 		}
 		*/
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
-			Object* obj = objectFactory->getObjectWithID(i);
+			Object* obj = objectFactory->getObjectWithID((long)i);
 
 			if (obj == nullptr)
 				continue;
 
 			if (obj->GetName() == "piston") {
-				Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+				//Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 				Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 				//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 
@@ -269,7 +202,7 @@ void GameLogic::Update() {
 					std::cout << piston_event->linked_event << std::endl;
 					//check the door
 					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
-						Object* obj2 = objectFactory->getObjectWithID(j);
+						Object* obj2 = objectFactory->getObjectWithID((long)j);
 						if (obj2->GetName() == "door") {
 							Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
 							if (piston_event->linked_event == door_event->linked_event) {
@@ -373,4 +306,9 @@ void GameLogic::Update() {
 		" BOTTOM: " << ((c_flag & COLLISION_BOTTOM) ? "YES" : "NO") << std::endl;
 	std::cout << "#####################################################################" << std::endl;
 	*/
+}
+
+void GameLogic::AddBehaviour(LogicScript* behaviour)
+{
+	behaviours.push_back(behaviour);
 }

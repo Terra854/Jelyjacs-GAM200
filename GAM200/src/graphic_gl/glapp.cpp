@@ -24,6 +24,7 @@ includes all the functions to draw objects
 #include <components/PlayerControllable.h>
 #include <components/Animation.h>
 #include <LevelEditor.h>
+#include "../Assets Manager/asset_manager.h"
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
@@ -275,7 +276,7 @@ void GLApp::Update()
 				tex_test = ani_pt->animation_tex_obj;
 		}
 		else
-			tex_test = tex_pt->texturepath;
+			tex_test = AssetManager::textureval(tex_pt->textureName);
 		
 		//get orientation
 		Transform* tran_pt = static_cast<Transform*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Transform));
@@ -354,7 +355,7 @@ void GLApp::Update()
 				ani_pt->frame_count = 0.f;
 				ani_pt->frame_num++;
 				if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
-					ani_pt->frame_num = ani_pt->animation_Map[ani_pt->current_type].size()-1;
+					ani_pt->frame_num = static_cast<int>(ani_pt->animation_Map[ani_pt->current_type].size()) - 1;
 			}
 
 			glBindTextureUnit(6, tex_test);
@@ -441,50 +442,52 @@ void GLApp::Update()
 
 		}
 		
-		if (i == level_editor->selected) {
-			Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Animation));
-			Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Texture));
-			Transform* tr = static_cast<Transform*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Transform));
-
-			GLint width, height;
-			Vec2 botleft, topright;
-
-			if (te != nullptr) {
-				// Bind the texture
-				glBindTexture(GL_TEXTURE_2D, te->texturepath);
-
-				// Get the texture width
-				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-
-				// Get the texture height
-				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-
-				// Unbind the texture
-				glBindTexture(GL_TEXTURE_2D, 0);
-
-				botleft = tr->Position + Vec2(-(width / 2.f), -(height / 2.f));
-				topright = tr->Position + Vec2(width / 2.f, height / 2.f);
-
-				drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
-				drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
-				drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
-				drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
-			} else if (a != nullptr) {
-				// TODO: Get the size of the animations
-				// Right now, it's hardcoded to 64x64
-				botleft = tr->Position + Vec2(-32.f, -32.f);
-				topright = tr->Position + Vec2(32.f, 32.f);
-
-				drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
-				drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
-				drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
-				drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
-			}
-		}
-		
     }
-	
-	
+
+	// Draw the bove around the selected object
+	if (level_editor->selected != -1) {
+		Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(level_editor->selected)->GetComponent(ComponentType::Animation));
+		Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(level_editor->selected)->GetComponent(ComponentType::Texture));
+		Transform* tr = static_cast<Transform*>(objectFactory->getObjectWithID(level_editor->selected)->GetComponent(ComponentType::Transform));
+
+		GLint width, height;
+		Vec2 botleft, topright;
+
+		if (te != nullptr) {
+			// Bind the texture
+			glBindTexture(GL_TEXTURE_2D, AssetManager::textureval(te->textureName));
+
+			// Get the texture width
+			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+
+			// Get the texture height
+			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+
+			// Unbind the texture
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			//botleft = tr->Position + Vec2(-(width / 2.f), -(height / 2.f));
+			botleft = tr->Position + -tr->Scale / 2.f;
+			//topright = tr->Position + Vec2(width / 2.f, height / 2.f);
+			topright = tr->Position + tr->Scale / 2.f;
+
+			drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
+			drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
+			drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
+			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
+		}
+		else if (a != nullptr) {
+			// TODO: Get the size of the animations
+			// Right now, it's hardcoded to 64x64
+			botleft = tr->Position + Vec2(-32.f, -32.f);
+			topright = tr->Position + Vec2(32.f, 32.f);
+
+			drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
+			drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
+			drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
+			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
+		}
+	}
 }
 
 /*

@@ -23,7 +23,8 @@ enum class ComponentType
 	Physics,
 	PlayerControllable,
 	Animation,
-	Event
+	Event,
+	Behaviour
 };
 
 class Component
@@ -34,7 +35,7 @@ public:
 	Component() : Base{nullptr} {}
 	virtual ~Component() = default;
 
-	//to initialise remainng game components not set from text file
+	//to initialise remaining game components not set from text file
 	virtual void Initialize() {};
 
 	//to allow serialization to occur

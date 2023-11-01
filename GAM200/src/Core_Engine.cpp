@@ -41,6 +41,7 @@ CoreEngine::CoreEngine()
 	dt = 1.f / core_fps;
 	game_active = true;
 	CORE = this;
+	paused = false;
 }
 /******************************************************************************
 * Destructor
@@ -196,13 +197,13 @@ void CoreEngine::GameLoop()
 
 	bool debug_gui_active = true;
 	bool show_performance_viewer = true;
-	bool objectProperties = false;
-	bool tempstorage = 1;
-	float pos_x = 0;
-	float pos_y = 0;
+	//bool objectProperties = false;
+	//bool tempstorage = 1;
+	//float pos_x = 0;
+	//float pos_y = 0;
 
-	float xPos = 0;
-	float yPos = 0;
+	//float xPos = 0;
+	//float yPos = 0;
 
 	/* Level Editor */
 
@@ -286,10 +287,21 @@ void CoreEngine::GameLoop()
 			Update(Systems["LevelEditor"]);
 
 			// Display the game inside the ImGui window
-			ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
+			//ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
 			ImGui::Begin("Game Runtime (This for the level editor)");
 			ImVec2 windowSize = ImGui::GetWindowSize();
-			ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
+
+			ImVec2 displaySize;
+			if (windowSize.y < (windowSize.x / 16.f * 9.f)) {
+				ImGui::SetCursorPos(ImVec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 20.f));
+				displaySize = ImVec2(windowSize.y * 16.f / 9.f, windowSize.y - 30.f);
+			}
+			else {
+				ImGui::SetCursorPos(ImVec2(10.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f));
+				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f) - 30.f);
+			}
+
+			//ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 			ImGui::End();
 
@@ -619,15 +631,6 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 	}
 }
 
-void CoreEngine::createObject(float posX, float posY, std::string objectName)
-{
-	Object* testingObject = objectFactory->createObject(objectName);
-	long testingObjectID = testingObject->GetId();
-	Transform* tran_pt = static_cast<Transform*>((objectFactory->getObjectWithID(testingObjectID))->GetComponent(ComponentType::Transform));
-	tran_pt->Position.x = posX;
-	tran_pt->Position.y = posY;
-}
-
 int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
 {
 	if (axis == Axis::X)
@@ -635,7 +638,7 @@ int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
 		int xPos = gridPos + static_cast<int>(window->width / 2);
 		return xPos;
 	}
-	else if (axis == Axis::Y)
+	else //axis == Axis::Y
 	{
 		int yPos = static_cast<int>(window->height / 2) - gridPos;
 		return yPos;
@@ -645,12 +648,12 @@ int CoreEngine::convertMousePosToGridPos(Axis axis)
 {
 	if (axis == Axis::X)
 	{
-		int xPos = input::GetMouseX() - static_cast<int>(window->width / 2);
+		int xPos = static_cast<int>(input::GetMouseX()) - static_cast<int>(window->width / 2);
 		return xPos;
 	}
-	else if (axis == Axis::Y)
+	else //axis == Axis::Y
 	{
-		int yPos = static_cast<int>(window->height / 2) - input::GetMouseY();
+		int yPos = static_cast<int>(window->height / 2) - static_cast<int>(input::GetMouseY());
 		return yPos;
 	}
 }

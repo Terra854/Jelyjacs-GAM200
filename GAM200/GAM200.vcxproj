@@ -72,6 +72,11 @@ copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew
 copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
 
+rmdir /s /q "$(TargetDir)Asset"
+rmdir /s /q "$(TargetDir)meshes"
+rmdir /s /q "$(TargetDir)scenes"
+rmdir /s /q "$(TargetDir)shaders"
+
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
 xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
 xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
@@ -102,6 +107,11 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
 copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew32.dll" /Y
 copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
+
+rmdir /s /q "$(TargetDir)Asset"
+rmdir /s /q "$(TargetDir)meshes"
+rmdir /s /q "$(TargetDir)scenes"
+rmdir /s /q "$(TargetDir)shaders"
 
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
 xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
