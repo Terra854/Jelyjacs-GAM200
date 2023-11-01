@@ -1,16 +1,11 @@
-﻿/* !
-@file main.cpp
-@author Luke Goh
-@date	28/9/2023
-
-This file contains the main function.
-*//*__________________________________________________________________________*/
+#include "Application.h"
+#include <iostream>
 #include <Core_Engine.h>
 #include <Factory.h>
 #include <glapp.h>
 #include <GLWindow.h>
 #include <PhysicsSystem.h>
-#include <iostream>
+
 #include <debug.h>
 #include <GameLogic.h>
 #include <Audio.h>
@@ -19,17 +14,26 @@ This file contains the main function.
 #include <LevelEditor.h>
 #include <ThreadPool.h>
 #include <../src/Assets Manager/asset_manager.h>
-/*
+
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
 ThreadPool* thread_pool;
+Application::Application()
+{
+}
 
-int main() {
+Application::~Application()
+{
+}
+
+void Application::Run() {
 	
+
+	std::cout << "Hello World!" << std::endl;
 	// Enable run-time memory check for debug builds.
 	#if defined(DEBUG) | defined(_DEBUG)
-		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	#endif
-	
+
 	// Initialise Pointer to Systems
 	engine = new CoreEngine();
 	GLWindow* windows = new GLWindow();
@@ -43,7 +47,7 @@ int main() {
 	GLApp* graphics = new GLApp();
 	level_editor = new LevelEditor();
 	thread_pool = new ThreadPool();
-	
+
 	// Add System to the engine 
 	engine->AddSystem(windows);
 	engine->AddSystem(thread_pool);
@@ -56,17 +60,15 @@ int main() {
 	engine->AddSystem(camera);
 	engine->AddSystem(level_editor);
 	engine->AddSystem(graphics);												  // Graphics should always be last
-	
+
 	// Initialize and Start Game Loop
 	engine->Initialize();
-	windows->ActivateWindow();                                                   
+	windows->ActivateWindow();
 	windows->print_specs();
 
 	engine->GameLoop();
 
 	// Free Engine
 	delete engine;
-	return 0;
-}
 
-*/
+}
