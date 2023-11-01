@@ -128,6 +128,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Behaviour.cpp" />
     <ClCompile Include="src\Body.cpp" />
+    <ClCompile Include="src\GameHud.cpp" />
     <ClCompile Include="src\graphic_gl\Particle.cpp" />
     <ClCompile Include="src\LevelEditor.cpp" />
     <ClCompile Include="src\EngineHud.cpp" />
@@ -178,6 +179,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Core.h" />
     <ClInclude Include="include\Core_Engine.h" />
     <ClInclude Include="include\Debug.h" />
+    <ClInclude Include="include\GameHud.h" />
     <ClInclude Include="include\Graphic_gl\Particle.h" />
     <ClInclude Include="include\LevelEditor.h" />
     <ClInclude Include="include\EngineHud.h" />
