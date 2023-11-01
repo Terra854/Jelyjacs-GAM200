@@ -158,7 +158,6 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Mat3.cpp" />
     <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\SceneLoader.cpp" />
-    <ClCompile Include="src\TestScript.cpp" />
     <ClCompile Include="src\ThreadPool.cpp" />
     <ClCompile Include="src\Vec2.cpp" />
   </ItemGroup>
@@ -203,7 +202,6 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\message.h" />
     <ClInclude Include="include\PhysicsSystem.h" />
     <ClInclude Include="include\SceneLoader.h" />
-    <ClInclude Include="include\TestScript.h" />
     <ClInclude Include="include\ThreadPool.h" />
     <ClInclude Include="include\Vec2.h" />
     <ClInclude Include="include\Precompile.h" />
