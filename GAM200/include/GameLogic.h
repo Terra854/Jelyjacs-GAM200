@@ -25,8 +25,8 @@ public:
 	void Update();
 	void AddBehaviour(LogicScript* behaviour);
 	virtual std::string SystemName() { return "Game_Logic"; }
-private:
 
+private:
 	std::vector<LogicScript*> behaviours;
 	std::vector<Behaviour*> behaviourComponents;
 };
