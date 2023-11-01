@@ -1,22 +1,32 @@
 #pragma once
 #include "Interface_System.h"
 #include "Vec2.h"
-#include "vector"
+#include <map>
+
 class GameHud
 {
 public:
 	GameHud() = default;
-	virtual void Initialize() ;
-	virtual void Update() ;
+	void Initialize() ;
+	void Update() ;
 	void Draw();
+	class Text
+	{
+	public:
+		Vec2 pos{};
+		float scale;
+		std::string text{};
+	};
 	class Button
 	{
 	public:
-		std::string text;
-		Vec2 pos1{};
-		Vec2 pos2{};
-		float scale;
+		Button(Vec2 pos1, Vec2 pos2);
+		Button(Vec2 centre, float width, float height);
+		Vec2 pos1;
+		Vec2 pos2;
+		Text string{};
 	};
-	void create_button(std::string const&, Vec2, float);
+	std::map<std::string,Button*> Buttons;
+	void create_button(std::string const& text, Button button, float scale);
 private:
 };

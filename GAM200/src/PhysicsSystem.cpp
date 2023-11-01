@@ -154,6 +154,10 @@ void PhysicsSystem::Initialize() {
 
 void PhysicsSystem::Update() {
 
+	// Do not update if the game is paused
+	if (engine->isPaused())
+		return;
+
 	accumulator += engine->GetDt();
 
 	// Only run the physics code if fixed_dt has passed 
@@ -241,7 +245,7 @@ void PhysicsSystem::Update() {
 		for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 			Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
 
-			if (b == nullptr)
+			if (b == nullptr || !b->active)
 				continue; // No physics or body in this object, move to next object
 
 			b->inGrid.clear();
@@ -257,6 +261,7 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
+				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
 					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 					b->inGrid.push_back({ w_index, h_index });
@@ -271,6 +276,7 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
+				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
 					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 					b->inGrid.push_back({ w_index, h_index });
@@ -285,6 +291,7 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
+				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
 					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 					b->inGrid.push_back({ w_index, h_index });
@@ -299,6 +306,7 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 
+				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
 					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
 					b->inGrid.push_back({ w_index, h_index });
@@ -342,7 +350,7 @@ void PhysicsSystem::Update() {
 			t->Position += p->Velocity * fixed_dt;
 		}
 
-		if (b == nullptr || !b->active)
+		if (b == nullptr)
 			continue; // No body in this object or disabled, move to next object
 
 		// Reset collision flags
@@ -350,83 +358,9 @@ void PhysicsSystem::Update() {
 			((Rectangular*)b)->ResetCollisionFlags();
 
 		RecalculateBody(t, b);
-		/*
-		for (Factory::objectIDMap::iterator anotherobj = objectFactory->objectMap.begin(); anotherobj != objectFactory->objectMap.end(); ++anotherobj) {
 
-			if (obj == anotherobj)
-				continue; // Can't collide with yourself
-
-			Body* b2 = (Body*)anotherobj->second->GetComponent(ComponentType::Body);
-
-			if (b2 == nullptr)
-				continue; // No body in the other object, no way it's collidable
-
-			collision_flag = Check_Collision(b, b2, fixed_dt);
-			if (collision_flag) {
-
-				/*
-				// DEBUG
-				std::cout << "A collision has occured between ";
-				switch (((Body*)obj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case Shape::Rectangle:
-					std::cout << "a rectangle ";
-					break;
-				case Shape::Circle:
-					std::cout << "a circle ";
-					break;
-				case Shape::Line:
-					std::cout << "a line ";
-					break;
-				}
-				std::cout << "and ";
-				switch (((Body*)anotherobj->second->GetComponent(ComponentType::Body))->GetShape()) {
-				case Shape::Rectangle:
-					std::cout << "a rectangle.";
-					break;
-				case Shape::Circle:
-					std::cout << "a circle.";
-					break;
-				case Shape::Line:
-					std::cout << "a line.";
-					break;
-				}
-				std::cout << std::endl;
-
-				Response_Collision(t, b, p, b2, (Physics*)anotherobj->second->GetComponent(ComponentType::Physics));
-			}
-			else {
-
-			}
-		}*/
-		/*
-		for (const auto& width_grid : Collision::uniform_grid) {
-			for (const auto& grid : width_grid) {
-				if (grid.size() < 2)
-					continue; // Skip if there is 1 or less object as there is no way a collision can occur in the grid
-				for (const auto& current_obj : grid) {
-					if (obj->second == current_obj) { // Is the object in the grid?
-						for (const auto& anotherobj : grid) {
-							if (obj->second == anotherobj)
-								continue; // Can't collide with yourself
-
-							Body* b2 = (Body*)anotherobj->GetComponent(ComponentType::Body);
-
-							if (b2 == nullptr)
-								continue; // No body in the other object, no way it's collidable
-
-							collision_flag = Check_Collision(b, b2, fixed_dt);
-							if (collision_flag) {
-								Response_Collision(t, b, p, b2, (Physics*)anotherobj->GetComponent(ComponentType::Physics));
-							}
-							else {
-
-							}
-						}
-					}
-				}
-			}
-		}
-		*/
+		if (!b->active)
+			continue; // Don't calculate collision for this object if active flag is unset
 
 		bool collision_has_occured = false;
 
@@ -439,19 +373,10 @@ void PhysicsSystem::Update() {
 
 				if (b2 == nullptr)
 					continue; // No body in the other object, no way it's collidable
-
-				//Check_Collision(b, b2, fixed_dt);
-				//if (collision_flag) {
-				//	Response_Collision(collision_flag, t, b, p, b2, (Physics*)anotherobj->GetComponent(ComponentType::Physics));
-				//}
-				//else {
-
-				//}
 				
 				if (Check_Collision(b, b2, fixed_dt)) {
 					collision_has_occured = true;
 				}
-
 			}
 		}
 

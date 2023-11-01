@@ -24,8 +24,8 @@ void Font::Initialize()
 {
 	std::vector<std::pair<GLenum, std::string>> shdr_files
 	{
-		std::make_pair(GL_VERTEX_SHADER, "../shaders/Font.vert"),
-		std::make_pair(GL_FRAGMENT_SHADER, "../shaders/Font.frag")
+		std::make_pair(GL_VERTEX_SHADER, "shaders/Font.vert"),
+		std::make_pair(GL_FRAGMENT_SHADER, "shaders/Font.frag")
 	};
 	
 	shdr_pgm.CompileLinkValidate(shdr_files);
@@ -52,7 +52,8 @@ void Font::Initialize()
         }
 
         // load font as face
-        if (FT_New_Face(ft, "../Asset/Fonts/Aldrich-Regular.ttf", 0, &face)) {
+
+        if (FT_New_Face(ft, "Asset/Fonts/Aldrich-Regular.ttf", 0, &face)) {
             std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
         }
         else {
@@ -119,20 +120,6 @@ void Font::Initialize()
         shdr_pgm.UnUse();
 }
 
-int find_width(std::string const& str)
-{
-    int width{ 0 };
-    for (size_t i = 0; i < str.size(); ++i)
-    {
-        FT_Load_Char(face, str.at(i), FT_LOAD_RENDER);
-        width += face->glyph->advance.x;
-    }
-    return (width >> 6);
-}
-int find_lowest_point()
-{
-    return face->size->metrics.descender >> 6;
-}
 void normalise_coord(float& x, float& y)
 {
     x += window->width / 2.0f;
@@ -144,7 +131,7 @@ void RenderText(std::string text, float x, float y, float scale, glm::ivec3 colo
     normalise_coord(x, y);
     shdr_pgm.Use();
     // activate corresponding render 
-    glUniform3f(glGetUniformLocation(shdr_pgm.GetHandle(), "textColor"), color.x, color.y, color.z);
+    glUniform3f(glGetUniformLocation(shdr_pgm.GetHandle(), "textColor"), (float)color.x, (float)color.y, (float)color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
@@ -198,4 +185,16 @@ Font::~Font()
 {
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
+}
+
+
+int find_width(std::string const& str)
+{
+    int width{};
+    for (size_t i = 0; i < str.size(); ++i)
+    {
+        FT_Load_Char(face, str.at(i), FT_LOAD_RENDER);
+        width += face->glyph->advance.x;
+    }
+    return width>>6;
 }

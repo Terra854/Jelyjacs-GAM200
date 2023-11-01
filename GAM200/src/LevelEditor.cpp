@@ -6,6 +6,9 @@
 #include <Factory.h>
 #include <components/Texture.h>
 #include <components/Animation.h>
+#include <filesystem>
+#include "SceneLoader.h"
+#include "Assets Manager/asset_manager.h"
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -20,7 +23,9 @@ LevelEditor::LevelEditor() {
 LevelEditor::~LevelEditor() {
 	delete editor_grid;
 }
-
+/*
+	This window is to print out the uniform grid
+*/
 void LevelEditor::DebugUniformGrid() {
 	// DEBUG: Print out the uniform grid
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
@@ -72,7 +77,7 @@ void LevelEditor::DebugPerformanceViewer() {
 
 	for (std::pair<std::string, double> p : System_elapsed_time) {
 		ImGui::Text("%s system completed it's update in %.6f seconds", p.first.c_str(), p.second);
-		ImGui::ProgressBar(p.second / total_time, ImVec2(0.0f, 0.0f), "");
+		ImGui::ProgressBar((float)(p.second / total_time), ImVec2(0.0f, 0.0f), "");
 		ImGui::SameLine();
 		ImGui::Text("%.2f%%", p.second / total_time * 100.0);
 	}
@@ -84,7 +89,9 @@ void LevelEditor::DebugPerformanceViewer() {
 	ImGui::End();
 }
 
-int selected = -1;
+/*
+	Object Properties
+*/
 int cloneSuccessful = -1;
 
 bool Transform_EditMode = false;
@@ -95,6 +102,11 @@ Vec2 edited_scale;
 
 bool Body_EditMode = false;
 
+bool edited_active;
+bool edited_collision_response;
+
+bool AABB_EditMode = false;
+
 float edited_aabb_width;
 float edited_aabb_height;
 
@@ -103,7 +115,7 @@ bool Physics_EditMode = false;
 Vec2 edited_velocity;
 bool edited_gravity;
 
-void LevelEditor::ObjectProperties(){
+void LevelEditor::ObjectProperties() {
 
 	ImGui::SetNextWindowSize(ImVec2(450, 0));
 	char buffer[100];
@@ -139,7 +151,7 @@ void LevelEditor::ObjectProperties(){
 
 	ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().x * 0.25f));
 
-	if (a != nullptr){
+	if (a != nullptr) {
 		GLint width, height;
 
 		// Bind the texture
@@ -154,8 +166,8 @@ void LevelEditor::ObjectProperties(){
 		// Unbind the texture
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		ImVec2 uv0 = { (float)a->frame_num * 128.f / (float) width, (float)a->current_type * 128.f / (float)height };
-		ImVec2 uv1 = { uv0.x + (128.f / (float)width), uv0.y + (128.f / (float)height)};
+		ImVec2 uv0 = { (float)a->frame_num * 128.f / (float)width, (float)a->current_type * 128.f / (float)height };
+		ImVec2 uv1 = { uv0.x + (128.f / (float)width), uv0.y + (128.f / (float)height) };
 
 		ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImGui::GetContentRegionAvail(), uv0, uv1);
 	}
@@ -163,15 +175,15 @@ void LevelEditor::ObjectProperties(){
 		if (tr->Scale.x > tr->Scale.y) {
 			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
 			ImGui::Dummy(ImVec2(0, padding));
-			ImGui::Image((void*)(intptr_t)te->texturepath, ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
+			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
 		}
 		else if (tr->Scale.x == tr->Scale.y)
-			ImGui::Image((void*)(intptr_t)te->texturepath, ImGui::GetContentRegionAvail());
+			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImGui::GetContentRegionAvail());
 		else {
 			float padding = ImGui::GetContentRegionAvail().x * (tr->Scale.x / tr->Scale.y) * 0.5f;
 			ImGui::Dummy(ImVec2(padding, 0));
 			ImGui::SameLine();
-			ImGui::Image((void*)(intptr_t)te->texturepath, ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
 		}
 	}
 	else {
@@ -183,13 +195,12 @@ void LevelEditor::ObjectProperties(){
 
 	ImGui::SameLine();
 
-	//ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, ImGui::GetContentRegionAvail().x * 0.5f));
 	ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().x * 0.25f));
 
 	ImGui::Text("Object ID: %d", object->GetId());
 	ImGui::Text("Object Name: %s", object->GetName().c_str());
 	ImGui::Text("Number of components: %d", object->GetNumComponents());
-	
+
 	if (ImGui::Button("Clone"))
 	{
 		Object* o = objectFactory->cloneObject(object);
@@ -199,10 +210,40 @@ void LevelEditor::ObjectProperties(){
 
 	ImGui::SameLine();
 
+	if (ImGui::Button("Add Component")) {
+		if (b == nullptr || ph == nullptr)
+			ImGui::OpenPopup("AddComponent");
+		else
+			ImGui::OpenPopup("NoComponentsToAdd");
+	}
+
+	if (ImGui::BeginPopup("AddComponent"))
+	{
+		if (b == nullptr)
+			if (ImGui::Selectable("Body")) {
+				object->AddComponent(new Rectangular());
+			}
+
+		if (ph == nullptr)
+			if (ImGui::Selectable("Physics")) {
+				object->AddComponent(new Physics());
+			}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopup("NoComponentsToAdd"))
+	{
+		ImGui::TextDisabled("There isn't any missing components to add");
+		ImGui::EndPopup();
+	}
+
+	ImGui::SameLine();
+
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-	if (ImGui::Button("Delete"))
+	if (ImGui::Button("Delete Object"))
 	{
 		objectFactory->destroyObject(object);
 		selected = -1;
@@ -210,10 +251,17 @@ void LevelEditor::ObjectProperties(){
 	ImGui::PopStyleColor(3);
 
 	ImGui::EndChild();
-
+	ImGui::BeginChild("ObjectPropertiesScroll", ImGui::GetContentRegionAvail());
+	// Texture
 	if (te != nullptr) {
 		if (ImGui::CollapsingHeader("Texture")) {
-			ImGui::Text("Nothing right now");
+
+			for (const auto& pair : AssetManager::textures) {
+				if (pair.first == te->textureName) {
+					ImGui::Text("Texture: %s", pair.first.c_str());
+				}
+			}
+
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
@@ -225,6 +273,7 @@ void LevelEditor::ObjectProperties(){
 		}
 	}
 
+	// Animation
 	if (a != nullptr) {
 		if (ImGui::CollapsingHeader("Animation")) {
 			GLint width, height;
@@ -260,6 +309,7 @@ void LevelEditor::ObjectProperties(){
 		}
 	}
 
+	// Transform
 	if (tr != nullptr) {
 		if (ImGui::CollapsingHeader("Transform")) {
 			if (Transform_EditMode)
@@ -270,7 +320,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::InputFloat2("Scale", &(edited_scale.x));
 
 				// Button to exit edit mode
-				if (ImGui::Button("Done"))
+				if (ImGui::Button("Done##Transform"))
 				{
 					Transform_EditMode = false;
 					tr->Position = edited_position;
@@ -283,7 +333,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-				if (ImGui::Button("Cancel"))
+				if (ImGui::Button("Cancel##Transform"))
 				{
 					Transform_EditMode = false;
 				}
@@ -297,7 +347,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::Text("Scale: %.5f, %.5f", tr->Scale.x, tr->Scale.y);
 
 				// Button to enter edit mode
-				if (ImGui::Button("Edit"))
+				if (ImGui::Button("Edit##Transform"))
 				{
 					Transform_EditMode = true;
 					edited_position = tr->Position;
@@ -308,21 +358,83 @@ void LevelEditor::ObjectProperties(){
 		}
 	}
 
+	// Body
 	if (b != nullptr) {
 		if (ImGui::CollapsingHeader("Body")) {
-			if (b->GetShape() == Shape::Rectangle) {
+			ImGui::SeparatorText("General Body Settings");
+
+			if (Body_EditMode)
+			{
+				// Display input fields
+				ImGui::Checkbox("Active", &edited_active);
+				ImGui::Checkbox("Respond to collision", &edited_collision_response);
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done##Body"))
+				{
+					Body_EditMode = false;
+					b->active = edited_active;
+					b->collision_response = edited_collision_response;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel##Body"))
+				{
+					Body_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
+			}
+			else
+			{
+				// Display the values as text
+				ImGui::Text("Active: ");
+				ImGui::SameLine();
+				b->active ? ImGui::Text("true") : ImGui::Text("false");
+
+				ImGui::Text("Respond to collision: ");
+				ImGui::SameLine();
+				b->collision_response ? ImGui::Text("true") : ImGui::Text("false");
+
+				// Button to enter edit mode
+				if (ImGui::Button("Edit##Body"))
+				{
+					Body_EditMode = true;
+					edited_active = b->active;
+					edited_collision_response = b->collision_response;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete##Body"))
+				{
+					objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
+					b = nullptr;
+				}
+				ImGui::PopStyleColor(3);
+			}
+
+			if (b != nullptr && b->GetShape() == Shape::Rectangle) {
 				Rectangular* r = (Rectangular*)b;
 
-				if (Body_EditMode)
+				ImGui::SeparatorText("AABB Collision Settings");
+
+				if (AABB_EditMode)
 				{
 					// Display input fields
 					ImGui::InputFloat("AABB Width", &edited_aabb_width);
 					ImGui::InputFloat("AABB Height", &edited_aabb_height);
 
 					// Button to exit edit mode
-					if (ImGui::Button("Done"))
+					if (ImGui::Button("Done##AABB"))
 					{
-						Body_EditMode = false;
+						AABB_EditMode = false;
 						r->width = edited_aabb_width;
 						r->height = edited_aabb_height;
 					}
@@ -332,9 +444,9 @@ void LevelEditor::ObjectProperties(){
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-					if (ImGui::Button("Cancel"))
+					if (ImGui::Button("Cancel##AABB"))
 					{
-						Body_EditMode = false;
+						AABB_EditMode = false;
 					}
 					ImGui::PopStyleColor(3);
 				}
@@ -342,26 +454,50 @@ void LevelEditor::ObjectProperties(){
 				{
 					// Display the values as text
 					ImGui::Text("AABB Width: %.5f", r->width);
-					ImGui::Text("AABB Height: %.5f", r->height);
 
-					// Button to enter edit mode
-					if (ImGui::Button("Edit"))
-					{
-						Body_EditMode = true;
-						edited_aabb_width = r->width;
-						edited_aabb_height = r->height;
+					ImGui::SameLine();
+
+					ImGui::Button("-##aabbwidth");
+
+					if (ImGui::IsItemActive()) { // Will run so long as the above button is held
+						r->width -= engine->GetDt() * 2.f;
+						r->width < 0.f ? 0.f : r->width; // Do not go below 0
 					}
 
 					ImGui::SameLine();
 
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-					if (ImGui::Button("Delete"))
-					{
-						objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
+					ImGui::Button("+##aabbwidth");
+
+					if (ImGui::IsItemActive()) { // Will run so long as the above button is held
+						r->width += engine->GetDt() * 2.f;
 					}
-					ImGui::PopStyleColor(3);
+
+					ImGui::Text("AABB Height: %.5f", r->height);
+
+					ImGui::SameLine();
+
+					ImGui::Button("-##aabbheight");
+
+					if (ImGui::IsItemActive()) { // Will run so long as the above button is held
+						r->height -= engine->GetDt() * 2.f;
+						r->height < 0.f ? 0.f : r->width; // Do not go below 0
+					}
+
+					ImGui::SameLine();
+
+					ImGui::Button("+##aabbheight");
+
+					if (ImGui::IsItemActive()) { // Will run so long as the above button is held
+						r->height += engine->GetDt() * 2.f;
+					}
+
+					// Button to enter edit mode
+					if (ImGui::Button("Edit##AABB"))
+					{
+						AABB_EditMode = true;
+						edited_aabb_width = r->width;
+						edited_aabb_height = r->height;
+					}
 				}
 
 				ImGui::SeparatorText("AABB Collision");
@@ -421,10 +557,10 @@ void LevelEditor::ObjectProperties(){
 					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 				ImGui::Text("%s", text.c_str());
-				
+
 				if (r->top_collision != nullptr)
 					ImGui::PopStyleColor();
-				
+
 				ImGui::EndChild();
 
 				ImGui::SameLine();
@@ -519,7 +655,7 @@ void LevelEditor::ObjectProperties(){
 				// Render the text
 				if (r->right_collision != nullptr)
 					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
-				
+
 				ImGui::Text("%s", text.c_str());
 
 				if (r->right_collision != nullptr)
@@ -620,6 +756,7 @@ void LevelEditor::ObjectProperties(){
 		}
 	}
 
+	// Physics
 	if (ph != nullptr) {
 		if (ImGui::CollapsingHeader("Physics")) {
 			if (Physics_EditMode)
@@ -629,7 +766,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
 
 				// Button to exit edit mode
-				if (ImGui::Button("Done"))
+				if (ImGui::Button("Done##Physics"))
 				{
 					Physics_EditMode = false;
 					ph->Velocity = edited_velocity;
@@ -641,7 +778,7 @@ void LevelEditor::ObjectProperties(){
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-				if (ImGui::Button("Cancel"))
+				if (ImGui::Button("Cancel##Physics"))
 				{
 					Physics_EditMode = false;
 				}
@@ -656,35 +793,54 @@ void LevelEditor::ObjectProperties(){
 				ph->AffectedByGravity ? ImGui::Text("true") : ImGui::Text("false");
 
 				// Button to enter edit mode
-				if (ImGui::Button("Edit"))
+				if (ImGui::Button("Edit##Physics"))
 				{
 					Physics_EditMode = true;
 					edited_velocity = ph->Velocity;
 					edited_gravity = ph->AffectedByGravity;
 				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete##Physics"))
+				{
+					objectFactory->DeleteComponent(object->GetId(), ComponentType::Physics);
+					ph = nullptr;
+				}
+				ImGui::PopStyleColor(3);
 			}
 		}
 	}
 
+	// PlayerControllable
 	if (pc != nullptr) {
 		if (ImGui::CollapsingHeader("PlayerControllable")) {
 			ImGui::Text("Nothing right now");
 		}
 	}
+
+	ImGui::EndChild();
 	ImGui::End();
 }
 
+/*
+	Object List
+*/
 void LevelEditor::ListOfObjects() {
 
 	ImGui::Begin("Object List");
 	ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
 
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
 
-			if (objectFactory->getObjectWithID(i) == nullptr)
+			if (objectFactory->getObjectWithID((long)i) == nullptr)
 			{
 				continue;
 			}
@@ -703,11 +859,170 @@ void LevelEditor::ListOfObjects() {
 		}
 		ImGui::EndTable();
 	}
+	ImGui::EndChild();
 	ImGui::End();
 }
 
+/*
+	Displays the selected texture from the asset list
+*/
+
+std::pair<std::string, GLuint> selectedTexture;
+bool display_selected_texture = false;
+
+void LevelEditor::DisplaySelectedTexture() {
+
+	if (display_selected_texture) {
+
+		GLint width, height;
+
+		// Bind the texture
+		glBindTexture(GL_TEXTURE_2D, selectedTexture.second);
+
+		// Get the texture width
+		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+
+		// Get the texture height
+		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+
+		// Unbind the texture
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		ImGui::SetNextWindowPos(ImVec2((float)window->width * 0.15f, (float)window->height * 0.15f), ImGuiCond_Appearing);
+
+		ImVec2 image_size((float) width, (float)height);
+
+		if (width > window->width * 0.3) {
+			image_size = ImVec2((float)window->width * 0.3f, (float)height * ((float)window->width * 0.3f / (float) width));
+		} else if (height > window->height * 0.3) {
+			image_size = ImVec2(((float)width * ((float)window->height * 0.3f / (float)height)), (float)window->height * 0.3f);
+		}
+
+		
+		ImGui::SetNextWindowSize(ImVec2(image_size.x + 20, image_size.y + 40), ImGuiCond_Always);
+
+		ImGui::Begin(selectedTexture.first.c_str(), &display_selected_texture);
+
+		//ImVec2 windowSize = ImGui::GetWindowSize();
+		//ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y);
+
+		ImGui::Image((void*)(intptr_t)selectedTexture.second, image_size);
+
+		ImGui::End();
+	}
+}
+
+/*
+	Asset List
+*/
+void LevelEditor::AssetList() {
+	ImGui::Begin("Asset List");
+
+	if (ImGui::BeginTabBar("##AssetList")) {
+		if (ImGui::BeginTabItem("Textures")) {
+
+			if (ImGui::Button("Refresh Textures"))
+			{
+				AssetManager::unloadalltextures();
+				AssetManager::loadalltextures();
+
+			}
+			ImGui::BeginChild("AssetListScroll", ImGui::GetContentRegionAvail());
+			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) {
+				char buffer[256];
+				sprintf_s(buffer, "##%s", t.first.c_str());
+
+				// Start the invisible button
+				
+				if (ImGui::Button(buffer, button_size))
+				{
+					selectedTexture = t;
+					display_selected_texture = true;
+
+				}
+
+				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
+
+				// Image
+				ImGui::Image((void*)(intptr_t)t.second, ImVec2(64, 64));
+
+				// Move to the right of the image without moving to a new line
+				ImGui::SameLine();
+
+				// Text
+				ImGui::Text(t.first.c_str());
+			}
+
+			ImGui::PopStyleColor();
+			ImGui::EndChild();
+			ImGui::EndTabItem();
+		}
+	}
+	if (ImGui::BeginTabItem("Prefabs")) {
+		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+		for (const std::pair<std::string, Object *>& p : AssetManager::prefabs) {
+			char buffer[256];
+			sprintf_s(buffer, "##%s", p.first.c_str());
+
+			// Text and images will be in the above layer
+			if (ImGui::Button(buffer, button_size))
+			{
+				// Nothing right now
+			}
+
+			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
+
+			// Get texture or animation
+			Texture* t = (Texture*)p.second->GetComponent(ComponentType::Texture);
+			Animation* a = (Animation*)p.second->GetComponent(ComponentType::Animation);
+
+			// Image
+			if (t != nullptr)
+				ImGui::Image((void*)(intptr_t)AssetManager::textureval(t->textureName), ImVec2(64, 64));
+			// or Animation
+			else if (a != nullptr) {
+				GLint width, height;
+
+				// Bind the texture
+				glBindTexture(GL_TEXTURE_2D, a->animation_tex_obj);
+
+				// Get the texture width
+				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+
+				// Get the texture height
+				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+
+				// Unbind the texture
+				glBindTexture(GL_TEXTURE_2D, 0);
+
+				ImVec2 uv0 = { (float)a->frame_num * 128.f / (float)width, (float)a->current_type * 128.f / (float)height };
+				ImVec2 uv1 = { uv0.x + (128.f / (float)width), uv0.y + (128.f / (float)height) };
+
+				ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImVec2(64, 64), uv0, uv1);
+			}
+
+			// Move to the right of the image without moving to a new line
+			ImGui::SameLine();
+
+			// Text
+			ImGui::Text(p.second->GetName().c_str());
+		}
+
+		ImGui::PopStyleColor();
+		ImGui::EndTabItem();
+	}
+	ImGui::EndTabBar();
+	ImGui::End();
+}
+
+/*
+	This is for a window to pop up telliing that the object has cloned successfully
+*/
 void ObjectClonedSuccessfully(int i) {
-	ImGui::SetNextWindowPos(ImVec2(window->width / 2, window->height / 2));
+	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f, (float)window->height / 2.f));
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
 	char text[50];
 
@@ -730,6 +1045,21 @@ void ObjectClonedSuccessfully(int i) {
 	ImGui::End();
 }
 
+void PlayPauseGame() {
+	ImGui::Begin("Play/Pause");
+
+	if (engine->isPaused()) {
+		if (ImGui::Button("Play"))
+			engine->setPause();
+	}
+	else {
+		if (ImGui::Button("Pause"))
+			engine->setPause();
+	}
+
+	ImGui::End();
+}
+
 void DoNothing() {
 
 }
@@ -737,6 +1067,8 @@ void DoNothing() {
 void LevelEditor::Initialize() {
 	total_time = 0.0;
 }
+
+/************************************LEVEL EDITOR MAIN UPDATE LOOP************************************/
 
 void LevelEditor::Update() {
 
@@ -751,7 +1083,7 @@ void LevelEditor::Update() {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	
+
 	ImGui::Begin("DockSpace", &dock_space, window_flags);
 
 	ImGui::PopStyleVar(3);
@@ -765,7 +1097,7 @@ void LevelEditor::Update() {
 	}
 	else
 	{
-		ImGuiIO& io = ImGui::GetIO();
+		io = ImGui::GetIO();
 		ImGui::Text("ERROR: Docking is not enabled! See Demo > Configuration.");
 		ImGui::Text("Set io.ConfigFlags |= ImGuiConfigFlags_DockingEnable in your code, or ");
 		ImGui::SameLine(0.0f, 0.0f);
@@ -779,6 +1111,34 @@ void LevelEditor::Update() {
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::BeginMenu("Load Level")) {
+				std::vector<std::string> level_files;
+				const std::string path = "Asset/Levels/";
+
+				try {
+					for (const auto& entry : std::filesystem::directory_iterator(path)) {
+						if (entry.is_regular_file() && entry.path().extension() == ".json") {
+							level_files.push_back(entry.path().filename().string());
+						}
+					}
+
+					// Print the filenames
+					for (const auto& filename : level_files) {
+						if (ImGui::MenuItem(filename.c_str())) {
+							selected = -1;
+							objectFactory->destroyAllObjects();
+							LoadScene(path + filename.c_str());
+						}
+					}
+				}
+				catch (std::filesystem::filesystem_error& e) {
+					std::cerr << e.what() << std::endl;
+				}
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+
 			if (ImGui::MenuItem("Exit")) { engine->game_active = false; }
 			ImGui::EndMenu();
 		}
@@ -797,6 +1157,12 @@ void LevelEditor::Update() {
 	ListOfObjects();
 
 	ObjectProperties();
+
+	AssetList();
+
+	DisplaySelectedTexture();
+
+	PlayPauseGame();
 
 	if (cloneSuccessful > -1) {
 		ObjectClonedSuccessfully(cloneSuccessful);
@@ -844,10 +1210,10 @@ void LevelEditorGrid::drawleveleditor()
 			app->shdrpgms["shape"].UnUse();
 			Vec2 botleft = { (i - num.x / 2) * box_size, (j - num.y / 2) * box_size };
 			Vec2 topright = { botleft.x + box_size,botleft.y + box_size };
-			app->drawline(Vec2(topright.x, botleft.y), botleft);
-			app->drawline(topright, Vec2(topright.x, botleft.y));
-			app->drawline(topright, Vec2(botleft.x, topright.y));
-			app->drawline(Vec2(botleft.x, topright.y), botleft);
+			app->drawline(Vec2(topright.x, botleft.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });
+			app->drawline(topright, Vec2(topright.x, botleft.y), glm::vec3{ 0.0f, 1.0f, 1.0f });
+			app->drawline(topright, Vec2(botleft.x, topright.y), glm::vec3{ 0.0f, 1.0f, 1.0f });
+			app->drawline(Vec2(botleft.x, topright.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });
 		}
 	}
 }

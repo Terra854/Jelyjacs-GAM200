@@ -61,8 +61,8 @@ public:
 	static GLuint setup_texobj(const char*);
 	//helper function set up shader program
 	static void insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr);
-	
-	static void drawline(Vec2 start, Vec2 end);
+
+	static void drawline(Vec2 start, Vec2 end, glm::vec3 color);
 
 	//helper function set up model
 	// container for shader programs and models

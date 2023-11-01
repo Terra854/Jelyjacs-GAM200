@@ -3,46 +3,64 @@
 #include "GLApp.h"
 #include "input.h"
 
-std::vector<GameHud::Button> Buttons;
-int descent = 11;
 
 void GameHud::Initialize()
 {
-	create_button("button1g", Vec2(500, 0), 2);
+	create_button("button1", Button(Vec2(700 , 0),200 , 100) , 1);
+	create_button("button2", Button(Vec2(700, -200), 200, 100), 1);
 }
 void GameHud::Update()
 {
-	if (input::IsPressedRepeatedly(KEY::mouseL))
+	if (input::IsPressed(KEY::mouseL))
 	{
-		for (Button b : Buttons)
+		for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
 		{
-			if (input::GetMouseX() < b.pos1.x || input::GetMouseX() > b.pos2.x)
+			Button* ptr = it->second;
+			if (input::GetMouseX() < ptr->pos1.x || input::GetMouseX() > ptr->pos2.x || input::GetMouseY() < ptr->pos2.y || input::GetMouseY() > ptr->pos1.y)
 			{
-				return;
+				continue;
 			}
-			if (input::GetMouseY() > b.pos1.y || input::GetMouseY() < b.pos2.y)
-			{
-				return;
-			}
-			std::cout << b.text << "Is pressed!!" << std::endl;
+			std::cout << it->first << " is pressed" << std::endl;
 		}
 	}
 }
+
+void GameHud::create_button(std::string const& text, Button button, float scale)
+{
+	button.string.pos.x -= find_width(text)/2 * scale ;
+	button.string.pos.y -= 14 * scale;
+	button.string.text = text;
+	button.string.scale = scale;
+	Buttons[text] = new Button{ button };
+}
+
+GameHud::Button::Button(Vec2 Pos1,Vec2 Pos2)
+	:pos1{Pos1}, pos2{Pos2}
+{
+	string.pos.x = pos1.x + ((pos1.x + pos2.x) / 2);
+	string.pos.y = pos1.y + ((pos1.y + pos2.y) / 2);
+}
+
+GameHud::Button::Button(Vec2 pos, float width, float height)
+{
+	string.pos = pos;
+	pos1.x = pos.x - width / 2;
+	pos2.x = pos.x + width / 2;
+	pos1.y = pos.y + height / 2;
+	pos2.y = pos.y - height / 2;
+}
+
 void GameHud::Draw()
 {
-	for (Button b : Buttons)
+	for (auto it = Buttons.begin() ; it!=Buttons.end(); ++it)
 	{
-		DrawText(b.text, b.pos1.x, b.pos1.y - b.scale * (48-descent), b.scale);
-		GLApp::drawline(b.pos1, Vec2(b.pos2.x, b.pos1.y));
-		GLApp::drawline(Vec2(b.pos1.x, b.pos2.y), b.pos2);
-		GLApp::drawline(b.pos1, Vec2(b.pos1.x, b.pos2.y));
-		GLApp::drawline(Vec2(b.pos2.x, b.pos1.y), b.pos2);
+		Button* ptr = it->second;
+		GLApp::drawline(Vec2(ptr->pos1.x,ptr->pos1.y), Vec2(ptr->pos2.x , ptr->pos1.y), glm::vec3(1,1,1));
+		GLApp::drawline(Vec2(ptr->pos1.x, ptr->pos2.y), Vec2(ptr->pos2.x, ptr->pos2.y), glm::vec3(1, 1, 1));
+		GLApp::drawline(Vec2(ptr->pos1.x, ptr->pos1.y), Vec2(ptr->pos1.x, ptr->pos2.y), glm::vec3(1, 1, 1));
+		GLApp::drawline(Vec2(ptr->pos2.x, ptr->pos1.y), Vec2(ptr->pos2.x, ptr->pos2.y), glm::vec3(1, 1, 1));
+
+		DrawText(ptr->string.text, ptr->string.pos.x, ptr->string.pos.y, ptr->string.scale);
 	}
 }
-void GameHud::create_button(std::string const& str, Vec2 pos, float scale)
-{
-	float x = (find_width(str)) * scale;
-	float y = 48 * scale;
-	Button b = { str, pos, Vec2(pos.x + x, pos.y - y)  , scale };
-	Buttons.push_back(b);
-}
+

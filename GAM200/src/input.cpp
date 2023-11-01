@@ -10,11 +10,11 @@ To detect mouse/keyboard key presses and mouse position.
 #include <Debug.h>
 #include "input.h"
 #include "GLWindow.h"
-
 //refer to input.h for input functions interface
 
 namespace
 {
+	GLFWwindow* Pwindow = nullptr;
 	struct BUTTON
 	{
 	public:
@@ -25,7 +25,8 @@ namespace
 	private:
 		bool pressed = false;
 		bool released = true;
-		bool pressedFirstTime = true;
+		bool pressedPrevFrame = false;
+	friend void input::Update();
 	};
 
 	struct MOUSE
@@ -39,12 +40,7 @@ namespace
 
 bool BUTTON::IsPressed()
 {
-	if (pressed && pressedFirstTime)
-	{
-		pressedFirstTime = false;
-		return true;
-	}
-	else return false;
+	return (pressed && !pressedPrevFrame);
 }
 
 bool BUTTON::IsReleased()
@@ -68,7 +64,7 @@ void BUTTON::SetKeyState(int action)
 	{
 		released = true;
 		pressed = false;
-		pressedFirstTime = true;
+		pressedPrevFrame = false;
 	}
 }
 
@@ -77,110 +73,6 @@ int at(KEY index)
 	return static_cast<int>(index);
 }
 
-void KeyCallBack(GLFWwindow* pWin, int key, int scancode, int action, int mod)
-{
-	(void)pWin;
-	(void)scancode;
-	(void)mod;
-
-	switch (key)
-	{
-	case GLFW_KEY_W:
-	{
-		buttons[at(KEY::w)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_A:
-	{
-		buttons[at(KEY::a)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_S:
-	{
-		buttons[at(KEY::s)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_D:
-	{
-		buttons[at(KEY::d)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_P:
-	{
-		buttons[at(KEY::p)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_F:
-	{
-		buttons[at(KEY::f)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_Z:
-	{
-		buttons[at(KEY::z)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_X:
-	{
-		buttons[at(KEY::x)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_L:
-	{
-		buttons[at(KEY::l)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_UP:
-	{
-		buttons[at(KEY::up)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_DOWN:
-	{
-		buttons[at(KEY::down)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_LEFT:
-	{
-		buttons[at(KEY::left)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_RIGHT:
-	{
-		buttons[at(KEY::right)].SetKeyState(action);
-		break;
-	}
-	case GLFW_KEY_ESCAPE:
-	{
-		buttons[at(KEY::esc)].SetKeyState(action);
-		break;
-	}
-	}
-	/*
-	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
-	{
-		glfwSetWindowShouldClose(pWin, GLFW_TRUE);
-	}
-	*/
-}
-
-void MouseButtonCallBack(GLFWwindow* pWin, int button, int action, int mod)
-{
-	(void)pWin;
-	(void)mod;
-	switch (button)
-	{
-	case GLFW_MOUSE_BUTTON_1:
-	{
-		buttons[at(KEY::mouseL)].SetKeyState(action);
-	}
-	break;
-	case GLFW_MOUSE_BUTTON_2:
-	{
-		buttons[at(KEY::mouseR)].SetKeyState(action);
-	}
-	}
-}
 
 void MousePosCallBack(GLFWwindow* pWin, double xpos, double ypos)
 {
@@ -191,8 +83,7 @@ void MousePosCallBack(GLFWwindow* pWin, double xpos, double ypos)
 
 void input::Init(GLFWwindow* pWin)
 {
-	glfwSetKeyCallback(pWin, KeyCallBack);
-	glfwSetMouseButtonCallback(pWin, MouseButtonCallBack);
+	Pwindow = pWin;
 	glfwSetCursorPosCallback(pWin, MousePosCallBack);
 }
 
@@ -221,4 +112,33 @@ double input::GetMouseX()
 double input::GetMouseY()
 {
 	return -mouse.y + static_cast<double>(window->height / 2);
+}
+
+void input::Update()
+{
+	for (int i = 0; i < at(KEY::total); ++i)
+	{
+		if (buttons[i].pressed && !buttons[i].pressedPrevFrame)
+		{
+			buttons[i].pressedPrevFrame = true;
+		}
+	}
+	buttons[at(KEY::w)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_W));
+	buttons[at(KEY::a)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_A));
+	buttons[at(KEY::s)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_S));
+	buttons[at(KEY::d)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_D));
+	buttons[at(KEY::l)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_L));
+	buttons[at(KEY::p)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_P));
+	buttons[at(KEY::f)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_F));
+	buttons[at(KEY::z)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_Z));
+	buttons[at(KEY::x)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_X));
+	buttons[at(KEY::c)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_C));
+	buttons[at(KEY::mouseL)].SetKeyState(glfwGetMouseButton(Pwindow, GLFW_MOUSE_BUTTON_1));
+	buttons[at(KEY::mouseR)].SetKeyState(glfwGetMouseButton(Pwindow, GLFW_MOUSE_BUTTON_2));
+	buttons[at(KEY::up)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_UP));
+	buttons[at(KEY::down)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_DOWN));
+	buttons[at(KEY::left)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_LEFT));
+	buttons[at(KEY::right)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_RIGHT));
+	buttons[at(KEY::esc)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_ESCAPE));
+	
 }

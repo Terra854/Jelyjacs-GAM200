@@ -31,7 +31,6 @@ public:
 	~Factory();
 
 	// This creates a game object using the variables from the json file
-// This will be what is used to create game objects in the game loop
 	Object* createObject(const std::string& filename);
 
 	//This doesn't destroy the game object instantly but will set it to be destroyed in the update loop
@@ -69,14 +68,14 @@ public:
 
 	Object* FindObject(std::string name);
 
-	void DeleteComponent(unsigned id, ComponentType c);
+	void DeleteComponent(int id, ComponentType c);
 
 	int GetNextId() { return nextObjectId; };
 
 	friend class PhysicsSystem; // Needed to apply physics onto each object
 private:
 	//ID to assign to the next game object created
-	unsigned nextObjectId;
+	int nextObjectId;
 
 	//to map the component name in object text file to component type
 	typedef std::map< std::string, BaseComponentCreator*> componentCreatorMap;
@@ -84,7 +83,7 @@ private:
 
 	//Map of all the game objects created
 	//Associated with an ID to return them when needed
-	typedef std::map<unsigned, Object*> objectIDMap;
+	typedef std::map<int, Object*> objectIDMap;
 	objectIDMap objectMap;
 
 	//Set of game objects to be deleted every frame

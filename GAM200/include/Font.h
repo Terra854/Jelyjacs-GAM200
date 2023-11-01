@@ -12,7 +12,6 @@
 bool DrawText(std::string const& text, float posX, float posY, float scale, float red = 1, float green = 1, float blue = 1);
 
 int find_width(std::string const& str);
-int find_lowest_point();
 
 class Font : public ISystems
 {

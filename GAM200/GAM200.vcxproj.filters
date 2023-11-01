@@ -174,7 +174,10 @@
     <ClCompile Include="src\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameHud.cpp">
+    <ClCompile Include="src\Behaviour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LogicScript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -296,7 +299,10 @@
     <ClInclude Include="include\components\Event.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\GameHud.h">
+    <ClInclude Include="include\LogicScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Behaviour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

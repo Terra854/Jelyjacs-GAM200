@@ -54,6 +54,14 @@ bool JsonSerialization::closeFile()
 	return true;
 }
 
+void JsonSerialization::readInt(int& i, std::string param, int pos)
+{
+	if (pos == -1)
+		i = (*jsonObject)[param].asInt();
+	else
+		i = (*jsonObject)[param][pos].asInt();
+}
+
 // Use to read the next interger
 void JsonSerialization::readInt(int& i, std::string param1, std::string param2, int pos)
 {

@@ -754,7 +754,8 @@
       "Position": {
         "x": -298.0,
         "y": -174.0
-      }
+      },
+      "linkedevent": 1
     },
     {
       "Prefabs": "piston.json",
@@ -762,7 +763,8 @@
       "Position": {
         "x": -20.0,
         "y": 144.0
-      }
+      },
+      "linkedevent": 2
     },
     {
       "Prefabs": "door.json",
@@ -770,7 +772,8 @@
       "Position": {
         "x": -232.0,
         "y": -101.0
-      }
+      },
+      "linkedevent": 1
     },
     {
       "Prefabs": "door.json",
@@ -778,7 +781,8 @@
       "Position": {
         "x": -325.0,
         "y": 218.0
-      }
+      },
+      "linkedevent": 2
     }
   ]
 }

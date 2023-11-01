@@ -70,7 +70,17 @@
       <Command>copy "$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3.dll" "$(TargetDir)glfw3.dll" /Y
 copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew32.dll" /Y
 copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y
-copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</Command>
+copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
+
+rmdir /s /q "$(TargetDir)Asset"
+rmdir /s /q "$(TargetDir)meshes"
+rmdir /s /q "$(TargetDir)scenes"
+rmdir /s /q "$(TargetDir)shaders"
+
+xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
+xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
+xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
+xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -96,7 +106,17 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
       <Command>copy "$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3.dll" "$(TargetDir)glfw3.dll" /Y
 copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew32.dll" /Y
 copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y
-copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</Command>
+copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
+
+rmdir /s /q "$(TargetDir)Asset"
+rmdir /s /q "$(TargetDir)meshes"
+rmdir /s /q "$(TargetDir)scenes"
+rmdir /s /q "$(TargetDir)shaders"
+
+xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
+xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
+xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
+xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -105,6 +125,7 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
     <ClCompile Include="src\Assets Manager\json_serialization.cpp" />
     <ClCompile Include="src\Audio.cpp" />
+    <ClCompile Include="src\Behaviour.cpp" />
     <ClCompile Include="src\Body.cpp" />
     <ClCompile Include="src\GameHud.cpp" />
     <ClCompile Include="src\LevelEditor.cpp" />
@@ -122,6 +143,7 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
     <ClCompile Include="src\Line.cpp" />
     <ClCompile Include="src\Assets Manager\text_serialization.cpp" />
     <ClCompile Include="src\Collision.cpp" />
+    <ClCompile Include="src\LogicScript.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Core_Engine.cpp" />
     <ClCompile Include="src\Factory.cpp" />
@@ -140,6 +162,7 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
   <ItemGroup>
     <ClInclude Include="include\Audio.h" />
     <ClInclude Include="include\components\Animation.h" />
+    <ClInclude Include="include\components\Behaviour.h" />
     <ClInclude Include="include\components\Body.h" />
     <ClInclude Include="include\components\Event.h" />
     <ClInclude Include="include\components\PlayerControllable.h" />
@@ -157,6 +180,7 @@ copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y</C
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\Factory.h" />
     <ClInclude Include="include\Graphic_gl\Camera.h" />
+    <ClInclude Include="include\LogicScript.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\Interface_System.h" />
     <ClInclude Include="include\AABB.h" />

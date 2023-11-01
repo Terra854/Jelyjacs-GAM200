@@ -37,8 +37,8 @@ int main() {
 	PhysicsSystem* physics = new PhysicsSystem();
 	AssetManager* assetmanager = new AssetManager();
 	audio = new Audio(); // declared in Audio.h
-	GameLogic* logic = new GameLogic();
-	Font* font = new Font();
+	Logic = new GameLogic(); // declared in GameLogic.h
+	font = new Font();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();
 	level_editor = new LevelEditor();
@@ -48,7 +48,7 @@ int main() {
 	engine->AddSystem(windows);
 	engine->AddSystem(thread_pool);
 	engine->AddSystem(assetmanager);
-	engine->AddSystem(logic);
+	engine->AddSystem(Logic);
 	engine->AddSystem(factory);
 	engine->AddSystem(physics);
 	engine->AddSystem(audio);
