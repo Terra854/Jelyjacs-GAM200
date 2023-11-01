@@ -1,6 +1,5 @@
-
 #include <iostream>
-/*
+#include "Test.h"
 namespace Test {
 	void Start(Object* obj) {
 		std::cout << "Start" << std::endl;
@@ -13,6 +12,5 @@ namespace Test {
 	}
 
 	//Having Error, GameLogic* Logic is a nullptr
-	//LogicScript* logicScript = new LogicScript(Start, Update, End);
+	LogicScript(Start, Update, End);
 }
-*/

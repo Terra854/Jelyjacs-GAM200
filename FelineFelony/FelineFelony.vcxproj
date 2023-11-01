@@ -79,10 +79,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sandbox.cpp" />
-    <ClCompile Include="Test.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GAM200\GAM200.vcxproj">
