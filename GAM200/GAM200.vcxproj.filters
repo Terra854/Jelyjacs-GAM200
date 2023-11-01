@@ -180,6 +180,9 @@
     <ClCompile Include="src\LogicScript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphic_gl\Particle.cpp">
+      <Filter>Source Files\Systems\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -304,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="include\components\Behaviour.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphic_gl\Particle.h">
+      <Filter>Header Files\Systems\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
