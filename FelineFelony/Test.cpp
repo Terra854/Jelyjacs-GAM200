@@ -1,7 +1,6 @@
-/*
-#include "LogicScript.h"
-#include <iostream>
 
+#include <iostream>
+/*
 namespace Test {
 	void Start(Object* obj) {
 		std::cout << "Start" << std::endl;

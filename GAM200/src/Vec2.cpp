@@ -97,6 +97,7 @@ bool operator!=(const Vec2& lhs, const Vec2& rhs)
 }
 
 // Converts the vector for use in OpenGL calls
+
 glm::vec2 Vec2::ToGlmVec2() {
 	return glm::vec2(x, y);
 }
