@@ -25,6 +25,14 @@ class Camera : public ISystems
 	virtual void Update();
 	virtual std::string SystemName() { return "Camera"; }
 
+	void SetToPlayer();
+
+	void toggleFreeCam() { free_cam = !free_cam; }
+	bool isFreeCamEnabled() { return free_cam; }
+
+private:
+	bool free_cam = false;
+
 };
 extern Camera* camera2D;
 #endif // !CAMERA_H
