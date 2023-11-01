@@ -93,6 +93,7 @@ void LevelEditor::DebugPerformanceViewer() {
 	Object Properties
 */
 int cloneSuccessful = -1;
+bool selected = false;
 
 void LevelEditor::ObjectProperties() {
 
@@ -101,7 +102,7 @@ void LevelEditor::ObjectProperties() {
 
 	ImGui::Begin("Object Properties");
 
-	if (selected == -1) {
+	if (!selected) {
 		ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().x * 0.25f));
 		ImGui::Image(NULL, ImGui::GetContentRegionAvail());
 		ImGui::EndChild();
@@ -140,7 +141,15 @@ void LevelEditor::ObjectProperties() {
 	static Vec2 edited_velocity;
 	static bool edited_gravity;
 
-	Object* object = objectFactory->getObjectWithID(selected);
+	Object* object;
+
+	if (selectedNum < 0) {
+		auto it = AssetManager::prefabs.begin();
+		std::advance(it, -(selectedNum+1));
+		object = it->second;
+	}
+	else
+		object = objectFactory->getObjectWithID(selectedNum);
 
 	Transform* tr = (Transform*)object->GetComponent(ComponentType::Transform);
 	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
@@ -197,15 +206,30 @@ void LevelEditor::ObjectProperties() {
 
 	ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().x * 0.25f));
 
-	ImGui::Text("Object ID: %d", object->GetId());
-	ImGui::Text("Object Name: %s", object->GetName().c_str());
-	ImGui::Text("Number of components: %d", object->GetNumComponents());
+	if (selectedNum < 0) {
+		ImGui::Text("Prefab Name: %s", object->GetName().c_str());
+		ImGui::Text("Number of components: %d", object->GetNumComponents());
 
-	if (ImGui::Button("Clone"))
-	{
-		Object* o = objectFactory->cloneObject(object);
-		selected = o->GetId();
-		cloneSuccessful = selected;
+		if (ImGui::Button("Insert Prefab"))
+		{
+			Object* o = objectFactory->cloneObject(object);
+			objectFactory->assignIdToObject(o);
+			selectedNum = o->GetId();
+			cloneSuccessful = selectedNum;
+		}
+	}
+	else {
+		ImGui::Text("Object ID: %d", object->GetId());
+		ImGui::Text("Object Name: %s", object->GetName().c_str());
+		ImGui::Text("Number of components: %d", object->GetNumComponents());
+
+		if (ImGui::Button("Clone"))
+		{
+			Object* o = objectFactory->cloneObject(object);
+			objectFactory->assignIdToObject(o);
+			selectedNum = o->GetId();
+			cloneSuccessful = selectedNum;
+		}
 	}
 
 	ImGui::SameLine();
@@ -246,7 +270,8 @@ void LevelEditor::ObjectProperties() {
 	if (ImGui::Button("Delete Object"))
 	{
 		objectFactory->destroyObject(object);
-		selected = -1;
+		selectedNum = -1;
+		selected = false;
 	}
 	ImGui::PopStyleColor(3);
 
@@ -853,8 +878,9 @@ void LevelEditor::ListOfObjects() {
 				sprintf_s(buf, "%d) %s", static_cast<int>(i), object->GetName().c_str());
 
 			// Creating button for each object
-			if (ImGui::Selectable(buf, selected == static_cast<int>(i))) {
-				selected = static_cast<int>(i);
+			if (ImGui::Selectable(buf, selectedNum == static_cast<int>(i))) {
+				selected = true;
+				selectedNum = static_cast<int>(i);
 			}
 		}
 		ImGui::EndTable();
@@ -963,14 +989,19 @@ void LevelEditor::AssetList() {
 	if (ImGui::BeginTabItem("Prefabs")) {
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+		//int i = 0;
 		for (const std::pair<std::string, Object *>& p : AssetManager::prefabs) {
+			//i--;
+
 			char buffer[256];
 			sprintf_s(buffer, "##%s", p.first.c_str());
 
 			// Text and images will be in the above layer
 			if (ImGui::Button(buffer, button_size))
 			{
-				// Nothing right now
+				selected = true;
+				//selectedNum = i;
+				selectedNum = -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
 			}
 
 			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
@@ -1206,7 +1237,7 @@ void LevelEditor::Update() {
 					// Print the filenames
 					for (const auto& filename : level_files) {
 						if (ImGui::MenuItem(filename.c_str())) {
-							selected = -1;
+							selectedNum = -1;
 							objectFactory->destroyAllObjects();
 							LoadScene(path + filename.c_str());
 						}

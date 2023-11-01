@@ -31,7 +31,7 @@ public:
 	void AddTotalTime(double time) { total_time += time; }
 	void ClearAll() { System_elapsed_time.clear();  total_time = 0.0; }
 
-	int selected = -1;
+	int selectedNum = -1; // Negative values for prefabs, positive values for objects
 
 private:
 	std::map<std::string, double> System_elapsed_time;
