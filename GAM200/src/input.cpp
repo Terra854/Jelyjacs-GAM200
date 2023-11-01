@@ -6,8 +6,10 @@
 This file contains the implementations for input manager.
 To detect mouse/keyboard key presses and mouse position.
 *//*__________________________________________________________________________*/
+#include <Precompile.h>
 #include <Debug.h>
 #include "input.h"
+#include "GLWindow.h"
 
 //refer to input.h for input functions interface
 
@@ -219,9 +221,9 @@ bool input::IsPressedRepeatedly(KEY key)
 
 double input::GetMouseX()
 {
-	return mouse.x;
+	return mouse.x - static_cast<double>(window->width/2);
 }
 double input::GetMouseY()
 {
-	return mouse.y;
+	return -mouse.y + static_cast<double>(window->height / 2);
 }

@@ -4,7 +4,8 @@
 Font* font = NULL;
 Font::Font() {
 }
-
+FT_Face face;
+FT_Library ft;
 namespace
 {
     struct Character {
@@ -44,7 +45,6 @@ void Font::Initialize()
 
         // FreeType
         // --------
-        FT_Library ft;
         // All functions return a value different than 0 whenever an error occurred
         if (FT_Init_FreeType(&ft))
         {
@@ -52,7 +52,7 @@ void Font::Initialize()
         }
 
         // load font as face
-        FT_Face face;
+
         if (FT_New_Face(ft, "Asset/Fonts/Aldrich-Regular.ttf", 0, &face)) {
             std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
         }
@@ -104,8 +104,7 @@ void Font::Initialize()
             glBindTexture(GL_TEXTURE_2D, 0);
         }
         // destroy FreeType once we're finished
-        FT_Done_Face(face);
-        FT_Done_FreeType(ft);
+        
 
         // configure VAO/VBO for texture quads
         // -----------------------------------
@@ -178,4 +177,22 @@ bool DrawText(std::string const& text, float posX, float posY, float scale , flo
 
 void Font::Update()
 {
+}
+
+Font::~Font()
+{
+    FT_Done_Face(face);
+    FT_Done_FreeType(ft);
+}
+
+
+int find_width(std::string const& str)
+{
+    int width{ 0 };
+    for (size_t i = 0; i < str.size(); ++i)
+    {
+        FT_Load_Char(face, str.at(i), FT_LOAD_RENDER);
+        width += face->glyph->advance.x;
+    }
+    return (width >> 6);
 }
