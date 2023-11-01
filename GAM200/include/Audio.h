@@ -24,10 +24,8 @@ public:
 	void stopWalking();
 	void playJump();
 	void playSlidingDoor();
-	//void stopJump();
 private:
 	FMOD::System* system;
-	FMOD::System* sound;
 	FMOD::Channel *background, *channel, *sfx;
 	FMOD_RESULT result;
 

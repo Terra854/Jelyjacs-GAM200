@@ -13,7 +13,6 @@ Audio* audio = nullptr;
 
 Audio::~Audio(){
     AssetManager::clearsounds();
-    system->close();
     system->release();
 }
 
