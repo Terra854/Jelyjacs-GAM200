@@ -30,7 +30,7 @@ void GameHud::Update()
 				if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
 					camera2D->scale = { 2.0f, 2.0f };
 				}
-				else camera2D->scale = { 1.5f, 1.5f };
+				else camera2D->scale = { 1.0f, 1.0f };
 			}
 		}
 	}
