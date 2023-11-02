@@ -1,6 +1,6 @@
 #pragma once
 /* !
-@file Core_Engine.h
+@file	Core_Engine.h
 @author Luke Goh
 @date	28/9/2023
 
@@ -65,7 +65,7 @@ public:
 	void setPause() { paused = !paused; }
 	bool isPaused() { return paused; }
 
-	std::string loaded_level;
+	std::string loaded_level, loaded_filename;
 
 	friend class LevelEditor; // For displaying performance info
 	
