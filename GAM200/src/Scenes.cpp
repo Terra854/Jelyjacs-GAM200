@@ -10,7 +10,7 @@ This file contains the definitions for loading scenes
 #include "Assets Manager/asset_manager.h"
 #include "Assets Manager/json_serialization.h"
 #include "../include/components/Event.h"
-#include "SceneLoader.h"
+#include "Scenes.h"
 #include <iostream>
 
 void LoadScene(std::string filename)

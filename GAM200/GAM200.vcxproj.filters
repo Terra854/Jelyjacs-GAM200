@@ -156,7 +156,7 @@
     <ClCompile Include="src\EngineHud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SceneLoader.cpp">
+    <ClCompile Include="src\Scenes.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
     <ClCompile Include="src\LevelEditor.cpp">
@@ -287,7 +287,7 @@
     <ClInclude Include="include\components\Texture.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\SceneLoader.h">
+    <ClInclude Include="include\Scenes.h">
       <Filter>Header Files\Miscellanous</Filter>
     </ClInclude>
     <ClInclude Include="include\LevelEditor.h">

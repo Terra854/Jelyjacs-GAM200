@@ -22,7 +22,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <message.h>
 //#include <Movement.h>
 #include <Audio.h>
-#include <SceneLoader.h>
+#include <Scenes.h>
 #include <PhysicsSystem.h>
 
 GameLogic* Logic = NULL;

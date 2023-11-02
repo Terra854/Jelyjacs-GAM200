@@ -13,7 +13,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <components/Texture.h>
 #include <components/Animation.h>
 #include <filesystem>
-#include "SceneLoader.h"
+#include "Scenes.h"
 #include "Assets Manager/asset_manager.h"
 #include <PhysicsSystem.h>
 
