@@ -503,6 +503,7 @@ void GLApp::Update()
 */
 void GLApp::cleanup()
 {
+	particleSystem.Free();
 	//delete all models
 	for (auto& model : models)
 	{
