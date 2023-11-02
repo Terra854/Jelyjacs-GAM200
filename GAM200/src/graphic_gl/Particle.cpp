@@ -11,7 +11,7 @@ void ParticleSystem::Init()
         {
             glm::vec2 translation;
             translation.x = 1.0f - (float) (x * x) / 50.0f;
-            translation.y = 0.8f - (float) y / 6.75f;
+            translation.y = (float) ((y-5) * x) / 50.0f;
             translations[index++] = translation;
         }
     }
@@ -64,20 +64,21 @@ void ParticleSystem::Update()
                 
                 float Vx = phy_pt->Velocity.x;
                 float Vy = phy_pt->Velocity.y;
+                if (Vx == 0 && Vy == 0) {
+                    draw_particle = false;
+                    continue;
+                }
+                draw_particle = true;
                 Vec2 pos = tran_pt->Position;
                 pos.x -= Vx * 0.1f;
                 pos.y -= Vy * 0.1f;
                 pos.x = pos.x * 2.0f / window->width;
                 pos.y = pos.y * 2.0f / window->height;
                 Vec2 scale{0.f,0.f};
-                
-                if (Vx == 0 && Vy == 0) {
-                    draw_particle = false;
-                    continue;
-                }
-                draw_particle = true;
                 scale.x = tran_pt->Scale.x / window->width;
                 scale.y = tran_pt->Scale.y / window->height;
+                scale.x *= sqrt(Vx * Vx + Vy * Vy) * 0.002f ;
+                scale.y *= sqrt(Vx * Vx + Vy * Vy) * 0.002f;
                 //calculate rotation
                 float orientation = atan2(Vy, Vx);
                
