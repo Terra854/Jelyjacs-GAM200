@@ -23,24 +23,25 @@ namespace
 		Text string{};
 	};
 	std::map<std::string, Button*> Buttons;
-}
 
+
+GLuint texture_id;
+
+GLSLShader shdr_pgm;
+
+}
 void create_button(std::string const& text, Button button, float scale, FONT font);
-void init_hud_graphics();
 
-void init_hud_graphics()
-{
-	Gamehud_graphics::texture_id = GLApp::setup_texobj("Asset/Picture/Empty_Box.png") ;
-}
+void init_hud_assets();
 
-GLuint Gamehud_graphics::texture_id{};
-
+void draw_hud_texture();
 void GameHud::Initialize()
 {
-	init_hud_graphics();
+	init_hud_assets();
 	create_button("pause", Button(Vec2(700, 0), 200, 100), 1, AldrichRegular);
 	create_button("camera", Button(Vec2(700, -200), 200, 100), 1 , GeoRegular);
 }
+
 void GameHud::Update()
 {
 	if (input::IsPressed(KEY::mouseL))
@@ -96,6 +97,7 @@ Button::Button(Vec2 pos, float width, float height)
 
 void GameHud::Draw()
 {
+	draw_hud_texture();
 	for (auto it = Buttons.begin() ; it!=Buttons.end(); ++it)
 	{
 		Button* ptr = it->second;
@@ -117,4 +119,37 @@ GameHud::~GameHud()
 	}
 	Buttons.clear();
 }
+
+void draw_hud_texture()
+{
+	glBindTextureUnit(6, texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	// load shader program in use by this object
+	GLApp::shdrpgms["image"].Use();
+	glBindVertexArray(GLApp::models["square"].vaoid);
+	// copy object's model-to-NDC matrix to vertex shader's
+	// uniform variable uModelToNDC
+	Vec2 pos;
+	pos.x = 0 * 2 / window->width;
+	pos.y = 0 * 2 / window->height;
+	Vec2 scale;
+	scale.x = 500 / window->width;
+	scale.y = 100 / window->height;
+	Mat3 mat = Mat3Translate(pos) * Mat3Scale(scale);
+	shdr_pgm.SetUniform("uModel_to_NDC", mat.ToGlmMat3());
+	// tell fragment shader sampler uTex2d will use texture image unit 6
+	GLuint tex_loc = glGetUniformLocation(GLApp::shdrpgms["image"].GetHandle(), "uTex2d");
+	glUniform1i(tex_loc, 6);
+	// call glDrawElements with appropriate arguments
+	glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+	// unbind VAO and unload shader program
+	glBindVertexArray(0);
+	GLApp::shdrpgms["image"].UnUse();
+}
+
+void init_hud_assets()
+{
+	texture_id = GLApp::setup_texobj("Asset/Picture/Empty_Box.png");
+}
+
 

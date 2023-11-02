@@ -15,7 +15,3 @@ public:
 	
 private:
 };
-namespace Gamehud_graphics
-{
-	extern GLuint texture_id;
-}
