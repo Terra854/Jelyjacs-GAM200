@@ -65,7 +65,7 @@ public:
 
 	//Returns the total number of game objects created by this game factory
 	size_t NumberOfObjects() {	return objectMap.size();}
-
+	//Returns the pointer to an object by that object's name
 	Object* FindObject(std::string name);
 
 	void DeleteComponent(int id, ComponentType c);

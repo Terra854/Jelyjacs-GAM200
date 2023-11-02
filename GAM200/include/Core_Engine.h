@@ -53,11 +53,11 @@ public:
 	void Broadcast(Message_Handler *msg);
 
 	void createObject(float posX, float posY, std::string objectName);
-
+	/*
 	int convertGridToWorldPos(int gridPos, Axis axis);
 	int convertMousePosToGridPos(Axis axis);
 	bool checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int bottomY);
-
+	*/
 	float GetDt() { return dt; }
 	float Get_FPS() { return core_fps; }
 	float Get_Fixed_DT() { return fixed_dt; }

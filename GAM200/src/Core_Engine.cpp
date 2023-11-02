@@ -638,7 +638,7 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 		sys.second->MessageRelay(msg);
 	}
 }
-
+/*
 int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
 {
 	if (axis == Axis::X)
@@ -699,3 +699,4 @@ bool CoreEngine::checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int b
 
 	return true;
 }
+*/
