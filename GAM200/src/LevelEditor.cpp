@@ -16,6 +16,7 @@ This file contains the definitions of the functions that are part of the level e
 #include "SceneLoader.h"
 #include "Assets Manager/asset_manager.h"
 #include <PhysicsSystem.h>
+#include <ThreadPool.h>
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -1328,7 +1329,7 @@ void LoadLevelPanel() {
 			if (ImGui::Selectable(filename.c_str())) {
 				selected = false;
 				objectFactory->destroyAllObjects();
-				LoadScene(path + filename.c_str());
+				thread_pool->enqueue(LoadScene, path + filename.c_str());
 			}
 		}
 
