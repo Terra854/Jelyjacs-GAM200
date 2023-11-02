@@ -306,7 +306,7 @@ void GLApp::Update()
 		
 		
 		//get matrix
-		mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotRad(orientation);
+		mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotDeg(orientation);
 		
 
 		// matrix after camrea
