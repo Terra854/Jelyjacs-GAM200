@@ -1310,7 +1310,7 @@ void LoadLevelPanel() {
 				selected = false;
 				objectFactory->destroyAllObjects();
 				level_editor->ClearLevelEditorObjectMap(true);
-				thread_pool->enqueue(LoadScene, path + filename.c_str());
+				LoadScene(path + filename.c_str());
 			}
 		}
 
