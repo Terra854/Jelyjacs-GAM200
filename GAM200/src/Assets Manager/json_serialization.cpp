@@ -65,6 +65,7 @@ bool JsonSerialization::openFileWrite(const std::string& file)
 // Close a file, returns true if file is closed
 bool JsonSerialization::closeFile()
 {
+	delete jsonObject;
 	return true;
 }
 
