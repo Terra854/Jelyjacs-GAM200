@@ -25,9 +25,10 @@ void Camera::Update() {
 			}
 			else {
 				position = { 0.0f, 0.0f };
-				camera2D->scale = { 1.0f, 1.0f };
+				scale = { 1.0f, 1.0f };
 			}
 		}
+		if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
 
 		SetToPlayer();
 
