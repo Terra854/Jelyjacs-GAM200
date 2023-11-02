@@ -26,13 +26,13 @@ void ParticleSystem::Init()
    // ------------------------------------------------------------------
     float quadVertices[] = {
         // positions     // colors
-        -0.05f,  0.05f,  1.0f, 1.0f, 1.0f,
-         0.05f, -0.05f,  1.0f, 1.0f, 1.0f,
-        -0.05f, -0.05f,  1.0f, 1.0f, 1.0f,
+        -0.05f,  0.05f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+         0.05f, -0.05f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+        -0.05f, -0.05f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
 
-        -0.05f,  0.05f,  1.0f, 1.0f, 1.0f,
-         0.05f, -0.05f,  1.0f, 1.0f, 1.0f,
-         0.05f,  0.05f,  1.0f, 1.0f, 1.0f
+        -0.05f,  0.05f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+         0.05f, -0.05f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+         0.05f,  0.05f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f
     };
     quadVAO, quadVBO;
     glGenVertexArrays(1, &quadVAO);
@@ -41,15 +41,19 @@ void ParticleSystem::Init()
     glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(5 * sizeof(float)));
     // also set instance data
     glEnableVertexAttribArray(2);
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO); // this attribute comes from a different vertex buffer
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
+
+    particle_texture = GLApp::setup_texobj("Asset/Picture/particle.png");
 }
 
 void ParticleSystem::Update()
@@ -92,12 +96,19 @@ void ParticleSystem::Update()
 void ParticleSystem::Draw()
 {
     if (!draw_particle) return;
+    glBindTextureUnit(6, particle_texture);
+    glBindTexture(GL_TEXTURE_2D, particle_texture);
     GLApp::shdrpgms["instancing"].Use();
     glBindVertexArray(quadVAO);
     GLApp::shdrpgms["instancing"].SetUniform("uModel_to_NDC", world_to_ndc.ToGlmMat3());
+    GLuint tex_loc = glGetUniformLocation(GLApp::shdrpgms["instancing"].GetHandle(), "uTex2d");
+    glUniform1i(tex_loc, 6);
+
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100); // 100 triangles of 6 vertices each
     glBindVertexArray(0);
     GLApp::shdrpgms["instancing"].UnUse();
+
+   
 }
 
 void ParticleSystem::Free()
