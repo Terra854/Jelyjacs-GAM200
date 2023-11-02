@@ -6,8 +6,8 @@
 
 void GameHud::Initialize()
 {
-	create_button("pause", Button(Vec2(700 , 0),200 , 100) , 1);
-	create_button("camera", Button(Vec2(700, -200), 200, 100), 1);
+	create_button("pause", Button(Vec2(700 , 0),200 , 100) , 1,  AldrichRegular);
+	create_button("camera", Button(Vec2(700, -200), 200, 100), 1 , GeoRegular);
 }
 void GameHud::Update()
 {
@@ -36,12 +36,13 @@ void GameHud::Update()
 	}
 }
 
-void GameHud::create_button(std::string const& text, Button button, float scale)
+void GameHud::create_button(std::string const& text, Button button, float scale , FONT font)
 {
-	button.string.pos.x -= find_width(text)/2 * scale ;
+	button.string.pos.x -= find_width(text,font)/2 * scale ;
 	button.string.pos.y -= 14 * scale;
 	button.string.text = text;
 	button.string.scale = scale;
+	button.string.font = font;
 	Buttons[text] = new Button{ button };
 }
 
@@ -71,6 +72,7 @@ void GameHud::Draw()
 		GLApp::drawline(Vec2(ptr->pos1.x, ptr->pos1.y), Vec2(ptr->pos1.x, ptr->pos2.y), glm::vec3(1, 1, 1));
 		GLApp::drawline(Vec2(ptr->pos2.x, ptr->pos1.y), Vec2(ptr->pos2.x, ptr->pos2.y), glm::vec3(1, 1, 1));
 
+		SetFont(ptr->string.font);
 		DrawText(ptr->string.text, ptr->string.pos.x, ptr->string.pos.y, ptr->string.scale);
 	}
 }

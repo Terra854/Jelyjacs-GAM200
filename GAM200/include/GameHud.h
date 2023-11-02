@@ -2,6 +2,7 @@
 #include "Interface_System.h"
 #include "Vec2.h"
 #include <map>
+#include "font.h"
 
 class GameHud
 {
@@ -17,6 +18,7 @@ public:
 		Vec2 pos{};
 		float scale;
 		std::string text{};
+		FONT font;
 	};
 	class Button
 	{
@@ -28,6 +30,6 @@ public:
 		Text string{};
 	};
 	std::map<std::string,Button*> Buttons;
-	void create_button(std::string const& text, Button button, float scale);
+	void create_button(std::string const& text, Button button, float scale, FONT font);
 private:
 };
