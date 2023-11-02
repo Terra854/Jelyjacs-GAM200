@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Debug.h>
-
+#include <Factory.h>
 #include "Vec2.h"
 #include "Interface_System.h"
 #include <map>
@@ -16,6 +16,8 @@ public:
 	void ListOfObjects();
 	void DisplaySelectedTexture();
 	void AssetList();
+	void PlayPauseGame();
+	void ClearLevelEditorObjectMap();
 	//Constructor to initialise pointer
 	
 	LevelEditor();
@@ -36,6 +38,10 @@ public:
 private:
 	std::map<std::string, double> System_elapsed_time;
 	double total_time;
+
+	// When the play button os pressed, the level editor will make a copy of the initial
+	// state of the level so that the user can reset it later
+	Factory::objectIDMap initialObjectMap;
 };
 
 class LevelEditorGrid {
