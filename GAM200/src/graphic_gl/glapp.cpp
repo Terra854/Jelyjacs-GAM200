@@ -341,6 +341,8 @@ void GLApp::Update()
 			// if is player
 			if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 				// draw object with animation
+				particleSystem.Update();
+				particleSystem.Draw();
 				if (ani_pt->current_type != ani_pt->previous_type && !ani_pt->jump_fixed)
 					ani_pt->frame_num = 0;
 				else if (ani_pt->frame_count >= ani_pt->frame_rate) {
@@ -493,8 +495,7 @@ void GLApp::Update()
 			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
 		}
 	}
-	particleSystem.Update();
-	particleSystem.Draw();
+	
 }
 
 /*

@@ -4,14 +4,14 @@ void ParticleSystem::Init()
 {
     
     int index = 0;
-    float offset = 0.1f;
-    for (int y = -10; y < 10; y += 2)
+    
+    for (int y = 0;y < 10;y++)
     {
-        for (int x = -10; x < 10; x += 2)
+        for (int x = 0; x < 10; x++)
         {
             glm::vec2 translation;
-            translation.x = (float)x / 10.0f + offset;
-            translation.y = (float)y / 10.0f + offset;
+            translation.x = 1.0f - (float) (x * x) / 50.0f;
+            translation.y = 0.8f - (float) y / 6.75f;
             translations[index++] = translation;
         }
     }
@@ -60,21 +60,27 @@ void ParticleSystem::Update()
             // get the player's position
             Transform* tran_pt = static_cast<Transform*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Transform));
             Physics* phy_pt = static_cast<Physics*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Physics));
-            if (tran_pt != nullptr) {
+            if (phy_pt != nullptr) {
                 
-				Vec2 pos = tran_pt->Position;
                 float Vx = phy_pt->Velocity.x;
                 float Vy = phy_pt->Velocity.y;
-
-                if (Vx == 0 && Vy == 0) {
-                    continue;
-                }
-                Vec2 scale= tran_pt->Scale;
-                //calculate rotation
-                float orientation = atan2(Vy, Vx);
+                Vec2 pos = tran_pt->Position;
                 pos.x -= Vx * 0.1f;
                 pos.y -= Vy * 0.1f;
-
+                pos.x = pos.x * 2.0f / window->width;
+                pos.y = pos.y * 2.0f / window->height;
+                Vec2 scale{0.f,0.f};
+                
+                if (Vx == 0 && Vy == 0) {
+                    draw_particle = false;
+                    continue;
+                }
+                draw_particle = true;
+                scale.x = tran_pt->Scale.x / window->width;
+                scale.y = tran_pt->Scale.y / window->height;
+                //calculate rotation
+                float orientation = atan2(Vy, Vx);
+               
                 world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
                 world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
 			}
@@ -84,6 +90,7 @@ void ParticleSystem::Update()
 
 void ParticleSystem::Draw()
 {
+    if (!draw_particle) return;
     GLApp::shdrpgms["instancing"].Use();
     glBindVertexArray(quadVAO);
     GLApp::shdrpgms["instancing"].SetUniform("uModel_to_NDC", world_to_ndc.ToGlmMat3());
