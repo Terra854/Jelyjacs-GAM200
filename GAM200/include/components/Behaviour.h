@@ -9,10 +9,12 @@ public:
 
 	//~Behaviour() = default;
 	virtual void Initialize() override {}
-	void SetIndex(const unsigned int& index);
-	unsigned int& GetIndex() noexcept;
+	void SetIndex(const int& index);
+	int& GetIndex() noexcept;
 
 	virtual ComponentType TypeId() const override { return ComponentType::Behaviour; }
-protected:
-	unsigned int behaviour_index;
+
+	int behaviour_index;
+	std::string behaviour_name;
+	Object* obj;
 };

@@ -75,7 +75,7 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
 	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 
-
+	//for(auto const)
 	LoadScene("Asset/Levels/tutorial_level.json");
 }
 
@@ -88,11 +88,7 @@ void GameLogic::Update() {
 	// Do not update if the game is paused
 	if (engine->isPaused())
 		return;
-	
-	for (auto& it : behaviourComponents)
-	{
-		behaviours[it->GetIndex()]->update_script(it->GetOwner());
-	}
+
 	
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
@@ -304,7 +300,12 @@ void GameLogic::Update() {
 	*/
 }
 
-void GameLogic::AddBehaviour(LogicScript* behaviour)
+void GameLogic::AddBehaviour(std::string name, LogicScript* behaviour)
 {
-	behaviours.push_back(behaviour);
+	behaviours[name] = behaviour;
+}
+
+void GameLogic::AddObject(Object* obj)
+{
+	b_objects.push_back(obj);
 }
