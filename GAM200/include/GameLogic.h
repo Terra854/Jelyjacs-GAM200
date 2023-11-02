@@ -6,9 +6,9 @@
 
 This file contains the declaration for the Game Logic system class
 *//*__________________________________________________________________________*/
+#include <Interface_System.h>
 #include <Debug.h>
 #include <LogicScript.h>
-#include "Interface_System.h"
 #include <components/Behaviour.h>
 
 
@@ -30,7 +30,7 @@ public:
 private:
 	std::unordered_map<std::string, LogicScript*> behaviours;
 	std::vector<Object*> b_objects;
-	//std::vector<Behaviour*> behaviourComponents;
+	std::vector<Behaviour*> behaviourComponents;
 };
 
 extern GameLogic* Logic;

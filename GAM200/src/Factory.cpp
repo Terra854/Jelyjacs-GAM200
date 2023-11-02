@@ -282,6 +282,7 @@ Object* Factory::createObject(const std::string& filename)
 			jsonloop.readInt(b->behaviour_index, "Properties", "behaviourindex");
 			obj->AddComponent(b);
 			b->obj = obj;
+			std::cout << "Behaviour added" << std::endl;
 		}
 	}
 

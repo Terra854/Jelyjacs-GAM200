@@ -7,3 +7,4 @@ This file contains the includes header files that needs to be precompiled
 *//*__________________________________________________________________________*/
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <GameLogic.h>
