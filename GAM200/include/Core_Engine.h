@@ -72,7 +72,7 @@ public:
 	
 private:
 	// Map of Systems (Container)
-	std::map<std::string, ISystems*> Systems;
+	std::unordered_map<std::string, ISystems*> Systems;
 
 	// FPS
 	float core_fps;
