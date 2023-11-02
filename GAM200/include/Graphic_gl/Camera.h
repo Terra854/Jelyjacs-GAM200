@@ -1,3 +1,10 @@
+/* !
+@file    Camera.h
+@author  Guo Chen (g.chen@digipen.edu)
+@date    02/11/2023
+
+Header file for Camera.cpp
+*//*__________________________________________________________________________*/
 #include <Mat3.h>
 #include <Vec2.h>
 #include <interface_System.h>
