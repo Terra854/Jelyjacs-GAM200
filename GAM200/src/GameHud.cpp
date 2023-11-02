@@ -3,10 +3,42 @@
 #include "GLApp.h"
 #include "input.h"
 #include "Core_Engine.h"
+namespace
+{
+	class Text
+	{
+	public:
+		Vec2 pos{};
+		float scale;
+		std::string text{};
+		FONT font;
+	};
+	class Button
+	{
+	public:
+		Button(Vec2 pos1, Vec2 pos2);
+		Button(Vec2 centre, float width, float height);
+		Vec2 pos1;
+		Vec2 pos2;
+		Text string{};
+	};
+	std::map<std::string, Button*> Buttons;
+}
+
+void create_button(std::string const& text, Button button, float scale, FONT font);
+void init_hud_graphics();
+
+void init_hud_graphics()
+{
+	Gamehud_graphics::texture_id = GLApp::setup_texobj("Asset/Picture/Empty_Box.png") ;
+}
+
+GLuint Gamehud_graphics::texture_id{};
 
 void GameHud::Initialize()
 {
-	create_button("pause", Button(Vec2(700 , 0),200 , 100) , 1,  AldrichRegular);
+	init_hud_graphics();
+	create_button("pause", Button(Vec2(700, 0), 200, 100), 1, AldrichRegular);
 	create_button("camera", Button(Vec2(700, -200), 200, 100), 1 , GeoRegular);
 }
 void GameHud::Update()
@@ -36,7 +68,7 @@ void GameHud::Update()
 	}
 }
 
-void GameHud::create_button(std::string const& text, Button button, float scale , FONT font)
+void create_button(std::string const& text, Button button, float scale , FONT font)
 {
 	button.string.pos.x -= find_width(text,font)/2 * scale ;
 	button.string.pos.y -= 14 * scale;
@@ -46,14 +78,14 @@ void GameHud::create_button(std::string const& text, Button button, float scale 
 	Buttons[text] = new Button{ button };
 }
 
-GameHud::Button::Button(Vec2 Pos1,Vec2 Pos2)
+Button::Button(Vec2 Pos1,Vec2 Pos2)
 	:pos1{Pos1}, pos2{Pos2}
 {
 	string.pos.x = pos1.x + ((pos1.x + pos2.x) / 2);
 	string.pos.y = pos1.y + ((pos1.y + pos2.y) / 2);
 }
 
-GameHud::Button::Button(Vec2 pos, float width, float height)
+Button::Button(Vec2 pos, float width, float height)
 {
 	string.pos = pos;
 	pos1.x = pos.x - width / 2;
