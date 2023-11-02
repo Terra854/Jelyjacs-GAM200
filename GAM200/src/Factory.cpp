@@ -369,7 +369,7 @@ Object* Factory::getObjectWithID(long id)
 	}
 	else
 	{
-		return NULL;
+		return nullptr;
 	}
 }
 
