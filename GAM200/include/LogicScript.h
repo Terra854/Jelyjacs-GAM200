@@ -1,7 +1,6 @@
 #pragma once
-
+#include <string>
 #include <Object.h>
-
 class LogicScript
 {
 public:
@@ -9,7 +8,7 @@ public:
 	LogicScript(std::string name);
 	~LogicScript();
 	
-	virtual void Start(Object* obj) {};
-	virtual void Update(Object* obj) {};
-	virtual void Shutdown(Object* obj) {};
+	virtual void Start(Object* obj) = 0 ;
+	virtual void Update(Object* obj) = 0;
+	virtual void Shutdown(Object* obj) = 0;
 };

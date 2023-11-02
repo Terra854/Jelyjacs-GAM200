@@ -5,7 +5,7 @@
 class Behaviour : public Component
 {
 public:
-	Behaviour() : Component(), behaviour_index{0} {}
+	Behaviour() : Component(), behaviour_index{ 0 }, obj{ NULL } {}
 
 	//~Behaviour() = default;
 	virtual void Initialize() override {}

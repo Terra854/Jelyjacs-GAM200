@@ -1,13 +1,15 @@
 #pragma once
-#include "Object.h"
 #include "LogicScript.h"
+#include <iostream>
 
 class Test : public LogicScript{
 public:
-	Test(std::string name) : LogicScript(name) {}
+	Test(std::string name);
 
-	void Start(Object* obj);
-	void Update(Object* obj);
-	void End(Object* obj);
-} 
+	virtual void Start(Object* obj);
+	virtual void Update(Object* obj);
+	virtual void Shutdown(Object* obj);
+}; 
+
+
 

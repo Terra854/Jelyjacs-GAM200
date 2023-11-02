@@ -8,7 +8,6 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Debug.h>
 #include "GameLogic.h"
 #include <iostream>
-//#include "Assets Manager/file_reader.h"
 #include "Factory.h"
 #include "ComponentCreator.h"
 #include "components/Transform.h"
@@ -77,6 +76,7 @@ void GameLogic::Initialize()
 
 	//for(auto const)
 	LoadScene("Asset/Levels/tutorial_level.json");
+	
 }
 
 /******************************************************************************
@@ -88,7 +88,12 @@ void GameLogic::Update() {
 	// Do not update if the game is paused
 	if (engine->isPaused())
 		return;
-
+	int x = 0;
+	for (auto& behaviour : behaviours) {
+		behaviour.second->Update(b_objects[x]);
+		std::cout << "Behaviour " << x << " updated" << std::endl;
+		x++;
+	}
 	
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
