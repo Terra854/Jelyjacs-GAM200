@@ -40,8 +40,8 @@ void draw_hud_texture(Vec2 pos, float scaleX, float scaleY);
 void GameHud::Initialize()
 {
 	init_hud_assets();
-	create_button("play", Button(Vec2(800, 400), 180, 70), 1, AldrichRegular);
-	create_button("zoom", Button(Vec2(800, 250), 180, 70), 1.2 , GeoRegular);
+	create_button("play", Button(Vec2(800, 400), 180, 70), 1.0f, AldrichRegular);
+	create_button("zoom", Button(Vec2(800, 250), 180, 70), 1.2f , GeoRegular);
 
 }
 
@@ -60,15 +60,15 @@ void GameHud::Update()
 			if (it->first == "play")
 			{
 				engine->setPause();
-				if (it->second->string.text == "pause")
+				if (engine->isPaused())
 				{
 					it->second->string.text = "play";
-					it->second->string.pos.x = it->second->centre.x - (find_width("play", it->second->string.font) / 2 * it->second->string.scale);
+					it->second->string.pos.x = it->second->centre.x - (static_cast<float>(find_width("play", it->second->string.font)) / 2.0f * it->second->string.scale);
 				}
 				else
 				{
 					it->second->string.text = "pause";
-					it->second->string.pos.x = it->second->centre.x - (find_width("pause", it->second->string.font) / 2 * it->second->string.scale);
+					it->second->string.pos.x = it->second->centre.x - (static_cast<float>(find_width("pause", it->second->string.font)) / 2.0f * it->second->string.scale);
 				}
 			}
 			else if (it->first == "zoom")
@@ -82,13 +82,13 @@ void GameHud::Update()
 	}
 }
 
-void create_button(std::string const& text, Button button, float scale , FONT font)
+void create_button(std::string const& text, Button button, float scale , FONT f)
 {
-	button.string.pos.x = button.centre.x - find_width(text,font)/2 * scale ;
+	button.string.pos.x = button.centre.x - static_cast<float>(find_width(text,f))/2 * scale ;
 	button.string.pos.y -= 14 * scale;
 	button.string.text = text;
 	button.string.scale = scale;
-	button.string.font = font;
+	button.string.font = f;
 	Buttons[text] = new Button{ button };
 }
 
@@ -120,11 +120,6 @@ void GameHud::Draw()
 	{
 		Button* ptr = it->second;
 		draw_hud_texture(ptr->centre ,ptr->width , ptr->height);
-		//GLApp::drawline(Vec2(ptr->pos1.x,ptr->pos1.y), Vec2(ptr->pos2.x , ptr->pos1.y), glm::vec3(1,1,1));
-		//GLApp::drawline(Vec2(ptr->pos1.x, ptr->pos2.y), Vec2(ptr->pos2.x, ptr->pos2.y), glm::vec3(1, 1, 1));
-		//GLApp::drawline(Vec2(ptr->pos1.x, ptr->pos1.y), Vec2(ptr->pos1.x, ptr->pos2.y), glm::vec3(1, 1, 1));
-		//GLApp::drawline(Vec2(ptr->pos2.x, ptr->pos1.y), Vec2(ptr->pos2.x, ptr->pos2.y), glm::vec3(1, 1, 1));
-
 		SetFont(ptr->string.font);
 		DrawText(ptr->string.text, ptr->string.pos.x, ptr->string.pos.y, ptr->string.scale);
 	}
@@ -149,11 +144,11 @@ void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
 		// copy object's model-to-NDC matrix to vertex shader's
 		// uniform variable uModelToNDC
 		Vec2 posM;
-		posM.x = ((pos.x-17) * 2 / window->width  ) ;
-		posM.y = (pos.y+10) * 2 / window->height;
+		posM.x = ((pos.x-17.0f) * 2.0f / window->width  ) ;
+		posM.y = (pos.y+10.0f) * 2.0f / window->height;
 		Vec2 scale;
-		scale.x = (scaleX*1.6)/ window->width ;
-		scale.y = (scaleY *2.5)/ window->height;
+		scale.x = (scaleX*1.6f)/ window->width ;
+		scale.y = (scaleY *2.5f)/ window->height;
 		Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale) * Mat3RotRad(0.f);
 		GLApp::shdrpgms["image"].SetUniform("uModel_to_NDC", mat.ToGlmMat3());
 		// tell fragment shader sampler uTex2d will use texture image unit 6

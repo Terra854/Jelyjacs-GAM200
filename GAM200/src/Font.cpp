@@ -30,9 +30,9 @@ namespace
 
 void init_shaders();
 
-void SetFont(FONT font)
+void SetFont(FONT f)
 {
-    fontTracker = &fontOutlines[font];
+    fontTracker = &fontOutlines[f];
 }
 
 void Font::Initialize()
@@ -158,13 +158,13 @@ Font::~Font()
 }
 
 
-int find_width(std::string const& str , FONT font)
+int find_width(std::string const& str , FONT f)
 {
     int width{};
     for (size_t i = 0; i < str.size(); ++i)
     {
-        FT_Load_Char(fontOutlines[font].face, str.at(i), FT_LOAD_RENDER);
-        width += fontOutlines[font].face->glyph->advance.x;
+        FT_Load_Char(fontOutlines[f].face, str.at(i), FT_LOAD_RENDER);
+        width += fontOutlines[f].face->glyph->advance.x;
     }
     return width>>6;
 }
