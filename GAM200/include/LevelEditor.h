@@ -23,7 +23,7 @@ public:
 	void DisplaySelectedTexture();
 	void AssetList();
 	void PlayPauseGame();
-	void ClearLevelEditorObjectMap();
+	void ClearLevelEditorObjectMap(bool deleteObjects);
 	//Constructor to initialise pointer
 	
 	LevelEditor();

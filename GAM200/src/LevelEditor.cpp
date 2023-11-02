@@ -37,7 +37,7 @@ LevelEditor::LevelEditor() {
 LevelEditor::~LevelEditor() {
 	delete editor_grid;
 
-	ClearLevelEditorObjectMap();
+	ClearLevelEditorObjectMap(true);
 }
 
 /******************************************************************************
@@ -1059,7 +1059,7 @@ void LevelEditor::AssetList() {
 			{
 				selected = true;
 				//selectedNum = i;
-				selectedNum = -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
+				selectedNum = (int) -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
 			}
 
 			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
@@ -1108,34 +1108,6 @@ void LevelEditor::AssetList() {
 }
 
 /******************************************************************************
-	ObjectClonedSuccessfully
-	- This pop up window tells that the object has cloned successfully
-*******************************************************************************/
-void ObjectClonedSuccessfully(int i) {
-	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f, (float)window->height / 2.f));
-	ImGui::SetNextWindowSize(ImVec2(0, 0));
-	char text[50];
-
-	ImGui::Begin("Clone Successful");
-	sprintf_s(text, "New object ID is: %d", i);
-
-	ImVec2 textSize = ImGui::CalcTextSize(text);
-	ImVec2 windowSize = ImGui::GetWindowSize();
-	ImVec2 textPos = {
-		(windowSize.x - textSize.x) * 0.5f,
-		(windowSize.y - textSize.y) * 0.5f
-	};
-	ImGui::SetCursorPos(textPos);
-	ImGui::Text(text);
-
-	if (ImGui::Button("OK"))
-	{
-		cloneSuccessful = -1;
-	}
-	ImGui::End();
-}
-
-/******************************************************************************
 	PlayPauseGame
 	- This window contains buttons that allows a user to play/pause the game.
 	- This window also has a reset button that allows the user to reset the level
@@ -1146,13 +1118,13 @@ void LevelEditor::PlayPauseGame() {
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
-			engine->setPause();
-
 			if (initialObjectMap.empty()) {
 				for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
 					initialObjectMap[p.first] = objectFactory->cloneObject(p.second);
 				}
 			}
+
+			engine->setPause();
 		}
 	}
 	else {
@@ -1174,10 +1146,10 @@ void LevelEditor::PlayPauseGame() {
 		objectFactory->destroyAllObjects();
 
 		for (const std::pair<int, Object*>& p : initialObjectMap) {
-			objectFactory->assignIdToObject(objectFactory->cloneObject(p.second));
+			objectFactory->assignIdToObject(p.second);
 		}
 
-		ClearLevelEditorObjectMap();
+		ClearLevelEditorObjectMap(false);
 
 		// Break here, cause otherwise the next line will be EndDisabled()
 		// which will cause an abort() due to mismatch 
@@ -1200,12 +1172,18 @@ void LevelEditor::PlayPauseGame() {
 	ClearLevelEditorObjectMap
 	- Used to clear the copy of the object map in the level editor used to backup
 	  the level's initial state
+
+	@param deleteObjects - Whether to delete the objects itself. false is for only
+						   if transferring the objects to the main object map
 *******************************************************************************/
-void LevelEditor::ClearLevelEditorObjectMap() {
-	Factory::objectIDMap::iterator it = initialObjectMap.begin();
-	for (; it != initialObjectMap.end(); ++it)
-	{
-		delete it->second;
+void LevelEditor::ClearLevelEditorObjectMap(bool deleteObjects) {
+
+	if (deleteObjects) {
+		Factory::objectIDMap::iterator it = initialObjectMap.begin();
+		for (; it != initialObjectMap.end(); ++it)
+		{
+			delete it->second;
+		}
 	}
 
 	initialObjectMap.clear();
@@ -1340,6 +1318,69 @@ void LoadLevelPanel() {
 }
 
 /******************************************************************************
+	ObjectClonedSuccessfully
+	- This pop up window tells that the object has cloned successfully
+*******************************************************************************/
+void ObjectClonedSuccessfully(int i) {
+	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f, (float)window->height / 2.f));
+	ImGui::SetNextWindowSize(ImVec2(0, 0));
+	char text[50];
+
+	ImGui::Begin("Clone Successful");
+	sprintf_s(text, "New object ID is: %d", i);
+
+	ImVec2 textSize = ImGui::CalcTextSize(text);
+	ImVec2 windowSize = ImGui::GetWindowSize();
+	ImVec2 textPos = {
+		(windowSize.x - textSize.x) * 0.5f,
+		(windowSize.y - textSize.y) * 0.5f
+	};
+	ImGui::SetCursorPos(textPos);
+	ImGui::Text(text);
+
+	if (ImGui::Button("OK"))
+	{
+		cloneSuccessful = -1;
+	}
+	ImGui::End();
+}
+
+bool save_as_dialog = false;
+
+/******************************************************************************
+	SaveAsDialog
+	- This pop up a dialog box to ask where to save the level to
+*******************************************************************************/
+void SaveAsDialog() {
+	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f - 150, (float)window->height / 2.f));
+	ImGui::SetNextWindowSize(ImVec2(300, 0));
+	static char text[100];
+
+	ImGui::Begin("Save as", &save_as_dialog);
+	
+	ImGui::Text("Save to file:");
+	ImGui::InputText("##Filename", text, 100);
+
+	ImGui::SameLine();
+
+	ImGui::Text(".json");
+
+	if (ImGui::Button("OK"))
+	{
+		save_as_dialog = false;
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Cancel"))
+	{
+		save_as_dialog = false;
+	}
+
+	ImGui::End();
+}
+
+/******************************************************************************
 	DoNothing
 	- Just a stub function. It does nothing
 *******************************************************************************/
@@ -1400,6 +1441,20 @@ void LevelEditor::Update() {
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			char savetext[108];
+			sprintf_s(savetext, "Save to %s", engine->loaded_filename.c_str());
+
+			if (ImGui::MenuItem(savetext)) {
+				if (!initialObjectMap.empty()) {
+
+				}
+				else {
+
+				}
+			}
+			if (ImGui::MenuItem("Save as...")) {
+				save_as_dialog = true;
+			}
 			ImGui::Separator();
 
 			if (ImGui::MenuItem("Exit")) { engine->game_active = false; }
@@ -1436,6 +1491,8 @@ void LevelEditor::Update() {
 	if (cloneSuccessful > -1) {
 		ObjectClonedSuccessfully(cloneSuccessful);
 	}
+
+	save_as_dialog ? SaveAsDialog() : DoNothing();
 }
 
 /************************************LEVEL EDITOR GRID************************************/
