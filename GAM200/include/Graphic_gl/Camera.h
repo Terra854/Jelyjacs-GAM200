@@ -1,9 +1,3 @@
-#include <Mat3.h>
-#include <Vec2.h>
-#include <interface_System.h>
-#include <components/Transform.h>
-#include <components/Physics.h>
-#include <components/Body.h>
 /* !
 @file    Camera.h
 @author  Guo Chen (g.chen@digipen.edu)
@@ -11,6 +5,12 @@
 
 Header file for Camera.cpp
 *//*__________________________________________________________________________*/
+#include <Mat3.h>
+#include <Vec2.h>
+#include <interface_System.h>
+#include <components/Transform.h>
+#include <components/Physics.h>
+#include <components/Body.h>
 #include <components/PlayerControllable.h>
 #include <Factory.h>
 #include <GLWindow.h>
