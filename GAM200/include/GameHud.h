@@ -1,4 +1,11 @@
 #pragma once
+/* !
+@file	GameHud.h
+@author	Yeo Jia Ming
+@date	02/11/2023
+
+This file contains declarations for the in-game hud
+*//*__________________________________________________________________________*/
 #include "Interface_System.h"
 #include "Vec2.h"
 #include <map>

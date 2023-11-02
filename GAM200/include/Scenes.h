@@ -1,8 +1,8 @@
 #pragma once
 /* !
-@file	SceneLoader.h
+@file	Scenes.h
 @author	Tay Sen Chuan
-@date	
+@date	2/11/2023
 
 This file contains the declaration for loading scenes
 *//*__________________________________________________________________________*/

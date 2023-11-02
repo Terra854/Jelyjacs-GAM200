@@ -1,3 +1,11 @@
+/* !
+@file	Animation.cpp
+@author	Guo Chen
+@date	02/11/2023
+
+This file contains the implementation for the Animation component class
+*//*__________________________________________________________________________*/
+
 #include "../include/components/Animation.h"
 
 Animation::Animation()

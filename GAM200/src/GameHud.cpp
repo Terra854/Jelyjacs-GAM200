@@ -1,3 +1,10 @@
+/* !
+@file	GameHud.cpp
+@author	Yeo Jia Ming
+@date	02/11/2023
+
+This file contains the functions needed to render the in-game hud
+*//*__________________________________________________________________________*/
 #include "GameHud.h"
 #include "Font.h"
 #include "GLApp.h"

@@ -1,3 +1,11 @@
+/* !
+@file	Font.cpp
+@author	Yeo Jia Ming
+@date	02/11/2023
+
+This file contains the definition of the Font system class and functions to initialize
+the freetype library and for rendering fonts
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Font.h"
 
