@@ -1462,7 +1462,7 @@ void LevelEditor::Update() {
 		}
 		if (ImGui::BeginMenu("Window"))
 		{
-			if (ImGui::MenuItem("Performance Viewer")) { showPerformanceInfo = true; }
+			if (ImGui::MenuItem("TileSet")) { engine->show_tileset = true; }
 			if (ImGui::MenuItem("Uniform Grid")) { showUniformGrid = true; }
 			ImGui::EndMenu();
 		}
