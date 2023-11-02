@@ -295,7 +295,7 @@ void CoreEngine::GameLoop()
 
 			// Display the game inside the ImGui window
 			//ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
-			ImGui::Begin("Game Runtime (This for the level editor)");
+			ImGui::Begin("Game Viewport");
 			ImVec2 windowSize = ImGui::GetWindowSize();
 
 			ImVec2 displaySize;
