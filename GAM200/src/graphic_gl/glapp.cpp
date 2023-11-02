@@ -493,8 +493,8 @@ void GLApp::Update()
 			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
 		}
 	}
-	//particleSystem.Update();
-	//particleSystem.Draw();
+	particleSystem.Update();
+	particleSystem.Draw();
 }
 
 /*

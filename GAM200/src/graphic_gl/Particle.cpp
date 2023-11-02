@@ -75,9 +75,6 @@ void ParticleSystem::Update()
                 pos.x -= Vx * 0.1f;
                 pos.y -= Vy * 0.1f;
 
-
-
-                
                 world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
                 world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
 			}
