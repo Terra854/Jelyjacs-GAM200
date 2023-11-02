@@ -143,12 +143,34 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 	}
 }
 
+int total_grid_width, total_grid_height, num_of_grids_per_side;
+
+void PrepareUniformGrid() {
+	// All values here will need to eventually be read from the level files
+	int level_width = 1920;
+	int level_height = 1080;
+	int num_of_partitions_per_side = 6;
+
+	//factor in objects that can be just outside the viewable area
+	int extra_grids_per_side = num_of_partitions_per_side / 6;
+	extra_grids_per_side = extra_grids_per_side ? extra_grids_per_side : 1;
+
+	num_of_grids_per_side = num_of_partitions_per_side + (2 * extra_grids_per_side);
+	total_grid_width = level_width / num_of_partitions_per_side * num_of_grids_per_side;
+	total_grid_height = level_height / num_of_partitions_per_side * num_of_grids_per_side;
+
+	Collision::uniform_grid.resize(num_of_grids_per_side);
+	for (std::vector<std::vector<Object*>>& v : Collision::uniform_grid) {
+		v.resize(num_of_grids_per_side);
+	}
+}
+
 PhysicsSystem::PhysicsSystem() {
 
 }
 
 void PhysicsSystem::Initialize() {
-
+	PrepareUniformGrid();
 }
 
 
@@ -224,23 +246,7 @@ void PhysicsSystem::Update() {
 
 		/* Uniform grid */
 
-		// All values here will need to eventually be read from the level files
-		int level_width = 1920;
-		int level_height = 1080;
-		int num_of_partitions_per_side = 6;
-
-		//factor in objects that can be just outside the viewable area
-		int extra_grids_per_side = num_of_partitions_per_side / 6;
-		extra_grids_per_side = extra_grids_per_side ? extra_grids_per_side : 1;
-
-		int num_of_grids_per_side = num_of_partitions_per_side + (2 * extra_grids_per_side);
-		int total_grid_width = level_width / num_of_partitions_per_side * num_of_grids_per_side;
-		int total_grid_height = level_height / num_of_partitions_per_side * num_of_grids_per_side;
-
-		Collision::uniform_grid.resize(num_of_grids_per_side);
-		for (std::vector<std::vector<Object*>>& v : Collision::uniform_grid) {
-			v.resize(num_of_grids_per_side);
-		}
+		PrepareUniformGrid();
 
 		for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 			Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
