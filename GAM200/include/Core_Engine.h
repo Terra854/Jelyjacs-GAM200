@@ -68,6 +68,8 @@ public:
 
 	std::string loaded_level, loaded_filename;
 
+	bool show_tileset = false;
+
 	friend class LevelEditor; // For displaying performance info
 	
 private:
