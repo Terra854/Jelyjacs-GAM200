@@ -85,7 +85,7 @@
       }
     },
     {
-      "Prefabs": "player.json",
+      "Prefabs": "Finn.json",
       "Type": "Transform",
       "Position": {
         "x": -350.0,

@@ -45,17 +45,71 @@ bool JsonSerialization::openFileRead(const std::string& file)
 }
 
 // Open a file for writing, returns true if successfully opened
+bool JsonSerialization::openFileWrite(const std::string& file)
+{
+	std::ofstream outputFile(file);
+	if (outputFile.is_open()) {
+		Json::StreamWriterBuilder writer;
+		writer["indentation"] = "  ";
 
+		outputFile << Json::writeString(writer, jsonObject);
+		outputFile.close();
+		std::cout << file << " has been successfully saved." << std::endl;
+		return true;
+	}
+	else
+		std::cerr << "Failed to open file for writing." << std::endl;
+	return false;
+}
 
 // Close a file, returns true if file is closed
 bool JsonSerialization::closeFile()
 {
-	delete jsonObject;
 	return true;
+}
+
+bool JsonSerialization::checkValidParam(int pos, std::string param1, std::string param2, std::string param3)
+{
+	// Check Param1
+	if (param1.empty())
+		return false;
+	else if (!jsonObject->isMember(param1))
+		return false; // Invalid param1
+
+	// Check param2
+	if (param2.empty())
+	{
+		// Ensure pos is valid
+		if (pos != -1 && (!(*jsonObject)[param1].isArray() || pos >= (*jsonObject)[param1].size()))
+			return false; // Invalid pos
+	}
+	else if (!(*jsonObject)[param1].isMember(param2))
+		return false; // Invalid param2
+		
+	// Check param3
+	if (param3.empty())
+	{
+		// Ensure pos is valid
+		if (pos != -1 && (!(*jsonObject)[param1][param2].isArray() || pos >= (*jsonObject)[param1][param2].size()))
+			return false; // Invalid pos
+	}
+	else if (!(*jsonObject)[param1][param2].isMember(param3))
+		return false; // Invalid param3
+
+	if (!param3.empty())
+	{
+		// Ensure pos is valid
+		if (pos != -1 && (!(*jsonObject)[param1][param2][param3].isArray() || pos >= (*jsonObject)[param1][param2][param3].size()))
+			return false; // Invalid pos
+	}
+
+	return true; // All valid
 }
 
 void JsonSerialization::readInt(int& i, std::string param, int pos)
 {
+	if (!checkValidParam(pos, param)) return;
+
 	if (pos == -1)
 		i = (*jsonObject)[param].asInt();
 	else
@@ -65,15 +119,29 @@ void JsonSerialization::readInt(int& i, std::string param, int pos)
 // Use to read the next interger
 void JsonSerialization::readInt(int& i, std::string param1, std::string param2, int pos)
 {
+	if (!checkValidParam(pos, param1, param2)) return;
+
 	if (pos == -1)
 		i = (*jsonObject)[param1][param2].asInt();
 	else
 		i = (*jsonObject)[param1][param2][pos].asInt();
 }
 
+void JsonSerialization::readFloat(float& f, std::string param, int pos)
+{
+	if (!checkValidParam(pos, param)) return;
+
+	if (pos == -1)
+		f = (*jsonObject)[param].asFloat();
+	else
+		f = (*jsonObject)[param][pos].asFloat();
+}
+
 // Use to read the next float
 void JsonSerialization::readFloat(float& f, std::string param1, std::string param2, int pos)
 {
+	if (!checkValidParam(pos, param1, param2)) return;
+
 	if (pos == -1)
 		f = (*jsonObject)[param1][param2].asFloat();
 	else
@@ -83,6 +151,8 @@ void JsonSerialization::readFloat(float& f, std::string param1, std::string para
 // Use to read the next float
 void JsonSerialization::readFloat(float& f, std::string param1, std::string param2, std::string param3, int pos)
 {
+	if (!checkValidParam(pos, param1, param2, param3)) return;
+
 	if (pos == -1)
 		f = (*jsonObject)[param1][param2][param3].asFloat();
 	else
@@ -92,6 +162,8 @@ void JsonSerialization::readFloat(float& f, std::string param1, std::string para
 // Use to read the next string
 void JsonSerialization::readString(std::string& str, std::string param, int pos)
 {
+	if (!checkValidParam(pos, param)) return;
+
 	if (pos == -1)
 		str = (*jsonObject)[param].asString();
 	else
@@ -101,6 +173,8 @@ void JsonSerialization::readString(std::string& str, std::string param, int pos)
 // Use to read the next string
 void JsonSerialization::readString(std::string& str, std::string param1, std::string param2, int pos)
 {
+	if (!checkValidParam(pos, param1, param2)) return;
+
 	if (pos == -1)
 		str = (*jsonObject)[param1][param2].asString();
 	else
@@ -109,6 +183,8 @@ void JsonSerialization::readString(std::string& str, std::string param1, std::st
 
 void JsonSerialization::readBool(bool& val, std::string param, int pos)
 {
+	if (!checkValidParam(pos, param)) return;
+
 	if (pos == -1)
 		val = (*jsonObject)[param].asBool();
 	else
@@ -117,6 +193,8 @@ void JsonSerialization::readBool(bool& val, std::string param, int pos)
 
 void JsonSerialization::readBool(bool& val, std::string param1, std::string param2, int pos)
 {
+	if (!checkValidParam(pos, param1, param2)) return;
+
 	if (pos == -1)
 		val = (*jsonObject)[param1][param2].asBool();
 	else
@@ -145,14 +223,23 @@ auto JsonSerialization::read(std::string str) -> decltype((*jsonObject)[str])
 	return (*jsonObject)[str];
 }
 
-// Use to write the next interger
-
-
-// Use to write the next float
-
-
-// Use to write the next string
-
+//template <typename T>
+//void JsonSerialization::writeData(std::string param, T value)
+//{
+//	(*jsonObject)[param] = value;
+//}
+//
+//template <typename T>
+//void JsonSerialization::writeArrData(std::string param, T value)
+//{
+//	jsonArr[param] = value;
+//}
+//
+//void JsonSerialization::appendToArr()
+//{
+//	jsonObject->append(jsonArr);
+//	jsonArr.clear();
+//}
 
 
 

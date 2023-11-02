@@ -1,0 +1,1480 @@
+{
+  "Objects" : 
+  [
+    {
+      "Position" : 
+      {
+        "x" : -33.0,
+        "y" : 31.5
+      },
+      "Prefabs" : "tutorial_background.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 1282.0,
+        "y" : 720.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 269.0,
+        "y" : -226.0
+      },
+      "Prefabs" : "elevator_mid.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 269.0,
+        "y" : -162.0
+      },
+      "Prefabs" : "elevator_mid.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 269.0,
+        "y" : -98.0
+      },
+      "Prefabs" : "elevator_mid.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 269.0,
+        "y" : -34.0
+      },
+      "Prefabs" : "elevator_mid.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 269.0,
+        "y" : 30.0
+      },
+      "Prefabs" : "elevator_mid.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 269.0,
+        "y" : 94.0
+      },
+      "Prefabs" : "elevator_mid.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 269.0,
+        "y" : 158.0
+      },
+      "Prefabs" : "elevator_mid.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 269.0,
+        "y" : 222.0
+      },
+      "Prefabs" : "elevator_mid.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 269.0,
+        "y" : 256.0
+      },
+      "Prefabs" : "elevator_top.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 267.0,
+        "y" : -150.0
+      },
+      "Prefabs" : "elevator.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 128.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -350.0,
+        "y" : -170.0
+      },
+      "Prefabs" : "Finn.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 54.0,
+        "y" : 54.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -211.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_0.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 87.0,
+        "y" : -226.0
+      },
+      "Prefabs" : "platform_1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -169.0,
+        "y" : -256.0
+      },
+      "Prefabs" : "platform_1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -211.0,
+        "y" : 54.0
+      },
+      "Prefabs" : "platform_1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : -8.0
+      },
+      "Prefabs" : "platform_1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : -72.0
+      },
+      "Prefabs" : "platform_1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : -136.0
+      },
+      "Prefabs" : "platform_1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : 310.0
+      },
+      "Prefabs" : "platform_1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : 246.0
+      },
+      "Prefabs" : "platform_1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : 182.0
+      },
+      "Prefabs" : "platform_1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 23.0,
+        "y" : -162.0
+      },
+      "Prefabs" : "platform_3.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : 116.0
+      },
+      "Prefabs" : "platform_3.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : 312.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : 308.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : 312.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 557.0,
+        "y" : 180.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : 52.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : -12.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : -76.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : -140.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : -204.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : -226.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 23.0,
+        "y" : -226.0
+      },
+      "Prefabs" : "platform_4.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : 244.0
+      },
+      "Prefabs" : "platform_5.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -275.0,
+        "y" : -10.0
+      },
+      "Prefabs" : "platform_5.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 493.0,
+        "y" : 116.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -275.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -339.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -403.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -467.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 343.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 367.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 279.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 215.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 151.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -41.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -105.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -233.0,
+        "y" : -200.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -297.0,
+        "y" : -200.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -361.0,
+        "y" : -200.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -425.0,
+        "y" : -200.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -489.0,
+        "y" : -200.0
+      },
+      "Prefabs" : "platform_9.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -339.0,
+        "y" : 54.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -403.0,
+        "y" : 54.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -467.0,
+        "y" : 54.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 493.0,
+        "y" : 244.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 381.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 317.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 253.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 189.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 125.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 61.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -3.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -67.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -131.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -195.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -259.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -387.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -451.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -467.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_11.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 87.0,
+        "y" : -162.0
+      },
+      "Prefabs" : "platform_16.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -169.0,
+        "y" : -200.0
+      },
+      "Prefabs" : "platform_16.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -211.0,
+        "y" : -10.0
+      },
+      "Prefabs" : "platform_18.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_20.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : 54.0
+      },
+      "Prefabs" : "platform_20.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 87.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_21.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -169.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_21.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : -200.0
+      },
+      "Prefabs" : "platform_21.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -531.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_21.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 557.0,
+        "y" : 244.0
+      },
+      "Prefabs" : "platform_23.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_23.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -275.0,
+        "y" : 54.0
+      },
+      "Prefabs" : "platform_23.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 557.0,
+        "y" : 116.0
+      },
+      "Prefabs" : "platform_24.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 429.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_24.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 23.0,
+        "y" : -290.0
+      },
+      "Prefabs" : "platform_24.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 45.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_25.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -19.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_25.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -83.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_25.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -147.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_25.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -323.0,
+        "y" : 310.0
+      },
+      "Prefabs" : "platform_28.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : 109.0,
+        "y" : 118.0
+      },
+      "Prefabs" : "platform_29.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -323.0,
+        "y" : 374.0
+      },
+      "Prefabs" : "platform_c1.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -298.0,
+        "y" : -174.0
+      },
+      "Prefabs" : "piston.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform",
+      "linkedevent" : 1
+    },
+    {
+      "Position" : 
+      {
+        "x" : -20.0,
+        "y" : 144.0
+      },
+      "Prefabs" : "piston.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 64.0
+      },
+      "Type" : "Transform",
+      "linkedevent" : 2
+    },
+    {
+      "Position" : 
+      {
+        "x" : -232.0,
+        "y" : -101.0
+      },
+      "Prefabs" : "door.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 164.0
+      },
+      "Type" : "Transform",
+      "linkedevent" : 1
+    },
+    {
+      "Position" : 
+      {
+        "x" : -325.0,
+        "y" : 218.0
+      },
+      "Prefabs" : "door.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 64.0,
+        "y" : 164.0
+      },
+      "Type" : "Transform",
+      "linkedevent" : 2
+    }
+  ],
+  "SceneName" : "testsaving"
+}

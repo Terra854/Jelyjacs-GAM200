@@ -75,8 +75,11 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 
 	//for(auto const)
+
+	//LoadScene("Asset/Levels/testsave.json");
+
 	LoadScene("Asset/Levels/tutorial_level.json");
-	
+	SaveScene("Asset/Levels/testsave.json");
 }
 
 /******************************************************************************
