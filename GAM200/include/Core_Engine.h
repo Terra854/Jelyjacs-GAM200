@@ -65,6 +65,8 @@ public:
 	void setPause() { paused = !paused; }
 	bool isPaused() { return paused; }
 
+	std::string loaded_level;
+
 	friend class LevelEditor; // For displaying performance info
 	
 private:

@@ -73,6 +73,9 @@ void LoadScene(std::string filename)
 
 	}
 
+	// Save the name of the level to engine to track
+	engine->loaded_level = filename;
+
 	jsonobj.closeFile();
 }
 
