@@ -2,18 +2,14 @@
 
 #include <Object.h>
 
-typedef void (*InitScript)(Object*);
-typedef void (*UpdateScript)(Object*);
-typedef void (*ShutdownScript)(Object*);
-
 class LogicScript
 {
 public:
-	LogicScript(const InitScript& init, const UpdateScript& update, const ShutdownScript& shutdown);
+	LogicScript() {};
+	LogicScript(std::string name);
 	~LogicScript();
-
-
-	InitScript init_script;
-	UpdateScript update_script;
-	ShutdownScript shutdown_script;
+	
+	virtual void Start(Object* obj) {};
+	virtual void Update(Object* obj) {};
+	virtual void Shutdown(Object* obj) {};
 };

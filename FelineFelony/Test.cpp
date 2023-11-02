@@ -12,5 +12,6 @@ namespace Test {
 	}
 
 	//Having Error, GameLogic* Logic is a nullptr
-	LogicScript(Start, Update, End);
+	//LogicScript(Start, Update, End);
+	Test("Test");
 }
