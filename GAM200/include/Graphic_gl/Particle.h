@@ -1,3 +1,10 @@
+/* !
+@file    Particle.h
+@author  Guo Chen (g.chen@digipen.edu)
+@date    02/11/2023
+
+Header file for Particle.cpp
+*//*__________________________________________________________________________*/
 #include "glapp.h"
 #include <Factory.h>
 #include <Camera.h>

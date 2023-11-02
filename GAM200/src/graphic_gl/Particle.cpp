@@ -1,5 +1,18 @@
+/* !
+@file    Particle.cpp
+@author  Guo Chen (g.chen@digipen.edu)
+@date    02/11/2023
+
+Partical system using instancing rendering.
+
+*//*__________________________________________________________________________*/
 #include "Particle.h"
 
+/*
+* init the particle system
+* set position for each particle
+* set up vertex data (and buffer(s)) and configure vertex attributes
+*/
 void ParticleSystem::Init()
 {
     
@@ -25,7 +38,7 @@ void ParticleSystem::Init()
     // set up vertex data (and buffer(s)) and configure vertex attributes
    // ------------------------------------------------------------------
     float quadVertices[] = {
-        // positions     // colors
+        // positions     // colors          // texture coords
         -0.05f,  0.05f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
          0.05f, -0.05f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
         -0.05f, -0.05f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
@@ -55,7 +68,11 @@ void ParticleSystem::Init()
 
     particle_texture = GLApp::setup_texobj("Asset/Picture/particle.png");
 }
-
+/*
+* update the particle system
+* get the player's position
+* set the particle's position
+*/
 void ParticleSystem::Update()
 {
     for (long i = 0; i < (long)objectFactory->GetNextId(); i++) {
@@ -93,6 +110,10 @@ void ParticleSystem::Update()
     }
 }
 
+/*
+* draw the particle system
+* use instancing rendering
+*/
 void ParticleSystem::Draw()
 {
     if (!draw_particle) return;
@@ -111,6 +132,9 @@ void ParticleSystem::Draw()
    
 }
 
+/*
+* free the particle system
+*/
 void ParticleSystem::Free()
 {
     glDeleteVertexArrays(1, &quadVAO);

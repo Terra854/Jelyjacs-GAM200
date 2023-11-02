@@ -4,6 +4,13 @@
 #include <components/Transform.h>
 #include <components/Physics.h>
 #include <components/Body.h>
+/* !
+@file    Camera.h
+@author  Guo Chen (g.chen@digipen.edu)
+@date    02/11/2023
+
+Header file for Camera.cpp
+*//*__________________________________________________________________________*/
 #include <components/PlayerControllable.h>
 #include <Factory.h>
 #include <GLWindow.h>
