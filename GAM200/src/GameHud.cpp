@@ -51,16 +51,9 @@ void GameHud::Update()
 	{
 		for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
 		{
-			Button* ptr = it->second;
-			if (input::GetMouseX() < ptr->pos1.x || input::GetMouseX() > ptr->pos2.x || input::GetMouseY() < ptr->pos2.y || input::GetMouseY() > ptr->pos1.y)
+			if (it->first == "play" || it->first == "pause")
 			{
-				continue;
-			}
-			std::cout << it->first << " is pressed" << std::endl;
-			if (it->first == "play")
-			{
-				engine->setPause();
-				if (engine->isPaused())
+				if (!engine->isPaused())
 				{
 					it->second->string.text = "play";
 					it->second->string.pos.x = it->second->centre.x - (static_cast<float>(find_width("play", it->second->string.font)) / 2.0f * it->second->string.scale);
@@ -70,6 +63,17 @@ void GameHud::Update()
 					it->second->string.text = "pause";
 					it->second->string.pos.x = it->second->centre.x - (static_cast<float>(find_width("pause", it->second->string.font)) / 2.0f * it->second->string.scale);
 				}
+			}
+
+			Button* ptr = it->second;
+			if (input::GetMouseX() < ptr->pos1.x || input::GetMouseX() > ptr->pos2.x || input::GetMouseY() < ptr->pos2.y || input::GetMouseY() > ptr->pos1.y)
+			{
+				continue;
+			}
+			std::cout << it->first << " is pressed" << std::endl;
+			if (it->first == "play" || it->first == "pause")
+			{
+				engine->setPause();
 			}
 			else if (it->first == "zoom")
 			{
