@@ -154,7 +154,6 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\graphic_gl\GLWindow.cpp" />
     <ClCompile Include="src\graphic_gl\glslshader.cpp" />
     <ClCompile Include="src\input.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mat3.cpp" />
     <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\Scenes.cpp" />

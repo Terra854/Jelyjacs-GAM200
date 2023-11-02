@@ -107,42 +107,6 @@ void ParticleSystem::Update()
             world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
         }
     }
-
-    /*
-    for (long i = 0; i < (long)objectFactory->GetNextId(); i++) {
-        //if the object is a player
-        if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
-            // get the player's position
-            Transform* tran_pt = static_cast<Transform*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Transform));
-            Physics* phy_pt = static_cast<Physics*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::Physics));
-            if (phy_pt != nullptr) {
-                
-                float Vx = phy_pt->Velocity.x;
-                float Vy = phy_pt->Velocity.y;
-                if (Vx == 0 && Vy == 0) {
-                    draw_particle = false;
-                    continue;
-                }
-                draw_particle = true;
-                Vec2 pos = tran_pt->Position;
-                pos.x -= Vx * 0.1f;
-                pos.y -= Vy * 0.1f;
-                pos.x = pos.x * 2.0f / window->width;
-                pos.y = pos.y * 2.0f / window->height;
-                Vec2 scale{0.f,0.f};
-                scale.x = tran_pt->Scale.x / window->width;
-                scale.y = tran_pt->Scale.y / window->height;
-                scale.x *= sqrt(Vx * Vx + Vy * Vy) * 0.002f ;
-                scale.y *= sqrt(Vx * Vx + Vy * Vy) * 0.002f;
-                //calculate rotation
-                float orientation = atan2(Vy, Vx);
-               
-                world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
-                world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
-			}
-        }
-    }
-    */
 }
 
 /*

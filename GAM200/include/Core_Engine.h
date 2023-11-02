@@ -33,12 +33,6 @@ public:
 	// Initialize all the system
 	void Initialize();
 
-	// Update all the System and FPS
-	//void Update();
-
-	// Debug Update function
-	//void Debug_Update();
-
 	// Main Game Loop - looping all the system updates
 	void GameLoop();
 
@@ -52,12 +46,6 @@ public:
 	// Acts as a MessageRelay for Core Engine
 	void Broadcast(Message_Handler *msg);
 
-	void createObject(float posX, float posY, std::string objectName);
-	/*
-	int convertGridToWorldPos(int gridPos, Axis axis);
-	int convertMousePosToGridPos(Axis axis);
-	bool checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int bottomY);
-	*/
 	float GetDt() { return dt; }
 	float Get_FPS() { return core_fps; }
 	float Get_Fixed_DT() { return fixed_dt; }

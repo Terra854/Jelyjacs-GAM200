@@ -43,23 +43,6 @@ public:
 	virtual void readBool(bool& val, std::string param, int pos = -1);
 	virtual void readBool(bool& val, std::string param1, std::string param2, int pos = -1);
 
-	//virtual void WriteInt(Json::Value& data, std::string param, int value);
-	//virtual void WriteInt(Json::Value& data, std::string param1, std::string param2, int value);
-	//virtual void WriteFloat(Json::Value& data, std::string param, int value);
-	//virtual void WriteFloat(Json::Value& data, std::string param1, std::string param2, int value);
-	//virtual void WriteString(Json::Value& data, std::string param, int value);
-	//virtual void WriteString(Json::Value& data, std::string param1, std::string param2, int value);
-	//virtual void WriteBool(Json::Value& data, std::string param, int value);
-	//virtual void WriteBool(Json::Value& data, std::string param1, std::string param2, int value);
-
-	//template <typename T>
-	//void writeData(std::string param, T value);
-
-	//template <typename T>
-	//void writeArrData(std::string param, T value);
-
-	//void appendToArr();
-
 	virtual bool isMember(std::string str);
 	virtual bool isMember(std::string str, std::string param);
 	auto read(std::string str) -> decltype((*jsonObject)[str]);

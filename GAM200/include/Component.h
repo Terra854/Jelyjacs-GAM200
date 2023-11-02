@@ -38,9 +38,6 @@ public:
 	//to initialise remaining game components not set from text file
 	virtual void Initialize() {};
 
-	//to allow serialization to occur
-	//virtual void JsonSerialize(JsonSerialization obj) {};
-
 	///to get the object that this component is part of
 	Object* GetOwner() { return Base; }
 

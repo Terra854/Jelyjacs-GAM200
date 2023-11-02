@@ -367,7 +367,6 @@ void GLApp::Update()
 
 			glBindTextureUnit(6, tex_test);
 			glBindTexture(GL_TEXTURE_2D, tex_test);
-			//glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 			// load shader program in use by this object
 			shdrpgms["image"].Use();
 			// bind VAO of this object's model
@@ -472,9 +471,7 @@ void GLApp::Update()
 			// Unbind the texture
 			glBindTexture(GL_TEXTURE_2D, 0);
 
-			//botleft = tr->Position + Vec2(-(width / 2.f), -(height / 2.f));
 			botleft = tr->Position + -tr->Scale / 2.f;
-			//topright = tr->Position + Vec2(width / 2.f, height / 2.f);
 			topright = tr->Position + tr->Scale / 2.f;
 
 			drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);

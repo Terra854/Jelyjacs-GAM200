@@ -29,8 +29,6 @@ private:
 	FMOD::Channel *background, *channel, *sfx;
 	FMOD_RESULT result;
 
-	//FMOD::Sound *walking, *jump, *game_background, *sliding_door_open;
-
 	bool isPlayingWalking = false;
 };
 

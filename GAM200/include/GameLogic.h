@@ -16,13 +16,11 @@ class GameLogic : public ISystems
 {
 public:
 	//Constructor to initialise pointer
-	// It's broken, will be purged in the future
 	GameLogic();
 	~GameLogic();
 	virtual void MessageRelay(Message_Handler* msg);
 	virtual void Initialize();
 	void Update();
-	//void Exit();
 	void AddBehaviour(std::string name, LogicScript* behaviour);
 	void AddObject(Object* obj);
 	virtual std::string SystemName() { return "Game_Logic"; }

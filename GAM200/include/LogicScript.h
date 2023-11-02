@@ -12,7 +12,6 @@ class LogicScript
 {
 public:
 	LogicScript() {};
-	//LogicScript(std::string name);
 	~LogicScript() = default;
 	
 	virtual void Start(Object* obj) = 0 ;

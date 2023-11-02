@@ -40,17 +40,11 @@ void Audio::Initialize(){
 void Audio::setupSound()
 {
     // Load sounds
-    //system->createSound("Asset/Sounds/Game_Background.wav", FMOD_LOOP_NORMAL, 0, &game_background);
     system->playSound(AssetManager::soundsval("Game_Background.wav"), 0, false, &background);
     background->setVolume(0.2f);
 
-    //system->createSound("Asset/Sounds/Footsteps.wav", FMOD_LOOP_NORMAL, 0, &walking);
     system->playSound(AssetManager::soundsval("Footsteps.wav"), 0, false, &channel);
     channel->setVolume(0.0);
-
-
-    //system->createSound("Asset/Sounds/Jump.wav", FMOD_DEFAULT, 0, &jump);
-    //system->createSound("Asset/Sounds/Sliding_Door_Open.wav", FMOD_DEFAULT, 0, &sliding_door_open);
 }
 
 void Audio::createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound)

@@ -139,48 +139,6 @@ void SaveScene(std::string filename)
 	}
 	else
 		std::cerr << "Failed to open file for writing." << std::endl;
-	
-	// GETTING ERROR, TEMPORARY NOT USING JSONSERILIZATION.H
-	// 
-	//JsonSerialization jsonobj;
-	//jsonobj.writeData("SceneName", filename);	
-
-	//for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) 
-	//{
-	//	Object* obj = objectFactory->getObjectWithID((long)i);
-
-	//	if (obj == nullptr)
-	//		continue;
-
-	//	std::string name = obj->GetName() + ".json";
-	//	jsonobj.writeArrData("Prefabs", name);
-
-	//	if (obj->GetComponent(ComponentType::Transform) != nullptr)
-	//	{
-	//		Transform* trans = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-	//		jsonobj.writeArrData("Type", "Transform");
-	//		Json::Value position;
-	//		position["x"] = trans->Position.x;
-	//		position["y"] = trans->Position.y;
-	//		jsonobj.writeArrData("Position", position);
-	//		Json::Value scale;
-	//		scale["x"] = trans->Scale.x;
-	//		scale["y"] = trans->Scale.y;
-	//		jsonobj.writeArrData("Scale", scale);
-	//		jsonobj.writeArrData("Rotation", trans->Rotation);
-	//	}
-
-	//	if (obj->GetComponent(ComponentType::Event) != nullptr)
-	//	{
-	//		Event* event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-	//		jsonobj.writeArrData("linkedevent", event->linked_event);
-	//	}
-
-	//	jsonobj.appendToArr();
-	//}
-
-	//jsonobj.openFileWrite(filename);
-	//jsonobj.closeFile();
 }
 
 

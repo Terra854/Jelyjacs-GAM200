@@ -20,7 +20,6 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
-//#include <Movement.h>
 #include <Audio.h>
 #include <Scenes.h>
 #include <PhysicsSystem.h>
@@ -127,9 +126,7 @@ void GameLogic::Update() {
 		if (input::IsPressed(KEY::w)) {
 			MovementKey msg(up);
 			engine->Broadcast(&msg);
-			//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 			if (player_physics->Velocity.y == 0.0f) {
-				//player_physics->Velocity.y = 1000.0f;
 				player_physics->Force = 60000.0f + gravity;
 				audio->playJump();
 			}
@@ -159,13 +156,6 @@ void GameLogic::Update() {
 		}
 		else player_animation->jump_fixed = false;
 
-
-		// Let the player loop around the window
-		/*
-		Transform* t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-		t->Position.x = t->Position.x > 1000.0f ? -1000.0f : t->Position.x;
-		t->Position.x = t->Position.x < -1000.0f ? 1000.0f : t->Position.x;
-		*/
 		// Audio for Character Movement
 		if ((player_physics->Velocity.y == 0.f) && moving) {
 			audio->startWalking();
@@ -175,13 +165,6 @@ void GameLogic::Update() {
 			moving = false;
 		}
 
-		// Printing Player Position by pressing Z
-		/*
-		if (input::IsPressed(KEY::z)) {
-			Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-			std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
-		}
-		*/
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID((long)i);
 
@@ -189,9 +172,7 @@ void GameLogic::Update() {
 				continue;
 
 			if (obj->GetName() == "piston") {
-				//Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 				Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
-				//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 
 				if (piston_b->collision_flag & COLLISION_TOP) {
 					Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
@@ -226,7 +207,6 @@ void GameLogic::Update() {
 				Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));
 				moving_platform_physics->Velocity.x = 0.0f;
 				float moving_platform_speed;
-				//bool moving_platform_direction;
 
 				// if the platform reach the max/min height, change direction
 				if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
@@ -244,69 +224,6 @@ void GameLogic::Update() {
 			}
 		}
 	}
-	//Movement for Moving Platform
-	/*
-	if (objectFactory->FindObject("elevator") != nullptr)
-		MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
-
-	if (MovingPlatform != nullptr) {
-		Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
-		Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));
-		moving_platform_physics->Velocity.x = 0.0f;
-		float moving_platform_speed;
-		//bool moving_platform_direction;
-
-		// if the platform reach the max/min height, change direction
-		if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
-			moving_platform_direction = true;
-		}
-		if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
-			moving_platform_direction = false;
-		}
-		moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
-		moving_platform_physics->Velocity.y = moving_platform_speed;
-
-		if (input::IsPressed(KEY::z)) {
-			std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
-		}
-	}
-	*/
-	/*
-	// Rotation of an object
-	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
-
-	if (input::IsPressedRepeatedly(KEY::up)) {
-		t2->Scale_x += 1.0f;
-		t2->Scale_y += 1.0f;
-	}
-	if (input::IsPressedRepeatedly(KEY::down)) {
-		t2->Scale_x = t2->Scale_x >= 1.0f ? t2->Scale_x - 1.0f : 0.f;
-		t2->Scale_y = t2->Scale_y >= 1.0f ? t2->Scale_y - 1.0f : 0.f;
-	}
-	if (input::IsPressedRepeatedly(KEY::left)) {
-		t2->Rotation += 0.01f;
-	}
-	if (input::IsPressedRepeatedly(KEY::right)) {
-		t2->Rotation -= 0.01f;
-	}
-	*/
-
-	// Dynamic collision
-	//Physics* dynamic_collision_p = static_cast<Physics*>(dynamic_collision->GetComponent(ComponentType::Physics));
-	//dynamic_collision_p->Velocity.x = 200.0f;
-	//Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
-	//dynamic_collision_t->Position.x = dynamic_collision_t->Position.x < 1000.0f ? dynamic_collision_t->Position.x : -1000.0f;
-
-	/*
-	// DEBUG: Print out collision flags
-	int c_flag = static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag;
-	std::cout << "FLAG: " << c_flag <<
-		" LEFT: " << ((c_flag & COLLISION_LEFT) ? "YES" : "NO") <<
-		" RIGHT: " << ((c_flag & COLLISION_RIGHT) ? "YES" : "NO") <<
-		" TOP: " << ((c_flag & COLLISION_TOP) ? "YES" : "NO") <<
-		" BOTTOM: " << ((c_flag & COLLISION_BOTTOM) ? "YES" : "NO") << std::endl;
-	std::cout << "#####################################################################" << std::endl;
-	*/
 }
 
 void GameLogic::AddBehaviour(std::string name, LogicScript* behaviour)
