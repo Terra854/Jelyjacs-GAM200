@@ -1,3 +1,10 @@
+/* !
+@file Application.cpp
+@author Luke Goh
+@date	3/11/2023
+
+This file contains the class definitions that is used to run the game
+*//*__________________________________________________________________________*/
 #include "Application.h"
 #include <iostream>
 #include <Core_Engine.h>

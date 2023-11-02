@@ -1,3 +1,10 @@
+/* !
+@file Core.h
+@author Luke Goh
+@date	3/11/2023
+
+This file contains the link between the engine and the game
+*//*__________________________________________________________________________*/
 #pragma once
 
 #ifdef GAM200_PLATFORM_WINDOWS

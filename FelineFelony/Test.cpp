@@ -1,3 +1,10 @@
+/* !
+@file LogicScript.h
+@author Luke Goh
+@date	3/11/2023
+
+This file contains the TestScript class that is used to test the LogicScript Interface
+*//*__________________________________________________________________________*/
 #include "Test.h"
 #include <iostream>
 /*

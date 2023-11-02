@@ -1,3 +1,10 @@
+/* !
+@file Behaviour.h
+@author Luke Goh
+@date	3/11/2023
+
+This file contains the Behaviour Component that is needed for Logic System
+*//*__________________________________________________________________________*/
 #pragma once
 
 #include <Object.h>
