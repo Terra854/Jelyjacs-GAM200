@@ -1,10 +1,10 @@
 #pragma once
 /* !
-@file	SceneLoader.h
+@file	Scenes.h
 @author	Tay Sen Chuan
-@date	
+@date	1/11/2023
 
-This file contains the declaration for loading scenes
+This file contains the declaration for loading and saving scenes
 *//*__________________________________________________________________________*/
 #include <string>
 

@@ -1,9 +1,9 @@
 /* !
-@file	SceneLoader.cpp
+@file	Scenes.cpp
 @author	Tay Sen Chuan
-@date	
+@date	1/11/2023
 
-This file contains the definitions for loading scenes
+This file contains the definitions for loading and saving scenes
 *//*__________________________________________________________________________*/
 
 #include <Debug.h>
@@ -85,6 +85,7 @@ void LoadScene(std::string filename)
 
 void SaveScene(std::string filename)
 {
+	// Save Scene Name
 	Json::Value jsonobj;
 	jsonobj["SceneName"] = "testsaving";
 
@@ -95,11 +96,13 @@ void SaveScene(std::string filename)
 		if (obj == nullptr)
 			continue;
 
+		// Save object prefabs data
 		std::string name = obj->GetName() + ".json";
 		Json::Value innerobj;
 
 		innerobj["Prefabs"] = name;
 
+		// Save object transform data
 		if (obj->GetComponent(ComponentType::Transform) != nullptr)
 		{
 			Transform* trans = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
@@ -118,6 +121,7 @@ void SaveScene(std::string filename)
 			innerobj["Rotation"] = trans->Rotation;
 		}
 
+		// Save objects event data
 		if (obj->GetComponent(ComponentType::Event) != nullptr)
 		{
 			Event* event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
@@ -127,6 +131,7 @@ void SaveScene(std::string filename)
 		jsonobj["Objects"].append(innerobj);
 	}
 
+	// Write file
 	std::ofstream outputFile(filename);
 	if (outputFile.is_open()) {
 		Json::StreamWriterBuilder writer;

@@ -1,11 +1,9 @@
 /* !
-@file	text_serialization.cpp
+@file	json_serialization.cpp
 @author	Tay Sen Chuan (t.senchuan@digipen.edu)
-@date	28/9/2023
+@date	21/10/2023
 
-This file contains the definition of class TextSerialization. TextSerialization inherits 
-from the Serialization class, but is designed to be used with text files.
-
+This file contains the definition of class JsonSerialization.
 *//*__________________________________________________________________________*/
 #include <json/json.h>
 

@@ -1,8 +1,8 @@
 #pragma once
 /* !
-@file	text_serialization.h
+@file	json_serialization.h
 @author	Tay Sen Chuan (t.senchuan@digipen.edu)
-@date	28/9/2023
+@date	21/10/2023
 
 This file contains the declaration of the class JsonSerialization.
 
