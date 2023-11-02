@@ -1305,8 +1305,11 @@ void LoadLevelPanel() {
 		for (const auto& filename : level_files) {
 			ImGui::TableNextColumn();
 			if (ImGui::Selectable(filename.c_str())) {
+				if (!engine->isPaused())
+					engine->setPause();
 				selected = false;
 				objectFactory->destroyAllObjects();
+				level_editor->ClearLevelEditorObjectMap(true);
 				thread_pool->enqueue(LoadScene, path + filename.c_str());
 			}
 		}
