@@ -287,9 +287,33 @@ void LevelEditor::ObjectProperties() {
 				}
 			}
 
+
+			if (ImGui::Button("Change Texture"))
+				ImGui::OpenPopup("ChangeTexture");
+
+			if (ImGui::BeginPopup("ChangeTexture"))
+			{
+				int i = 0;
+				for (const auto& t : AssetManager::textures) {
+					if (ImGui::ImageButton(t.first.c_str(), (void*)(intptr_t)t.second, ImVec2(64, 64))) {
+						te->textureName = t.first;
+					}
+
+					if (((i + 1) % 4))
+						ImGui::SameLine();
+
+					i++;
+				}
+
+				ImGui::EndPopup();
+			}
+
+			ImGui::SameLine();
+
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+
 			if (ImGui::Button("Delete"))
 			{
 				objectFactory->DeleteComponent(object->GetId(), ComponentType::Texture);
