@@ -4,7 +4,7 @@
 Font* font = NULL;
 Font::Font() {
 }
-FT_Face face;
+
 FT_Library ft;
 namespace
 {
@@ -14,27 +14,30 @@ namespace
         glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
         unsigned int Advance;    // Offset to advance to next glyph
     };
-
+    struct outline
+    {
+        std::map<char, Character> Characters;
+        FT_Face face;
+        void set_pixel_size(int size);
+        void load_ascii_chars();
+    };
     unsigned int VAO, VBO;
     GLSLShader shdr_pgm;
-    std::map<char, Character> Characters;
+    outline fontOutlines[total];
+    outline* fontTracker = nullptr;
+    FT_Error error;
+}
+
+void init_shaders();
+
+void SetFont(FONT font)
+{
+    fontTracker = &fontOutlines[font];
 }
 
 void Font::Initialize()
 {
-	std::vector<std::pair<GLenum, std::string>> shdr_files
-	{
-		std::make_pair(GL_VERTEX_SHADER, "shaders/Font.vert"),
-		std::make_pair(GL_FRAGMENT_SHADER, "shaders/Font.frag")
-	};
-	
-	shdr_pgm.CompileLinkValidate(shdr_files);
-	if (GL_FALSE == shdr_pgm.IsLinked())
-	{
-		std::cout << "Unable to compile/link/validate shader programs\n";
-		std::cout << shdr_pgm.GetLog() << "\n";
-		std::exit(EXIT_FAILURE);
-	}
+    init_shaders();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -46,66 +49,30 @@ void Font::Initialize()
         // FreeType
         // --------
         // All functions return a value different than 0 whenever an error occurred
-        if (FT_Init_FreeType(&ft))
+    
+    error = FT_Init_FreeType(&ft);
+    if(error)
         {
-            std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+            std::cout << "ERROR::FREETYPE: Could not init FreeType Library!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
         }
 
-        // load font as face
-
-        if (FT_New_Face(ft, "Asset/Fonts/Aldrich-Regular.ttf", 0, &face)) {
-            std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+    error = (FT_New_Face(ft, "Asset/Fonts/Aldrich-Regular.ttf", 0, &fontOutlines[AldrichRegular].face));
+        if(error)
+        {
+            std::cout << "ERROR::FREETYPE: Failed to load font!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
         }
-        else {
-            // set size to load glyphs as
-            FT_Set_Pixel_Sizes(face, 0, 48);
-
-            // disable byte-alignment restriction
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-            // load first 128 characters of ASCII set
-            for (unsigned char c = 0; c < 128; c++)
-            {
-                // Load character glyph 
-                if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-                {
-                    std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-                    continue;
-                }
-                // generate texture 
-                unsigned int texture;
-                glGenTextures(1, &texture);
-                glBindTexture(GL_TEXTURE_2D, texture);
-                glTexImage2D(
-                    GL_TEXTURE_2D,
-                    0,
-                    GL_RED,
-                    face->glyph->bitmap.width,
-                    face->glyph->bitmap.rows,
-                    0,
-                    GL_RED,
-                    GL_UNSIGNED_BYTE,
-                    face->glyph->bitmap.buffer
-                );
-                // set texture options
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                // now store character for later use
-                Character character = { 
-                    texture,
-                    glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-                    glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-                    static_cast<unsigned int>(face->glyph->advance.x)
-                };
-                Characters.insert(std::pair<char, Character>(c, character));
-            }
-            glBindTexture(GL_TEXTURE_2D, 0);
+        error = (FT_New_Face(ft, "Asset/Fonts/Geo-Regular.ttf", 0, &fontOutlines[GeoRegular].face));
+        if (error)
+        {
+            std::cout << "ERROR::FREETYPE: Failed to load font!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
         }
-        // destroy FreeType once we're finished
-        
 
+        for (int i = 0; i < total; ++i)
+        {
+            fontOutlines[i].set_pixel_size(48);
+            fontOutlines[i].load_ascii_chars();
+        }
+          
         // configure VAO/VBO for texture quads
         // -----------------------------------
         glGenVertexArrays(1, &VAO);
@@ -138,7 +105,7 @@ void RenderText(std::string text, float x, float y, float scale, glm::ivec3 colo
     // iterate through all characters
     for (char c : text)
     {
-        Character ch = Characters[c];
+        Character ch = fontTracker->Characters[c];
 
         float xpos = x + ch.Bearing.x * scale;
         float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
@@ -183,18 +150,87 @@ void Font::Update()
 
 Font::~Font()
 {
-    FT_Done_Face(face);
+    for (int i = 0; i < total; ++i)
+    {
+        FT_Done_Face(fontOutlines[i].face);
+    }
     FT_Done_FreeType(ft);
 }
 
 
-int find_width(std::string const& str)
+int find_width(std::string const& str , FONT font)
 {
     int width{};
     for (size_t i = 0; i < str.size(); ++i)
     {
-        FT_Load_Char(face, str.at(i), FT_LOAD_RENDER);
-        width += face->glyph->advance.x;
+        FT_Load_Char(fontOutlines[font].face, str.at(i), FT_LOAD_RENDER);
+        width += fontOutlines[font].face->glyph->advance.x;
     }
     return width>>6;
+}
+
+void init_shaders()
+{
+    std::vector<std::pair<GLenum, std::string>> shdr_files
+    {
+        std::make_pair(GL_VERTEX_SHADER, "shaders/Font.vert"),
+        std::make_pair(GL_FRAGMENT_SHADER, "shaders/Font.frag")
+    };
+
+    shdr_pgm.CompileLinkValidate(shdr_files);
+    if (GL_FALSE == shdr_pgm.IsLinked())
+    {
+        std::cout << "Unable to compile/link/validate shader programs!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        std::cout << shdr_pgm.GetLog() << "\n";
+        std::exit(EXIT_FAILURE);
+    }
+}
+
+void outline::load_ascii_chars()
+{
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        // load first 128 characters of ASCII set
+        for (unsigned char c = 0; c < 128; c++)
+        {
+            // Load character glyph 
+            error = (FT_Load_Char(face, c, FT_LOAD_RENDER));
+            if (error)
+            {
+                std::cout << "ERROR::FREETYTPE: Failed to load Glyph!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+            }
+            // generate texture 
+            unsigned int texture;
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(
+                GL_TEXTURE_2D,
+                0,
+                GL_RED,
+                face->glyph->bitmap.width,
+                face->glyph->bitmap.rows,
+                0,
+                GL_RED,
+                GL_UNSIGNED_BYTE,
+                face->glyph->bitmap.buffer
+            );
+            // set texture options
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            // now store character for later use
+            Character charac = {
+                texture,
+                glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+                glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+                static_cast<unsigned int>(face->glyph->advance.x)
+            };
+            Characters.insert(std::pair<char, Character>(c, charac));
+        }
+        glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void outline::set_pixel_size(int size)
+{
+    FT_Set_Pixel_Sizes(face, 0, size);
 }
