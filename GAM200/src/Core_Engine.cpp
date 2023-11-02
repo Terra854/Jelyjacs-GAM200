@@ -117,7 +117,6 @@ void Update(ISystems* sys)
 	end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	//elapsed_time[sys->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
 	//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
-
 	level_editor->SetSystemElapsedTime(sys->SystemName(), (double)(end_system_time - start_system_time) / 1000000.0);
 	level_editor->AddTotalTime((double)(end_system_time - start_system_time) / 1000000.0);
 }

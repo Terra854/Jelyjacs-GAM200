@@ -1,6 +1,6 @@
 #include "Test.h"
-
-
+#include <iostream>
+/*
 Test::Test(std::string name) : LogicScript(name) {
 	std::cout << "Test Constructor" << std::endl;
 }
@@ -14,9 +14,8 @@ void Test::Update(Object* obj) {
 void Test::Shutdown(Object* obj) {
 	std::cout << "End" << obj->GetName() << std::endl;
 }
-
+*/
 //Test mytest("Test");
 //Having Error, GameLogic* Logic is a nullptr
-//LogicScript(Start, Update, End);
 
 

@@ -89,6 +89,7 @@ void GameLogic::Update() {
 	if (engine->isPaused())
 		return;
 	int x = 0;
+
 	for (auto& behaviour : behaviours) {
 		behaviour.second->Update(b_objects[x]);
 		std::cout << "Behaviour " << x << " updated" << std::endl;

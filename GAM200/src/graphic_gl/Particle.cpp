@@ -77,7 +77,7 @@ void ParticleSystem::Update()
 
 
 
-                Vec2 scale = tran_pt->Scale;
+                //Vec2 scale = tran_pt->Scale;
                 world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
                 world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
 			}

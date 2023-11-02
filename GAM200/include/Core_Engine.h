@@ -12,6 +12,7 @@ This file contains the declaration for the Core Engine class
 #include "Interface_System.h"
 #include <message.h>
 #include <unordered_map>
+#include <map> 
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_glfw.h>
 #include <Imgui/imgui_impl_opengl3.h>
@@ -69,7 +70,7 @@ public:
 	
 private:
 	// Map of Systems (Container)
-	std::unordered_map<std::string, ISystems*> Systems;
+	std::map<std::string, ISystems*> Systems;
 
 	// FPS
 	float core_fps;

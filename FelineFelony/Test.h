@@ -1,7 +1,6 @@
 #pragma once
-#include "LogicScript.h"
-#include <iostream>
-
+#include <LogicScript.h>
+/*
 class Test : public LogicScript{
 public:
 	Test(std::string name);
@@ -11,5 +10,5 @@ public:
 	virtual void Shutdown(Object* obj);
 }; 
 
-
+*/
 
