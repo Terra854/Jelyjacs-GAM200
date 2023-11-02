@@ -25,6 +25,7 @@ includes all the functions to draw objects
 #include <components/Animation.h>
 #include <LevelEditor.h>
 #include "../Assets Manager/asset_manager.h"
+#include "Particle.h"
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
@@ -48,6 +49,7 @@ GLApp::GLApp()
 {
 	app = this;
 }
+ParticleSystem particleSystem;
 
 /*
 * Initialize() is called once, at program start.
@@ -63,6 +65,8 @@ void GLApp::Initialize()
 	// enable alpha blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	particleSystem.Init();
 }
 
 /*
@@ -229,6 +233,8 @@ void GLApp::init_shdrpgms() {
 	std::cout << "test shader program: " << "image-shdrpgm" << std::endl;
 	insert_shdrpgm("shape", "shaders/shape.vert", "shaders/shape.frag");
 	std::cout << "test shader program: " << "shape-shdrpgm" << std::endl;
+	insert_shdrpgm("instancing", "shaders/instancing.vert", "shaders/instancing.frag");
+
 }
 
 /*
@@ -440,8 +446,7 @@ void GLApp::Update()
 				}
 			}
 
-		}
-		
+		}		
     }
 
 	// Draw the bove around the selected object
@@ -488,6 +493,8 @@ void GLApp::Update()
 			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
 		}
 	}
+	//particleSystem.Update();
+	//particleSystem.Draw();
 }
 
 /*
