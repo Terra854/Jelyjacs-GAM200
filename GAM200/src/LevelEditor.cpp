@@ -1,3 +1,10 @@
+/* !
+@file	LevelEditor.cpp
+@author Tan Yee Ann
+@date	2/11/2023
+
+This file contains the definitions of the functions that are part of the level editor
+*//*__________________________________________________________________________*/
 #include <LevelEditor.h>
 #include <Debug.h>
 #include <ImGui/imgui.h>
@@ -16,18 +23,27 @@ bool showPerformanceInfo = false;
 
 bool dock_space = true; // Always must be on for level editor
 
+/******************************************************************************
+	Default Constructor for LevelEditor
+*******************************************************************************/
 LevelEditor::LevelEditor() {
 	editor_grid = new LevelEditorGrid();
 }
 
+/******************************************************************************
+	Default Destructor for LevelEditor
+*******************************************************************************/
 LevelEditor::~LevelEditor() {
 	delete editor_grid;
 
 	ClearLevelEditorObjectMap();
 }
-/*
-	This window is to print out the uniform grid
-*/
+
+/******************************************************************************
+	DebugUniformGrid
+	- This window prints out a formatted table of how many objects are inside
+	  a particular grid
+*******************************************************************************/
 void LevelEditor::DebugUniformGrid() {
 	// DEBUG: Print out the uniform grid
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
@@ -72,9 +88,14 @@ void LevelEditor::DebugUniformGrid() {
 	ImGui::End();
 }
 
+/******************************************************************************
+	DebugPerformanceViewer
+	- This window prints out the time taken for each system to complete it's update
+	  and the total time taken to complete each game loop.
+	- It will also print out the FPS of the game
+*******************************************************************************/
 void LevelEditor::DebugPerformanceViewer() {
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
-	//ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
 	ImGui::Begin("DEBUG: Performance Viewer", &showPerformanceInfo);
 
 	for (std::pair<std::string, double> p : System_elapsed_time) {
@@ -91,9 +112,12 @@ void LevelEditor::DebugPerformanceViewer() {
 	ImGui::End();
 }
 
-/*
+/******************************************************************************
 	Object Properties
-*/
+	- This window allows the user to view the details of a selected object and
+	  it's components
+	- It also allows the user to modify the object's properties
+*******************************************************************************/
 int cloneSuccessful = -1;
 bool selected = false;
 
@@ -880,9 +904,11 @@ void LevelEditor::ObjectProperties() {
 	ImGui::End();
 }
 
-/*
-	Object List
-*/
+/******************************************************************************
+	ListOfObjects
+	- This window lists down the the objects that are in the scene
+	- Selecting an object will display it's properties in the Object Properties window
+*******************************************************************************/
 void LevelEditor::ListOfObjects() {
 
 	ImGui::Begin("Object List");
@@ -918,10 +944,10 @@ void LevelEditor::ListOfObjects() {
 	ImGui::End();
 }
 
-/*
-	Displays the selected texture from the asset list
-*/
-
+/******************************************************************************
+	DisplaySelectedTexture
+	- This window displays the texture that is selected in the Asset List window
+*******************************************************************************/
 std::pair<std::string, GLuint> selectedTexture;
 bool display_selected_texture = false;
 
@@ -967,9 +993,11 @@ void LevelEditor::DisplaySelectedTexture() {
 	}
 }
 
-/*
-	Asset List
-*/
+/******************************************************************************
+	AssetList
+	- This window displays the lists of assets that are loaded by the engine
+	- Only textures and prefabs currently
+*******************************************************************************/
 void LevelEditor::AssetList() {
 	ImGui::Begin("Asset List");
 
@@ -1078,9 +1106,10 @@ void LevelEditor::AssetList() {
 	ImGui::End();
 }
 
-/*
-	This is for a window to pop up telliing that the object has cloned successfully
-*/
+/******************************************************************************
+	ObjectClonedSuccessfully
+	- This pop up window tells that the object has cloned successfully
+*******************************************************************************/
 void ObjectClonedSuccessfully(int i) {
 	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f, (float)window->height / 2.f));
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
@@ -1105,6 +1134,12 @@ void ObjectClonedSuccessfully(int i) {
 	ImGui::End();
 }
 
+/******************************************************************************
+	PlayPauseGame
+	- This window contains buttons that allows a user to play/pause the game.
+	- This window also has a reset button that allows the user to reset the level
+	  back to it's initial state before the user hits play for the first time.
+*******************************************************************************/
 void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
@@ -1160,6 +1195,11 @@ void LevelEditor::PlayPauseGame() {
 	ImGui::End();
 }
 
+/******************************************************************************
+	ClearLevelEditorObjectMap
+	- Used to clear the copy of the object map in the level editor used to backup
+	  the level's initial state
+*******************************************************************************/
 void LevelEditor::ClearLevelEditorObjectMap() {
 	Factory::objectIDMap::iterator it = initialObjectMap.begin();
 	for (; it != initialObjectMap.end(); ++it)
@@ -1170,6 +1210,11 @@ void LevelEditor::ClearLevelEditorObjectMap() {
 	initialObjectMap.clear();
 }
 
+/******************************************************************************
+	CameraControl
+	- This window is used to toggle the camera between the game camera and the free camera.
+	- The free camera allows the user to move it in all directions
+*******************************************************************************/
 void CameraControl() {
 
 	ImGui::Begin("Camera Control");
@@ -1251,6 +1296,11 @@ void CameraControl() {
 	ImGui::End();
 }
 
+/******************************************************************************
+	LoadLevelPanel
+	- This window lets users select a level to load
+	- All levels are in json files and stored in Asset/Levels
+*******************************************************************************/
 void LoadLevelPanel() {
 
 	std::vector<std::string> level_files;
@@ -1288,16 +1338,26 @@ void LoadLevelPanel() {
 	ImGui::End();
 }
 
+/******************************************************************************
+	DoNothing
+	- Just a stub function. It does nothing
+*******************************************************************************/
 void DoNothing() {
 
 }
 
+/******************************************************************************
+	Initialize
+	- Initializes the level editor
+*******************************************************************************/
 void LevelEditor::Initialize() {
 	total_time = 0.0;
 }
 
-/************************************LEVEL EDITOR MAIN UPDATE LOOP************************************/
-
+/******************************************************************************
+	Update
+	- The update loop for the level editor
+*******************************************************************************/
 void LevelEditor::Update() {
 
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -1380,6 +1440,10 @@ void LevelEditor::Update() {
 /************************************LEVEL EDITOR GRID************************************/
 
 LevelEditorGrid* editor_grid;
+
+/******************************************************************************
+	Default Constructor for LevelEditorGrid
+*******************************************************************************/
 LevelEditorGrid::LevelEditorGrid()
 {
 	set_num({ 12, 12 });
@@ -1388,6 +1452,10 @@ LevelEditorGrid::LevelEditorGrid()
 
 glm::vec3 box_color_editor{ 0.0f, 0.5f, 0.5f };
 
+/******************************************************************************
+	drawleveleditor
+	- Draws the level editor grid
+*******************************************************************************/
 void LevelEditorGrid::drawleveleditor()
 {
 	if (num.x > num.y)

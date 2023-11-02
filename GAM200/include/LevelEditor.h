@@ -1,5 +1,11 @@
 #pragma once
+/* !
+@file	LevelEditor.h
+@author Tan Yee Ann
+@date	2/11/2023
 
+This file contains the declarations for the LevelEditor system class
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <Factory.h>
 #include "Vec2.h"
@@ -28,7 +34,6 @@ public:
 	virtual std::string SystemName() { return "LevelEditor"; }
 
 	void SetSystemElapsedTime(std::string name, double time) { System_elapsed_time[name] = time; }
-	//void ClearSystemElapsedTime() { System_elapsed_time.clear(); }
 	void SetTotalTime(double time) { total_time = time; }
 	void AddTotalTime(double time) { total_time += time; }
 	void ClearAll() { System_elapsed_time.clear();  total_time = 0.0; }
