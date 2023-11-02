@@ -1353,7 +1353,7 @@ bool save_as_dialog = false;
 	SaveAsDialog
 	- This pop up a dialog box to ask where to save the level to
 *******************************************************************************/
-void SaveAsDialog() {
+void LevelEditor::SaveAsDialog() {
 	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f - 150, (float)window->height / 2.f));
 	ImGui::SetNextWindowSize(ImVec2(300, 0));
 	static char text[100];
@@ -1369,6 +1369,21 @@ void SaveAsDialog() {
 
 	if (ImGui::Button("OK"))
 	{
+		if (!initialObjectMap.empty()) {
+			objectFactory->destroyAllObjects();
+
+			for (const std::pair<int, Object*>& p : initialObjectMap) {
+				objectFactory->assignIdToObject(p.second);
+			}
+
+			ClearLevelEditorObjectMap(false);
+		}
+
+		char saveLocation[110];
+
+		sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
+
+		SaveScene(saveLocation);
 		save_as_dialog = false;
 	}
 
@@ -1448,11 +1463,16 @@ void LevelEditor::Update() {
 
 			if (ImGui::MenuItem(savetext)) {
 				if (!initialObjectMap.empty()) {
+					objectFactory->destroyAllObjects();
 
-				}
-				else {
+					for (const std::pair<int, Object*>& p : initialObjectMap) {
+						objectFactory->assignIdToObject(p.second);
+					}
 
+					ClearLevelEditorObjectMap(false);
 				}
+				
+				SaveScene(engine->loaded_filename.c_str());
 			}
 			if (ImGui::MenuItem("Save as...")) {
 				save_as_dialog = true;

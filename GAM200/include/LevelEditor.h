@@ -29,6 +29,8 @@ public:
 	LevelEditor();
 	~LevelEditor();
 
+	void SaveAsDialog();
+
 	virtual void Initialize();
 	void Update();
 	virtual std::string SystemName() { return "LevelEditor"; }
