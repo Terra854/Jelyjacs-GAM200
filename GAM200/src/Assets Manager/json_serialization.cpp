@@ -80,7 +80,7 @@ bool JsonSerialization::checkValidParam(int pos, std::string param1, std::string
 	if (param2.empty())
 	{
 		// Ensure pos is valid
-		if (pos != -1 && (!(*jsonObject)[param1].isArray() || pos >= (*jsonObject)[param1].size()))
+		if (pos != -1 && (!(*jsonObject)[param1].isArray() || pos >= static_cast<int>((*jsonObject)[param1].size())))
 			return false; // Invalid pos
 	}
 	else if (!(*jsonObject)[param1].isMember(param2))
@@ -90,7 +90,7 @@ bool JsonSerialization::checkValidParam(int pos, std::string param1, std::string
 	if (param3.empty())
 	{
 		// Ensure pos is valid
-		if (pos != -1 && (!(*jsonObject)[param1][param2].isArray() || pos >= (*jsonObject)[param1][param2].size()))
+		if (pos != -1 && (!(*jsonObject)[param1][param2].isArray() || pos >= static_cast<int>((*jsonObject)[param1][param2].size())))
 			return false; // Invalid pos
 	}
 	else if (!(*jsonObject)[param1][param2].isMember(param3))
@@ -99,7 +99,7 @@ bool JsonSerialization::checkValidParam(int pos, std::string param1, std::string
 	if (!param3.empty())
 	{
 		// Ensure pos is valid
-		if (pos != -1 && (!(*jsonObject)[param1][param2][param3].isArray() || pos >= (*jsonObject)[param1][param2][param3].size()))
+		if (pos != -1 && (!(*jsonObject)[param1][param2][param3].isArray() || pos >= static_cast<int>((*jsonObject)[param1][param2][param3].size())))
 			return false; // Invalid pos
 	}
 
