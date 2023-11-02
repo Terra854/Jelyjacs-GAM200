@@ -8,6 +8,14 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+enum FONT
+{
+	AldrichRegular,
+	GeoRegular,
+	total
+};
+
+
 //rgb values range: 0 to 1
 bool DrawText(std::string const& text, float posX, float posY, float scale, float red = 1, float green = 1, float blue = 1);
 
@@ -19,6 +27,7 @@ public:
 	Font();
 	virtual void Initialize();
 	virtual void Update();
+	void SetFont(FONT);
 	virtual std::string SystemName() { return "Font"; }
 	~Font();
 };

@@ -75,3 +75,12 @@ void GameHud::Draw()
 	}
 }
 
+GameHud::~GameHud()
+{
+	for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
+	{
+		delete it->second;
+	}
+	Buttons.clear();
+}
+
