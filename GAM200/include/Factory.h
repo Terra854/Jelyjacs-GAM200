@@ -73,6 +73,8 @@ public:
 	int GetNextId() { return nextObjectId; };
 
 	friend class PhysicsSystem; // Needed to apply physics onto each object
+	friend class LevelEditor; // Needed for the level editor
+
 private:
 	//ID to assign to the next game object created
 	int nextObjectId;

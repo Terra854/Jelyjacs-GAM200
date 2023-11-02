@@ -3,12 +3,12 @@
 #include <ImGui/imgui.h>
 #include <Collision.h>
 #include <Core_Engine.h>
-#include <Factory.h>
 #include <components/Texture.h>
 #include <components/Animation.h>
 #include <filesystem>
 #include "SceneLoader.h"
 #include "Assets Manager/asset_manager.h"
+#include <PhysicsSystem.h>
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -22,6 +22,8 @@ LevelEditor::LevelEditor() {
 
 LevelEditor::~LevelEditor() {
 	delete editor_grid;
+
+	ClearLevelEditorObjectMap();
 }
 /*
 	This window is to print out the uniform grid
@@ -375,6 +377,9 @@ void LevelEditor::ObjectProperties() {
 					tr->Position = edited_position;
 					tr->Rotation = edited_rotation;
 					tr->Scale = edited_scale;
+
+					if (b != nullptr)
+						RecalculateBody(tr, b);
 				}
 
 				ImGui::SameLine();
@@ -1100,19 +1105,69 @@ void ObjectClonedSuccessfully(int i) {
 	ImGui::End();
 }
 
-void PlayPauseGame() {
+void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
 	if (engine->isPaused()) {
-		if (ImGui::Button("Play"))
+		if (ImGui::Button("Play")) {
 			engine->setPause();
+
+			if (initialObjectMap.empty()) {
+				for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
+					initialObjectMap[p.first] = objectFactory->cloneObject(p.second);
+				}
+			}
+		}
 	}
 	else {
 		if (ImGui::Button("Pause"))
 			engine->setPause();
 	}
 
+	ImGui::SameLine();
+
+	if (!engine->isPaused() || initialObjectMap.empty()) {
+		// Make the button look disabled by reducing its alpha
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+
+		// Make the button unclickable
+		ImGui::BeginDisabled(true);
+	}
+
+	if (ImGui::Button("Reset")) {
+		objectFactory->destroyAllObjects();
+
+		for (const std::pair<int, Object*>& p : initialObjectMap) {
+			objectFactory->assignIdToObject(objectFactory->cloneObject(p.second));
+		}
+
+		ClearLevelEditorObjectMap();
+
+		// Break here, cause otherwise the next line will be EndDisabled()
+		// which will cause an abort() due to mismatch 
+		ImGui::End();
+		return;
+	}
+
+	if (!engine->isPaused() || initialObjectMap.empty()) {
+		// End the disabled section
+		ImGui::EndDisabled();
+
+		// Restore original style
+		ImGui::PopStyleVar();
+	}
+
 	ImGui::End();
+}
+
+void LevelEditor::ClearLevelEditorObjectMap() {
+	Factory::objectIDMap::iterator it = initialObjectMap.begin();
+	for (; it != initialObjectMap.end(); ++it)
+	{
+		delete it->second;
+	}
+
+	initialObjectMap.clear();
 }
 
 void CameraControl() {
@@ -1196,6 +1251,43 @@ void CameraControl() {
 	ImGui::End();
 }
 
+void LoadLevelPanel() {
+
+	std::vector<std::string> level_files;
+	const std::string path = "Asset/Levels/";
+
+	try {
+		for (const auto& entry : std::filesystem::directory_iterator(path)) {
+			if (entry.is_regular_file() && entry.path().extension() == ".json") {
+				level_files.push_back(entry.path().filename().string());
+			}
+		}
+	}
+	catch (std::filesystem::filesystem_error& e) {
+		std::cerr << e.what() << std::endl;
+	}
+
+	ImGui::Begin("Level List");
+	ImGui::Text("Number of levels detected: %d", level_files.size());
+	ImGui::BeginChild("LevelListScroll", ImGui::GetContentRegionAvail());
+	if (ImGui::BeginTable("LevelList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
+	{
+		// Print the filenames
+		for (const auto& filename : level_files) {
+			ImGui::TableNextColumn();
+			if (ImGui::Selectable(filename.c_str())) {
+				selected = false;
+				objectFactory->destroyAllObjects();
+				LoadScene(path + filename.c_str());
+			}
+		}
+
+		ImGui::EndTable();
+	}
+	ImGui::EndChild();
+	ImGui::End();
+}
+
 void DoNothing() {
 
 }
@@ -1247,32 +1339,6 @@ void LevelEditor::Update() {
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::BeginMenu("Load Level")) {
-				std::vector<std::string> level_files;
-				const std::string path = "Asset/Levels/";
-
-				try {
-					for (const auto& entry : std::filesystem::directory_iterator(path)) {
-						if (entry.is_regular_file() && entry.path().extension() == ".json") {
-							level_files.push_back(entry.path().filename().string());
-						}
-					}
-
-					// Print the filenames
-					for (const auto& filename : level_files) {
-						if (ImGui::MenuItem(filename.c_str())) {
-							selectedNum = -1;
-							objectFactory->destroyAllObjects();
-							LoadScene(path + filename.c_str());
-						}
-					}
-				}
-				catch (std::filesystem::filesystem_error& e) {
-					std::cerr << e.what() << std::endl;
-				}
-				ImGui::EndMenu();
-			}
-
 			ImGui::Separator();
 
 			if (ImGui::MenuItem("Exit")) { engine->game_active = false; }
@@ -1303,6 +1369,8 @@ void LevelEditor::Update() {
 	PlayPauseGame();
 
 	CameraControl();
+
+	LoadLevelPanel();
 
 	if (cloneSuccessful > -1) {
 		ObjectClonedSuccessfully(cloneSuccessful);
