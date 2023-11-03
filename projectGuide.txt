@@ -1,7 +1,7 @@
-Position: 20 20
-Size: 20.0
-Rotation: 0
-Texture: test.png
-Components:
-Transform
-Sprite
+Input key:
+
+Player movement: W, A, S, D
+Camera zoom: C
+Debug drawing: L
+
+Switch play/edit mode: P
