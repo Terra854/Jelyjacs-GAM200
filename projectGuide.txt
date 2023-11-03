@@ -4,4 +4,6 @@ Player movement: W, A, S, D
 Camera zoom: C
 Debug drawing: L
 
-Switch play/edit mode: P
+Enable/Disable level editor mode: P
+
+Note: The engine will start as paused in the beginning.
