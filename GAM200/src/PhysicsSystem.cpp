@@ -19,9 +19,6 @@ This file contains the definitions of the functions that are part of the Physics
 #include <input.h>
 #include <Audio.h> // Direct call the audio functions cause messaging system is not ready
 
-//Vec2 interPt, normalAtCollision;
-//float interTime = 0.0f;
-
 int collision_flag;
 
 // A workaround to prevent sticking onto the top of the walls
