@@ -193,6 +193,7 @@ void GameLogic::Update() {
 				Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 				//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 
+				// if piston collides with player, change the animation of piston
 				if (piston_b->collision_flag & COLLISION_TOP) {
 					Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 					piston_animation->fixed = true;
@@ -201,7 +202,8 @@ void GameLogic::Update() {
 					Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
 					std::cout << "pisotn event linked event:";
 					std::cout << piston_event->linked_event << std::endl;
-					//check the door
+
+					//  Change the animation of door and disable the body of door
 					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
 						Object* obj2 = objectFactory->getObjectWithID((long)j);
 						if (obj2->GetName() == "door") {

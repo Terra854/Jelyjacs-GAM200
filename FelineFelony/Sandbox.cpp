@@ -7,7 +7,7 @@ This file contains the class that is used to run the game
 *//*__________________________________________________________________________*/
 #include <GAM200.h>
 
-class Sandbox : public Application
+class Sandbox : public Application 
 {
 public:
 	Sandbox()
@@ -21,7 +21,7 @@ public:
 	}
 };
 
-Application* CreateApplication()
+Application* CreateApplication() 
 {
-	return new Sandbox();
+	return new Sandbox();		// This is to create a new instance for the game
 }
