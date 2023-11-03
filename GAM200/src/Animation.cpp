@@ -1,11 +1,10 @@
 /* !
-@file	Animation.cpp
-@author	Guo Chen
-@date	02/11/2023
+@file Animation.cpp
+@author Yeo Jia Ming, Tay Sen Chuan, Guo Chen
+@date	3/11/2023
 
-This file contains the implementation for the Animation component class
+This file contains the definition of the animation game component class
 *//*__________________________________________________________________________*/
-
 #include "../include/components/Animation.h"
 
 Animation::Animation()
@@ -17,6 +16,10 @@ void Animation::Initialize()
 
 }
 
+
+/******************************************************************************
+	to create a model
+*******************************************************************************/
 GLApp::GLModel Animation::setup_texobj_animation(float x, float y, float z, float w, bool right)
 {
 	GLApp::GLModel Model;
