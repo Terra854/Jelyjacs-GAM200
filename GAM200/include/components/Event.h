@@ -2,7 +2,7 @@
 /* !
 @file	Event.h
 @author	Tay Sen Chuan
-@date	27/10/2023
+@date	02/11/2023
 
 This file contains the declaration for the Event component class
 *//*__________________________________________________________________________*/

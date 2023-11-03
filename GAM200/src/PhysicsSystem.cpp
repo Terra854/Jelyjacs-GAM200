@@ -70,6 +70,17 @@ bool Check_Collision(Body* b1, Body* b2, float dt) {
 // Check if both bodies are rectangular
 // If they are, use Check AABB with AABB function and return collision flag.
 // If return false means no collision
+
+/******************************************************************************
+	RecalculateBody
+	- Check if two objects are colliding with each other
+
+	@param b1 = The object's body component
+	@param b2 = The other object's body component
+	@param dt = Delta time (preferably fixed_dt)
+
+	@return Whether the objects are collising or not
+*******************************************************************************/
 bool Check_Collision(Body* b1, Body* b2, float dt) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
@@ -87,7 +98,14 @@ bool Check_Collision(Body* b1, Body* b2, float dt) {
 // If collide on the left or right, unable to move
 // If collide from the top ...
 // If collide from the bottom ...
-// Recalculate collision data
+
+/******************************************************************************
+	RecalculateBody
+	- Recalculate collision data
+
+	@param t = The object's transform component
+	@param b = The object's body component
+*******************************************************************************/
 void RecalculateBody(Transform* t, Body* b) {
 	// Recalculate AABB for rectangles
 	if (b->GetShape() == Shape::Rectangle) {
@@ -101,7 +119,10 @@ void RecalculateBody(Transform* t, Body* b) {
 	}
 }
 
-// Objects responding to collision
+/******************************************************************************
+	Response_Collision
+	- Objects responding to collision
+*******************************************************************************/
 void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular)) {
@@ -145,6 +166,10 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 
 int total_grid_width, total_grid_height, num_of_grids_per_side;
 
+/******************************************************************************
+	PrepareUniformGrid
+	- Prepares the uniform grid to insert objects into
+*******************************************************************************/
 void PrepareUniformGrid() {
 	// All values here will need to eventually be read from the level files
 	int level_width = 1920;
@@ -173,7 +198,10 @@ void PhysicsSystem::Initialize() {
 	PrepareUniformGrid();
 }
 
-
+/******************************************************************************
+	PhysicsSystem::Update
+	- Main update loop for Physics system
+*******************************************************************************/
 void PhysicsSystem::Update() {
 
 	// Do not update if the game is paused
@@ -247,6 +275,8 @@ void PhysicsSystem::Update() {
 		/* Uniform grid */
 
 		PrepareUniformGrid();
+
+		/* Insert all objects into the grid */
 
 		for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
 			Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
