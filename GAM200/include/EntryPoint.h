@@ -8,9 +8,9 @@ This file contains the main function that is used to run the game
 #pragma once
 
 #ifdef GAM200_PLATFORM_WINDOWS
-
-	extern Application* CreateApplication();
-	int main() {
+	
+	extern Application* CreateApplication(); // To be defined in CLIENT
+	int main() { // Entry point
 		auto app = CreateApplication();
 		app->Run();
 		delete app;
