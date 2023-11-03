@@ -64,7 +64,7 @@ void draw_hud_texture(Vec2 pos, float scaleX, float scaleY);
 void GameHud::Initialize()
 {
 	init_hud_assets();
-	create_button("play", Button(Vec2(800, 400), 180, 70), 1.0f, AldrichRegular);
+	create_button("pause", Button(Vec2(800, 400), 180, 70), 1.0f, AldrichRegular);
 	create_button("zoom", Button(Vec2(800, 250), 180, 70), 1.2f , GeoRegular);
 
 }
