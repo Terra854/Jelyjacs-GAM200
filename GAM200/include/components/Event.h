@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Event.h
-@author	?
+@author	Tay Sen Chuan
 @date	02/11/2023
 
 This file contains declarations for the body component class

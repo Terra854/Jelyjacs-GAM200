@@ -1,3 +1,10 @@
+/* !
+@file Animation.h
+@author Yeo Jia Ming, Tay Sen Chuan, Guo Chen
+@date	3/11/2023
+
+This file contains the declaration for the animation game component class
+*//*__________________________________________________________________________*/
 #pragma once
 /* !
 @file	Animation.h
