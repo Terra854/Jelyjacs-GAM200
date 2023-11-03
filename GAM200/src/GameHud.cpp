@@ -1,3 +1,10 @@
+/* !
+@file GameHud.cpp
+@author Yeo Jia Ming
+@date	3/11/2023
+
+This file contains the definition of the functions of GameHud 
+*//*__________________________________________________________________________*/
 #include "GameHud.h"
 #include "Font.h"
 #include "GLApp.h"
@@ -5,6 +12,7 @@
 #include "Core_Engine.h"
 namespace
 {
+	//to display the text inside the button
 	class Text
 	{
 	public:
@@ -13,6 +21,8 @@ namespace
 		std::string text{};
 		FONT font;
 	};
+
+	//the dimensions of button
 	class Button
 	{
 	public:
@@ -25,18 +35,32 @@ namespace
 		float height;
 		Text string{};
 	};
+
+	//map container to store all buttons created
 	std::map<std::string, Button*> Buttons;
+	
+	//to attach an empty box texture to the button
+	GLuint texture_id;
 
 
-
-GLuint texture_id;
 }
+
+	//helper function
+	//creates a new button with data initialised by function parameters
 void create_button(std::string const& text, Button button, float scale, FONT font);
 
+
+	//helper function
+	//loads hud textures from assets into the texture_id
 void init_hud_assets();
 
+	//helper function
+	//draws the texture with texure_id using opengl api
 void draw_hud_texture(Vec2 pos, float scaleX, float scaleY);
 
+/******************************************************************************
+	Inialise gamehud buttons and assets
+*******************************************************************************/
 void GameHud::Initialize()
 {
 	init_hud_assets();
@@ -45,6 +69,9 @@ void GameHud::Initialize()
 
 }
 
+/******************************************************************************
+	checks for mouse input and update buttons
+*******************************************************************************/
 void GameHud::Update()
 {
 	if (input::IsPressed(KEY::mouseL))
@@ -86,6 +113,20 @@ void GameHud::Update()
 	}
 }
 
+/******************************************************************************
+	draw texture and text font of the game huds
+*******************************************************************************/
+void GameHud::Draw()
+{
+	for (auto it = Buttons.begin() ; it!=Buttons.end(); ++it)
+	{
+		Button* ptr = it->second;
+		draw_hud_texture(ptr->centre ,ptr->width , ptr->height);
+		SetFont(ptr->string.font);
+		DrawText(ptr->string.text, ptr->string.pos.x, ptr->string.pos.y, ptr->string.scale);
+	}
+}
+
 void create_button(std::string const& text, Button button, float scale , FONT f)
 {
 	button.string.pos.x = button.centre.x - static_cast<float>(find_width(text,f))/2 * scale ;
@@ -118,17 +159,9 @@ Button::Button(Vec2 pos, float width, float height)
 	pos2.y = pos.y - height / 2;
 }
 
-void GameHud::Draw()
-{
-	for (auto it = Buttons.begin() ; it!=Buttons.end(); ++it)
-	{
-		Button* ptr = it->second;
-		draw_hud_texture(ptr->centre ,ptr->width , ptr->height);
-		SetFont(ptr->string.font);
-		DrawText(ptr->string.text, ptr->string.pos.x, ptr->string.pos.y, ptr->string.scale);
-	}
-}
-
+/******************************************************************************
+	dtor
+*******************************************************************************/
 GameHud::~GameHud()
 {
 	for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
