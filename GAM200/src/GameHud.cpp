@@ -78,7 +78,7 @@ void GameHud::Update()
 	{
 		for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
 		{
-			if (it->first == "play" || it->first == "pause")
+			if (it->first == "play")
 			{
 				if (!engine->isPaused())
 				{
@@ -98,7 +98,7 @@ void GameHud::Update()
 				continue;
 			}
 			std::cout << it->first << " is pressed" << std::endl;
-			if (it->first == "play" || it->first == "pause")
+			if (it->first == "play")
 			{
 				engine->setPause();
 			}
