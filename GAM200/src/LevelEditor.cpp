@@ -1109,8 +1109,9 @@ void LevelEditor::AssetList() {
 
 			size_t size = sizeof(p);
 
-			if (ImGui::BeginDragDropSource())
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 			{
+				std::cout << "test\n";
 				ImGui::SetDragDropPayload("Game object", &p, size);
 				ImGui::EndDragDropSource();
 			}
