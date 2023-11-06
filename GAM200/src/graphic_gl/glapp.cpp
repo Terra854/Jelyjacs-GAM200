@@ -451,7 +451,7 @@ void GLApp::Update()
     }
 
 	// Draw the bove around the selected object
-	if (level_editor->selectedNum >= 0) {
+	if (level_editor->selected && level_editor->selectedNum >= 0) {
 		Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Animation));
 		Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Texture));
 		Transform* tr = static_cast<Transform*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Transform));

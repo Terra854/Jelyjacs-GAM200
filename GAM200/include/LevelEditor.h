@@ -29,6 +29,8 @@ public:
 	LevelEditor();
 	~LevelEditor();
 
+	void LoadLevelPanel();
+
 	void SaveAsDialog();
 
 	virtual void Initialize();
@@ -41,6 +43,7 @@ public:
 	void ClearAll() { System_elapsed_time.clear();  total_time = 0.0; }
 
 	int selectedNum = -1; // Negative values for prefabs, positive values for objects
+	bool selected = false;
 
 private:
 	std::map<std::string, double> System_elapsed_time;

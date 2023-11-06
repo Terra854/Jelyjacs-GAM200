@@ -119,7 +119,6 @@ void LevelEditor::DebugPerformanceViewer() {
 	- It also allows the user to modify the object's properties
 *******************************************************************************/
 int cloneSuccessful = -1;
-bool selected = false;
 
 void LevelEditor::ObjectProperties() {
 
@@ -1279,7 +1278,7 @@ void CameraControl() {
 	- This window lets users select a level to load
 	- All levels are in json files and stored in Asset/Levels
 *******************************************************************************/
-void LoadLevelPanel() {
+void LevelEditor::LoadLevelPanel() {
 
 	std::vector<std::string> level_files;
 	const std::string path = "Asset/Levels/";
