@@ -289,9 +289,10 @@ void CoreEngine::GameLoop()
 
 			Update(Systems["Window"]);
 			//editor_grid->drawleveleditor();
+			
+			// End rendering into imgui window 
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
-			// End rendering into imgui window 
 
 			Update(Systems["LevelEditor"]);
 
