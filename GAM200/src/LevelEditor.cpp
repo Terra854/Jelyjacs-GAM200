@@ -1001,7 +1001,8 @@ void LevelEditor::DisplaySelectedTexture() {
 	- This window displays the lists of assets that are loaded by the engine
 	- Only textures and prefabs currently
 *******************************************************************************/
-void LevelEditor::AssetList() {
+void LevelEditor::AssetList() 
+{
 	ImGui::Begin("Asset List");
 
 	if (ImGui::BeginTabBar("##AssetList")) 
@@ -1068,6 +1069,13 @@ void LevelEditor::AssetList() {
 				//selectedNum = i;
 				selectedNum = (int) -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
 			}
+			size_t size = sizeof(p);
+			if (ImGui::BeginDragDropSource())//ImGuiDragDropFlags_SourceAllowNullID
+			{
+				std::cout << "test\n";
+				ImGui::SetDragDropPayload("Game object", &p, size);
+				ImGui::EndDragDropSource();
+			}
 
 			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
 
@@ -1107,14 +1115,7 @@ void LevelEditor::AssetList() {
 			// Text
 			ImGui::Text(p.second->GetName().c_str());
 
-			size_t size = sizeof(p);
 
-			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-			{
-				std::cout << "test\n";
-				ImGui::SetDragDropPayload("Game object", &p, size);
-				ImGui::EndDragDropSource();
-			}
 		}
 
 		ImGui::PopStyleColor();

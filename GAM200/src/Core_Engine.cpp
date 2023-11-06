@@ -314,7 +314,7 @@ void CoreEngine::GameLoop()
 
 			if (ImGui::BeginDragDropTarget())
 			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game object", ImGuiDragDropFlags_SourceAllowNullID))
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game object"))
 				{
 					std::cout << "Drop detected\n";
 				}
