@@ -275,10 +275,8 @@ void CoreEngine::GameLoop()
 		
 
 		if (input::IsPressed(KEY::p)) { debug_gui_active = !debug_gui_active; }
-		if (debug_gui_active) {
-
-			
-			
+		if (debug_gui_active) 
+		{
 			// For rendering into imgui window 
 			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
 
@@ -313,6 +311,16 @@ void CoreEngine::GameLoop()
 
 			//ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game object", ImGuiDragDropFlags_SourceAllowNullID))
+				{
+					std::cout << "Drop detected\n";
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 			ImGui::End();
 
 			/*

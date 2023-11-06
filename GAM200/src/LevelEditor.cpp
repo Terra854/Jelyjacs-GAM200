@@ -303,11 +303,15 @@ void LevelEditor::ObjectProperties() {
 	ImGui::EndChild();
 	ImGui::BeginChild("ObjectPropertiesScroll", ImGui::GetContentRegionAvail());
 	// Texture
-	if (te != nullptr) {
-		if (ImGui::CollapsingHeader("Texture")) {
+	if (te != nullptr) 
+	{
+		if (ImGui::CollapsingHeader("Texture")) 
+		{
 
-			for (const auto& pair : AssetManager::textures) {
-				if (pair.first == te->textureName) {
+			for (const auto& pair : AssetManager::textures) 
+			{
+				if (pair.first == te->textureName) 
+				{
 					ImGui::Text("Texture: %s", pair.first.c_str());
 				}
 			}
@@ -1000,8 +1004,10 @@ void LevelEditor::DisplaySelectedTexture() {
 void LevelEditor::AssetList() {
 	ImGui::Begin("Asset List");
 
-	if (ImGui::BeginTabBar("##AssetList")) {
-		if (ImGui::BeginTabItem("Textures")) {
+	if (ImGui::BeginTabBar("##AssetList")) 
+	{
+		if (ImGui::BeginTabItem("Textures")) 
+		{
 
 			if (ImGui::Button("Refresh Textures"))
 			{
@@ -1012,7 +1018,8 @@ void LevelEditor::AssetList() {
 			ImGui::BeginChild("AssetListScroll", ImGui::GetContentRegionAvail());
 			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) {
+			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) 
+			{
 				char buffer[256];
 				sprintf_s(buffer, "##%s", t.first.c_str());
 
@@ -1042,11 +1049,13 @@ void LevelEditor::AssetList() {
 			ImGui::EndTabItem();
 		}
 	}
-	if (ImGui::BeginTabItem("Prefabs")) {
+	if (ImGui::BeginTabItem("Prefabs")) 
+	{
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		//int i = 0;
-		for (const std::pair<std::string, Object *>& p : AssetManager::prefabs) {
+		for (const std::pair<std::string, Object *>& p : AssetManager::prefabs) 
+		{
 			//i--;
 
 			char buffer[256];
@@ -1070,7 +1079,8 @@ void LevelEditor::AssetList() {
 			if (t != nullptr)
 				ImGui::Image((void*)(intptr_t)AssetManager::textureval(t->textureName), ImVec2(64, 64));
 			// or Animation
-			else if (a != nullptr) {
+			else if (a != nullptr) 
+			{
 				GLint width, height;
 
 				// Bind the texture
@@ -1096,6 +1106,15 @@ void LevelEditor::AssetList() {
 
 			// Text
 			ImGui::Text(p.second->GetName().c_str());
+
+			size_t size = sizeof(p);
+
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+			{
+				std::cout << "test\n";
+				ImGui::SetDragDropPayload("Game object", &p, size);
+				ImGui::EndDragDropSource();
+			}
 		}
 
 		ImGui::PopStyleColor();
