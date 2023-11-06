@@ -316,7 +316,23 @@ void CoreEngine::GameLoop()
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game object"))
 				{
-					std::cout << "Drop detected\n";
+					const std::pair<std::string, Object*>* object = (const std::pair<std::string, Object*>*)payload->Data;
+
+					Object* createdObj = objectFactory->cloneObject(object->second);
+					objectFactory->assignIdToObject(createdObj);
+					Transform* objTransform = (Transform*)createdObj->GetComponent(ComponentType::Transform);
+					Body* objBody = (Body*)createdObj->GetComponent(ComponentType::Body);
+
+					if (objTransform != nullptr)
+					{
+						objTransform->Position.x = input::GetMouseX();
+						objTransform->Position.y = input::GetMouseY();
+					}
+
+					if (objBody != nullptr)
+					{
+						RecalculateBody(objTransform, objBody);
+					}
 				}
 				ImGui::EndDragDropTarget();
 			}
