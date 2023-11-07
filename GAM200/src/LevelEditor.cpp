@@ -1070,9 +1070,8 @@ void LevelEditor::AssetList()
 				selectedNum = (int) -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
 			}
 			size_t size = sizeof(p);
-			if (ImGui::BeginDragDropSource())//ImGuiDragDropFlags_SourceAllowNullID
+			if (ImGui::BeginDragDropSource())
 			{
-				std::cout << "test\n";
 				ImGui::SetDragDropPayload("Game object", &p, size);
 				ImGui::EndDragDropSource();
 			}

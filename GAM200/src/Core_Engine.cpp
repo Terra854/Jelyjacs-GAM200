@@ -6,7 +6,7 @@
 This file contains the definitions of the functions that are part of the Core Engine
 *//*__________________________________________________________________________*/
 #include <Precompile.h>
-#include<GLWindow.h>
+#include <GLWindow.h>
 #include <Debug.h>
 #include "Core_Engine.h"
 #include <chrono>
@@ -25,6 +25,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <PhysicsSystem.h>
 #include <glapp.h>
 #include "GameHud.h"
+#include "Utils.h"
 
 CoreEngine* CORE = NULL;
 EngineHud hud;
@@ -312,6 +313,9 @@ void CoreEngine::GameLoop()
 			//ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 
+			std::cout << "Mouse X: " << input::GetMouseX() << "\n" << "Mouse Y: " << input::GetMouseY() << "\n";
+			std::cout << "Menu X: " << ImGui::GetWindowPos().x << "\n" << " Menu Y: " << ImGui::GetWindowPos().y << "\n";
+
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game object"))
@@ -325,8 +329,9 @@ void CoreEngine::GameLoop()
 
 					if (objTransform != nullptr)
 					{
-						objTransform->Position.x = input::GetMouseX();
-						objTransform->Position.y = input::GetMouseY();
+						ImVec2 objPos = convertMouseToGameViewportPos();
+						objTransform->Position.x = objPos.x;
+						objTransform->Position.y = objPos.y;
 					}
 
 					if (objBody != nullptr)
@@ -666,6 +671,7 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 		sys.second->MessageRelay(msg);
 	}
 }
+
 /*
 int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
 {
