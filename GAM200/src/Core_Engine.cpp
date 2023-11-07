@@ -313,9 +313,6 @@ void CoreEngine::GameLoop()
 			//ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 
-			std::cout << "Mouse X: " << input::GetMouseX() << "\n" << "Mouse Y: " << input::GetMouseY() << "\n";
-			std::cout << "Menu X: " << ImGui::GetWindowPos().x << "\n" << " Menu Y: " << ImGui::GetWindowPos().y << "\n";
-
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game object"))

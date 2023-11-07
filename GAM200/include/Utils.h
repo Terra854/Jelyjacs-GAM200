@@ -6,6 +6,7 @@
 #include <Imgui/imgui_impl_opengl3.h>
 #include <input.h>
 #include <GLWindow.h>
+#include <iostream>
 
 ImVec2 convertImGuiPosToWorldPos(ImVec2 pos);
 
