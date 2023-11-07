@@ -301,11 +301,13 @@ void CoreEngine::GameLoop()
 			ImVec2 windowSize = ImGui::GetWindowSize();
 
 			ImVec2 displaySize;
-			if (windowSize.y < (windowSize.x / 16.f * 9.f)) {
+			if (windowSize.y < (windowSize.x / 16.f * 9.f)) 
+			{
 				ImGui::SetCursorPos(ImVec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 20.f));
 				displaySize = ImVec2(windowSize.y * 16.f / 9.f, windowSize.y - 30.f);
 			}
-			else {
+			else 
+			{
 				ImGui::SetCursorPos(ImVec2(10.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f));
 				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f) - 30.f);
 			}
@@ -326,7 +328,7 @@ void CoreEngine::GameLoop()
 
 					if (objTransform != nullptr)
 					{
-						ImVec2 objPos = convertMouseToGameViewportPos();
+						ImVec2 objPos = convertMouseToGameViewportPos(displaySize);
 						objTransform->Position.x = objPos.x;
 						objTransform->Position.y = objPos.y;
 					}

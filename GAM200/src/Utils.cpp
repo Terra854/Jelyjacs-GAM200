@@ -8,7 +8,7 @@ ImVec2 convertImGuiPosToWorldPos(ImVec2 pos)
 	return output;
 }
 
-ImVec2 convertMouseToGameViewportPos()
+ImVec2 convertMouseToGameViewportPos(ImVec2 displaySize)
 {
 	ImVec2 output;
 	ImVec2 menuProportions = ImGui::GetWindowSize();
@@ -19,8 +19,8 @@ ImVec2 convertMouseToGameViewportPos()
 	ImVec2 menuCentreWorldPos = convertImGuiPosToWorldPos(menuImGuiCentrePos);
 	float xDiff = input::GetMouseX() - menuCentreWorldPos.x;
 	float yDiff = input::GetMouseY() - menuCentreWorldPos.y;
-	xDiff *= (window->width / menuProportions.x);
-	yDiff *= (window->height / menuProportions.y);
+	xDiff *= (window->width / displaySize.x);
+	yDiff *= (window->height / displaySize.y);
 	output.x = xDiff;
 	output.y = yDiff;
 	std::cout << "Object X coordinates: " << output.x << " Object Y coordinates: " << output.y << "\n";

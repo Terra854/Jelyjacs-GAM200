@@ -10,4 +10,4 @@
 
 ImVec2 convertImGuiPosToWorldPos(ImVec2 pos);
 
-ImVec2 convertMouseToGameViewportPos();
+ImVec2 convertMouseToGameViewportPos(ImVec2 displaySize);
