@@ -131,6 +131,9 @@ void GLWindow::Update()
         //ChangeWindowMode();
         glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
     }
+    if (input::IsPressed(KEY::f)) {
+		glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
+	}
     // Check if the close button or alt + f4 is pressed
     if (glfwWindowShouldClose(ptr_window)) {
         Message_Handler msg(MessageID::Event_Type::Quit);
