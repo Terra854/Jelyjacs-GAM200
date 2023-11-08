@@ -355,7 +355,7 @@ void CoreEngine::GameLoop()
 						std::cout << "Mouse Pos x: " << mousePos.x << " Mouse Pos y: " << mousePos.y << "\n";
 						Vec2 botLeft = objTransform->Position - (objTransform->Scale / 2);
 						Vec2 topRight = objTransform->Position + (objTransform->Scale / 2);
-						if (mousePos.x >= botLeft.x && mousePos.x <= topRight.x && mousePos.y >= botLeft.x && mousePos.y <= topRight.y)
+						if (mousePos.x >= botLeft.x && mousePos.x <= topRight.x && mousePos.y >= botLeft.y && mousePos.y <= topRight.y)
 						{
 							level_editor->selected = true;
 							level_editor->selectedNum = (int)i;
