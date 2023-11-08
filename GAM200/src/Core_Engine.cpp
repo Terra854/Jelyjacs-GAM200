@@ -297,19 +297,19 @@ void CoreEngine::GameLoop()
 
 			// Display the game inside the ImGui window
 			//ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
-			ImGui::Begin("Game Viewport");
+			ImGui::Begin("Game Viewport", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 			ImVec2 windowSize = ImGui::GetWindowSize();
 
 			ImVec2 displaySize;
 			if (windowSize.y < (windowSize.x / 16.f * 9.f)) 
 			{
-				ImGui::SetCursorPos(ImVec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 20.f));
-				displaySize = ImVec2(windowSize.y * 16.f / 9.f, windowSize.y - 30.f);
+				ImGui::SetCursorPos(ImVec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 0.f));
+				displaySize = ImVec2(windowSize.y * 16.f / 9.f, windowSize.y );
 			}
 			else 
 			{
-				ImGui::SetCursorPos(ImVec2(10.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f));
-				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f) - 30.f);
+				ImGui::SetCursorPos(ImVec2(0.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f));
+				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f) );
 			}
 
 			//ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
