@@ -87,7 +87,7 @@ void GLWindow::Initialize() {
     glfwWindowHint(GLFW_BLUE_BITS, 8); glfwWindowHint(GLFW_ALPHA_BITS, 8);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); // window dimensions are static
 
-    GLWindow::ptr_window = glfwCreateWindow(width, height, title.c_str(), glfwGetPrimaryMonitor(), NULL);
+    GLWindow::ptr_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
     if (!window->ptr_window) {
         std::cerr << "GLFW unable to create OpenGL context - abort program\n";
         glfwTerminate();
@@ -126,10 +126,16 @@ void GLWindow::Initialize() {
 void GLWindow::Update()
 {
     glfwPollEvents();
-  
+    
+
+    //change to windowed mode
     if (input::IsPressed(KEY::x)) {
-        //ChangeWindowMode();
+        
         glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+        //set window position to the center of the screen
+        int pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
+        int pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+        glfwSetWindowPos(ptr_window, pos_x, pos_y);
     }
     if (input::IsPressed(KEY::f)) {
 		glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
