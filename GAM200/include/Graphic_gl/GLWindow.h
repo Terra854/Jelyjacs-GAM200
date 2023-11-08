@@ -29,7 +29,7 @@ public:
 	virtual void Initialize();
 	virtual void Update();
 	virtual std::string SystemName() { return "Window"; };
-	static void ActivateWindow();
+	static void ChangeWindowMode();
 	static void cleanup();
 
   // callbacks ...
@@ -42,17 +42,14 @@ public:
 
 
   static GLint width, height;
+  static GLint width_windowed, height_windowed;
   static GLdouble fps;
   static GLdouble delta_time; // time taken to complete most recent game loop
   static std::string title;
   static GLFWwindow *ptr_window;
-};
+ 
 
-enum class Gamestate {
-	start,
-	end
 };
-
 
 extern GLWindow* window;
 

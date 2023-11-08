@@ -29,6 +29,8 @@ GLdouble GLWindow::fps;
 GLdouble GLWindow::delta_time;
 std::string GLWindow::title;
 GLFWwindow* GLWindow::ptr_window;
+GLint GLWindow::width_windowed;
+GLint GLWindow::height_windowed;
 
 
 //Global Pointer to Window System
@@ -85,7 +87,7 @@ void GLWindow::Initialize() {
     glfwWindowHint(GLFW_BLUE_BITS, 8); glfwWindowHint(GLFW_ALPHA_BITS, 8);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); // window dimensions are static
 
-    GLWindow::ptr_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    GLWindow::ptr_window = glfwCreateWindow(width, height, title.c_str(), glfwGetPrimaryMonitor(), NULL);
     if (!window->ptr_window) {
         std::cerr << "GLFW unable to create OpenGL context - abort program\n";
         glfwTerminate();
@@ -115,7 +117,7 @@ void GLWindow::Initialize() {
         std::cerr << "Driver doesn't support OpenGL 4.5 - abort program" << std::endl;
         return;
     }
-
+    
 }
 
 /*
@@ -124,20 +126,42 @@ void GLWindow::Initialize() {
 void GLWindow::Update()
 {
     glfwPollEvents();
-
-   
+  
+    if (input::IsPressed(KEY::x)) {
+        //ChangeWindowMode();
+        glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+    }
     // Check if the close button or alt + f4 is pressed
     if (glfwWindowShouldClose(ptr_window)) {
         Message_Handler msg(MessageID::Event_Type::Quit);
         engine->Broadcast(&msg);
         //engine->game_active = false; // Tells the engine to terminate
     }
+    
 }
 
 
-void GLWindow::ActivateWindow()
+void GLWindow::ChangeWindowMode()
 {
 
+    
+
+    // Destroy the current fullscreen window
+    glfwDestroyWindow(ptr_window);
+
+    // Create a new window in windowed mode with the desired position and size
+    ptr_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+
+    std::cout<< "Window mode changed to windowed mode" << std::endl;
+    std::cout<<"width"<<width<<std::endl;
+    std::cout<<"height"<<height<<std::endl;
+
+    // Check if the window was created successfully
+    if (!ptr_window) {
+        // Handle the error
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
 }
 
 

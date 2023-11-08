@@ -87,7 +87,7 @@ void Application::Run() {
 
 	// Initialize and Start Game Loop
 	engine->Initialize();
-	windows->ActivateWindow();
+	//windows->ActivateWindow();
 	windows->print_specs();
 
 	engine->GameLoop();
