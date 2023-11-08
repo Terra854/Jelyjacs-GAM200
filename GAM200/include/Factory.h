@@ -60,7 +60,7 @@ public:
 	Object* cloneObject(Object* object);
 
 	//This adds a new component creator which is necessary for the creation of game objects
-//Call this at the very start of the game loop in Intialize
+	//Call this at the very start of the game loop in Intialize
 	void AddComponentCreator(const std::string& name, BaseComponentCreator* creator);
 
 	//Returns the total number of game objects created by this game factory

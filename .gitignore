@@ -407,3 +407,4 @@ Doxyfile
 
 # Config files
 *.ini
+!imgui-original.ini

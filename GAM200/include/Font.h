@@ -6,6 +6,13 @@
 This file contains the declarations of the functions for font system
 *//*__________________________________________________________________________*/
 #pragma once
+/* !
+@file	Font.h
+@author	Yeo Jia Ming
+@date	02/11/2023
+
+This file contains declarations for the Font system class
+*//*__________________________________________________________________________*/
 #include "interface_System.h"
 #include "glslshader.h"
 #include <glm/glm.hpp>

@@ -6,6 +6,13 @@
 This file contains the declaration for the animation game component class
 *//*__________________________________________________________________________*/
 #pragma once
+/* !
+@file	Animation.h
+@author	Guo Chen
+@date	02/11/2023
+
+This file contains the declaration for the Animation component class
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <string>
 #include <vector>
