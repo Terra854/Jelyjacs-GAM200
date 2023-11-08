@@ -23,6 +23,5 @@ ImVec2 convertMouseToGameViewportPos(ImVec2 displaySize)
 	yDiff *= (window->height / displaySize.y);
 	output.x = xDiff;
 	output.y = yDiff;
-	std::cout << "Object X coordinates: " << output.x << " Object Y coordinates: " << output.y << "\n";
 	return output;
 }

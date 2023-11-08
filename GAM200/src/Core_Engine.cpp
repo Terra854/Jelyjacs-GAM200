@@ -341,6 +341,36 @@ void CoreEngine::GameLoop()
 				ImGui::EndDragDropTarget();
 			}
 
+			if (input::IsPressed(KEY::mouseL))
+			{
+				for (size_t i = 1; i < objectFactory->NumberOfObjects(); i++)
+				{
+					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
+					Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+					Texture* objTexture = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
+
+					if (objTexture != nullptr)
+					{
+						ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
+						std::cout << "Mouse Pos x: " << mousePos.x << " Mouse Pos y: " << mousePos.y << "\n";
+						Vec2 botLeft = objTransform->Position - (objTransform->Scale / 2);
+						Vec2 topRight = objTransform->Position + (objTransform->Scale / 2);
+						if (mousePos.x >= botLeft.x && mousePos.x <= topRight.x && mousePos.y >= botLeft.x && mousePos.y <= topRight.y)
+						{
+							level_editor->selected = true;
+							level_editor->selectedNum = (int)i;
+						}
+					}
+				}
+			}
+
+			if (input::IsPressed(KEY::mouseR) && level_editor->selected == true)
+			{
+				level_editor->selected = false;
+				level_editor->selectedNum = -1;
+			}
+
+
 			ImGui::End();
 
 			/*
