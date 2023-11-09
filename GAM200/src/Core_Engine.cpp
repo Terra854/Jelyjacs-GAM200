@@ -348,16 +348,12 @@ void CoreEngine::GameLoop()
 				{
 					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
 					Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-
-					if (objTexture != nullptr)
+					ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
+					if (isObjectClicked(objTransform, mousePos))
 					{
-						ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
-						if (isObjectClicked(objTransform, mousePos))
-						{
-							level_editor->selected = true;
-							level_editor->selectedNum = (int)i;
-							selectedObjectID = static_cast<long>(i);
-						}
+						level_editor->selected = true;
+						level_editor->selectedNum = (int)i;
+						selectedObjectID = static_cast<long>(i);
 					}
 				}
 			}
@@ -385,9 +381,8 @@ void CoreEngine::GameLoop()
 					RecalculateBody(objTransform, objBody);
 				}
 			}
-
-			ImGui::End();
 			*/
+			ImGui::End();
 			/*
 
 			ImGui::Begin("Level editor");
