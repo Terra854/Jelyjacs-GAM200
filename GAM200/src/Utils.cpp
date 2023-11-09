@@ -25,3 +25,17 @@ ImVec2 convertMouseToGameViewportPos(ImVec2 displaySize)
 	output.y = yDiff;
 	return output;
 }
+
+bool isObjectClicked(Transform* trans, ImVec2 mousePos)
+{
+	Vec2 botLeft = trans->Position - (trans->Scale / 2);
+	Vec2 topRight = trans->Position + (trans->Scale / 2);
+	if (mousePos.x >= botLeft.x && mousePos.x <= topRight.x && mousePos.y >= botLeft.y && mousePos.y <= topRight.y)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

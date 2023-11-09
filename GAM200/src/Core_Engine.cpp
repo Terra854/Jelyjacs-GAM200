@@ -341,6 +341,7 @@ void CoreEngine::GameLoop()
 				ImGui::EndDragDropTarget();
 			}
 
+			long selectedObjectID = -1;
 			if (input::IsPressed(KEY::mouseL))
 			{
 				for (size_t i = 1; i < objectFactory->NumberOfObjects(); i++)
@@ -348,14 +349,15 @@ void CoreEngine::GameLoop()
 					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
 					Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 
-					ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
-					std::cout << "Mouse Pos x: " << mousePos.x << " Mouse Pos y: " << mousePos.y << "\n";
-					Vec2 botLeft = objTransform->Position - (objTransform->Scale / 2);
-					Vec2 topRight = objTransform->Position + (objTransform->Scale / 2);
-					if (mousePos.x >= botLeft.x && mousePos.x <= topRight.x && mousePos.y >= botLeft.y && mousePos.y <= topRight.y)
+					if (objTexture != nullptr)
 					{
-						level_editor->selected = true;
-						level_editor->selectedNum = (int)i;
+						ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
+						if (isObjectClicked(objTransform, mousePos))
+						{
+							level_editor->selected = true;
+							level_editor->selectedNum = (int)i;
+							selectedObjectID = static_cast<long>(i);
+						}
 					}
 				}
 			}
@@ -365,10 +367,27 @@ void CoreEngine::GameLoop()
 				level_editor->selected = false;
 				level_editor->selectedNum = -1;
 			}
+			/*
+			if (input::IsPressedRepeatedly(KEY::mouseL) && level_editor->selected == true)
+			{
+				Object* object = objectFactory->getObjectWithID(selectedObjectID);
+				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+				Body* objBody = static_cast<Body*>(object->GetComponent(ComponentType::Body));
+				ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
+				if (isObjectClicked(objTransform, mousePos) && objTransform != nullptr)
+				{
+					objTransform->Position.x = mousePos.x;
+					objTransform->Position.y = mousePos.y;
+				}
 
+				if (objBody != nullptr)
+				{
+					RecalculateBody(objTransform, objBody);
+				}
+			}
 
 			ImGui::End();
-
+			*/
 			/*
 
 			ImGui::Begin("Level editor");
