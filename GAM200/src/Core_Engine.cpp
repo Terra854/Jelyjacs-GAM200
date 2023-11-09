@@ -237,6 +237,7 @@ void CoreEngine::GameLoop()
 	// Game Loop
 
 	gamehud.Initialize();
+	long selectedObjectID = -1;
 
 	while (game_active)
 	{
@@ -341,7 +342,24 @@ void CoreEngine::GameLoop()
 				ImGui::EndDragDropTarget();
 			}
 
-			long selectedObjectID = -1;
+			if (input::IsPressedRepeatedly(KEY::mouseL) && level_editor->selected == true)
+			{
+				Object* object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
+				ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
+				if (isObjectClicked(objTransform, mousePos))
+				{
+					objTransform->Position.x = mousePos.x;
+					objTransform->Position.y = mousePos.y;
+				}
+
+				if (objBody != nullptr)
+				{
+					RecalculateBody(objTransform, objBody);
+				}
+			}
+
 			if (input::IsPressed(KEY::mouseL))
 			{
 				for (size_t i = 1; i < objectFactory->NumberOfObjects(); i++)
