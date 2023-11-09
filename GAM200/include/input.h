@@ -64,6 +64,9 @@ namespace input
 	/*!	returns true as long as key is held down for more than 1 game loop.
 	*/
 	bool IsPressedRepeatedly(KEY);
+
+	bool IsPressedRepeatedlyDelayed(KEY , float delay=1.0f);
+
 	/*------------------------------------------------------------------------------------------------------------*/
 	/*! returns true if key is not pressed/pressedrepeatedly
 	*/

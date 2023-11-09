@@ -10,6 +10,7 @@ To detect mouse/keyboard key presses and mouse position.
 #include <Debug.h>
 #include "input.h"
 #include "GLWindow.h"
+#include "Core_Engine.h"
 //refer to input.h for input functions interface
 
 namespace
@@ -22,6 +23,7 @@ namespace
 		bool IsPressedRepeatedly();
 		bool IsReleased();
 		void SetKeyState(int action);
+	    float timer = 0.0f;
 	private:
 		bool pressed = false;
 		bool released = true;
@@ -65,6 +67,7 @@ void BUTTON::SetKeyState(int action)
 		released = true;
 		pressed = false;
 		pressedPrevFrame = false;
+		timer = 0;
 	}
 }
 
@@ -141,4 +144,17 @@ void input::Update()
 	buttons[at(KEY::right)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_RIGHT));
 	buttons[at(KEY::esc)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_ESCAPE));
 	
+}
+
+bool input::IsPressedRepeatedlyDelayed(KEY key , float delay)
+{
+	if (buttons[at(key)].IsPressedRepeatedly())
+	{
+		buttons[at(key)].timer += engine->GetDt();
+		if (buttons[at(key)].timer > delay)
+		{
+			return true;
+		}
+		else return false;
+	}
 }
