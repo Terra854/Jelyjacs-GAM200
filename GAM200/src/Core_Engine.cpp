@@ -342,7 +342,7 @@ void CoreEngine::GameLoop()
 				ImGui::EndDragDropTarget();
 			}
 
-			if (input::IsPressedRepeatedly(KEY::mouseL) && level_editor->selected == true)
+			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true)
 			{
 				Object* object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
 				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
