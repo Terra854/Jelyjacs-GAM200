@@ -143,6 +143,8 @@ void input::Update()
 	buttons[at(KEY::left)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_LEFT));
 	buttons[at(KEY::right)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_RIGHT));
 	buttons[at(KEY::esc)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_ESCAPE));
+	buttons[at(KEY::q)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_Q));
+	buttons[at(KEY::e)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_E));
 	
 }
 

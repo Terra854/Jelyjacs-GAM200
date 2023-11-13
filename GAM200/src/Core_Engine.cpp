@@ -381,6 +381,21 @@ void CoreEngine::GameLoop()
 				level_editor->selected = false;
 				level_editor->selectedNum = -1;
 			}
+
+			if (input::IsPressed(KEY::q) && level_editor->selected == true)
+			{
+				Object* object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
+
+				objTransform->Rotation += 5.0f;
+
+				if (objBody != nullptr)
+				{
+					RecalculateBody(objTransform, objBody);
+				}
+			}
+
 			/*
 			if (input::IsPressedRepeatedly(KEY::mouseL) && level_editor->selected == true)
 			{
