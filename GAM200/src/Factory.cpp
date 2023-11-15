@@ -28,6 +28,7 @@ ID aand is stored as part of a private map
 #include "Assets Manager/asset_manager.h"
 #include "Object.h"
 #include <components/Behaviour.h>
+#include "GameLogic.h"
 
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
@@ -278,10 +279,12 @@ Object* Factory::createObject(const std::string& filename)
 		{
 			Behaviour *b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
 
-			jsonloop.readString(b->behaviour_name, "Properties", "behaviourname");
-			jsonloop.readInt(b->behaviour_index, "Properties", "behaviourindex");
+			jsonloop.readString(b->behaviour_name, "Properties", "Script");
+			jsonloop.readInt(b->behaviour_index, "Properties", "Index");
 			obj->AddComponent(b);
-			b->obj = obj;
+			Logic->AddBehaviourComponent(b);
+			b->SetOwner(obj);
+			std::cout << obj->GetName() << std::endl;
 			std::cout << "Behaviour added" << std::endl;
 		}
 	}

@@ -25,6 +25,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Scenes.h>
 #include <PhysicsSystem.h>
 
+//std::map <std::string, LogicScript*> temp_scriptmap{};
 GameLogic* Logic = NULL;
 Object* scale_and_rotate;
 Object* playerObj;
@@ -74,12 +75,26 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
 	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 
+	std::cout << "GameLogic Initialized" << std::endl;
+	std::cout << behaviourComponents.size() << std::endl;
+	std::cout << behaviours.size() << std::endl;
 	//for(auto const)
-
+	LoadScripts();
 	//LoadScene("Asset/Levels/testsave.json");
 
 	LoadScene("Asset/Levels/tutorial_level.json");
 	SaveScene("Asset/Levels/testsave.json");
+	for (auto iter : behaviourComponents ) {
+		
+		if (behaviours[iter->GetName()] == nullptr) {
+			std::cout << "Behaviour " << iter->GetName() << " is null" << std::endl;
+			continue;
+		}
+		else 
+			behaviours[iter->GetName()]->Start(iter->GetOwner());
+			
+		std::cout << "Behaviour Start" << std::endl;
+	}
 }
 
 /******************************************************************************
@@ -91,12 +106,10 @@ void GameLogic::Update() {
 	// Do not update if the game is paused
 	if (engine->isPaused())
 		return;
-	int x = 0;
 
-	for (auto& behaviour : behaviours) {
-		behaviour.second->Update(b_objects[x]);
-		std::cout << "Behaviour " << x << " updated" << std::endl;
-		x++;
+	for (auto& iter : behaviourComponents) {
+		//std::cout << "Behaviour Update" << std::endl;
+		behaviours[iter->GetName()]->Update(iter->GetOwner());
 	}
 	
 	// If Left Click, show mouse position
@@ -314,9 +327,14 @@ void GameLogic::Update() {
 void GameLogic::AddBehaviour(std::string name, LogicScript* behaviour)
 {
 	behaviours[name] = behaviour;
+	std::cout << behaviours.size() << std::endl;
 }
 
-void GameLogic::AddObject(Object* obj)
-{
-	b_objects.push_back(obj);
+
+void GameLogic::LoadScripts() {
+	std::cout << temp_scriptmap.size()<< std::endl;
+	for (auto& it : temp_scriptmap) {
+		this->AddBehaviour(it.first, it.second);
+		std::cout << "Behaviour " << it.first << " added" << std::endl;
+	}
 }
