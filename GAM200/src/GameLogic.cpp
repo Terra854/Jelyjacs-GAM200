@@ -25,7 +25,6 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Scenes.h>
 #include <PhysicsSystem.h>
 
-//std::map <std::string, LogicScript*> temp_scriptmap{};
 GameLogic* Logic = NULL;
 Object* scale_and_rotate;
 Object* playerObj;
@@ -75,15 +74,11 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
 	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 
-	std::cout << "GameLogic Initialized" << std::endl;
-	std::cout << behaviourComponents.size() << std::endl;
-	std::cout << behaviours.size() << std::endl;
-	//for(auto const)
-	LoadScripts();
+	
 	//LoadScene("Asset/Levels/testsave.json");
-
 	LoadScene("Asset/Levels/tutorial_level.json");
 	SaveScene("Asset/Levels/testsave.json");
+	LoadScripts();
 	for (auto iter : behaviourComponents ) {
 		
 		if (behaviours[iter->GetName()] == nullptr) {
@@ -92,9 +87,11 @@ void GameLogic::Initialize()
 		}
 		else 
 			behaviours[iter->GetName()]->Start(iter->GetOwner());
-			
-		std::cout << "Behaviour Start" << std::endl;
 	}
+
+	std::cout << "GameLogic Initialized" << std::endl;
+	std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
+	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
 }
 
 /******************************************************************************
@@ -128,8 +125,9 @@ void GameLogic::Update() {
 
 	// Movement for Player
 	// If button Pressed, changed velocity
+	
 	playerObj = objectFactory->getPlayerObject();
-
+	
 	if (playerObj != nullptr && playerObj->GetComponent(ComponentType::Physics) != nullptr) {
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
@@ -174,11 +172,11 @@ void GameLogic::Update() {
 
 
 		// Let the player loop around the window
-		/*
+		
 		Transform* t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 		t->Position.x = t->Position.x > 1000.0f ? -1000.0f : t->Position.x;
 		t->Position.x = t->Position.x < -1000.0f ? 1000.0f : t->Position.x;
-		*/
+		
 		// Audio for Character Movement
 		if ((player_physics->Velocity.y == 0.f) && moving) {
 			audio->startWalking();
@@ -187,14 +185,7 @@ void GameLogic::Update() {
 			audio->stopWalking();
 			moving = false;
 		}
-
-		// Printing Player Position by pressing Z
-		/*
-		if (input::IsPressed(KEY::z)) {
-			Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-			std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
-		}
-		*/
+		
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID((long)i);
 
@@ -327,14 +318,13 @@ void GameLogic::Update() {
 void GameLogic::AddBehaviour(std::string name, LogicScript* behaviour)
 {
 	behaviours[name] = behaviour;
-	std::cout << behaviours.size() << std::endl;
+	std::cout <<  "Added Behaviour to container. Container Size : " << behaviours.size() << std::endl;
 }
 
-
 void GameLogic::LoadScripts() {
-	std::cout << temp_scriptmap.size()<< std::endl;
 	for (auto& it : temp_scriptmap) {
 		this->AddBehaviour(it.first, it.second);
 		std::cout << "Behaviour " << it.first << " added" << std::endl;
 	}
+	std::cout << "Loaded temp_scriptmap : " << temp_scriptmap.size() << std::endl;
 }

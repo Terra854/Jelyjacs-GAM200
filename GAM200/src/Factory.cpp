@@ -284,8 +284,6 @@ Object* Factory::createObject(const std::string& filename)
 			obj->AddComponent(b);
 			Logic->AddBehaviourComponent(b);
 			b->SetOwner(obj);
-			std::cout << obj->GetName() << std::endl;
-			std::cout << "Behaviour added" << std::endl;
 		}
 	}
 

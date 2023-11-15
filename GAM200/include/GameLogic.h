@@ -49,7 +49,7 @@ public:
 	LogicScript() {};
 	LogicScript(std::string name) {
 		temp_scriptmap[name] = this;
-		std::cout << temp_scriptmap.size() << std::endl;
+		std::cout << "LogicScript Map size : " << temp_scriptmap.size() << std::endl;
 	}
 	virtual ~LogicScript() {};
 
