@@ -21,6 +21,7 @@ This file contains the class definitions that is used to run the game
 #include <LevelEditor.h>
 #include <ThreadPool.h>
 #include <../src/Assets Manager/asset_manager.h>
+#include "../../FelineFelony/Test.h"
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
 ThreadPool* thread_pool;
@@ -32,10 +33,8 @@ Application::~Application()
 {
 }
 
-void Application::Run() {
-
-	std::cout << "Hello World!" << std::endl;
-
+void Application::Init() {
+	// Enable run-time memory check for debug builds.
 #if defined(DEBUG) | defined(_DEBUG)
 
 	// Enable run-time memory check for debug builds.
@@ -73,6 +72,7 @@ void Application::Run() {
 	GLApp* graphics = new GLApp();
 	thread_pool = new ThreadPool();
 
+
 	// Add System to the engine 
 	engine->AddSystem(windows);
 	engine->AddSystem(thread_pool);
@@ -98,6 +98,8 @@ void Application::Run() {
 	engine->Initialize();
 	//windows->ActivateWindow();
 	windows->print_specs();
+}
+void Application::Run() {
 
 	engine->GameLoop();
 

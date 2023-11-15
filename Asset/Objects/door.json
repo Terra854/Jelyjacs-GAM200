@@ -40,8 +40,8 @@
     {
       "Type": "Behaviour",
       "Properties": {
-        "ScriptName": "Test",
-        "ScriptIndex": "1"
+        "Script": "Test",
+        "Index": 1
       }
     }
   ]

@@ -157,7 +157,6 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Line.cpp" />
     <ClCompile Include="src\Assets Manager\text_serialization.cpp" />
     <ClCompile Include="src\Collision.cpp" />
-    <ClCompile Include="src\LogicScript.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Core_Engine.cpp" />
     <ClCompile Include="src\Factory.cpp" />
@@ -166,10 +165,10 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\graphic_gl\GLWindow.cpp" />
     <ClCompile Include="src\graphic_gl\glslshader.cpp" />
     <ClCompile Include="src\input.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mat3.cpp" />
     <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\Scenes.cpp" />
+    <ClCompile Include="src\Scripts\TestScript.cpp" />
     <ClCompile Include="src\ThreadPool.cpp" />
     <ClCompile Include="src\Utils.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -202,7 +201,6 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\Factory.h" />
     <ClInclude Include="include\Graphic_gl\Camera.h" />
-    <ClInclude Include="include\LogicScript.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\Interface_System.h" />
     <ClInclude Include="include\AABB.h" />
@@ -217,6 +215,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\message.h" />
     <ClInclude Include="include\PhysicsSystem.h" />
     <ClInclude Include="include\Scenes.h" />
+    <ClInclude Include="include\Scripts\TestScript.h" />
     <ClInclude Include="include\ThreadPool.h" />
     <ClInclude Include="include\Utils.h" />
     <ClInclude Include="include\Vec2.h" />

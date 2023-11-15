@@ -6,16 +6,19 @@
 This file contains the declaration of the Test script that are part of the LogicScript Interface
 *//*__________________________________________________________________________*/
 #pragma once
-#include <LogicScript.h>
-/*
-class Test : public LogicScript{
-public:
-	Test(std::string name);
+#include <string>
+#include <Object.h>
+#include "GameLogic.h"
+#include <iostream>
 
-	virtual void Start(Object* obj);
-	virtual void Update(Object* obj);
-	virtual void Shutdown(Object* obj);
-}; 
+std::map<std::string, LogicScript*> temp_scriptmap;
+namespace Script1 {
+	class Test : public LogicScript {
+	public:
+		Test(std::string name);
 
-*/
-
+		void Start(Object* obj);
+		void Update(Object* obj);
+		void Shutdown(Object* obj);
+	};
+}
