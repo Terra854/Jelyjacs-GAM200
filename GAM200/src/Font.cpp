@@ -1,3 +1,10 @@
+/* !
+@file GameHud.cpp
+@author Yeo Jia Ming
+@date	3/11/2023
+
+This file contains the definition of the functions of font system
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Font.h"
 
@@ -8,33 +15,63 @@ Font::Font() {
 FT_Library ft;
 namespace
 {
+    //alignment of a character 
     struct Character {
         unsigned int TextureID;  // ID handle of the glyph texture
         glm::ivec2   Size;       // Size of glyph
         glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
         unsigned int Advance;    // Offset to advance to next glyph
     };
+
+    //the entire set of data needed to draw a string of text in a particular font
     struct outline
     {
+        //container of ascii chars map to character alignments
         std::map<char, Character> Characters;
+
+        //metrics for the font
         FT_Face face;
+
+        //member function to set a mormalised size in pixels
         void set_pixel_size(int size);
+
+        //to initialise the map of chars 
         void load_ascii_chars();
     };
+   
+    //for opengl api
     unsigned int VAO, VBO;
     GLSLShader shdr_pgm;
+
+    //array of the font data
     outline fontOutlines[total];
+
+    //to keep track of the current font being used
     outline* fontTracker = nullptr;
+
+    //for error handling to cout
     FT_Error error;
 }
 
+//helper function to compile and link shaders
 void init_shaders();
 
-void SetFont(FONT font)
+//helper function to normailise coordinates
+void normalise_coord(float& x, float& y);
+
+//helper function to draw text
+void RenderText(std::string text, float x, float y, float scale, glm::ivec3 color);
+
+//to change to a different font
+void SetFont(FONT f)
 {
-    fontTracker = &fontOutlines[font];
+    fontTracker = &fontOutlines[f];
 }
 
+/******************************************************************************
+    loads font assets, initilise shaders, 
+    configure opengl context to draw texture for the shader program
+*******************************************************************************/
 void Font::Initialize()
 {
     init_shaders();
@@ -73,8 +110,7 @@ void Font::Initialize()
             fontOutlines[i].load_ascii_chars();
         }
           
-        // configure VAO/VBO for texture quads
-        // -----------------------------------
+        // configure VAO/VBO for texture
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glBindVertexArray(VAO);
@@ -87,11 +123,36 @@ void Font::Initialize()
         shdr_pgm.UnUse();
 }
 
+/******************************************************************************
+    to draw the font texture, specified by the parameters
+*******************************************************************************/
+bool DrawText(std::string const& text, float posX, float posY, float scale , float red , float green , float blue)
+{
+    RenderText(text, posX, posY, scale, glm::vec3(red,green,blue));
+    return true;
+}
+
+/******************************************************************************
+    to calculate the total width of the text string to be drawn, in pixels,
+    depending on what the text string is, in the default font size
+*******************************************************************************/
+int find_width(std::string const& str , FONT f)
+{
+    int width{};
+    for (size_t i = 0; i < str.size(); ++i)
+    {
+        FT_Load_Char(fontOutlines[f].face, str.at(i), FT_LOAD_RENDER);
+        width += fontOutlines[f].face->glyph->advance.x;
+    }
+    return width>>6;
+}
+
 void normalise_coord(float& x, float& y)
 {
     x += window->width / 2.0f;
     y += window->height / 2.0f;
 }
+
 
 void RenderText(std::string text, float x, float y, float scale, glm::ivec3 color)
 {
@@ -138,12 +199,6 @@ void RenderText(std::string text, float x, float y, float scale, glm::ivec3 colo
     shdr_pgm.UnUse();
 }
 
-bool DrawText(std::string const& text, float posX, float posY, float scale , float red , float green , float blue)
-{
-    RenderText(text, posX, posY, scale, glm::vec3(red,green,blue));
-    return true;
-}
-
 void Font::Update()
 {
 }
@@ -158,16 +213,6 @@ Font::~Font()
 }
 
 
-int find_width(std::string const& str , FONT font)
-{
-    int width{};
-    for (size_t i = 0; i < str.size(); ++i)
-    {
-        FT_Load_Char(fontOutlines[font].face, str.at(i), FT_LOAD_RENDER);
-        width += fontOutlines[font].face->glyph->advance.x;
-    }
-    return width>>6;
-}
 
 void init_shaders()
 {

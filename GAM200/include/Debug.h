@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Debug.h
-@author	t.yeeann@digipen.edu
+@author	Tan Yee Ann
 @date	28/9/2023
 
 This file contains preprocessor macros that when enabled, tell you where exactly

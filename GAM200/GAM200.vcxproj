@@ -60,6 +60,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -71,11 +72,6 @@
 copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew32.dll" /Y
 copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
-
-rmdir /s /q "$(TargetDir)Asset"
-rmdir /s /q "$(TargetDir)meshes"
-rmdir /s /q "$(TargetDir)scenes"
-rmdir /s /q "$(TargetDir)shaders"
 
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
 xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
@@ -94,6 +90,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -105,13 +102,8 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022\glfw3.dll" "$(TargetDir)glfw3.dll" /Y
 copy "$(SolutionDir)lib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(TargetDir)glew32.dll" /Y
-copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y
+copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
-
-rmdir /s /q "$(TargetDir)Asset"
-rmdir /s /q "$(TargetDir)meshes"
-rmdir /s /q "$(TargetDir)scenes"
-rmdir /s /q "$(TargetDir)shaders"
 
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
 xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
@@ -157,8 +149,9 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mat3.cpp" />
     <ClCompile Include="src\PhysicsSystem.cpp" />
-    <ClCompile Include="src\SceneLoader.cpp" />
+    <ClCompile Include="src\Scenes.cpp" />
     <ClCompile Include="src\ThreadPool.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -201,8 +194,9 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Mat3.h" />
     <ClInclude Include="include\message.h" />
     <ClInclude Include="include\PhysicsSystem.h" />
-    <ClInclude Include="include\SceneLoader.h" />
+    <ClInclude Include="include\Scenes.h" />
     <ClInclude Include="include\ThreadPool.h" />
+    <ClInclude Include="include\Utils.h" />
     <ClInclude Include="include\Vec2.h" />
     <ClInclude Include="include\Precompile.h" />
     <ClInclude Include="src\Assets Manager\asset_manager.h" />

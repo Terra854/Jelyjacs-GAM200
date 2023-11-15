@@ -1,9 +1,23 @@
+/* !
+@file GameHud.h
+@author Yeo Jia Ming
+@date	3/11/2023
+
+This file contains the declarations for the functions of gamehud class
+*//*__________________________________________________________________________*/
 #pragma once
+/* !
+@file	GameHud.h
+@author	Yeo Jia Ming
+@date	02/11/2023
+
+This file contains declarations for the in-game hud
+*//*__________________________________________________________________________*/
 #include "Interface_System.h"
 #include "Vec2.h"
 #include <map>
 #include "font.h"
-
+#include "GLApp.h"
 class GameHud
 {
 public:
@@ -12,24 +26,6 @@ public:
 	void Update() ;
 	void Draw();
 	~GameHud();
-	class Text
-	{
-	public:
-		Vec2 pos{};
-		float scale;
-		std::string text{};
-		FONT font;
-	};
-	class Button
-	{
-	public:
-		Button(Vec2 pos1, Vec2 pos2);
-		Button(Vec2 centre, float width, float height);
-		Vec2 pos1;
-		Vec2 pos2;
-		Text string{};
-	};
-	std::map<std::string,Button*> Buttons;
-	void create_button(std::string const& text, Button button, float scale, FONT font);
+	
 private:
 };

@@ -1,4 +1,3 @@
-#pragma once
 /* !
 @file	Body.cpp
 @author	Yeo Jia Ming

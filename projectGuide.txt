@@ -1,0 +1,7 @@
+Input key:
+
+Player movement: W, A, S, D
+Camera zoom: C
+Debug drawing: L
+
+Switch play/edit mode: P

@@ -60,12 +60,12 @@ public:
 	Object* cloneObject(Object* object);
 
 	//This adds a new component creator which is necessary for the creation of game objects
-//Call this at the very start of the game loop in Intialize
+	//Call this at the very start of the game loop in Intialize
 	void AddComponentCreator(const std::string& name, BaseComponentCreator* creator);
 
 	//Returns the total number of game objects created by this game factory
 	size_t NumberOfObjects() {	return objectMap.size();}
-
+	//Returns the pointer to an object by that object's name
 	Object* FindObject(std::string name);
 
 	void DeleteComponent(int id, ComponentType c);
@@ -73,6 +73,8 @@ public:
 	int GetNextId() { return nextObjectId; };
 
 	friend class PhysicsSystem; // Needed to apply physics onto each object
+	friend class LevelEditor; // Needed for the level editor
+
 private:
 	//ID to assign to the next game object created
 	int nextObjectId;

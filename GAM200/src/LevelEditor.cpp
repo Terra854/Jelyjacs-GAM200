@@ -1,14 +1,21 @@
+/* !
+@file	LevelEditor.cpp
+@author Tan Yee Ann
+@date	2/11/2023
+
+This file contains the definitions of the functions that are part of the level editor
+*//*__________________________________________________________________________*/
 #include <LevelEditor.h>
 #include <Debug.h>
 #include <ImGui/imgui.h>
 #include <Collision.h>
 #include <Core_Engine.h>
-#include <Factory.h>
 #include <components/Texture.h>
 #include <components/Animation.h>
 #include <filesystem>
-#include "SceneLoader.h"
+#include "Scenes.h"
 #include "Assets Manager/asset_manager.h"
+#include <PhysicsSystem.h>
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -16,16 +23,27 @@ bool showPerformanceInfo = false;
 
 bool dock_space = true; // Always must be on for level editor
 
+/******************************************************************************
+	Default Constructor for LevelEditor
+*******************************************************************************/
 LevelEditor::LevelEditor() {
 	editor_grid = new LevelEditorGrid();
 }
 
+/******************************************************************************
+	Default Destructor for LevelEditor
+*******************************************************************************/
 LevelEditor::~LevelEditor() {
 	delete editor_grid;
+
+	ClearLevelEditorObjectMap(true);
 }
-/*
-	This window is to print out the uniform grid
-*/
+
+/******************************************************************************
+	DebugUniformGrid
+	- This window prints out a formatted table of how many objects are inside
+	  a particular grid
+*******************************************************************************/
 void LevelEditor::DebugUniformGrid() {
 	// DEBUG: Print out the uniform grid
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
@@ -70,9 +88,14 @@ void LevelEditor::DebugUniformGrid() {
 	ImGui::End();
 }
 
+/******************************************************************************
+	DebugPerformanceViewer
+	- This window prints out the time taken for each system to complete it's update
+	  and the total time taken to complete each game loop.
+	- It will also print out the FPS of the game
+*******************************************************************************/
 void LevelEditor::DebugPerformanceViewer() {
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
-	ImGui::SetNextWindowPos(ImVec2(0, 30), ImGuiCond_Once);
 	ImGui::Begin("DEBUG: Performance Viewer", &showPerformanceInfo);
 
 	for (std::pair<std::string, double> p : System_elapsed_time) {
@@ -89,11 +112,13 @@ void LevelEditor::DebugPerformanceViewer() {
 	ImGui::End();
 }
 
-/*
+/******************************************************************************
 	Object Properties
-*/
+	- This window allows the user to view the details of a selected object and
+	  it's components
+	- It also allows the user to modify the object's properties
+*******************************************************************************/
 int cloneSuccessful = -1;
-bool selected = false;
 
 void LevelEditor::ObjectProperties() {
 
@@ -278,18 +303,46 @@ void LevelEditor::ObjectProperties() {
 	ImGui::EndChild();
 	ImGui::BeginChild("ObjectPropertiesScroll", ImGui::GetContentRegionAvail());
 	// Texture
-	if (te != nullptr) {
-		if (ImGui::CollapsingHeader("Texture")) {
+	if (te != nullptr) 
+	{
+		if (ImGui::CollapsingHeader("Texture")) 
+		{
 
-			for (const auto& pair : AssetManager::textures) {
-				if (pair.first == te->textureName) {
+			for (const auto& pair : AssetManager::textures) 
+			{
+				if (pair.first == te->textureName) 
+				{
 					ImGui::Text("Texture: %s", pair.first.c_str());
 				}
 			}
 
+
+			if (ImGui::Button("Change Texture"))
+				ImGui::OpenPopup("ChangeTexture");
+
+			if (ImGui::BeginPopup("ChangeTexture"))
+			{
+				int i = 0;
+				for (const auto& t : AssetManager::textures) {
+					if (ImGui::ImageButton(t.first.c_str(), (void*)(intptr_t)t.second, ImVec2(64, 64))) {
+						te->textureName = t.first;
+					}
+
+					if (((i + 1) % 4))
+						ImGui::SameLine();
+
+					i++;
+				}
+
+				ImGui::EndPopup();
+			}
+
+			ImGui::SameLine();
+
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+
 			if (ImGui::Button("Delete"))
 			{
 				objectFactory->DeleteComponent(object->GetId(), ComponentType::Texture);
@@ -351,6 +404,9 @@ void LevelEditor::ObjectProperties() {
 					tr->Position = edited_position;
 					tr->Rotation = edited_rotation;
 					tr->Scale = edited_scale;
+
+					if (b != nullptr)
+						RecalculateBody(tr, b);
 				}
 
 				ImGui::SameLine();
@@ -851,9 +907,11 @@ void LevelEditor::ObjectProperties() {
 	ImGui::End();
 }
 
-/*
-	Object List
-*/
+/******************************************************************************
+	ListOfObjects
+	- This window lists down the the objects that are in the scene
+	- Selecting an object will display it's properties in the Object Properties window
+*******************************************************************************/
 void LevelEditor::ListOfObjects() {
 
 	ImGui::Begin("Object List");
@@ -889,10 +947,10 @@ void LevelEditor::ListOfObjects() {
 	ImGui::End();
 }
 
-/*
-	Displays the selected texture from the asset list
-*/
-
+/******************************************************************************
+	DisplaySelectedTexture
+	- This window displays the texture that is selected in the Asset List window
+*******************************************************************************/
 std::pair<std::string, GLuint> selectedTexture;
 bool display_selected_texture = false;
 
@@ -938,14 +996,19 @@ void LevelEditor::DisplaySelectedTexture() {
 	}
 }
 
-/*
-	Asset List
-*/
-void LevelEditor::AssetList() {
+/******************************************************************************
+	AssetList
+	- This window displays the lists of assets that are loaded by the engine
+	- Only textures and prefabs currently
+*******************************************************************************/
+void LevelEditor::AssetList() 
+{
 	ImGui::Begin("Asset List");
 
-	if (ImGui::BeginTabBar("##AssetList")) {
-		if (ImGui::BeginTabItem("Textures")) {
+	if (ImGui::BeginTabBar("##AssetList")) 
+	{
+		if (ImGui::BeginTabItem("Textures")) 
+		{
 
 			if (ImGui::Button("Refresh Textures"))
 			{
@@ -956,7 +1019,8 @@ void LevelEditor::AssetList() {
 			ImGui::BeginChild("AssetListScroll", ImGui::GetContentRegionAvail());
 			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) {
+			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) 
+			{
 				char buffer[256];
 				sprintf_s(buffer, "##%s", t.first.c_str());
 
@@ -986,11 +1050,13 @@ void LevelEditor::AssetList() {
 			ImGui::EndTabItem();
 		}
 	}
-	if (ImGui::BeginTabItem("Prefabs")) {
+	if (ImGui::BeginTabItem("Prefabs")) 
+	{
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		//int i = 0;
-		for (const std::pair<std::string, Object *>& p : AssetManager::prefabs) {
+		for (const std::pair<std::string, Object *>& p : AssetManager::prefabs) 
+		{
 			//i--;
 
 			char buffer[256];
@@ -1001,7 +1067,13 @@ void LevelEditor::AssetList() {
 			{
 				selected = true;
 				//selectedNum = i;
-				selectedNum = -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
+				selectedNum = (int) -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
+			}
+			size_t size = sizeof(p);
+			if (ImGui::BeginDragDropSource())
+			{
+				ImGui::SetDragDropPayload("Game object", &p, size);
+				ImGui::EndDragDropSource();
 			}
 
 			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
@@ -1014,7 +1086,8 @@ void LevelEditor::AssetList() {
 			if (t != nullptr)
 				ImGui::Image((void*)(intptr_t)AssetManager::textureval(t->textureName), ImVec2(64, 64));
 			// or Animation
-			else if (a != nullptr) {
+			else if (a != nullptr) 
+			{
 				GLint width, height;
 
 				// Bind the texture
@@ -1040,6 +1113,8 @@ void LevelEditor::AssetList() {
 
 			// Text
 			ImGui::Text(p.second->GetName().c_str());
+
+
 		}
 
 		ImGui::PopStyleColor();
@@ -1049,48 +1124,93 @@ void LevelEditor::AssetList() {
 	ImGui::End();
 }
 
-/*
-	This is for a window to pop up telliing that the object has cloned successfully
-*/
-void ObjectClonedSuccessfully(int i) {
-	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f, (float)window->height / 2.f));
-	ImGui::SetNextWindowSize(ImVec2(0, 0));
-	char text[50];
-
-	ImGui::Begin("Clone Successful");
-	sprintf_s(text, "New object ID is: %d", i);
-
-	ImVec2 textSize = ImGui::CalcTextSize(text);
-	ImVec2 windowSize = ImGui::GetWindowSize();
-	ImVec2 textPos = {
-		(windowSize.x - textSize.x) * 0.5f,
-		(windowSize.y - textSize.y) * 0.5f
-	};
-	ImGui::SetCursorPos(textPos);
-	ImGui::Text(text);
-
-	if (ImGui::Button("OK"))
-	{
-		cloneSuccessful = -1;
-	}
-	ImGui::End();
-}
-
-void PlayPauseGame() {
+/******************************************************************************
+	PlayPauseGame
+	- This window contains buttons that allows a user to play/pause the game.
+	- This window also has a reset button that allows the user to reset the level
+	  back to it's initial state before the user hits play for the first time.
+*******************************************************************************/
+void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
 	if (engine->isPaused()) {
-		if (ImGui::Button("Play"))
+		if (ImGui::Button("Play")) {
+			if (initialObjectMap.empty()) {
+				for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
+					initialObjectMap[p.first] = objectFactory->cloneObject(p.second);
+				}
+			}
+
 			engine->setPause();
+		}
 	}
 	else {
 		if (ImGui::Button("Pause"))
 			engine->setPause();
 	}
 
+	ImGui::SameLine();
+
+	if (!engine->isPaused() || initialObjectMap.empty()) {
+		// Make the button look disabled by reducing its alpha
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+
+		// Make the button unclickable
+		ImGui::BeginDisabled(true);
+	}
+
+	if (ImGui::Button("Reset")) {
+		objectFactory->destroyAllObjects();
+
+		for (const std::pair<int, Object*>& p : initialObjectMap) {
+			objectFactory->assignIdToObject(p.second);
+		}
+
+		ClearLevelEditorObjectMap(false);
+
+		// Break here, cause otherwise the next line will be EndDisabled()
+		// which will cause an abort() due to mismatch 
+		ImGui::End();
+		return;
+	}
+
+	if (!engine->isPaused() || initialObjectMap.empty()) {
+		// End the disabled section
+		ImGui::EndDisabled();
+
+		// Restore original style
+		ImGui::PopStyleVar();
+	}
+
 	ImGui::End();
 }
 
+/******************************************************************************
+	ClearLevelEditorObjectMap
+	- Used to clear the copy of the object map in the level editor used to backup
+	  the level's initial state
+
+	@param deleteObjects - Whether to delete the objects itself. false is for only
+						   if transferring the objects to the main object map
+*******************************************************************************/
+void LevelEditor::ClearLevelEditorObjectMap(bool deleteObjects) {
+
+	if (deleteObjects) {
+		Factory::objectIDMap::iterator it = initialObjectMap.begin();
+		for (; it != initialObjectMap.end(); ++it)
+		{
+			delete it->second;
+		}
+	}
+
+	initialObjectMap.clear();
+}
+
+/******************************************************************************
+	CameraControl
+	- This window is used to toggle the camera between the game camera and the free camera.
+	- The free camera allows the user to move it in all directions
+*******************************************************************************/
 void CameraControl() {
 
 	ImGui::Begin("Camera Control");
@@ -1172,16 +1292,149 @@ void CameraControl() {
 	ImGui::End();
 }
 
+/******************************************************************************
+	LoadLevelPanel
+	- This window lets users select a level to load
+	- All levels are in json files and stored in Asset/Levels
+*******************************************************************************/
+void LevelEditor::LoadLevelPanel() {
+
+	std::vector<std::string> level_files;
+	const std::string path = "Asset/Levels/";
+
+	try {
+		for (const auto& entry : std::filesystem::directory_iterator(path)) {
+			if (entry.is_regular_file() && entry.path().extension() == ".json") {
+				level_files.push_back(entry.path().filename().string());
+			}
+		}
+	}
+	catch (std::filesystem::filesystem_error& e) {
+		std::cerr << e.what() << std::endl;
+	}
+
+	ImGui::Begin("Level List");
+	ImGui::Text("Number of levels detected: %d", level_files.size());
+	ImGui::BeginChild("LevelListScroll", ImGui::GetContentRegionAvail());
+	if (ImGui::BeginTable("LevelList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
+	{
+		// Print the filenames
+		for (const auto& filename : level_files) {
+			ImGui::TableNextColumn();
+			if (ImGui::Selectable(filename.c_str())) {
+				if (!engine->isPaused())
+					engine->setPause();
+				selected = false;
+				objectFactory->destroyAllObjects();
+				level_editor->ClearLevelEditorObjectMap(true);
+				LoadScene(path + filename.c_str());
+			}
+		}
+
+		ImGui::EndTable();
+	}
+	ImGui::EndChild();
+	ImGui::End();
+}
+
+/******************************************************************************
+	ObjectClonedSuccessfully
+	- This pop up window tells that the object has cloned successfully
+*******************************************************************************/
+void ObjectClonedSuccessfully(int i) {
+	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f, (float)window->height / 2.f));
+	ImGui::SetNextWindowSize(ImVec2(0, 0));
+	char text[50];
+
+	ImGui::Begin("Clone Successful");
+	sprintf_s(text, "New object ID is: %d", i);
+
+	ImVec2 textSize = ImGui::CalcTextSize(text);
+	ImVec2 windowSize = ImGui::GetWindowSize();
+	ImVec2 textPos = {
+		(windowSize.x - textSize.x) * 0.5f,
+		(windowSize.y - textSize.y) * 0.5f
+	};
+	ImGui::SetCursorPos(textPos);
+	ImGui::Text(text);
+
+	if (ImGui::Button("OK"))
+	{
+		cloneSuccessful = -1;
+	}
+	ImGui::End();
+}
+
+bool save_as_dialog = false;
+
+/******************************************************************************
+	SaveAsDialog
+	- This pop up a dialog box to ask where to save the level to
+*******************************************************************************/
+void LevelEditor::SaveAsDialog() {
+	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f - 150, (float)window->height / 2.f));
+	ImGui::SetNextWindowSize(ImVec2(300, 0));
+	static char text[100];
+
+	ImGui::Begin("Save as", &save_as_dialog);
+	
+	ImGui::Text("Save to file:");
+	ImGui::InputText("##Filename", text, 100);
+
+	ImGui::SameLine();
+
+	ImGui::Text(".json");
+
+	if (ImGui::Button("OK"))
+	{
+		if (!initialObjectMap.empty()) {
+			objectFactory->destroyAllObjects();
+
+			for (const std::pair<int, Object*>& p : initialObjectMap) {
+				objectFactory->assignIdToObject(p.second);
+			}
+
+			ClearLevelEditorObjectMap(false);
+		}
+
+		char saveLocation[110];
+
+		sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
+
+		SaveScene(saveLocation);
+		save_as_dialog = false;
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Cancel"))
+	{
+		save_as_dialog = false;
+	}
+
+	ImGui::End();
+}
+
+/******************************************************************************
+	DoNothing
+	- Just a stub function. It does nothing
+*******************************************************************************/
 void DoNothing() {
 
 }
 
+/******************************************************************************
+	Initialize
+	- Initializes the level editor
+*******************************************************************************/
 void LevelEditor::Initialize() {
 	total_time = 0.0;
 }
 
-/************************************LEVEL EDITOR MAIN UPDATE LOOP************************************/
-
+/******************************************************************************
+	Update
+	- The update loop for the level editor
+*******************************************************************************/
 void LevelEditor::Update() {
 
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -1217,38 +1470,31 @@ void LevelEditor::Update() {
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	}
 
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::BeginMenu("Load Level")) {
-				std::vector<std::string> level_files;
-				const std::string path = "Asset/Levels/";
+			char savetext[108];
+			sprintf_s(savetext, "Save to %s", engine->loaded_filename.c_str());
 
-				try {
-					for (const auto& entry : std::filesystem::directory_iterator(path)) {
-						if (entry.is_regular_file() && entry.path().extension() == ".json") {
-							level_files.push_back(entry.path().filename().string());
-						}
+			if (ImGui::MenuItem(savetext)) {
+				if (!initialObjectMap.empty()) {
+					objectFactory->destroyAllObjects();
+
+					for (const std::pair<int, Object*>& p : initialObjectMap) {
+						objectFactory->assignIdToObject(p.second);
 					}
 
-					// Print the filenames
-					for (const auto& filename : level_files) {
-						if (ImGui::MenuItem(filename.c_str())) {
-							selectedNum = -1;
-							objectFactory->destroyAllObjects();
-							LoadScene(path + filename.c_str());
-						}
-					}
+					ClearLevelEditorObjectMap(false);
 				}
-				catch (std::filesystem::filesystem_error& e) {
-					std::cerr << e.what() << std::endl;
-				}
-				ImGui::EndMenu();
+				
+				SaveScene(engine->loaded_filename.c_str());
 			}
-
+			if (ImGui::MenuItem("Save as...")) {
+				save_as_dialog = true;
+			}
 			ImGui::Separator();
 
 			if (ImGui::MenuItem("Exit")) { engine->game_active = false; }
@@ -1256,7 +1502,7 @@ void LevelEditor::Update() {
 		}
 		if (ImGui::BeginMenu("Window"))
 		{
-			if (ImGui::MenuItem("Performance Viewer")) { showPerformanceInfo = true; }
+			if (ImGui::MenuItem("TileSet")) { engine->show_tileset = true; }
 			if (ImGui::MenuItem("Uniform Grid")) { showUniformGrid = true; }
 			ImGui::EndMenu();
 		}
@@ -1264,7 +1510,9 @@ void LevelEditor::Update() {
 	}
 
 	showUniformGrid ? DebugUniformGrid() : DoNothing();
-	showPerformanceInfo ? DebugPerformanceViewer() : DoNothing();
+
+	//showPerformanceInfo ? DebugPerformanceViewer() : DoNothing();
+	DebugPerformanceViewer();
 
 	ListOfObjects();
 
@@ -1278,14 +1526,22 @@ void LevelEditor::Update() {
 
 	CameraControl();
 
+	LoadLevelPanel();
+
 	if (cloneSuccessful > -1) {
 		ObjectClonedSuccessfully(cloneSuccessful);
 	}
+
+	save_as_dialog ? SaveAsDialog() : DoNothing();
 }
 
 /************************************LEVEL EDITOR GRID************************************/
 
 LevelEditorGrid* editor_grid;
+
+/******************************************************************************
+	Default Constructor for LevelEditorGrid
+*******************************************************************************/
 LevelEditorGrid::LevelEditorGrid()
 {
 	set_num({ 12, 12 });
@@ -1294,6 +1550,10 @@ LevelEditorGrid::LevelEditorGrid()
 
 glm::vec3 box_color_editor{ 0.0f, 0.5f, 0.5f };
 
+/******************************************************************************
+	drawleveleditor
+	- Draws the level editor grid
+*******************************************************************************/
 void LevelEditorGrid::drawleveleditor()
 {
 	if (num.x > num.y)

@@ -1,19 +1,21 @@
+/* !
+@file LogicScript.h
+@author Luke Goh
+@date	28/9/2023
+
+This file contains the declaration of the functions that are part of the LogicScript Interface
+*//*__________________________________________________________________________*/
 #pragma once
-
+#include <string>
 #include <Object.h>
-
-typedef void (*InitScript)(Object*);
-typedef void (*UpdateScript)(Object*);
-typedef void (*ShutdownScript)(Object*);
-
 class LogicScript
 {
 public:
-	LogicScript(const InitScript& init, const UpdateScript& update, const ShutdownScript& shutdown);
-	~LogicScript();
-
-
-	InitScript init_script;
-	UpdateScript update_script;
-	ShutdownScript shutdown_script;
+	LogicScript() {};
+	//LogicScript(std::string name);
+	~LogicScript() = default;
+	
+	virtual void Start(Object* obj) = 0 ;
+	virtual void Update(Object* obj) = 0;
+	virtual void Shutdown(Object* obj) = 0;
 };

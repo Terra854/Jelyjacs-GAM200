@@ -1,3 +1,10 @@
+/* !
+@file Application.cpp
+@author Luke Goh
+@date	3/11/2023
+
+This file contains the class definitions that is used to run the game
+*//*__________________________________________________________________________*/
 #include "Application.h"
 #include <iostream>
 #include <Core_Engine.h>
@@ -26,13 +33,30 @@ Application::~Application()
 }
 
 void Application::Run() {
-	
 
 	std::cout << "Hello World!" << std::endl;
+	
 	// Enable run-time memory check for debug builds.
-	#if defined(DEBUG) | defined(_DEBUG)
-			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	#endif
+#if defined(DEBUG) | defined(_DEBUG)
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
+	// Copy the imgui configs
+
+	// Check if the destination file already exists
+	if (!std::filesystem::exists("imgui.ini")) {
+		try {
+			// Attempt to copy the file
+			std::filesystem::copy_file("Asset/imgui-original.ini", "imgui.ini");
+			std::cout << "imgui config copied successfully." << std::endl;
+		}
+		catch (std::filesystem::filesystem_error& e) {
+			std::cerr << e.what() << std::endl;
+		}
+	}
+	else {
+		std::cout << "imgui config already exist, skip copying" << std::endl;
+	}
 
 	// Initialise Pointer to Systems
 	engine = new CoreEngine();
@@ -63,7 +87,7 @@ void Application::Run() {
 
 	// Initialize and Start Game Loop
 	engine->Initialize();
-	windows->ActivateWindow();
+	//windows->ActivateWindow();
 	windows->print_specs();
 
 	engine->GameLoop();

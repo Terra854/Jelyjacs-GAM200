@@ -1,4 +1,11 @@
 #pragma once
+/* !
+@file	ThreadPool.h
+@author Tan Yee Ann
+@date	2/11/2023
+
+This file contains the declarations for the ThreadPool system class
+*//*__________________________________________________________________________*/
 
 #include <Debug.h>
 #include <Interface_System.h>
@@ -23,6 +30,19 @@ public:
     ThreadPool() {}
     ~ThreadPool() { Free(); }
 
+    /******************************************************************************
+        enqueue
+        - Queues a function to be executed by a worker thread
+
+        NOTE: Do not enqueue any function that have opengl function calls as they must
+        be executed in the thread that initializes it (in this case, the main thread)
+
+        @param f - The function to execute
+        @param args - The arguments to pass to the function
+
+        @return - an std::future that contains the returned value of the function
+                  (if you pass a non-void function to it)
+    *******************************************************************************/
     template <typename Func, typename... Args>
     auto enqueue(Func&& f, Args&&... args) -> std::future<typename std::result_of<Func(Args...)>::type> {
         using return_type = typename std::invoke_result<Func, Args...>::type;
@@ -43,7 +63,7 @@ public:
     }
 
     void Initialize();
-    void Update() {}; // This can be used to handle tasks if you want.
+    void Update() {};
 
     bool isQueueEmpty();
     int numOfTasksLeft();

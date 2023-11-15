@@ -8,7 +8,6 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Debug.h>
 #include "GameLogic.h"
 #include <iostream>
-//#include "Assets Manager/file_reader.h"
 #include "Factory.h"
 #include "ComponentCreator.h"
 #include "components/Transform.h"
@@ -23,7 +22,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <message.h>
 //#include <Movement.h>
 #include <Audio.h>
-#include <SceneLoader.h>
+#include <Scenes.h>
 #include <PhysicsSystem.h>
 
 GameLogic* Logic = NULL;
@@ -75,8 +74,12 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
 	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 
+	//for(auto const)
+
+	//LoadScene("Asset/Levels/testsave.json");
 
 	LoadScene("Asset/Levels/tutorial_level.json");
+	SaveScene("Asset/Levels/testsave.json");
 }
 
 /******************************************************************************
@@ -88,10 +91,12 @@ void GameLogic::Update() {
 	// Do not update if the game is paused
 	if (engine->isPaused())
 		return;
-	
-	for (auto& it : behaviourComponents)
-	{
-		behaviours[it->GetIndex()]->update_script(it->GetOwner());
+	int x = 0;
+
+	for (auto& behaviour : behaviours) {
+		behaviour.second->Update(b_objects[x]);
+		std::cout << "Behaviour " << x << " updated" << std::endl;
+		x++;
 	}
 	
 	// If Left Click, show mouse position
@@ -188,6 +193,7 @@ void GameLogic::Update() {
 				Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 				//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 
+				// if piston collides with player, change the animation of piston
 				if (piston_b->collision_flag & COLLISION_TOP) {
 					Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 					piston_animation->fixed = true;
@@ -196,7 +202,8 @@ void GameLogic::Update() {
 					Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
 					std::cout << "pisotn event linked event:";
 					std::cout << piston_event->linked_event << std::endl;
-					//check the door
+
+					//  Change the animation of door and disable the body of door
 					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
 						Object* obj2 = objectFactory->getObjectWithID((long)j);
 						if (obj2->GetName() == "door") {
@@ -304,7 +311,12 @@ void GameLogic::Update() {
 	*/
 }
 
-void GameLogic::AddBehaviour(LogicScript* behaviour)
+void GameLogic::AddBehaviour(std::string name, LogicScript* behaviour)
 {
-	behaviours.push_back(behaviour);
+	behaviours[name] = behaviour;
+}
+
+void GameLogic::AddObject(Object* obj)
+{
+	b_objects.push_back(obj);
 }

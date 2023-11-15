@@ -1,3 +1,11 @@
+/* !
+@file	EngineHud.cpp
+@author	Jonathan Woo Jia How
+@date	02/11/2023
+
+This file contains functions to initialize and render the IMGui windows for the level editor
+*//*__________________________________________________________________________*/
+
 #include "EngineHud.h"
 #include <Debug.h>
 

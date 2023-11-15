@@ -1,3 +1,10 @@
+/* !
+@file    Camera.cpp
+@author  Guo Chen (g.chen@digipen.edu)
+@date    02/11/2023
+
+Camera system for 2D game.
+*//*__________________________________________________________________________*/
 #include <Camera.h>
 #include <iostream>
 #include <input.h>
@@ -8,11 +15,17 @@ Camera::Camera() {
 	camera2D = this;
 }
 
-
+/*
+* Initialize the camera
+*/
 void Camera::Initialize() {
 	scale = { 1.f,1.f };
 }
 
+/*
+* Update the camera
+* Press C to zoom in/out
+*/
 void Camera::Update() {
 
 	if (!isFreeCamEnabled()) {
@@ -23,8 +36,12 @@ void Camera::Update() {
 			if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
 				camera2D->scale = { 2.0f, 2.0f };
 			}
-			else camera2D->scale = { 1.0f, 1.0f };
+			else {
+				position = { 0.0f, 0.0f };
+				scale = { 1.0f, 1.0f };
+			}
 		}
+		if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
 
 		SetToPlayer();
 
@@ -35,6 +52,9 @@ void Camera::Update() {
 
 }
 
+/*
+* Set the camera to the player's position
+*/
 void Camera::SetToPlayer() {
 	// get player object
 	Object* player = objectFactory->getPlayerObject();

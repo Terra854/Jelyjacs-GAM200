@@ -25,6 +25,7 @@ includes all the functions to draw objects
 #include <components/Animation.h>
 #include <LevelEditor.h>
 #include "../Assets Manager/asset_manager.h"
+#include "Particle.h"
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
@@ -48,6 +49,7 @@ GLApp::GLApp()
 {
 	app = this;
 }
+ParticleSystem particleSystem;
 
 /*
 * Initialize() is called once, at program start.
@@ -63,6 +65,8 @@ void GLApp::Initialize()
 	// enable alpha blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	particleSystem.Init();
 }
 
 /*
@@ -229,6 +233,8 @@ void GLApp::init_shdrpgms() {
 	std::cout << "test shader program: " << "image-shdrpgm" << std::endl;
 	insert_shdrpgm("shape", "shaders/shape.vert", "shaders/shape.frag");
 	std::cout << "test shader program: " << "shape-shdrpgm" << std::endl;
+	insert_shdrpgm("instancing", "shaders/instancing.vert", "shaders/instancing.frag");
+
 }
 
 /*
@@ -244,7 +250,7 @@ void GLApp::Update()
 	}
 
 	//clear screen
-	glClearColor(0.11f, 0.094f, 0.161f, 1.0f);
+	glClearColor(1.f, 1.f, 1.f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//update window bar
@@ -253,8 +259,7 @@ void GLApp::Update()
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
 
 	//draw objects
-	//int i = 0;
-	//while (i < 6) {
+	
 	for (long i = 0; i < (long) objectFactory->GetNextId(); i++) 
 	{
 		if (objectFactory->getObjectWithID(i) == nullptr)
@@ -301,7 +306,7 @@ void GLApp::Update()
 		
 		
 		//get matrix
-		mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotRad(orientation);
+		mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotDeg(orientation);
 		
 
 		// matrix after camrea
@@ -335,6 +340,8 @@ void GLApp::Update()
 			// if is player
 			if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 				// draw object with animation
+				particleSystem.Update();
+				particleSystem.Draw();
 				if (ani_pt->current_type != ani_pt->previous_type && !ani_pt->jump_fixed)
 					ani_pt->frame_num = 0;
 				else if (ani_pt->frame_count >= ani_pt->frame_rate) {
@@ -440,12 +447,11 @@ void GLApp::Update()
 				}
 			}
 
-		}
-		
+		}		
     }
 
 	// Draw the bove around the selected object
-	if (level_editor->selectedNum >= 0) {
+	if (level_editor->selected && level_editor->selectedNum >= 0) {
 		Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Animation));
 		Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Texture));
 		Transform* tr = static_cast<Transform*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Transform));
@@ -488,6 +494,7 @@ void GLApp::Update()
 			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
 		}
 	}
+	
 }
 
 /*
@@ -495,6 +502,7 @@ void GLApp::Update()
 */
 void GLApp::cleanup()
 {
+	particleSystem.Free();
 	//delete all models
 	for (auto& model : models)
 	{

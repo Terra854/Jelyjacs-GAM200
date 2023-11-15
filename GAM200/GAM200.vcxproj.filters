@@ -156,7 +156,7 @@
     <ClCompile Include="src\EngineHud.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SceneLoader.cpp">
+    <ClCompile Include="src\Scenes.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
     <ClCompile Include="src\LevelEditor.cpp">
@@ -177,9 +177,6 @@
     <ClCompile Include="src\Behaviour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\LogicScript.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphic_gl\Particle.cpp">
       <Filter>Source Files\Systems\Graphics</Filter>
     </ClCompile>
@@ -187,6 +184,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GameHud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LogicScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -287,17 +290,11 @@
     <ClInclude Include="include\components\Texture.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\SceneLoader.h">
+    <ClInclude Include="include\Scenes.h">
       <Filter>Header Files\Miscellanous</Filter>
-    </ClInclude>
-    <ClInclude Include="include\LevelEditor.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ThreadPool.h">
       <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Font.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Assets Manager\json_serialization.h">
       <Filter>Header Files\Miscellanous</Filter>
@@ -330,6 +327,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GameHud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Font.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LevelEditor.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

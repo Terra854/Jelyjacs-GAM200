@@ -27,15 +27,5 @@ public:
 
 	}
 
-	/*virtual void JsonSerialize(JsonSerialization obj) override
-	{
-		obj.readFloat(Position.x, "Properties", "Position", "x");
-		obj.readFloat(Position.y, "Properties", "Position", "y");
-
-		obj.readFloat(Scale_x, "Properties", "Scale_x");
-		obj.readFloat(Scale_y, "Properties", "Scale_y");
-		obj.readFloat(Rotation, "Properties", "Rotation");
-	}*/
-
 	virtual ComponentType TypeId() const override { return ComponentType::Transform; }
 };

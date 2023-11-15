@@ -1,12 +1,17 @@
-#include "LogicScript.h"
-#include "GameLogic.h"
+/* !
+@file LogicScript.cpp
+@author Luke Goh
+@date	3/11/2023
 
-
-LogicScript::LogicScript(const InitScript& init, const UpdateScript& update, const ShutdownScript& shutdown)
-	: init_script(init), update_script(update), shutdown_script(shutdown) {
-	Logic->AddBehaviour(this);
+This file contains the definition of the functions that are part of the LogicScript Interface
+*//*__________________________________________________________________________*/
+#include <GameLogic.h>
+/*
+LogicScript::LogicScript(std::string name) {
+	Logic->AddBehaviour(name ,this);
 }
 
 LogicScript::~LogicScript() {
 	//Logic->RemoveBehaviour(this);
 }
+*/

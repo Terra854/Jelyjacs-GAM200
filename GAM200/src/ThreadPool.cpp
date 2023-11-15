@@ -1,5 +1,17 @@
+/* !
+@file	ThreadPool.cpp
+@author Tan Yee Ann
+@date	2/11/2023
+
+This file contains the definitions of the functions that implements a thread pool
+for use in the game engine
+*//*__________________________________________________________________________*/
 #include <ThreadPool.h>
 
+/******************************************************************************
+    Initialize
+    - Initializes the threadpool
+*******************************************************************************/
 void ThreadPool::Initialize() {
     num_of_threads = std::thread::hardware_concurrency();
     for (int i = 0; i < num_of_threads; ++i) {
@@ -7,6 +19,10 @@ void ThreadPool::Initialize() {
     }
 }
 
+/******************************************************************************
+    Free
+    - Ceanly shuts down the threadpool
+*******************************************************************************/
 void ThreadPool::Free() {
     {
         std::unique_lock<std::mutex> lock(queue_mutex);
@@ -20,15 +36,29 @@ void ThreadPool::Free() {
     }
 }
 
+/******************************************************************************
+    isQueueEmpty
+    - Checks to see if there is no tasks queued for execution
+*******************************************************************************/
 bool ThreadPool::isQueueEmpty() {
     std::unique_lock<std::mutex> lock(queue_mutex);
     return tasks.empty();
 }
 
+/******************************************************************************
+    numOfTasksLeft
+    - Returns the number of tasks left in teh queue
+*******************************************************************************/
 int ThreadPool::numOfTasksLeft() {
     return (int)tasks.size();
 }
 
+/******************************************************************************
+    workerThread
+    - Spawns a worker thread
+
+    @param i - ID of the worker thread
+*******************************************************************************/
 void ThreadPool::workerThread(int i) {
     std::cout << "Worker thread no. " << i << " initialized and running." << std::endl;
     while (true) {

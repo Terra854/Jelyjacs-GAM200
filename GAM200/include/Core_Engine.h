@@ -1,6 +1,6 @@
 #pragma once
 /* !
-@file Core_Engine.h
+@file	Core_Engine.h
 @author Luke Goh
 @date	28/9/2023
 
@@ -12,6 +12,7 @@ This file contains the declaration for the Core Engine class
 #include "Interface_System.h"
 #include <message.h>
 #include <unordered_map>
+#include <map> 
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_glfw.h>
 #include <Imgui/imgui_impl_opengl3.h>
@@ -52,11 +53,11 @@ public:
 	void Broadcast(Message_Handler *msg);
 
 	void createObject(float posX, float posY, std::string objectName);
-
+	/*
 	int convertGridToWorldPos(int gridPos, Axis axis);
 	int convertMousePosToGridPos(Axis axis);
 	bool checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int bottomY);
-
+	*/
 	float GetDt() { return dt; }
 	float Get_FPS() { return core_fps; }
 	float Get_Fixed_DT() { return fixed_dt; }
@@ -64,6 +65,10 @@ public:
 	// Check if the game is paused
 	void setPause() { paused = !paused; }
 	bool isPaused() { return paused; }
+
+	std::string loaded_level, loaded_filename;
+
+	bool show_tileset = false;
 
 	friend class LevelEditor; // For displaying performance info
 	
