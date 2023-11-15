@@ -450,6 +450,8 @@ void GLApp::Update()
 		}		
     }
 
+
+#if defined(DEBUG) | defined(_DEBUG)
 	// Draw the bove around the selected object
 	if (level_editor->selected && level_editor->selectedNum >= 0) {
 		Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Animation));
@@ -494,6 +496,7 @@ void GLApp::Update()
 			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
 		}
 	}
+#endif
 	
 }
 
