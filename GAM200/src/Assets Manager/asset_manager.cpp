@@ -138,7 +138,7 @@ void AssetManager::createprefablist()
 		else
 		{
 			std::cout << "Error located here: " << list.path().filename() << std::endl;
-			MessageBox(0, "Invalid file extension for prefabs detected. Please only use .json", "Error: Prefabs", MB_OK);
+			MessageBoxA(0, "Invalid file extension for prefabs detected. Please only use .json", "Error: Prefabs", MB_OK);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -173,7 +173,7 @@ void AssetManager::loadsounds()
 				{
 					// Popup for invalid audio file
 					std::cout << "Error located here: " << innerlist.path().filename() << std::endl;
-					MessageBox(0, "Invalid file extension for audio detected. Please only use .wav", "Error: Audio", MB_OK);
+					MessageBoxA(0, "Invalid file extension for audio detected. Please only use .wav", "Error: Audio", MB_OK);
 					exit(EXIT_FAILURE);
 				}
 			}
