@@ -236,11 +236,11 @@ void CoreEngine::GameLoop()
 
 	/* End Level Editor */
 	GLuint tileset = app->setup_texobj("Asset/Picture/TileSheet.png");
-	// Game Loop
-
-	gamehud.Initialize();
-#endif
 	long selectedObjectID = -1;
+
+#endif
+	// Game Loop
+	gamehud.Initialize();
 
 	while (game_active)
 	{
