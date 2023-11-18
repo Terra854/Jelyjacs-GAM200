@@ -135,6 +135,7 @@ void GLWindow::Update()
         //set window position to the center of the screen
         int pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
         int pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+        pos_y += 100;
         glfwSetWindowPos(ptr_window, pos_x, pos_y);
     }
     if (input::IsPressed(KEY::f)) {
