@@ -347,7 +347,12 @@ void CoreEngine::GameLoop()
 
 			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true)
 			{
-				Object* object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				Object* object;
+				if (level_editor->selectedNum >= 0)
+					object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				else
+					object = objectFactory->getPrefabWithID(static_cast<long>(level_editor->selectedNum));
+
 				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
 				ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
