@@ -93,6 +93,14 @@
       }
     },
     {
+      "Prefabs": "Spark.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -350.0,
+        "y": -130.0
+      }
+    },
+    {
       "Prefabs": "platform_0.json",
       "Type": "Transform",
       "Position": {
