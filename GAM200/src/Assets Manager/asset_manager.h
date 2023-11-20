@@ -55,6 +55,9 @@ public:
 	// Level Editor will need to access the private data
 	friend class LevelEditor;
 
+	// The factory will need to get the prefabs
+	friend class Factory;
+
 	// These data shouldn't be modified unless file location is changed
 private:
 	// Location initialize in asset_manager.cpp
@@ -72,7 +75,3 @@ private:
 
 	static GLuint missing_texture;
 };
-
-
-
-

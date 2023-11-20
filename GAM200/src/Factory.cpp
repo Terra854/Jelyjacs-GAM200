@@ -375,6 +375,14 @@ Object* Factory::getObjectWithID(long id)
 	}
 }
 
+//Returns a game prefab from the map with a specific id
+Object* Factory::getPrefabWithID(long id)
+{
+	auto it = AssetManager::prefabs.begin();
+	std::advance(it, -(id + 1));
+	return it->second;
+}
+
 // Returns the player object from the map
 Object* Factory::getPlayerObject()
 {
