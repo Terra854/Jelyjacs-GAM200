@@ -120,6 +120,27 @@ void LevelEditor::DebugPerformanceViewer() {
 *******************************************************************************/
 int cloneSuccessful = -1;
 
+static bool Transform_EditMode = false;
+
+static Vec2 edited_position;
+static float edited_rotation;
+static Vec2 edited_scale;
+
+static bool Body_EditMode = false;
+
+static bool edited_active;
+static bool edited_collision_response;
+
+static bool AABB_EditMode = false;
+
+static float edited_aabb_width;
+static float edited_aabb_height;
+
+static bool Physics_EditMode = false;
+
+static Vec2 edited_velocity;
+static bool edited_gravity;
+
 void LevelEditor::ObjectProperties() {
 
 	ImGui::SetNextWindowSize(ImVec2(450, 0));
@@ -144,27 +165,6 @@ void LevelEditor::ObjectProperties() {
 
 		return;
 	}
-
-	static bool Transform_EditMode = false;
-
-	static Vec2 edited_position;
-	static float edited_rotation;
-	static Vec2 edited_scale;
-
-	static bool Body_EditMode = false;
-
-	static bool edited_active;
-	static bool edited_collision_response;
-
-	static bool AABB_EditMode = false;
-
-	static float edited_aabb_width;
-	static float edited_aabb_height;
-
-	static bool Physics_EditMode = false;
-
-	static Vec2 edited_velocity;
-	static bool edited_gravity;
 
 	Object* object;
 
@@ -939,6 +939,12 @@ void LevelEditor::ListOfObjects() {
 			if (ImGui::Selectable(buf, selectedNum == static_cast<int>(i))) {
 				selected = true;
 				selectedNum = static_cast<int>(i);
+
+				// Cancel all edits inside the property editor
+				Transform_EditMode = false;
+				Body_EditMode = false;
+				AABB_EditMode = false;
+				Physics_EditMode = false;
 			}
 		}
 		ImGui::EndTable();
@@ -1069,6 +1075,11 @@ void LevelEditor::AssetList()
 				//selectedNum = i;
 				selectedNum = (int) -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
 
+				// Cancel all edits inside the property editor
+				Transform_EditMode = false;
+				Body_EditMode = false;
+				AABB_EditMode = false;
+				Physics_EditMode = false;
 			}
 			size_t size = sizeof(p);
 			if (ImGui::BeginDragDropSource())
