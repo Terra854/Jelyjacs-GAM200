@@ -92,6 +92,8 @@ void GameLogic::Initialize()
 	std::cout << "GameLogic Initialized" << std::endl;
 	std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
 	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
+
+	playerObj = objectFactory->getPlayerObject();
 }
 
 /******************************************************************************
@@ -126,7 +128,7 @@ void GameLogic::Update() {
 	// Movement for Player
 	// If button Pressed, changed velocity
 	
-	playerObj = objectFactory->getPlayerObject();
+	//playerObj = objectFactory->getPlayerObject();
 	
 	if (playerObj != nullptr && playerObj->GetComponent(ComponentType::Physics) != nullptr) {
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
@@ -170,6 +172,14 @@ void GameLogic::Update() {
 		}
 		else player_animation->jump_fixed = false;
 
+		if (input::IsPressed(KEY::e)) {
+			if (playerObj->GetName() == "Finn") {
+				playerObj = objectFactory->FindObject("Spark");
+			}
+			else {
+				playerObj = objectFactory->FindObject("Finn");
+			}
+		}
 
 		// Let the player loop around the window
 		
@@ -204,7 +214,7 @@ void GameLogic::Update() {
 					if (piston_animation->current_type == AnimationType::Jump)continue;
 					piston_animation->current_type = AnimationType::Jump;
 					Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-					std::cout << "pisotn event linked event:";
+					std::cout << "piston event linked event:";
 					std::cout << piston_event->linked_event << std::endl;
 
 					//  Change the animation of door and disable the body of door

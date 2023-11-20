@@ -1,0 +1,57 @@
+{
+  "Name": "Spark",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale_x": 54.0,
+        "Scale_y": 54.0,
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Body",
+      "Shape": "Rectangle",
+      "Properties": {
+        "width": 29.7,
+        "height": 43.7
+      }
+    },
+    {
+      "Type": "Animation",
+      "Properties": {
+        "texturepath": "Finn.png",
+        "jumpfixframe": 6,
+        "framerate": 0.1,
+        "frame": [13, 4],
+        "idle": [8, 1],
+        "push": [9, 2],
+        "jump": [11, 3],
+        "run": [13, 4]
+      }
+    },
+    {
+      "Type": "Physics",
+      "Properties": {
+        "X_Velocity": 0.0,
+        "Y_Velocity": 0.0,
+        "AffectedByGravity": true,
+        "Mass": 1.0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "Player",
+        "Index" : 1
+      }
+    },
+    {
+      "Type": "Player"
+    }
+  ]
+}
