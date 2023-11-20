@@ -93,17 +93,19 @@ void ParticleSystem::Update()
             Vec2 pos = tran_pt->Position;
             pos.x -= Vx * 0.1f;
             pos.y -= Vy * 0.1f;
-            pos.x = pos.x * 2.0f / window->width;
-            pos.y = pos.y * 2.0f / window->height;
+            pos.x = pos.x * 2.0f / window->width_init;
+            pos.y = pos.y * 2.0f / window->height_init;
             Vec2 scale{ 0.f,0.f };
-            scale.x = tran_pt->Scale.x / window->width;
-            scale.y = tran_pt->Scale.y / window->height;
+            scale.x = tran_pt->Scale.x / window->width_init;
+            scale.y = tran_pt->Scale.y / window->height_init;
             scale.x *= sqrt(Vx * Vx + Vy * Vy) * 0.002f;
             scale.y *= sqrt(Vx * Vx + Vy * Vy) * 0.002f;
             //calculate rotation
             float orientation = atan2(Vy, Vx);
 
             world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
+            Vec2 window_scaling{(float)window->width / (float)window->width_init, (float)window->height / (float) window->height_init};
+            world_to_ndc = Mat3Scale(window_scaling.x ,window_scaling.y) * world_to_ndc;
             world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
         }
     }

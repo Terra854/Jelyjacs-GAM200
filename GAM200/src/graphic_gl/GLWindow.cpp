@@ -25,13 +25,15 @@ includes all the functions to create and update the window
 // static data members declared in
 GLint GLWindow::width;
 GLint GLWindow::height;
+GLint GLWindow::width_init;
+GLint GLWindow::height_init;
 GLdouble GLWindow::fps;
 GLdouble GLWindow::delta_time;
 std::string GLWindow::title;
 GLFWwindow* GLWindow::ptr_window;
 GLint GLWindow::width_windowed;
 GLint GLWindow::height_windowed;
-
+Window_size GLWindow::window_size;
 
 //Global Pointer to Window System
 GLWindow* window = NULL;
@@ -56,10 +58,14 @@ GLWindow::GLWindow() {
     line_title >> GLWindow::title;
     getline(ifs, line);
     std::istringstream line_width{ line };
-    line_width >> GLWindow::width;
+    line_width >> GLWindow::width_init;
     getline(ifs, line);
     std::istringstream line_height{ line };
-    line_height >> GLWindow::height;
+    line_height >> GLWindow::height_init;
+
+    ifs.close();
+    width = width_init;
+    height = height_init;
 }
 
 /*  _________________________________________________________________________ */
@@ -87,7 +93,7 @@ void GLWindow::Initialize() {
     glfwWindowHint(GLFW_BLUE_BITS, 8); glfwWindowHint(GLFW_ALPHA_BITS, 8);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); // window dimensions are static
 
-    GLWindow::ptr_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    GLWindow::ptr_window = glfwCreateWindow(width_init, height_init, title.c_str(), NULL, NULL);
     if (!window->ptr_window) {
         std::cerr << "GLFW unable to create OpenGL context - abort program\n";
         glfwTerminate();
@@ -117,7 +123,7 @@ void GLWindow::Initialize() {
         std::cerr << "Driver doesn't support OpenGL 4.5 - abort program" << std::endl;
         return;
     }
-    
+    window_size = Window_size::high;
 }
 
 /*
@@ -130,17 +136,70 @@ void GLWindow::Update()
 
     //change to windowed mode
     if (input::IsPressed(KEY::x)) {
-        
-        glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
-        //set window position to the center of the screen
-        int pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
-        int pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
-        pos_y += 100;
-        glfwSetWindowPos(ptr_window, pos_x, pos_y);
+        if (window_size == Window_size::fullscreen)
+        {
+			window_size = Window_size::high;
+		}
+        else {
+           //switch to another resolution
+            switch (window_size)
+            {
+			case Window_size::high:
+				window_size = Window_size::medium;
+				break;
+			case Window_size::medium:
+				window_size = Window_size::low;
+				break;
+			case Window_size::low:
+				window_size = Window_size::high;
+				break;
+			}
+        }
+        //glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+        ////set window position to the center of the screen
+        //int pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
+        //int pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+        //pos_y += 100;
+        //glfwSetWindowPos(ptr_window, pos_x, pos_y);
+        int pos_x, pos_y;
+        switch (window_size)
+        {
+        /*case Window_size::fullscreen:
+            glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
+            break;*/
+        case Window_size::high:
+            width = 1920;
+            height = 1080;
+            glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+            pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
+            pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+            pos_y += 100;
+            glfwSetWindowPos(ptr_window, pos_x, pos_y);
+            break;
+        case Window_size::medium:
+            width = 1280;
+            height = 720;
+            glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+            pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
+            pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+            glfwSetWindowPos(ptr_window, pos_x, pos_y);
+            break;
+        case Window_size::low:
+            width = 800;
+            height = 600;
+            glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+            pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
+            pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+            glfwSetWindowPos(ptr_window, pos_x, pos_y);
+            break;
+        }
+
     }
     if (input::IsPressed(KEY::f)) {
+        window_size = Window_size::fullscreen;
 		glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
 	}
+    
     // Check if the close button or alt + f4 is pressed
     if (glfwWindowShouldClose(ptr_window)) {
         Message_Handler msg(MessageID::Event_Type::Quit);
