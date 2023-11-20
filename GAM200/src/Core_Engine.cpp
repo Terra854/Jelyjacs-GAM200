@@ -26,6 +26,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <glapp.h>
 #include "GameHud.h"
 #include "Utils.h"
+#include "Assets Manager/asset_manager.h"
 
 CoreEngine* CORE = NULL;
 
@@ -351,7 +352,7 @@ void CoreEngine::GameLoop()
 				if (level_editor->selectedNum >= 0)
 					object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
 				else
-					object = objectFactory->getPrefabWithID(static_cast<long>(level_editor->selectedNum));
+					object = AssetManager::prefabById(static_cast<long>(level_editor->selectedNum));
 
 				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);

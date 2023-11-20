@@ -1068,6 +1068,7 @@ void LevelEditor::AssetList()
 				selected = true;
 				//selectedNum = i;
 				selectedNum = (int) -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
+
 			}
 			size_t size = sizeof(p);
 			if (ImGui::BeginDragDropSource())

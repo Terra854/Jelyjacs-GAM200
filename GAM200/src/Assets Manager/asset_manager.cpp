@@ -232,6 +232,14 @@ Object* AssetManager::prefabsval(std::string str)
 	}
 }
 
+//Returns a game prefab from the map with a specific id
+Object* AssetManager::prefabById(long id)
+{
+	auto it = prefabs.begin();
+	std::advance(it, -(id + 1));
+	return it->second;
+}
+
 void AssetManager::updateprefab(std::string str, Object* o)
 {
 	prefabs[str] = o;

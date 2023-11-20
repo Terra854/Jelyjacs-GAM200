@@ -42,6 +42,7 @@ public:
 	static GLuint animationval(std::string str);
 
 	static Object* prefabsval(std::string str);
+	static Object* prefabById(long id);
 	static void updateprefab(std::string str, Object* o);
 
 	static std::string objectprefabsval();
@@ -54,9 +55,6 @@ public:
 
 	// Level Editor will need to access the private data
 	friend class LevelEditor;
-
-	// The factory will need to get the prefabs
-	friend class Factory;
 
 	// These data shouldn't be modified unless file location is changed
 private:

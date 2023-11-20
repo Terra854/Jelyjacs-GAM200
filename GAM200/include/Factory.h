@@ -53,9 +53,6 @@ public:
 	//Returns a game object from the map with a specific id
 	Object* getObjectWithID(long id);
 
-	//Returns a game prefab from the map with a specific id
-	Object* getPrefabWithID(long id);
-
 	//Returns the player object from the map
 	Object* getPlayerObject();
 
