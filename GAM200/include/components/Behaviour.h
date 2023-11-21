@@ -30,7 +30,6 @@ public:
 
 	virtual ComponentType TypeId() const override { return ComponentType::Behaviour; }
 
-
 	int behaviour_index;
 	std::string behaviour_name;
 	Object* obj;
