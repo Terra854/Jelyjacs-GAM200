@@ -237,6 +237,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Installer|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Vec2.cpp" />
+    <ClCompile Include="src\Vec4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\EntryPoint.h" />
@@ -285,6 +286,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Utils.h" />
     <ClInclude Include="include\Vec2.h" />
     <ClInclude Include="include\Precompile.h" />
+    <ClInclude Include="include\Vec4.h" />
     <ClInclude Include="src\Assets Manager\asset_manager.h" />
     <ClInclude Include="src\Assets Manager\json_serialization.h" />
     <ClInclude Include="src\Assets Manager\serialization.h" />

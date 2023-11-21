@@ -16,6 +16,7 @@ This file contains the definitions of the functions that are part of the level e
 #include "Scenes.h"
 #include "Assets Manager/asset_manager.h"
 #include <PhysicsSystem.h>
+#include <Vec4.h>
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -590,7 +591,7 @@ void LevelEditor::ObjectProperties() {
 
 				/* P3 */
 
-				ImGui::BeginChild("P3", ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, 26.f));
+				ImGui::BeginChild("P3", ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, 40.f));
 
 				// Get the child window's size
 				ImVec2 childSize = ImGui::GetWindowSize();
@@ -625,7 +626,7 @@ void LevelEditor::ObjectProperties() {
 
 				/* TOP COLLISION */
 
-				ImGui::BeginChild("CollisionTop", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 26.f));
+				ImGui::BeginChild("CollisionTop", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 40.f));
 
 				// Calculate the text's size
 				sprintf_s(buffer, "Top");
@@ -651,7 +652,7 @@ void LevelEditor::ObjectProperties() {
 
 				/* P2 */
 
-				ImGui::BeginChild("P2", ImVec2(0.f, 26.f));
+				ImGui::BeginChild("P2", ImVec2(0.f, 40.f));
 
 				// Calculate the text's size
 				sprintf_s(buffer, "P2: x: %.5f", r->aabb.P2().x);
@@ -751,7 +752,7 @@ void LevelEditor::ObjectProperties() {
 
 				/* P0 */
 
-				ImGui::BeginChild("P0", ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, 26.f));
+				ImGui::BeginChild("P0", ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, 40.f));
 
 				// Calculate the text's size
 				sprintf_s(buffer, "P0: x: %.5f", r->aabb.P0().x);
@@ -783,7 +784,7 @@ void LevelEditor::ObjectProperties() {
 
 				/* BOTTOM COLLISION */
 
-				ImGui::BeginChild("CollisionBottom", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 26.f));
+				ImGui::BeginChild("CollisionBottom", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 40.f));
 
 				// Calculate the text's size
 				sprintf_s(buffer, "Bottom");
@@ -809,7 +810,7 @@ void LevelEditor::ObjectProperties() {
 
 				/* P1 */
 
-				ImGui::BeginChild("P1", ImVec2(0.f, 26.f));
+				ImGui::BeginChild("P1", ImVec2(0.f, 40.f));
 
 				// Calculate the text's size
 				sprintf_s(buffer, "P1: x: %.5f", r->aabb.P1().x);
@@ -1459,20 +1460,72 @@ void LevelEditor::Initialize() {
 	//style->GrabMinSize = 5.0f;
 	//style->GrabRounding = 3.0f;
 
-	style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
-	style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_ChildBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
-	style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
-	style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
-	style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	Vec4 NormalizeColor(255.f, 255.f, 255.f, 1.f);
+
+	Vec4 DisabledModifier(0.5f, 0.5f, 0.5f, 1.f);
+	Vec4 HoveredModifier = Vec4(32.f, 32.f, 32.f, 1.f) / NormalizeColor;
+	Vec4 ActiveModifier = Vec4(-64.f, -64.f, -64.f, 1.f) / NormalizeColor;
+	
+	//Vec4 ShadowModifier(0.8f, 0.8f, 0.8f, 0.8f);
+
+	Vec4 BorderModifier(1.2f, 1.2f, 1.2f, 1.f);
+
+	Vec4 TextColor = Vec4(255.f, 255.f, 255.f, 1.f) / NormalizeColor;
+	Vec4 BackgroundColor = Vec4(32.f, 32.f, 32.f, 1.f) / NormalizeColor;
+	Vec4 FrameColor = Vec4(8.f, 8.f, 8.f, 1.f) / NormalizeColor;
+	Vec4 BaseColor = Vec4(96.f, 96.f, 96.f, 1.f) / NormalizeColor;
+	Vec4 ButtonColor = Vec4(128.f, 128.f, 128.f, 1.f) / NormalizeColor;
+
+
+	
+	// Text
+	style->Colors[ImGuiCol_Text] = TextColor.ToImVec4();
+	style->Colors[ImGuiCol_TextDisabled] = Vec4(TextColor * DisabledModifier).ToImVec4();
+
+	// ImGui window backgrounds
+	style->Colors[ImGuiCol_WindowBg] = BackgroundColor.ToImVec4();
+	style->Colors[ImGuiCol_ChildBg] = BackgroundColor.ToImVec4();
+	style->Colors[ImGuiCol_PopupBg] = BackgroundColor.ToImVec4();
+
+	// Title bars
+	style->Colors[ImGuiCol_TitleBg] = Vec4(ButtonColor * DisabledModifier).ToImVec4();
+	style->Colors[ImGuiCol_TitleBgActive] = ButtonColor.ToImVec4();
+	style->Colors[ImGuiCol_TitleBgCollapsed] = Vec4(ButtonColor * DisabledModifier).ToImVec4();
+
+	// Scroll bar
+	style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.f, 0.f, 0.f, 1.00f);
+	style->Colors[ImGuiCol_ScrollbarGrab] = BaseColor.ToImVec4();
+	style->Colors[ImGuiCol_ScrollbarGrabHovered] = Vec4(BaseColor + HoveredModifier).ToImVec4();
+	style->Colors[ImGuiCol_ScrollbarGrabActive] = Vec4(BaseColor + ActiveModifier).ToImVec4();
+
+	/*
+	// ImGui window borders
+	style->Colors[ImGuiCol_Border] = Vec4(BackgroundColor * BorderModifier).ToImVec4();
+	//style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
+	//style->Colors[ImGuiCol_BorderShadow] = Vec4(BackgroundColor * ShadowModifier).ToImVec4();
+
+	// Checkbox, radio button, plot, slider, text input
+	style->Colors[ImGuiCol_FrameBg] = FrameColor.ToImVec4();
+	style->Colors[ImGuiCol_FrameBgHovered] = Vec4(FrameColor * HoveredModifier).ToImVec4();
+	style->Colors[ImGuiCol_FrameBgActive] = Vec4(FrameColor * ActiveModifier).ToImVec4();
+
+	//style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	//style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
+	//style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+	style->Colors[ImGuiCol_MenuBarBg] = Vec4(BackgroundColor + Vec4(0.2f, 0.2f, 0.2f, 0.f)).ToImVec4();;
+	
+	// Default buttons
+	style->Colors[ImGuiCol_Button] = ButtonColor.ToImVec4();
+	style->Colors[ImGuiCol_ButtonHovered] = Vec4(ButtonColor * HoveredModifier).ToImVec4();
+	style->Colors[ImGuiCol_ButtonActive] = Vec4(ButtonColor * ActiveModifier).ToImVec4();
+
+	// Tabs
+	style->Colors[ImGuiCol_Tab] = ButtonColor.ToImVec4();
+	style->Colors[ImGuiCol_TabHovered] = Vec4(ButtonColor * HoveredModifier).ToImVec4();
+	style->Colors[ImGuiCol_TabActive] = Vec4(ButtonColor * ActiveModifier).ToImVec4();
+
+	
+
 	style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
 	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
@@ -1480,9 +1533,6 @@ void LevelEditor::Initialize() {
 	style->Colors[ImGuiCol_CheckMark] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
 	style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
 	style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 	style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 	style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
@@ -1496,8 +1546,10 @@ void LevelEditor::Initialize() {
 	style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 	style->Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
 
+	*/
+
 	ImGuiIO& io = ImGui::GetIO();
-	font = io.Fonts->AddFontFromFileTTF("Asset/Fonts/Roboto-Regular.ttf", 16);
+	font = io.Fonts->AddFontFromFileTTF("Asset/Fonts/Roboto-Regular.ttf", 15);
 
 	io.Fonts->Build();
 }
@@ -1543,7 +1595,7 @@ void LevelEditor::Update() {
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	}
 
-	//ImGui::ShowDemoWindow();
+	ImGui::ShowDemoWindow();
 
 	if (ImGui::BeginMenuBar())
 	{
