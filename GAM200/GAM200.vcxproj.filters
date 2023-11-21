@@ -186,10 +186,10 @@
     <ClCompile Include="src\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\TestScript.cpp">
+    <ClCompile Include="src\Scripts\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Player.cpp">
+    <ClCompile Include="src\Scripts\Piston.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -335,10 +335,10 @@
     <ClInclude Include="include\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\TestScript.h">
+    <ClInclude Include="include\Scripts\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\Player.h">
+    <ClInclude Include="include\Scripts\Piston.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

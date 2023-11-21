@@ -149,7 +149,7 @@ void GameLogic::Update() {
 				playerObj = objectFactory->FindObject("Finn");
 			}
 		}
-
+		// Transfered to Player.cpp
 		/*
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));

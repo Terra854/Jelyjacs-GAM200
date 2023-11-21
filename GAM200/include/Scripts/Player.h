@@ -8,7 +8,7 @@ public:
 	Player(std::string);
 	~Player() = default;
 
-	void Start(Object* obj);
-	void Update(Object* obj);
-	void Shutdown(Object* obj);
+	void Start(Object* obj) override;
+	void Update(Object* obj) override;
+	void Shutdown(Object* obj) override;
 };

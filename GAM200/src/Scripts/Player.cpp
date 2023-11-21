@@ -21,10 +21,6 @@ void Player::Start(Object* obj) {
 }
 
 void Player::Update(Object* obj) {
-	if (input::IsPressed(KEY::down)) {
-		std::cout << "Down is working for player" << std::endl;
-		std::cout << obj->GetName() << std::endl;
-	}
 	// For some reason, the player is not changing position
 	if ((obj == nullptr) || (obj->GetComponent(ComponentType::Physics) == nullptr)) { 
 		std::cout << "NIL OBJ" << std::endl;
