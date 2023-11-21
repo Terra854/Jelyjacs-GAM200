@@ -10,12 +10,6 @@ This file contains the definitions of the member functions in the Vec2 class
 
 #include <cmath>
 
-Vec2::Vec2(float _x, float _y)
-{
-	x = _x;
-	y = _y;
-}
-
 Vec2& Vec2::operator+=(const Vec2& rhs)
 {
 	x += rhs.x;
