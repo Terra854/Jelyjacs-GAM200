@@ -16,7 +16,7 @@ class EngineHud
 public:
 	EngineHud() = default;
 	~EngineHud();
-	ImGuiIO& StartGui();
+	void StartGui();
 	void NewGuiFrame(bool showDemo = true);
-	void GuiRender(ImGuiIO& io);
+	void GuiRender();
 };
