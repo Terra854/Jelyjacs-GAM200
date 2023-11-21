@@ -58,7 +58,7 @@ void GLApp::Initialize()
 {
 	glClearColor(1.f, 1.f, 1.f, 1.f);
 
-	glViewport(0, 0, window->width, window->height);
+	glViewport(0, 0, window->width_init, window->height_init);
 	init_models();
 	init_shdrpgms();
 	
@@ -272,6 +272,7 @@ void GLApp::Update()
 		Vec2 pos;
 		float orientation;
 		Vec2 scaling;
+		Vec2 window_scaling;
 		bool texture_bool = true;
 		//get texture		
 		Texture* tex_pt = static_cast<Texture*>(objectFactory->getObjectWithID(i)->GetComponent(ComponentType::Texture));
@@ -299,16 +300,18 @@ void GLApp::Update()
 			orientation = tran_pt->Rotation;
 
 		// get pos and scale from transform component
-		pos.x = tran_pt->Position.x * 2.0f / window->width;
-		pos.y = tran_pt->Position.y * 2.0f / window->height;
-		scaling.x = tran_pt->Scale.x / window->width;
-		scaling.y = tran_pt->Scale.y / window->height;
+		pos.x = tran_pt->Position.x * 2.0f / window->width_init;
+		pos.y = tran_pt->Position.y * 2.0f / window->height_init;
+		scaling.x = tran_pt->Scale.x / window->width_init;
+		scaling.y = tran_pt->Scale.y / window->height_init;
 		
 		
 		//get matrix
 		mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotDeg(orientation);
 		
-
+		window_scaling = {(float) window->width /(float) window->width_init, (float) window->height / (float) window->height_init };
+		
+		mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
 		// matrix after camrea
 		mat_test = camera2D->world_to_ndc * mat_test;
 
@@ -426,9 +429,10 @@ void GLApp::Update()
 					orientation = atan2(Vy, Vx);
 
 					//get slcae of line based on length of line
-					Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width / 2, sqrt(Vx * Vx + Vy * Vy) / window->height / 2 };
+					Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width_init / 2, sqrt(Vx * Vx + Vy * Vy) / window->height_init / 2 };
 
 					mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
+					mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
 					mat_test = camera2D->world_to_ndc * mat_test;
 					//draw line
 					shdrpgms["shape"].Use();
@@ -450,6 +454,8 @@ void GLApp::Update()
 		}		
     }
 
+
+#if defined(DEBUG) | defined(_DEBUG)
 	// Draw the bove around the selected object
 	if (level_editor->selected && level_editor->selectedNum >= 0) {
 		Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Animation));
@@ -494,6 +500,7 @@ void GLApp::Update()
 			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
 		}
 	}
+#endif
 	
 }
 
@@ -582,13 +589,15 @@ void GLApp::drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	float scaling_y;
 	orientation = atan2(end.y - start.y, end.x - start.x);
 
-	scaling_x = abs(end.x - start.x) * 2 / window->width;
-	scaling_y = abs(end.y - start.y) * 2 / window->height;
-	pos_x = start.x * 2.0f / window->width;
-	pos_y = start.y * 2.0f / window->height;
+	scaling_x = abs(end.x - start.x) * 2 / window->width_init;
+	scaling_y = abs(end.y - start.y) * 2 / window->height_init;
+	pos_x = start.x * 2.0f / window->width_init;
+	pos_y = start.y * 2.0f / window->height_init;
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
+	Vec2 window_sacling = {(float) window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
 	mat_test = camera2D->world_to_ndc * mat_test;
 	//draw line
 	shdrpgms["shape"].Use();

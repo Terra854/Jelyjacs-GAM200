@@ -74,12 +74,26 @@ void GameLogic::Initialize()
 	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
 	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 
-	//for(auto const)
-
+	
 	//LoadScene("Asset/Levels/testsave.json");
-
 	LoadScene("Asset/Levels/tutorial_level.json");
 	SaveScene("Asset/Levels/testsave.json");
+	LoadScripts();
+	for (auto iter : behaviourComponents ) {
+		
+		if (behaviours[iter->GetName()] == nullptr) {
+			std::cout << "Behaviour " << iter->GetName() << " is null" << std::endl;
+			continue;
+		}
+		else 
+			behaviours[iter->GetName()]->Start(iter->GetOwner());
+	}
+
+	std::cout << "GameLogic Initialized" << std::endl;
+	std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
+	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
+
+	playerObj = objectFactory->getPlayerObject();
 }
 
 /******************************************************************************
@@ -91,12 +105,10 @@ void GameLogic::Update() {
 	// Do not update if the game is paused
 	if (engine->isPaused())
 		return;
-	int x = 0;
 
-	for (auto& behaviour : behaviours) {
-		behaviour.second->Update(b_objects[x]);
-		std::cout << "Behaviour " << x << " updated" << std::endl;
-		x++;
+	for (auto& iter : behaviourComponents) {
+		//std::cout << "Behaviour Update" << std::endl;
+		behaviours[iter->GetName()]->Update(iter->GetOwner());
 	}
 	
 	// If Left Click, show mouse position
@@ -115,8 +127,9 @@ void GameLogic::Update() {
 
 	// Movement for Player
 	// If button Pressed, changed velocity
-	playerObj = objectFactory->getPlayerObject();
-
+	
+	//playerObj = objectFactory->getPlayerObject();
+	
 	if (playerObj != nullptr && playerObj->GetComponent(ComponentType::Physics) != nullptr) {
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
@@ -159,13 +172,21 @@ void GameLogic::Update() {
 		}
 		else player_animation->jump_fixed = false;
 
+		if (input::IsPressed(KEY::e)) {
+			if (playerObj->GetName() == "Finn") {
+				playerObj = objectFactory->FindObject("Spark");
+			}
+			else {
+				playerObj = objectFactory->FindObject("Finn");
+			}
+		}
 
 		// Let the player loop around the window
-		/*
+		
 		Transform* t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 		t->Position.x = t->Position.x > 1000.0f ? -1000.0f : t->Position.x;
 		t->Position.x = t->Position.x < -1000.0f ? 1000.0f : t->Position.x;
-		*/
+		
 		// Audio for Character Movement
 		if ((player_physics->Velocity.y == 0.f) && moving) {
 			audio->startWalking();
@@ -174,14 +195,7 @@ void GameLogic::Update() {
 			audio->stopWalking();
 			moving = false;
 		}
-
-		// Printing Player Position by pressing Z
-		/*
-		if (input::IsPressed(KEY::z)) {
-			Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-			std::cout << "Printing player Position : " << player_t->Position.x << ", " << player_t->Position.y << std::endl;
-		}
-		*/
+		
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID((long)i);
 
@@ -200,7 +214,7 @@ void GameLogic::Update() {
 					if (piston_animation->current_type == AnimationType::Jump)continue;
 					piston_animation->current_type = AnimationType::Jump;
 					Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-					std::cout << "pisotn event linked event:";
+					std::cout << "piston event linked event:";
 					std::cout << piston_event->linked_event << std::endl;
 
 					//  Change the animation of door and disable the body of door
@@ -314,9 +328,13 @@ void GameLogic::Update() {
 void GameLogic::AddBehaviour(std::string name, LogicScript* behaviour)
 {
 	behaviours[name] = behaviour;
+	std::cout <<  "Added Behaviour to container. Container Size : " << behaviours.size() << std::endl;
 }
 
-void GameLogic::AddObject(Object* obj)
-{
-	b_objects.push_back(obj);
+void GameLogic::LoadScripts() {
+	for (auto& it : temp_scriptmap) {
+		this->AddBehaviour(it.first, it.second);
+		std::cout << "Behaviour " << it.first << " added" << std::endl;
+	}
+	std::cout << "Loaded temp_scriptmap : " << temp_scriptmap.size() << std::endl;
 }

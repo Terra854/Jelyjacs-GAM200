@@ -5,20 +5,6 @@
 
 This file contains the main function.
 *//*__________________________________________________________________________*/
-#include <Core_Engine.h>
-#include <Factory.h>
-#include <glapp.h>
-#include <GLWindow.h>
-#include <PhysicsSystem.h>
-#include <iostream>
-#include <debug.h>
-#include <GameLogic.h>
-#include <Audio.h>
-#include <Font.h>
-#include <Camera.h>
-#include <LevelEditor.h>
-#include <ThreadPool.h>
-#include <../src/Assets Manager/asset_manager.h>
 /*
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
 ThreadPool* thread_pool;

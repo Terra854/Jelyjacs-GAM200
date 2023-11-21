@@ -20,10 +20,18 @@ includes all the functions to create and update the window
 
 
 /*  _________________________________________________________________________ */
+enum class Window_size {
+	fullscreen=0,
+	high,
+	medium,
+	low,
+	count
+};
 class GLWindow : public ISystems
   
 {
 public:
+	
 	GLWindow();
 	~GLWindow() {};
 	virtual void Initialize();
@@ -42,11 +50,13 @@ public:
 
 
   static GLint width, height;
+  static GLint width_init, height_init;
   static GLint width_windowed, height_windowed;
   static GLdouble fps;
   static GLdouble delta_time; // time taken to complete most recent game loop
   static std::string title;
   static GLFWwindow *ptr_window;
+  static Window_size window_size;
  
 
 };

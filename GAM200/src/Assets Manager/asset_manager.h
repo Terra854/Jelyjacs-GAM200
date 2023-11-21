@@ -42,6 +42,7 @@ public:
 	static GLuint animationval(std::string str);
 
 	static Object* prefabsval(std::string str);
+	static Object* prefabById(long id);
 	static void updateprefab(std::string str, Object* o);
 
 	static std::string objectprefabsval();
@@ -72,7 +73,3 @@ private:
 
 	static GLuint missing_texture;
 };
-
-
-
-

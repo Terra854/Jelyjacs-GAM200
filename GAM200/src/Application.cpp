@@ -21,6 +21,7 @@ This file contains the class definitions that is used to run the game
 #include <LevelEditor.h>
 #include <ThreadPool.h>
 #include <../src/Assets Manager/asset_manager.h>
+#include "../../FelineFelony/Test.h"
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
 ThreadPool* thread_pool;
@@ -32,14 +33,13 @@ Application::~Application()
 {
 }
 
-void Application::Run() {
-
-	std::cout << "Hello World!" << std::endl;
-	
+void Application::Init() {
 	// Enable run-time memory check for debug builds.
 #if defined(DEBUG) | defined(_DEBUG)
+
+	// Enable run-time memory check for debug builds.
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif
+
 
 	// Copy the imgui configs
 
@@ -57,6 +57,7 @@ void Application::Run() {
 	else {
 		std::cout << "imgui config already exist, skip copying" << std::endl;
 	}
+#endif
 
 	// Initialise Pointer to Systems
 	engine = new CoreEngine();
@@ -69,8 +70,8 @@ void Application::Run() {
 	font = new Font();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();
-	level_editor = new LevelEditor();
 	thread_pool = new ThreadPool();
+
 
 	// Add System to the engine 
 	engine->AddSystem(windows);
@@ -82,13 +83,23 @@ void Application::Run() {
 	engine->AddSystem(physics);
 	engine->AddSystem(font);
 	engine->AddSystem(camera);
+
+
+#if defined(DEBUG) | defined(_DEBUG)
+	// Level Editor
+	level_editor = new LevelEditor();
 	engine->AddSystem(level_editor);
+#endif
+
+
 	engine->AddSystem(graphics);												  // Graphics should always be last
 
 	// Initialize and Start Game Loop
 	engine->Initialize();
 	//windows->ActivateWindow();
 	windows->print_specs();
+}
+void Application::Run() {
 
 	engine->GameLoop();
 

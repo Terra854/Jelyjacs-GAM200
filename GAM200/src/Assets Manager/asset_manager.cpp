@@ -9,6 +9,7 @@ to be referenced from when needed.
 
 *//*__________________________________________________________________________*/
 #include "asset_manager.h"
+#include <Windows.h>
 #include <iostream>
 
 // Creating of static data members
@@ -128,9 +129,18 @@ void AssetManager::createprefablist()
 {
 	for (const auto& list : std::filesystem::directory_iterator(objectprefabs))
 	{
-		std::filesystem::path filename = list.path().filename();
-		prefabs.emplace(filename.string(), objectFactory->createObject(list.path().string()));
-		std::cout << "Added to list: " << filename.string() <<  std::endl;
+		if (list.path().extension() == ".json")
+		{
+			std::filesystem::path filename = list.path().filename();
+			prefabs.emplace(filename.string(), objectFactory->createObject(list.path().string()));
+			std::cout << "Added to list: " << filename.string() << std::endl;
+		}
+		else
+		{
+			std::cout << "Error located here: " << list.path().filename() << std::endl;
+			MessageBoxA(0, "Invalid file extension for prefabs detected. Please only use .json", "Error: Prefabs", MB_OK);
+			exit(EXIT_FAILURE);
+		}
 	}
 }
 
@@ -140,19 +150,33 @@ void AssetManager::loadsounds()
 	{
 		std::cout << "Folders: " << list.path().filename() << std::endl;
 		FMOD_MODE audio_mode;
-		if (list.path().filename() == "looping")
-			audio_mode = FMOD_LOOP_NORMAL;
-		else
-			audio_mode = FMOD_DEFAULT;
 
-		auto inneraudio = std::filesystem::directory_entry(list);
-		for (const auto& innerlist : std::filesystem::directory_iterator(inneraudio))
+		if (list.is_directory()) // Only loads audio files within the sub-directory (e.g. looping)
 		{
-			std::filesystem::path filename = innerlist.path().filename();
-			FMOD::Sound* sound;
-			audio->createSound(innerlist.path().string(), audio_mode, &sound);
-			sounds.emplace(filename.string(), sound);
-			std::cout << "Added to list: " << filename.string() << std::endl;
+			if (list.path().filename() == "looping")
+				audio_mode = FMOD_LOOP_NORMAL;
+			else
+				audio_mode = FMOD_DEFAULT;
+
+			auto inneraudio = std::filesystem::directory_entry(list);
+			for (const auto& innerlist : std::filesystem::directory_iterator(inneraudio))
+			{
+				if (innerlist.path().extension() == ".wav")
+				{
+					std::filesystem::path filename = innerlist.path().filename();
+					FMOD::Sound* sound;
+					audio->createSound(innerlist.path().string(), audio_mode, &sound);
+					sounds.emplace(filename.string(), sound);
+					std::cout << "Added to list: " << filename.string() << std::endl;
+				}
+				else
+				{
+					// Popup for invalid audio file
+					std::cout << "Error located here: " << innerlist.path().filename() << std::endl;
+					MessageBoxA(0, "Invalid file extension for audio detected. Please only use .wav", "Error: Audio", MB_OK);
+					exit(EXIT_FAILURE);
+				}
+			}
 		}
 	}
 	audio->setupSound();
@@ -206,6 +230,14 @@ Object* AssetManager::prefabsval(std::string str)
 	catch (std::out_of_range) {
 		return nullptr;
 	}
+}
+
+//Returns a game prefab from the map with a specific id
+Object* AssetManager::prefabById(long id)
+{
+	auto it = prefabs.begin();
+	std::advance(it, -(id + 1));
+	return it->second;
 }
 
 void AssetManager::updateprefab(std::string str, Object* o)

@@ -26,9 +26,13 @@ This file contains the definitions of the functions that are part of the Core En
 #include <glapp.h>
 #include "GameHud.h"
 #include "Utils.h"
+#include "Assets Manager/asset_manager.h"
 
 CoreEngine* CORE = NULL;
+
+#if defined(DEBUG) | defined(_DEBUG)
 EngineHud hud;
+#endif
 GameHud gamehud;
 ImVec4 clear_color;
 
@@ -43,7 +47,12 @@ CoreEngine::CoreEngine()
 	dt = 1.f / core_fps;
 	game_active = true;
 	CORE = this;
+
+#if defined(DEBUG) | defined(_DEBUG)
 	paused = true;
+#else
+	paused = false;
+#endif
 }
 /******************************************************************************
 * Destructor
@@ -111,6 +120,8 @@ long long start_system_time, end_system_time;
 //std::map<std::string, double> elapsed_time;
 //double total_time = 0.0;
 
+
+#if defined(DEBUG) | defined(_DEBUG)
 void Update(ISystems* sys)
 {
 	start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -121,6 +132,7 @@ void Update(ISystems* sys)
 	level_editor->SetSystemElapsedTime(sys->SystemName(), (double)(end_system_time - start_system_time) / 1000000.0);
 	level_editor->AddTotalTime((double)(end_system_time - start_system_time) / 1000000.0);
 }
+#endif
 
 
 /********************************************************************************
@@ -175,24 +187,15 @@ void CoreEngine::Debug_Update()
 ********************************************************************************/
 void CoreEngine::GameLoop()
 {
-	int numOfBoxes = (int) (editor_grid->num.x * editor_grid->num.y);
-	std::cout << "Number of boxes " << numOfBoxes << std::endl;
-	std::vector<int> boxesFilled(numOfBoxes, 0);
-	std::cout << boxesFilled.capacity();
 	// FPS Variables
 	int numofsteps = 0;
 	double accumulator = 0.0;
 
-	//auto invFpsLimit = std::chrono::round<std::chrono::system_clock::duration>(std::chrono::duration<double>{ 1. / fixed_dt }); // 1/60
-	//std::chrono::time_point<std::chrono::system_clock> m_EndFrame;
-	
-
-	// Console Debug Instructions
-	//std::cout << "########################################################" << std::endl;
-	//std::cout << "Press F to print out frametime performance information" << std::endl;
-	//std::cout << "for the current frame" << std::endl;
-	//std::cout << "game window is the active window first and then press P" << std::endl;
-	//std::cout << "########################################################" << std::endl;
+#if defined(DEBUG) | defined(_DEBUG)
+	int numOfBoxes = (int)(editor_grid->num.x * editor_grid->num.y);
+	std::cout << "Number of boxes " << numOfBoxes << std::endl;
+	std::vector<int> boxesFilled(numOfBoxes, 0);
+	std::cout << boxesFilled.capacity();
 
 	ImGuiIO& io = hud.StartGui();
 
@@ -234,34 +237,36 @@ void CoreEngine::GameLoop()
 
 	/* End Level Editor */
 	GLuint tileset = app->setup_texobj("Asset/Picture/TileSheet.png");
-	// Game Loop
-
-	gamehud.Initialize();
 	long selectedObjectID = -1;
+
+#endif
+	// Game Loop
+	gamehud.Initialize();
 
 	while (game_active)
 	{
-		
 		auto m_BeginFrame = std::chrono::system_clock::now();
+
+#if defined(DEBUG) | defined(_DEBUG)	
 		hud.NewGuiFrame(0);
-		input::Update();
 
 		// Toggle Button to Display Debug Information in IMGui
 		if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
 
 		//show_performance_viewer ? Debug_Update() : Update();
-
+#endif
+		input::Update();
 
 		for (const std::pair<std::string, ISystems*>& sys : Systems)
 		{
 			if (sys.first != "Window" && sys.first != "Graphics" && sys.first != "LevelEditor")
 			{
-				//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+#if defined(DEBUG) | defined(_DEBUG)	
 				Update(sys.second);
-				//sys.second->Update();
-				//end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-				//elapsed_time[sys.second->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
-				//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
+#else
+				sys.second->Update();
+#endif
 			}
 		}
 		
@@ -272,13 +277,12 @@ void CoreEngine::GameLoop()
 		
 		
 		*****************************************************************************************************************************************/
-		//start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-		
-		
-
+#if defined(DEBUG) | defined(_DEBUG)
 		if (input::IsPressed(KEY::p)) { debug_gui_active = !debug_gui_active; }
-		if (debug_gui_active) 
-		{
+		if (debug_gui_active) {
+
+			
+			
 			// For rendering into imgui window 
 			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
 
@@ -344,7 +348,12 @@ void CoreEngine::GameLoop()
 
 			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true)
 			{
-				Object* object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				Object* object;
+				if (level_editor->selectedNum >= 0)
+					object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				else
+					object = AssetManager::prefabById(static_cast<long>(level_editor->selectedNum));
+
 				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
 				ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
@@ -674,7 +683,13 @@ void CoreEngine::GameLoop()
 		}
 
 		level_editor->ClearAll();
-		
+#else
+		Systems["Graphics"]->Update();
+		gamehud.Update();
+		gamehud.Draw();
+		Systems["Window"]->Update();
+		glfwSwapBuffers(window->ptr_window);
+#endif
 
 		// FPS Calculation
 		auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
@@ -704,8 +719,11 @@ void CoreEngine::GameLoop()
 		//m_BeginFrame = m_EndFrame;
 		//m_EndFrame = m_BeginFrame + invFpsLimit;
 	}
+
+#if defined(DEBUG) | defined(_DEBUG)
 	glDeleteFramebuffers(1, &level_editor_fb);
 	glDeleteTextures(1, &level_editor_texture);
+#endif
 }
 
 /********************************************************************************

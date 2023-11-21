@@ -13,7 +13,7 @@ class GAM200_API Application {	// This class is used to run the game
 public:
 	Application();
 	virtual ~Application();
-
+	void Init();
 	void Run();
 };
  

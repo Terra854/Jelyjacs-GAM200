@@ -70,7 +70,10 @@ public:
 
 	bool show_tileset = false;
 
+
+#if defined(DEBUG) | defined(_DEBUG)
 	friend class LevelEditor; // For displaying performance info
+#endif
 	
 private:
 	// Map of Systems (Container)

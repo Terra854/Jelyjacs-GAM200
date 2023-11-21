@@ -1,5 +1,5 @@
 {
-  "Name": "Finn",
+  "Name": "Spark",
   "Components": [
     {
       "Type": "Transform",
@@ -47,7 +47,7 @@
       "Type": "Behaviour",
       "Properties": {
         "Script": "Player",
-        "Index" : 0
+        "Index" : 1
       }
     },
     {

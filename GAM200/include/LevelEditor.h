@@ -6,6 +6,9 @@
 
 This file contains the declarations for the LevelEditor system class
 *//*__________________________________________________________________________*/
+
+#if defined(DEBUG) | defined(_DEBUG)
+
 #include <Debug.h>
 #include <Factory.h>
 #include "Vec2.h"
@@ -68,3 +71,5 @@ public:
 
 extern LevelEditor* level_editor; // declared in LevelEditor.cpp
 extern LevelEditorGrid* editor_grid;
+
+#endif
