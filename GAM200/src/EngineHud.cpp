@@ -16,7 +16,7 @@ EngineHud::~EngineHud()
 	ImGui::DestroyContext();
 }
 
-ImGuiIO& EngineHud::StartGui()
+void EngineHud::StartGui()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -29,7 +29,7 @@ ImGuiIO& EngineHud::StartGui()
 	// Setup Platform/Renderer backends
 	ImGui_ImplGlfw_InitForOpenGL(window->ptr_window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
 	ImGui_ImplOpenGL3_Init();
-	return io;
+	//return io;
 }
 
 void EngineHud::NewGuiFrame(bool showDemo)
@@ -45,11 +45,14 @@ void EngineHud::NewGuiFrame(bool showDemo)
 	}
 }
 
-void EngineHud::GuiRender(ImGuiIO& io)
+void EngineHud::GuiRender()
 {
 	ImGui::Render();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	ImGuiIO& io = ImGui::GetIO();
+
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
 		GLFWwindow* backup_current_context = glfwGetCurrentContext();
@@ -57,6 +60,4 @@ void EngineHud::GuiRender(ImGuiIO& io)
 		ImGui::RenderPlatformWindowsDefault();
 		glfwMakeContextCurrent(backup_current_context);
 	}
-
-	glfwSwapBuffers(window->ptr_window);
 }
