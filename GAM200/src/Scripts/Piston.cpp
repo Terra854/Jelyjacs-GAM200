@@ -14,11 +14,11 @@ void Piston::Start(Object* obj) {
 }
 
 void Piston::Update(Object* obj) {
-
+	
 }
 
 void Piston::Shutdown(Object* obj) {
-
+	std::cout << "Piston Script Shutdown : " << obj->GetName() << std::endl;
 }
 
 Piston piston("Piston");

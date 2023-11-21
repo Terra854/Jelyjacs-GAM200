@@ -230,6 +230,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Scenes.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
     <ClCompile Include="src\Scripts\Player.cpp" />
+    <ClCompile Include="src\Scripts\Vert_Elevator.cpp" />
     <ClCompile Include="src\ThreadPool.cpp" />
     <ClCompile Include="src\Utils.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -280,6 +281,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Scenes.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
     <ClInclude Include="include\Scripts\Player.h" />
+    <ClInclude Include="include\Scripts\Vert_Elevator.h" />
     <ClInclude Include="include\ThreadPool.h" />
     <ClInclude Include="include\Utils.h" />
     <ClInclude Include="include\Vec2.h" />
