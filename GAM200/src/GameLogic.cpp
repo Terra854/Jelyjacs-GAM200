@@ -145,7 +145,7 @@ void GameLogic::Update() {
 			if (playerObj->GetName() == "Finn") {
 				playerObj = objectFactory->FindObject("Spark");
 			}
-			else {
+			else if(playerObj->GetName() == "Spark") {
 				playerObj = objectFactory->FindObject("Finn");
 			}
 		}
@@ -248,6 +248,7 @@ void GameLogic::Update() {
 				}
 			}
 			else if (obj->GetName() == "elevator") {
+
 				MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
 
 				Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));

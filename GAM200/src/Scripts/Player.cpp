@@ -94,6 +94,8 @@ void Player::Update(Object* obj) {
 
 void Player::Shutdown(Object* obj){
 
+	std::cout << "Player Script Shutdown : " << obj->GetName() << std::endl;
+
 }
 
 Player player("Player");

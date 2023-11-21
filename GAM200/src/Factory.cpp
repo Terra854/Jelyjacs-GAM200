@@ -283,7 +283,7 @@ Object* Factory::createObject(const std::string& filename)
 			jsonloop.readInt(b->behaviour_index, "Properties", "Index");
 			obj->AddComponent(b);
 			Logic->AddBehaviourComponent(b);
-			b->SetOwner(obj);
+			//b->SetOwner(obj);
 		}
 	}
 

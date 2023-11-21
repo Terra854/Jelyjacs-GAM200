@@ -25,8 +25,10 @@ public:
 	void SetName(const std::string& name) { behaviour_name = name; }
 	std::string GetName() noexcept { return behaviour_name; }
 
+	/*
 	void SetOwner(Object* owner) { obj = owner; }
 	Object* GetOwner() { return obj; }
+	*/
 
 	virtual ComponentType TypeId() const override { return ComponentType::Behaviour; }
 

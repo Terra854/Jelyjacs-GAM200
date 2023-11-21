@@ -192,6 +192,9 @@
     <ClCompile Include="src\Scripts\Piston.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\Vert_Elevator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -339,6 +342,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\Piston.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Vert_Elevator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
