@@ -35,6 +35,7 @@ namespace
 	{
 		double x;
 		double y;
+		bool moved = false;
 	};
 	BUTTON buttons[static_cast<int>(KEY::total)]{};
 	MOUSE mouse{};
@@ -80,6 +81,7 @@ int at(KEY index)
 void MousePosCallBack(GLFWwindow* pWin, double xpos, double ypos)
 {
 	(void)pWin;
+	mouse.moved = true;
 	mouse.x = xpos;
 	mouse.y = ypos;
 }
@@ -117,6 +119,22 @@ double input::GetMouseY()
 	return -mouse.y + static_cast<double>(window->height / 2);
 }
 
+bool mouse_update()
+{
+	static float mouse_prevX = 0.0f;
+	static float mouse_prevY = 0.0f;
+	if (mouse.x == mouse_prevX && mouse.y == mouse_prevY)
+	{
+		return false;
+	}
+	else
+	{
+		mouse_prevX = mouse.x;
+		mouse_prevY = mouse.y;
+		return true;
+	}
+}
+
 void input::Update()
 {
 	for (int i = 0; i < at(KEY::total); ++i)
@@ -126,6 +144,7 @@ void input::Update()
 			buttons[i].pressedPrevFrame = true;
 		}
 	}
+	mouse.moved = mouse_update();
 	buttons[at(KEY::w)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_W));
 	buttons[at(KEY::a)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_A));
 	buttons[at(KEY::s)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_S));
@@ -145,7 +164,8 @@ void input::Update()
 	buttons[at(KEY::esc)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_ESCAPE));
 	buttons[at(KEY::q)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_Q));
 	buttons[at(KEY::e)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_E));
-	
+	buttons[at(KEY::tab)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_TAB));
+	buttons[at(KEY::enter)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_ENTER));
 }
 
 bool input::IsPressedRepeatedlyDelayed(KEY key , float delay)
@@ -160,3 +180,9 @@ bool input::IsPressedRepeatedlyDelayed(KEY key , float delay)
 		else return false;
 	}
 }
+
+bool input::MouseMoved()
+{
+	return mouse.moved;
+}
+

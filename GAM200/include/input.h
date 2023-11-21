@@ -32,6 +32,8 @@ enum class KEY
 	left,
 	right,
 	esc,
+	tab,
+	enter,
 	total
 };
 /*
@@ -86,4 +88,6 @@ namespace input
 	*/
 	void Init(GLFWwindow* pWin);
 	void Update();
+
+	bool MouseMoved();
 }
