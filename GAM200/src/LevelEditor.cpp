@@ -187,7 +187,7 @@ void LevelEditor::ObjectProperties() {
 	PlayerControllable* pc = (PlayerControllable*)object->GetComponent(ComponentType::PlayerControllable);
 	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
 
-	ImGui::BeginChild("Texture", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().x * 0.25f));
+	ImGui::BeginChild("Texture", ImVec2(128.f, 128.f));
 
 	if (a != nullptr) {
 		GLint width, height;
@@ -233,7 +233,7 @@ void LevelEditor::ObjectProperties() {
 
 	ImGui::SameLine();
 
-	ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().x * 0.25f));
+	ImGui::BeginChild("ID", ImVec2(ImGui::GetContentRegionAvail().x, 128.f));
 
 	if (selectedNum < 0) {
 		ImGui::Text("Prefab Name: %s", object->GetName().c_str());
@@ -1463,6 +1463,7 @@ void LevelEditor::Initialize() {
 	Vec4 NormalizeColor(255.f, 255.f, 255.f, 1.f);
 
 	Vec4 DisabledModifier(0.5f, 0.5f, 0.5f, 1.f);
+
 	Vec4 HoveredModifier = Vec4(32.f, 32.f, 32.f, 1.f) / NormalizeColor;
 	Vec4 ActiveModifier = Vec4(-64.f, -64.f, -64.f, 1.f) / NormalizeColor;
 	
@@ -1476,6 +1477,7 @@ void LevelEditor::Initialize() {
 	Vec4 BaseColor = Vec4(96.f, 96.f, 96.f, 1.f) / NormalizeColor;
 	Vec4 ButtonColor = Vec4(128.f, 128.f, 128.f, 1.f) / NormalizeColor;
 
+	Vec4 ProgressBarColor = Vec4(66.f, 150.f, 250.f, 1.f) / NormalizeColor;
 
 	
 	// Text
@@ -1497,6 +1499,9 @@ void LevelEditor::Initialize() {
 	style->Colors[ImGuiCol_ScrollbarGrab] = BaseColor.ToImVec4();
 	style->Colors[ImGuiCol_ScrollbarGrabHovered] = Vec4(BaseColor + HoveredModifier).ToImVec4();
 	style->Colors[ImGuiCol_ScrollbarGrabActive] = Vec4(BaseColor + ActiveModifier).ToImVec4();
+
+	// Progress bar
+	style->Colors[ImGuiCol_PlotHistogram] = ProgressBarColor.ToImVec4();
 
 	/*
 	// ImGui window borders
