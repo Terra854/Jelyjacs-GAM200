@@ -139,7 +139,7 @@ void GLWindow::Initialize() {
 void GLWindow::Update()
 {
     glfwPollEvents();
-    
+    glfwSetWindowIconifyCallback(ptr_window, window_iconify_callback);
 
     //change to windowed mode
     if (input::IsPressed(KEY::x)) {
@@ -241,6 +241,22 @@ void GLWindow::ChangeWindowMode()
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
+}
+
+void GLWindow::window_iconify_callback(GLFWwindow* window, int iconified)
+{
+    (void)window;
+    if (iconified)
+	{
+		// The window was iconified
+		std::cout << "Window was iconified" << std::endl;
+	}
+	else
+	{
+		// The window was restored
+		std::cout << "Window was restored" << std::endl;
+	}
+
 }
 
 
