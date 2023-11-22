@@ -268,6 +268,15 @@ FMOD::Sound* AssetManager::soundsval(std::string str)
 	}
 }
 
+FMOD::Sound* AssetManager::getsoundbyaudiotype(AudioType a) {
+	try {
+		return soundsval(soundMapping.at(a));
+	}
+	catch (std::out_of_range) {
+		return nullptr;
+	}
+}
+
 void AssetManager::addtextures(std::string str, GLuint tex)
 {
 	textures.emplace(str, tex);

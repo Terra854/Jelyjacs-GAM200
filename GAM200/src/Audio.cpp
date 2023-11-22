@@ -72,6 +72,13 @@ void Audio::stopWalking() {
     channel->setVolume(0.0);
 }
 
+void Audio::playSfx(AudioType a) {
+    system->playSound(AssetManager::getsoundbyaudiotype(a), 0, false, &sfx);
+    sfx->setVolume(0.2f);
+}
+
+// Legacy functions, will be nuked
+
 void Audio::playJump() {
     system->playSound(AssetManager::soundsval("Jump.wav"), 0, false, &sfx);
     sfx->setVolume(0.2f);

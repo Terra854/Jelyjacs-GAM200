@@ -10,6 +10,13 @@ This file contains the declaration for the Audio system class
 #include <fmod.hpp>
 #include <fmod_errors.h>
 
+enum AudioType : int {
+	Background,
+	Walking,
+	Jump,
+	Sliding_Door_Open
+};
+
 class Audio : public ISystems {
 public:
 	~Audio();
