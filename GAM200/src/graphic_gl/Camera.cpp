@@ -59,7 +59,7 @@ void Camera::Update() {
 */
 void Camera::SetToPlayer() {
 	// get player object
-	Object* player = objectFactory->getPlayerObject();
+	Object* player = Logic->playerObj;
 
 	// Make sure it's not nullptr
 	if (player != nullptr) {

@@ -27,7 +27,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 
 GameLogic* Logic = NULL;
 Object* scale_and_rotate;
-Object* playerObj;
+Object* GameLogic::playerObj;
 Object* MovingPlatform;
 Object* dynamic_collision;
 bool moving_platform_direction = false;

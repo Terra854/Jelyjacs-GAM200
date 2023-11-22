@@ -31,7 +31,7 @@ public:
 		behaviourComponents.push_back(behaviour);
 	}
 	//void AddObject(Object* obj);
-
+	static Object* playerObj;
 	void LoadScripts();
 	virtual std::string SystemName() { return "Game_Logic"; }
 
@@ -39,6 +39,8 @@ private:
 	std::unordered_map<std::string, LogicScript*> behaviours;
 	//std::vector<Object*> b_objects;
 	std::vector<Behaviour*> behaviourComponents;
+
+
 };
 
 extern GameLogic* Logic;

@@ -14,6 +14,7 @@ Header file for Camera.cpp
 #include <components/PlayerControllable.h>
 #include <Factory.h>
 #include <GLWindow.h>
+#include <GameLogic.h>
 
 #ifndef CAMERA_H
 #define CAMERA_H
