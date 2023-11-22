@@ -24,6 +24,15 @@ void LoadScene(std::string filename)
 	jsonobj.readString(levelname, "SceneName");
 	std::cout << "Loading Scene: " << levelname << std::endl;
 
+	AssetManager::clearSoundMap();
+	if (jsonobj.isMember("SoundMap"))
+	{
+		std::cout << "Linking sound map..." << std::endl;
+		std::string soundmap;
+		jsonobj.readString(soundmap, "SoundMap");
+		linkSoundMap(soundmap);
+	}
+
 	for (auto& component : jsonobj.read("Objects"))
 	{
 		JsonSerialization jsonloop;
@@ -88,6 +97,8 @@ void SaveScene(std::string filename)
 	// Save Scene Name
 	Json::Value jsonobj;
 	jsonobj["SceneName"] = "testsaving";
+
+	jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
 
 	for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 	{
@@ -188,7 +199,49 @@ void SaveScene(std::string filename)
 	//jsonobj.closeFile();
 }
 
+void linkSoundMap(std::string filename)
+{
+	// Check if the given file exists
+	JsonSerialization jsonobj;
+	jsonobj.openFileRead(filename);
 
+	// Loop through AudioType
+	for (int i = 0; i < AudioType::END; i++)
+	{
+		std::string audio;
+		switch (i) // Set audio value based on current AudioType
+		{
+			case AudioType::Background:
+				audio = "background";
+				break;
+			case AudioType::Walking:
+				audio = "walking";
+				break;
+			case AudioType::Jumping:
+				audio = "jumping";
+				break;
+			case AudioType::Sliding_Door_Open:
+				audio = "sliding_door_open";
+				break;
+			default:
+				audio = "END";
+				break;
+		}
+
+		AudioType a = static_cast<AudioType>(i);
+
+		// Check if AudioType exist in audiomap json and then update it
+		if (jsonobj.isMember(audio))
+		{
+			std::string audioval;
+			jsonobj.readString(audioval, audio);
+			AssetManager::updateSoundMap(a, audioval);
+			std::cout << "AudioMap value: " << audioval << std::endl;
+		}
+	}
+
+	jsonobj.closeFile();
+}
 
 
 

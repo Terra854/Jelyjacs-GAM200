@@ -9,6 +9,7 @@ to be referenced from when needed.
 
 *//*__________________________________________________________________________*/
 #include "asset_manager.h"
+#include "../../include/Audio.h"
 #include <Windows.h>
 #include <iostream>
 
@@ -283,9 +284,15 @@ void AssetManager::addtextures(std::string str, GLuint tex)
 	textures.emplace(str, tex);
 }
 
+void AssetManager::updateSoundMap(AudioType a, std::string file)
+{
+	soundMapping.emplace(a, file);
+}
 
-
-
+void AssetManager::clearSoundMap()
+{
+	soundMapping.clear();
+}
 
 
 

@@ -14,7 +14,7 @@ void LoadScene(std::string);
 // Save all objects into a json file
 void SaveScene(std::string);
 
-
+void linkSoundMap(std::string);
 
 
 
