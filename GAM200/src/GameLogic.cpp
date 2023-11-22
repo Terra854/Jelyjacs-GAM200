@@ -62,19 +62,6 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 *******************************************************************************/
 void GameLogic::Initialize()
 {
-	// In order to use the game object factory, we need to register the components we want to use first like this
-	// When we create new types of components, we need to add it in there as well
-	objectFactory->AddComponentCreator("Transform", new ComponentCreator<Transform>());
-	objectFactory->AddComponentCreator("Texture", new ComponentCreator<Texture>());
-	objectFactory->AddComponentCreator("Rectangle", new ComponentCreator<Rectangular>());
-	objectFactory->AddComponentCreator("Circle", new ComponentCreator<Circular>());
-	objectFactory->AddComponentCreator("Line", new ComponentCreator<Lines>());
-	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
-	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
-	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
-	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
-
-	
 	//LoadScene("Asset/Levels/testsave.json");
 	LoadScene("Asset/Levels/tutorial_level.json");
 	//SaveScene("Asset/Levels/testsave.json");

@@ -43,6 +43,18 @@ Factory::Factory()
 {
 	objectFactory = this;
 	nextObjectId = 0;
+
+	// In order to use the game object factory, we need to register the components we want to use first like this
+	// When we create new types of components, we need to add it in there as well
+	AddComponentCreator("Transform", new ComponentCreator<Transform>());
+	AddComponentCreator("Texture", new ComponentCreator<Texture>());
+	AddComponentCreator("Rectangle", new ComponentCreator<Rectangular>());
+	AddComponentCreator("Circle", new ComponentCreator<Circular>());
+	AddComponentCreator("Line", new ComponentCreator<Lines>());
+	AddComponentCreator("Physics", new ComponentCreator<Physics>());
+	AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
+	AddComponentCreator("Event", new ComponentCreator<Event>());
+	AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 }
 
 //Dtor
