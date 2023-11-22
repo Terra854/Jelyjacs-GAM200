@@ -10,7 +10,7 @@ This file contains the declaration for the Audio system class
 #include <fmod.hpp>
 #include <fmod_errors.h>
 
-enum AudioType : int {
+enum class AudioType {
 	Background,
 	Walking,
 	Jump,
@@ -29,6 +29,7 @@ public:
 
 	void startWalking();
 	void stopWalking();
+	void playSfx(AudioType a);
 	void playJump();
 	void playSlidingDoor();
 private:

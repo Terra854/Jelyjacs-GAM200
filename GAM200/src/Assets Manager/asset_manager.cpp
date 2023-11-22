@@ -23,6 +23,7 @@ std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;
 std::map<std::string, Object*> AssetManager::prefabs;
 std::map<std::string, FMOD::Sound*> AssetManager::sounds;
+std::map<AudioType, std::string> AssetManager::soundMapping;
 
 GLuint AssetManager::missing_texture;
 
