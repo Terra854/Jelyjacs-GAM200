@@ -73,7 +73,9 @@ void CoreEngine::Initialize()
 	std::cout << "Initialising " << Systems["Window"]->SystemName() << std::endl;
 	Systems["Window"]->Initialize(); // Must initialize Window first
 
+#if defined(DEBUG) | defined(_DEBUG)
 	hud.StartGui();
+#endif
 
 	for (const std::pair<std::string, ISystems*>& sys : Systems)
 	{ // Then initialize all other systems
