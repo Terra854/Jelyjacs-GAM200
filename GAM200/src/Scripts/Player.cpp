@@ -28,12 +28,6 @@ void Player::Update(Object* obj) {
 	}
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
-
-	if (player_physics->Velocity.x != 0) {
-		std::cout << "Player Velocity X : " << player_physics->Velocity.x << std::endl;
-		std::cout << "Player Velocity Y : " << player_physics->Velocity.y << std::endl;
-	}
-
 	player_physics->Velocity.x = 0.0f;
 
 	if (player_animation->face_right){
