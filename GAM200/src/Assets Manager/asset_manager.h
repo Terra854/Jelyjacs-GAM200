@@ -51,6 +51,9 @@ public:
 	static FMOD::Sound* soundsval(std::string str);
 	static FMOD::Sound* getsoundbyaudiotype(AudioType a);
 
+	static void updateSoundMap(AudioType a, std::string);
+	static void clearSoundMap();
+
 	// Add textures while the game is running (defaults to missing texture if no textures are provided)
 	static void addtextures(std::string str, GLuint tex = missing_texture);
 

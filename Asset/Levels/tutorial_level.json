@@ -1,5 +1,6 @@
 {
   "SceneName": "tutorial_level",
+  "SoundMap" : "Asset/Sounds/sounds.json",
   "Objects": [
     {
       "Prefabs": "tutorial_background.json"
