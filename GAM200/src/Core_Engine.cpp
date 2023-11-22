@@ -72,6 +72,9 @@ void CoreEngine::Initialize()
 	// Initialize all the Systems
 	std::cout << "Initialising " << Systems["Window"]->SystemName() << std::endl;
 	Systems["Window"]->Initialize(); // Must initialize Window first
+
+	hud.StartGui();
+
 	for (const std::pair<std::string, ISystems*>& sys : Systems)
 	{ // Then initialize all other systems
 		if (sys.first != "Window")
@@ -197,7 +200,7 @@ void CoreEngine::GameLoop()
 	std::vector<int> boxesFilled(numOfBoxes, 0);
 	std::cout << boxesFilled.capacity();
 
-	ImGuiIO& io = hud.StartGui();
+	//ImGuiIO& io = hud.StartGui();
 
 	bool debug_gui_active = true;
 	bool show_performance_viewer = true;
@@ -670,7 +673,7 @@ void CoreEngine::GameLoop()
 				ImGui::End();
 			}
 
-			hud.GuiRender(io);
+			hud.GuiRender();
 		}
 		else {
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
@@ -679,8 +682,9 @@ void CoreEngine::GameLoop()
 			gamehud.Update();
 			gamehud.Draw();
 			Update(Systems["Window"]);
-			hud.GuiRender(io);
+			hud.GuiRender();
 		}
+		glfwSwapBuffers(window->ptr_window);
 
 		level_editor->ClearAll();
 #else

@@ -23,6 +23,7 @@ std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;
 std::map<std::string, Object*> AssetManager::prefabs;
 std::map<std::string, FMOD::Sound*> AssetManager::sounds;
+std::map<AudioType, std::string> AssetManager::soundMapping;
 
 GLuint AssetManager::missing_texture;
 
@@ -262,6 +263,15 @@ FMOD::Sound* AssetManager::soundsval(std::string str)
 {
 	try {
 		return sounds.at(str);
+	}
+	catch (std::out_of_range) {
+		return nullptr;
+	}
+}
+
+FMOD::Sound* AssetManager::getsoundbyaudiotype(AudioType a) {
+	try {
+		return soundsval(soundMapping.at(a));
 	}
 	catch (std::out_of_range) {
 		return nullptr;

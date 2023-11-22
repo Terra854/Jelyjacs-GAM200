@@ -1,5 +1,6 @@
 #include "Scripts/Player.h"
 #include <PhysicsSystem.h>
+#include "Core_Engine.h"
 #include <components/Physics.h>
 #include <components/Animation.h>
 #include <components/Transform.h>
@@ -7,6 +8,8 @@
 #include <components/PlayerControllable.h>
 #include <components/Event.h>
 #include <Audio.h>
+#include <input.h>
+#include <message.h>
 
 Player::Player(std::string name) : LogicScript(name)
 {
@@ -18,14 +21,19 @@ void Player::Start(Object* obj) {
 }
 
 void Player::Update(Object* obj) {
-	if (input::IsPressed(KEY::down)) {
-		std::cout << "Down is working for player" << std::endl;
-	}
 	// For some reason, the player is not changing position
-	/*
-	if ((obj == nullptr) || (obj->GetComponent(ComponentType::Physics) == nullptr)) return;
+	if ((obj == nullptr) || (obj->GetComponent(ComponentType::Physics) == nullptr)) { 
+		std::cout << "NIL OBJ" << std::endl;
+		return; 
+	}
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+
+	if (player_physics->Velocity.x != 0) {
+		std::cout << "Player Velocity X : " << player_physics->Velocity.x << std::endl;
+		std::cout << "Player Velocity Y : " << player_physics->Velocity.y << std::endl;
+	}
+
 	player_physics->Velocity.x = 0.0f;
 
 	if (player_animation->face_right){
@@ -81,11 +89,12 @@ void Player::Update(Object* obj) {
 		audio->stopWalking();
 		moving = false;
 	}
-	*/
-	
+
 }
 
 void Player::Shutdown(Object* obj){
+
+	std::cout << "Player Script Shutdown : " << obj->GetName() << std::endl;
 
 }
 

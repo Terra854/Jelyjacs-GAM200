@@ -10,12 +10,6 @@ This file contains the definitions of the member functions in the Vec2 class
 
 #include <cmath>
 
-Vec2::Vec2(float _x, float _y)
-{
-	x = _x;
-	y = _y;
-}
-
 Vec2& Vec2::operator+=(const Vec2& rhs)
 {
 	x += rhs.x;
@@ -97,45 +91,44 @@ bool operator!=(const Vec2& lhs, const Vec2& rhs)
 }
 
 // Converts the vector for use in OpenGL calls
-
 glm::vec2 Vec2::ToGlmVec2() {
 	return glm::vec2(x, y);
 }
 
-Vec2 Vec2Normalize(const Vec2& pVec0)
+Vec2 Vec2Normalize(const Vec2& v)
 {
-	float f = Vec2Length(pVec0);
-	return Vec2(pVec0.x / f, pVec0.y / f);
+	float f = Vec2Length(v);
+	return Vec2(v.x / f, v.y / f);
 }
 
-float Vec2Length(const Vec2& pVec0)
+float Vec2Length(const Vec2& v)
 {
-	return sqrt(pVec0.x * pVec0.x + pVec0.y * pVec0.y);
+	return sqrt(v.x * v.x + v.y * v.y);
 }
 
-float Vec2SquareLength(const Vec2& pVec0)
+float Vec2SquareLength(const Vec2& v)
 {
-	return Vec2Length(pVec0) * Vec2Length(pVec0);
+	return Vec2Length(v) * Vec2Length(v);
 }
 
-float Vec2Distance(const Vec2& pVec0, const Vec2& pVec1)
+float Vec2Distance(const Vec2& v0, const Vec2& v1)
 {
-	Vec2 distance{ pVec1.x - pVec0.x, pVec1.y - pVec0.y };
+	Vec2 distance{ v1.x - v0.x, v1.y - v0.y };
 	return Vec2Length(distance);
 }
 
-float Vec2SquareDistance(const Vec2& pVec0, const Vec2& pVec1)
+float Vec2SquareDistance(const Vec2& v0, const Vec2& v1)
 {
-	Vec2 distance{ pVec1.x - pVec0.x, pVec1.y - pVec0.y };
+	Vec2 distance{ v1.x - v0.x, v1.y - v0.y };
 	return Vec2Length(distance) * Vec2Length(distance);
 }
 
-float Vec2DotProduct(const Vec2& pVec0, const Vec2& pVec1)
+float Vec2DotProduct(const Vec2& v0, const Vec2& v1)
 {
-	return pVec1.x * pVec0.x + pVec1.y * pVec0.y;
+	return v1.x * v0.x + v1.y * v0.y;
 }
 
-float Vec2CrossProductMag(const Vec2& pVec0, const Vec2& pVec1)
+float Vec2CrossProductMag(const Vec2& v0, const Vec2& v1)
 {
-	return pVec0.x * pVec1.y - pVec0.y * pVec1.x;
+	return v0.x * v1.y - v0.y * v1.x;
 }

@@ -49,6 +49,7 @@ public:
 	static void cleanprefab();
 
 	static FMOD::Sound* soundsval(std::string str);
+	static FMOD::Sound* getsoundbyaudiotype(AudioType a);
 
 	// Add textures while the game is running (defaults to missing texture if no textures are provided)
 	static void addtextures(std::string str, GLuint tex = missing_texture);
@@ -70,6 +71,7 @@ private:
 	static std::map<std::string, GLuint> animations;
 	static std::map<std::string, Object*> prefabs;
 	static std::map<std::string, FMOD::Sound*> sounds;
+	static std::map<AudioType, std::string> soundMapping;
 
 	static GLuint missing_texture;
 };

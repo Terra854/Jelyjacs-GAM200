@@ -36,13 +36,6 @@
       "Properties": {
         "linkedevent" : 0
       }
-    },
-    {
-      "Type": "Behaviour",
-      "Properties": {
-        "Script": "Test",
-        "Index": 1
-      }
     }
   ]
 }

@@ -107,8 +107,13 @@ void GameLogic::Update() {
 		return;
 
 	for (auto& iter : behaviourComponents) {
-		//std::cout << "Behaviour Update" << std::endl;
-		behaviours[iter->GetName()]->Update(iter->GetOwner());
+		// Check if the object is the player
+		if (iter->GetName() == "Player" && iter->GetOwner()->GetName() == playerObj->GetName()) {
+			behaviours["Player"]->Update(playerObj);
+		}
+		else {
+			behaviours[iter->GetName()]->Update(iter->GetOwner());
+		}
 	}
 	
 	// If Left Click, show mouse position
@@ -129,8 +134,23 @@ void GameLogic::Update() {
 	// If button Pressed, changed velocity
 	
 	//playerObj = objectFactory->getPlayerObject();
-	
+	Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
+	if (player_physics->Velocity.x != 0) {
+		std::cout << "Player Velocity X : " << player_physics->Velocity.x << std::endl;
+		std::cout << "Player Velocity Y : " << player_physics->Velocity.y << std::endl;
+	}
 	if (playerObj != nullptr && playerObj->GetComponent(ComponentType::Physics) != nullptr) {
+
+		if (input::IsPressed(KEY::e)) {
+			if (playerObj->GetName() == "Finn") {
+				playerObj = objectFactory->FindObject("Spark");
+			}
+			else if(playerObj->GetName() == "Spark") {
+				playerObj = objectFactory->FindObject("Finn");
+			}
+		}
+		// Transfered to Player.cpp
+		/*
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
 		player_physics->Velocity.x = 0.0f;
@@ -171,16 +191,7 @@ void GameLogic::Update() {
 			else player_animation->current_type = AnimationType::Jump_left;
 		}
 		else player_animation->jump_fixed = false;
-
-		if (input::IsPressed(KEY::e)) {
-			if (playerObj->GetName() == "Finn") {
-				playerObj = objectFactory->FindObject("Spark");
-			}
-			else {
-				playerObj = objectFactory->FindObject("Finn");
-			}
-		}
-
+		
 		// Let the player loop around the window
 		
 		Transform* t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
@@ -195,6 +206,7 @@ void GameLogic::Update() {
 			audio->stopWalking();
 			moving = false;
 		}
+		*/
 		
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID((long)i);
@@ -236,6 +248,7 @@ void GameLogic::Update() {
 				}
 			}
 			else if (obj->GetName() == "elevator") {
+
 				MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
 
 				Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
