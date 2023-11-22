@@ -34,6 +34,9 @@ GLFWwindow* GLWindow::ptr_window;
 GLint GLWindow::width_windowed;
 GLint GLWindow::height_windowed;
 Window_size GLWindow::window_size;
+const GLFWvidmode* originalMode;
+int originalX, originalY, originalWidth, originalHeight;
+GLFWmonitor* monitor;
 
 //Global Pointer to Window System
 GLWindow* window = NULL;
@@ -124,6 +127,10 @@ void GLWindow::Initialize() {
         return;
     }
     window_size = Window_size::high;
+    monitor = glfwGetPrimaryMonitor();
+    originalMode = glfwGetVideoMode(monitor);
+    glfwGetWindowPos(ptr_window, &originalX, &originalY);
+    glfwGetWindowSize(ptr_window, &originalWidth, &originalHeight);
 }
 
 /*
@@ -139,6 +146,8 @@ void GLWindow::Update()
         if (window_size == Window_size::fullscreen)
         {
 			window_size = Window_size::high;
+            // restore windows desktop resolution
+            glfwSetWindowMonitor(ptr_window, NULL, originalX, originalY, originalWidth, originalHeight, 0);
 		}
         else {
            //switch to another resolution
@@ -197,7 +206,8 @@ void GLWindow::Update()
     }
     if (input::IsPressed(KEY::f)) {
         window_size = Window_size::fullscreen;
-		glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
+
+		glfwSetWindowMonitor(ptr_window, monitor, 0, 0, originalMode->width, originalMode->height, originalMode->refreshRate);
 	}
     
     // Check if the close button or alt + f4 is pressed
