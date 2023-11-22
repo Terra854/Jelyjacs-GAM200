@@ -1,16 +1,16 @@
 {
   "Audio": {
     "walking": {
-      "File": "looping/Footsteps.wav"
+      "File": "Footsteps.wav"
     },
     "background": {
-      "File": "looping/Game_Background.wav"
+      "File": "Game_Background.wav"
     },
     "jump": {
-      "File": "non looping/Jump.wav"
+      "File": "Jump.wav"
     },
     "sliding_door_open": {
-      "File": "non looping/Sliding_Door_Open.wav"
+      "File": "Sliding_Door_Open.wav"
     }
   }
 }
