@@ -81,7 +81,7 @@ void LoadScene(std::string filename)
 		// Add here to read oher types of data if necessary WIP
 
 
-		obj->Intialize();
+		obj->Initialize();
 
 	}
 

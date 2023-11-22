@@ -81,12 +81,12 @@ void GameLogic::Initialize()
 	LoadScripts();
 	for (auto iter : behaviourComponents ) {
 		
-		if (behaviours[iter->GetName()] == nullptr) {
-			std::cout << "Behaviour " << iter->GetName() << " is null" << std::endl;
+		if (behaviours[iter->GetBehaviourName()] == nullptr) {
+			std::cout << "Behaviour " << iter->GetBehaviourName() << " is null" << std::endl;
 			continue;
 		}
 		else 
-			behaviours[iter->GetName()]->Start(iter->GetOwner());
+			behaviours[iter->GetBehaviourName()]->Start(iter->GetOwner());
 	}
 
 	std::cout << "GameLogic Initialized" << std::endl;
@@ -108,11 +108,13 @@ void GameLogic::Update() {
 
 	for (auto& iter : behaviourComponents) {
 		// Check if the object is the player
-		if (iter->GetName() == "Player" && iter->GetOwner()->GetName() == playerObj->GetName()) {
-			behaviours["Player"]->Update(playerObj);
+		if (iter->GetBehaviourName() == "Player" && iter->GetOwner()->GetName() == playerObj->GetName()) {
+			behaviours["Player"]->Update(iter->GetOwner());
 		}
 		else {
-			behaviours[iter->GetName()]->Update(iter->GetOwner());
+			behaviours[iter->GetBehaviourName()]->Update(objectFactory->FindObject(iter->GetOwner()->GetName()));
+			//std::cout << "Velocity Y of Platform:" << static_cast<Physics*>(iter->GetOwner()->GetComponent(ComponentType::Physics))->Velocity.y << std::endl;
+			//std::cout << "Velocity X of Platform:" << static_cast<Transform*>(iter->GetOwner()->GetComponent(ComponentType::Transform))->Position.y << std::endl;
 		}
 	}
 	
@@ -149,7 +151,7 @@ void GameLogic::Update() {
 				playerObj = objectFactory->FindObject("Finn");
 			}
 		}
-		// Transfered to Player.cpp
+		// Transferred to Player.cpp
 		/*
 		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
 		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
@@ -247,8 +249,9 @@ void GameLogic::Update() {
 
 				}
 			}
+			/*
 			else if (obj->GetName() == "elevator") {
-
+				
 				MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
 
 				Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
@@ -270,7 +273,8 @@ void GameLogic::Update() {
 				if (input::IsPressed(KEY::z)) {
 					std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
 				}
-			}
+			
+			}*/
 		}
 	}
 	//Movement for Moving Platform

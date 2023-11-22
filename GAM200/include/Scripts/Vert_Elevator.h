@@ -11,6 +11,7 @@ public:
 	void Start(Object* obj) override;
 	void Update(Object* obj) override;
 	void Shutdown(Object* obj) override;
+
 private:
 	bool moving_platform_direction;
 };

@@ -288,7 +288,7 @@ Object* Factory::createObject(const std::string& filename)
 	}
 
 	// Run the initilization routines for each component (if there is any)
-	obj->Intialize();
+	obj->Initialize();
 	
 	// Clean up
 	jsonobj.closeFile();
@@ -504,12 +504,12 @@ Object* Factory::cloneObject(Object* object)
 		}
 	}
 
-	obj->Intialize();
+	obj->Initialize();
 	return obj;
 }
 
 //This adds a new component creator which is necessary for the creation of game objects
-//Call this at the very start of the game loop in Intialize
+//Call this at the very start of the game loop in Initialize
 void Factory::AddComponentCreator(const std::string& name, BaseComponentCreator* creator)
 {
 	componentMap[name] = creator;

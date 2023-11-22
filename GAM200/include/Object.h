@@ -38,7 +38,7 @@ public:
 	///adds a component to be a part of the object by adding it into the component map
 	void AddComponent(Component* component);
 
-	void Intialize();
+	void Initialize();
 
 	///Get the game object's Id
 	long GetId() { return ObjectId; }

@@ -14,7 +14,7 @@ Vert_Elevator::Vert_Elevator(std::string name) : LogicScript(name)
 void Vert_Elevator::Start(Object* obj)
 {
 	std::cout << "Vert_Elevator Script Ready : " << obj->GetName() << std::endl;
-	//moving_platform_direction = false;
+	
 }
 
 void Vert_Elevator::Update(Object* obj) {
