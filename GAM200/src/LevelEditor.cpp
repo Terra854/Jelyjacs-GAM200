@@ -1205,6 +1205,8 @@ void LevelEditor::PlayPauseGame() {
 
 		ClearLevelEditorObjectMap(false);
 
+		Logic->playerObj = objectFactory->getPlayerObject();
+
 		// Break here, cause otherwise the next line will be EndDisabled()
 		// which will cause an abort() due to mismatch 
 		ImGui::End();
