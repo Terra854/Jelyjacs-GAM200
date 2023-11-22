@@ -77,7 +77,7 @@ void GameLogic::Initialize()
 	
 	//LoadScene("Asset/Levels/testsave.json");
 	LoadScene("Asset/Levels/tutorial_level.json");
-	SaveScene("Asset/Levels/testsave.json");
+	//SaveScene("Asset/Levels/testsave.json");
 	LoadScripts();
 	for (auto iter : behaviourComponents ) {
 		
