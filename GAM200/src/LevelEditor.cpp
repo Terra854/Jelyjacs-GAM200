@@ -209,15 +209,29 @@ void LevelEditor::ObjectProperties() {
 
 		ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImGui::GetContentRegionAvail(), uv0, uv1);
 	}
-	else if (te != nullptr) {
-		if (tr->Scale.x > tr->Scale.y) {
+	else if (te != nullptr) 
+	{
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
+			{
+				std::cout << "test\n";
+				const std::pair<std::string, GLuint>* object = (const std::pair<std::string, GLuint>*)payload->Data;
+				te->textureName = object->first;
+				ImGui::EndDragDropTarget();
+			}
+		}
+
+		if (tr->Scale.x > tr->Scale.y) 
+		{
 			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
 			ImGui::Dummy(ImVec2(0, padding));
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
 		}
 		else if (tr->Scale.x == tr->Scale.y)
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImGui::GetContentRegionAvail());
-		else {
+		else 
+		{
 			float padding = ImGui::GetContentRegionAvail().x * (tr->Scale.x / tr->Scale.y) * 0.5f;
 			ImGui::Dummy(ImVec2(padding, 0));
 			ImGui::SameLine();
@@ -1041,6 +1055,13 @@ void LevelEditor::AssetList()
 					selectedTexture = t;
 					display_selected_texture = true;
 
+				}
+
+				size_t size = sizeof(t);
+				if (ImGui::BeginDragDropSource())
+				{
+					ImGui::SetDragDropPayload("Game texture", &t, size);
+					ImGui::EndDragDropSource();
 				}
 
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
