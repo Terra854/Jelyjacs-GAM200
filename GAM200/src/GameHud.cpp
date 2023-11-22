@@ -206,12 +206,14 @@ void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
 		// copy object's model-to-NDC matrix to vertex shader's
 		// uniform variable uModelToNDC
 		Vec2 posM;
-		posM.x = ((pos.x-17.0f) * 2.0f / window->width  ) ;
-		posM.y = (pos.y+10.0f) * 2.0f / window->height;
+		posM.x = ((pos.x-17.0f) * 2.0f / window->width_init  ) ;
+		posM.y = (pos.y+10.0f) * 2.0f / window->height_init;
 		Vec2 scale;
-		scale.x = (scaleX*1.6f)/ window->width ;
-		scale.y = (scaleY *2.5f)/ window->height;
+		scale.x = (scaleX*1.6f)/ window->width_init;
+		scale.y = (scaleY *2.5f)/ window->height_init;
 		Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale) * Mat3RotRad(0.f);
+		Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+		mat = Mat3Scale(window_sacling.x, window_sacling.y) * mat;
 		GLApp::shdrpgms["image"].SetUniform("uModel_to_NDC", mat.ToGlmMat3());
 		// tell fragment shader sampler uTex2d will use texture image unit 6
 		GLuint tex_loc = glGetUniformLocation(GLApp::shdrpgms["image"].GetHandle(), "uTex2d");
