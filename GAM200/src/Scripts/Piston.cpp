@@ -41,7 +41,7 @@ void Piston::Update(Object* obj) {
 				if (obj2->GetName() == "door") {
 					Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
 					if (piston_event->linked_event == door_event->linked_event) {
-						audio->playSlidingDoor();
+						audio->playSfx(AudioType::Sliding_Door_Open);
 						Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
 						door_animation->fixed = true;
 						door_animation->current_type = AnimationType::Jump;
