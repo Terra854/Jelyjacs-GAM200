@@ -338,9 +338,9 @@ void CoreEngine::GameLoop()
 
 			// Translate the ImGui-relative coordinates to application window-relative coordinates
 			ImVec2 cursorPosInAppWindow = ImVec2(viewportStartPos.x + viewportPos.x, viewportStartPos.y + viewportPos.y + titleBarHeight);
-			ImGui::SetCursorPos(viewportStartPos);
 
 			// Render the viewport
+			ImGui::SetCursorPos(viewportStartPos);
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 
 			if (ImGui::BeginDragDropTarget())
