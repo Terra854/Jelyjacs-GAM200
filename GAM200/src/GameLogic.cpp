@@ -58,7 +58,7 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 	// For Movement Key Display
 	if (msg->GetMessage() == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
-		std::cout << temp->dir << std::endl;
+		//std::cout << temp->dir << std::endl;
 	}
 }
 /******************************************************************************
@@ -108,7 +108,9 @@ void GameLogic::Update() {
 		}
 		else {
 			// Update the behaviour
-			behaviours[iter->GetBehaviourName()]->Update(objectFactory->getObjectWithID(iter->GetOwner()->GetId()));
+			for (auto it : objectFactory->FindAllObjectsByName(iter->GetOwner()->GetName())) {
+				behaviours[iter->GetBehaviourName()]->Update(it);
+			}
 		}
 	}
 	
