@@ -108,7 +108,7 @@ void GameLogic::Update() {
 		}
 		else {
 			// Update the behaviour
-			behaviours[iter->GetBehaviourName()]->Update(objectFactory->FindObject(iter->GetOwner()->GetName()));
+			behaviours[iter->GetBehaviourName()]->Update(objectFactory->getObjectWithID(iter->GetOwner()->GetId()));
 		}
 	}
 	

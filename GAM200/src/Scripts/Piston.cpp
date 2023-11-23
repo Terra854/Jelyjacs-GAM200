@@ -25,6 +25,7 @@ void Piston::Update(Object* obj) {
 		std::cout << "NIL OBJ : Piston" << std::endl;
 		return;
 	}
+	std::cout << "Piston Script Update : " << obj->GetId() << std::endl;
 	Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 	//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 	if (piston_b == nullptr) {
