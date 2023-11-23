@@ -16,7 +16,7 @@ public:
 
 	Vec2 Velocity;
 	bool AffectedByGravity = true;
-	float Mass;
+	float Mass = 1.f;
 	float Force = 0.f;
 
 	virtual void Initialize() override

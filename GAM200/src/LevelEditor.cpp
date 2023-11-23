@@ -144,6 +144,7 @@ static float edited_aabb_height;
 static bool Physics_EditMode = false;
 
 static Vec2 edited_velocity;
+static float edited_mass;
 static bool edited_gravity;
 
 void LevelEditor::ObjectProperties() {
@@ -865,6 +866,7 @@ void LevelEditor::ObjectProperties() {
 			{
 				// Display input fields
 				ImGui::InputFloat2("Velocity", &(edited_velocity.x));
+				ImGui::InputFloat("Mass", &(edited_mass));
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
 
 				// Button to exit edit mode
@@ -872,6 +874,7 @@ void LevelEditor::ObjectProperties() {
 				{
 					Physics_EditMode = false;
 					ph->Velocity = edited_velocity;
+					ph->Mass = edited_mass;
 					ph->AffectedByGravity = edited_gravity;
 				}
 
@@ -890,6 +893,7 @@ void LevelEditor::ObjectProperties() {
 			{
 				// Display the values as text
 				ImGui::Text("Velocity: %.5f, %.5f", ph->Velocity.x, ph->Velocity.y);
+				ImGui::Text("Mass: %.5f", ph->Mass);
 				ImGui::Text("Affected by gravity: ");
 				ImGui::SameLine();
 				ph->AffectedByGravity ? ImGui::Text("true") : ImGui::Text("false");
@@ -899,6 +903,7 @@ void LevelEditor::ObjectProperties() {
 				{
 					Physics_EditMode = true;
 					edited_velocity = ph->Velocity;
+					edited_mass = ph->Mass;
 					edited_gravity = ph->AffectedByGravity;
 				}
 
