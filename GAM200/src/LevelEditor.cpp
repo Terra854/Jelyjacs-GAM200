@@ -1175,9 +1175,18 @@ void LevelEditor::AssetList()
 			// Text
 			ImGui::Text(p.second->GetName().c_str());
 
-
 		}
 
+		ImGui::PopStyleColor();
+		ImGui::EndTabItem();
+	}
+	if (ImGui::BeginTabItem("Scripts"))
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+		for (const auto& script : Logic->behaviours)
+		{
+			ImGui::Text(script.first.c_str());
+		}
 		ImGui::PopStyleColor();
 		ImGui::EndTabItem();
 	}

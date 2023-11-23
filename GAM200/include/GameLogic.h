@@ -37,7 +37,7 @@ public:
 
 	static Object* playerObj;
 
-private:
+
 	std::unordered_map<std::string, LogicScript*> behaviours; // Map of behaviours to be added to objects on creation 
 	std::vector<Behaviour*> behaviourComponents; // Vector of behaviours to be updated every frame 
 
