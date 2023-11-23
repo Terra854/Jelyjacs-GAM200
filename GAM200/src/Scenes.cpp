@@ -90,6 +90,8 @@ void LoadScene(std::string filename)
 	engine->loaded_filename = filename;
 
 	jsonobj.closeFile();
+
+	Logic->Initialize();
 }
 
 void SaveScene(std::string filename)

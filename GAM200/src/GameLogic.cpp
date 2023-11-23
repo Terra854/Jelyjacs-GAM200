@@ -63,8 +63,10 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 void GameLogic::Initialize()
 {
 	//LoadScene("Asset/Levels/testsave.json");
-	LoadScene("Asset/Levels/tutorial_level.json");
 	//SaveScene("Asset/Levels/testsave.json");
+
+	behaviours.clear();
+
 	LoadScripts();
 	for (auto iter : behaviourComponents ) {
 		

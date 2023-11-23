@@ -27,6 +27,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include "GameHud.h"
 #include "Utils.h"
 #include "Assets Manager/asset_manager.h"
+#include <Scenes.h>
 
 CoreEngine* CORE = NULL;
 
@@ -247,6 +248,10 @@ void CoreEngine::GameLoop()
 #endif
 	// Game Loop
 	gamehud.Initialize();
+
+#if !(defined(DEBUG) | defined(_DEBUG))
+	LoadScene("Asset/Levels/tutorial_level.json");
+#endif
 
 	while (game_active)
 	{
