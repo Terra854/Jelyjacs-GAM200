@@ -17,6 +17,7 @@ This file contains the definitions of the functions that are part of the level e
 #include "Assets Manager/asset_manager.h"
 #include <PhysicsSystem.h>
 #include <Vec4.h>
+#include <components/Event.h>
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -182,10 +183,13 @@ void LevelEditor::ObjectProperties() {
 
 	Transform* tr = (Transform*)object->GetComponent(ComponentType::Transform);
 	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
-	Body* b = (Body*)object->GetComponent(ComponentType::Body);
+	Body* bo = (Body*)object->GetComponent(ComponentType::Body);
 	Physics* ph = (Physics*)object->GetComponent(ComponentType::Physics);
 	PlayerControllable* pc = (PlayerControllable*)object->GetComponent(ComponentType::PlayerControllable);
 	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
+	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
+	Event* e = (Event*)object->GetComponent(ComponentType::Event);
+	
 
 	ImGui::BeginChild("Texture", ImVec2(128.f, 128.f));
 
@@ -278,7 +282,7 @@ void LevelEditor::ObjectProperties() {
 	ImGui::SameLine();
 
 	if (ImGui::Button("Add Component")) {
-		if (b == nullptr || ph == nullptr)
+		if (bo == nullptr || ph == nullptr)
 			ImGui::OpenPopup("AddComponent");
 		else
 			ImGui::OpenPopup("NoComponentsToAdd");
@@ -286,7 +290,7 @@ void LevelEditor::ObjectProperties() {
 
 	if (ImGui::BeginPopup("AddComponent"))
 	{
-		if (b == nullptr)
+		if (bo == nullptr)
 			if (ImGui::Selectable("Body")) {
 				object->AddComponent(new Rectangular());
 			}
@@ -423,8 +427,8 @@ void LevelEditor::ObjectProperties() {
 					tr->Rotation = edited_rotation;
 					tr->Scale = edited_scale;
 
-					if (b != nullptr)
-						RecalculateBody(tr, b);
+					if (bo != nullptr)
+						RecalculateBody(tr, bo);
 				}
 
 				ImGui::SameLine();
@@ -458,7 +462,7 @@ void LevelEditor::ObjectProperties() {
 	}
 
 	// Body
-	if (b != nullptr) {
+	if (bo != nullptr) {
 		if (ImGui::CollapsingHeader("Body")) {
 			ImGui::SeparatorText("General Body Settings");
 
@@ -472,8 +476,8 @@ void LevelEditor::ObjectProperties() {
 				if (ImGui::Button("Done##Body"))
 				{
 					Body_EditMode = false;
-					b->active = edited_active;
-					b->collision_response = edited_collision_response;
+					bo->active = edited_active;
+					bo->collision_response = edited_collision_response;
 				}
 
 				ImGui::SameLine();
@@ -492,18 +496,18 @@ void LevelEditor::ObjectProperties() {
 				// Display the values as text
 				ImGui::Text("Active: ");
 				ImGui::SameLine();
-				b->active ? ImGui::Text("true") : ImGui::Text("false");
+				bo->active ? ImGui::Text("true") : ImGui::Text("false");
 
 				ImGui::Text("Respond to collision: ");
 				ImGui::SameLine();
-				b->collision_response ? ImGui::Text("true") : ImGui::Text("false");
+				bo->collision_response ? ImGui::Text("true") : ImGui::Text("false");
 
 				// Button to enter edit mode
 				if (ImGui::Button("Edit##Body"))
 				{
 					Body_EditMode = true;
-					edited_active = b->active;
-					edited_collision_response = b->collision_response;
+					edited_active = bo->active;
+					edited_collision_response = bo->collision_response;
 				}
 
 				ImGui::SameLine();
@@ -514,13 +518,13 @@ void LevelEditor::ObjectProperties() {
 				if (ImGui::Button("Delete##Body"))
 				{
 					objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
-					b = nullptr;
+					bo = nullptr;
 				}
 				ImGui::PopStyleColor(3);
 			}
 
-			if (b != nullptr && b->GetShape() == Shape::Rectangle) {
-				Rectangular* r = (Rectangular*)b;
+			if (bo != nullptr && bo->GetShape() == Shape::Rectangle) {
+				Rectangular* r = (Rectangular*)bo;
 
 				ImGui::SeparatorText("AABB Collision Settings");
 
@@ -917,6 +921,20 @@ void LevelEditor::ObjectProperties() {
 	// PlayerControllable
 	if (pc != nullptr) {
 		if (ImGui::CollapsingHeader("PlayerControllable")) {
+			ImGui::Text("Nothing right now");
+		}
+	}
+
+	// Event
+	if (be != nullptr) {
+		if (ImGui::CollapsingHeader("Behaviour")) {
+			ImGui::Text("Nothing right now");
+		}
+	}
+
+	// Event
+	if (e != nullptr) {
+		if (ImGui::CollapsingHeader("Event")) {
 			ImGui::Text("Nothing right now");
 		}
 	}

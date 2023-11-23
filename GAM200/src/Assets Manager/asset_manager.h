@@ -15,6 +15,7 @@ This file contains the declaration of class AssetManager.
 #include "../../include/Audio.h"
 #include "../../include/Interface_System.h"
 #include "../../include/Graphic_gl/glapp.h"
+#include <variant>
 
 class AssetManager : public ISystems
 {
@@ -49,7 +50,7 @@ public:
 	static void cleanprefab();
 
 	static FMOD::Sound* soundsval(std::string str);
-	static FMOD::Sound* getsoundbyaudiotype(AudioType a);
+	static FMOD::Sound* getsoundbyaudiotype(AudioType a, bool random = false, int seq_num = 0);
 
 	static void updateSoundMap(AudioType a, std::string);
 	static void clearSoundMap();
@@ -74,7 +75,10 @@ private:
 	static std::map<std::string, GLuint> animations;
 	static std::map<std::string, Object*> prefabs;
 	static std::map<std::string, FMOD::Sound*> sounds;
-	static std::map<AudioType, std::string> soundMapping;
+
+	// std::string if there is only 1 audio mapped to a sound type.
+	// vector of strings otherwise if there is more then 1
+	static std::map<AudioType, std::variant<std::string, std::vector<std::string>>> soundMapping;
 
 	static GLuint missing_texture;
 };
