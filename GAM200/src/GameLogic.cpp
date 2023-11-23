@@ -102,8 +102,6 @@ void GameLogic::Update() {
 		return;
 
 	for (auto& iter : behaviourComponents) {
-		if(GameLogic::playerObj != nullptr)
-			std::cout << playerObj->GetName() <<" : " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName() << std::endl;
 		//Check if the object is the player
 		if ((GameLogic::playerObj != nullptr) && (iter->GetBehaviourName() == static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName())) {
 				behaviours[iter->GetBehaviourName()]->Update(GameLogic::playerObj);

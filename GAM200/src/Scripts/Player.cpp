@@ -27,6 +27,10 @@ void Player::Update(Object* obj) {
 	}
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+	if (player_physics == nullptr || player_animation == nullptr) {
+		//std::cout << "NIL COMPONENT : Player" << std::endl;
+		return;
+	};
 	player_physics->Velocity.x = 0.0f;
 
 	if (player_animation->face_right){

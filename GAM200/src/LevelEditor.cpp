@@ -932,7 +932,7 @@ void LevelEditor::ObjectProperties() {
 	// Event
 	if (e != nullptr) {
 		if (ImGui::CollapsingHeader("Event")) {
-			ImGui::Text("Nothing right now");
+			ImGui::Text("Linked Event : %d", e->linked_event);
 		}
 	}
 
