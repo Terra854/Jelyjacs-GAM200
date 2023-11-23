@@ -45,7 +45,7 @@ void Object::AddComponent(Component* component)
 	if(component->TypeId() == ComponentType::Behaviour)
 	{
 		Behaviour* behaviour = static_cast<Behaviour*>(component);
-		std::cout << "Object name : " << this->name << "      |     Behaviour added in Obj: " << behaviour->behaviour_name << std::endl;
+		std::cout << "Object name : " << this->name << "      |     Behaviour added in Obj: " << behaviour->GetBehaviourName() << std::endl;
 	}
 
 	//sets the component's base ptr to refer to the current object that it is apart of

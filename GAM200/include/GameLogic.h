@@ -13,7 +13,7 @@ This file contains the declaration for the Game Logic system class
 #include <iostream>
 
 class LogicScript;
-extern std::map<std::string, LogicScript*> temp_scriptmap;
+
 
 class GameLogic : public ISystems
 {
@@ -49,6 +49,7 @@ extern GameLogic* Logic;
 class LogicScript
 {
 public:
+	friend class GameLogic;
 	LogicScript() {};
 	LogicScript(std::string name) {
 		temp_scriptmap[name] = this;
@@ -59,5 +60,7 @@ public:
 	virtual void Start(Object* obj) = 0;
 	virtual void Update(Object* obj) = 0;
 	virtual void Shutdown(Object* obj) = 0;
+private:
+	static std::map<std::string, LogicScript*> temp_scriptmap;
 };
 

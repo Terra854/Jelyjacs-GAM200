@@ -934,8 +934,8 @@ void LevelEditor::ObjectProperties() {
 	// Behaviour
 	if (be != nullptr) {
 		if (ImGui::CollapsingHeader("Behaviour")) {
-			ImGui::Text("Script Name : %s", be->behaviour_name.c_str());
-			ImGui::Text("Script Index : %d", be->behaviour_index);
+			ImGui::Text("Script Name : %s", be->GetBehaviourName().c_str());
+			ImGui::Text("Script Index : %d", be->GetBehaviourIndex());
 		}
 	}
 

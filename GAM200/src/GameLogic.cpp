@@ -27,6 +27,8 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Scenes.h>
 #include <PhysicsSystem.h>
 
+
+std::map<std::string, LogicScript*> LogicScript::temp_scriptmap;
 GameLogic* Logic = NULL;
 Object* scale_and_rotate;
 Object* GameLogic::playerObj;
@@ -34,9 +36,11 @@ Object* MovingPlatform;
 Object* dynamic_collision;
 bool moving_platform_direction = false;
 
+
+
 GameLogic::GameLogic() {
 	Logic = this;
-	playerObj = nullptr;
+	GameLogic::playerObj = nullptr;
 	MovingPlatform = nullptr;
 	dynamic_collision = nullptr;
 	moving_platform_direction = false;
@@ -83,8 +87,8 @@ void GameLogic::Initialize()
 	std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
 	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
 
-	playerObj = objectFactory->getPlayerObject();
-	//std::cout << "Player's behaviour is " << static_cast<Behaviour*>(playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName() << " || " << static_cast<Behaviour*>(playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex() << std::endl;
+	GameLogic::playerObj = objectFactory->getPlayerObject();
+	//std::cout << "Player's behaviour is " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName() << " || " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex() << std::endl;
 }
 
 /******************************************************************************
@@ -98,14 +102,16 @@ void GameLogic::Update() {
 		return;
 
 	for (auto& iter : behaviourComponents) {
-		/* Check if the object is the player
-		if (iter->GetBehaviourName() == "Player" && iter->GetOwner()->GetName() == playerObj->GetName()) {
-			behaviours[iter->GetBehaviourName()]->Update(objectFactory->FindObject(iter->GetOwner()->GetName()));
+		if(GameLogic::playerObj != nullptr)
+			std::cout << playerObj->GetName() <<" : " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName() << std::endl;
+		//Check if the object is the player
+		if ((GameLogic::playerObj != nullptr) && (iter->GetBehaviourName() == static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName())) {
+				behaviours[iter->GetBehaviourName()]->Update(GameLogic::playerObj);
 		}
-		else {*/
+		else {
 			// Update the behaviour
 			behaviours[iter->GetBehaviourName()]->Update(objectFactory->FindObject(iter->GetOwner()->GetName()));
-		//}
+		}
 	}
 	
 	// If Left Click, show mouse position
@@ -120,20 +126,21 @@ void GameLogic::Update() {
 		Message_Handler msg(MessageID::Event_Type::Quit);
 		engine->Broadcast(&msg);
 	}
-
-
-	// Movement for Player
-	// If button Pressed, changed velocity
 	
-	//playerObj = objectFactory->getPlayerObject();
-	if (playerObj != nullptr && playerObj->GetComponent(ComponentType::Physics) != nullptr) {
-
+	if (GameLogic::playerObj != nullptr) {
 		if (input::IsPressed(KEY::e)) {
-			if (playerObj->GetName() == "Finn") {
-				playerObj = objectFactory->FindObject("Spark");
+			if (GameLogic::playerObj->GetName() == "Finn") {
+				Object* temp = objectFactory->FindObject("Spark");
+				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj :objectFactory->FindObject("Spark");
+				std::cout << "Switched to Spark" << std::endl;
 			}
-			else if(playerObj->GetName() == "Spark") {
-				playerObj = objectFactory->FindObject("Finn");
+			else if(GameLogic::playerObj->GetName() == "Spark") {
+				Object* temp = objectFactory->FindObject("Finn");
+				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Finn");
+				std::cout << "Switched to Finn" << std::endl;
+			}
+			else {
+				GameLogic::playerObj = GameLogic::playerObj;
 			}
 		}
 
@@ -189,10 +196,10 @@ void GameLogic::AddBehaviour(std::string name, LogicScript* behaviour)
 }
 
 void GameLogic::LoadScripts() {
-	for (auto& it : temp_scriptmap) {
+	for (auto& it : LogicScript::temp_scriptmap) {
 		this->AddBehaviour(it.first, it.second);
 	}
-	std::cout << "Loaded Temporary Script Map: " << temp_scriptmap.size() << std::endl;
+	std::cout << "Loaded Temporary Script Map: " << LogicScript::temp_scriptmap.size() << std::endl;
 }
 
 bool GameLogic::CheckBehaviour(std::string name) {
