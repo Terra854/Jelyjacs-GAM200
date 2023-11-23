@@ -45,7 +45,13 @@ void Player::Update(Object* obj) {
 		if (player_physics->Velocity.y == 0.0f) {
 			//player_physics->Velocity.y = 1000.0f;
 			player_physics->Force = 60000.0f + gravity;
-			audio->playJump();
+			//audio->playJump();
+			std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
+			
+			if (player_physics->GetOwner()->GetName() == "Finn")
+				audio->playSfx(AudioType::Finn_Jumping);
+			else if (player_physics->GetOwner()->GetName() == "Spark")
+				audio->playSfx(AudioType::Spark_Jumping);
 		}
 	}
 	if (input::IsPressedRepeatedly(KEY::a)) {

@@ -50,7 +50,7 @@ public:
 	static void cleanprefab();
 
 	static FMOD::Sound* soundsval(std::string str);
-	static FMOD::Sound* getsoundbyaudiotype(AudioType a, bool random = false, int seq_num = 0);
+	static FMOD::Sound* getsoundbyaudiotype(AudioType a, bool random = true, int seq_num = 0);
 
 	static void updateSoundMap(AudioType a, std::string);
 	static void updateSoundMap(AudioType a, std::vector<std::string>);
