@@ -309,6 +309,11 @@ void AssetManager::updateSoundMap(AudioType a, std::string file)
 	soundMapping.emplace(a, file);
 }
 
+void AssetManager::updateSoundMap(AudioType a, std::vector<std::string> file)
+{
+	soundMapping.emplace(a, file);
+}
+
 void AssetManager::clearSoundMap()
 {
 	soundMapping.clear();

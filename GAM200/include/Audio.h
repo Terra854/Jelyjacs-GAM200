@@ -13,7 +13,8 @@ This file contains the declaration for the Audio system class
 enum AudioType {
 	Background,
 	Walking,
-	Jumping,
+	Finn_Jumping,
+	Spark_Jumping,
 	Sliding_Door_Open,
 	END
 };

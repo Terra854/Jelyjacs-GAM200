@@ -217,8 +217,11 @@ void linkSoundMap(std::string filename)
 			case AudioType::Walking:
 				audio = "walking";
 				break;
-			case AudioType::Jumping:
-				audio = "jumping";
+			case AudioType::Finn_Jumping:
+				audio = "finn_jumping";
+				break;
+			case AudioType::Spark_Jumping:
+				audio = "spark_jumping";
 				break;
 			case AudioType::Sliding_Door_Open:
 				audio = "sliding_door_open";
@@ -233,10 +236,26 @@ void linkSoundMap(std::string filename)
 		// Check if AudioType exist in audiomap json and then update it
 		if (jsonobj.isMember(audio))
 		{
-			std::string audioval;
-			jsonobj.readString(audioval, audio);
-			AssetManager::updateSoundMap(a, audioval);
-			std::cout << "AudioMap value: " << audioval << std::endl;
+			if (jsonobj.isArray(audio))
+			{
+				size_t pos = jsonobj.size(audio);
+				std::vector<std::string> audioarr;
+				for (size_t i = 0; i < pos; i++)
+				{
+					std::string audioval;
+					jsonobj.readString(audioval, audio, i);
+					audioarr.push_back(audioval);
+					std::cout << "AudioMap arrvalue: " << audioval << std::endl;
+				}
+				AssetManager::updateSoundMap(a, audioarr);
+			}
+			else
+			{
+				std::string audioval;
+				jsonobj.readString(audioval, audio);
+				AssetManager::updateSoundMap(a, audioval);
+				std::cout << "AudioMap value: " << audioval << std::endl;
+			}
 		}
 	}
 

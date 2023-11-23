@@ -75,25 +75,31 @@ bool JsonSerialization::checkValidParam(int pos, std::string param1, std::string
 	else if (!jsonObject->isMember(param1))
 		return false; // Invalid param1
 
-	// Check param2
-	if (param2.empty())
+	// Check param2 (param1 must not be empty)
+	if (!param1.empty())
 	{
-		// Ensure pos is valid
-		if (pos != -1 && (!(*jsonObject)[param1].isArray() || pos >= static_cast<int>((*jsonObject)[param1].size())))
-			return false; // Invalid pos
+		if (param2.empty())
+		{
+			// Ensure pos is valid
+			if (pos != -1 && (!(*jsonObject)[param1].isArray() || pos >= static_cast<int>((*jsonObject)[param1].size())))
+				return false; // Invalid pos
+		}
+		else if (!(*jsonObject)[param1].isMember(param2))
+			return false; // Invalid param2
 	}
-	else if (!(*jsonObject)[param1].isMember(param2))
-		return false; // Invalid param2
-		
-	// Check param3
-	if (param3.empty())
+
+	// Check param3 (param2 and 1 must not be empty)
+	if (!param2.empty() && !param1.empty())
 	{
-		// Ensure pos is valid
-		if (pos != -1 && (!(*jsonObject)[param1][param2].isArray() || pos >= static_cast<int>((*jsonObject)[param1][param2].size())))
-			return false; // Invalid pos
+		if (param3.empty())
+		{
+			// Ensure pos is valid
+			if (pos != -1 && (!(*jsonObject)[param1][param2].isArray() || pos >= static_cast<int>((*jsonObject)[param1][param2].size())))
+				return false; // Invalid pos
+		}
+		else if (!(*jsonObject)[param1][param2].isMember(param3))
+			return false; // Invalid param3
 	}
-	else if (!(*jsonObject)[param1][param2].isMember(param3))
-		return false; // Invalid param3
 
 	if (!param3.empty())
 	{
@@ -214,6 +220,20 @@ bool JsonSerialization::isMember(std::string str, std::string param)
 		return true;
 	else
 		return false;
+}
+
+bool JsonSerialization::isArray(std::string str)
+{
+	if ((*jsonObject)[str].isArray())
+		return true;
+	else
+		return false;
+}
+
+size_t JsonSerialization::size(std::string str)
+{
+	std::cout << "ARRAY SIZE: " << (*jsonObject)[str].size() << std::endl;
+	return ((*jsonObject)[str].size());
 }
 
 // For for-loop range usage
