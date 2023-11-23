@@ -9,6 +9,8 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include "GameLogic.h"
 #include <iostream>
 #include "Factory.h"
+#include "Object.h"
+#include "components/Behaviour.h"
 #include "ComponentCreator.h"
 #include "components/Transform.h"
 #include "components/Texture.h"
@@ -34,7 +36,6 @@ bool moving_platform_direction = false;
 
 GameLogic::GameLogic() {
 	Logic = this;
-	
 	playerObj = nullptr;
 	MovingPlatform = nullptr;
 	dynamic_collision = nullptr;
@@ -83,6 +84,7 @@ void GameLogic::Initialize()
 	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
 
 	playerObj = objectFactory->getPlayerObject();
+	//std::cout << "Player's behaviour is " << static_cast<Behaviour*>(playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName() << " || " << static_cast<Behaviour*>(playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex() << std::endl;
 }
 
 /******************************************************************************
@@ -96,15 +98,14 @@ void GameLogic::Update() {
 		return;
 
 	for (auto& iter : behaviourComponents) {
-		// Check if the object is the player
+		/* Check if the object is the player
 		if (iter->GetBehaviourName() == "Player" && iter->GetOwner()->GetName() == playerObj->GetName()) {
-			behaviours["Player"]->Update(iter->GetOwner());
-		}
-		else {
 			behaviours[iter->GetBehaviourName()]->Update(objectFactory->FindObject(iter->GetOwner()->GetName()));
-			//std::cout << "Velocity Y of Platform:" << static_cast<Physics*>(iter->GetOwner()->GetComponent(ComponentType::Physics))->Velocity.y << std::endl;
-			//std::cout << "Velocity X of Platform:" << static_cast<Transform*>(iter->GetOwner()->GetComponent(ComponentType::Transform))->Position.y << std::endl;
 		}
+		else {*/
+			// Update the behaviour
+			behaviours[iter->GetBehaviourName()]->Update(objectFactory->FindObject(iter->GetOwner()->GetName()));
+		//}
 	}
 	
 	// If Left Click, show mouse position
@@ -136,48 +137,12 @@ void GameLogic::Update() {
 			}
 		}
 
-		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
+		/*for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID((long)i);
 
 			if (obj == nullptr)
 				continue;
-
-			if (obj->GetName() == "piston") {
-				////Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-				//Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
-				////Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-
-				//// if piston collides with player, change the animation of piston
-				//if (piston_b->collision_flag & COLLISION_TOP) {
-				//	Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
-				//	piston_animation->fixed = true;
-				//	if (piston_animation->current_type == AnimationType::Jump) {}
-				//	else {
-				//		piston_animation->current_type = AnimationType::Jump;
-				//		Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-				//		std::cout << "piston event linked event:";
-				//		std::cout << piston_event->linked_event << std::endl;
-
-				//		//  Change the animation of door and disable the body of door
-				//		for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
-				//			Object* obj2 = objectFactory->getObjectWithID((long)j);
-				//			if (obj2->GetName() == "door") {
-				//				Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
-				//				if (piston_event->linked_event == door_event->linked_event) {
-				//					audio->playSlidingDoor();
-				//					Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
-				//					door_animation->fixed = true;
-				//					door_animation->current_type = AnimationType::Jump;
-				//					Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
-				//					door_body->active = false;
-				//				}
-				//			}
-				//		}
-				//	}
-				//
-				//}
-			}
-		}
+		}*/
 	}
 	/*
 	// Rotation of an object
@@ -228,4 +193,8 @@ void GameLogic::LoadScripts() {
 		this->AddBehaviour(it.first, it.second);
 	}
 	std::cout << "Loaded Temporary Script Map: " << temp_scriptmap.size() << std::endl;
+}
+
+bool GameLogic::CheckBehaviour(std::string name) {
+	return behaviours.find(name) == behaviours.end() ? false : true;
 }

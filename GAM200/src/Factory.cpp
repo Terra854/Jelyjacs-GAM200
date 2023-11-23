@@ -290,16 +290,19 @@ Object* Factory::createObject(const std::string& filename)
 		else if (type == "Behaviour") 
 		{
 			Behaviour *b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
-
-			jsonloop.readString(b->behaviour_name, "Properties", "Script");
-			jsonloop.readInt(b->behaviour_index, "Properties", "Index");
-			obj->AddComponent(b);
+			std::string temp_name;
+			int temp_index;
+			jsonloop.readString(temp_name, "Properties", "Script");
+			jsonloop.readInt(temp_index, "Properties", "Index");
 			Logic->AddBehaviourComponent(b);
-			//b->SetOwner(obj);
+			obj->AddComponent(b);
+			std::cout << "Behaviour Script & Index: " << temp_name << ", " << temp_index << std::endl;
+			b->SetBehaviourIndex(temp_index);
+			b->SetBehaviourName(temp_name);
 		}
 	}
 
-	// Run the initilization routines for each component (if there is any)
+	// Run the initialization routines for each component (if there is any)
 	obj->Initialize();
 	
 	// Clean up

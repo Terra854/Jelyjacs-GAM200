@@ -21,9 +21,8 @@ void Player::Start(Object* obj) {
 }
 
 void Player::Update(Object* obj) {
-	// For some reason, the player is not changing position
-	if ((obj == nullptr) || (obj->GetComponent(ComponentType::Physics) == nullptr)) { 
-		std::cout << "NIL OBJ" << std::endl;
+	if (obj == nullptr) { 
+		//std::cout << "NIL OBJ : Player" << std::endl;
 		return; 
 	}
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));

@@ -187,9 +187,8 @@ void LevelEditor::ObjectProperties() {
 	Physics* ph = (Physics*)object->GetComponent(ComponentType::Physics);
 	PlayerControllable* pc = (PlayerControllable*)object->GetComponent(ComponentType::PlayerControllable);
 	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
-	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
 	Event* e = (Event*)object->GetComponent(ComponentType::Event);
-	
+	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
 
 	ImGui::BeginChild("Texture", ImVec2(128.f, 128.f));
 
@@ -926,18 +925,20 @@ void LevelEditor::ObjectProperties() {
 	}
 
 	// Event
-	if (be != nullptr) {
-		if (ImGui::CollapsingHeader("Behaviour")) {
-			ImGui::Text("Nothing right now");
-		}
-	}
-
-	// Event
 	if (e != nullptr) {
 		if (ImGui::CollapsingHeader("Event")) {
 			ImGui::Text("Nothing right now");
 		}
 	}
+
+	// Behaviour
+	if (be != nullptr) {
+		if (ImGui::CollapsingHeader("Behaviour")) {
+			ImGui::Text("Script Name : %s", be->behaviour_name.c_str());
+			ImGui::Text("Script Index : %d", be->behaviour_index);
+		}
+	}
+
 
 	ImGui::EndChild();
 	ImGui::End();

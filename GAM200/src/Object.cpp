@@ -9,6 +9,8 @@ and retrieve a specific component from the object.
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Object.h"
+#include <components/Behaviour.h> // FOR TESTING PURPOSES, REMOVE LATER
+#include <iostream> // FOR TESTING PURPOSES, REMOVE LATER
 
 Object::Object(){}
 
@@ -39,6 +41,12 @@ void Object::AddComponent(Component* component)
 {
 	//add into component map
 	Components[component->TypeId()] = component;
+
+	if(component->TypeId() == ComponentType::Behaviour)
+	{
+		Behaviour* behaviour = static_cast<Behaviour*>(component);
+		std::cout << "Object name : " << this->name << "      |     Behaviour added in Obj: " << behaviour->behaviour_name << std::endl;
+	}
 
 	//sets the component's base ptr to refer to the current object that it is apart of
 	component->Base = this;

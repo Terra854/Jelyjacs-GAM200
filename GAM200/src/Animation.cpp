@@ -98,6 +98,6 @@ GLApp::GLModel Animation::setup_texobj_animation(float x, float y, float z, floa
 	Model.draw_cnt = (unsigned int)gl_tri_primitives.size();
 	Model.primitive_type = GL_TRIANGLES;
 
-	std::cout << "frame created" << std::endl;
+	//std::cout << "frame created" << std::endl;
 	return Model;
 }

@@ -30,15 +30,16 @@ public:
 	void AddBehaviourComponent(Behaviour* behaviour) {
 		behaviourComponents.push_back(behaviour);
 	}
+	bool CheckBehaviour(std::string name);
 	//void AddObject(Object* obj);
-	static Object* playerObj;
 	void LoadScripts();
 	virtual std::string SystemName() { return "Game_Logic"; }
 
+	static Object* playerObj;
+
 private:
-	std::unordered_map<std::string, LogicScript*> behaviours;
-	//std::vector<Object*> b_objects;
-	std::vector<Behaviour*> behaviourComponents;
+	std::unordered_map<std::string, LogicScript*> behaviours; // Map of behaviours to be added to objects on creation 
+	std::vector<Behaviour*> behaviourComponents; // Vector of behaviours to be updated every frame 
 
 
 };
