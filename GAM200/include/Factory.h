@@ -69,6 +69,8 @@ public:
 	//Returns the pointer to an object by that object's name
 	Object* FindObject(std::string name);
 
+	std::vector<Object*> FindAllObjectsByName(std::string name);
+
 	void DeleteComponent(int id, ComponentType c);
 
 	int GetNextId() { return nextObjectId; };

@@ -554,6 +554,29 @@ Object* Factory::FindObject(std::string name)
 	return nullptr;
 }
 
+std::vector<Object*> Factory::FindAllObjectsByName(std::string name)
+{
+
+	std::vector<Object*> v;
+
+	if (objectMap.empty())
+	{
+		return v;
+	}
+
+	for (auto it = objectMap.begin(); it != objectMap.end(); it++)
+	{
+		Object* testObject = it->second;
+		std::string objectName = testObject->GetName();
+		if (objectName == name)
+		{
+			v.push_back(testObject);
+		}
+	}
+
+	return v;
+}
+
 void Factory::DeleteComponent(int id, ComponentType c) {
 	Object* o = getObjectWithID(id);
 	delete o->Components[c];
