@@ -318,19 +318,27 @@ void CoreEngine::GameLoop()
 			ImGui::Begin("Game Viewport", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 			ImVec2 windowSize = ImGui::GetWindowSize();
 
-			ImVec2 displaySize;
+			ImVec2 displaySize, viewportStartPos;
 			if (windowSize.y < (windowSize.x / 16.f * 9.f)) 
 			{
-				ImGui::SetCursorPos(ImVec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 0.f));
+				viewportStartPos = ImVec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 0.f);
 				displaySize = ImVec2(windowSize.y * 16.f / 9.f, windowSize.y );
 			}
 			else 
 			{
-				ImGui::SetCursorPos(ImVec2(0.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f));
+				viewportStartPos = ImVec2(0.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f);
 				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f) );
 			}
 
-			//ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y - 40.f);
+			// Get the top-left position of the viewport
+			ImVec2 viewportPos = ImGui::GetWindowPos();
+
+			// Estimate the height of the title bar
+			float titleBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
+
+			// Translate the ImGui-relative coordinates to application window-relative coordinates
+			ImVec2 cursorPosInAppWindow = ImVec2(viewportStartPos.x + viewportPos.x, viewportStartPos.y + viewportPos.y + titleBarHeight);
+			ImGui::SetCursorPos(viewportStartPos);
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 
 			if (ImGui::BeginDragDropTarget())
@@ -359,6 +367,18 @@ void CoreEngine::GameLoop()
 				ImGui::EndDragDropTarget();
 			}
 
+			if (ImGui::IsItemClicked()) {
+				ImVec2 clickPos = ImGui::GetMousePos();
+
+				// Assuming imagePos is the top-left position of your image
+				std::cout << clickPos.x << ", " << clickPos.y << std::endl;
+				std::cout << cursorPosInAppWindow.x << ", " << cursorPosInAppWindow.y << std::endl;
+
+				// Now relativePos contains the position of the click relative to the image
+				// You can use relativePos as needed
+			}
+
+			/*
 			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true)
 			{
 				Object* object;
@@ -382,7 +402,7 @@ void CoreEngine::GameLoop()
 				}
 			}
 
-			if (input::IsPressed(KEY::mouseL))
+			else if (input::IsPressed(KEY::mouseL))
 			{
 				for (size_t i = 1; i < objectFactory->NumberOfObjects(); i++)
 				{
@@ -403,6 +423,7 @@ void CoreEngine::GameLoop()
 				level_editor->selected = false;
 				level_editor->selectedNum = -1;
 			}
+			*/
 
 			if (input::IsPressed(KEY::q) && level_editor->selected == true)
 			{
