@@ -1,6 +1,6 @@
 /*!
 @file    GLWindow.cpp
-@author  Guo Chen (g.chen@digipen.edu).  pghali@digipen.edu
+@author  Guo Chen (g.chen@digipen.edu)
 @date    28/09/2023
 
 Window system for the engine
