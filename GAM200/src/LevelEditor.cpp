@@ -1188,6 +1188,9 @@ void LevelEditor::AssetList()
 void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
+	// Make the buttons unclickable if a level is not loaded
+	ImGui::BeginDisabled(engine->loaded_level.empty());
+
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
 			if (initialObjectMap.empty()) {
@@ -1204,15 +1207,21 @@ void LevelEditor::PlayPauseGame() {
 			engine->setPause();
 	}
 
+	ImGui::EndDisabled();
+
 	ImGui::SameLine();
 
+	/*
 	if (!engine->isPaused() || initialObjectMap.empty()) {
 		// Make the button look disabled by reducing its alpha
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		//ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 
 		// Make the button unclickable
 		ImGui::BeginDisabled(true);
-	}
+	}*/
+
+
+	ImGui::BeginDisabled(!engine->isPaused() || initialObjectMap.empty());
 
 	if (ImGui::Button("Reset")) {
 		objectFactory->destroyAllObjects();
@@ -1227,17 +1236,21 @@ void LevelEditor::PlayPauseGame() {
 
 		// Break here, cause otherwise the next line will be EndDisabled()
 		// which will cause an abort() due to mismatch 
-		ImGui::End();
-		return;
+		//ImGui::End();
+		//return;
 	}
 
+	/*
 	if (!engine->isPaused() || initialObjectMap.empty()) {
 		// End the disabled section
 		ImGui::EndDisabled();
 
 		// Restore original style
-		ImGui::PopStyleVar();
-	}
+		//ImGui::PopStyleVar();
+	}*/
+
+	ImGui::EndDisabled();
+
 
 	ImGui::End();
 }
@@ -1286,7 +1299,7 @@ void CameraControl() {
 
 	if (!camera2D->isFreeCamEnabled()) {
 		// Make the button look disabled by reducing its alpha
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		//ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 
 		// Make the button unclickable
 		ImGui::BeginDisabled(true);
@@ -1343,7 +1356,7 @@ void CameraControl() {
 		ImGui::EndDisabled();
 
 		// Restore original style
-		ImGui::PopStyleVar();
+		//ImGui::PopStyleVar();
 	}
 		
 	ImGui::End();
