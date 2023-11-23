@@ -49,6 +49,9 @@ CoreEngine::CoreEngine()
 	game_active = true;
 	CORE = this;
 
+	level_size = Vec2(0.0f, 0.0f);
+	start_coord = Vec2(0.0f, 0.0f);
+
 #if defined(DEBUG) | defined(_DEBUG)
 	paused = true;
 #else

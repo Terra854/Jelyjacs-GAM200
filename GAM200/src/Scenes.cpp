@@ -33,6 +33,16 @@ void LoadScene(std::string filename)
 		linkSoundMap(soundmap);
 	}
 
+	Vec2 start_coord;
+	jsonobj.readFloat(start_coord.x, "Size", "startX");
+	jsonobj.readFloat(start_coord.y, "Size", "startY");
+	engine->Set_Start_Coords(start_coord);
+
+	Vec2 level_size;
+	jsonobj.readFloat(level_size.x, "Size", "width");
+	jsonobj.readFloat(level_size.y, "Size", "height");
+	engine->Set_Level_Size(level_size);
+
 	for (auto& component : jsonobj.read("Objects"))
 	{
 		JsonSerialization jsonloop;
@@ -101,6 +111,15 @@ void SaveScene(std::string filename)
 	jsonobj["SceneName"] = "testsaving";
 
 	jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
+
+	Vec2 start_coord = engine->Get_Start_Coords();
+
+	Vec2 level_size = engine->Get_Level_Size();
+
+	jsonobj["Size"]["startX"] = start_coord.x;
+	jsonobj["Size"]["startY"] = start_coord.y;
+	jsonobj["Size"]["width"] = level_size.x;
+	jsonobj["Size"]["height"] = level_size.y;
 
 	for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 	{

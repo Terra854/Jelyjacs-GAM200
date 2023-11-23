@@ -172,17 +172,20 @@ int total_grid_width, total_grid_height, num_of_grids_per_side;
 *******************************************************************************/
 void PrepareUniformGrid() {
 	// All values here will need to eventually be read from the level files
-	int level_width = 1920;
-	int level_height = 1080;
+	//int level_width = 1920;
+	//int level_height = 1080;
+
+	Vec2 level_size = engine->Get_Level_Size();
+
 	int num_of_partitions_per_side = 6;
 
 	//factor in objects that can be just outside the viewable area
 	int extra_grids_per_side = num_of_partitions_per_side / 6;
 	extra_grids_per_side = extra_grids_per_side ? extra_grids_per_side : 1;
 
-	num_of_grids_per_side = num_of_partitions_per_side + (2 * extra_grids_per_side);
-	total_grid_width = level_width / num_of_partitions_per_side * num_of_grids_per_side;
-	total_grid_height = level_height / num_of_partitions_per_side * num_of_grids_per_side;
+	num_of_grids_per_side = num_of_partitions_per_side;// +(2 * extra_grids_per_side);
+	total_grid_width = (int)level_size.x / num_of_partitions_per_side * num_of_grids_per_side;
+	total_grid_height = (int)level_size.y / num_of_partitions_per_side * num_of_grids_per_side;
 
 	Collision::uniform_grid.resize(num_of_grids_per_side);
 	for (std::vector<std::vector<Object*>>& v : Collision::uniform_grid) {
@@ -288,14 +291,22 @@ void PhysicsSystem::Update() {
 
 			if (b->GetShape() == Shape::Rectangle) {
 
+				int w_index, h_index;
+				Vec2 start_coord = engine->Get_Start_Coords();
+
 				Vec2 p = ((Rectangular*)b)->aabb.P0();
 
+				/*
 				int w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
 				if (p.x < 0.f)
 					w_index--;
 				int h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
 				if (p.y < 0.f)
 					h_index--;
+				*/
+				
+				w_index = (((int)p.x - (int)start_coord.x) / (total_grid_width / num_of_grids_per_side));
+				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
 				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
@@ -305,12 +316,17 @@ void PhysicsSystem::Update() {
 
 				p = ((Rectangular*)b)->aabb.P1();
 
-				w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				/*
+				int w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
 				if (p.x < 0.f)
 					w_index--;
-				h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				int h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
 				if (p.y < 0.f)
 					h_index--;
+				*/
+
+				w_index = (((int)p.x - (int)start_coord.x) / (total_grid_width / num_of_grids_per_side));
+				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
 				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
@@ -320,12 +336,17 @@ void PhysicsSystem::Update() {
 
 				p = ((Rectangular*)b)->aabb.P2();
 
-				w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				/*
+				int w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
 				if (p.x < 0.f)
 					w_index--;
-				h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				int h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
 				if (p.y < 0.f)
 					h_index--;
+				*/
+
+				w_index = (((int)p.x - (int)start_coord.x) / (total_grid_width / num_of_grids_per_side));
+				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
 				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
@@ -335,12 +356,17 @@ void PhysicsSystem::Update() {
 
 				p = ((Rectangular*)b)->aabb.P3();
 
-				w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				/*
+				int w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
 				if (p.x < 0.f)
 					w_index--;
-				h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
+				int h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
 				if (p.y < 0.f)
 					h_index--;
+				*/
+
+				w_index = (((int)p.x - (int)start_coord.x) / (total_grid_width / num_of_grids_per_side));
+				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
 				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
 				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {

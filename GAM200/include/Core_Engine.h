@@ -16,6 +16,7 @@ This file contains the declaration for the Core Engine class
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_glfw.h>
 #include <Imgui/imgui_impl_opengl3.h>
+#include <Vec2.h>
 
 enum Axis
 {
@@ -70,6 +71,12 @@ public:
 
 	bool show_tileset = false;
 
+	void Set_Level_Size(Vec2& size) { level_size = size; }
+	Vec2 Get_Level_Size() { return level_size; }
+
+	void Set_Start_Coords(Vec2& coords) { start_coord = coords; }
+	Vec2 Get_Start_Coords() { return start_coord; }
+
 
 #if defined(DEBUG) | defined(_DEBUG)
 	friend class LevelEditor; // For displaying performance info
@@ -91,6 +98,8 @@ private:
 	bool game_active;
 
 	bool paused;
+
+	Vec2 level_size, start_coord;
 };
 
 extern CoreEngine* engine;

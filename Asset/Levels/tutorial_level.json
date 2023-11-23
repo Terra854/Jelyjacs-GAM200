@@ -1,6 +1,12 @@
 {
   "SceneName": "tutorial_level",
-  "SoundMap" : "Asset/Sounds/sounds.json",
+  "SoundMap": "Asset/Sounds/sounds.json",
+  "Size": {
+    "startX": -960.0,
+    "startY": -540.0,
+    "width": 1920.0,
+    "height": 1080.0
+  },
   "Objects": [
     {
       "Prefabs": "tutorial_background.json"
