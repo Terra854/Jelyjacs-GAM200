@@ -25,13 +25,16 @@ void LoadScene(std::string filename)
 	std::cout << "Loading Scene: " << levelname << std::endl;
 
 	AssetManager::clearSoundMap();
-	if (jsonobj.isMember("SoundMap"))
+	/*if (jsonobj.isMember("SoundMap"))
 	{
 		std::cout << "Linking sound map..." << std::endl;
 		std::string soundmap;
 		jsonobj.readString(soundmap, "SoundMap");
 		linkSoundMap(soundmap);
-	}
+	}*/
+	
+	std::string soundmap = "Asset/Sounds/sounds.json";
+	linkSoundMap(soundmap);
 
 	Vec2 start_coord;
 	jsonobj.readFloat(start_coord.x, "Size", "startX");

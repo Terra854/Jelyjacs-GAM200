@@ -1,6 +1,5 @@
 {
   "SceneName": "level_1",
-  "SoundMap": "Asset/Sounds/sounds.json",
   "Size": {
     "startX": -672.0,
     "startY": -352.0,
@@ -1239,7 +1238,7 @@
       }
     },
     {
-      "Prefabs": "platform_24.json",
+      "Prefabs": "platform_20.json",
       "Type": "Transform",
       "Position": {
         "x": 320.0,
