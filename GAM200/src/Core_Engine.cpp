@@ -330,7 +330,7 @@ void CoreEngine::GameLoop()
 				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f) );
 			}
 
-			// Get the top-left position of the viewport
+			// Get the top-left position of the viewport window
 			ImVec2 viewportPos = ImGui::GetWindowPos();
 
 			// Estimate the height of the title bar
@@ -339,6 +339,8 @@ void CoreEngine::GameLoop()
 			// Translate the ImGui-relative coordinates to application window-relative coordinates
 			ImVec2 cursorPosInAppWindow = ImVec2(viewportStartPos.x + viewportPos.x, viewportStartPos.y + viewportPos.y + titleBarHeight);
 			ImGui::SetCursorPos(viewportStartPos);
+
+			// Render the viewport
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 
 			if (ImGui::BeginDragDropTarget())
@@ -370,14 +372,11 @@ void CoreEngine::GameLoop()
 			if (ImGui::IsItemClicked()) {
 				ImVec2 clickPos = ImGui::GetMousePos();
 
-				// Assuming imagePos is the top-left position of your image
 				std::cout << clickPos.x << ", " << clickPos.y << std::endl;
 				std::cout << cursorPosInAppWindow.x << ", " << cursorPosInAppWindow.y << std::endl;
-
-				// Now relativePos contains the position of the click relative to the image
-				// You can use relativePos as needed
 			}
 
+			// Selecting objects in the viewport is very very bugged, commenting out for now while trying to fix it
 			/*
 			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true)
 			{
@@ -417,13 +416,13 @@ void CoreEngine::GameLoop()
 					}
 				}
 			}
+			*/
 
 			if (input::IsPressed(KEY::mouseR) && level_editor->selected == true)
 			{
 				level_editor->selected = false;
 				level_editor->selectedNum = -1;
 			}
-			*/
 
 			if (input::IsPressed(KEY::q) && level_editor->selected == true)
 			{
