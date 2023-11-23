@@ -72,7 +72,7 @@ void Camera::SetToPlayer() {
 
 			position.y = 0.f - trans->Position.y * 2.0f / window->height_init;
 			// make sure the camera is not out of bounds
-
+			/*
 			if (position.x > 0.6f - 1.f / scale.x) {
 				position.x = 0.6f - 1.f / scale.x;
 			}
@@ -86,6 +86,7 @@ void Camera::SetToPlayer() {
 			else if (position.y < -0.8f + 1.f / scale.y) {
 				position.y = -0.8f + 1.f / scale.y;
 			}
+			*/
 		}
 
 	}
