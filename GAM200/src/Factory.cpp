@@ -517,9 +517,8 @@ Object* Factory::cloneObject(Object* object)
 			Behaviour* b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
 			Behaviour* b_tmp = static_cast<Behaviour*>(object->GetComponent(ComponentType::Behaviour));
 
-			b->behaviour_index = b_tmp->behaviour_index;
-			b->behaviour_name = b_tmp->behaviour_name;
-
+			b->SetBehaviourIndex(b_tmp->GetBehaviourIndex());
+			b->SetBehaviourName(b_tmp->GetBehaviourName());
 			obj->AddComponent(b);
 		}
 	}
