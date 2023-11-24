@@ -9,6 +9,8 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include "GameLogic.h"
 #include <iostream>
 #include "Factory.h"
+#include "Object.h"
+#include "components/Behaviour.h"
 #include "ComponentCreator.h"
 #include "components/Transform.h"
 #include "components/Texture.h"
@@ -25,17 +27,20 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Scenes.h>
 #include <PhysicsSystem.h>
 
+
+std::map<std::string, LogicScript*> LogicScript::temp_scriptmap;
 GameLogic* Logic = NULL;
 Object* scale_and_rotate;
-Object* playerObj;
+Object* GameLogic::playerObj;
 Object* MovingPlatform;
 Object* dynamic_collision;
 bool moving_platform_direction = false;
 
+
+
 GameLogic::GameLogic() {
 	Logic = this;
-	
-	playerObj = nullptr;
+	GameLogic::playerObj = nullptr;
 	MovingPlatform = nullptr;
 	dynamic_collision = nullptr;
 	moving_platform_direction = false;
@@ -53,7 +58,7 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 	// For Movement Key Display
 	if (msg->GetMessage() == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
-		std::cout << temp->dir << std::endl;
+		//std::cout << temp->dir << std::endl;
 	}
 }
 /******************************************************************************
@@ -62,38 +67,28 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 *******************************************************************************/
 void GameLogic::Initialize()
 {
-	// In order to use the game object factory, we need to register the components we want to use first like this
-	// When we create new types of components, we need to add it in there as well
-	objectFactory->AddComponentCreator("Transform", new ComponentCreator<Transform>());
-	objectFactory->AddComponentCreator("Texture", new ComponentCreator<Texture>());
-	objectFactory->AddComponentCreator("Rectangle", new ComponentCreator<Rectangular>());
-	objectFactory->AddComponentCreator("Circle", new ComponentCreator<Circular>());
-	objectFactory->AddComponentCreator("Line", new ComponentCreator<Lines>());
-	objectFactory->AddComponentCreator("Physics", new ComponentCreator<Physics>());
-	objectFactory->AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
-	objectFactory->AddComponentCreator("Event", new ComponentCreator<Event>());
-	objectFactory->AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
-
-	
 	//LoadScene("Asset/Levels/testsave.json");
-	LoadScene("Asset/Levels/tutorial_level.json");
-	SaveScene("Asset/Levels/testsave.json");
+	//SaveScene("Asset/Levels/testsave.json");
+
+	behaviours.clear();
+
 	LoadScripts();
 	for (auto iter : behaviourComponents ) {
 		
-		if (behaviours[iter->GetName()] == nullptr) {
-			std::cout << "Behaviour " << iter->GetName() << " is null" << std::endl;
+		if (behaviours[iter->GetBehaviourName()] == nullptr) {
+			std::cout << "Behaviour " << iter->GetBehaviourName() << " is null" << std::endl;
 			continue;
 		}
 		else 
-			behaviours[iter->GetName()]->Start(iter->GetOwner());
+			behaviours[iter->GetBehaviourName()]->Start(iter->GetOwner());
 	}
 
 	std::cout << "GameLogic Initialized" << std::endl;
 	std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
 	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
 
-	playerObj = objectFactory->getPlayerObject();
+	GameLogic::playerObj = objectFactory->getPlayerObject();
+	//std::cout << "Player's behaviour is " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName() << " || " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex() << std::endl;
 }
 
 /******************************************************************************
@@ -107,12 +102,15 @@ void GameLogic::Update() {
 		return;
 
 	for (auto& iter : behaviourComponents) {
-		// Check if the object is the player
-		if (iter->GetName() == "Player" && iter->GetOwner()->GetName() == playerObj->GetName()) {
-			behaviours["Player"]->Update(playerObj);
+		//Check if the object is the player
+		if ((GameLogic::playerObj != nullptr) && (iter->GetBehaviourName() == static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName())) {
+				behaviours[iter->GetBehaviourName()]->Update(GameLogic::playerObj);
 		}
 		else {
-			behaviours[iter->GetName()]->Update(iter->GetOwner());
+			// Update the behaviour
+			for (auto it : objectFactory->FindAllObjectsByName(iter->GetOwner()->GetName())) {
+				behaviours[iter->GetBehaviourName()]->Update(it);
+			}
 		}
 	}
 	
@@ -128,178 +126,31 @@ void GameLogic::Update() {
 		Message_Handler msg(MessageID::Event_Type::Quit);
 		engine->Broadcast(&msg);
 	}
-
-
-	// Movement for Player
-	// If button Pressed, changed velocity
 	
-	//playerObj = objectFactory->getPlayerObject();
-	Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
-	if (player_physics->Velocity.x != 0) {
-		std::cout << "Player Velocity X : " << player_physics->Velocity.x << std::endl;
-		std::cout << "Player Velocity Y : " << player_physics->Velocity.y << std::endl;
-	}
-	if (playerObj != nullptr && playerObj->GetComponent(ComponentType::Physics) != nullptr) {
-
+	if (GameLogic::playerObj != nullptr) {
 		if (input::IsPressed(KEY::e)) {
-			if (playerObj->GetName() == "Finn") {
-				playerObj = objectFactory->FindObject("Spark");
+			if (GameLogic::playerObj->GetName() == "Finn") {
+				Object* temp = objectFactory->FindObject("Spark");
+				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj :objectFactory->FindObject("Spark");
+				std::cout << "Switched to Spark" << std::endl;
 			}
-			else if(playerObj->GetName() == "Spark") {
-				playerObj = objectFactory->FindObject("Finn");
+			else if(GameLogic::playerObj->GetName() == "Spark") {
+				Object* temp = objectFactory->FindObject("Finn");
+				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Finn");
+				std::cout << "Switched to Finn" << std::endl;
 			}
-		}
-		// Transfered to Player.cpp
-		/*
-		Physics* player_physics = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
-		Animation* player_animation = static_cast<Animation*>(playerObj->GetComponent(ComponentType::Animation));
-		player_physics->Velocity.x = 0.0f;
-		if (player_animation->face_right)player_animation->current_type = AnimationType::Idle;
-		else player_animation->current_type = AnimationType::Idle_left;
-		bool moving = false;
-		if (input::IsPressed(KEY::w)) {
-			MovementKey msg(up);
-			engine->Broadcast(&msg);
-			//if (static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
-			if (player_physics->Velocity.y == 0.0f) {
-				//player_physics->Velocity.y = 1000.0f;
-				player_physics->Force = 60000.0f + gravity;
-				audio->playJump();
+			else {
+				GameLogic::playerObj = GameLogic::playerObj;
 			}
-		}
-		if (input::IsPressedRepeatedly(KEY::a)) {
-			MovementKey msg(left);
-			engine->Broadcast(&msg);
-			player_physics->Velocity.x -= 500.0f;
-			moving = true;
-			player_animation->face_right = false;
-			player_animation->current_type = AnimationType::Run_left;
-		}
-		if (input::IsPressedRepeatedly(KEY::d)) {
-			MovementKey msg(right);
-			engine->Broadcast(&msg);
-			player_physics->Velocity.x += 500.0f;
-			moving = true;
-			player_animation->face_right = true;
-			player_animation->current_type = AnimationType::Run;
 		}
 
-		if (player_physics->Velocity.y != 0.0f) {
-			player_animation->jump_fixed = true;
-
-			if (player_animation->face_right)player_animation->current_type = AnimationType::Jump;
-			else player_animation->current_type = AnimationType::Jump_left;
-		}
-		else player_animation->jump_fixed = false;
-		
-		// Let the player loop around the window
-		
-		Transform* t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-		t->Position.x = t->Position.x > 1000.0f ? -1000.0f : t->Position.x;
-		t->Position.x = t->Position.x < -1000.0f ? 1000.0f : t->Position.x;
-		
-		// Audio for Character Movement
-		if ((player_physics->Velocity.y == 0.f) && moving) {
-			audio->startWalking();
-		}
-		else {
-			audio->stopWalking();
-			moving = false;
-		}
-		*/
-		
-		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
+		/*for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID((long)i);
 
 			if (obj == nullptr)
 				continue;
-
-			if (obj->GetName() == "piston") {
-				//Transform* piston_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-				Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
-				//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
-
-				// if piston collides with player, change the animation of piston
-				if (piston_b->collision_flag & COLLISION_TOP) {
-					Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
-					piston_animation->fixed = true;
-					if (piston_animation->current_type == AnimationType::Jump)continue;
-					piston_animation->current_type = AnimationType::Jump;
-					Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-					std::cout << "piston event linked event:";
-					std::cout << piston_event->linked_event << std::endl;
-
-					//  Change the animation of door and disable the body of door
-					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
-						Object* obj2 = objectFactory->getObjectWithID((long)j);
-						if (obj2->GetName() == "door") {
-							Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
-							if (piston_event->linked_event == door_event->linked_event) {
-								audio->playSlidingDoor();
-								Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
-								door_animation->fixed = true;
-								door_animation->current_type = AnimationType::Jump;
-								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
-								door_body->active = false;
-							}
-						}
-					}
-
-				}
-			}
-			else if (obj->GetName() == "elevator") {
-
-				MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
-
-				Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
-				Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));
-				moving_platform_physics->Velocity.x = 0.0f;
-				float moving_platform_speed;
-				//bool moving_platform_direction;
-
-				// if the platform reach the max/min height, change direction
-				if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
-					moving_platform_direction = true;
-				}
-				if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
-					moving_platform_direction = false;
-				}
-				moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
-				moving_platform_physics->Velocity.y = moving_platform_speed;
-
-				if (input::IsPressed(KEY::z)) {
-					std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
-				}
-			}
-		}
+		}*/
 	}
-	//Movement for Moving Platform
-	/*
-	if (objectFactory->FindObject("elevator") != nullptr)
-		MovingPlatform = objectFactory->getObjectWithID(objectFactory->FindObject("elevator")->GetId());
-
-	if (MovingPlatform != nullptr) {
-		Physics* moving_platform_physics = static_cast<Physics*>(MovingPlatform->GetComponent(ComponentType::Physics));
-		Transform* moving_platform_t = static_cast<Transform*>(MovingPlatform->GetComponent(ComponentType::Transform));
-		moving_platform_physics->Velocity.x = 0.0f;
-		float moving_platform_speed;
-		//bool moving_platform_direction;
-
-		// if the platform reach the max/min height, change direction
-		if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
-			moving_platform_direction = true;
-		}
-		if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
-			moving_platform_direction = false;
-		}
-		moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
-		moving_platform_physics->Velocity.y = moving_platform_speed;
-
-		if (input::IsPressed(KEY::z)) {
-			std::cout << "Moving Platform Position : " << moving_platform_t->Position.x << ", " << moving_platform_t->Position.y << std::endl;
-		}
-	}
-	*/
 	/*
 	// Rotation of an object
 	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
@@ -341,13 +192,16 @@ void GameLogic::Update() {
 void GameLogic::AddBehaviour(std::string name, LogicScript* behaviour)
 {
 	behaviours[name] = behaviour;
-	std::cout <<  "Added Behaviour to container. Container Size : " << behaviours.size() << std::endl;
+	std::cout <<  "Added Behaviour to container. Name : "<< name <<"  |  Container Size : " << behaviours.size() << std::endl;
 }
 
 void GameLogic::LoadScripts() {
-	for (auto& it : temp_scriptmap) {
+	for (auto& it : LogicScript::temp_scriptmap) {
 		this->AddBehaviour(it.first, it.second);
-		std::cout << "Behaviour " << it.first << " added" << std::endl;
 	}
-	std::cout << "Loaded temp_scriptmap : " << temp_scriptmap.size() << std::endl;
+	std::cout << "Loaded Temporary Script Map: " << LogicScript::temp_scriptmap.size() << std::endl;
+}
+
+bool GameLogic::CheckBehaviour(std::string name) {
+	return behaviours.find(name) == behaviours.end() ? false : true;
 }

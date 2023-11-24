@@ -46,7 +46,7 @@
       "Type": "Behaviour",
       "Properties": {
         "Script": "Player",
-        "Index" : 1
+        "Index": 1
       }
     },
     {

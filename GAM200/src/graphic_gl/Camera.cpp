@@ -59,7 +59,7 @@ void Camera::Update() {
 */
 void Camera::SetToPlayer() {
 	// get player object
-	Object* player = objectFactory->getPlayerObject();
+	Object* player = Logic->playerObj;
 
 	// Make sure it's not nullptr
 	if (player != nullptr) {
@@ -68,11 +68,11 @@ void Camera::SetToPlayer() {
 		if (scale.x != 1.f || scale.y != 1.f) {
 			Transform* trans = static_cast<Transform*>(player->GetComponent(ComponentType::Transform));
 
-			position.x = 0.f - trans->Position.x * 2.0f / window->width;
+			position.x = 0.f - trans->Position.x * 2.0f / window->width_init;
 
-			position.y = 0.f - trans->Position.y * 2.0f / window->height;
+			position.y = 0.f - trans->Position.y * 2.0f / window->height_init;
 			// make sure the camera is not out of bounds
-
+			/*
 			if (position.x > 0.6f - 1.f / scale.x) {
 				position.x = 0.6f - 1.f / scale.x;
 			}
@@ -86,6 +86,7 @@ void Camera::SetToPlayer() {
 			else if (position.y < -0.8f + 1.f / scale.y) {
 				position.y = -0.8f + 1.f / scale.y;
 			}
+			*/
 		}
 
 	}

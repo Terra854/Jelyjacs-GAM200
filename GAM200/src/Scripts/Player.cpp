@@ -21,19 +21,16 @@ void Player::Start(Object* obj) {
 }
 
 void Player::Update(Object* obj) {
-	// For some reason, the player is not changing position
-	if ((obj == nullptr) || (obj->GetComponent(ComponentType::Physics) == nullptr)) { 
-		std::cout << "NIL OBJ" << std::endl;
+	if (obj == nullptr) { 
+		//std::cout << "NIL OBJ : Player" << std::endl;
 		return; 
 	}
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
-
-	if (player_physics->Velocity.x != 0) {
-		std::cout << "Player Velocity X : " << player_physics->Velocity.x << std::endl;
-		std::cout << "Player Velocity Y : " << player_physics->Velocity.y << std::endl;
-	}
-
+	if (player_physics == nullptr || player_animation == nullptr) {
+		//std::cout << "NIL COMPONENT : Player" << std::endl;
+		return;
+	};
 	player_physics->Velocity.x = 0.0f;
 
 	if (player_animation->face_right){
@@ -51,7 +48,13 @@ void Player::Update(Object* obj) {
 		if (player_physics->Velocity.y == 0.0f) {
 			//player_physics->Velocity.y = 1000.0f;
 			player_physics->Force = 60000.0f + gravity;
-			audio->playJump();
+			//audio->playJump();
+			std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
+			
+			if (player_physics->GetOwner()->GetName() == "Finn")
+				audio->playSfx(AudioType::Finn_Jumping);
+			else if (player_physics->GetOwner()->GetName() == "Spark")
+				audio->playSfx(AudioType::Spark_Jumping);
 		}
 	}
 	if (input::IsPressedRepeatedly(KEY::a)) {

@@ -13,7 +13,7 @@ This file contains the declaration for the Game Logic system class
 #include <iostream>
 
 class LogicScript;
-extern std::map<std::string, LogicScript*> temp_scriptmap;
+
 
 class GameLogic : public ISystems
 {
@@ -30,15 +30,18 @@ public:
 	void AddBehaviourComponent(Behaviour* behaviour) {
 		behaviourComponents.push_back(behaviour);
 	}
+	bool CheckBehaviour(std::string name);
 	//void AddObject(Object* obj);
-
 	void LoadScripts();
 	virtual std::string SystemName() { return "Game_Logic"; }
 
-private:
-	std::unordered_map<std::string, LogicScript*> behaviours;
-	//std::vector<Object*> b_objects;
-	std::vector<Behaviour*> behaviourComponents;
+	static Object* playerObj;
+
+
+	std::unordered_map<std::string, LogicScript*> behaviours; // Map of behaviours to be added to objects on creation 
+	std::vector<Behaviour*> behaviourComponents; // Vector of behaviours to be updated every frame 
+
+
 };
 
 extern GameLogic* Logic;
@@ -46,6 +49,7 @@ extern GameLogic* Logic;
 class LogicScript
 {
 public:
+	friend class GameLogic;
 	LogicScript() {};
 	LogicScript(std::string name) {
 		temp_scriptmap[name] = this;
@@ -56,5 +60,7 @@ public:
 	virtual void Start(Object* obj) = 0;
 	virtual void Update(Object* obj) = 0;
 	virtual void Shutdown(Object* obj) = 0;
+private:
+	static std::map<std::string, LogicScript*> temp_scriptmap;
 };
 

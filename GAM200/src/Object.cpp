@@ -22,12 +22,17 @@ Object::~Object(){
 
 Component* Object::GetComponent(ComponentType typeID)
 {
+	/*
 	//loop through component map to find the game component
 	for (const std::pair<ComponentType, Component*>& c : Components) {
 		if (c.first == typeID)
 			return c.second;
 	}
-	return nullptr;
+	*/
+	if(Components.find(typeID) != Components.end())
+		return (Components.find(typeID))->second;
+	else
+		return nullptr;
 }
 
 void Object::AddComponent(Component* component)
@@ -39,7 +44,7 @@ void Object::AddComponent(Component* component)
 	component->Base = this;
 }
 
-void Object::Intialize()
+void Object::Initialize()
 {
 	for (std::unordered_map<ComponentType, Component*>::iterator it = Components.begin(); it != Components.end(); ++it)
 	{

@@ -537,9 +537,11 @@ GLuint GLApp::setup_texobj(const char* pathname)
 		std::exit(EXIT_FAILURE);
 	}
 	else {
+#if defined(DEBUG) | defined(_DEBUG)
 		std::cout << "Loaded texture file: " << pathname << "\n";
 		std::cout << "Image width: " << width << "\n";
 		std::cout << "Image height: " << height << "\n";
+#endif
 	}
 
 	GLuint texobj_hdl;

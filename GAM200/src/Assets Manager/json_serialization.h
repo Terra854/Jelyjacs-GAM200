@@ -62,6 +62,8 @@ public:
 
 	virtual bool isMember(std::string str);
 	virtual bool isMember(std::string str, std::string param);
+	virtual bool isArray(std::string str);
+	virtual size_t size(std::string str);
 	auto read(std::string str) -> decltype((*jsonObject)[str]);
 
 

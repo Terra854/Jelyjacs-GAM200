@@ -43,6 +43,18 @@ Factory::Factory()
 {
 	objectFactory = this;
 	nextObjectId = 0;
+
+	// In order to use the game object factory, we need to register the components we want to use first like this
+	// When we create new types of components, we need to add it in there as well
+	AddComponentCreator("Transform", new ComponentCreator<Transform>());
+	AddComponentCreator("Texture", new ComponentCreator<Texture>());
+	AddComponentCreator("Rectangle", new ComponentCreator<Rectangular>());
+	AddComponentCreator("Circle", new ComponentCreator<Circular>());
+	AddComponentCreator("Line", new ComponentCreator<Lines>());
+	AddComponentCreator("Physics", new ComponentCreator<Physics>());
+	AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
+	AddComponentCreator("Event", new ComponentCreator<Event>());
+	AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 }
 
 //Dtor
@@ -278,17 +290,20 @@ Object* Factory::createObject(const std::string& filename)
 		else if (type == "Behaviour") 
 		{
 			Behaviour *b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
-
-			jsonloop.readString(b->behaviour_name, "Properties", "Script");
-			jsonloop.readInt(b->behaviour_index, "Properties", "Index");
-			obj->AddComponent(b);
+			std::string temp_name;
+			int temp_index;
+			jsonloop.readString(temp_name, "Properties", "Script");
+			jsonloop.readInt(temp_index, "Properties", "Index");
 			Logic->AddBehaviourComponent(b);
-			//b->SetOwner(obj);
+			obj->AddComponent(b);
+			std::cout << "Behaviour Script & Index: " << temp_name << ", " << temp_index << std::endl;
+			b->SetBehaviourIndex(temp_index);
+			b->SetBehaviourName(temp_name);
 		}
 	}
 
-	// Run the initilization routines for each component (if there is any)
-	obj->Intialize();
+	// Run the initialization routines for each component (if there is any)
+	obj->Initialize();
 	
 	// Clean up
 	jsonobj.closeFile();
@@ -500,16 +515,20 @@ Object* Factory::cloneObject(Object* object)
 		else if (component.first == ComponentType::Behaviour)
 		{
 			Behaviour* b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
+			Behaviour* b_tmp = static_cast<Behaviour*>(object->GetComponent(ComponentType::Behaviour));
+
+			b->SetBehaviourIndex(b_tmp->GetBehaviourIndex());
+			b->SetBehaviourName(b_tmp->GetBehaviourName());
 			obj->AddComponent(b);
 		}
 	}
 
-	obj->Intialize();
+	obj->Initialize();
 	return obj;
 }
 
 //This adds a new component creator which is necessary for the creation of game objects
-//Call this at the very start of the game loop in Intialize
+//Call this at the very start of the game loop in Initialize
 void Factory::AddComponentCreator(const std::string& name, BaseComponentCreator* creator)
 {
 	componentMap[name] = creator;
@@ -533,6 +552,29 @@ Object* Factory::FindObject(std::string name)
 	}
 
 	return nullptr;
+}
+
+std::vector<Object*> Factory::FindAllObjectsByName(std::string name)
+{
+
+	std::vector<Object*> v;
+
+	if (objectMap.empty())
+	{
+		return v;
+	}
+
+	for (auto it = objectMap.begin(); it != objectMap.end(); it++)
+	{
+		Object* testObject = it->second;
+		std::string objectName = testObject->GetName();
+		if (objectName == name)
+		{
+			v.push_back(testObject);
+		}
+	}
+
+	return v;
 }
 
 void Factory::DeleteComponent(int id, ComponentType c) {

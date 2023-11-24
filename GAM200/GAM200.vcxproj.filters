@@ -311,9 +311,6 @@
     <ClInclude Include="include\components\Event.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\components\Behaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphic_gl\Particle.h">
       <Filter>Header Files\Systems\Graphics</Filter>
     </ClInclude>
@@ -352,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="include\Vec4.h">
       <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Behaviour.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

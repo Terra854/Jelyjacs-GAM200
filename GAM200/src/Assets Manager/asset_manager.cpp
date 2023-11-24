@@ -9,8 +9,10 @@ to be referenced from when needed.
 
 *//*__________________________________________________________________________*/
 #include "asset_manager.h"
+#include "../../include/Audio.h"
 #include <Windows.h>
 #include <iostream>
+#include <random>
 
 // Creating of static data members
 std::filesystem::path AssetManager::pathtexture = "Asset/Picture";
@@ -23,7 +25,7 @@ std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;
 std::map<std::string, Object*> AssetManager::prefabs;
 std::map<std::string, FMOD::Sound*> AssetManager::sounds;
-std::map<AudioType, std::string> AssetManager::soundMapping;
+std::map<AudioType, std::variant<std::string, std::vector<std::string>>> AssetManager::soundMapping;
 
 GLuint AssetManager::missing_texture;
 
@@ -269,9 +271,28 @@ FMOD::Sound* AssetManager::soundsval(std::string str)
 	}
 }
 
-FMOD::Sound* AssetManager::getsoundbyaudiotype(AudioType a) {
+FMOD::Sound* AssetManager::getsoundbyaudiotype(AudioType a, bool random, int seq_num) {
 	try {
-		return soundsval(soundMapping.at(a));
+		auto& sound = soundMapping.at(a);
+
+		if (std::holds_alternative<std::string>(sound)) {
+			return soundsval(std::get<std::string>(sound));
+		}
+		else {
+			std::vector<std::string> v = std::get<std::vector<std::string>>(sound);
+			if (random) {
+				// Rng the audio file to play
+				std::random_device rd;
+				std::mt19937 gen(rd());
+
+				std::uniform_int_distribution<> dis(0, v.size() - 1);
+
+				return soundsval(v[dis(gen)]);
+			}
+			else {
+				return soundsval(v[seq_num]);
+			}
+		}
 	}
 	catch (std::out_of_range) {
 		return nullptr;
@@ -283,9 +304,20 @@ void AssetManager::addtextures(std::string str, GLuint tex)
 	textures.emplace(str, tex);
 }
 
+void AssetManager::updateSoundMap(AudioType a, std::string file)
+{
+	soundMapping.emplace(a, file);
+}
 
+void AssetManager::updateSoundMap(AudioType a, std::vector<std::string> file)
+{
+	soundMapping.emplace(a, file);
+}
 
-
+void AssetManager::clearSoundMap()
+{
+	soundMapping.clear();
+}
 
 
 

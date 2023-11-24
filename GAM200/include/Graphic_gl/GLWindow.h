@@ -38,6 +38,7 @@ public:
 	virtual void Update();
 	virtual std::string SystemName() { return "Window"; };
 	static void ChangeWindowMode();
+	static void window_iconify_callback(GLFWwindow* window, int iconified);
 	static void cleanup();
 
   // callbacks ...

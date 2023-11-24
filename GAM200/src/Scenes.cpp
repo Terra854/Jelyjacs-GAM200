@@ -24,6 +24,28 @@ void LoadScene(std::string filename)
 	jsonobj.readString(levelname, "SceneName");
 	std::cout << "Loading Scene: " << levelname << std::endl;
 
+	AssetManager::clearSoundMap();
+	/*if (jsonobj.isMember("SoundMap"))
+	{
+		std::cout << "Linking sound map..." << std::endl;
+		std::string soundmap;
+		jsonobj.readString(soundmap, "SoundMap");
+		linkSoundMap(soundmap);
+	}*/
+	
+	std::string soundmap = "Asset/Sounds/sounds.json";
+	linkSoundMap(soundmap);
+
+	Vec2 start_coord;
+	jsonobj.readFloat(start_coord.x, "Size", "startX");
+	jsonobj.readFloat(start_coord.y, "Size", "startY");
+	engine->Set_Start_Coords(start_coord);
+
+	Vec2 level_size;
+	jsonobj.readFloat(level_size.x, "Size", "width");
+	jsonobj.readFloat(level_size.y, "Size", "height");
+	engine->Set_Level_Size(level_size);
+
 	for (auto& component : jsonobj.read("Objects"))
 	{
 		JsonSerialization jsonloop;
@@ -72,7 +94,7 @@ void LoadScene(std::string filename)
 		// Add here to read oher types of data if necessary WIP
 
 
-		obj->Intialize();
+		obj->Initialize();
 
 	}
 
@@ -81,6 +103,8 @@ void LoadScene(std::string filename)
 	engine->loaded_filename = filename;
 
 	jsonobj.closeFile();
+
+	Logic->Initialize();
 }
 
 void SaveScene(std::string filename)
@@ -88,6 +112,17 @@ void SaveScene(std::string filename)
 	// Save Scene Name
 	Json::Value jsonobj;
 	jsonobj["SceneName"] = "testsaving";
+
+	jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
+
+	Vec2 start_coord = engine->Get_Start_Coords();
+
+	Vec2 level_size = engine->Get_Level_Size();
+
+	jsonobj["Size"]["startX"] = start_coord.x;
+	jsonobj["Size"]["startY"] = start_coord.y;
+	jsonobj["Size"]["width"] = level_size.x;
+	jsonobj["Size"]["height"] = level_size.y;
 
 	for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 	{
@@ -188,7 +223,68 @@ void SaveScene(std::string filename)
 	//jsonobj.closeFile();
 }
 
+void linkSoundMap(std::string filename)
+{
+	// Check if the given file exists
+	JsonSerialization jsonobj;
+	jsonobj.openFileRead(filename);
 
+	// Loop through AudioType
+	for (int i = 0; i < AudioType::END; i++)
+	{
+		std::string audio;
+		switch (i) // Set audio value based on current AudioType
+		{
+			case AudioType::Background:
+				audio = "background";
+				break;
+			case AudioType::Walking:
+				audio = "walking";
+				break;
+			case AudioType::Finn_Jumping:
+				audio = "finn_jumping";
+				break;
+			case AudioType::Spark_Jumping:
+				audio = "spark_jumping";
+				break;
+			case AudioType::Sliding_Door_Open:
+				audio = "sliding_door_open";
+				break;
+			default:
+				audio = "END";
+				break;
+		}
+
+		AudioType a = static_cast<AudioType>(i);
+
+		// Check if AudioType exist in audiomap json and then update it
+		if (jsonobj.isMember(audio))
+		{
+			if (jsonobj.isArray(audio))
+			{
+				size_t pos = jsonobj.size(audio);
+				std::vector<std::string> audioarr;
+				for (size_t i = 0; i < pos; i++)
+				{
+					std::string audioval;
+					jsonobj.readString(audioval, audio, i);
+					audioarr.push_back(audioval);
+					std::cout << "AudioMap arrvalue: " << audioval << std::endl;
+				}
+				AssetManager::updateSoundMap(a, audioarr);
+			}
+			else
+			{
+				std::string audioval;
+				jsonobj.readString(audioval, audio);
+				AssetManager::updateSoundMap(a, audioval);
+				std::cout << "AudioMap value: " << audioval << std::endl;
+			}
+		}
+	}
+
+	jsonobj.closeFile();
+}
 
 
 

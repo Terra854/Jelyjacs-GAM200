@@ -17,6 +17,7 @@ This file contains the definitions of the functions that are part of the level e
 #include "Assets Manager/asset_manager.h"
 #include <PhysicsSystem.h>
 #include <Vec4.h>
+#include <components/Event.h>
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -143,6 +144,7 @@ static float edited_aabb_height;
 static bool Physics_EditMode = false;
 
 static Vec2 edited_velocity;
+static float edited_mass;
 static bool edited_gravity;
 
 void LevelEditor::ObjectProperties() {
@@ -182,10 +184,12 @@ void LevelEditor::ObjectProperties() {
 
 	Transform* tr = (Transform*)object->GetComponent(ComponentType::Transform);
 	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
-	Body* b = (Body*)object->GetComponent(ComponentType::Body);
+	Body* bo = (Body*)object->GetComponent(ComponentType::Body);
 	Physics* ph = (Physics*)object->GetComponent(ComponentType::Physics);
 	PlayerControllable* pc = (PlayerControllable*)object->GetComponent(ComponentType::PlayerControllable);
 	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
+	Event* e = (Event*)object->GetComponent(ComponentType::Event);
+	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
 
 	ImGui::BeginChild("Texture", ImVec2(128.f, 128.f));
 
@@ -209,15 +213,29 @@ void LevelEditor::ObjectProperties() {
 
 		ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImGui::GetContentRegionAvail(), uv0, uv1);
 	}
-	else if (te != nullptr) {
-		if (tr->Scale.x > tr->Scale.y) {
+	else if (te != nullptr) 
+	{
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
+			{
+				std::cout << "test\n";
+				const std::pair<std::string, GLuint>* object = (const std::pair<std::string, GLuint>*)payload->Data;
+				te->textureName = object->first;
+				ImGui::EndDragDropTarget();
+			}
+		}
+
+		if (tr->Scale.x > tr->Scale.y) 
+		{
 			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
 			ImGui::Dummy(ImVec2(0, padding));
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
 		}
 		else if (tr->Scale.x == tr->Scale.y)
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImGui::GetContentRegionAvail());
-		else {
+		else 
+		{
 			float padding = ImGui::GetContentRegionAvail().x * (tr->Scale.x / tr->Scale.y) * 0.5f;
 			ImGui::Dummy(ImVec2(padding, 0));
 			ImGui::SameLine();
@@ -264,7 +282,7 @@ void LevelEditor::ObjectProperties() {
 	ImGui::SameLine();
 
 	if (ImGui::Button("Add Component")) {
-		if (b == nullptr || ph == nullptr)
+		if (bo == nullptr || ph == nullptr)
 			ImGui::OpenPopup("AddComponent");
 		else
 			ImGui::OpenPopup("NoComponentsToAdd");
@@ -272,7 +290,7 @@ void LevelEditor::ObjectProperties() {
 
 	if (ImGui::BeginPopup("AddComponent"))
 	{
-		if (b == nullptr)
+		if (bo == nullptr)
 			if (ImGui::Selectable("Body")) {
 				object->AddComponent(new Rectangular());
 			}
@@ -409,8 +427,8 @@ void LevelEditor::ObjectProperties() {
 					tr->Rotation = edited_rotation;
 					tr->Scale = edited_scale;
 
-					if (b != nullptr)
-						RecalculateBody(tr, b);
+					if (bo != nullptr)
+						RecalculateBody(tr, bo);
 				}
 
 				ImGui::SameLine();
@@ -444,7 +462,7 @@ void LevelEditor::ObjectProperties() {
 	}
 
 	// Body
-	if (b != nullptr) {
+	if (bo != nullptr) {
 		if (ImGui::CollapsingHeader("Body")) {
 			ImGui::SeparatorText("General Body Settings");
 
@@ -458,8 +476,8 @@ void LevelEditor::ObjectProperties() {
 				if (ImGui::Button("Done##Body"))
 				{
 					Body_EditMode = false;
-					b->active = edited_active;
-					b->collision_response = edited_collision_response;
+					bo->active = edited_active;
+					bo->collision_response = edited_collision_response;
 				}
 
 				ImGui::SameLine();
@@ -478,18 +496,18 @@ void LevelEditor::ObjectProperties() {
 				// Display the values as text
 				ImGui::Text("Active: ");
 				ImGui::SameLine();
-				b->active ? ImGui::Text("true") : ImGui::Text("false");
+				bo->active ? ImGui::Text("true") : ImGui::Text("false");
 
 				ImGui::Text("Respond to collision: ");
 				ImGui::SameLine();
-				b->collision_response ? ImGui::Text("true") : ImGui::Text("false");
+				bo->collision_response ? ImGui::Text("true") : ImGui::Text("false");
 
 				// Button to enter edit mode
 				if (ImGui::Button("Edit##Body"))
 				{
 					Body_EditMode = true;
-					edited_active = b->active;
-					edited_collision_response = b->collision_response;
+					edited_active = bo->active;
+					edited_collision_response = bo->collision_response;
 				}
 
 				ImGui::SameLine();
@@ -500,13 +518,13 @@ void LevelEditor::ObjectProperties() {
 				if (ImGui::Button("Delete##Body"))
 				{
 					objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
-					b = nullptr;
+					bo = nullptr;
 				}
 				ImGui::PopStyleColor(3);
 			}
 
-			if (b != nullptr && b->GetShape() == Shape::Rectangle) {
-				Rectangular* r = (Rectangular*)b;
+			if (bo != nullptr && bo->GetShape() == Shape::Rectangle) {
+				Rectangular* r = (Rectangular*)bo;
 
 				ImGui::SeparatorText("AABB Collision Settings");
 
@@ -848,6 +866,7 @@ void LevelEditor::ObjectProperties() {
 			{
 				// Display input fields
 				ImGui::InputFloat2("Velocity", &(edited_velocity.x));
+				ImGui::InputFloat("Mass", &(edited_mass));
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
 
 				// Button to exit edit mode
@@ -855,6 +874,7 @@ void LevelEditor::ObjectProperties() {
 				{
 					Physics_EditMode = false;
 					ph->Velocity = edited_velocity;
+					ph->Mass = edited_mass;
 					ph->AffectedByGravity = edited_gravity;
 				}
 
@@ -873,6 +893,7 @@ void LevelEditor::ObjectProperties() {
 			{
 				// Display the values as text
 				ImGui::Text("Velocity: %.5f, %.5f", ph->Velocity.x, ph->Velocity.y);
+				ImGui::Text("Mass: %.5f", ph->Mass);
 				ImGui::Text("Affected by gravity: ");
 				ImGui::SameLine();
 				ph->AffectedByGravity ? ImGui::Text("true") : ImGui::Text("false");
@@ -882,6 +903,7 @@ void LevelEditor::ObjectProperties() {
 				{
 					Physics_EditMode = true;
 					edited_velocity = ph->Velocity;
+					edited_mass = ph->Mass;
 					edited_gravity = ph->AffectedByGravity;
 				}
 
@@ -906,6 +928,22 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Text("Nothing right now");
 		}
 	}
+
+	// Event
+	if (e != nullptr) {
+		if (ImGui::CollapsingHeader("Event")) {
+			ImGui::Text("Linked Event : %d", e->linked_event);
+		}
+	}
+
+	// Behaviour
+	if (be != nullptr) {
+		if (ImGui::CollapsingHeader("Behaviour")) {
+			ImGui::Text("Script Name : %s", be->GetBehaviourName().c_str());
+			ImGui::Text("Script Index : %d", be->GetBehaviourIndex());
+		}
+	}
+
 
 	ImGui::EndChild();
 	ImGui::End();
@@ -1043,6 +1081,13 @@ void LevelEditor::AssetList()
 
 				}
 
+				size_t size = sizeof(t);
+				if (ImGui::BeginDragDropSource())
+				{
+					ImGui::SetDragDropPayload("Game texture", &t, size);
+					ImGui::EndDragDropSource();
+				}
+
 				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
 
 				// Image
@@ -1130,9 +1175,18 @@ void LevelEditor::AssetList()
 			// Text
 			ImGui::Text(p.second->GetName().c_str());
 
-
 		}
 
+		ImGui::PopStyleColor();
+		ImGui::EndTabItem();
+	}
+	if (ImGui::BeginTabItem("Scripts"))
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+		for (const auto& script : Logic->behaviours)
+		{
+			ImGui::Text(script.first.c_str());
+		}
 		ImGui::PopStyleColor();
 		ImGui::EndTabItem();
 	}
@@ -1148,6 +1202,9 @@ void LevelEditor::AssetList()
 *******************************************************************************/
 void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
+
+	// Make the buttons unclickable if a level is not loaded
+	ImGui::BeginDisabled(engine->loaded_level.empty());
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
@@ -1165,15 +1222,21 @@ void LevelEditor::PlayPauseGame() {
 			engine->setPause();
 	}
 
+	ImGui::EndDisabled();
+
 	ImGui::SameLine();
 
+	/*
 	if (!engine->isPaused() || initialObjectMap.empty()) {
 		// Make the button look disabled by reducing its alpha
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		//ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 
 		// Make the button unclickable
 		ImGui::BeginDisabled(true);
-	}
+	}*/
+
+
+	ImGui::BeginDisabled(!engine->isPaused() || initialObjectMap.empty());
 
 	if (ImGui::Button("Reset")) {
 		objectFactory->destroyAllObjects();
@@ -1184,19 +1247,25 @@ void LevelEditor::PlayPauseGame() {
 
 		ClearLevelEditorObjectMap(false);
 
+		Logic->playerObj = objectFactory->getPlayerObject();
+
 		// Break here, cause otherwise the next line will be EndDisabled()
 		// which will cause an abort() due to mismatch 
-		ImGui::End();
-		return;
+		//ImGui::End();
+		//return;
 	}
 
+	/*
 	if (!engine->isPaused() || initialObjectMap.empty()) {
 		// End the disabled section
 		ImGui::EndDisabled();
 
 		// Restore original style
-		ImGui::PopStyleVar();
-	}
+		//ImGui::PopStyleVar();
+	}*/
+
+	ImGui::EndDisabled();
+
 
 	ImGui::End();
 }
@@ -1245,7 +1314,7 @@ void CameraControl() {
 
 	if (!camera2D->isFreeCamEnabled()) {
 		// Make the button look disabled by reducing its alpha
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		//ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 
 		// Make the button unclickable
 		ImGui::BeginDisabled(true);
@@ -1302,7 +1371,7 @@ void CameraControl() {
 		ImGui::EndDisabled();
 
 		// Restore original style
-		ImGui::PopStyleVar();
+		//ImGui::PopStyleVar();
 	}
 		
 	ImGui::End();

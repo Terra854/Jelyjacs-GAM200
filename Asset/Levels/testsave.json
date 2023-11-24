@@ -170,9 +170,24 @@
       "Position" : 
       {
         "x" : -350.0,
-        "y" : -170.0
+        "y" : -130.0
       },
       "Prefabs" : "Finn.json",
+      "Rotation" : 0.0,
+      "Scale" : 
+      {
+        "x" : 54.0,
+        "y" : 54.0
+      },
+      "Type" : "Transform"
+    },
+    {
+      "Position" : 
+      {
+        "x" : -350.0,
+        "y" : -130.0
+      },
+      "Prefabs" : "Spark.json",
       "Rotation" : 0.0,
       "Scale" : 
       {
@@ -1476,5 +1491,13 @@
       "linkedevent" : 2
     }
   ],
-  "SceneName" : "testsaving"
+  "SceneName" : "testsaving",
+  "Size" : 
+  {
+    "height" : 1080.0,
+    "startX" : -960.0,
+    "startY" : -540.0,
+    "width" : 1920.0
+  },
+  "SoundMap" : "Asset/Sounds/sounds.json"
 }

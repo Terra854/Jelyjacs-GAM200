@@ -21,7 +21,6 @@ This file contains the class definitions that is used to run the game
 #include <LevelEditor.h>
 #include <ThreadPool.h>
 #include <../src/Assets Manager/asset_manager.h>
-#include "../../FelineFelony/Test.h"
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
 ThreadPool* thread_pool;
