@@ -378,3 +378,61 @@ void GLWindow::print_specs() {
 
 }
 
+void GLWindow::change_window_size(Window_size size) {
+    if (window_size == Window_size::fullscreen)
+    {
+        // restore windows desktop resolution
+        glfwSetWindowMonitor(ptr_window, NULL, originalX, originalY, originalWidth, originalHeight, 0);
+    }
+
+    window_size = size;
+    int pos_x, pos_y;
+    switch (window_size)
+    {
+        /*case Window_size::fullscreen:
+            glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
+            break;*/
+    case Window_size::high:
+        width = 1920;
+        height = 1080;
+        glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+        pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
+        pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+        pos_y += 100;
+        glfwSetWindowPos(ptr_window, pos_x, pos_y);
+        break;
+    case Window_size::medium:
+        width = 1280;
+        height = 720;
+        glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+        pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
+        pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+        glfwSetWindowPos(ptr_window, pos_x, pos_y);
+        break;
+    case Window_size::low:
+        width = 800;
+        height = 600;
+        glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+        pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
+        pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+        glfwSetWindowPos(ptr_window, pos_x, pos_y);
+        break;
+    }
+}
+
+void GLWindow::change_window_size(int w, int h) {
+	width = w;
+	height = h;
+	glfwSetWindowSize(ptr_window, width, height);
+	int pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
+	int pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
+	glfwSetWindowPos(ptr_window, pos_x, pos_y);
+}
+
+void GLWindow::change_window_size_fullscreen() {
+    window_size = Window_size::fullscreen;
+    width = width_init;
+    height = height_init;
+    glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+    glfwSetWindowMonitor(ptr_window, monitor, 0, 0, originalMode->width, originalMode->height, originalMode->refreshRate);
+}
