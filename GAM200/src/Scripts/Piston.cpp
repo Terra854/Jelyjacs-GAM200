@@ -45,7 +45,7 @@ void Piston::Update(Object* obj) {
 			//  Change the animation of door and disable the body of door
 			for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
 				Object* obj2 = objectFactory->getObjectWithID((long)j);
-				if (obj2->GetName() == "door") {
+				if (obj2->GetComponent(ComponentType::Event) != nullptr) {
 					Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
 					if (piston_event->linked_event == door_event->linked_event) {
 						audio->playSfx(AudioType::Sliding_Door_Open);
