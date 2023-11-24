@@ -63,3 +63,7 @@ public:
 	
 private:
 };
+
+void createHudFromConfig(std::string file);
+
+

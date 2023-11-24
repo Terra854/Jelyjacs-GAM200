@@ -10,6 +10,8 @@ This file contains the definition of the functions of GameHud
 #include "GLApp.h"
 #include "input.h"
 #include "Core_Engine.h"
+#include "Assets Manager/json_serialization.h"
+#include "Assets Manager/asset_manager.h"
 namespace
 {
 	std::vector<Button>::iterator button_tracker;
@@ -42,6 +44,7 @@ void GameHud::Initialize()
 	//init_hud_assets();
 	//create_button("play", Button(Vec2(800, 400), 180, 70), 1.0f, AldrichRegular);
 	//create_button("zoom", Button(Vec2(800, 250), 180, 70), 1.2f , GeoRegular);
+	createHudFromConfig("Asset/UI/Pause.json");
 	button_tracker = Buttons.end();
 }
 
@@ -243,4 +246,55 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	glBindVertexArray(0);
 	GLApp::shdrpgms["shape"].UnUse();
 }
+
+void createHudFromConfig(std::string file)
+{
+	JsonSerialization jsonobj;
+	jsonobj.openFileRead(file);
+
+	for (auto& button : jsonobj.read("Button"))
+	{
+		JsonSerialization jsonloop;
+		jsonloop.jsonObject = &button;
+
+		std::string text, font, texture;
+		jsonloop.readString(text, "text");
+		float x, y, w, h, scale;
+		jsonloop.readFloat(x, "button_x");
+		jsonloop.readFloat(y, "button_y");
+		jsonloop.readFloat(w, "button_w");
+		jsonloop.readFloat(h, "button_h");
+		jsonloop.readFloat(scale, "scale");
+
+		jsonloop.readString(font, "font");
+		FONT f = total;
+		if (font == "AldrichRegular")
+		{
+			f = FONT::AldrichRegular;
+		}
+		else if (font == "GeoRegular")
+		{
+			f = FONT::GeoRegular;
+		}
+
+		GLuint val;
+		jsonloop.readString(texture, "texture");
+		val = AssetManager::textureval(texture);
+
+		if (!AssetManager::texturecheckexist(texture))
+			std::cout << "TEXTURE MISSING FOR BUTTON!!!\n";
+
+		create_button(text, Button(Vec2(x, y), w, h), scale, f, val);
+	}
+
+
+	jsonobj.closeFile();
+}
+
+
+
+
+
+
+
 

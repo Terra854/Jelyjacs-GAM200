@@ -1,0 +1,25 @@
+{
+  "Button": 
+  [
+    {
+      "text": "play",
+      "button_x": 800,
+      "button_y": 400,
+      "button_width": 180,
+      "button_height": 70,
+      "scale": 1.0,
+      "font": "AldrichRegular",
+      "texture": "Empty_Box.png"
+    },
+    {
+      "text": "zoom",
+      "button_x": 800,
+      "button_y": 250,
+      "button_width": 180,
+      "button_height": 70,
+      "scale": 1.2,
+      "font": "GeoRegular",
+      "texture": "Empty_Box.png"
+    }
+  ]
+}
