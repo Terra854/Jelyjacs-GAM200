@@ -206,7 +206,9 @@ void GLWindow::Update()
     }
     if (input::IsPressed(KEY::f)) {
         window_size = Window_size::fullscreen;
-
+        width = 1920;
+        height = 1080;
+        glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
 		glfwSetWindowMonitor(ptr_window, monitor, 0, 0, originalMode->width, originalMode->height, originalMode->refreshRate);
 	}
     
