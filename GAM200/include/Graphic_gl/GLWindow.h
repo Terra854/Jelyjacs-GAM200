@@ -45,7 +45,10 @@ public:
   static void error_cb(int error, char const* description);
   static void fbsize_cb(GLFWwindow *ptr_win, int wwidth, int hheight);
  
-  
+  static void change_window_size(Window_size size);
+  static void change_window_size(int width, int height);
+  static void change_window_size_fullscreen();
+
   //static void update_time(double fpsCalcInt = 1.0);
   static void print_specs();
 

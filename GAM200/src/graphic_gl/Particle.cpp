@@ -140,6 +140,7 @@ void ParticleSystem::Draw()
 */
 void ParticleSystem::Free()
 {
+    glDeleteTextures(1, &particle_texture);
     glDeleteVertexArrays(1, &quadVAO);
 	glDeleteBuffers(1, &quadVBO);
 }

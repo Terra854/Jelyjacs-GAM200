@@ -182,7 +182,6 @@ void AssetManager::loadsounds()
 			}
 		}
 	}
-	audio->setupSound();
 }
 
 void AssetManager::clearsounds()
