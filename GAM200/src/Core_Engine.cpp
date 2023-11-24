@@ -257,6 +257,10 @@ void CoreEngine::GameLoop()
 	LoadScene("Asset/Levels/tutorial_level.json");
 #endif
 
+	// For dragging objects in level editor
+	static Vec2 offset(NAN, NAN);
+	static bool object_being_moved = false;
+
 	while (game_active)
 	{
 		auto m_BeginFrame = std::chrono::system_clock::now();
@@ -372,14 +376,17 @@ void CoreEngine::GameLoop()
 				ImGui::EndDragDropTarget();
 			}
 
-			if (ImGui::IsItemClicked()) {
-				ImVec2 clickPos = ImGui::GetMousePos();
-				ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
-				ImVec2 displayPos(relativePos.x / displaySize.x * 1920, 1080 - (relativePos.y / displaySize.y * 1080)); // Hardcoded to 1920x1080 for now, other resolutions bugged for now
-				ImVec2 openGlDisplayCoord(displayPos.x - (1920 / 2), displayPos.y - (1080 / 2));
+			ImVec2 clickPos = ImGui::GetMousePos();
+			ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
+			ImVec2 displayPos(relativePos.x / displaySize.x * 1920, 1080 - (relativePos.y / displaySize.y * 1080)); // Hardcoded to 1920x1080 for now, other resolutions bugged for now
+			ImVec2 openGlDisplayCoord(displayPos.x - (1920 / 2), displayPos.y - (1080 / 2));
 
-				// Camera is stationary, it's the scene that is moving, so inverse pos
-				ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * 1080.f * 0.91f)), (openGlDisplayCoord.y - (camera2D->position.y * 1080.f * 0.91f)));
+			// Camera is stationary, it's the scene that is moving, so inverse pos
+			// Also, need to divide camera coord by 2 
+			ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * 1920.f / 2.f)), (openGlDisplayCoord.y - (camera2D->position.y * 1080.f / 2.f)));
+
+			if (ImGui::IsItemClicked()) {
+				
 
 				std::cout << "################################################################" << std::endl;
 				std::cout << "ClickPos " << clickPos.x << ", " << clickPos.y << std::endl;
@@ -395,17 +402,62 @@ void CoreEngine::GameLoop()
 				{
 					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
 					Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-					//ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
+
 					if (isObjectClicked(objTransform, gameWorldPos))
 					{
-						level_editor->selected = true;
-						level_editor->selectedNum = (int)i;
-						selectedObjectID = static_cast<long>(i);
+						if (selectedObjectID != static_cast<long>(i)) {
+							level_editor->selected = true;
+							level_editor->selectedNum = (int)i;
+							selectedObjectID = static_cast<long>(i);
+						}
+
+						else if (selectedObjectID == static_cast<long>(i)) {
+							
+						}
+						
 					}
 				}
 			}
 
-			// Selecting objects in the viewport is very very bugged, commenting out for now while trying to fix it
+			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true){
+				Object* object;
+				if (level_editor->selectedNum >= 0)
+					object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				else
+					object = AssetManager::prefabById(static_cast<long>(level_editor->selectedNum));
+
+				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
+
+				if (isObjectClicked(objTransform, gameWorldPos))
+				{
+					object_being_moved = true;
+					
+				}
+
+				if (object_being_moved) {
+					if (isnan(offset.x))
+						offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+
+					std::cout << "Offset: " << offset << std::endl;
+
+					objTransform->Position.x = gameWorldPos.x - offset.x;
+					objTransform->Position.y = gameWorldPos.y - offset.y;
+
+					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
+				}
+
+				if (objBody != nullptr)
+				{
+					RecalculateBody(objTransform, objBody);
+				}
+			}
+			else {
+				offset = Vec2(NAN, NAN);
+				object_being_moved = false;
+			}
+			// The old and buggy version of selecting objects in the viewport
+			// will be deleted at some point
 			/*
 			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true)
 			{
