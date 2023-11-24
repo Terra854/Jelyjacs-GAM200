@@ -215,17 +215,6 @@ void LevelEditor::ObjectProperties() {
 	}
 	else if (te != nullptr) 
 	{
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
-			{
-				std::cout << "test\n";
-				const std::pair<std::string, GLuint>* object = (const std::pair<std::string, GLuint>*)payload->Data;
-				te->textureName = object->first;
-				ImGui::EndDragDropTarget();
-			}
-		}
-
 		if (tr->Scale.x > tr->Scale.y) 
 		{
 			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
@@ -240,6 +229,17 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Dummy(ImVec2(padding, 0));
 			ImGui::SameLine();
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+		}
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
+			{
+				std::cout << "test\n";
+				const std::pair<std::string, GLuint>* object = (const std::pair<std::string, GLuint>*)payload->Data;
+				te->textureName = object->first;
+				ImGui::EndDragDropTarget();
+			}
 		}
 	}
 	else {
