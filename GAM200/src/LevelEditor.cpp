@@ -28,6 +28,8 @@ bool dock_space = true; // Always must be on for level editor
 ImGuiStyle* style;
 ImFont* font;
 
+char buffer[256];
+
 /******************************************************************************
 	Default Constructor for LevelEditor
 *******************************************************************************/
@@ -150,7 +152,6 @@ static bool edited_gravity;
 void LevelEditor::ObjectProperties() {
 
 	ImGui::SetNextWindowSize(ImVec2(450, 0));
-	char buffer[100];
 
 	ImGui::Begin("Object Properties");
 
@@ -1069,7 +1070,6 @@ void LevelEditor::AssetList()
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) 
 			{
-				char buffer[256];
 				sprintf_s(buffer, "##%s", t.first.c_str());
 
 				// Start the invisible button
@@ -1186,6 +1186,46 @@ void LevelEditor::AssetList()
 		for (const auto& script : Logic->behaviours)
 		{
 			ImGui::Text(script.first.c_str());
+		}
+		ImGui::PopStyleColor();
+		ImGui::EndTabItem();
+	}
+	if (ImGui::BeginTabItem("Audio"))
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+		for (const auto& audioPair : AssetManager::soundMapping)
+		{
+			std::string AudioTypeString;
+
+			switch (audioPair.first) {
+			case AudioType::Background:
+				AudioTypeString = "Background";
+				break;
+			case AudioType::Finn_Jumping:
+				AudioTypeString = "Finn_Jumping";
+				break;
+			case AudioType::Sliding_Door_Open:
+				AudioTypeString = "Sliding_Door_Open";
+				break;
+			case AudioType::Spark_Jumping:
+				AudioTypeString = "Spark_Jumping";
+				break;
+			case AudioType::Walking:
+				AudioTypeString = "Walking";
+				break;
+			}
+
+			if (ImGui::TreeNode(AudioTypeString.c_str())) {
+				if (std::holds_alternative<std::string>(audioPair.second)) {
+					ImGui::Text(std::get<std::string>(audioPair.second).c_str());
+				}
+				else {
+					std::vector<std::string> v = std::get<std::vector<std::string>>(audioPair.second);
+					for (const std::string& s : v)
+						ImGui::Text(s.c_str());
+				}
+				ImGui::TreePop();
+			}
 		}
 		ImGui::PopStyleColor();
 		ImGui::EndTabItem();
