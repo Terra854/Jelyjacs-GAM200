@@ -34,6 +34,7 @@ enum class KEY
 	esc,
 	tab,
 	enter,
+	f1,
 	total
 };
 /*

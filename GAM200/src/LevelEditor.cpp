@@ -952,7 +952,7 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Text("Script Index : %d", be->GetBehaviourIndex());
 			if (ImGui::CollapsingHeader("Change Scripts")) {
 				ImGui::OpenPopup("Select Scripts");
-				for (auto it : Logic->behaviours)
+				for (auto& it : Logic->behaviours)
 					if (ImGui::Selectable(it.first.c_str())) {
 						be->SetBehaviourName(it.first);
 					}
