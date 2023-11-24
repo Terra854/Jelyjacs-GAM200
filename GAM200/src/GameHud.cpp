@@ -126,13 +126,14 @@ void GameHud::Draw()
 	}
 }
 
-void create_button(std::string const& text, Button button, float scale , FONT f)
+void create_button(std::string const& text, Button button, float scale , FONT f, GLuint id)
 {
 	button.string.pos.x = button.centre.x - static_cast<float>(find_width(text,f))/2 * scale ;
 	button.string.pos.y -= 14 * scale;
 	button.string.text = text;
 	button.string.scale = scale;
 	button.string.font = f;
+	button.texture_id = id;
 	Buttons.push_back(button);
 }
 

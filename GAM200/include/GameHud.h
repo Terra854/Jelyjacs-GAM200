@@ -49,7 +49,7 @@ public:
 extern std::vector<Button> Buttons;
 
 //creates a new button with data initialised by function parameters
-void create_button(std::string const& text, Button button, float scale, FONT font);
+void create_button(std::string const& text, Button button, float scale, FONT font , GLuint id);
 
 
 class GameHud
