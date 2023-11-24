@@ -1420,13 +1420,13 @@
       "linkedevent": 2
     },
     {
-      "Prefabs": "PressurePlateOrange.json",
+      "Prefabs": "PressurePlateDarkBlue.json",
       "Type": "Transform",
       "Position": {
         "x": 1216.0,
         "y": -230.0
       },
-      "linkedevent": 3
+      "linkedevent": 4
     },
     {
       "Prefabs": "DoorOrange.json",
@@ -1454,13 +1454,13 @@
       }
     },
     {
-      "Prefabs": "PressurePlateDarkBlue.json",
+      "Prefabs": "PressurePlateOrange.json",
       "Type": "Transform",
       "Position": {
         "x": 1184.0,
         "y": 602.0
       },
-      "linkedevent": 4
+      "linkedevent": 3
     },
     {
       "Prefabs": "DoorDarkBlue.json",
