@@ -29,6 +29,22 @@
       "Prefabs": "level1_background_7.json"
     },
     {
+      "Prefabs": "MainDoor.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -96.0,
+        "y": 32.0
+      }
+    },
+    {
+      "Prefabs": "MainDoor.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -352.0,
+        "y": 352.0
+      }
+    },
+    {
       "Prefabs": "Finn.json",
       "Type": "Transform",
       "Position": {
@@ -1349,6 +1365,237 @@
         "x": 1024.0,
         "y": -128.0
       }
+    },
+    {
+      "Prefabs": "DoorLightCyan.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 192.0,
+        "y": 128.0
+      }
+    },
+    {
+      "Prefabs": "DoorCyan.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 192.0,
+        "y": 32.0
+      },
+      "linkedevent": 1
+    },
+    {
+      "Prefabs": "PressurePlateCyan.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 128.0,
+        "y": -38.0
+      },
+      "linkedevent": 1
+    },
+    {
+      "Prefabs": "PressurePlatePink.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 448.0,
+        "y": -166.0
+      },
+      "linkedevent": 2
+    },
+    {
+      "Prefabs": "LaserPink.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 616.0,
+        "y": -96.0
+      },
+      "linkedevent": 2
+    },
+    {
+      "Prefabs": "LaserPink.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 664.0,
+        "y": -96.0
+      },
+      "linkedevent": 2
+    },
+    {
+      "Prefabs": "PressurePlateOrange.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 1216.0,
+        "y": -230.0
+      },
+      "linkedevent": 3
+    },
+    {
+      "Prefabs": "DoorOrange.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 640.0,
+        "y": 352.0
+      },
+      "linkedevent": 3
+    },
+    {
+      "Prefabs": "DoorLightOrange.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 640.0,
+        "y": 448.0
+      }
+    },
+    {
+      "Prefabs": "DoorLightDarkBlue.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 576.0,
+        "y": 448.0
+      }
+    },
+    {
+      "Prefabs": "PressurePlateDarkBlue.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 1184.0,
+        "y": 602.0
+      },
+      "linkedevent": 4
+    },
+    {
+      "Prefabs": "DoorDarkBlue.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 576.0,
+        "y": 352.0
+      },
+      "linkedevent": 4
+    },
+    {
+      "Prefabs": "BlueHorizontalDoor.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 1056.0,
+        "y": 576.0
+      },
+      "linkedevent": 4
+    },
+    {
+      "Prefabs": "BlueHorizontalDoor.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 928.0, 
+        "y": 576.0
+      },
+      "Rotation": 180.0,
+      "linkedevent": 4
+    },
+    {
+      "Prefabs": "CatTeleport.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 832.0, 
+        "y": 192.0
+      },
+      "linkedevent": 5
+    },
+    {
+      "Prefabs": "CatTeleport.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 768.0, 
+        "y": 640.0
+      },
+      "linkedevent": 5
+    },
+    {
+      "Prefabs": "PressurePlatePink.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 448.0,
+        "y": 282.0
+      },
+      "linkedevent": 6
+    },
+    {
+      "Prefabs": "LaserPink.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 338.0,
+        "y": 416.0
+      },
+      "linkedevent": 6
+    },
+    {
+      "Prefabs": "PinkHorizontalDoor.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 160.0,
+        "y": 640.0
+      },
+      "Rotation": 180.0,
+      "linkedevent": 6
+    },
+    {
+      "Prefabs": "PressurePlateOrange.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 224.0,
+        "y": 282.0
+      },
+      "linkedevent": 7
+    },
+    {
+      "Prefabs": "DoorOrange.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -64.0,
+        "y": 352.0
+      },
+      "linkedevent": 7
+    },
+    {
+      "Prefabs": "DoorLightOrange.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -64.0,
+        "y": 448.0
+      }
+    },
+    {
+      "Prefabs": "DoorLightGreen.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -128.0,
+        "y": 448.0
+      }
+    },
+    {
+      "Prefabs": "PressurePlateGreen.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 64.0,
+        "y": 282.0
+      },
+      "linkedevent": 8
+    },
+    {
+      "Prefabs": "GreenHorizontalDoor.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 160.0,
+        "y": 576.0
+      },
+      "linkedevent": 8
+    },
+    {
+      "Prefabs": "DoorGreen.json",
+      "Type": "Transform",
+      "Position": {
+        "x": -128.0,
+        "y": 352.0
+      },
+      "linkedevent": 8
     }
   ]
 }

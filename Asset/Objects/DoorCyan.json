@@ -1,0 +1,41 @@
+{
+  "Name": "doorcyan",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale_x": 64.0,
+        "Scale_y": 192.0,
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Body",
+      "Shape": "Rectangle",
+      "Properties": {
+        "width": 32.0,
+        "height": 128.0
+      }
+    },
+    {
+      "Type": "Animation",
+      "Properties": {
+        "texturepath": "DoorCyan.png",
+        "framerate": 0.1,
+        "frame": [11, 1],
+        "idle": [1, 1],
+        "jump": [11, 1]
+      }
+    },
+    {
+      "Type": "Event",
+      "Properties": {
+        "linkedevent" : 0
+      }
+    }
+  ]
+}

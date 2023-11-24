@@ -257,6 +257,10 @@ void CoreEngine::GameLoop()
 	LoadScene("Asset/Levels/tutorial_level.json");
 #endif
 
+	// For dragging objects in level editor
+	static Vec2 offset(NAN, NAN);
+	static bool object_being_moved = false;
+
 	while (game_active)
 	{
 		auto m_BeginFrame = std::chrono::system_clock::now();
@@ -283,31 +287,31 @@ void CoreEngine::GameLoop()
 #endif
 			}
 		}
-		
+
 		/***************************************************************************************************************************************
-		
-		
+
+
 														Drawing
-		
-		
+
+
 		*****************************************************************************************************************************************/
 #if defined(DEBUG) | defined(_DEBUG)
 		if (input::IsPressed(KEY::p)) { debug_gui_active = !debug_gui_active; }
 		if (debug_gui_active) {
 
-			
-			
+
+
 			// For rendering into imgui window 
 			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
 
 			Update(Systems["Graphics"]);
-			
+
 			gamehud.Update();
 			gamehud.Draw();
 
 			Update(Systems["Window"]);
 			//editor_grid->drawleveleditor();
-			
+
 			// End rendering into imgui window 
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Back to rendering to the main window
@@ -320,15 +324,15 @@ void CoreEngine::GameLoop()
 			ImVec2 windowSize = ImGui::GetWindowSize();
 
 			ImVec2 displaySize, viewportStartPos;
-			if (windowSize.y < (windowSize.x / 16.f * 9.f)) 
+			if (windowSize.y < (windowSize.x / 16.f * 9.f))
 			{
 				viewportStartPos = ImVec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 0.f);
-				displaySize = ImVec2(windowSize.y * 16.f / 9.f, windowSize.y );
+				displaySize = ImVec2(windowSize.y * 16.f / 9.f, windowSize.y);
 			}
-			else 
+			else
 			{
 				viewportStartPos = ImVec2(0.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f);
-				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f) );
+				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f));
 			}
 
 			// Get the top-left position of the viewport window
@@ -372,15 +376,16 @@ void CoreEngine::GameLoop()
 				ImGui::EndDragDropTarget();
 			}
 
+			ImVec2 clickPos = ImGui::GetMousePos();
+			ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
+			ImVec2 displayPos(relativePos.x / displaySize.x * 1920, 1080 - (relativePos.y / displaySize.y * 1080)); // Hardcoded to 1920x1080 as other resolutions bugged for now
+			ImVec2 openGlDisplayCoord(displayPos.x - (1920 / 2), displayPos.y - (1080 / 2));
+
+			// Camera is stationary, it's the scene that is moving, so inverse pos
+			// Also, need to divide camera coord by 2 
+			ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * 1920.f / 2.f)), (openGlDisplayCoord.y - (camera2D->position.y * 1080.f / 2.f)));
+
 			if (ImGui::IsItemClicked()) {
-				ImVec2 clickPos = ImGui::GetMousePos();
-				ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
-				ImVec2 displayPos(relativePos.x / displaySize.x * 1920, 1080 - (relativePos.y / displaySize.y * 1080)); // Hardcoded to 1920x1080 for now, other resolutions bugged for now
-				ImVec2 openGlDisplayCoord(displayPos.x - (1920 / 2), displayPos.y - (1080 / 2));
-
-				// Camera is stationary, it's the scene that is moving, so inverse pos
-				ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * 1080.f * 0.91f)), (openGlDisplayCoord.y - (camera2D->position.y * 1080.f * 0.91f)));
-
 				std::cout << "################################################################" << std::endl;
 				std::cout << "ClickPos " << clickPos.x << ", " << clickPos.y << std::endl;
 				std::cout << "ViewportMin " << viewport_min.x << ", " << viewport_min.y << std::endl;
@@ -390,12 +395,12 @@ void CoreEngine::GameLoop()
 				std::cout << "Translated ClickPos (in terms of opengl display) " << displayPos.x << ", " << displayPos.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of opengl display coord) " << openGlDisplayCoord.x << ", " << openGlDisplayCoord.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of game world) " << gameWorldPos.x << ", " << gameWorldPos.y << std::endl;
-				
+
 				for (size_t i = 1; i < objectFactory->NumberOfObjects(); i++)
 				{
 					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
 					Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-					//ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
+
 					if (isObjectClicked(objTransform, gameWorldPos))
 					{
 						level_editor->selected = true;
@@ -404,8 +409,49 @@ void CoreEngine::GameLoop()
 					}
 				}
 			}
+			
+			// Dragging the selected object in the viewport
+			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true) {
+				Object* object;
+				if (level_editor->selectedNum >= 0)
+					object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				else
+					object = AssetManager::prefabById(static_cast<long>(level_editor->selectedNum));
 
-			// Selecting objects in the viewport is very very bugged, commenting out for now while trying to fix it
+				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
+
+				if (isObjectClicked(objTransform, gameWorldPos))
+				{
+					object_being_moved = true;
+				}
+				
+				// This arrangement is to account for the mouse that sometimes can be outside of the selected object
+				if (object_being_moved) {
+
+					// Offset to account for mouse not being in the center of the selected object
+					if (isnan(offset.x))
+						offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+
+					std::cout << "Offset: " << offset << std::endl;
+
+					objTransform->Position.x = gameWorldPos.x - offset.x;
+					objTransform->Position.y = gameWorldPos.y - offset.y;
+
+					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
+				}
+
+				if (objBody != nullptr)
+				{
+					RecalculateBody(objTransform, objBody);
+				}
+			}
+			else {
+				offset = Vec2(NAN, NAN);
+				object_being_moved = false;
+			}
+			// The old and buggy version of selecting objects in the viewport
+			// will be deleted at some point
 			/*
 			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true)
 			{
@@ -447,11 +493,13 @@ void CoreEngine::GameLoop()
 			}
 			*/
 
+			// Deselect the object
 			if (input::IsPressed(KEY::mouseR) && level_editor->selected == true)
 			{
 				level_editor->selected = false;
 				level_editor->selectedNum = -1;
 			}
+
 
 			if (input::IsPressed(KEY::q) && level_editor->selected == true)
 			{
@@ -509,7 +557,7 @@ void CoreEngine::GameLoop()
 				{
 					for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 					{
-						
+
 						if (objectFactory->getObjectWithID(i) == nullptr)
 						{
 							continue;
@@ -533,7 +581,7 @@ void CoreEngine::GameLoop()
 					}
 					ImGui::EndTable();
 				}
-				if (objectProperties) 
+				if (objectProperties)
 				{
 					if (objectFactory->getObjectWithID(selected) == nullptr)
 					{
@@ -556,14 +604,14 @@ void CoreEngine::GameLoop()
 					}
 					Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 					// Not working
-					
+
 					Vec2 botleft = { tran_pt->Position.x - tran_pt->Scale_x / 2, tran_pt->Position.y - tran_pt->Scale_y / 2 };
 					Vec2 topright = { tran_pt->Position.x + tran_pt->Scale_x / 2, tran_pt->Position.y + tran_pt->Scale_y / 2 };
 					app->drawline({ botleft.x,botleft.y }, { botleft.x,topright.y });
 					app->drawline({ botleft.x,topright.y }, { topright.x,topright.y });
 					app->drawline({ topright.x,topright.y }, { topright.x,botleft.y });
 					app->drawline({ topright.x,botleft.y }, { botleft.x,botleft.y });
-					
+
 					ImGui::Text("Object Position:");
 					ImGui::Text("x = %.2f, y = %.2f", tran_pt->Position.x, tran_pt->Position.y);
 					if (tempstorage) {
@@ -579,7 +627,7 @@ void CoreEngine::GameLoop()
 					}
 					if (ImGui::Button("Delete"))
 					{
-						objectFactory->destroyObject(object); 
+						objectFactory->destroyObject(object);
 						objectProperties = false;
 					}
 					if (object->GetComponent(ComponentType::Body) != nullptr)
@@ -768,7 +816,7 @@ void CoreEngine::GameLoop()
 			accumulator -= fixed_dt;
 			numofsteps++;
 		}
-		
+
 		// Update delta_time every second
 		if (time_in_seconds > prev_time_in_seconds)
 		{
@@ -776,7 +824,7 @@ void CoreEngine::GameLoop()
 			//std::cout << "DT: " << dt << std::endl;
 			prev_time_in_seconds = time_in_seconds;
 		}
-	
+
 
 		// Updating Frame Times
 		//m_BeginFrame = m_EndFrame;

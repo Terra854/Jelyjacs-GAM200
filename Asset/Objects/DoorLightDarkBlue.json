@@ -1,0 +1,34 @@
+{
+  "Name": "doorlightdarkblue",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale_x": 64.0,
+        "Scale_y": 64.0,
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Body",
+      "Shape": "Rectangle",
+      "Properties": {
+        "width": 64.0,
+        "height": 64.0
+      }
+    },
+    {
+      "Type": "Animation",
+      "Properties": {
+        "texturepath": "Props_DoorLightDarkBlue.png",
+        "framerate": 0.1,
+        "frame": [10, 1],
+        "idle": [10, 1]
+      }
+    }
+  ]
+}
