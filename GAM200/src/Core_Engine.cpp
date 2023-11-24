@@ -28,6 +28,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include "Utils.h"
 #include "Assets Manager/asset_manager.h"
 #include <Scenes.h>
+#include <Camera.h>
 
 CoreEngine* CORE = NULL;
 
@@ -334,10 +335,12 @@ void CoreEngine::GameLoop()
 			ImVec2 viewportPos = ImGui::GetWindowPos();
 
 			// Estimate the height of the title bar
-			float titleBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
+			//float titleBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
+			float titleBarHeight = 0.f;
 
 			// Translate the ImGui-relative coordinates to application window-relative coordinates
-			ImVec2 cursorPosInAppWindow = ImVec2(viewportStartPos.x + viewportPos.x, viewportStartPos.y + viewportPos.y + titleBarHeight);
+			ImVec2 viewport_min = ImVec2(viewportStartPos.x + viewportPos.x, viewportStartPos.y + viewportPos.y + titleBarHeight);
+			ImVec2 viewport_max = ImVec2(viewport_min.x + displaySize.x, viewport_min.y + displaySize.y);
 
 			// Render the viewport
 			ImGui::SetCursorPos(viewportStartPos);
@@ -371,9 +374,35 @@ void CoreEngine::GameLoop()
 
 			if (ImGui::IsItemClicked()) {
 				ImVec2 clickPos = ImGui::GetMousePos();
+				ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
+				ImVec2 displayPos(relativePos.x / displaySize.x * 1920, 1080 - (relativePos.y / displaySize.y * 1080)); // Hardcoded to 1920x1080 for now, other resolutions bugged for now
+				ImVec2 openGlDisplayCoord(displayPos.x - (1920 / 2), displayPos.y - (1080 / 2));
 
-				std::cout << clickPos.x << ", " << clickPos.y << std::endl;
-				std::cout << cursorPosInAppWindow.x << ", " << cursorPosInAppWindow.y << std::endl;
+				// Camera is stationary, it's the scene that is moving, so inverse pos
+				ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * 1080.f * 0.91f)), (openGlDisplayCoord.y - (camera2D->position.y * 1080.f * 0.91f)));
+
+				std::cout << "################################################################" << std::endl;
+				std::cout << "ClickPos " << clickPos.x << ", " << clickPos.y << std::endl;
+				std::cout << "ViewportMin " << viewport_min.x << ", " << viewport_min.y << std::endl;
+				std::cout << "ViewportMax " << viewport_max.x << ", " << viewport_max.y << std::endl;
+				std::cout << "ClickPos relative to viewport " << relativePos.x << ", " << relativePos.y << std::endl;
+				std::cout << "DisplaySize " << displaySize.x << ", " << displaySize.y << std::endl;
+				std::cout << "Translated ClickPos (in terms of opengl display) " << displayPos.x << ", " << displayPos.y << std::endl;
+				std::cout << "Translated ClickPos (in terms of opengl display coord) " << openGlDisplayCoord.x << ", " << openGlDisplayCoord.y << std::endl;
+				std::cout << "Translated ClickPos (in terms of game world) " << gameWorldPos.x << ", " << gameWorldPos.y << std::endl;
+				
+				for (size_t i = 1; i < objectFactory->NumberOfObjects(); i++)
+				{
+					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
+					Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+					//ImVec2 mousePos = convertMouseToGameViewportPos(displaySize);
+					if (isObjectClicked(objTransform, gameWorldPos))
+					{
+						level_editor->selected = true;
+						level_editor->selectedNum = (int)i;
+						selectedObjectID = static_cast<long>(i);
+					}
+				}
 			}
 
 			// Selecting objects in the viewport is very very bugged, commenting out for now while trying to fix it
