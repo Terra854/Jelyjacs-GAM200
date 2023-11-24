@@ -103,8 +103,16 @@ void GameLogic::Update() {
 
 	for (auto& iter : behaviourComponents) {
 		//Check if the object is the player
-		if ((GameLogic::playerObj != nullptr) && (iter->GetBehaviourName() == static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName())) {
+		if (GameLogic::playerObj != nullptr && GameLogic::playerObj->GetComponent(ComponentType::Behaviour) != nullptr) {
+			if (iter->GetBehaviourName() == static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName()) {
 				behaviours[iter->GetBehaviourName()]->Update(GameLogic::playerObj);
+			}
+			else {
+				// Update the behaviour
+				for (auto it : objectFactory->FindAllObjectsByName(iter->GetOwner()->GetName())) {
+					behaviours[iter->GetBehaviourName()]->Update(it);
+				}
+			}
 		}
 		else {
 			// Update the behaviour
