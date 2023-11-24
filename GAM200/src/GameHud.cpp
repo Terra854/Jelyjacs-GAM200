@@ -12,53 +12,23 @@ This file contains the definition of the functions of GameHud
 #include "Core_Engine.h"
 namespace
 {
-	//to display the text inside the button
-	class Text
-	{
-	public:
-		Vec2 pos{};
-		float scale;
-		std::string text{};
-		FONT font;
-	};
-
-	//the dimensions of button
-	class Button
-	{
-	public:
-		Button(Vec2 pos1, Vec2 pos2);
-		Button(Vec2 centre, float width, float height);
-		Vec2 pos1;
-		Vec2 pos2;
-		Vec2 centre;
-		float width;
-		float height;
-		Text string{};
-	};
-
-	//map container to store all buttons created
-	std::vector<Button> Buttons;
-	
-	//to attach an empty box texture to the button
-	GLuint texture_id;
-
 	std::vector<Button>::iterator button_tracker;
 
 	bool keyboard_mode = false;
 }
 
-	//helper function
-	//creates a new button with data initialised by function parameters
-void create_button(std::string const& text, Button button, float scale, FONT font);
+std::vector<Button> Buttons;
 
+	//helper function
+	
 
 	//helper function
 	//loads hud textures from assets into the texture_id
-void init_hud_assets();
+//void init_hud_assets();
 
 	//helper function
 	//draws the texture with texure_id using opengl api
-void draw_hud_texture(Vec2 pos, float scaleX, float scaleY);
+//void draw_hud_texture(Vec2 pos, float scaleX, float scaleY);
 
 void draw_outline(Vec2 pos1, Vec2 pos2);
 
@@ -69,9 +39,9 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color);
 *******************************************************************************/
 void GameHud::Initialize()
 {
-	init_hud_assets();
-	create_button("play", Button(Vec2(800, 400), 180, 70), 1.0f, AldrichRegular);
-	create_button("zoom", Button(Vec2(800, 250), 180, 70), 1.2f , GeoRegular);
+	//init_hud_assets();
+	//create_button("play", Button(Vec2(800, 400), 180, 70), 1.0f, AldrichRegular);
+	//create_button("zoom", Button(Vec2(800, 250), 180, 70), 1.2f , GeoRegular);
 	button_tracker = Buttons.end();
 }
 
@@ -146,7 +116,7 @@ void GameHud::Draw()
 {
 	for (auto it = Buttons.begin() ; it!=Buttons.end(); ++it)
 	{
-		draw_hud_texture(it->centre , it->width , it->height);
+		//draw_hud_texture(it->centre , it->width , it->height);
 		SetFont(it->string.font);
 		DrawText(it->string.text, it->string.pos.x, it->string.pos.y, it->string.scale);
 	}
@@ -195,7 +165,7 @@ GameHud::~GameHud()
 {
 	Buttons.clear();
 }
-
+/*
 void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
 {
 		glBindTextureUnit(6, texture_id);
@@ -224,12 +194,12 @@ void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
 		glBindVertexArray(0);
 		GLApp::shdrpgms["image"].UnUse();
 }
-
 void init_hud_assets()
 {
 	texture_id = GLApp::setup_texobj("Asset/Picture/Empty_Box.png");
 }
 
+*/
 void draw_outline(Vec2 pos1 , Vec2 pos2)
 {
 	drawline(pos1, Vec2(pos2.x, pos1.y), glm::vec3(1, 1, 1));
