@@ -30,14 +30,6 @@ public:
 	void AddBehaviourComponent(Behaviour* behaviour) {
 		behaviourComponents.push_back(behaviour);
 	}
-	void RemoveBehaviourComponent(Behaviour* behaviour) {
-		for (int i = 0; i < behaviourComponents.size(); i++) {
-			if (behaviourComponents[i]->GetOwner()->GetId() == behaviour->GetOwner()->GetId()) {
-				behaviourComponents.erase(behaviourComponents.begin() + i);
-				std::cout << "Erased Behaviour Component" << std::endl;
-			}
-		}
-	}
 	bool CheckBehaviour(std::string name);
 	//void AddObject(Object* obj);
 	void LoadScripts();
