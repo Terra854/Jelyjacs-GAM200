@@ -283,7 +283,7 @@ void LevelEditor::ObjectProperties() {
 	ImGui::SameLine();
 
 	if (ImGui::Button("Add Component")) {
-		if (bo == nullptr || ph == nullptr)
+		if (bo == nullptr || ph == nullptr || be == nullptr)
 			ImGui::OpenPopup("AddComponent");
 		else
 			ImGui::OpenPopup("NoComponentsToAdd");
@@ -299,6 +299,14 @@ void LevelEditor::ObjectProperties() {
 		if (ph == nullptr)
 			if (ImGui::Selectable("Physics")) {
 				object->AddComponent(new Physics());
+			}
+		if(be == nullptr)
+			if (ImGui::Selectable("Behaviour")) {
+				ImGui::Text("Pick your Behaviour");
+				for (auto it : Logic->behaviours) {
+					if (ImGui::Button(it.first.c_str()))
+						object->AddComponent(new Behaviour(0, it.first));
+				}
 			}
 
 		ImGui::EndPopup();
@@ -942,6 +950,21 @@ void LevelEditor::ObjectProperties() {
 		if (ImGui::CollapsingHeader("Behaviour")) {
 			ImGui::Text("Script Name : %s", be->GetBehaviourName().c_str());
 			ImGui::Text("Script Index : %d", be->GetBehaviourIndex());
+			if (ImGui::CollapsingHeader("Change Scripts")) {
+				ImGui::OpenPopup("Select Scripts");
+				for (auto it : Logic->behaviours)
+					if (ImGui::Selectable(it.first.c_str())) {
+						be->SetBehaviourName(it.first);
+					}
+
+			}
+			/*if (ImGui::Button("Delete Behaviour"))
+			{
+				Logic->RemoveBehaviourComponent(be);
+				objectFactory->DeleteComponent(object->GetId(), ComponentType::Behaviour);
+				be = nullptr;
+				std::cout << "Updated Map Size : " << Logic->behaviourComponents.size() << std::endl;
+			}*/
 		}
 	}
 
