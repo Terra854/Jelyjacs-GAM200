@@ -107,6 +107,12 @@ void GameLogic::Update() {
 			if (iter->GetBehaviourName() == static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName()) {
 				behaviours[iter->GetBehaviourName()]->Update(GameLogic::playerObj);
 			}
+			else {
+				// Update the behaviour
+				for (auto it : objectFactory->FindAllObjectsByName(iter->GetOwner()->GetName())) {
+					behaviours[iter->GetBehaviourName()]->Update(it);
+				}
+			}
 		}
 		else {
 			// Update the behaviour
