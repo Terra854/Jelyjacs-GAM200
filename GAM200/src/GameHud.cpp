@@ -21,17 +21,6 @@ namespace
 
 std::vector<Button> Buttons;
 
-	//helper function
-	
-
-	//helper function
-	//loads hud textures from assets into the texture_id
-//void init_hud_assets();
-
-	//helper function
-	//draws the texture with texure_id using opengl api
-//void draw_hud_texture(Vec2 pos, float scaleX, float scaleY);
-
 void draw_outline(Vec2 pos1, Vec2 pos2);
 
 void drawline(Vec2 start, Vec2 end, glm::vec3 color);
@@ -117,9 +106,14 @@ void GameHud::Update()
 *******************************************************************************/
 void GameHud::Draw()
 {
+	for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
+	{
+		std::cout << "width" << it->width << std::endl;
+		std::cout <<"height" << it->height << std::endl;
+	}
 	for (auto it = Buttons.begin() ; it!=Buttons.end(); ++it)
 	{
-		//draw_hud_texture(it->centre , it->width , it->height);
+		it->draw_hud_texture();
 		SetFont(it->string.font);
 		DrawText(it->string.text, it->string.pos.x, it->string.pos.y, it->string.scale);
 	}
@@ -169,8 +163,8 @@ GameHud::~GameHud()
 {
 	Buttons.clear();
 }
-/*
-void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
+
+void Button::draw_hud_texture()
 {
 		glBindTextureUnit(6, texture_id);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -180,11 +174,11 @@ void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
 		// copy object's model-to-NDC matrix to vertex shader's
 		// uniform variable uModelToNDC
 		Vec2 posM;
-		posM.x = ((pos.x-17.0f) * 2.0f / window->width_init  ) ;
-		posM.y = (pos.y+10.0f) * 2.0f / window->height_init;
+		posM.x = ((centre.x-17.0f) * 2.0f / window->width_init  ) ;
+		posM.y = (centre.y+10.0f) * 2.0f / window->height_init;
 		Vec2 scale;
-		scale.x = (scaleX*1.6f)/ window->width_init;
-		scale.y = (scaleY *2.5f)/ window->height_init;
+		scale.x = (width *1.6f)/ window->width_init;
+		scale.y = (height *2.5f)/ window->height_init;
 		Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale) * Mat3RotRad(0.f);
 		Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
 		mat = Mat3Scale(window_sacling.x, window_sacling.y) * mat;
@@ -198,12 +192,7 @@ void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
 		glBindVertexArray(0);
 		GLApp::shdrpgms["image"].UnUse();
 }
-void init_hud_assets()
-{
-	texture_id = GLApp::setup_texobj("Asset/Picture/Empty_Box.png");
-}
 
-*/
 void draw_outline(Vec2 pos1 , Vec2 pos2)
 {
 	drawline(pos1, Vec2(pos2.x, pos1.y), glm::vec3(1, 1, 1));

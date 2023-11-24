@@ -43,6 +43,7 @@ public:
 	Text string{};
 	//to attach an empty box texture to the button
 	GLuint texture_id;
+	void draw_hud_texture();
 };
 
 //map container to store all buttons created
