@@ -2,11 +2,11 @@
   "Button": 
   [
     {
-      "text": "play",
+      "text": "pause",
       "button_x": 800,
       "button_y": 400,
-      "button_width": 180,
-      "button_height": 70,
+      "button_w": 180,
+      "button_h": 70,
       "scale": 1.0,
       "font": "AldrichRegular",
       "texture": "Empty_Box.png"
@@ -15,11 +15,61 @@
       "text": "zoom",
       "button_x": 800,
       "button_y": 250,
-      "button_width": 180,
-      "button_height": 70,
+      "button_w": 180,
+      "button_h": 70,
       "scale": 1.2,
       "font": "GeoRegular",
       "texture": "Empty_Box.png"
+    },
+    {
+      "text": "menu",
+      "button_x": 0,
+      "button_y": 0,
+      "button_w": 500,
+      "button_h": 500,
+      "scale": 1.0,
+      "font": "AldrichRegular",
+      "texture": "MENU_back.png"
+    },
+    {
+      "text": "resolution",
+      "button_x": 0,
+      "button_y": -220,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "fullscreen",
+      "button_x": 0,
+      "button_y": -320,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "restart",
+      "button_x": -15,
+      "button_y": 177,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "resume",
+      "button_x": -13,
+      "button_y": 310,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
     }
   ]
 }

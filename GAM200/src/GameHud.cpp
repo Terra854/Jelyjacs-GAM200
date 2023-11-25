@@ -2,7 +2,7 @@
 @file GameHud.cpp
 @author Yeo Jia Ming
 @date	3/11/2023
-
+//
 This file contains the definition of the functions of GameHud 
 *//*__________________________________________________________________________*/
 #include "GameHud.h"
@@ -14,12 +14,14 @@ This file contains the definition of the functions of GameHud
 #include "Assets Manager/asset_manager.h"
 namespace
 {
-	std::vector<Button>::iterator button_tracker;
-
-	bool keyboard_mode = false;
+	std::string button_tracker;
 }
 
 std::vector<Button> Buttons;
+std::map <std::string, int> index;
+
+int menu_index = 0;
+int number_of_buttons = 0;
 
 void draw_outline(Vec2 pos1, Vec2 pos2);
 
@@ -30,11 +32,9 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color);
 *******************************************************************************/
 void GameHud::Initialize()
 {
-	//init_hud_assets();
-	//create_button("play", Button(Vec2(800, 400), 180, 70), 1.0f, AldrichRegular);
-	//create_button("zoom", Button(Vec2(800, 250), 180, 70), 1.2f , GeoRegular);
+
 	createHudFromConfig("Asset/UI/Pause.json");
-	button_tracker = Buttons.end();
+	button_tracker = "nil";
 }
 
 /******************************************************************************
@@ -42,56 +42,42 @@ void GameHud::Initialize()
 *******************************************************************************/
 void GameHud::Update()
 {
+	
 	if (input::MouseMoved())
 	{
-		for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
-		{
-			if (input::GetMouseX() > it->pos1.x && input::GetMouseX() < it->pos2.x)
+			for (auto it = index.begin(); it != index.end(); ++it)
 			{
-				if (input::GetMouseY() > it->pos2.y && input::GetMouseY() < it->pos1.y)
+				button_tracker = "nil";
+				if (it->first == "menu")
 				{
-					button_tracker = it;
-					keyboard_mode = false;
-					break;
+					continue;
+				}
+				if (!engine->isPaused() && it->second > menu_index)
+				{
+					continue;
+				}
+				else if (engine->isPaused() && it->second < menu_index)
+				{
+					continue;
+				}
+				if (input::GetMouseX() > Buttons[it->second].pos1.x && input::GetMouseX() < Buttons[it->second].pos2.x)
+				{
+					if (input::GetMouseY() > Buttons[it->second].pos2.y && input::GetMouseY() < Buttons[it->second].pos1.y)
+					{
+						button_tracker = it->first;
+						break;
+					}
 				}
 			}
-			if (!keyboard_mode)
-			{
-				button_tracker = Buttons.end();
-			}
-		}
 	}
-	else if (input::IsPressed(KEY::tab))
-	{
-		if (keyboard_mode && button_tracker < Buttons.end() - 1)
+	
+	if ((input::IsPressed(KEY::mouseL) && button_tracker != "nil"))
 		{
-			++button_tracker;
-		}
-		else
-		{
-			button_tracker = Buttons.begin();
-		}
-		keyboard_mode = true;
-	}
-
-		if ((input::IsPressed(KEY::mouseL) && button_tracker != Buttons.end() && !keyboard_mode) || (input::IsPressed(KEY::enter) && keyboard_mode))
-		{
-			if (button_tracker->string.text == "play" || button_tracker->string.text == "pause")
+			if (button_tracker == "pause" || button_tracker == "resume")
 			{
-				if (!engine->isPaused())
-				{
-					button_tracker->string.text = "play";
-					button_tracker->string.pos.x = button_tracker->centre.x - (static_cast<float>(find_width("play", button_tracker->string.font)) / 2.0f * button_tracker->string.scale);
-				}
-				else
-				{
-					button_tracker->string.text = "pause";
-					button_tracker->string.pos.x = button_tracker->centre.x - (static_cast<float>(find_width("pause", button_tracker->string.font)) / 2.0f * button_tracker->string.scale);
-				}
 				engine->setPause();
 			}
-
-			else if (button_tracker->string.text == "zoom")
+			else if (button_tracker == "zoom")
 			{
 				if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
 					camera2D->scale = { 2.0f, 2.0f };
@@ -99,6 +85,7 @@ void GameHud::Update()
 				else camera2D->scale = { 1.0f, 1.0f };
 			}
 		}
+	
 }
 
 /******************************************************************************
@@ -106,20 +93,27 @@ void GameHud::Update()
 *******************************************************************************/
 void GameHud::Draw()
 {
-	for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
+	for (int i =0 ; i< Buttons.size(); ++i)
 	{
-		std::cout << "width" << it->width << std::endl;
-		std::cout <<"height" << it->height << std::endl;
+		if (engine->isPaused() && i < menu_index)
+		{
+			continue;
+		}
+		if (!engine->isPaused() && i >= menu_index)
+		{
+			continue;
+		}
+		Buttons[i].draw_hud_texture();
+		if (index.at("menu") == i)
+		{
+			continue;
+		}
+		SetFont(Buttons[i].string.font);
+		DrawText(Buttons[i].string.text, Buttons[i].string.pos.x, Buttons[i].string.pos.y, Buttons[i].string.scale);
 	}
-	for (auto it = Buttons.begin() ; it!=Buttons.end(); ++it)
+	if (button_tracker != "nil")
 	{
-		it->draw_hud_texture();
-		SetFont(it->string.font);
-		DrawText(it->string.text, it->string.pos.x, it->string.pos.y, it->string.scale);
-	}
-	if (button_tracker != Buttons.end())
-	{
-		draw_outline(button_tracker->pos1, button_tracker->pos2);
+		draw_outline(Buttons[index.at(button_tracker)].pos1, Buttons[index.at(button_tracker)].pos2);
 	}
 }
 
@@ -132,6 +126,11 @@ void create_button(std::string const& text, Button button, float scale , FONT f,
 	button.string.font = f;
 	button.texture_id = id;
 	Buttons.push_back(button);
+	if (text == "menu")
+	{
+		menu_index = number_of_buttons;
+	}
+	index[text] = number_of_buttons++;
 }
 
 Button::Button(Vec2 Pos1,Vec2 Pos2)
