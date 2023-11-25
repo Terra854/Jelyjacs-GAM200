@@ -2,7 +2,7 @@
 @file GameHud.cpp
 @author Yeo Jia Ming
 @date	3/11/2023
-
+//
 This file contains the definition of the functions of GameHud 
 *//*__________________________________________________________________________*/
 #include "GameHud.h"
@@ -10,55 +10,21 @@ This file contains the definition of the functions of GameHud
 #include "GLApp.h"
 #include "input.h"
 #include "Core_Engine.h"
+#include "Assets Manager/json_serialization.h"
+#include "Assets Manager/asset_manager.h"
+#include "SceneManager.h"
 namespace
 {
-	//to display the text inside the button
-	class Text
-	{
-	public:
-		Vec2 pos{};
-		float scale;
-		std::string text{};
-		FONT font;
-	};
-
-	//the dimensions of button
-	class Button
-	{
-	public:
-		Button(Vec2 pos1, Vec2 pos2);
-		Button(Vec2 centre, float width, float height);
-		Vec2 pos1;
-		Vec2 pos2;
-		Vec2 centre;
-		float width;
-		float height;
-		Text string{};
-	};
-
-	//map container to store all buttons created
-	std::vector<Button> Buttons;
-	
-	//to attach an empty box texture to the button
-	GLuint texture_id;
-
-	std::vector<Button>::iterator button_tracker;
-
-	bool keyboard_mode = false;
+	std::string button_tracker;
 }
 
-	//helper function
-	//creates a new button with data initialised by function parameters
-void create_button(std::string const& text, Button button, float scale, FONT font);
+std::vector<Button> Buttons;
+std::map <std::string, int> index;
 
+bool restarted = false;
 
-	//helper function
-	//loads hud textures from assets into the texture_id
-void init_hud_assets();
-
-	//helper function
-	//draws the texture with texure_id using opengl api
-void draw_hud_texture(Vec2 pos, float scaleX, float scaleY);
+int menu_index = 0;
+int number_of_buttons = 0;
 
 void draw_outline(Vec2 pos1, Vec2 pos2);
 
@@ -69,10 +35,9 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color);
 *******************************************************************************/
 void GameHud::Initialize()
 {
-	init_hud_assets();
-	create_button("play", Button(Vec2(800, 400), 180, 70), 1.0f, AldrichRegular);
-	create_button("zoom", Button(Vec2(800, 250), 180, 70), 1.2f , GeoRegular);
-	button_tracker = Buttons.end();
+
+	createHudFromConfig("Asset/UI/Pause.json");
+	button_tracker = "nil";
 }
 
 /******************************************************************************
@@ -80,65 +45,71 @@ void GameHud::Initialize()
 *******************************************************************************/
 void GameHud::Update()
 {
-	if (!engine->debug_gui_active) { // Make sure the menus are not active when the level editor is up
-		if (input::MouseMoved())
-		{
-			for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
+	
+	if (input::MouseMoved())
+	{
+			for (auto it = index.begin(); it != index.end(); ++it)
 			{
-				if (input::GetMouseX() > it->pos1.x && input::GetMouseX() < it->pos2.x)
+				button_tracker = "nil";
+				if (it->first == "menu")
 				{
-					if (input::GetMouseY() > it->pos2.y && input::GetMouseY() < it->pos1.y)
+					continue;
+				}
+				if (!engine->isPaused() && it->second > menu_index)
+				{
+					continue;
+				}
+				else if (engine->isPaused() && it->second < menu_index)
+				{
+					continue;
+				}
+				if (input::GetMouseX() > Buttons[it->second].pos1.x && input::GetMouseX() < Buttons[it->second].pos2.x)
+				{
+					if (input::GetMouseY() > Buttons[it->second].pos2.y && input::GetMouseY() < Buttons[it->second].pos1.y)
 					{
-						button_tracker = it;
-						keyboard_mode = false;
+						button_tracker = it->first;
 						break;
 					}
 				}
-				if (!keyboard_mode)
-				{
-					button_tracker = Buttons.end();
-				}
 			}
-		}
-		else if (input::IsPressed(KEY::tab))
+	}
+	
+	if ((input::IsPressed(KEY::mouseL) && button_tracker != "nil"))
 		{
-			if (keyboard_mode && button_tracker < Buttons.end() - 1)
+			if (button_tracker == "pause")
 			{
-				++button_tracker;
+				SceneManager::PauseScene();
 			}
-			else
+			else if (button_tracker == "resume")
 			{
-				button_tracker = Buttons.begin();
+				SceneManager::PlayScene();
+				restarted = false;
 			}
-			keyboard_mode = true;
-		}
-
-		if ((input::IsPressed(KEY::mouseL) && button_tracker != Buttons.end() && !keyboard_mode) || (input::IsPressed(KEY::enter) && keyboard_mode))
-		{
-			if (button_tracker->string.text == "play" || button_tracker->string.text == "pause")
-			{
-				if (!engine->isPaused())
-				{
-					button_tracker->string.text = "play";
-					button_tracker->string.pos.x = button_tracker->centre.x - (static_cast<float>(find_width("play", button_tracker->string.font)) / 2.0f * button_tracker->string.scale);
-				}
-				else
-				{
-					button_tracker->string.text = "pause";
-					button_tracker->string.pos.x = button_tracker->centre.x - (static_cast<float>(find_width("pause", button_tracker->string.font)) / 2.0f * button_tracker->string.scale);
-				}
-				engine->setPause();
-			}
-
-			else if (button_tracker->string.text == "zoom")
+			else if (button_tracker == "zoom")
 			{
 				if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
 					camera2D->scale = { 2.0f, 2.0f };
 				}
 				else camera2D->scale = { 1.0f, 1.0f };
 			}
+			else if (button_tracker == "resolution")
+			{
+
+			}
+			else if (button_tracker == "fullscreen")
+			{
+
+			}
+			else if (button_tracker == "restart")
+			{
+				if (!restarted)
+				{
+					SceneManager::RestartScene();
+					restarted = true;
+				}
+			}
 		}
-	}
+	
 }
 
 /******************************************************************************
@@ -146,26 +117,44 @@ void GameHud::Update()
 *******************************************************************************/
 void GameHud::Draw()
 {
-	for (auto it = Buttons.begin() ; it!=Buttons.end(); ++it)
+	for (int i =0 ; i< Buttons.size(); ++i)
 	{
-		draw_hud_texture(it->centre , it->width , it->height);
-		SetFont(it->string.font);
-		DrawText(it->string.text, it->string.pos.x, it->string.pos.y, it->string.scale);
+		if (engine->isPaused() && i < menu_index)
+		{
+			continue;
+		}
+		if (!engine->isPaused() && i >= menu_index)
+		{
+			continue;
+		}
+		Buttons[i].draw_hud_texture();
+		if (index.at("menu") == i)
+		{
+			continue;
+		}
+		SetFont(Buttons[i].string.font);
+		DrawText(Buttons[i].string.text, Buttons[i].string.pos.x, Buttons[i].string.pos.y, Buttons[i].string.scale);
 	}
-	if (button_tracker != Buttons.end())
+	if (button_tracker != "nil")
 	{
-		draw_outline(button_tracker->pos1, button_tracker->pos2);
+		draw_outline(Buttons[index.at(button_tracker)].pos1, Buttons[index.at(button_tracker)].pos2);
 	}
 }
 
-void create_button(std::string const& text, Button button, float scale , FONT f)
+void create_button(std::string const& text, Button button, float scale , FONT f, GLuint id)
 {
 	button.string.pos.x = button.centre.x - static_cast<float>(find_width(text,f))/2 * scale ;
 	button.string.pos.y -= 14 * scale;
 	button.string.text = text;
 	button.string.scale = scale;
 	button.string.font = f;
+	button.texture_id = id;
 	Buttons.push_back(button);
+	if (text == "menu")
+	{
+		menu_index = number_of_buttons;
+	}
+	index[text] = number_of_buttons++;
 }
 
 Button::Button(Vec2 Pos1,Vec2 Pos2)
@@ -198,7 +187,7 @@ GameHud::~GameHud()
 	Buttons.clear();
 }
 
-void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
+void Button::draw_hud_texture()
 {
 		glBindTextureUnit(6, texture_id);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -208,11 +197,11 @@ void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
 		// copy object's model-to-NDC matrix to vertex shader's
 		// uniform variable uModelToNDC
 		Vec2 posM;
-		posM.x = ((pos.x-17.0f) * 2.0f / window->width_init  ) ;
-		posM.y = (pos.y+10.0f) * 2.0f / window->height_init;
+		posM.x = ((centre.x-17.0f) * 2.0f / window->width_init  ) ;
+		posM.y = (centre.y+10.0f) * 2.0f / window->height_init;
 		Vec2 scale;
-		scale.x = (scaleX*1.6f)/ window->width_init;
-		scale.y = (scaleY *2.5f)/ window->height_init;
+		scale.x = (width *1.6f)/ window->width_init;
+		scale.y = (height *2.5f)/ window->height_init;
 		Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale) * Mat3RotRad(0.f);
 		Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
 		mat = Mat3Scale(window_sacling.x, window_sacling.y) * mat;
@@ -225,11 +214,6 @@ void draw_hud_texture( Vec2 pos , float scaleX , float scaleY)
 		// unbind VAO and unload shader program
 		glBindVertexArray(0);
 		GLApp::shdrpgms["image"].UnUse();
-}
-
-void init_hud_assets()
-{
-	texture_id = GLApp::setup_texobj("Asset/Picture/Empty_Box.png");
 }
 
 void draw_outline(Vec2 pos1 , Vec2 pos2)
@@ -274,4 +258,55 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	glBindVertexArray(0);
 	GLApp::shdrpgms["shape"].UnUse();
 }
+
+void createHudFromConfig(std::string file)
+{
+	JsonSerialization jsonobj;
+	jsonobj.openFileRead(file);
+
+	for (auto& button : jsonobj.read("Button"))
+	{
+		JsonSerialization jsonloop;
+		jsonloop.jsonObject = &button;
+
+		std::string text, font, texture;
+		jsonloop.readString(text, "text");
+		float x, y, w, h, scale;
+		jsonloop.readFloat(x, "button_x");
+		jsonloop.readFloat(y, "button_y");
+		jsonloop.readFloat(w, "button_w");
+		jsonloop.readFloat(h, "button_h");
+		jsonloop.readFloat(scale, "scale");
+
+		jsonloop.readString(font, "font");
+		FONT f = total;
+		if (font == "AldrichRegular")
+		{
+			f = FONT::AldrichRegular;
+		}
+		else if (font == "GeoRegular")
+		{
+			f = FONT::GeoRegular;
+		}
+
+		GLuint val;
+		jsonloop.readString(texture, "texture");
+		val = AssetManager::textureval(texture);
+
+		if (!AssetManager::texturecheckexist(texture))
+			std::cout << "TEXTURE MISSING FOR BUTTON!!!\n";
+
+		create_button(text, Button(Vec2(x, y), w, h), scale, f, val);
+	}
+
+
+	jsonobj.closeFile();
+}
+
+
+
+
+
+
+
 

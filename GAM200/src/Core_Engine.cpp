@@ -305,9 +305,6 @@ void CoreEngine::GameLoop()
 
 			Update(Systems["Graphics"]);
 
-			gamehud.Update();
-			gamehud.Draw();
-
 			Update(Systems["Window"]);
 			//editor_grid->drawleveleditor();
 
