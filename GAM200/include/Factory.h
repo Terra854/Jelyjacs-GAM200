@@ -73,6 +73,8 @@ public:
 
 	void DeleteComponent(int id, ComponentType c);
 
+	void DeleteComponent(Object* o, ComponentType c);
+
 	int GetNextId() { return nextObjectId; };
 
 	friend class PhysicsSystem; // Needed to apply physics onto each object

@@ -36,6 +36,8 @@ public:
 
 	void SaveAsDialog();
 
+	void UpdateAllObjectInstances(Object* object);
+
 	virtual void Initialize();
 	void Update();
 	virtual std::string SystemName() { return "LevelEditor"; }
