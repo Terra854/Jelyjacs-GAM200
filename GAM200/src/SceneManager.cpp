@@ -6,10 +6,17 @@
 SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
 
+/******************************************************************************
+Destructor class for SceneManager
+*******************************************************************************/
 SceneManager::~SceneManager(){
 	ClearInitialObjectMap(true);
 }
 
+/******************************************************************************
+PlayScene
+-	Used to start or resume the scene
+*******************************************************************************/
 void SceneManager::PlayScene() {
 	if (engine->isPaused()) {
 		if (initialObjectMap.empty()) {
@@ -22,6 +29,11 @@ void SceneManager::PlayScene() {
 
 }
 
+
+/******************************************************************************
+PauseScene
+-	Used to pause the scene
+*******************************************************************************/
 void SceneManager::PauseScene() {
 	if (!engine->isPaused())
 		engine->setPause();
@@ -29,6 +41,11 @@ void SceneManager::PauseScene() {
 	audio->stopWalking();
 }
 
+/******************************************************************************
+RestartScene
+-	Used to restart the current scene. All objects will be cleared and the initial
+	state copied over
+*******************************************************************************/
 void SceneManager::RestartScene() {
 	audio->stopWalking();
 
@@ -44,8 +61,8 @@ void SceneManager::RestartScene() {
 }
 
 /******************************************************************************
-ClearLevelEditorObjectMap
-- Used to clear the object map used to backup the level's initial state
+ClearInitialObjectMap
+-	Used to clear the object map used to backup the level's initial state
 
 @param deleteObjects - Whether to delete the objects itself. false is for only
 					   if transferring the objects to the main object map located
