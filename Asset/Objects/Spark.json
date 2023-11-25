@@ -45,8 +45,8 @@
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "Player",
-        "Index": 1
+        "Script": "Spark",
+        "Index": 0
       }
     },
     {

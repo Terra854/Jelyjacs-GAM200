@@ -26,6 +26,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Audio.h>
 #include <Scenes.h>
 #include <PhysicsSystem.h>
+#include <Scripts/Spark.h>
 
 
 std::map<std::string, LogicScript*> LogicScript::temp_scriptmap;
@@ -163,6 +164,8 @@ void GameLogic::Update() {
 			if (GameLogic::playerObj->GetName() == "Finn") {
 				Object* temp = objectFactory->FindObject("Spark");
 				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj :objectFactory->FindObject("Spark");
+				Spark::Just_detached = true;
+				static_cast<Body*>(temp->GetComponent(ComponentType::Body))->active = true;
 				std::cout << "Switched to Spark" << std::endl;
 			}
 			else if(GameLogic::playerObj->GetName() == "Spark") {

@@ -207,6 +207,12 @@
     <ClCompile Include="src\Scripts\CatPortal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\Finn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Spark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -369,6 +375,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\CatPortal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Finn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Spark.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

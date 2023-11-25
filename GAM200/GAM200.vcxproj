@@ -231,8 +231,10 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Scenes.cpp" />
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
+    <ClCompile Include="src\Scripts\Finn.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
     <ClCompile Include="src\Scripts\Player.cpp" />
+    <ClCompile Include="src\Scripts\Spark.cpp" />
     <ClCompile Include="src\Scripts\Vert_Elevator.cpp" />
     <ClCompile Include="src\ThreadPool.cpp" />
     <ClCompile Include="src\Utils.cpp">
@@ -285,8 +287,10 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Scenes.h" />
     <ClInclude Include="include\Scripts\CatPortal.h" />
     <ClInclude Include="include\Scripts\Endpoint.h" />
+    <ClInclude Include="include\Scripts\Finn.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
     <ClInclude Include="include\Scripts\Player.h" />
+    <ClInclude Include="include\Scripts\Spark.h" />
     <ClInclude Include="include\Scripts\Vert_Elevator.h" />
     <ClInclude Include="include\ThreadPool.h" />
     <ClInclude Include="include\Utils.h" />
