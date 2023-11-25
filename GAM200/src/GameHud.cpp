@@ -80,37 +80,38 @@ void GameHud::Initialize()
 *******************************************************************************/
 void GameHud::Update()
 {
-	if (input::MouseMoved())
-	{
-		for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
+	if (!engine->debug_gui_active) { // Make sure the menus are not active when the level editor is up
+		if (input::MouseMoved())
 		{
-			if (input::GetMouseX() > it->pos1.x && input::GetMouseX() < it->pos2.x)
+			for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
 			{
-				if (input::GetMouseY() > it->pos2.y && input::GetMouseY() < it->pos1.y)
+				if (input::GetMouseX() > it->pos1.x && input::GetMouseX() < it->pos2.x)
 				{
-					button_tracker = it;
-					keyboard_mode = false;
-					break;
+					if (input::GetMouseY() > it->pos2.y && input::GetMouseY() < it->pos1.y)
+					{
+						button_tracker = it;
+						keyboard_mode = false;
+						break;
+					}
+				}
+				if (!keyboard_mode)
+				{
+					button_tracker = Buttons.end();
 				}
 			}
-			if (!keyboard_mode)
+		}
+		else if (input::IsPressed(KEY::tab))
+		{
+			if (keyboard_mode && button_tracker < Buttons.end() - 1)
 			{
-				button_tracker = Buttons.end();
+				++button_tracker;
 			}
+			else
+			{
+				button_tracker = Buttons.begin();
+			}
+			keyboard_mode = true;
 		}
-	}
-	else if (input::IsPressed(KEY::tab))
-	{
-		if (keyboard_mode && button_tracker < Buttons.end() - 1)
-		{
-			++button_tracker;
-		}
-		else
-		{
-			button_tracker = Buttons.begin();
-		}
-		keyboard_mode = true;
-	}
 
 		if ((input::IsPressed(KEY::mouseL) && button_tracker != Buttons.end() && !keyboard_mode) || (input::IsPressed(KEY::enter) && keyboard_mode))
 		{
@@ -137,6 +138,7 @@ void GameHud::Update()
 				else camera2D->scale = { 1.0f, 1.0f };
 			}
 		}
+	}
 }
 
 /******************************************************************************

@@ -209,7 +209,6 @@ void CoreEngine::GameLoop()
 
 	//ImGuiIO& io = hud.StartGui();
 
-	bool debug_gui_active = true;
 	bool show_performance_viewer = true;
 	//bool objectProperties = false;
 	//bool tempstorage = 1;
