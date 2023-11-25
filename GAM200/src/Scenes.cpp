@@ -234,42 +234,42 @@ void linkSoundMap(std::string filename)
 	// Loop through AudioType
 	for (int i = 0; i < AudioType::END; i++)
 	{
-		std::string audio;
+		std::string audio_type;
 		switch (i) // Set audio value based on current AudioType
 		{
 			case AudioType::Background:
-				audio = "background";
+				audio_type = "background";
 				break;
 			case AudioType::Walking:
-				audio = "walking";
+				audio_type = "walking";
 				break;
 			case AudioType::Finn_Jumping:
-				audio = "finn_jumping";
+				audio_type = "finn_jumping";
 				break;
 			case AudioType::Spark_Jumping:
-				audio = "spark_jumping";
+				audio_type = "spark_jumping";
 				break;
 			case AudioType::Sliding_Door_Open:
-				audio = "sliding_door_open";
+				audio_type = "sliding_door_open";
 				break;
 			default:
-				audio = "END";
+				audio_type = "END";
 				break;
 		}
 
 		AudioType a = static_cast<AudioType>(i);
 
 		// Check if AudioType exist in audiomap json and then update it
-		if (jsonobj.isMember(audio))
+		if (jsonobj.isMember(audio_type))
 		{
-			if (jsonobj.isArray(audio))
+			if (jsonobj.isArray(audio_type))
 			{
-				size_t pos = jsonobj.size(audio);
+				size_t pos = jsonobj.size(audio_type);
 				std::vector<std::string> audioarr;
-				for (size_t i = 0; i < pos; i++)
+				for (size_t j = 0; j < pos; j++)
 				{
 					std::string audioval;
-					jsonobj.readString(audioval, audio, i);
+					jsonobj.readString(audioval, audio_type, (int) j);
 					audioarr.push_back(audioval);
 					std::cout << "AudioMap arrvalue: " << audioval << std::endl;
 				}
@@ -278,7 +278,7 @@ void linkSoundMap(std::string filename)
 			else
 			{
 				std::string audioval;
-				jsonobj.readString(audioval, audio);
+				jsonobj.readString(audioval, audio_type);
 				AssetManager::updateSoundMap(a, audioval);
 				std::cout << "AudioMap value: " << audioval << std::endl;
 			}

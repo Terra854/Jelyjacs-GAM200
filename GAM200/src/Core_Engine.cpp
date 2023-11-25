@@ -29,6 +29,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include "Assets Manager/asset_manager.h"
 #include <Scenes.h>
 #include <Camera.h>
+#include <SceneManager.h>
 
 CoreEngine* CORE = NULL;
 
@@ -53,11 +54,11 @@ CoreEngine::CoreEngine()
 	level_size = Vec2(0.0f, 0.0f);
 	start_coord = Vec2(0.0f, 0.0f);
 
-#if defined(DEBUG) | defined(_DEBUG)
+//#if defined(DEBUG) | defined(_DEBUG)
 	paused = true;
-#else
-	paused = false;
-#endif
+//#else
+//	paused = false;
+//#endif
 }
 /******************************************************************************
 * Destructor
@@ -253,7 +254,8 @@ void CoreEngine::GameLoop()
 	gamehud.Initialize();
 
 #if !(defined(DEBUG) | defined(_DEBUG))
-	LoadScene("Asset/Levels/tutorial_level.json");
+	LoadScene("Asset/Levels/level_1.json");
+	SceneManager::PlayScene();
 #endif
 
 	// For dragging objects in level editor

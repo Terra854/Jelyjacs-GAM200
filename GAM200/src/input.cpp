@@ -129,8 +129,8 @@ bool mouse_update()
 	}
 	else
 	{
-		mouse_prevX = mouse.x;
-		mouse_prevY = mouse.y;
+		mouse_prevX = (float) mouse.x;
+		mouse_prevY = (float) mouse.y;
 		return true;
 	}
 }

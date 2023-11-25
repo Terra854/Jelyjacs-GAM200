@@ -238,8 +238,8 @@ void LevelEditor::ObjectProperties() {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
 			{
 				std::cout << "test\n";
-				const std::pair<std::string, GLuint>* object = (const std::pair<std::string, GLuint>*)payload->Data;
-				te->textureName = object->first;
+				const std::pair<std::string, GLuint>* dropped_object = (const std::pair<std::string, GLuint>*)payload->Data;
+				te->textureName = dropped_object->first;
 				ImGui::EndDragDropTarget();
 			}
 		}
@@ -295,18 +295,22 @@ void LevelEditor::ObjectProperties() {
 		if (bo == nullptr)
 			if (ImGui::Selectable("Body")) {
 				object->AddComponent(new Rectangular());
+				UpdateAllObjectInstances(object);
 			}
 
 		if (ph == nullptr)
 			if (ImGui::Selectable("Physics")) {
 				object->AddComponent(new Physics());
+				UpdateAllObjectInstances(object);
 			}
 		if(be == nullptr)
 			if (ImGui::Selectable("Behaviour")) {
 				ImGui::Text("Pick your Behaviour");
 				for (auto it : Logic->behaviours) {
-					if (ImGui::Button(it.first.c_str()))
+					if (ImGui::Button(it.first.c_str())) {
 						object->AddComponent(new Behaviour(0, it.first));
+						UpdateAllObjectInstances(object);
+					}
 				}
 			}
 
@@ -354,10 +358,12 @@ void LevelEditor::ObjectProperties() {
 
 			if (ImGui::BeginPopup("ChangeTexture"))
 			{
+				ImGui::Text("Changes will apply to all instances of %s", object->GetName().c_str());
 				int i = 0;
 				for (const auto& t : AssetManager::textures) {
 					if (ImGui::ImageButton(t.first.c_str(), (void*)(intptr_t)t.second, ImVec2(64, 64))) {
 						te->textureName = t.first;
+						UpdateAllObjectInstances(object);
 					}
 
 					if (((i + 1) % 4))
@@ -377,7 +383,9 @@ void LevelEditor::ObjectProperties() {
 
 			if (ImGui::Button("Delete"))
 			{
-				objectFactory->DeleteComponent(object->GetId(), ComponentType::Texture);
+				objectFactory->DeleteComponent(object, ComponentType::Texture);
+				te = nullptr;
+				UpdateAllObjectInstances(object);
 			}
 			ImGui::PopStyleColor(3);
 		}
@@ -488,6 +496,8 @@ void LevelEditor::ObjectProperties() {
 					Body_EditMode = false;
 					bo->active = edited_active;
 					bo->collision_response = edited_collision_response;
+
+					UpdateAllObjectInstances(object);
 				}
 
 				ImGui::SameLine();
@@ -527,8 +537,9 @@ void LevelEditor::ObjectProperties() {
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete##Body"))
 				{
-					objectFactory->DeleteComponent(object->GetId(), ComponentType::Body);
+					objectFactory->DeleteComponent(object, ComponentType::Body);
 					bo = nullptr;
+					UpdateAllObjectInstances(object);
 				}
 				ImGui::PopStyleColor(3);
 			}
@@ -540,6 +551,7 @@ void LevelEditor::ObjectProperties() {
 
 				if (AABB_EditMode)
 				{
+					ImGui::Text("All values will apply to all instances of %s", object->GetName().c_str());
 					// Display input fields
 					ImGui::InputFloat("AABB Width", &edited_aabb_width);
 					ImGui::InputFloat("AABB Height", &edited_aabb_height);
@@ -550,6 +562,8 @@ void LevelEditor::ObjectProperties() {
 						AABB_EditMode = false;
 						r->width = edited_aabb_width;
 						r->height = edited_aabb_height;
+
+						UpdateAllObjectInstances(object);
 					}
 
 					ImGui::SameLine();
@@ -876,6 +890,7 @@ void LevelEditor::ObjectProperties() {
 			{
 				// Display input fields
 				ImGui::InputFloat2("Velocity", &(edited_velocity.x));
+				ImGui::Text("All values below will apply to all instances of %s", object->GetName().c_str());
 				ImGui::InputFloat("Mass", &(edited_mass));
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
 
@@ -886,6 +901,8 @@ void LevelEditor::ObjectProperties() {
 					ph->Velocity = edited_velocity;
 					ph->Mass = edited_mass;
 					ph->AffectedByGravity = edited_gravity;
+
+					UpdateAllObjectInstances(object);
 				}
 
 				ImGui::SameLine();
@@ -924,8 +941,9 @@ void LevelEditor::ObjectProperties() {
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete##Physics"))
 				{
-					objectFactory->DeleteComponent(object->GetId(), ComponentType::Physics);
+					objectFactory->DeleteComponent(object, ComponentType::Physics);
 					ph = nullptr;
+					UpdateAllObjectInstances(object);
 				}
 				ImGui::PopStyleColor(3);
 			}
@@ -1138,7 +1156,6 @@ void LevelEditor::AssetList()
 		{
 			//i--;
 
-			char buffer[256];
 			sprintf_s(buffer, "##%s", p.first.c_str());
 
 			// Text and images will be in the above layer
@@ -1191,6 +1208,18 @@ void LevelEditor::AssetList()
 				ImVec2 uv1 = { uv0.x + (128.f / (float)width), uv0.y + (128.f / (float)height) };
 
 				ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImVec2(64, 64), uv0, uv1);
+			}
+			// There is neither
+			else {
+				sprintf_s(buffer, "%s#NoTexOrAnim", p.second->GetName().c_str());
+
+				ImGui::BeginChild(buffer, ImVec2(64.f, 64.f));
+
+				ImGui::Text("This object has");
+				ImGui::Text("no texture or");
+				ImGui::Text("animations");
+
+				ImGui::EndChild();
 			}
 
 			// Move to the right of the image without moving to a new line
@@ -1565,6 +1594,111 @@ void LevelEditor::SaveAsDialog() {
 	}
 
 	ImGui::End();
+}
+
+/******************************************************************************
+	UpdateAllObjectInstances
+	- This function will update all instances of the given object
+
+	@param object - The object to reference when updating. All objects with the
+					same name (including prefabs) will be updated
+*******************************************************************************/
+void LevelEditor::UpdateAllObjectInstances(Object* object) {
+	
+	// Do not copy Transform
+	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
+	Body* bo = (Body*)object->GetComponent(ComponentType::Body);
+	Physics* ph = (Physics*)object->GetComponent(ComponentType::Physics);
+	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
+	Event* e = (Event*)object->GetComponent(ComponentType::Event);
+	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
+
+	// Get all instances of the object
+	std::vector<Object*> v = objectFactory->FindAllObjectsByName(object->GetName());
+
+	// Get the prefab too
+	v.push_back(AssetManager::prefabsval(object->GetName() + ".json"));
+
+	for (Object* o : v) {
+		if (o != object) { // Make sure it's not the same object as the reference
+			Texture* o_te = (Texture*)o->GetComponent(ComponentType::Texture);
+			Body* o_bo = (Body*)o->GetComponent(ComponentType::Body);
+			Physics* o_ph = (Physics*)o->GetComponent(ComponentType::Physics);
+			Animation* o_a = (Animation*)o->GetComponent(ComponentType::Animation);
+			Event* o_e = (Event*)o->GetComponent(ComponentType::Event);
+			Behaviour* o_be = (Behaviour*)o->GetComponent(ComponentType::Behaviour);
+
+			// Check to see if a component needs to be deleted
+
+			// Transform object is not supposed to be deleted at this time
+			if (te == nullptr && o_te != nullptr)
+				objectFactory->DeleteComponent(o, ComponentType::Texture);
+			if (bo == nullptr && o_bo != nullptr)
+				objectFactory->DeleteComponent(o, ComponentType::Body);
+			if (ph == nullptr && o_ph != nullptr)
+				objectFactory->DeleteComponent(o, ComponentType::Physics);
+			if (a == nullptr && o_a != nullptr)
+				objectFactory->DeleteComponent(o, ComponentType::Animation);
+			if (e == nullptr && o_e != nullptr)
+				objectFactory->DeleteComponent(o, ComponentType::Event);
+			if (be == nullptr && o_be != nullptr)
+				objectFactory->DeleteComponent(o, ComponentType::Behaviour);
+
+
+			if (bo != nullptr && o_bo == nullptr)
+				o->AddComponent(new Rectangular());
+			if (ph != nullptr && o_ph == nullptr)
+				o->AddComponent(new Physics());
+			if (be != nullptr && o_be == nullptr)
+				o->AddComponent(new Behaviour(be->GetBehaviourIndex(), be->GetBehaviourName()));
+
+			// Check to see if we are not copying the data to components that doesn't exist
+			if (te != nullptr && o_te != nullptr) {
+				o_te->textureName = te->textureName;
+			}
+			if (bo != nullptr && o_bo != nullptr) {
+				// Only copy the collision data. Don't copy the active or collision response flags 
+				if (bo->GetShape() == Shape::Rectangle) {
+					Rectangular* r = (Rectangular*)bo;
+					Rectangular* o_r = (Rectangular*)o_bo;
+
+					o_r->aabb = r->aabb;
+					o_r->width = r->width;
+					o_r->height = r->height;
+
+					o_r->Initialize();
+				}
+				else if (bo->GetShape() == Shape::Circle) {
+					Circular* c = (Circular*)bo;
+					Circular* o_c = (Circular*)o_bo;
+
+					o_c->circle = c->circle;
+				}
+				else if (bo->GetShape() == Shape::Line) {
+					Lines* l = (Lines*)bo;
+					Lines* o_l = (Lines*)o_bo;
+
+					o_l->line = l->line;
+				}
+			}
+			if (ph != nullptr && o_ph != nullptr) {
+				// Do not copy velocity
+				o_ph->AffectedByGravity = ph->AffectedByGravity;
+				o_ph->Mass = ph->Mass;
+			}
+			if (a != nullptr && o_a != nullptr) {
+				o_a->animation_tex_obj = a->animation_tex_obj;
+				o_a->animation_Map = a->animation_Map;
+			}
+			if (e != nullptr && o_e != nullptr) {
+				o_e->linked_event = e->linked_event;
+			}
+			if (be != nullptr && o_be != nullptr) {
+				o_be->SetBehaviourIndex(be->GetBehaviourIndex());
+				o_be->SetBehaviourName(be->GetBehaviourName());
+			}
+		}
+	}
 }
 
 /******************************************************************************

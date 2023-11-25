@@ -578,7 +578,10 @@ std::vector<Object*> Factory::FindAllObjectsByName(std::string name)
 }
 
 void Factory::DeleteComponent(int id, ComponentType c) {
-	Object* o = getObjectWithID(id);
+	DeleteComponent(getObjectWithID(id), c);
+}
+
+void Factory::DeleteComponent(Object* o, ComponentType c) {
 	delete o->Components[c];
 	o->Components.erase(c);
 }

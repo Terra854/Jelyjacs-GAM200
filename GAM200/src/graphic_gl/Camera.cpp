@@ -20,6 +20,7 @@ Camera::Camera() {
 */
 void Camera::Initialize() {
 	scale = { 1.f,1.f };
+	position = { 0.f,0.f };
 }
 
 /*
@@ -51,6 +52,19 @@ void Camera::Update() {
 	world_to_ndc = Mat3Scale(scale.x, scale.y) * Mat3Translate(position.x, position.y);
 	Vec2 window_scaling = {(float)window->width_init/(float)window->width,(float)window->height_init/(float)window->height};
 	world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
+
+}
+
+void Camera::SetCameraScale(Vec2 scale_input)
+{
+	scale.x= scale_input.x/window->width_init;
+	scale.y = scale_input.y/window->height_init;
+}
+
+void Camera::SetCameraPosition(Vec2 position_input)
+{
+	position.x = position_input.x;
+	position.y = position_input.y;
 
 }
 

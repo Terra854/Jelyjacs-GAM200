@@ -32,7 +32,8 @@ class Camera : public ISystems
 	virtual void Initialize();
 	virtual void Update();
 	virtual std::string SystemName() { return "Camera"; }
-
+	void SetCameraScale(Vec2 scale_input);
+	void SetCameraPosition(Vec2 position_input);
 	void SetToPlayer();
 
 	void toggleFreeCam() { free_cam = !free_cam; }
