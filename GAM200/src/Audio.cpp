@@ -8,6 +8,7 @@ This file contains the definitions of the functions that are part of the Audio s
 #include "Audio.h"
 #include "Assets Manager/asset_manager.h"
 #include <Core_Engine.h>
+#include "Assets Manager/json_serialization.h"
 
 Audio* audio = nullptr;
 
@@ -35,22 +36,79 @@ void Audio::Initialize(){
 
     // Let other systems have access to this system
     audio = this;
-}
 
+}
 void Audio::setupSound()
 {
     // Load sounds
-    //system->createSound("Asset/Sounds/Game_Background.wav", FMOD_LOOP_NORMAL, 0, &game_background);
+    std::string soundmap = "Asset/Sounds/sounds.json";
+    
+	// Check if the given file exists
+	JsonSerialization jsonobj;
+	jsonobj.openFileRead(soundmap);
+
+	// Loop through AudioType
+	for (int i = 0; i < AudioType::END; i++)
+	{
+		std::string audio_type;
+		switch (i) // Set audio value based on current AudioType
+		{
+		case AudioType::Background:
+			audio_type = "background";
+			break;
+		case AudioType::Walking:
+			audio_type = "walking";
+			break;
+		case AudioType::Finn_Jumping:
+			audio_type = "finn_jumping";
+			break;
+		case AudioType::Spark_Jumping:
+			audio_type = "spark_jumping";
+			break;
+		case AudioType::Sliding_Door_Open:
+			audio_type = "sliding_door_open";
+			break;
+		default:
+			audio_type = "END";
+			break;
+		}
+
+		AudioType a = static_cast<AudioType>(i);
+
+		// Check if AudioType exist in audiomap json and then update it
+		if (jsonobj.isMember(audio_type))
+		{
+			if (jsonobj.isArray(audio_type))
+			{
+				size_t pos = jsonobj.size(audio_type);
+				std::vector<std::string> audioarr;
+				for (size_t j = 0; j < pos; j++)
+				{
+					std::string audioval;
+					jsonobj.readString(audioval, audio_type, (int)j);
+					audioarr.push_back(audioval);
+					std::cout << "AudioMap arrvalue: " << audioval << std::endl;
+				}
+				AssetManager::updateSoundMap(a, audioarr);
+			}
+			else
+			{
+				std::string audioval;
+				jsonobj.readString(audioval, audio_type);
+				AssetManager::updateSoundMap(a, audioval);
+				std::cout << "AudioMap value: " << audioval << std::endl;
+			}
+		}
+	}
+
+	jsonobj.closeFile();
+
+    // Set the background music
     system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, false, &background);
     background->setVolume(0.2f);
 
-    //system->createSound("Asset/Sounds/Footsteps.wav", FMOD_LOOP_NORMAL, 0, &walking);
     system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Walking), 0, false, &channel);
     channel->setVolume(0.0);
-
-
-    //system->createSound("Asset/Sounds/Jump.wav", FMOD_DEFAULT, 0, &jump);
-    //system->createSound("Asset/Sounds/Sliding_Door_Open.wav", FMOD_DEFAULT, 0, &sliding_door_open);
 }
 
 void Audio::createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound)

@@ -262,6 +262,8 @@ void CoreEngine::GameLoop()
 	static Vec2 offset(NAN, NAN);
 	static bool object_being_moved = false;
 
+	audio->setupSound();
+
 	while (game_active)
 	{
 		auto m_BeginFrame = std::chrono::system_clock::now();

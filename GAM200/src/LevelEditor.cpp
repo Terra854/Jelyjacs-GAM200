@@ -1504,7 +1504,8 @@ void LevelEditor::LoadLevelPanel() {
 			ImGui::TableNextColumn();
 			if (ImGui::Selectable(filename.c_str())) {
 				if (!engine->isPaused())
-					engine->setPause();
+					//engine->setPause();
+					SceneManager::PauseScene();
 				selected = false;
 				objectFactory->destroyAllObjects();
 				SceneManager::ClearInitialObjectMap(true);
