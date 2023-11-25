@@ -12,6 +12,7 @@ This file contains the definition of the functions of GameHud
 #include "Core_Engine.h"
 #include "Assets Manager/json_serialization.h"
 #include "Assets Manager/asset_manager.h"
+#include "SceneManager.h"
 namespace
 {
 	std::string button_tracker;
@@ -83,6 +84,18 @@ void GameHud::Update()
 					camera2D->scale = { 2.0f, 2.0f };
 				}
 				else camera2D->scale = { 1.0f, 1.0f };
+			}
+			else if (button_tracker == "resolution")
+			{
+
+			}
+			else if (button_tracker == "fullscreen")
+			{
+
+			}
+			else if (button_tracker == "restart")
+			{
+				SceneManager::RestartScene();
 			}
 		}
 	
