@@ -94,11 +94,32 @@ void GameHud::Update()
 			}
 			else if (button_tracker == "resolution")
 			{
-
+				switch (window->window_size) {
+					case(Window_size::fullscreen):
+					{
+						window->change_window_size(Window_size::high);
+						break;
+					}
+					case(Window_size::high):
+					{
+						window->change_window_size(Window_size::medium);
+						break;
+					}
+					case(Window_size::medium):
+					{
+						window->change_window_size(Window_size::low);
+						break;
+					}
+					case(Window_size::low):
+					{
+						window->change_window_size(Window_size::high);
+						break;
+					}
+				}
 			}
 			else if (button_tracker == "fullscreen")
 			{
-
+				window->change_window_size_fullscreen();
 			}
 			else if (button_tracker == "restart")
 			{
