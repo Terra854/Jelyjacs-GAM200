@@ -117,7 +117,7 @@ void GameLogic::Update() {
 			counter++;
 		}
 	}
-	if (input::IsPressed(KEY::f1)) {
+	if (input::IsPressed(KEY::one)) {
 		if (!cheat) {
 			std::cout << "Cheat Mode Activated" << std::endl;
 			cheat = true;
@@ -133,11 +133,11 @@ void GameLogic::Update() {
 		Physics* temp_p = static_cast<Physics*>(GameLogic::playerObj->GetComponent(ComponentType::Physics));
 		temp_p->AffectedByGravity = false;
 		static_cast<Body*>(playerObj->GetComponent(ComponentType::Body))->active = false;
-		if (input::IsPressed(KEY::up)) {
-			temp_p->Velocity.y = -1000.0f;
+		if (input::IsPressed(KEY::w)) {
+			temp_p->Velocity.y = 300.00f;
 		}
-		if (input::IsPressed(KEY::down)) {
-			temp_p->Velocity.y = 1000.0f;
+		if (input::IsPressed(KEY::s)) {
+			temp_p->Velocity.y = -300.0f;
 		}
 	}
 	else {
