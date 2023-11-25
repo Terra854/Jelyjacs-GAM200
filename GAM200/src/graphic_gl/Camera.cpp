@@ -20,6 +20,7 @@ Camera::Camera() {
 */
 void Camera::Initialize() {
 	scale = { 1.f,1.f };
+	position = { 0.f,0.f };
 }
 
 /*
@@ -62,6 +63,13 @@ void Camera::SetCameraScale(Vec2 scale_input)
 {
 	scale.x= scale_input.x/window->width_init;
 	scale.y = scale_input.y/window->height_init;
+}
+
+void Camera::SetCameraPosition(Vec2 position_input)
+{
+	position.x = position_input.x;
+	position.y = position_input.y;
+
 }
 
 /*
