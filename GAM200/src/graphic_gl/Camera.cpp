@@ -51,10 +51,6 @@ void Camera::Update() {
 
 	world_to_ndc = Mat3Scale(scale.x, scale.y) * Mat3Translate(position.x, position.y);
 	Vec2 window_scaling = {(float)window->width_init/(float)window->width,(float)window->height_init/(float)window->height};
-	std::cout<<"window scaling:"<<std::endl;
-	std::cout<<window_scaling.x<<" "<<window_scaling.y<<std::endl;
-	std::cout<<"scale:"<<std::endl;
-	std::cout<<scale.x<<" "<<scale.y<<std::endl;
 	world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
 
 }
