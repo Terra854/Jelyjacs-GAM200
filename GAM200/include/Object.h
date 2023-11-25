@@ -54,7 +54,7 @@ private:
 
 	//A unique id for each object used to safely reference 
 	//Objects.
-	long ObjectId;
+	long ObjectId = -1;
 
 	//A unique name for each object used to name objects
 	std::string name;
