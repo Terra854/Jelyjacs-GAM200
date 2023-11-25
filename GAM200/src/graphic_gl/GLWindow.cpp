@@ -245,9 +245,9 @@ void GLWindow::ChangeWindowMode()
     }
 }
 
-void GLWindow::window_iconify_callback(GLFWwindow* window, int iconified)
+void GLWindow::window_iconify_callback(GLFWwindow* w, int iconified)
 {
-    (void)window;
+    (void)w;
     if (iconified)
 	{
 		// The window was iconified

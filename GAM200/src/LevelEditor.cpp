@@ -238,8 +238,8 @@ void LevelEditor::ObjectProperties() {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
 			{
 				std::cout << "test\n";
-				const std::pair<std::string, GLuint>* object = (const std::pair<std::string, GLuint>*)payload->Data;
-				te->textureName = object->first;
+				const std::pair<std::string, GLuint>* dropped_object = (const std::pair<std::string, GLuint>*)payload->Data;
+				te->textureName = dropped_object->first;
 				ImGui::EndDragDropTarget();
 			}
 		}
@@ -1156,7 +1156,6 @@ void LevelEditor::AssetList()
 		{
 			//i--;
 
-			char buffer[256];
 			sprintf_s(buffer, "##%s", p.first.c_str());
 
 			// Text and images will be in the above layer
