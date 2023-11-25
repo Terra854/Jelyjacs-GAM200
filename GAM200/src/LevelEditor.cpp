@@ -18,6 +18,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <PhysicsSystem.h>
 #include <Vec4.h>
 #include <components/Event.h>
+#include <SceneManager.h>
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -43,7 +44,7 @@ LevelEditor::LevelEditor() {
 LevelEditor::~LevelEditor() {
 	delete editor_grid;
 
-	ClearLevelEditorObjectMap(true);
+	SceneManager::ClearInitialObjectMap(true);
 }
 
 /******************************************************************************
@@ -1271,6 +1272,7 @@ void LevelEditor::PlayPauseGame() {
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
+			/*
 			if (initialObjectMap.empty()) {
 				for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
 					initialObjectMap[p.first] = objectFactory->cloneObject(p.second);
@@ -1278,11 +1280,14 @@ void LevelEditor::PlayPauseGame() {
 			}
 
 			engine->setPause();
+			*/
+			SceneManager::PlayScene();
 		}
 	}
 	else {
 		if (ImGui::Button("Pause"))
-			engine->setPause();
+			//engine->setPause();
+			SceneManager::PauseScene();
 	}
 
 	ImGui::EndDisabled();
@@ -1299,9 +1304,10 @@ void LevelEditor::PlayPauseGame() {
 	}*/
 
 
-	ImGui::BeginDisabled(!engine->isPaused() || initialObjectMap.empty());
+	ImGui::BeginDisabled(!engine->isPaused() || SceneManager::IsInitialObjectMapEmpty());
 
 	if (ImGui::Button("Reset")) {
+		/*
 		objectFactory->destroyAllObjects();
 
 		for (const std::pair<int, Object*>& p : initialObjectMap) {
@@ -1311,11 +1317,8 @@ void LevelEditor::PlayPauseGame() {
 		ClearLevelEditorObjectMap(false);
 
 		Logic->playerObj = objectFactory->getPlayerObject();
-
-		// Break here, cause otherwise the next line will be EndDisabled()
-		// which will cause an abort() due to mismatch 
-		//ImGui::End();
-		//return;
+		*/
+		SceneManager::RestartScene();
 	}
 
 	/*
@@ -1341,6 +1344,7 @@ void LevelEditor::PlayPauseGame() {
 	@param deleteObjects - Whether to delete the objects itself. false is for only
 						   if transferring the objects to the main object map
 *******************************************************************************/
+/*
 void LevelEditor::ClearLevelEditorObjectMap(bool deleteObjects) {
 
 	if (deleteObjects) {
@@ -1352,7 +1356,7 @@ void LevelEditor::ClearLevelEditorObjectMap(bool deleteObjects) {
 	}
 
 	initialObjectMap.clear();
-}
+}*/
 
 /******************************************************************************
 	CameraControl
@@ -1474,7 +1478,7 @@ void LevelEditor::LoadLevelPanel() {
 					engine->setPause();
 				selected = false;
 				objectFactory->destroyAllObjects();
-				level_editor->ClearLevelEditorObjectMap(true);
+				SceneManager::ClearInitialObjectMap(true);
 				LoadScene(path + filename.c_str());
 			}
 		}
@@ -1542,7 +1546,7 @@ void LevelEditor::SaveAsDialog() {
 				objectFactory->assignIdToObject(p.second);
 			}
 
-			ClearLevelEditorObjectMap(false);
+			SceneManager::ClearInitialObjectMap(false);
 		}
 
 		char saveLocation[110];
@@ -1749,7 +1753,7 @@ void LevelEditor::Update() {
 						objectFactory->assignIdToObject(p.second);
 					}
 
-					ClearLevelEditorObjectMap(false);
+					SceneManager::ClearInitialObjectMap(false);
 				}
 				
 				SaveScene(engine->loaded_filename.c_str());
