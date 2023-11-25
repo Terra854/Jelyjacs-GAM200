@@ -77,6 +77,7 @@ public:
 
 	friend class PhysicsSystem; // Needed to apply physics onto each object
 	friend class LevelEditor; // Needed for the level editor
+	friend class SceneManager; // Needed for SceneMahaer to make a copy of the level's initial state 
 
 private:
 	//ID to assign to the next game object created

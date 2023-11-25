@@ -36,7 +36,8 @@ Object* MovingPlatform;
 Object* dynamic_collision;
 bool moving_platform_direction = false;
 
-
+bool one_time = false;
+bool cheat = false;
 
 GameLogic::GameLogic() {
 	Logic = this;
@@ -100,20 +101,50 @@ void GameLogic::Update() {
 	// Do not update if the game is paused
 	if (engine->isPaused())
 		return;
-
+	int counter = 0;
 	for (auto& iter : behaviourComponents) {
 		//Check if the object is the player
-		if ((GameLogic::playerObj != nullptr) && (iter->GetBehaviourName() == static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName())) {
+		if (GameLogic::playerObj != nullptr && GameLogic::playerObj->GetComponent(ComponentType::Behaviour) != nullptr) {
+			if (iter->GetBehaviourName() == static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName()) {
 				behaviours[iter->GetBehaviourName()]->Update(GameLogic::playerObj);
-		}
-		else {
-			// Update the behaviour
-			for (auto it : objectFactory->FindAllObjectsByName(iter->GetOwner()->GetName())) {
-				behaviours[iter->GetBehaviourName()]->Update(it);
+				counter++;
+				continue;
 			}
 		}
+		// Update all other objects
+		for (auto it : objectFactory->FindAllObjectsByName(iter->GetOwner()->GetName())) {
+			behaviours[iter->GetBehaviourName()]->Update(it);
+			counter++;
+		}
 	}
-	
+	if (input::IsPressed(KEY::one)) {
+		if (!cheat) {
+			std::cout << "Cheat Mode Activated" << std::endl;
+			cheat = true;
+		}
+		else {
+			std::cout << "Cheat Mode Deactivated" << std::endl;
+			cheat = false;
+		
+		}
+	}
+
+	if (cheat) {
+		Physics* temp_p = static_cast<Physics*>(GameLogic::playerObj->GetComponent(ComponentType::Physics));
+		temp_p->AffectedByGravity = false;
+		static_cast<Body*>(playerObj->GetComponent(ComponentType::Body))->active = false;
+		if (input::IsPressed(KEY::w)) {
+			temp_p->Velocity.y = 300.00f;
+		}
+		if (input::IsPressed(KEY::s)) {
+			temp_p->Velocity.y = -300.0f;
+		}
+	}
+	else {
+		static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
+		static_cast<Body*>(playerObj->GetComponent(ComponentType::Body))->active = true;
+	}
+	//std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
 		std::cout << "Mouse Position is :  X = " << input::GetMouseX() << ", Y = " << input::GetMouseY() << std::endl;

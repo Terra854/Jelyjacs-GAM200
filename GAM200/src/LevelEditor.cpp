@@ -18,6 +18,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <PhysicsSystem.h>
 #include <Vec4.h>
 #include <components/Event.h>
+#include <SceneManager.h>
 
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
@@ -27,6 +28,8 @@ bool dock_space = true; // Always must be on for level editor
 
 ImGuiStyle* style;
 ImFont* font;
+
+char buffer[256];
 
 /******************************************************************************
 	Default Constructor for LevelEditor
@@ -41,7 +44,7 @@ LevelEditor::LevelEditor() {
 LevelEditor::~LevelEditor() {
 	delete editor_grid;
 
-	ClearLevelEditorObjectMap(true);
+	SceneManager::ClearInitialObjectMap(true);
 }
 
 /******************************************************************************
@@ -150,7 +153,6 @@ static bool edited_gravity;
 void LevelEditor::ObjectProperties() {
 
 	ImGui::SetNextWindowSize(ImVec2(450, 0));
-	char buffer[100];
 
 	ImGui::Begin("Object Properties");
 
@@ -282,7 +284,7 @@ void LevelEditor::ObjectProperties() {
 	ImGui::SameLine();
 
 	if (ImGui::Button("Add Component")) {
-		if (bo == nullptr || ph == nullptr)
+		if (bo == nullptr || ph == nullptr || be == nullptr)
 			ImGui::OpenPopup("AddComponent");
 		else
 			ImGui::OpenPopup("NoComponentsToAdd");
@@ -298,6 +300,14 @@ void LevelEditor::ObjectProperties() {
 		if (ph == nullptr)
 			if (ImGui::Selectable("Physics")) {
 				object->AddComponent(new Physics());
+			}
+		if(be == nullptr)
+			if (ImGui::Selectable("Behaviour")) {
+				ImGui::Text("Pick your Behaviour");
+				for (auto it : Logic->behaviours) {
+					if (ImGui::Button(it.first.c_str()))
+						object->AddComponent(new Behaviour(0, it.first));
+				}
 			}
 
 		ImGui::EndPopup();
@@ -941,6 +951,21 @@ void LevelEditor::ObjectProperties() {
 		if (ImGui::CollapsingHeader("Behaviour")) {
 			ImGui::Text("Script Name : %s", be->GetBehaviourName().c_str());
 			ImGui::Text("Script Index : %d", be->GetBehaviourIndex());
+			if (ImGui::CollapsingHeader("Change Scripts")) {
+				ImGui::OpenPopup("Select Scripts");
+				for (auto& it : Logic->behaviours)
+					if (ImGui::Selectable(it.first.c_str())) {
+						be->SetBehaviourName(it.first);
+					}
+
+			}
+			/*if (ImGui::Button("Delete Behaviour"))
+			{
+				Logic->RemoveBehaviourComponent(be);
+				objectFactory->DeleteComponent(object->GetId(), ComponentType::Behaviour);
+				be = nullptr;
+				std::cout << "Updated Map Size : " << Logic->behaviourComponents.size() << std::endl;
+			}*/
 		}
 	}
 
@@ -1069,7 +1094,6 @@ void LevelEditor::AssetList()
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) 
 			{
-				char buffer[256];
 				sprintf_s(buffer, "##%s", t.first.c_str());
 
 				// Start the invisible button
@@ -1190,6 +1214,46 @@ void LevelEditor::AssetList()
 		ImGui::PopStyleColor();
 		ImGui::EndTabItem();
 	}
+	if (ImGui::BeginTabItem("Audio"))
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+		for (const auto& audioPair : AssetManager::soundMapping)
+		{
+			std::string AudioTypeString;
+
+			switch (audioPair.first) {
+			case AudioType::Background:
+				AudioTypeString = "Background";
+				break;
+			case AudioType::Finn_Jumping:
+				AudioTypeString = "Finn_Jumping";
+				break;
+			case AudioType::Sliding_Door_Open:
+				AudioTypeString = "Sliding_Door_Open";
+				break;
+			case AudioType::Spark_Jumping:
+				AudioTypeString = "Spark_Jumping";
+				break;
+			case AudioType::Walking:
+				AudioTypeString = "Walking";
+				break;
+			}
+
+			if (ImGui::TreeNode(AudioTypeString.c_str())) {
+				if (std::holds_alternative<std::string>(audioPair.second)) {
+					ImGui::Text(std::get<std::string>(audioPair.second).c_str());
+				}
+				else {
+					std::vector<std::string> v = std::get<std::vector<std::string>>(audioPair.second);
+					for (const std::string& s : v)
+						ImGui::Text(s.c_str());
+				}
+				ImGui::TreePop();
+			}
+		}
+		ImGui::PopStyleColor();
+		ImGui::EndTabItem();
+	}
 	ImGui::EndTabBar();
 	ImGui::End();
 }
@@ -1208,6 +1272,7 @@ void LevelEditor::PlayPauseGame() {
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
+			/*
 			if (initialObjectMap.empty()) {
 				for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
 					initialObjectMap[p.first] = objectFactory->cloneObject(p.second);
@@ -1215,11 +1280,14 @@ void LevelEditor::PlayPauseGame() {
 			}
 
 			engine->setPause();
+			*/
+			SceneManager::PlayScene();
 		}
 	}
 	else {
 		if (ImGui::Button("Pause"))
-			engine->setPause();
+			//engine->setPause();
+			SceneManager::PauseScene();
 	}
 
 	ImGui::EndDisabled();
@@ -1236,9 +1304,10 @@ void LevelEditor::PlayPauseGame() {
 	}*/
 
 
-	ImGui::BeginDisabled(!engine->isPaused() || initialObjectMap.empty());
+	ImGui::BeginDisabled(!engine->isPaused() || SceneManager::IsInitialObjectMapEmpty());
 
 	if (ImGui::Button("Reset")) {
+		/*
 		objectFactory->destroyAllObjects();
 
 		for (const std::pair<int, Object*>& p : initialObjectMap) {
@@ -1248,11 +1317,8 @@ void LevelEditor::PlayPauseGame() {
 		ClearLevelEditorObjectMap(false);
 
 		Logic->playerObj = objectFactory->getPlayerObject();
-
-		// Break here, cause otherwise the next line will be EndDisabled()
-		// which will cause an abort() due to mismatch 
-		//ImGui::End();
-		//return;
+		*/
+		SceneManager::RestartScene();
 	}
 
 	/*
@@ -1278,6 +1344,7 @@ void LevelEditor::PlayPauseGame() {
 	@param deleteObjects - Whether to delete the objects itself. false is for only
 						   if transferring the objects to the main object map
 *******************************************************************************/
+/*
 void LevelEditor::ClearLevelEditorObjectMap(bool deleteObjects) {
 
 	if (deleteObjects) {
@@ -1289,7 +1356,7 @@ void LevelEditor::ClearLevelEditorObjectMap(bool deleteObjects) {
 	}
 
 	initialObjectMap.clear();
-}
+}*/
 
 /******************************************************************************
 	CameraControl
@@ -1411,7 +1478,7 @@ void LevelEditor::LoadLevelPanel() {
 					engine->setPause();
 				selected = false;
 				objectFactory->destroyAllObjects();
-				level_editor->ClearLevelEditorObjectMap(true);
+				SceneManager::ClearInitialObjectMap(true);
 				LoadScene(path + filename.c_str());
 			}
 		}
@@ -1479,7 +1546,7 @@ void LevelEditor::SaveAsDialog() {
 				objectFactory->assignIdToObject(p.second);
 			}
 
-			ClearLevelEditorObjectMap(false);
+			SceneManager::ClearInitialObjectMap(false);
 		}
 
 		char saveLocation[110];
@@ -1686,7 +1753,7 @@ void LevelEditor::Update() {
 						objectFactory->assignIdToObject(p.second);
 					}
 
-					ClearLevelEditorObjectMap(false);
+					SceneManager::ClearInitialObjectMap(false);
 				}
 				
 				SaveScene(engine->loaded_filename.c_str());

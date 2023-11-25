@@ -47,7 +47,7 @@ void Player::Update(Object* obj) {
 		//if (static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 		if (player_physics->Velocity.y == 0.0f) {
 			//player_physics->Velocity.y = 1000.0f;
-			player_physics->Force = 60000.0f + gravity;
+			player_physics->Force = 85000.0f;
 			//audio->playJump();
 			std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 			

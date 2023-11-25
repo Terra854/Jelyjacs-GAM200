@@ -12,14 +12,15 @@ This file contains the class definitions that is used to run the game
 #include <glapp.h>
 #include <GLWindow.h>
 #include <PhysicsSystem.h>
+#include <LevelEditor.h>
+#include <ThreadPool.h>
+#include <SceneManager.h>
 
 #include <debug.h>
 #include <GameLogic.h>
 #include <Audio.h>
 #include <Font.h>
 #include <Camera.h>
-#include <LevelEditor.h>
-#include <ThreadPool.h>
 #include <../src/Assets Manager/asset_manager.h>
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
@@ -64,6 +65,7 @@ void Application::Init() {
 	Factory* factory = new Factory();
 	PhysicsSystem* physics = new PhysicsSystem();
 	AssetManager* assetmanager = new AssetManager();
+	sceneManager = new SceneManager();
 	audio = new Audio(); // declared in Audio.h
 	Logic = new GameLogic(); // declared in GameLogic.h
 	font = new Font();
@@ -77,6 +79,7 @@ void Application::Init() {
 	engine->AddSystem(thread_pool);
 	engine->AddSystem(audio);
 	engine->AddSystem(assetmanager);
+	engine->AddSystem(sceneManager);
 	engine->AddSystem(Logic);
 	engine->AddSystem(factory);
 	engine->AddSystem(physics);

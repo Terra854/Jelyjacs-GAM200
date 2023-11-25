@@ -36,6 +36,8 @@ void LoadScene(std::string filename)
 	std::string soundmap = "Asset/Sounds/sounds.json";
 	linkSoundMap(soundmap);
 
+	audio->setupSound();
+
 	Vec2 start_coord;
 	jsonobj.readFloat(start_coord.x, "Size", "startX");
 	jsonobj.readFloat(start_coord.y, "Size", "startY");

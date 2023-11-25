@@ -32,8 +32,8 @@ public:
 	void startWalking();
 	void stopWalking();
 	void playSfx(AudioType a);
-	void playJump();
-	void playSlidingDoor();
+	void setBackgroundAudio();
+	void setWalkingAudio();
 private:
 	FMOD::System* system;
 	FMOD::Channel *background, *channel, *sfx;

@@ -56,8 +56,23 @@ void AssetManager::Initialize()
 	else
 		std::cout << pathanimations << " does not exist!" << std::endl;
 
-	// Load the placeholder for missing textures
-	missing_texture = GLApp::setup_texobj("Asset/missing_texture.png");
+	// Create a placeholder for missing textures
+	glGenTextures(1, &AssetManager::missing_texture);
+	glBindTexture(GL_TEXTURE_2D, AssetManager::missing_texture);
+
+	int width = 128;  // Texture width
+	int height = 128; // Texture height
+	GLubyte* blackData = new GLubyte[width * height * 3]; // 3 for RGB
+	memset(blackData, 0, width * height * 3 * sizeof(GLubyte));
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, blackData);
+
+	delete[] blackData;
 
 	// Create a list of object prefabs, that will be used for scene loading
 	if (std::filesystem::exists(objectprefabs))
@@ -182,7 +197,6 @@ void AssetManager::loadsounds()
 			}
 		}
 	}
-	audio->setupSound();
 }
 
 void AssetManager::clearsounds()

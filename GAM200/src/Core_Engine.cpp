@@ -209,7 +209,6 @@ void CoreEngine::GameLoop()
 
 	//ImGuiIO& io = hud.StartGui();
 
-	bool debug_gui_active = true;
 	bool show_performance_viewer = true;
 	//bool objectProperties = false;
 	//bool tempstorage = 1;
@@ -376,7 +375,7 @@ void CoreEngine::GameLoop()
 			ImVec2 clickPos = ImGui::GetMousePos();
 			ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
 			ImVec2 displayPos(relativePos.x / displaySize.x * 1920, 1080 - (relativePos.y / displaySize.y * 1080)); // Hardcoded to 1920x1080 as other resolutions bugged for now
-			ImVec2 openGlDisplayCoord(displayPos.x - (1920 / 2), displayPos.y - (1080 / 2));
+			ImVec2 openGlDisplayCoord((displayPos.x - (1920 / 2)) / camera2D->scale.x, (displayPos.y - (1080 / 2)) / camera2D->scale.y);
 
 			// Camera is stationary, it's the scene that is moving, so inverse pos
 			// Also, need to divide camera coord by 2 
