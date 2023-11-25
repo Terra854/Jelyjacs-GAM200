@@ -229,6 +229,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Scenes.cpp" />
+    <ClCompile Include="src\Scripts\CatPortal.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
     <ClCompile Include="src\Scripts\Player.cpp" />
@@ -282,6 +283,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\PhysicsSystem.h" />
     <ClInclude Include="include\SceneManager.h" />
     <ClInclude Include="include\Scenes.h" />
+    <ClInclude Include="include\Scripts\CatPortal.h" />
     <ClInclude Include="include\Scripts\Endpoint.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
     <ClInclude Include="include\Scripts\Player.h" />

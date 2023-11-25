@@ -14,14 +14,6 @@
       }
     },
     {
-      "Type": "Body",
-      "Shape": "Rectangle",
-      "Properties": {
-        "width": 64.0,
-        "height": 64.0
-      }
-    },
-    {
       "Type": "Animation",
       "Properties": {
         "texturepath": "CatTeleport.png",
@@ -34,6 +26,13 @@
       "Type": "Event",
       "Properties": {
         "linkedevent" : 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "CatPortal",
+        "Index": 0
       }
     }
   ]
