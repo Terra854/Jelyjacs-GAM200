@@ -1301,21 +1301,11 @@ void LevelEditor::PlayPauseGame() {
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
-			/*
-			if (initialObjectMap.empty()) {
-				for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
-					initialObjectMap[p.first] = objectFactory->cloneObject(p.second);
-				}
-			}
-
-			engine->setPause();
-			*/
 			SceneManager::PlayScene();
 		}
 	}
 	else {
 		if (ImGui::Button("Pause"))
-			//engine->setPause();
 			SceneManager::PauseScene();
 	}
 
@@ -1323,69 +1313,17 @@ void LevelEditor::PlayPauseGame() {
 
 	ImGui::SameLine();
 
-	/*
-	if (!engine->isPaused() || initialObjectMap.empty()) {
-		// Make the button look disabled by reducing its alpha
-		//ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-
-		// Make the button unclickable
-		ImGui::BeginDisabled(true);
-	}*/
-
 
 	ImGui::BeginDisabled(!engine->isPaused() || SceneManager::IsInitialObjectMapEmpty());
 
 	if (ImGui::Button("Reset")) {
-		/*
-		objectFactory->destroyAllObjects();
-
-		for (const std::pair<int, Object*>& p : initialObjectMap) {
-			objectFactory->assignIdToObject(p.second);
-		}
-
-		ClearLevelEditorObjectMap(false);
-
-		Logic->playerObj = objectFactory->getPlayerObject();
-		*/
 		SceneManager::RestartScene();
 	}
 
-	/*
-	if (!engine->isPaused() || initialObjectMap.empty()) {
-		// End the disabled section
-		ImGui::EndDisabled();
-
-		// Restore original style
-		//ImGui::PopStyleVar();
-	}*/
-
 	ImGui::EndDisabled();
-
 
 	ImGui::End();
 }
-
-/******************************************************************************
-	ClearLevelEditorObjectMap
-	- Used to clear the copy of the object map in the level editor used to backup
-	  the level's initial state
-
-	@param deleteObjects - Whether to delete the objects itself. false is for only
-						   if transferring the objects to the main object map
-*******************************************************************************/
-/*
-void LevelEditor::ClearLevelEditorObjectMap(bool deleteObjects) {
-
-	if (deleteObjects) {
-		Factory::objectIDMap::iterator it = initialObjectMap.begin();
-		for (; it != initialObjectMap.end(); ++it)
-		{
-			delete it->second;
-		}
-	}
-
-	initialObjectMap.clear();
-}*/
 
 /******************************************************************************
 	CameraControl
@@ -1409,8 +1347,6 @@ void CameraControl() {
 	}
 
 	if (!camera2D->isFreeCamEnabled()) {
-		// Make the button look disabled by reducing its alpha
-		//ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 
 		// Make the button unclickable
 		ImGui::BeginDisabled(true);
@@ -1912,7 +1848,6 @@ void LevelEditor::Update() {
 
 	showUniformGrid ? DebugUniformGrid() : DoNothing();
 
-	//showPerformanceInfo ? DebugPerformanceViewer() : DoNothing();
 	DebugPerformanceViewer();
 
 	ListOfObjects();
