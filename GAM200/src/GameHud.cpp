@@ -21,6 +21,8 @@ namespace
 std::vector<Button> Buttons;
 std::map <std::string, int> index;
 
+bool restarted = false;
+
 int menu_index = 0;
 int number_of_buttons = 0;
 
@@ -74,9 +76,14 @@ void GameHud::Update()
 	
 	if ((input::IsPressed(KEY::mouseL) && button_tracker != "nil"))
 		{
-			if (button_tracker == "pause" || button_tracker == "resume")
+			if (button_tracker == "pause")
 			{
-				engine->setPause();
+				SceneManager::PauseScene();
+			}
+			else if (button_tracker == "resume")
+			{
+				SceneManager::PlayScene();
+				restarted = false;
 			}
 			else if (button_tracker == "zoom")
 			{
@@ -95,7 +102,11 @@ void GameHud::Update()
 			}
 			else if (button_tracker == "restart")
 			{
-				SceneManager::RestartScene();
+				if (!restarted)
+				{
+					SceneManager::RestartScene();
+					restarted = true;
+				}
 			}
 		}
 	
