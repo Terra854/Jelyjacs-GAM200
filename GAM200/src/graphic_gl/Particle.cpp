@@ -8,6 +8,7 @@ Partical system using instancing rendering.
 *//*__________________________________________________________________________*/
 #include "Particle.h"
 
+/*  _________________________________________________________________________ */
 /*
 * init the particle system
 * set position for each particle
@@ -68,6 +69,8 @@ void ParticleSystem::Init()
 
     particle_texture = GLApp::setup_texobj("Asset/Picture/particle.png");
 }
+
+/*  _________________________________________________________________________ */
 /*
 * update the particle system
 * get the player's position
@@ -113,6 +116,7 @@ void ParticleSystem::Update()
     
 }
 
+/*  _________________________________________________________________________ */
 /*
 * draw the particle system
 * use instancing rendering
@@ -135,6 +139,7 @@ void ParticleSystem::Draw()
    
 }
 
+/*  _________________________________________________________________________ */
 /*
 * free the particle system
 */
