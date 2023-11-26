@@ -1301,8 +1301,8 @@ void LevelEditor::AssetList()
 void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
-	// Make the buttons unclickable if a level is not loaded
-	ImGui::BeginDisabled(engine->loaded_level.empty());
+	// Make the buttons unclickable if Finn or Spark are not inside 
+	ImGui::BeginDisabled(objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr);
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
