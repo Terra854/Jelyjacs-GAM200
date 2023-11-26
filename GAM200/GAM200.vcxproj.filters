@@ -70,6 +70,9 @@
     <Filter Include="Header Files\Scripts">
       <UniqueIdentifier>{2d6feff4-7212-4378-ba62-9ccb577ee8fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{19f1a132-fce9-4d57-9178-de5d9ed0ef81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mat3.cpp">
@@ -126,9 +129,6 @@
     <ClCompile Include="src\Assets Manager\asset_manager.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
-    <ClCompile Include="src\Body.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphic_gl\Camera.cpp">
       <Filter>Source Files\Systems\Graphics</Filter>
     </ClCompile>
@@ -174,12 +174,6 @@
     <ClCompile Include="src\Assets Manager\json_serialization.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
-    <ClCompile Include="src\Animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Behaviour.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphic_gl\Particle.cpp">
       <Filter>Source Files\Systems\Graphics</Filter>
     </ClCompile>
@@ -218,6 +212,12 @@
     </ClCompile>
     <ClCompile Include="src\Scripts\Finn.cpp">
       <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Body.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
