@@ -1807,8 +1807,6 @@ void LevelEditor::Update() {
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	}
 
-	ImGui::ShowDemoWindow();
-
 	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
