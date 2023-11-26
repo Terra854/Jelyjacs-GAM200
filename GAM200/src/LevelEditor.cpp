@@ -323,17 +323,18 @@ void LevelEditor::ObjectProperties() {
 
 	ImGui::SameLine();
 
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-	if (ImGui::Button("Delete Object"))
-	{
-		objectFactory->destroyObject(object);
-		selectedNum = -1;
-		selected = false;
+	if (selectedNum >= 0) {
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+		if (ImGui::Button("Delete Object"))
+		{
+			objectFactory->destroyObject(object);
+			selectedNum = -1;
+			selected = false;
+		}
+		ImGui::PopStyleColor(3);
 	}
-	ImGui::PopStyleColor(3);
-
 	ImGui::EndChild();
 	ImGui::BeginChild("ObjectPropertiesScroll", ImGui::GetContentRegionAvail());
 	// Texture
@@ -1873,6 +1874,12 @@ void LevelEditor::Update() {
 	save_as_dialog ? SaveAsDialog() : DoNothing();
 
 	ImGui::PopFont();
+
+	if (input::IsPressed(KEY::del) && selectedNum >= 0) {
+		objectFactory->destroyObject(objectFactory->getObjectWithID(selectedNum));
+		selectedNum = -1;
+		selected = false;
+	}
 }
 
 /************************************LEVEL EDITOR GRID************************************/
