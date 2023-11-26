@@ -36,6 +36,7 @@ public:
 	void playSfx(AudioType a);
 	void setBackgroundAudio();
 	void setWalkingAudio();
+	void restartBackgroundAudio();
 private:
 	FMOD::System* system;
 	FMOD::Channel *background, *channel, *sfx;

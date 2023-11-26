@@ -110,7 +110,7 @@ void Audio::setupSound()
 	jsonobj.closeFile();
 
     // Set the background music
-    system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, false, &background);
+    system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, true, &background);
     background->setVolume(0.2f);
 
     system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Walking), 0, false, &channel);
@@ -143,10 +143,16 @@ void Audio::playSfx(AudioType a) {
 
 void Audio::setBackgroundAudio() {
     system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, false, &background);
-    sfx->setVolume(0.2f);
+	background->setVolume(0.2f);
 }
 
 void Audio::setWalkingAudio() {
     system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Walking), 0, false, &channel);
     channel->setVolume(0.0);
+}
+
+void Audio::restartBackgroundAudio() {
+	background->stop();
+	system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, true, &background);
+	background->setVolume(0.2f);
 }

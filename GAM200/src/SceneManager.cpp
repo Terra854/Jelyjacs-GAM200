@@ -48,6 +48,7 @@ RestartScene
 *******************************************************************************/
 void SceneManager::RestartScene() {
 	audio->stopWalking();
+	audio->restartBackgroundAudio();
 
 	objectFactory->destroyAllObjects();
 
