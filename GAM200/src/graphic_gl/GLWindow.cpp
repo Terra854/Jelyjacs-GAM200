@@ -126,7 +126,7 @@ void GLWindow::Initialize() {
         std::cerr << "Driver doesn't support OpenGL 4.5 - abort program" << std::endl;
         return;
     }
-    window_size = Window_size::high;
+    window_size = Window_size::fullscreen;
     monitor = glfwGetPrimaryMonitor();
     originalMode = glfwGetVideoMode(monitor);
     glfwGetWindowPos(ptr_window, &originalX, &originalY);
@@ -289,6 +289,7 @@ The error callback receives a human-readable description of the error and
 */
 void GLWindow::error_cb(int error, char const* description) {
     (void)error;
+    (void)description;
 #ifdef _DEBUG
     std::cerr << "GLFW error: " << description << std::endl;
 #endif
