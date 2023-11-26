@@ -978,12 +978,13 @@ void LevelEditor::ObjectProperties() {
 					}
 
 			}
-			/*if (ImGui::Button("Delete Behaviour"))
+			if (ImGui::Button("Delete Behaviour"))
 			{
 				Logic->RemoveBehaviourComponent(be);
 				objectFactory->DeleteComponent(object->GetId(), ComponentType::Behaviour);
 				std::cout << "Updated Map Size : " << Logic->behaviourComponents.size() << std::endl;
-			}*/
+				UpdateAllObjectInstances(object);
+			}
 		}
 	}
 

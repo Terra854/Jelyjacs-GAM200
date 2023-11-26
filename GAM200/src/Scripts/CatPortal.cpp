@@ -37,10 +37,12 @@ void CatPortal::Update(Object* obj) {
 			Object* temp_obj = objectFactory->getObjectWithID((long)i);
 			if (temp_obj == nullptr)
 				return;
-			if (temp_obj->GetName() == "CatTeleport" && temp_obj != obj)
-			{
-				otherCatPortal = temp_obj;
-				otherCatPortal_t = static_cast<Transform*>(otherCatPortal->GetComponent(ComponentType::Transform));
+			if (static_cast<Behaviour*>(temp_obj->GetComponent(ComponentType::Behaviour)) != nullptr) {
+				if (static_cast<Behaviour*>(temp_obj->GetComponent(ComponentType::Behaviour))->GetBehaviourName() == "CatPortal" && temp_obj != obj)
+				{
+					otherCatPortal = temp_obj;
+					otherCatPortal_t = static_cast<Transform*>(otherCatPortal->GetComponent(ComponentType::Transform));
+				}
 			}
 		}
 		if (player_t == nullptr || catPortal_t == nullptr) {
@@ -79,8 +81,10 @@ void CatPortal::Update(Object* obj) {
 			
 		}
 		else {
-			catPortal_animation->fixed = false;
-			catPortal_animation->current_type = AnimationType::Idle;
+			if (catPortal_animation != nullptr) {
+				catPortal_animation->fixed = false;
+				catPortal_animation->current_type = AnimationType::Idle;
+			}
 			justTeleported = false;
 		}
 		
