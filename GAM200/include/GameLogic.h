@@ -27,8 +27,9 @@ public:
 	void Update();
 	//void Exit();
 	void AddBehaviour(std::string name, LogicScript* behaviour);
-	void AddBehaviourComponent(Behaviour* behaviour) {
-		behaviourComponents.push_back(behaviour);
+	void AddBehaviourComponent(Behaviour* behaviour_comp) {
+		behaviourComponents.push_back(behaviour_comp);
+		std::cout << "Added Behaviour Component from "  << behaviour_comp->GetOwner()->GetName() << std::endl;
 	}
 	void RemoveBehaviourComponent(Behaviour* behaviour) {
 		for (int i = 0; i < behaviourComponents.size(); i++) {
