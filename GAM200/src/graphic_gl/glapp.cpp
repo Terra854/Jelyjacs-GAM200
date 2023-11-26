@@ -51,6 +51,7 @@ GLApp::GLApp()
 }
 ParticleSystem particleSystem;
 
+/*  _________________________________________________________________________ */
 /*
 * Initialize() is called once, at program start.
 */
@@ -69,6 +70,7 @@ void GLApp::Initialize()
 	particleSystem.Init();
 }
 
+/*  _________________________________________________________________________ */
 /*
 * get all he models from the list.txt file and store them in the models map
 */
@@ -224,6 +226,7 @@ void GLApp::init_models() {
 	}
 }
 
+/*  _________________________________________________________________________ */
 /*
 * get all he shader programs
 */
@@ -237,6 +240,7 @@ void GLApp::init_shdrpgms() {
 
 }
 
+/*  _________________________________________________________________________ */
 /*
 * update and draw objects
 */
@@ -504,6 +508,7 @@ void GLApp::Update()
 	
 }
 
+/*  _________________________________________________________________________ */
 /*
 * clean up
 */
@@ -522,8 +527,10 @@ void GLApp::cleanup()
 	}
 }
 
+/*  _________________________________________________________________________ */
 /*
 * read png file
+* @param pathname The path of the png file
 */
 GLuint GLApp::setup_texobj(const char* pathname)
 {
@@ -558,8 +565,12 @@ GLuint GLApp::setup_texobj(const char* pathname)
 	return texobj_hdl;
 }
 
+/*  _________________________________________________________________________ */
 /*
 *  load shader program and store it in map
+* @param shdr_pgm_name The name of the shader program
+* @param vtx_shdr The vertex shader file
+* @param frg_shdr The fragment shader file
 */
 void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std::string frg_shdr)
 {
@@ -583,6 +594,14 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 	GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
 }
 
+/*  _________________________________________________________________________ */
+/*
+* a function to draw line
+* @param start The start point of the line
+* @param end The end point of the line
+* @param color The color of the line
+* 
+*/
 void GLApp::drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	float pos_x;
 	float pos_y;

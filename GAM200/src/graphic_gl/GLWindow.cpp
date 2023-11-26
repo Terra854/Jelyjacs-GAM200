@@ -41,7 +41,7 @@ GLFWmonitor* monitor;
 //Global Pointer to Window System
 GLWindow* window = NULL;
 
-
+/*  _________________________________________________________________________ */
 /*
 constructor
 */
@@ -133,6 +133,7 @@ void GLWindow::Initialize() {
     glfwGetWindowSize(ptr_window, &originalWidth, &originalHeight);
 }
 
+/*  _________________________________________________________________________ */
 /*
 * upate event and detect close button
 */
@@ -192,6 +193,7 @@ void GLWindow::Update()
             pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
             pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
             pos_y += 100;
+            std::cout << glfwGetVideoMode(glfwGetPrimaryMonitor())->width << std::endl;
             glfwSetWindowPos(ptr_window, pos_x, pos_y);
             break;
         case Window_size::medium:
@@ -213,6 +215,7 @@ void GLWindow::Update()
         }
 
     }
+    //change to fullscreen mode
     if (input::IsPressed(KEY::f)) {
         window_size = Window_size::fullscreen;
         width = 1920;
@@ -230,11 +233,14 @@ void GLWindow::Update()
     
 }
 
-
+/*  _________________________________________________________________________ */
+/*
+*  change to windowed mode
+* 
+*/
 void GLWindow::ChangeWindowMode()
 {
 
-    
 
     // Destroy the current fullscreen window
     glfwDestroyWindow(ptr_window);
@@ -254,6 +260,13 @@ void GLWindow::ChangeWindowMode()
     }
 }
 
+/*  _________________________________________________________________________ */
+/*
+* window iconify callback
+* @param w window pointer
+* @param iconified iconified or not
+* 
+*/
 void GLWindow::window_iconify_callback(GLFWwindow* w, int iconified)
 {
     (void)w;
@@ -388,6 +401,11 @@ void GLWindow::print_specs() {
 
 }
 
+/*  _________________________________________________________________________ */
+/*
+* change window size
+* @param size window size
+*/
 void GLWindow::change_window_size(Window_size size) {
     if (window_size == Window_size::fullscreen)
     {
@@ -430,6 +448,12 @@ void GLWindow::change_window_size(Window_size size) {
     }
 }
 
+/*  _________________________________________________________________________ */
+/*
+* change window size
+* @param w width
+* @param h height
+*/
 void GLWindow::change_window_size(int w, int h) {
 	width = w;
 	height = h;
@@ -439,6 +463,10 @@ void GLWindow::change_window_size(int w, int h) {
 	glfwSetWindowPos(ptr_window, pos_x, pos_y);
 }
 
+/*  _________________________________________________________________________ */
+/*
+* change window size to fullscreen
+*/
 void GLWindow::change_window_size_fullscreen() {
     window_size = Window_size::fullscreen;
     width = width_init;

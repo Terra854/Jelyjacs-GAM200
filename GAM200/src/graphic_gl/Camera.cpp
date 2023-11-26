@@ -15,6 +15,7 @@ Camera::Camera() {
 	camera2D = this;
 }
 
+/*  _________________________________________________________________________ */
 /*
 * Initialize the camera
 */
@@ -23,6 +24,7 @@ void Camera::Initialize() {
 	position = { 0.f,0.f };
 }
 
+/*  _________________________________________________________________________ */
 /*
 * Update the camera
 * Press C to zoom in/out
@@ -54,12 +56,24 @@ void Camera::Update() {
 
 }
 
+/*  _________________________________________________________________________ */
+/*
+* Set the camera scale
+* @param scale_input The scale of the camera
+* 
+*/
 void Camera::SetCameraScale(Vec2 scale_input)
 {
 	scale.x= scale_input.x/window->width_init;
 	scale.y = scale_input.y/window->height_init;
 }
 
+/*  _________________________________________________________________________ */
+/*
+* Set the camera position
+* @param position_input The position of the camera
+* 
+*/
 void Camera::SetCameraPosition(Vec2 position_input)
 {
 	position.x = position_input.x;
@@ -67,6 +81,7 @@ void Camera::SetCameraPosition(Vec2 position_input)
 
 }
 
+/*  _________________________________________________________________________ */
 /*
 * Set the camera to the player's position
 */
