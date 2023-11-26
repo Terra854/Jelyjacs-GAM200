@@ -54,9 +54,13 @@ void Spark::Update(Object* obj) {
 		static_cast<Body*>(obj->GetComponent(ComponentType::Body))->active = false;
 		spark_t->Position.x = Finn_t->Position.x;
 		spark_t->Position.y = Finn_t->Position.y;
+
+		// Need to make sure Spark doesn't fall through the map
+		static_cast<Physics*>(obj->GetComponent(ComponentType::Physics))->AffectedByGravity = false;
 	}
 	else {
 		static_cast<Body*>(obj->GetComponent(ComponentType::Body))->active = true;
+		static_cast<Physics*>(obj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
 	}
 
 	if (GameLogic::playerObj->GetName() == "Spark")
