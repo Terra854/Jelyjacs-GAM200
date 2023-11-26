@@ -146,7 +146,7 @@ void GameHud::Update()
 					SceneManager::PlayScene();
 					win = false;
 			}
-			else if (button_tracker == "quit")
+			else if (button_tracker == "Quit Game")
 			{
 				Message_Handler msg(MessageID::Event_Type::Quit);
 				engine->Broadcast(&msg);

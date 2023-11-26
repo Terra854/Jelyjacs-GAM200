@@ -148,8 +148,9 @@ void GameLogic::Update() {
 	*********************************************************************************/
 	// If press esc button, quit the game
 	if (input::IsPressed(KEY::esc)) {
-		Message_Handler msg(MessageID::Event_Type::Quit);
-		engine->Broadcast(&msg);
+		//Message_Handler msg(MessageID::Event_Type::Quit);
+		//engine->Broadcast(&msg);
+		engine->setPause();
 	}
 
 	if (GameLogic::playerObj != nullptr) {
