@@ -112,11 +112,11 @@ bool input::IsPressedRepeatedly(KEY key)
 
 double input::GetMouseX()
 {
-	return mouse.x - static_cast<double>(window->width/2);
+	return mouse.x - static_cast<double>(window->width_init/2);
 }
 double input::GetMouseY()
 {
-	return -mouse.y + static_cast<double>(window->height / 2);
+	return -mouse.y + static_cast<double>(window->height_init / 2);
 }
 
 bool mouse_update()

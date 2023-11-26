@@ -32,7 +32,7 @@
       "texture": "MENU_back.png"
     },
     {
-      "text": "resolution",
+      "text": "quit",
       "button_x": 0,
       "button_y": -220,
       "button_w": 200,
@@ -63,6 +63,46 @@
     },
     {
       "text": "resume",
+      "button_x": -13,
+      "button_y": 310,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "win_menu",
+      "button_x": 0,
+      "button_y": 0,
+      "button_w": 500,
+      "button_h": 500,
+      "scale": 1.0,
+      "font": "AldrichRegular",
+      "texture": "MENU_back.png"
+    },
+    {
+      "text": "restart",
+      "button_x": -15,
+      "button_y": 177,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "quit",
+      "button_x": 0,
+      "button_y": -220,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "you win!",
       "button_x": -13,
       "button_y": 310,
       "button_w": 200,

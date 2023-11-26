@@ -16,14 +16,14 @@ This file contains the definition of the functions of GameHud
 namespace
 {
 	std::string button_tracker;
+	bool win = false;
 }
 
 std::vector<Button> Buttons;
 std::map <std::string, int> index;
 
-//bool restarted = false;
-
 int menu_index = 0;
+int win_menu_index = 0;
 int number_of_buttons = 0;
 
 void draw_outline(Vec2 pos1, Vec2 pos2);
@@ -35,9 +35,9 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color);
 *******************************************************************************/
 void GameHud::Initialize()
 {
-
 	createHudFromConfig("Asset/UI/Pause.json");
 	button_tracker = "nil";
+	//std::cout << "number off buttons!!!" << Buttons.size() <<std::endl;
 }
 
 /******************************************************************************
@@ -48,26 +48,26 @@ void GameHud::Update()
 	
 	if (input::MouseMoved())
 	{
-			for (auto it = index.begin(); it != index.end(); ++it)
+			for (int i = 0; i < Buttons.size(); ++i)
 			{
 				button_tracker = "nil";
-				if (it->first == "menu")
+				if (win && i < win_menu_index)
 				{
-					continue;
+					i = win_menu_index + 1;
 				}
-				if (!engine->isPaused() && it->second > menu_index)
+				else if (engine->isPaused() && i < menu_index)
 				{
-					continue;
+					i = menu_index + 1;
 				}
-				else if (engine->isPaused() && it->second < menu_index)
+				else if ((!engine->isPaused() && i >= menu_index && !win) || (!win && i >= win_menu_index))
 				{
-					continue;
+					break;
 				}
-				if (input::GetMouseX() > Buttons[it->second].pos1.x && input::GetMouseX() < Buttons[it->second].pos2.x)
+				if (input::GetMouseX() > Buttons[i].pos1.x && input::GetMouseX() < Buttons[i].pos2.x)
 				{
-					if (input::GetMouseY() > Buttons[it->second].pos2.y && input::GetMouseY() < Buttons[it->second].pos1.y)
+					if (input::GetMouseY() > Buttons[i].pos2.y && input::GetMouseY() < Buttons[i].pos1.y)
 					{
-						button_tracker = it->first;
+						button_tracker = Buttons[i].string.text;
 						break;
 					}
 				}
@@ -84,7 +84,6 @@ void GameHud::Update()
 			else if (button_tracker == "resume")
 			{
 				SceneManager::PlayScene();
-				//restarted = false;
 			}
 			else if (button_tracker == "zoom")
 			{
@@ -129,14 +128,26 @@ void GameHud::Update()
 			}
 			else if (button_tracker == "restart")
 			{
-				//if (!restarted)
-				//{
 					SceneManager::RestartScene();
-					//restarted = true;
 					SceneManager::PlayScene();
-				//}
+					win = false;
 			}
+			else if (button_tracker == "quit")
+			{
+				Message_Handler msg(MessageID::Event_Type::Quit);
+				engine->Broadcast(&msg);
+			}
+			button_tracker = "nil";
 		}
+	if (input::IsPressed(KEY::enter))
+	{
+		win = true;
+		if (!engine->isPaused())
+		{
+			SceneManager::PauseScene();
+		}
+	}
+
 	
 }
 
@@ -147,23 +158,35 @@ void GameHud::Draw()
 {
 	for (int i =0 ; i< Buttons.size(); ++i)
 	{
-		if (engine->isPaused() && i < menu_index)
+		if (win && i < win_menu_index)
 		{
-			continue;
+			i = win_menu_index;
 		}
-		if (!engine->isPaused() && i >= menu_index)
+		else if (engine->isPaused() && i < menu_index)
 		{
-			continue;
+			i = menu_index;
+		}
+		else if ((!engine->isPaused() && i >= menu_index && !win) || (!win && i >= win_menu_index))
+		{
+			break;
+		}
+		if (i > win_menu_index)
+		{
+			std::cout << "DRAW!!" << std::endl;
+		}
+		else
+		{
+			std::cout << i << std::endl;
 		}
 		Buttons[i].draw_hud_texture();
-		if (index.at("menu") == i)
+		if (menu_index == i || win_menu_index == i)
 		{
 			continue;
 		}
 		SetFont(Buttons[i].string.font);
 		DrawText(Buttons[i].string.text, Buttons[i].string.pos.x, Buttons[i].string.pos.y, Buttons[i].string.scale);
 	}
-	if (button_tracker != "nil")
+	if (button_tracker != "nil" && button_tracker != "you win!")
 	{
 		draw_outline(Buttons[index.at(button_tracker)].pos1, Buttons[index.at(button_tracker)].pos2);
 	}
@@ -181,6 +204,10 @@ void create_button(std::string const& text, Button button, float scale , FONT f,
 	if (text == "menu")
 	{
 		menu_index = number_of_buttons;
+	}
+	else if (text == "win_menu")
+	{
+		win_menu_index = number_of_buttons;
 	}
 	index[text] = number_of_buttons++;
 }
