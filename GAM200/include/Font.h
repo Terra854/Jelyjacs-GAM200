@@ -50,5 +50,5 @@ public:
 	virtual std::string SystemName() { return "Font"; }
 	~Font();
 };
-extern Font* font;
+extern Font* FontSystem;
 

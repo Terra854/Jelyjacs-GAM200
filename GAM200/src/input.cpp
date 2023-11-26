@@ -180,8 +180,8 @@ bool input::IsPressedRepeatedlyDelayed(KEY key , float delay)
 		{
 			return true;
 		}
-		else return false;
 	}
+	return false;
 }
 
 bool input::MouseMoved()

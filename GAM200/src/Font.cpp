@@ -8,7 +8,7 @@ This file contains the definition of the functions of font system
 #include <Debug.h>
 #include "Font.h"
 
-Font* font = NULL;
+Font* FontSystem = NULL;
 Font::Font() {
 }
 
