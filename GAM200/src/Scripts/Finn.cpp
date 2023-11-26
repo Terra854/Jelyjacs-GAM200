@@ -1,3 +1,10 @@
+/* !
+@file GameLogic.cpp
+@author Luke Goh
+@date	27/11/2023
+
+This file contains the script for Finn, the player character (Human)
+*//*__________________________________________________________________________*/
 #include "Scripts/Finn.h"
 #include <iostream>
 #include <components/Transform.h>

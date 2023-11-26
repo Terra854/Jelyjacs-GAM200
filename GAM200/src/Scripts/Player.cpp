@@ -1,3 +1,10 @@
+/* !
+@file GameLogic.cpp
+@author Luke Goh
+@date	27/11/2023
+
+This file contains the script the player characters
+*//*__________________________________________________________________________*/
 #include "Scripts/Player.h"
 #include <PhysicsSystem.h>
 #include "Core_Engine.h"

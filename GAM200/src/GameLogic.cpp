@@ -22,7 +22,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
-//#include <Movement.h>
+
 #include <Audio.h>
 #include <Scenes.h>
 #include <PhysicsSystem.h>
@@ -87,8 +87,10 @@ void GameLogic::Initialize()
 	//LoadScene("Asset/Levels/testsave.json");
 	//SaveScene("Asset/Levels/testsave.json");
 
+	// Clear all behaviours from the container
 	behaviours.clear();
 
+	// Load all behaviours into the container
 	LoadScripts();
 	for (auto iter : behaviourComponents ) {
 		
@@ -110,13 +112,15 @@ void GameLogic::Initialize()
 
 /******************************************************************************
 * Update
-* - Update Logic when there is user input
+* - Update Logic 
 *******************************************************************************/
 void GameLogic::Update() {
 
 	// Do not update if the game is paused
 	if (engine->isPaused())
 		return;
+
+	// Update all behaviours
 	int counter = 0;
 	for (auto& iter : behaviourComponents) {
 		//Check if the object is the player
@@ -137,6 +141,48 @@ void GameLogic::Update() {
 			counter++;
 		}
 	}
+	/********************************************************************************
+	*
+	*	Basic Input Handling Logic
+	*
+	*********************************************************************************/
+	// If press esc button, quit the game
+	if (input::IsPressed(KEY::esc)) {
+		Message_Handler msg(MessageID::Event_Type::Quit);
+		engine->Broadcast(&msg);
+	}
+
+	if (GameLogic::playerObj != nullptr) {
+		if (input::IsPressed(KEY::e)) {
+			if (GameLogic::playerObj->GetName() == "Finn") {
+				Object* temp = objectFactory->FindObject("Spark");
+				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Spark");
+				Spark::Just_detached = true;
+				static_cast<Body*>(temp->GetComponent(ComponentType::Body))->active = true;
+				std::cout << "Switched to Spark" << std::endl;
+			}
+			else if (GameLogic::playerObj->GetName() == "Spark") {
+				Object* temp = objectFactory->FindObject("Finn");
+				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Finn");
+				std::cout << "Switched to Finn" << std::endl;
+			}
+			else {
+				GameLogic::playerObj = GameLogic::playerObj;
+			}
+		}
+
+		/*for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
+			Object* obj = objectFactory->getObjectWithID((long)i);
+
+			if (obj == nullptr)
+				continue;
+		}*/
+	}
+	/*****************************************************************************************
+	*
+	*		Cheat Codes 
+	*
+	******************************************************************************************/
 	if (input::IsPressed(KEY::one)) {
 		if (!cheat) {
 			std::cout << "Cheat Mode Activated" << std::endl;
@@ -170,6 +216,12 @@ void GameLogic::Update() {
 		static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
 		static_cast<Body*>(playerObj->GetComponent(ComponentType::Body))->active = true;
 	}
+
+	/*****************************************************************************************
+	*
+	*	Debugging
+	*
+	*******************************************************************************************/
 	//std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
@@ -178,38 +230,7 @@ void GameLogic::Update() {
 		engine->Broadcast(&msg);
 	}
 
-	// If press esc button, quit the game
-	if (input::IsPressed(KEY::esc)) {
-		Message_Handler msg(MessageID::Event_Type::Quit);
-		engine->Broadcast(&msg);
-	}
 	
-	if (GameLogic::playerObj != nullptr) {
-		if (input::IsPressed(KEY::e)) {
-			if (GameLogic::playerObj->GetName() == "Finn") {
-				Object* temp = objectFactory->FindObject("Spark");
-				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj :objectFactory->FindObject("Spark");
-				Spark::Just_detached = true;
-				static_cast<Body*>(temp->GetComponent(ComponentType::Body))->active = true;
-				std::cout << "Switched to Spark" << std::endl;
-			}
-			else if(GameLogic::playerObj->GetName() == "Spark") {
-				Object* temp = objectFactory->FindObject("Finn");
-				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Finn");
-				std::cout << "Switched to Finn" << std::endl;
-			}
-			else {
-				GameLogic::playerObj = GameLogic::playerObj;
-			}
-		}
-
-		/*for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
-			Object* obj = objectFactory->getObjectWithID((long)i);
-
-			if (obj == nullptr)
-				continue;
-		}*/
-	}
 	/*
 	// Rotation of an object
 	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
@@ -247,13 +268,21 @@ void GameLogic::Update() {
 	std::cout << "#####################################################################" << std::endl;
 	*/
 }
-
+/******************************************************************************
+*
+*	AddBehaviour : Add a behaviour to the container
+*
+*******************************************************************************/
 void GameLogic::AddBehaviour(std::string name, LogicScript* behaviour)
 {
 	behaviours[name] = behaviour;
 	std::cout <<  "Added Behaviour to container. Name : "<< name <<"  |  Container Size : " << behaviours.size() << std::endl;
 }
-
+/******************************************************************************
+*
+*	LoadScripts : Load all scripts into the container
+*
+*******************************************************************************/
 void GameLogic::LoadScripts() {
 	for (auto& it : LogicScript::temp_scriptmap) {
 		this->AddBehaviour(it.first, it.second);
@@ -261,6 +290,11 @@ void GameLogic::LoadScripts() {
 	std::cout << "Loaded Temporary Script Map: " << LogicScript::temp_scriptmap.size() << std::endl;
 }
 
+/******************************************************************************
+*
+*	CheckBehaviour : Check if a behaviour exists in the container
+*
+*******************************************************************************/
 bool GameLogic::CheckBehaviour(std::string name) {
 	return behaviours.find(name) == behaviours.end() ? false : true;
 }

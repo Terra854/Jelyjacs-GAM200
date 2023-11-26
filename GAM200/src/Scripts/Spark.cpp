@@ -1,3 +1,10 @@
+/* !
+@file GameLogic.cpp
+@author Luke Goh
+@date	27/11/2023
+
+This file contains the script for Spark, the player character (Cat)
+*//*__________________________________________________________________________*/
 #include "Scripts/Spark.h"
 #include <Factory.h>
 #include <components/Transform.h>

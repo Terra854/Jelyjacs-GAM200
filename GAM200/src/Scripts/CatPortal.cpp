@@ -1,3 +1,10 @@
+/* !
+@file GameLogic.cpp
+@author Luke Goh
+@date	27/11/2023
+
+This file contains the script for the portal for the cat character to teleport
+*//*__________________________________________________________________________*/
 #include "Scripts/CatPortal.h"
 #include <components/Body.h>
 #include <components/Animation.h>

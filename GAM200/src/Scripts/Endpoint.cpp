@@ -1,3 +1,10 @@
+/* !
+@file GameLogic.cpp
+@author Luke Goh
+@date	27/11/2023
+
+This file contains the script for the endpoint door
+*//*__________________________________________________________________________*/
 #include "Scripts/Endpoint.h"
 #include <iostream>
 #include <components/Transform.h>

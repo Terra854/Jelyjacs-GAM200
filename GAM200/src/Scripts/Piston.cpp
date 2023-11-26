@@ -1,3 +1,10 @@
+/* !
+@file GameLogic.cpp
+@author Luke Goh
+@date	27/11/2023
+
+This file contains the script for Piston trigger to open door
+*//*__________________________________________________________________________*/
 #include "Scripts/Piston.h"
 #include <Factory.h>
 #include <Object.h>

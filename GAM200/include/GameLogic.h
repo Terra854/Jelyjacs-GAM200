@@ -4,7 +4,7 @@
 @author Luke Goh
 @date	28/9/2023
 
-This file contains the declaration for the Game Logic system class
+This file contains the declaration for the Game Logic system class & LogicScript class
 *//*__________________________________________________________________________*/
 #include <Interface_System.h>
 #include <Debug.h>
