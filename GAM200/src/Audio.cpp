@@ -74,14 +74,17 @@ void Audio::setupSound()
 		case AudioType::Cat_Teleport:
 			audio_type = "cat_teleport";
 			break;
-		case AudioType::Walking:
-			audio_type = "walking";
-			break;
 		case AudioType::Finn_Jumping:
 			audio_type = "finn_jumping";
 			break;
+		case AudioType::Finn_Walking:
+			audio_type = "finn_walking";
+			break;
 		case AudioType::Spark_Jumping:
 			audio_type = "spark_jumping";
+			break;
+		case AudioType::Spark_Walking:
+			audio_type = "spark_walking";
 			break;
 		case AudioType::Sliding_Door_Open:
 			audio_type = "sliding_door_open";
@@ -124,9 +127,6 @@ void Audio::setupSound()
     // Set the background music
     system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, true, &background);
     background->setVolume(0.2f);
-
-    system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Walking), 0, false, &channel);
-    channel->setVolume(0.0);
 }
 
 /******************************************************************************
@@ -149,22 +149,6 @@ void Audio::Update(){
 }
 
 /******************************************************************************
-startWalking
--	This function unmutes the walking sound
-*******************************************************************************/
-void Audio::startWalking() {
-    channel->setVolume(1.0);
-}
-
-/******************************************************************************
-stopWalking
--	This function mutes the walking sound
-*******************************************************************************/
-void Audio::stopWalking() {
-    channel->setVolume(0.0);
-}
-
-/******************************************************************************
 playSfx
 -	This function tells Fmod to play the given sfx type
 
@@ -173,16 +157,6 @@ playSfx
 void Audio::playSfx(AudioType a) {
     system->playSound(AssetManager::getsoundbyaudiotype(a), 0, false, &sfx);
     sfx->setVolume(0.2f);
-}
-
-/******************************************************************************
-setWalkingAudio
--	This function set the walking audio in Fmod
--	To be called if the sound linked to AudioType::Walking changes
-*******************************************************************************/
-void Audio::setWalkingAudio() {
-    system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Walking), 0, false, &channel);
-    channel->setVolume(0.0);
 }
 
 /******************************************************************************

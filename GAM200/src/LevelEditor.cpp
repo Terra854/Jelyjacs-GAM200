@@ -1264,14 +1264,17 @@ void LevelEditor::AssetList()
 			case AudioType::Finn_Jumping:
 				AudioTypeString = "Finn_Jumping";
 				break;
+			case AudioType::Finn_Walking:
+				AudioTypeString = "Finn_Walking";
+				break;
 			case AudioType::Sliding_Door_Open:
 				AudioTypeString = "Sliding_Door_Open";
 				break;
 			case AudioType::Spark_Jumping:
 				AudioTypeString = "Spark_Jumping";
 				break;
-			case AudioType::Walking:
-				AudioTypeString = "Walking";
+			case AudioType::Spark_Walking:
+				AudioTypeString = "Spark_Walking";
 				break;
 			}
 

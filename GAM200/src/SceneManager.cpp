@@ -43,8 +43,6 @@ PauseScene
 void SceneManager::PauseScene() {
 	if (!engine->isPaused())
 		engine->setPause();
-
-	audio->stopWalking();
 }
 
 /******************************************************************************
@@ -53,7 +51,6 @@ RestartScene
 	state copied over
 *******************************************************************************/
 void SceneManager::RestartScene() {
-	audio->stopWalking();
 	audio->restartBackgroundAudio();
 
 	objectFactory->destroyAllObjects();

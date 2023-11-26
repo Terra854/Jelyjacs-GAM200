@@ -14,9 +14,10 @@ enum AudioType {
 	Background,
 	Button_Click,
 	Cat_Teleport,
-	Walking,
 	Finn_Jumping,
+	Finn_Walking,
 	Spark_Jumping,
+	Spark_Walking,
 	Sliding_Door_Open,
 	END
 };
@@ -31,10 +32,7 @@ public:
 	void setupSound();
 	void createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound);
 
-	void startWalking();
-	void stopWalking();
 	void playSfx(AudioType a);
-	void setWalkingAudio();
 	void restartBackgroundAudio();
 private:
 	FMOD::System* system;

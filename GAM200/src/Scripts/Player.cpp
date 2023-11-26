@@ -90,7 +90,7 @@ void Player::Update(Object* obj) {
 	else player_animation->jump_fixed = false;
 
 
-	
+	/*
 	// Audio for Character Movement
 	if ((player_physics->Velocity.y == 0.f) && moving) {
 		audio->startWalking();
@@ -99,6 +99,7 @@ void Player::Update(Object* obj) {
 		audio->stopWalking();
 		moving = false;
 	}
+	*/
 
 }
 
