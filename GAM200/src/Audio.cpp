@@ -12,11 +12,18 @@ This file contains the definitions of the functions that are part of the Audio s
 
 Audio* audio = nullptr;
 
+/******************************************************************************
+Descructor for the Audio system
+*******************************************************************************/
 Audio::~Audio(){
     AssetManager::clearsounds();
     system->release();
 }
 
+/******************************************************************************
+Initialize
+-	This function initalizes the Audio system by setting up Fmod
+*******************************************************************************/
 void Audio::Initialize(){
     // Create the main system object.
     result = FMOD::System_Create(&system);      
@@ -38,6 +45,11 @@ void Audio::Initialize(){
     audio = this;
 
 }
+
+/******************************************************************************
+setupSound
+-	This function loads the sound mappings and sets the background and walking sounds
+*******************************************************************************/
 void Audio::setupSound()
 {
     // Load sounds
@@ -117,40 +129,68 @@ void Audio::setupSound()
     channel->setVolume(0.0);
 }
 
+/******************************************************************************
+createSound
+-	This function calls Fmod to load a given sound file
+*******************************************************************************/
 void Audio::createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound)
 {
     system->createSound(str.c_str(), mode, 0, sound);
 }
 
+/******************************************************************************
+Update
+-	The update loop for the Audio system
+*******************************************************************************/
 void Audio::Update(){
     system->update();
 
     background->setPaused(engine->isPaused());
 }
 
+/******************************************************************************
+startWalking
+-	This function unmutes the walking sound
+*******************************************************************************/
 void Audio::startWalking() {
     channel->setVolume(1.0);
 }
 
+/******************************************************************************
+stopWalking
+-	This function mutes the walking sound
+*******************************************************************************/
 void Audio::stopWalking() {
     channel->setVolume(0.0);
 }
 
+/******************************************************************************
+playSfx
+-	This function tells Fmod to play the given sfx type
+
+@param a - The sfx type to play
+*******************************************************************************/
 void Audio::playSfx(AudioType a) {
     system->playSound(AssetManager::getsoundbyaudiotype(a), 0, false, &sfx);
     sfx->setVolume(0.2f);
 }
 
-void Audio::setBackgroundAudio() {
-    system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, false, &background);
-	background->setVolume(0.2f);
-}
-
+/******************************************************************************
+setWalkingAudio
+-	This function set the walking audio in Fmod
+-	To be called if the sound linked to AudioType::Walking changes
+*******************************************************************************/
 void Audio::setWalkingAudio() {
     system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Walking), 0, false, &channel);
     channel->setVolume(0.0);
 }
 
+/******************************************************************************
+restartBackgroundAudio
+-	This function restarts the background the audio from the beginning
+-	To be called if you are changing or restarting a scene or if the sound
+	linked to AudioType::Background changes
+*******************************************************************************/
 void Audio::restartBackgroundAudio() {
 	background->stop();
 	system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, true, &background);

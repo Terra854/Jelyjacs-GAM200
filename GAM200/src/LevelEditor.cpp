@@ -1089,7 +1089,6 @@ void LevelEditor::DisplaySelectedTexture() {
 /******************************************************************************
 	AssetList
 	- This window displays the lists of assets that are loaded by the engine
-	- Only textures and prefabs currently
 *******************************************************************************/
 void LevelEditor::AssetList() 
 {
