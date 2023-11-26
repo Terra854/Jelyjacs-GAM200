@@ -970,12 +970,14 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Text("Script Index : %d", be->GetBehaviourIndex());
 			if (ImGui::CollapsingHeader("Change Scripts")) {
 				ImGui::OpenPopup("Select Scripts");
-				for (auto& it : Logic->behaviours)
+				for (auto& it : Logic->behaviours) {
 					if (ImGui::Selectable(it.first.c_str())) {
-						be->SetBehaviourName(it.first.c_str());
+						be->SetBehaviourName(it.first);
 						be->SetBehaviourIndex(0);
-						UpdateAllObjectInstances(object);
+						//UpdateAllObjectInstances(object);
 					}
+				}
+				
 
 			}
 			/*if (ImGui::Button("Delete Behaviour"))
@@ -1584,6 +1586,7 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 			if (e == nullptr && o_e != nullptr)
 				objectFactory->DeleteComponent(o, ComponentType::Event);
 			if (be == nullptr && o_be != nullptr)
+				Logic->RemoveBehaviourComponent(o_be);
 				objectFactory->DeleteComponent(o, ComponentType::Behaviour);
 
 

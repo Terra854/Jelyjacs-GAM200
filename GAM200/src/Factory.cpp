@@ -329,6 +329,7 @@ void Factory::Update() {
 		{
 			temp_id = obj->ObjectId;
 			//Delete it and remove its entry in the Id map
+			Logic->behaviourComponents.erase(std::find(Logic->behaviourComponents.begin(), Logic->behaviourComponents.end(), static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour))));
 			delete obj;
 			objectMap.erase(gameObjectInMap);
 			
@@ -357,6 +358,7 @@ void Factory::destroyAllObjects()
 	}
 
 	objectMap.clear();
+	Logic->behaviourComponents.clear();
 	nextObjectId = 0;
 }
 
@@ -522,6 +524,7 @@ Object* Factory::cloneObject(Object* object)
 			Behaviour* b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
 			Behaviour* b_tmp = static_cast<Behaviour*>(object->GetComponent(ComponentType::Behaviour));
 			obj->AddComponent(b);
+			Logic->AddBehaviourComponent(b);
 			b->SetBehaviourIndex(b_tmp->GetBehaviourIndex());
 			b->SetBehaviourName(b_tmp->GetBehaviourName());
 			
