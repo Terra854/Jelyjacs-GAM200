@@ -86,19 +86,16 @@ void Application::Init() {
 	engine->AddSystem(FontSystem);
 	engine->AddSystem(camera);
 
-
 #if defined(DEBUG) | defined(_DEBUG)
 	// Level Editor
 	level_editor = new LevelEditor();
 	engine->AddSystem(level_editor);
 #endif
 
-
 	engine->AddSystem(graphics);												  // Graphics should always be last
 
 	// Initialize and Start Game Loop
 	engine->Initialize();
-	//windows->ActivateWindow();
 	windows->print_specs();
 }
 void Application::Run() {

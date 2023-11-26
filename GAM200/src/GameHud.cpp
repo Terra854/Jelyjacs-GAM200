@@ -138,16 +138,6 @@ void GameHud::Update()
 			}
 			button_tracker = "nil";
 		}
-	if (input::IsPressed(KEY::enter))
-	{
-		win = true;
-		if (!engine->isPaused())
-		{
-			SceneManager::PauseScene();
-		}
-	}
-
-	
 }
 
 /******************************************************************************
@@ -350,7 +340,17 @@ void createHudFromConfig(std::string file)
 }
 
 
-
+void set_win()
+{
+	if (!win)
+	{
+		win = true;
+		if (!engine->isPaused())
+		{
+			SceneManager::PauseScene();
+		}
+	}
+}
 
 
 

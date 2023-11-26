@@ -241,6 +241,7 @@ void LevelEditor::ObjectProperties() {
 				std::cout << "test\n";
 				const std::pair<std::string, GLuint>* dropped_object = (const std::pair<std::string, GLuint>*)payload->Data;
 				te->textureName = dropped_object->first;
+				UpdateAllObjectInstances(object);
 				ImGui::EndDragDropTarget();
 			}
 		}
