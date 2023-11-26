@@ -16,6 +16,9 @@ This file contains the script for Spark, the player character (Cat)
 
 
 bool Spark::Just_detached;
+
+float spark_move_time = 0.f;
+
 Spark::Spark(std::string name) : LogicScript(name)
 { 
 	std::cout << name << " Created" << std::endl;
@@ -142,10 +145,17 @@ void Spark::Update(Object* obj) {
 
 		// Audio for Character Movement
 		if ((player_physics->Velocity.y == 0.f) && moving) {
-			audio->startWalking();
+			//audio->startWalking();
+			spark_move_time += engine->GetDt();
+
+			if (spark_move_time > 0.4f) {
+				audio->playSfx(AudioType::Spark_Walking);
+				spark_move_time -= 0.4f;
+			}
 		}
 		else {
-			audio->stopWalking();
+			//audio->stopWalking();
+			spark_move_time = 0.f;
 			moving = false;
 		}
 	}
@@ -154,7 +164,7 @@ void Spark::Update(Object* obj) {
 		player_animation->current_type = AnimationType::Idle;
 		player_animation->face_right = true;
 		player_animation->jump_fixed = false;
-		audio->stopWalking();
+		//audio->stopWalking();
 	}
 
 	

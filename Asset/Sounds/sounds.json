@@ -1,9 +1,10 @@
 {
-  "walking": "Footsteps.wav",
   "background": "Game_Background.wav",
   "button_click": "Button_Click.ogg",
   "cat_teleport": "Cat_Teleport.wav",
   "finn_jumping": [ "Finn_Jump_1.wav", "Finn_Jump_2.wav", "Finn_Jump_3.wav", "Finn_Jump_4.wav", "Finn_Jump_5.wav" ],
   "spark_jumping": [ "Spark_Jump_1.wav", "Spark_Jump_2.wav", "Spark_Jump_3.wav", "Spark_Jump_4.wav", "Spark_Jump_5.wav" ],
-  "sliding_door_open": "Sliding_Door_Open.wav"
+  "sliding_door_open": "Sliding_Door_Open.wav",
+  "finn_walking": [ "Footsteps_Concrete_far-smal_1.wav", "Footsteps_Concrete_far-smal_2.wav", "Footsteps_Concrete_far-smal_3.wav", "Footsteps_Concrete_far-smal_4.wav", "Footsteps_Concrete_far-smal_5.wav", "Footsteps_Concrete_far-smal_6.wav", "Footsteps_Concrete_far-smal_7.wav", "Footsteps_Concrete_far-smal_8.wav" ],
+  "spark_walking": [ "Cat-Footsteps-Concrete_1.wav", "Cat-Footsteps-Concrete_2.wav", "Cat-Footsteps-Concrete_3.wav", "Cat-Footsteps-Concrete_4.wav", "Cat-Footsteps-Concrete_5.wav", "Cat-Footsteps-Concrete_6.wav" ]
 }

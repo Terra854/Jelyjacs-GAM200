@@ -13,6 +13,8 @@ This file contains the script for Finn, the player character (Human)
 #include <components/Body.h>
 #include <Audio.h>
 
+float finn_move_time = 0.f;
+
 Finn::Finn(std::string name) : LogicScript(name)
 {
 	std::cout << name << " Created" << std::endl;
@@ -87,10 +89,17 @@ void Finn::Update(Object* obj) {
 
 		// Audio for Character Movement
 		if ((player_physics->Velocity.y == 0.f) && moving) {
-			audio->startWalking();
+			//audio->startWalking();
+			finn_move_time += engine->GetDt();
+
+			if (finn_move_time > 0.4f) {
+				audio->playSfx(AudioType::Finn_Walking);
+				finn_move_time -= 0.4f;
+			}
 		}
 		else {
-			audio->stopWalking();
+			//audio->stopWalking();
+			finn_move_time = 0.f;
 			moving = false;
 		}
 	}
@@ -99,7 +108,7 @@ void Finn::Update(Object* obj) {
 		player_animation->current_type = AnimationType::Idle;
 		player_animation->face_right = true;
 		player_animation->jump_fixed = false;
-		audio->stopWalking();
+		//audio->stopWalking();
 	}
 }
 
