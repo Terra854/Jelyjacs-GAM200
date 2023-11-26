@@ -35,14 +35,6 @@
       "Prefabs": "MainDoor.json",
       "Type": "Transform",
       "Position": {
-        "x": -96.0,
-        "y": 32.0
-      }
-    },
-    {
-      "Prefabs": "MainDoor.json",
-      "Type": "Transform",
-      "Position": {
         "x": -352.0,
         "y": 352.0
       }
@@ -1396,7 +1388,7 @@
       "linkedevent": 1
     },
     {
-      "Prefabs": "PressurePlatePink.json",
+      "Prefabs": "PressurePlatePurple.json",
       "Type": "Transform",
       "Position": {
         "x": 448.0,
@@ -1405,7 +1397,7 @@
       "linkedevent": 2
     },
     {
-      "Prefabs": "LaserPink.json",
+      "Prefabs": "LaserPurple.json",
       "Type": "Transform",
       "Position": {
         "x": 616.0,
@@ -1414,7 +1406,7 @@
       "linkedevent": 2
     },
     {
-      "Prefabs": "LaserPink.json",
+      "Prefabs": "LaserPurple.json",
       "Type": "Transform",
       "Position": {
         "x": 664.0,
