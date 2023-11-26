@@ -398,7 +398,7 @@ void CoreEngine::GameLoop()
 				std::cout << "Translated ClickPos (in terms of opengl display coord) " << openGlDisplayCoord.x << ", " << openGlDisplayCoord.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of game world) " << gameWorldPos.x << ", " << gameWorldPos.y << std::endl;
 
-				for (size_t i = 1; i < objectFactory->NumberOfObjects(); i++)
+				for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 				{
 					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
 					Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
