@@ -56,6 +56,12 @@ void Audio::setupSound()
 		case AudioType::Background:
 			audio_type = "background";
 			break;
+		case AudioType::Button_Click:
+			audio_type = "button_click";
+			break;
+		case AudioType::Cat_Teleport:
+			audio_type = "cat_teleport";
+			break;
 		case AudioType::Walking:
 			audio_type = "walking";
 			break;

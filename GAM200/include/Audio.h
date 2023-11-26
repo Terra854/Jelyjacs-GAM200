@@ -12,6 +12,8 @@ This file contains the declaration for the Audio system class
 
 enum AudioType {
 	Background,
+	Button_Click,
+	Cat_Teleport,
 	Walking,
 	Finn_Jumping,
 	Spark_Jumping,

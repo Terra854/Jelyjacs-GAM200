@@ -2,6 +2,7 @@
 #include <components/Body.h>
 #include <components/Animation.h>
 #include <components/Event.h>
+#include <Audio.h>
 
 bool CatPortal::justTeleported = false;
 CatPortal::CatPortal(std::string name) : LogicScript(name)
@@ -61,6 +62,7 @@ void CatPortal::Update(Object* obj) {
 						std::cout << "NIL OTHER CAT PORTAL TRANSFORM : CatPortal" << std::endl;
 						return;
 					}
+					audio->playSfx(AudioType::Cat_Teleport);
 					player_t->Position.x = otherCatPortal_t->Position.x;
 					player_t->Position.y = otherCatPortal_t->Position.y;
 					//std::cout << "Player position changed to the other cat portal's position" << std::endl;

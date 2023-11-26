@@ -1255,6 +1255,12 @@ void LevelEditor::AssetList()
 			case AudioType::Background:
 				AudioTypeString = "Background";
 				break;
+			case AudioType::Button_Click:
+				AudioTypeString = "Button_Click";
+				break;
+			case AudioType::Cat_Teleport:
+				AudioTypeString = "Cat_Teleport";
+				break;
 			case AudioType::Finn_Jumping:
 				AudioTypeString = "Finn_Jumping";
 				break;

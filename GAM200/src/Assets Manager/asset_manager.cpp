@@ -179,7 +179,7 @@ void AssetManager::loadsounds()
 			auto inneraudio = std::filesystem::directory_entry(list);
 			for (const auto& innerlist : std::filesystem::directory_iterator(inneraudio))
 			{
-				if (innerlist.path().extension() == ".wav")
+				if (innerlist.path().extension() == ".wav" || innerlist.path().extension() == ".ogg")
 				{
 					std::filesystem::path filename = innerlist.path().filename();
 					FMOD::Sound* sound;
