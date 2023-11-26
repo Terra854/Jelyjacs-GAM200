@@ -37,7 +37,6 @@ void GameHud::Initialize()
 {
 	createHudFromConfig("Asset/UI/Pause.json");
 	button_tracker = "nil";
-	//std::cout << "number off buttons!!!" << Buttons.size() <<std::endl;
 }
 
 /******************************************************************************
@@ -169,14 +168,6 @@ void GameHud::Draw()
 		else if ((!engine->isPaused() && i >= menu_index && !win) || (!win && i >= win_menu_index))
 		{
 			break;
-		}
-		if (i > win_menu_index)
-		{
-			std::cout << "DRAW!!" << std::endl;
-		}
-		else
-		{
-			std::cout << i << std::endl;
 		}
 		Buttons[i].draw_hud_texture();
 		if (menu_index == i || win_menu_index == i)
