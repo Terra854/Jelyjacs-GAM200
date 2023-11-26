@@ -20,11 +20,10 @@ void Finn::Update(Object* obj) {
 		//std::cout << "NIL OBJ : Player" << std::endl;
 		return;
 	}
-
+	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
+	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 	if (GameLogic::playerObj->GetName() == "Finn")
 	{
-		Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
-		Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 		if (player_physics == nullptr || player_animation == nullptr) {
 			//std::cout << "NIL COMPONENT : Player" << std::endl;
 			return;
@@ -87,6 +86,13 @@ void Finn::Update(Object* obj) {
 			audio->stopWalking();
 			moving = false;
 		}
+	}
+	else {
+		player_physics->Velocity.x = 0.0f;
+		player_animation->current_type = AnimationType::Idle;
+		player_animation->face_right = true;
+		player_animation->jump_fixed = false;
+		audio->stopWalking();
 	}
 }
 

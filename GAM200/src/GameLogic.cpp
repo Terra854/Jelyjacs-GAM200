@@ -99,7 +99,7 @@ void GameLogic::Initialize()
 		else 
 			behaviours[iter->GetBehaviourName()]->Start(iter->GetOwner());
 	}
-
+	cheat = false;
 	std::cout << "GameLogic Initialized" << std::endl;
 	std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
 	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
@@ -146,6 +146,12 @@ void GameLogic::Update() {
 			std::cout << "Cheat Mode Deactivated" << std::endl;
 			cheat = false;
 		
+		}
+	}
+	if (input::IsPressed(KEY::two)) {
+		if (objectFactory->FindObject("MainDoor") != nullptr && objectFactory->FindObject("Finn")!= nullptr && objectFactory->FindObject("Spark") != nullptr) {
+			static_cast<Transform*>(objectFactory->FindObject("Finn")->GetComponent(ComponentType::Transform))->Position = static_cast<Transform*>(objectFactory->FindObject("MainDoor")->GetComponent(ComponentType::Transform))->Position;
+			static_cast<Transform*>(objectFactory->FindObject("Spark")->GetComponent(ComponentType::Transform))->Position = static_cast<Transform*>(objectFactory->FindObject("MainDoor")->GetComponent(ComponentType::Transform))->Position;
 		}
 	}
 

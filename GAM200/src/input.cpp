@@ -170,6 +170,7 @@ void input::Update()
 	buttons[at(KEY::spacebar)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_SPACE));
 	buttons[at(KEY::shift)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_LEFT_SHIFT));
 	buttons[at(KEY::one)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_1));
+	buttons[at(KEY::two)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_2));
 }
 
 bool input::IsPressedRepeatedlyDelayed(KEY key , float delay)

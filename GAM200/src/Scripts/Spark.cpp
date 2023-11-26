@@ -28,14 +28,19 @@ void Spark::Update(Object* obj) {
 		//std::cout << "NIL OBJ : Spark" << std::endl;
 		return;
 	}
+
+	// Check if Finn is in the spark
 	Object* Finnobj = objectFactory->FindObject("Finn");
-	//Check if Finn is in the spark
+
 	Transform* Finn_t = static_cast<Transform*>(Finnobj->GetComponent(ComponentType::Transform));
 	Transform* spark_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 	if (Finn_t == nullptr || spark_t == nullptr) {
 		std::cout << "NIL COMPONENT : Spark" << std::endl;
 		return;
 	};
+	/*******************************************************************************************************
+	*					Connecting to Finn if Finn is close enough to Spark
+	**********************************************************************************************************/
 	if (Finn_t->Position.x > spark_t->Position.x - 100 && Finn_t->Position.x < spark_t->Position.x + 100) {
 		if (Finn_t->Position.y > spark_t->Position.y - 100 && Finn_t->Position.y < spark_t->Position.y + 100) {
 			if (!Just_detached) {
@@ -44,8 +49,8 @@ void Spark::Update(Object* obj) {
 			}
 		}
 	}
-	if (Finn_t->Position.x < spark_t->Position.x - 100 && Finn_t->Position.x > spark_t->Position.x + 100) {
-		if (Finn_t->Position.y < spark_t->Position.y - 100 && Finn_t->Position.y > spark_t->Position.y + 100) {
+	if (Finn_t->Position.x < spark_t->Position.x - 50 && Finn_t->Position.x > spark_t->Position.x + 50) {
+		if (Finn_t->Position.y < spark_t->Position.y - 50 && Finn_t->Position.y > spark_t->Position.y + 50) {
 			Just_detached = false;
 		}
 	}
@@ -63,11 +68,18 @@ void Spark::Update(Object* obj) {
 		static_cast<Physics*>(obj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
 	}
 
+
+	/********************************************************************************************************
+	*
+	*	If player is Spark, then control Spark
+	*
+	********************************************************************************************************/
+	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
+	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 	if (GameLogic::playerObj->GetName() == "Spark")
 	{
 		Connected_to_Finn = false;
-		Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
-		Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+		
 		if (player_physics == nullptr || player_animation == nullptr) {
 			//std::cout << "NIL COMPONENT : Player" << std::endl;
 			return;
@@ -129,6 +141,13 @@ void Spark::Update(Object* obj) {
 			audio->stopWalking();
 			moving = false;
 		}
+	}
+	else {
+		player_physics->Velocity.x = 0.0f;
+		player_animation->current_type = AnimationType::Idle;
+		player_animation->face_right = true;
+		player_animation->jump_fixed = false;
+		audio->stopWalking();
 	}
 
 	

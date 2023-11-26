@@ -38,6 +38,7 @@ enum class KEY
 	spacebar,
 	shift,
 	one,
+	two,
 	total
 };
 /*
