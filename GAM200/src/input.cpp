@@ -16,6 +16,12 @@ To detect mouse/keyboard key presses and mouse position.
 namespace
 {
 	GLFWwindow* Pwindow = nullptr;
+	float scaleX{ 1.0f };
+	double scaleY{ 1.0f };
+	int new_width;
+	int new_height;
+	float old_width;
+	float old_height;
 	struct BUTTON
 	{
 	public:
@@ -90,6 +96,8 @@ void input::Init(GLFWwindow* pWin)
 {
 	Pwindow = pWin;
 	glfwSetCursorPosCallback(pWin, MousePosCallBack);
+	old_width = window->width;
+	old_height = window->height;
 }
 
 
@@ -112,11 +120,11 @@ bool input::IsPressedRepeatedly(KEY key)
 
 double input::GetMouseX()
 {
-	return mouse.x - static_cast<double>(window->width_init/2);
+		return ((mouse.x) - static_cast<double>(old_width*scaleX / 2.0f));
 }
 double input::GetMouseY()
 {
-	return -mouse.y + static_cast<double>(window->height_init / 2);
+		return (-mouse.y) + (old_height*scaleY/ 2.0f);
 }
 
 bool mouse_update()
@@ -133,6 +141,7 @@ bool mouse_update()
 		mouse_prevY = (float) mouse.y;
 		return true;
 	}
+
 }
 
 void input::Update()
@@ -191,3 +200,12 @@ bool input::MouseMoved()
 	return mouse.moved;
 }
 
+void input::update_resolution()
+{
+	//new_width = glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
+	//new_height = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
+	glfwGetFramebufferSize(GLWindow::ptr_window, &new_width, &new_height);
+	scaleX = new_width / old_width;
+	scaleY = new_height / old_height;
+
+}

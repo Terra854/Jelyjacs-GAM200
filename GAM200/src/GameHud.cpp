@@ -30,6 +30,8 @@ void draw_outline(Vec2 pos1, Vec2 pos2);
 
 void drawline(Vec2 start, Vec2 end, glm::vec3 color);
 
+void Buttons_change_resolution();
+
 /******************************************************************************
 	Inialise gamehud buttons and assets
 *******************************************************************************/
@@ -67,6 +69,7 @@ void GameHud::Update()
 					if (input::GetMouseY() > Buttons[i].pos2.y && input::GetMouseY() < Buttons[i].pos1.y)
 					{
 						button_tracker = Buttons[i].string.text;
+
 						break;
 					}
 				}
@@ -122,8 +125,20 @@ void GameHud::Update()
 			}
 			else if (button_tracker == "fullscreen")
 			{
-				window->change_window_size_fullscreen();
-				window->window_size = Window_size::fullscreen;
+				static bool fullscreen = false;
+				if (fullscreen)
+				{
+					window->change_window_size(Window_size::high);
+					window->window_size = Window_size::high;
+				}
+				else
+				{
+					window->change_window_size_fullscreen();
+					window->window_size = Window_size::fullscreen;
+				}
+				fullscreen = !fullscreen;
+				input::update_resolution();
+				Buttons_change_resolution();
 			}
 			else if (button_tracker == "restart")
 			{
@@ -233,14 +248,15 @@ void Button::draw_hud_texture()
 		// copy object's model-to-NDC matrix to vertex shader's
 		// uniform variable uModelToNDC
 		Vec2 posM;
-		posM.x = ((centre.x-17.0f) * 2.0f / window->width_init  ) ;
-		posM.y = (centre.y+10.0f) * 2.0f / window->height_init;
+		int current_width;
+		int current_height;
+		glfwGetFramebufferSize(GLWindow::ptr_window, &current_width, &current_height);
+		posM.x = ((centre.x-17.0f) * 2.0f / current_width) ;
+		posM.y = (centre.y+10.0f) * 2.0f / current_height;
 		Vec2 scale;
-		scale.x = (width *1.6f)/ window->width_init;
-		scale.y = (height *2.5f)/ window->height_init;
+		scale.x = (width *1.6f)/ current_width;
+		scale.y = (height *2.5f)/ current_height;
 		Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale) * Mat3RotRad(0.f);
-		Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-		mat = Mat3Scale(window_sacling.x, window_sacling.y) * mat;
 		GLApp::shdrpgms["image"].SetUniform("uModel_to_NDC", mat.ToGlmMat3());
 		// tell fragment shader sampler uTex2d will use texture image unit 6
 		GLuint tex_loc = glGetUniformLocation(GLApp::shdrpgms["image"].GetHandle(), "uTex2d");
@@ -269,16 +285,15 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	float scaling_x;
 	float scaling_y;
 	orientation = atan2(end.y - start.y, end.x - start.x);
-
-	scaling_x = abs(end.x - start.x) * 2 / window->width_init;
-	scaling_y = abs(end.y - start.y) * 2 / window->height_init;
-	pos_x = start.x * 2.0f / window->width_init;
-	pos_y = start.y * 2.0f / window->height_init;
-
+	int current_width;
+	int current_height;
+	glfwGetFramebufferSize(GLWindow::ptr_window,&current_width, &current_height);
+	scaling_x = abs(end.x - start.x) * 2 / current_width;
+	scaling_y = abs(end.y - start.y) * 2 / current_height;
+	pos_x = start.x * 2.0f / current_width;
+	pos_y = start.y * 2.0f / current_height;
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
-	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
 	//draw line
 	GLApp::shdrpgms["shape"].Use();
 	// bind VAO of this object's model
@@ -353,6 +368,28 @@ void set_win()
 }
 
 
+void Buttons_change_resolution()
+{
+	int current_width, current_height;
+	static int old_width{ window->width_init };
+	static int old_height{ window->height_init };
+	glfwGetFramebufferSize(GLWindow::ptr_window, &current_width, &current_height);
+	float scaleX = static_cast<float>(current_width) / old_width;
+	float scaleY = static_cast<float>(current_height) / old_height;
+	old_width = current_width;
+	old_height = current_height;
 
+	for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
+	{
+		it->centre.x *= scaleX;
+		it->centre.y *= scaleY;
+		it->pos1.x *= scaleX;
+		it->pos1.y *= scaleY;
+		it-> pos2.x *= scaleX;
+		it->pos2.y *= scaleY;
+		it->width *= scaleX;
+		it->height *= scaleY;
+	}
+}
 
 
