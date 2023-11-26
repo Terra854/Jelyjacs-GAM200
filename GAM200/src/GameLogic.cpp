@@ -129,6 +129,9 @@ void GameLogic::Update() {
 		}
 		// Update all other objects
 		for (auto it : objectFactory->FindAllObjectsByName(iter->GetOwner()->GetName())) {
+			if (iter->GetBehaviourName() == "NULL") {
+				continue;
+			}
 			behaviours[iter->GetBehaviourName()]->Update(it);
 			counter++;
 		}

@@ -23,6 +23,7 @@ void Vert_Elevator::Update(Object* obj) {
 		//std::cout << "NIL OBJ : V_Elevator" << std::endl;
 		return;
 	}
+	//std::cout << obj->GetName() << std::endl;
 	Physics* moving_platform_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Transform* moving_platform_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 	if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {

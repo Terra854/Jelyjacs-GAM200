@@ -306,13 +306,10 @@ void LevelEditor::ObjectProperties() {
 			}
 		if(be == nullptr)
 			if (ImGui::Selectable("Behaviour")) {
-				ImGui::Text("Pick your Behaviour");
-				for (auto it : Logic->behaviours) {
-					if (ImGui::Button(it.first.c_str())) {
-						object->AddComponent(new Behaviour(0, it.first));
-						UpdateAllObjectInstances(object);
-					}
-				}
+				object->AddComponent(new Behaviour());
+				Logic->AddBehaviourComponent(static_cast<Behaviour*>(object->GetComponent(ComponentType::Behaviour)));
+				UpdateAllObjectInstances(object);
+				std::cout << "Object Name : " << object->GetName() <<  " | Object ID : " << object->GetId() << " Behaviour Added" << std::endl;
 			}
 
 		ImGui::EndPopup();
@@ -974,7 +971,9 @@ void LevelEditor::ObjectProperties() {
 				ImGui::OpenPopup("Select Scripts");
 				for (auto& it : Logic->behaviours)
 					if (ImGui::Selectable(it.first.c_str())) {
-						be->SetBehaviourName(it.first);
+						be->SetBehaviourName(it.first.c_str());
+						be->SetBehaviourIndex(0);
+						UpdateAllObjectInstances(object);
 					}
 
 			}
@@ -982,7 +981,6 @@ void LevelEditor::ObjectProperties() {
 			{
 				Logic->RemoveBehaviourComponent(be);
 				objectFactory->DeleteComponent(object->GetId(), ComponentType::Behaviour);
-				be = nullptr;
 				std::cout << "Updated Map Size : " << Logic->behaviourComponents.size() << std::endl;
 			}*/
 		}

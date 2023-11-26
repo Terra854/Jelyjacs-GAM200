@@ -294,8 +294,8 @@ Object* Factory::createObject(const std::string& filename)
 			int temp_index;
 			jsonloop.readString(temp_name, "Properties", "Script");
 			jsonloop.readInt(temp_index, "Properties", "Index");
-			Logic->AddBehaviourComponent(b);
 			obj->AddComponent(b);
+			Logic->AddBehaviourComponent(b);
 			std::cout << "Behaviour Script & Index: " << temp_name << ", " << temp_index << std::endl;
 			b->SetBehaviourIndex(temp_index);
 			b->SetBehaviourName(temp_name);
@@ -516,10 +516,10 @@ Object* Factory::cloneObject(Object* object)
 		{
 			Behaviour* b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
 			Behaviour* b_tmp = static_cast<Behaviour*>(object->GetComponent(ComponentType::Behaviour));
-
+			obj->AddComponent(b);
 			b->SetBehaviourIndex(b_tmp->GetBehaviourIndex());
 			b->SetBehaviourName(b_tmp->GetBehaviourName());
-			obj->AddComponent(b);
+			
 		}
 	}
 
