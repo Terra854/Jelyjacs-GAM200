@@ -24,7 +24,7 @@ void LoadScene(std::string filename)
 	jsonobj.readString(levelname, "SceneName");
 	std::cout << "Loading Scene: " << levelname << std::endl;
 
-	AssetManager::clearSoundMap();
+	//AssetManager::clearSoundMap();
 	/*if (jsonobj.isMember("SoundMap"))
 	{
 		std::cout << "Linking sound map..." << std::endl;
@@ -33,11 +33,12 @@ void LoadScene(std::string filename)
 		linkSoundMap(soundmap);
 	}*/
 	
+	/*
 	std::string soundmap = "Asset/Sounds/sounds.json";
 	linkSoundMap(soundmap);
 
 	audio->setupSound();
-
+	*/
 	Vec2 start_coord;
 	jsonobj.readFloat(start_coord.x, "Size", "startX");
 	jsonobj.readFloat(start_coord.y, "Size", "startY");
@@ -115,7 +116,7 @@ void SaveScene(std::string filename)
 	Json::Value jsonobj;
 	jsonobj["SceneName"] = "testsaving";
 
-	jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
+	//jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
 
 	Vec2 start_coord = engine->Get_Start_Coords();
 
@@ -223,69 +224,6 @@ void SaveScene(std::string filename)
 
 	//jsonobj.openFileWrite(filename);
 	//jsonobj.closeFile();
-}
-
-void linkSoundMap(std::string filename)
-{
-	// Check if the given file exists
-	JsonSerialization jsonobj;
-	jsonobj.openFileRead(filename);
-
-	// Loop through AudioType
-	for (int i = 0; i < AudioType::END; i++)
-	{
-		std::string audio_type;
-		switch (i) // Set audio value based on current AudioType
-		{
-			case AudioType::Background:
-				audio_type = "background";
-				break;
-			case AudioType::Walking:
-				audio_type = "walking";
-				break;
-			case AudioType::Finn_Jumping:
-				audio_type = "finn_jumping";
-				break;
-			case AudioType::Spark_Jumping:
-				audio_type = "spark_jumping";
-				break;
-			case AudioType::Sliding_Door_Open:
-				audio_type = "sliding_door_open";
-				break;
-			default:
-				audio_type = "END";
-				break;
-		}
-
-		AudioType a = static_cast<AudioType>(i);
-
-		// Check if AudioType exist in audiomap json and then update it
-		if (jsonobj.isMember(audio_type))
-		{
-			if (jsonobj.isArray(audio_type))
-			{
-				size_t pos = jsonobj.size(audio_type);
-				std::vector<std::string> audioarr;
-				for (size_t j = 0; j < pos; j++)
-				{
-					std::string audioval;
-					jsonobj.readString(audioval, audio_type, (int) j);
-					audioarr.push_back(audioval);
-					std::cout << "AudioMap arrvalue: " << audioval << std::endl;
-				}
-				AssetManager::updateSoundMap(a, audioarr);
-			}
-			else
-			{
-				std::string audioval;
-				jsonobj.readString(audioval, audio_type);
-				AssetManager::updateSoundMap(a, audioval);
-				std::cout << "AudioMap value: " << audioval << std::endl;
-			}
-		}
-	}
-
-	jsonobj.closeFile();
 }
 
 

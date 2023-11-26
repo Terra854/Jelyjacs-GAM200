@@ -46,7 +46,7 @@
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "Player",
+        "Script": "Finn",
         "Index" : 0
       }
     },

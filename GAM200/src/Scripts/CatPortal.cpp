@@ -36,7 +36,7 @@ void CatPortal::Update(Object* obj) {
 			Object* temp_obj = objectFactory->getObjectWithID((long)i);
 			if (temp_obj == nullptr)
 				return;
-			if (temp_obj->GetName() == "catteleport" && temp_obj != obj)
+			if (temp_obj->GetName() == "CatTeleport" && temp_obj != obj)
 			{
 				otherCatPortal = temp_obj;
 				otherCatPortal_t = static_cast<Transform*>(otherCatPortal->GetComponent(ComponentType::Transform));

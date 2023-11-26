@@ -26,6 +26,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Audio.h>
 #include <Scenes.h>
 #include <PhysicsSystem.h>
+#include <Scripts/Spark.h>
 
 
 std::map<std::string, LogicScript*> LogicScript::temp_scriptmap;
@@ -59,7 +60,22 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 	// For Movement Key Display
 	if (msg->GetMessage() == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
-		//std::cout << temp->dir << std::endl;
+		switch (temp->dir) {
+			case up:
+				std::cout << "UP" << std::endl;
+				break;
+			case down:
+				std::cout << "DOWN" << std::endl;
+				break;
+			case left:
+				std::cout << "LEFT" << std::endl;
+				break;
+			case right:
+				std::cout << "RIGHT" << std::endl;
+				break;
+			default:
+				break;
+		}
 	}
 }
 /******************************************************************************
@@ -163,6 +179,8 @@ void GameLogic::Update() {
 			if (GameLogic::playerObj->GetName() == "Finn") {
 				Object* temp = objectFactory->FindObject("Spark");
 				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj :objectFactory->FindObject("Spark");
+				Spark::Just_detached = true;
+				static_cast<Body*>(temp->GetComponent(ComponentType::Body))->active = true;
 				std::cout << "Switched to Spark" << std::endl;
 			}
 			else if(GameLogic::playerObj->GetName() == "Spark") {
