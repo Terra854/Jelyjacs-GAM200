@@ -349,7 +349,8 @@ void CoreEngine::GameLoop()
 			// Render the viewport
 			ImGui::SetCursorPos(viewportStartPos);
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
-
+			
+			//Accept drag and drop of game prefabs into the game scene
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game object"))
@@ -500,7 +501,7 @@ void CoreEngine::GameLoop()
 				level_editor->selectedNum = -1;
 			}
 
-
+			//Rotate the object
 			if (input::IsPressed(KEY::q) && level_editor->selected == true)
 			{
 				Object* object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));

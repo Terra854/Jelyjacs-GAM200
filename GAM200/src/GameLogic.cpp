@@ -60,7 +60,22 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 	// For Movement Key Display
 	if (msg->GetMessage() == MessageID::Movement) {
 		MovementKey* temp = static_cast<MovementKey*>(msg);
-		//std::cout << temp->dir << std::endl;
+		switch (temp->dir) {
+			case up:
+				std::cout << "UP" << std::endl;
+				break;
+			case down:
+				std::cout << "DOWN" << std::endl;
+				break;
+			case left:
+				std::cout << "LEFT" << std::endl;
+				break;
+			case right:
+				std::cout << "RIGHT" << std::endl;
+				break;
+			default:
+				break;
+		}
 	}
 }
 /******************************************************************************

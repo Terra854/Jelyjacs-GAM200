@@ -138,9 +138,18 @@ void GLWindow::Initialize() {
 */
 void GLWindow::Update()
 {
+    
     glfwPollEvents();
     glfwSetWindowIconifyCallback(ptr_window, window_iconify_callback);
 
+    static bool first_time = true;
+#ifdef _DEBUG
+    first_time = false;
+#endif
+    if (first_time) {
+        change_window_size_fullscreen();
+        first_time = false;
+    }
     //change to windowed mode
     if (input::IsPressed(KEY::x)) {
         if (window_size == Window_size::fullscreen)
@@ -289,6 +298,7 @@ The error callback receives a human-readable description of the error and
 */
 void GLWindow::error_cb(int error, char const* description) {
     (void)error;
+    (void)description;
 #ifdef _DEBUG
     std::cerr << "GLFW error: " << description << std::endl;
 #endif
