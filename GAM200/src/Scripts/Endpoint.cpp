@@ -2,7 +2,7 @@
 #include <iostream>
 #include <components/Transform.h>
 #include <components/Animation.h>
-
+#include "gamehud.h"
 
 Endpoint::Endpoint(std::string name) : LogicScript(name)
 {
@@ -51,6 +51,7 @@ void Endpoint::Update(Object* obj) {
 					//Get Animation and change the animation to jump
 					endpoint_animation->fixed = true;
 					endpoint_animation->current_type = AnimationType::Jump;
+					set_win();
 				}
 			}
 		}

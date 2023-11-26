@@ -53,6 +53,8 @@ extern std::vector<Button> Buttons;
 void create_button(std::string const& text, Button button, float scale, FONT font , GLuint id);
 
 
+void set_win();
+
 class GameHud
 {
 public:
