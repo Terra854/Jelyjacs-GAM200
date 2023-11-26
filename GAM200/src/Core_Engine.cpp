@@ -30,6 +30,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <Scenes.h>
 #include <Camera.h>
 #include <SceneManager.h>
+#include <cmath> 
 
 CoreEngine* CORE = NULL;
 
@@ -436,8 +437,8 @@ void CoreEngine::GameLoop()
 
 					std::cout << "Offset: " << offset << std::endl;
 
-					objTransform->Position.x = gameWorldPos.x - offset.x;
-					objTransform->Position.y = gameWorldPos.y - offset.y;
+					objTransform->Position.x = (float) std::round(gameWorldPos.x - offset.x);
+					objTransform->Position.y = (float) std::round(gameWorldPos.y - offset.y);
 
 					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
 				}
