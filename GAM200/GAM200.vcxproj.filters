@@ -64,6 +64,9 @@
     <Filter Include="Source Files\External Libraries\IMGui">
       <UniqueIdentifier>{66eb552d-a7ac-47aa-be27-d262a185d4a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scripts">
+      <UniqueIdentifier>{aae42476-efab-41f7-9dd2-bdab55879cce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mat3.cpp">
@@ -186,32 +189,32 @@
     <ClCompile Include="src\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripts\Piston.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripts\Vert_Elevator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vec4.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\SceneManager.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Endpoint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripts\CatPortal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripts\Finn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\Vert_Elevator.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scripts\Spark.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Piston.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Player.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\CatPortal.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Endpoint.cpp">
+      <Filter>Source Files\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
