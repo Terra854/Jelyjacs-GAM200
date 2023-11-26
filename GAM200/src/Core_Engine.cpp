@@ -211,7 +211,7 @@ void CoreEngine::GameLoop()
 
 	//ImGuiIO& io = hud.StartGui();
 
-	bool show_performance_viewer = true;
+	//bool show_performance_viewer = true;
 	//bool objectProperties = false;
 	//bool tempstorage = 1;
 	//float pos_x = 0;
@@ -250,6 +250,9 @@ void CoreEngine::GameLoop()
 	GLuint tileset = app->setup_texobj("Asset/Picture/TileSheet.png");
 	long selectedObjectID = -1;
 
+	/* For dragging objects into the viewport */
+	bool DraggingPrefabIntoViewport = false;
+
 #endif
 	// Game Loop
 	gamehud.Initialize();
@@ -273,7 +276,7 @@ void CoreEngine::GameLoop()
 		hud.NewGuiFrame(0);
 
 		// Toggle Button to Display Debug Information in IMGui
-		if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
+		//if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
 
 		//show_performance_viewer ? Debug_Update() : Update();
 #endif
@@ -351,9 +354,21 @@ void CoreEngine::GameLoop()
 			ImGui::SetCursorPos(viewportStartPos);
 			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
 			
+			// Calculate the mouse position relative to the game world
+			ImVec2 clickPos = ImGui::GetMousePos();
+			ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
+			ImVec2 displayPos(relativePos.x / displaySize.x * 1920, 1080 - (relativePos.y / displaySize.y * 1080)); // Hardcoded to 1920x1080 as other resolutions bugged for now
+			ImVec2 openGlDisplayCoord((displayPos.x - (1920 / 2)) / camera2D->scale.x, (displayPos.y - (1080 / 2)) / camera2D->scale.y);
+
+			// Camera is stationary, it's the scene that is moving, so inverse pos
+			// Also, need to divide camera coord by 2 
+			ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * 1920.f / 2.f)), (openGlDisplayCoord.y - (camera2D->position.y * 1080.f / 2.f)));
+
 			//Accept drag and drop of game prefabs into the game scene
 			if (ImGui::BeginDragDropTarget())
 			{
+				DraggingPrefabIntoViewport = true; // Make sure we are not accidentally dragging any objects in the viewport
+
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game object"))
 				{
 					const std::pair<std::string, Object*>* object = (const std::pair<std::string, Object*>*)payload->Data;
@@ -365,28 +380,24 @@ void CoreEngine::GameLoop()
 
 					if (objTransform != nullptr)
 					{
-						ImVec2 objPos = convertMouseToGameViewportPos(displaySize);
-						objTransform->Position.x = objPos.x;
-						objTransform->Position.y = objPos.y;
+						objTransform->Position.x = (float)std::round(gameWorldPos.x);
+						objTransform->Position.y = (float)std::round(gameWorldPos.y);
 					}
 
 					if (objBody != nullptr)
 					{
 						RecalculateBody(objTransform, objBody);
 					}
+
+					level_editor->selected = true;
+					level_editor->selectedNum = (int)createdObj->GetId();
+					selectedObjectID = static_cast<long>(createdObj->GetId());
+					DraggingPrefabIntoViewport = false;
 				}
 				ImGui::EndDragDropTarget();
 			}
 
-			ImVec2 clickPos = ImGui::GetMousePos();
-			ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
-			ImVec2 displayPos(relativePos.x / displaySize.x * 1920, 1080 - (relativePos.y / displaySize.y * 1080)); // Hardcoded to 1920x1080 as other resolutions bugged for now
-			ImVec2 openGlDisplayCoord((displayPos.x - (1920 / 2)) / camera2D->scale.x, (displayPos.y - (1080 / 2)) / camera2D->scale.y);
-
-			// Camera is stationary, it's the scene that is moving, so inverse pos
-			// Also, need to divide camera coord by 2 
-			ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * 1920.f / 2.f)), (openGlDisplayCoord.y - (camera2D->position.y * 1080.f / 2.f)));
-
+			// Select object in the viewport
 			if (ImGui::IsItemClicked()) {
 				std::cout << "################################################################" << std::endl;
 				std::cout << "ClickPos " << clickPos.x << ", " << clickPos.y << std::endl;
@@ -413,7 +424,7 @@ void CoreEngine::GameLoop()
 			}
 			
 			// Dragging the selected object in the viewport
-			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true) {
+			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true && !DraggingPrefabIntoViewport) {
 				Object* object;
 				if (level_editor->selectedNum >= 0)
 					object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
