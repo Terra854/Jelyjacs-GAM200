@@ -34,6 +34,10 @@ void Piston::Update(Object* obj) {
 	// if piston collides with player, change the animation of piston
 	if (piston_b->collision_flag & COLLISION_TOP) {
 		Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+		if (piston_animation == nullptr) {
+			//std::cout << "NIL ANIMATION : Piston" << std::endl;
+			return;
+		}
 		piston_animation->fixed = true;
 		if (piston_animation->current_type == AnimationType::Jump){}
 		else {

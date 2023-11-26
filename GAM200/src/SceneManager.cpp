@@ -1,3 +1,10 @@
+/* !
+@file	SceneManager.cpp
+@author Tan Yee Ann
+@date	26/11/2023
+
+This file contains the definitions of the functions that manages the game scene
+*//*__________________________________________________________________________*/
 #include <SceneManager.h>
 #include <Core_Engine.h>
 #include <GameLogic.h>
@@ -7,7 +14,7 @@ SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
 
 /******************************************************************************
-Destructor class for SceneManager
+Destructor for SceneManager
 *******************************************************************************/
 SceneManager::~SceneManager(){
 	ClearInitialObjectMap(true);
@@ -28,7 +35,6 @@ void SceneManager::PlayScene() {
 	}
 
 }
-
 
 /******************************************************************************
 PauseScene

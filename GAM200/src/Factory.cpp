@@ -369,11 +369,16 @@ Object* Factory::createEmptyObject()
 }
 
 //This gives a game object an ID tag which can be used to find that same game object
+//Also sets the player object if the object is player controllable
 void Factory::assignIdToObject(Object* gameObj)
 {
 	gameObj->ObjectId = nextObjectId;
 	objectMap[nextObjectId] = gameObj;
 	++nextObjectId;
+
+	if (gameObj->GetComponent(ComponentType::PlayerControllable)) {
+		GameLogic::playerObj = gameObj;
+	}
 }
 
 //Returns a game object from the map with a specific id

@@ -17,8 +17,8 @@ ImVec2 convertMouseToGameViewportPos(ImVec2 displaySize)
 	menuImGuiCentrePos.x = menuTopLeftPos.x + (menuProportions.x / 2);
 	menuImGuiCentrePos.y = menuTopLeftPos.y + (menuProportions.y / 2);
 	ImVec2 menuCentreWorldPos = convertImGuiPosToWorldPos(menuImGuiCentrePos);
-	float xDiff = input::GetMouseX() - menuCentreWorldPos.x;
-	float yDiff = input::GetMouseY() - menuCentreWorldPos.y;
+	float xDiff = (float) input::GetMouseX() - menuCentreWorldPos.x;
+	float yDiff = (float) input::GetMouseY() - menuCentreWorldPos.y;
 	xDiff *= (window->width / displaySize.x);
 	yDiff *= (window->height / displaySize.y);
 	output.x = xDiff;

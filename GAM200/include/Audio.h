@@ -34,7 +34,6 @@ public:
 	void startWalking();
 	void stopWalking();
 	void playSfx(AudioType a);
-	void setBackgroundAudio();
 	void setWalkingAudio();
 	void restartBackgroundAudio();
 private:

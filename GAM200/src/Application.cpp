@@ -68,7 +68,7 @@ void Application::Init() {
 	sceneManager = new SceneManager();
 	audio = new Audio(); // declared in Audio.h
 	Logic = new GameLogic(); // declared in GameLogic.h
-	font = new Font();
+	FontSystem = new Font();
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();
 	thread_pool = new ThreadPool();
@@ -83,7 +83,7 @@ void Application::Init() {
 	engine->AddSystem(Logic);
 	engine->AddSystem(factory);
 	engine->AddSystem(physics);
-	engine->AddSystem(font);
+	engine->AddSystem(FontSystem);
 	engine->AddSystem(camera);
 
 

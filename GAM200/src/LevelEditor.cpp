@@ -323,17 +323,18 @@ void LevelEditor::ObjectProperties() {
 
 	ImGui::SameLine();
 
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-	if (ImGui::Button("Delete Object"))
-	{
-		objectFactory->destroyObject(object);
-		selectedNum = -1;
-		selected = false;
+	if (selectedNum >= 0) {
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+		if (ImGui::Button("Delete Object"))
+		{
+			objectFactory->destroyObject(object);
+			selectedNum = -1;
+			selected = false;
+		}
+		ImGui::PopStyleColor(3);
 	}
-	ImGui::PopStyleColor(3);
-
 	ImGui::EndChild();
 	ImGui::BeginChild("ObjectPropertiesScroll", ImGui::GetContentRegionAvail());
 	// Texture
@@ -1089,7 +1090,6 @@ void LevelEditor::DisplaySelectedTexture() {
 /******************************************************************************
 	AssetList
 	- This window displays the lists of assets that are loaded by the engine
-	- Only textures and prefabs currently
 *******************************************************************************/
 void LevelEditor::AssetList() 
 {
@@ -1301,8 +1301,8 @@ void LevelEditor::AssetList()
 void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
-	// Make the buttons unclickable if a level is not loaded
-	ImGui::BeginDisabled(engine->loaded_level.empty());
+	// Make the buttons unclickable if Finn or Spark are not inside 
+	ImGui::BeginDisabled(objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr);
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
@@ -1874,6 +1874,12 @@ void LevelEditor::Update() {
 	save_as_dialog ? SaveAsDialog() : DoNothing();
 
 	ImGui::PopFont();
+
+	if (input::IsPressed(KEY::del) && selectedNum >= 0) {
+		objectFactory->destroyObject(objectFactory->getObjectWithID(selectedNum));
+		selectedNum = -1;
+		selected = false;
+	}
 }
 
 /************************************LEVEL EDITOR GRID************************************/
