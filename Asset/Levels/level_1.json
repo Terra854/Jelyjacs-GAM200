@@ -29,12 +29,7 @@
       "Prefabs": "level1_background_7.json"
     },
     {
-      "Prefabs": "MainDoor.json",
-      "Type": "Transform",
-      "Position": {
-        "x": -96.0,
-        "y": 32.0
-      }
+      "Prefabs": "level1_background_8.json"
     },
     {
       "Prefabs": "MainDoor.json",
@@ -1393,7 +1388,7 @@
       "linkedevent": 1
     },
     {
-      "Prefabs": "PressurePlatePink.json",
+      "Prefabs": "PressurePlatePurple.json",
       "Type": "Transform",
       "Position": {
         "x": 448.0,
@@ -1402,7 +1397,7 @@
       "linkedevent": 2
     },
     {
-      "Prefabs": "LaserPink.json",
+      "Prefabs": "LaserPurple.json",
       "Type": "Transform",
       "Position": {
         "x": 616.0,
@@ -1411,7 +1406,7 @@
       "linkedevent": 2
     },
     {
-      "Prefabs": "LaserPink.json",
+      "Prefabs": "LaserPurple.json",
       "Type": "Transform",
       "Position": {
         "x": 664.0,
@@ -1484,7 +1479,7 @@
       "Prefabs": "BlueHorizontalDoor.json",
       "Type": "Transform",
       "Position": {
-        "x": 928.0, 
+        "x": 928.0,
         "y": 576.0
       },
       "Rotation": 180.0,
@@ -1494,7 +1489,7 @@
       "Prefabs": "CatTeleport.json",
       "Type": "Transform",
       "Position": {
-        "x": 832.0, 
+        "x": 832.0,
         "y": 192.0
       },
       "linkedevent": 5
@@ -1503,7 +1498,7 @@
       "Prefabs": "CatTeleport.json",
       "Type": "Transform",
       "Position": {
-        "x": 768.0, 
+        "x": 768.0,
         "y": 640.0
       },
       "linkedevent": 5

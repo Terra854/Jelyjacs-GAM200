@@ -250,7 +250,7 @@ void GLApp::Update()
 	}
 
 	//clear screen
-	glClearColor(1.f, 1.f, 1.f, 1.0f);
+	glClearColor(0.11f, 0.094f, 0.161f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//update window bar
