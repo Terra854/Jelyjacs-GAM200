@@ -21,7 +21,7 @@ void ThreadPool::Initialize() {
 
 /******************************************************************************
     Free
-    - Ceanly shuts down the threadpool
+    - Cleanly shuts down the threadpool
 *******************************************************************************/
 void ThreadPool::Free() {
     {
