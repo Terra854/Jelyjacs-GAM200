@@ -126,7 +126,7 @@ void GLWindow::Initialize() {
         std::cerr << "Driver doesn't support OpenGL 4.5 - abort program" << std::endl;
         return;
     }
-    window_size = Window_size::fullscreen;
+    window_size = Window_size::high;
     monitor = glfwGetPrimaryMonitor();
     originalMode = glfwGetVideoMode(monitor);
     glfwGetWindowPos(ptr_window, &originalX, &originalY);
@@ -138,9 +138,18 @@ void GLWindow::Initialize() {
 */
 void GLWindow::Update()
 {
+    
     glfwPollEvents();
     glfwSetWindowIconifyCallback(ptr_window, window_iconify_callback);
 
+    static bool first_time = true;
+#ifdef _DEBUG
+    first_time = false;
+#endif
+    if (first_time) {
+        change_window_size_fullscreen();
+        first_time = false;
+    }
     //change to windowed mode
     if (input::IsPressed(KEY::x)) {
         if (window_size == Window_size::fullscreen)

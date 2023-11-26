@@ -98,21 +98,25 @@ void GameHud::Update()
 					case(Window_size::fullscreen):
 					{
 						window->change_window_size(Window_size::high);
+						window->window_size = Window_size::high;
 						break;
 					}
 					case(Window_size::high):
 					{
 						window->change_window_size(Window_size::medium);
+						window->window_size = Window_size::medium;
 						break;
 					}
 					case(Window_size::medium):
 					{
 						window->change_window_size(Window_size::low);
+						window->window_size = Window_size::low;
 						break;
 					}
 					case(Window_size::low):
 					{
 						window->change_window_size(Window_size::high);
+						window->window_size = Window_size::high;
 						break;
 					}
 				}
@@ -120,6 +124,7 @@ void GameHud::Update()
 			else if (button_tracker == "fullscreen")
 			{
 				window->change_window_size_fullscreen();
+				window->window_size = Window_size::fullscreen;
 			}
 			else if (button_tracker == "restart")
 			{
