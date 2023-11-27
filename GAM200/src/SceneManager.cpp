@@ -25,6 +25,10 @@ SceneManager::~SceneManager(){
 	- Used to start or resume the scene
 *******************************************************************************/
 void SceneManager::PlayScene() {
+	// Do not play scene if Finn or Spark isn't inside the level
+	if (objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr)
+		return;
+
 	if (engine->isPaused()) {
 		if (initialObjectMap.empty()) {
 			for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
