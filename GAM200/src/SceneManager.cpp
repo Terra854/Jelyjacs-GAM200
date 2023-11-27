@@ -57,14 +57,16 @@ void SceneManager::PauseScene() {
 void SceneManager::RestartScene() {
 	audio->restartBackgroundAudio();
 
-	objectFactory->destroyAllObjects();
+	// Do not reset state if intial object map is empty
+	if (!initialObjectMap.empty()) {
+		objectFactory->destroyAllObjects();
 
-	for (const std::pair<int, Object*>& p : initialObjectMap) {
-		objectFactory->assignIdToObject(p.second);
+		for (const std::pair<int, Object*>& p : initialObjectMap) {
+			objectFactory->assignIdToObject(p.second);
+		}
+
+		ClearInitialObjectMap(false);
 	}
-
-	ClearInitialObjectMap(false);
-
 	Logic->playerObj = objectFactory->FindObject("Finn");
 }
 
