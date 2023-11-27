@@ -259,7 +259,7 @@ void GLApp::Update()
 
 	//update window bar
 	std::stringstream sstr;
-	sstr << window->title << " FPS: " << window->fps;
+	sstr << "Feline Felony";
 	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
 
 	//draw objects
