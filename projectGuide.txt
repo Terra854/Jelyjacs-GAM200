@@ -1,6 +1,4 @@
-(List your different project settings, different configuration setup (if any),
-differences in different projects under the same solution (if you have more than
-one), how to run editor mode vs only game mode.)
-
 GAM200 is our Engine which is a dll. 
 Feline Felony is our exe project which takes in GAM200 as its dll to be able to run our game.
+
+Level Editor is only available in debug mode
