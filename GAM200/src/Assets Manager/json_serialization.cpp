@@ -67,6 +67,7 @@ bool JsonSerialization::closeFile()
 	return true;
 }
 
+// Check if the parameters are valid
 bool JsonSerialization::checkValidParam(int pos, std::string param1, std::string param2, std::string param3)
 {
 	// Check Param1
@@ -111,6 +112,7 @@ bool JsonSerialization::checkValidParam(int pos, std::string param1, std::string
 	return true; // All valid
 }
 
+// Read integer
 void JsonSerialization::readInt(int& i, std::string param, int pos)
 {
 	if (!checkValidParam(pos, param)) return;
@@ -132,6 +134,7 @@ void JsonSerialization::readInt(int& i, std::string param1, std::string param2, 
 		i = (*jsonObject)[param1][param2][pos].asInt();
 }
 
+// Read float
 void JsonSerialization::readFloat(float& f, std::string param, int pos)
 {
 	if (!checkValidParam(pos, param)) return;
@@ -186,6 +189,7 @@ void JsonSerialization::readString(std::string& str, std::string param1, std::st
 		str = (*jsonObject)[param1][param2][pos].asString();
 }
 
+// Read bool
 void JsonSerialization::readBool(bool& val, std::string param, int pos)
 {
 	if (!checkValidParam(pos, param)) return;
@@ -196,6 +200,7 @@ void JsonSerialization::readBool(bool& val, std::string param, int pos)
 		val = (*jsonObject)[param][pos].asBool();
 }
 
+// Read bool
 void JsonSerialization::readBool(bool& val, std::string param1, std::string param2, int pos)
 {
 	if (!checkValidParam(pos, param1, param2)) return;
@@ -206,6 +211,7 @@ void JsonSerialization::readBool(bool& val, std::string param1, std::string para
 		val = (*jsonObject)[param1][param2][pos].asBool();
 }
 
+// Check if a parameter is a member of the json
 bool JsonSerialization::isMember(std::string str)
 {
 	if ((*jsonObject).isMember(str))
@@ -214,6 +220,7 @@ bool JsonSerialization::isMember(std::string str)
 		return false;
 }
 
+// Check if a parameter is a member of the json
 bool JsonSerialization::isMember(std::string str, std::string param)
 {
 	if ((*jsonObject)[param].isMember(str))
@@ -222,6 +229,7 @@ bool JsonSerialization::isMember(std::string str, std::string param)
 		return false;
 }
 
+// Check if a parameter is an array of the json
 bool JsonSerialization::isArray(std::string str)
 {
 	if ((*jsonObject)[str].isArray())
@@ -230,6 +238,7 @@ bool JsonSerialization::isArray(std::string str)
 		return false;
 }
 
+// Returns the size of the json array
 size_t JsonSerialization::size(std::string str)
 {
 	std::cout << "ARRAY SIZE: " << (*jsonObject)[str].size() << std::endl;
