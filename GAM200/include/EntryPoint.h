@@ -15,7 +15,6 @@ This file contains the main function that is used to run the game
 
 	// Minimizes the game if it loses focus on fullscreen
 	// such as when alt tabbed or ctrl+alt+delete
-	// (Release build only)
 	LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg) {
 		case WM_KILLFOCUS:
