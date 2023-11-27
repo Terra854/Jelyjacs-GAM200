@@ -14,15 +14,15 @@ SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
 
 /******************************************************************************
-Destructor for SceneManager
+	Destructor for SceneManager
 *******************************************************************************/
 SceneManager::~SceneManager(){
 	ClearInitialObjectMap(true);
 }
 
 /******************************************************************************
-PlayScene
--	Used to start or resume the scene
+	PlayScene
+	- Used to start or resume the scene
 *******************************************************************************/
 void SceneManager::PlayScene() {
 	if (engine->isPaused()) {
@@ -37,8 +37,8 @@ void SceneManager::PlayScene() {
 }
 
 /******************************************************************************
-PauseScene
--	Used to pause the scene
+	PauseScene
+	- Used to pause the scene
 *******************************************************************************/
 void SceneManager::PauseScene() {
 	if (!engine->isPaused())
@@ -46,9 +46,9 @@ void SceneManager::PauseScene() {
 }
 
 /******************************************************************************
-RestartScene
--	Used to restart the current scene. All objects will be cleared and the initial
-	state copied over
+	RestartScene
+	- Used to restart the current scene. All objects will be cleared and the initial
+	  state copied over
 *******************************************************************************/
 void SceneManager::RestartScene() {
 	audio->restartBackgroundAudio();
@@ -65,12 +65,12 @@ void SceneManager::RestartScene() {
 }
 
 /******************************************************************************
-ClearInitialObjectMap
--	Used to clear the object map used to backup the level's initial state
+	ClearInitialObjectMap
+	- Used to clear the object map used to backup the level's initial state
 
-@param deleteObjects - Whether to delete the objects itself. false is for only
-					   if transferring the objects to the main object map located
-					   in Factory
+	@param deleteObjects - Whether to delete the objects itself. false is for only
+						   if transferring the objects to the main object map located
+						   in Factory
 *******************************************************************************/
 void SceneManager::ClearInitialObjectMap(bool deleteObjects) {
 
