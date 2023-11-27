@@ -2,7 +2,7 @@
 /* !
 @file	input.h
 @author	Yeo Jia Ming, Luke Goh
-@date	28/9/2023
+@date	27/11/2023
 
 This file contains declarations for the input manager functions.
 To detect mouse/keyboard key presses and mouse position.
@@ -11,6 +11,7 @@ To detect mouse/keyboard key presses and mouse position.
 #include <message.h>
 #include <GLFW/glfw3.h>
 
+//list of all keys
 enum class KEY
 {
 	w,
@@ -41,11 +42,7 @@ enum class KEY
 	two,
 	total
 };
-/*
-class EscapeExit : public Message_Handler {
-	EscapeExit() : Message_Handler(MessageID::Quit) {}
-};
-*/
+
 
 enum Movement_direction {
 	none = 0,
@@ -89,13 +86,16 @@ namespace input
 	*/
 	double GetMouseY();
 	/*------------------------------------------------------------------------------------------------------------*/
-	/*!	for use in graphics.cpp to initialise GLFW callbacks
-	*/
-
+	
+	//to initialise input system
 	void Init(GLFWwindow* pWin);
+
+	//updates each key state
 	void Update();
 
+	//checks if mouse moved
 	bool MouseMoved();
 
+	//updates input scaling if resolution changed
 	void update_resolution();
 }

@@ -1,5 +1,5 @@
 /* !
-@file GameHud.cpp
+@file Font.cpp
 @author Yeo Jia Ming
 @date	3/11/2023
 
@@ -147,13 +147,14 @@ int find_width(std::string const& str , FONT f)
     return width>>6;
 }
 
+//normoalise coordinates where centre is 0 , 0
 void normalise_coord(float& x, float& y)
 {
     x += window->width / 2.0f;
     y += window->height / 2.0f;
 }
 
-
+//draw the text with opengl api
 void RenderText(std::string text, float x, float y, float scale, glm::ivec3 color)
 {
     normalise_coord(x, y);
@@ -213,7 +214,7 @@ Font::~Font()
 }
 
 
-
+//initialise shaders
 void init_shaders()
 {
     std::vector<std::pair<GLenum, std::string>> shdr_files
@@ -231,6 +232,7 @@ void init_shaders()
     }
 }
 
+//load the ascii characters into the container of characters
 void outline::load_ascii_chars()
 {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -275,6 +277,7 @@ void outline::load_ascii_chars()
         glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+//set normalise pixel size
 void outline::set_pixel_size(int size)
 {
     FT_Set_Pixel_Sizes(face, 0, size);

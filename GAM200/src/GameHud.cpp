@@ -1,7 +1,7 @@
 /* !
 @file GameHud.cpp
-@author Yeo Jia Ming
-@date	3/11/2023
+@author Yeo Jia Ming, Tay Sen Chuan , Guo chen
+@date	27/11/2023
 //
 This file contains the definition of the functions of GameHud 
 *//*__________________________________________________________________________*/
@@ -19,23 +19,31 @@ namespace
 	bool win = false;
 }
 
+//container of buttons
 std::vector<Button> Buttons;
+
+//button map to track button according to index in vector
 std::map <std::string, int> index;
 
+//menu trackers
 bool settings_menu = false;
-
 bool how_to_play_menu = false;
-
 int number_of_buttons = 0;
 int begin_index = 0;
 int end_index = 0;
 
+//helper functions
+
+//draw outline of button
 void draw_outline(Vec2 pos1, Vec2 pos2);
 
+//draw a single line
 void drawline(Vec2 start, Vec2 end, glm::vec3 color);
 
+//change pos and scaling of buttons based on resolution
 void Buttons_change_resolution();
 
+//draw how to play screen text
 void draw_how_to_play_string();
 
 /******************************************************************************
@@ -43,6 +51,7 @@ void draw_how_to_play_string();
 *******************************************************************************/
 void GameHud::Initialize()
 {
+	//create buttons from json
 	createHudFromConfig("Asset/UI/Pause.json");
 	button_tracker = "nil";
 }
@@ -52,6 +61,7 @@ void GameHud::Initialize()
 *******************************************************************************/
 void GameHud::Update()
 {
+	//switching between the various menus
 	if (win)
 	{
 		begin_index = index.at("win_menu");
@@ -78,6 +88,7 @@ void GameHud::Update()
 		end_index = index.at("menu");
 	}
 
+	//tracking mouse if on buttons
 	if (input::MouseMoved())
 	{
 			for (int i = begin_index; i < end_index; ++i)
@@ -98,6 +109,7 @@ void GameHud::Update()
 			}
 	}
 	
+	//set outcome if button is pressed
 	if ((input::IsPressed(KEY::mouseL) && button_tracker != "nil"))
 		{
 			audio->playSfx(AudioType::Button_Click);
@@ -198,6 +210,7 @@ void GameHud::Update()
 *******************************************************************************/
 void GameHud::Draw()
 {
+	//draw only based on the menu setting
 	for (int i =begin_index ; i< end_index; ++i)
 	{
 		Buttons[i].draw_hud_texture();

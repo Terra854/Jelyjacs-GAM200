@@ -1,7 +1,7 @@
 /* !
 @file	input.cpp
 @author	Yeo Jia Ming
-@date	28/9/2023
+@date	27/11/2023
 
 This file contains the implementations for input manager.
 To detect mouse/keyboard key presses and mouse position.
@@ -11,17 +11,22 @@ To detect mouse/keyboard key presses and mouse position.
 #include "input.h"
 #include "GLWindow.h"
 #include "Core_Engine.h"
+
+
 //refer to input.h for input functions interface
 
 namespace
 {
 	GLFWwindow* Pwindow = nullptr;
+	
+	//keep track of resolution change
 	float scaleX{ 1.0f };
 	double scaleY{ 1.0f };
 	int new_width;
 	int new_height;
 	float old_width;
 	float old_height;
+
 	struct BUTTON
 	{
 	public:
@@ -61,6 +66,7 @@ bool BUTTON::IsPressedRepeatedly()
 {
 	return (pressed && !released);
 }
+
 
 void BUTTON::SetKeyState(int action)
 {
@@ -127,6 +133,7 @@ double input::GetMouseY()
 		return (-mouse.y) + (old_height*scaleY/ 2.0f);
 }
 
+//checks if mouse was moved
 bool mouse_update()
 {
 	static float mouse_prevX = 0.0f;
@@ -146,6 +153,7 @@ bool mouse_update()
 
 void input::Update()
 {
+	//updates each key if it was pressed previous frame
 	for (int i = 0; i < at(KEY::total); ++i)
 	{
 		if (buttons[i].pressed && !buttons[i].pressedPrevFrame)
@@ -153,6 +161,8 @@ void input::Update()
 			buttons[i].pressedPrevFrame = true;
 		}
 	}
+
+	//set the updated key states into the vector
 	mouse.moved = mouse_update();
 	buttons[at(KEY::w)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_W));
 	buttons[at(KEY::a)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_A));
@@ -182,6 +192,7 @@ void input::Update()
 	buttons[at(KEY::two)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_2));
 }
 
+//sets a delay when press repeatedly
 bool input::IsPressedRepeatedlyDelayed(KEY key , float delay)
 {
 	if (buttons[at(key)].IsPressedRepeatedly())
@@ -195,15 +206,15 @@ bool input::IsPressedRepeatedlyDelayed(KEY key , float delay)
 	return false;
 }
 
+
 bool input::MouseMoved()
 {
 	return mouse.moved;
 }
 
+//updates scaling of inputs based on resolution change
 void input::update_resolution()
 {
-	//new_width = glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
-	//new_height = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
 	glfwGetFramebufferSize(GLWindow::ptr_window, &new_width, &new_height);
 	scaleX = new_width / old_width;
 	scaleY = new_height / old_height;
