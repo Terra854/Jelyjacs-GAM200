@@ -1,10 +1,3 @@
-/* !
-@file GameHud.h
-@author Yeo Jia Ming
-@date	3/11/2023
-
-This file contains the declarations for the functions of gamehud class
-*//*__________________________________________________________________________*/
 #pragma once
 /* !
 @file	GameHud.h

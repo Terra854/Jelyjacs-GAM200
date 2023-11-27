@@ -16,6 +16,7 @@ This file contains the main function that is used to run the game
 
 #else
 #include <windows.h>
+	// WinMain instead of main to not show the Win32 console
 	int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, int nCmdShow) {
 
 		UNREFERENCED_PARAMETER(hInstance);

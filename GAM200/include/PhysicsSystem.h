@@ -19,6 +19,8 @@ public:
 	virtual void Initialize();
 	virtual void Update();
 	virtual void MessageRelay(Message_Handler* msg);
+
+	// Returns name of the component
 	virtual std::string SystemName() { return "Physics"; }
 };
 

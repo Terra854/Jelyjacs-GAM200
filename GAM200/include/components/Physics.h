@@ -19,10 +19,8 @@ public:
 	float Mass = 1.f;
 	float Force = 0.f;
 
-	virtual void Initialize() override
-	{
+	virtual void Initialize() override {}
 
-	}
-
+	// Returns name of the component
 	virtual ComponentType TypeId() const override { return ComponentType::Physics; }
 };

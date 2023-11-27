@@ -36,7 +36,10 @@ public:
 	~GLWindow() {};
 	virtual void Initialize();
 	virtual void Update();
-	virtual std::string SystemName() { return "Window"; };
+
+	// Returns name of the component
+	virtual std::string SystemName() { return "Window"; }
+
 	static void ChangeWindowMode();
 	static void window_iconify_callback(GLFWwindow* window, int iconified);
 	static void cleanup();

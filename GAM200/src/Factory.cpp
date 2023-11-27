@@ -582,6 +582,7 @@ std::vector<Object*> Factory::FindAllObjectsByName(std::string name)
 	return v;
 }
 
+//This will delete the specified component from a given object
 void Factory::DeleteComponent(int id, ComponentType c) {
 	DeleteComponent(getObjectWithID(id), c);
 }

@@ -40,6 +40,8 @@ public:
 
 	virtual void Initialize();
 	void Update();
+
+	// Returns name of the component
 	virtual std::string SystemName() { return "LevelEditor"; }
 
 	void SetSystemElapsedTime(std::string name, double time) { System_elapsed_time[name] = time; }

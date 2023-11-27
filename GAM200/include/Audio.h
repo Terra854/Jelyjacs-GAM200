@@ -27,6 +27,8 @@ public:
 	~Audio();
 	virtual void Initialize();
 	virtual void Update() override;
+
+	// Returns name of the component
 	virtual std::string SystemName() { return "Audio"; }
 
 	void setupSound();
@@ -38,10 +40,6 @@ private:
 	FMOD::System* system;
 	FMOD::Channel *background, *channel, *sfx;
 	FMOD_RESULT result;
-
-	//FMOD::Sound *walking, *jump, *game_background, *sliding_door_open;
-
-	bool isPlayingWalking = false;
 };
 
 extern Audio* audio;

@@ -1,3 +1,4 @@
+#pragma once
 /* !
 @file    Particle.h
 @author  Guo Chen (g.chen@digipen.edu)

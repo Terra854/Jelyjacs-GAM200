@@ -20,6 +20,9 @@ Object::~Object(){
 	Components.clear();
 }
 
+/******************************************************************************
+	Gets a given component from an object
+*******************************************************************************/
 Component* Object::GetComponent(ComponentType typeID)
 {
 	/*
@@ -35,6 +38,9 @@ Component* Object::GetComponent(ComponentType typeID)
 		return nullptr;
 }
 
+/******************************************************************************
+	Adds a given component into an object
+*******************************************************************************/
 void Object::AddComponent(Component* component)
 {
 	//add into component map
@@ -44,6 +50,9 @@ void Object::AddComponent(Component* component)
 	component->Base = this;
 }
 
+/******************************************************************************
+	Initializes the object
+*******************************************************************************/
 void Object::Initialize()
 {
 	for (std::unordered_map<ComponentType, Component*>::iterator it = Components.begin(); it != Components.end(); ++it)
