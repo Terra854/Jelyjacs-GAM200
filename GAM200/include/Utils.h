@@ -1,3 +1,12 @@
+/* !
+@file Utils.h
+@author Jonathan Woo
+@date	11/11/2023
+
+This file contains the declarations for the utility functions. These are meant
+to help with internal functionality with the engine and not for overtly affecting
+the engine itself or the game objects within it
+*//*__________________________________________________________________________*/
 #pragma once
 #include <Precompile.h>
 #include <ImGui/imgui.h>
@@ -18,4 +27,5 @@ ImVec2 convertImGuiPosToWorldPos(ImVec2 pos);
 //Needs the display size of the game scene as a parameter
 ImVec2 convertMouseToGameViewportPos(ImVec2 displaySize);
 
+//Used to check if a game object has been clicked on in the game scene
 bool isObjectClicked(Transform* trans, ImVec2 mousePos);

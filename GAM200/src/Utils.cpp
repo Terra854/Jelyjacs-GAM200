@@ -1,3 +1,13 @@
+/* !
+@file Utils.cpp
+@author Jonathan Woo
+@date	11/11/2023
+
+This file contains the definitions for the utility functions. These are meant
+to help with internal functionality with the engine and not for overtly affecting
+the engine itself or the game objects within it
+*//*__________________________________________________________________________*/
+
 #include "Utils.h"
 
 ImVec2 convertImGuiPosToWorldPos(ImVec2 pos)

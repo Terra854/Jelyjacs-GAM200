@@ -238,7 +238,6 @@ void LevelEditor::ObjectProperties() {
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
 			{
-				std::cout << "test\n";
 				const std::pair<std::string, GLuint>* dropped_object = (const std::pair<std::string, GLuint>*)payload->Data;
 				te->textureName = dropped_object->first;
 				UpdateAllObjectInstances(object);
