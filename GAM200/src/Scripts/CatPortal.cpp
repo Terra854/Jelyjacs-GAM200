@@ -78,20 +78,18 @@ void CatPortal::Update(Object* obj) {
             std::cout << "NIL OTHER CAT PORTAL : CatPortal" << std::endl;
             return;
         }
-
         // Check if the player is within the portal's range.
-        if (player_t->Position.x > catPortal_t->Position.x - 50 && player_t->Position.x < catPortal_t->Position.x + 50
-            && player_t->Position.y > catPortal_t->Position.y - 50 && player_t->Position.y < catPortal_t->Position.y + 50) {
-            if (justTeleported == true)
-                return;
-            else {
-                std::cout << "Player is in the cat portal" << std::endl;
-                //Find the other cat portal
-                if (otherCatPortal_t == nullptr) {
-                    std::cout << "NIL OTHER CAT PORTAL TRANSFORM : CatPortal" << std::endl;
+        if (player_t->Position.x > catPortal_t->Position.x - 50 && player_t->Position.x < catPortal_t->Position.x + 50) {
+            if (player_t->Position.y > catPortal_t->Position.y - 50 && player_t->Position.y < catPortal_t->Position.y + 50) {
+                if (justTeleported == true)
                     return;
-                }
                 else {
+                    std::cout << "Player is in the cat portal" << std::endl;
+                    //Find the other cat portal
+                    if (otherCatPortal_t == nullptr) {
+                        std::cout << "NIL OTHER CAT PORTAL TRANSFORM : CatPortal" << std::endl;
+                        return;
+                    }
                     // Teleport the player to the other CatPortal's position.
                     audio->playSfx(AudioType::Cat_Teleport);
                     player_t->Position.x = otherCatPortal_t->Position.x;
@@ -99,6 +97,11 @@ void CatPortal::Update(Object* obj) {
                     justTeleported = true;
                 }
             }
+        }
+        else if ((player_t->Position.x > otherCatPortal_t->Position.x - 50 && player_t->Position.x < otherCatPortal_t->Position.x + 50)
+            && (player_t->Position.y > otherCatPortal_t->Position.y - 50 && player_t->Position.y < otherCatPortal_t->Position.y + 50))
+        {
+
         }
         else {
             // Reset teleportation status and animation when the player is not near the portal.
