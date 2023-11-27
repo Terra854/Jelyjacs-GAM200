@@ -27,7 +27,7 @@
       "button_y": 0,
       "button_w": 500,
       "button_h": 500,
-      "scale": 1.0,
+      "scale": 0.0,
       "font": "AldrichRegular",
       "texture": "MENU_back.png"
     },
@@ -42,7 +42,7 @@
       "texture": "transparent.png"
     },
     {
-      "text": "fullscreen",
+      "text": "settings",
       "button_x": 0,
       "button_y": -320,
       "button_w": 200,
@@ -72,12 +72,72 @@
       "texture": "transparent.png"
     },
     {
+      "text": "settings_menu",
+      "button_x": 0,
+      "button_y": 0,
+      "button_w": 500,
+      "button_h": 500,
+      "scale": 0.0,
+      "font": "AldrichRegular",
+      "texture": "MENU_back.png"
+    },
+    {
+      "text": "fullscreen",
+      "button_x": 0,
+      "button_y": -320,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "back",
+      "button_x": -13,
+      "button_y": 310,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "how to play",
+      "button_x": 0,
+      "button_y": -220,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "how to play_menu",
+      "button_x": -50,
+      "button_y": -100,
+      "button_w": 900,
+      "button_h": 200,
+      "scale": 0.0,
+      "font": "AldrichRegular",
+      "texture": "Empty_Box.png"
+    },
+    {
+      "text": "close",
+      "button_x": 0,
+      "button_y": -300,
+      "button_w": 150,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
       "text": "win_menu",
       "button_x": 0,
       "button_y": 0,
       "button_w": 500,
       "button_h": 500,
-      "scale": 1.0,
+      "scale": 0.0,
       "font": "AldrichRegular",
       "texture": "MENU_back.png"
     },
