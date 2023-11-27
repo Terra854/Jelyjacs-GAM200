@@ -19,6 +19,8 @@ public:
 	static void RestartScene();
 	static void ClearInitialObjectMap(bool deleteObjects);
 	static bool IsInitialObjectMapEmpty() { return initialObjectMap.empty(); };
+
+	// Returns name of the component
 	virtual std::string SystemName() { return "SceneManager"; }
 
 	friend class LevelEditor;

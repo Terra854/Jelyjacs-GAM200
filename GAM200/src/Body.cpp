@@ -8,6 +8,9 @@ Body, as a shape contains the hitbox collision outline of the object.
 *//*__________________________________________________________________________*/
 #include "../include/components/Body.h"
 
+/******************************************************************************
+	Initializes the Rectangle collision data
+*******************************************************************************/
 void Rectangular::Initialize()
 {
 	Object* o = GetOwner();
@@ -18,11 +21,10 @@ void Rectangular::Initialize()
 	}
 }
 
-Shape Rectangular::GetShape()
-{
-	return Shape::Rectangle;
-}
 
+/******************************************************************************
+	Initializes the Circle collision data
+*******************************************************************************/
 void Circular::Initialize()
 {
 	Object* o = GetOwner();
@@ -30,6 +32,15 @@ void Circular::Initialize()
 		Vec2 pos = ((Transform*)o->GetComponent(ComponentType::Transform))->Position;
 		circle.center = pos;
 	}
+}
+
+/******************************************************************************
+	Returns the shape type
+*******************************************************************************/
+
+Shape Rectangular::GetShape()
+{
+	return Shape::Rectangle;
 }
 
 Shape Circular::GetShape()

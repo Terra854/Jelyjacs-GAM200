@@ -48,18 +48,22 @@ Mat3 operator* (const Mat3& lhs, const Mat3& rhs);
 
 Vec2 operator* (const Mat3& pMtx, const Vec2& rhs);
 
+// Identity matrix
 Mat3 Mat3Identity();
 
+// Translate matrix
 Mat3 Mat3Translate(float x, float y);
 Mat3 Mat3Translate(Vec2 v);
 
+// Scale matrix
 Mat3 Mat3Scale(float x, float y);
 Mat3 Mat3Scale(Vec2 v);
 
+// Rotation matrix
 Mat3 Mat3RotRad(float angle);
-
 Mat3 Mat3RotDeg(float angle);
 
+// Transpose a given matrix
 Mat3 Mat3Transpose(const Mat3& pMtx);
 
 // If the matrix inversion fails, the function returns NULL

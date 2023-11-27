@@ -36,6 +36,8 @@ public:
 	~GLApp() {}
 	virtual void Initialize() ;
 	virtual void Update();
+
+	// Returns name of the component
 	virtual std::string SystemName() { return "Graphics"; }
 	
 	static void cleanup();

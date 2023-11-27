@@ -18,8 +18,6 @@ class LogicScript;
 class GameLogic : public ISystems
 {
 public:
-	//Constructor to initialise pointer
-	// It's broken, will be purged in the future
 	GameLogic();
 	~GameLogic();
 	virtual void MessageRelay(Message_Handler* msg);
@@ -42,6 +40,8 @@ public:
 	bool CheckBehaviour(std::string name);
 	//void AddObject(Object* obj);
 	void LoadScripts();
+
+	// Returns name of the component
 	virtual std::string SystemName() { return "Game_Logic"; }
 
 	static Object* playerObj;

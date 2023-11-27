@@ -1,3 +1,4 @@
+#pragma once
 /* !
 @file Behaviour.h
 @author Luke Goh
@@ -5,7 +6,6 @@
 
 This file contains the Behaviour Component that is needed for Logic System
 *//*__________________________________________________________________________*/
-#pragma once
 
 #include <Object.h>
 #include <iostream>
