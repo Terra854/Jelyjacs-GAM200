@@ -1,5 +1,5 @@
 /* !
-@file GameLogic.cpp
+@file	Player.cpp
 @author Luke Goh
 @date	27/11/2023
 

@@ -1,5 +1,5 @@
 /* !
-@file GameLogic.cpp
+@file	Finn.cpp
 @author Luke Goh
 @date	27/11/2023
 

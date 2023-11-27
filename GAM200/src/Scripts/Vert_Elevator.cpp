@@ -1,3 +1,10 @@
+/* !
+@file	Vert_Elevator.cpp
+@author Luke Goh
+@date	27/11/2023
+
+This file contains the script for the vertical elevator
+*//*__________________________________________________________________________*/
 #include "Scripts/Vert_Elevator.h"
 #include <PhysicsSystem.h>
 #include <components/Physics.h>
