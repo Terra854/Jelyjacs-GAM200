@@ -21,11 +21,20 @@ Piston::Piston(std::string name) : LogicScript(name)
 {
 	std::cout << name << " Created" << std::endl;
 }
-
+/***************************************************************************/
+// Start method, called when the Piston script is first activated.
+// @param obj: A pointer to the Object that this script is attached to.
+// Performs initial setup and configuration for Piston.
+/***************************************************************************/
 void Piston::Start(Object* obj) {
 	std::cout << "Piston Script Ready : " << obj->GetName() << std::endl;
 }
 
+/***************************************************************************/
+// Update method, called on every frame to update Piston's state.
+// @param obj: A pointer to the Object that this script is attached to.
+// Contains logic for Piston's interactions with door, and animations.
+/***************************************************************************/
 void Piston::Update(Object* obj) {
 	// For some reason, the player is not changing position
 	if (obj == nullptr) {
@@ -67,6 +76,11 @@ void Piston::Update(Object* obj) {
 		}
 	}
 }
+
+/***************************************************************************/
+// Shutdown method, called when the Piston script is stopped.
+// @param obj: A pointer to the Object that this script is attached to.
+/***************************************************************************/
 
 void Piston::Shutdown(Object* obj) {
 	std::cout << "Piston Script Shutdown : " << obj->GetName() << std::endl;

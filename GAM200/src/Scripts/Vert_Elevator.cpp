@@ -17,13 +17,22 @@ Vert_Elevator::Vert_Elevator(std::string name) : LogicScript(name)
 	std::cout << name << " Created" << std::endl;
 	moving_platform_direction = false;
 }
-
+/***************************************************************************/
+// Start method, called when the Vert_Elevator script is first activated.
+// @param obj: A pointer to the Object that this script is attached to.
+// Performs initial setup and configuration for Vert_Elevator.
+/***************************************************************************/
 void Vert_Elevator::Start(Object* obj)
 {
 	std::cout << "Vert_Elevator Script Ready : " << obj->GetName() << std::endl;
 	
 }
 
+/***************************************************************************/
+// Update method, called on every frame to update Vert_Elevator's state.
+// @param obj: A pointer to the Object that this script is attached to.
+// Contains logic for Vert_Elevator's movement and animations.
+/***************************************************************************/
 void Vert_Elevator::Update(Object* obj) {
 	// For some reason, the player is not changing position
 	if (obj == nullptr) {
@@ -48,6 +57,11 @@ void Vert_Elevator::Update(Object* obj) {
 	moving_platform_physics->Velocity.y = moving_platform_speed;
 }
 
+/***************************************************************************/
+// Shutdown method, called when the Vert_Elevator script is stopped.
+// @param obj: A pointer to the Object that this script is attached to.
+// Contains cleanup logic for Vert_Elevator.
+/***************************************************************************/
 void Vert_Elevator::Shutdown(Object* obj) {
 	std::cout << "Vert_Elevator Script Shutdown : " << obj->GetName() << std::endl;
 }

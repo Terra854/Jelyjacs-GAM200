@@ -19,11 +19,20 @@ Finn::Finn(std::string name) : LogicScript(name)
 {
 	std::cout << name << " Created" << std::endl;
 }
-
+/***************************************************************************/
+// Start method, called when the Finn script is first activated.
+// @param obj: A pointer to the Object that this script is attached to.
+// Performs initial setup and configuration for Finn.
+/***************************************************************************/
 void Finn::Start(Object* obj) {
 	std::cout << "Finn Script Ready : " << obj->GetName() << std::endl;
 }
 
+/***************************************************************************/
+// Update method, called on every frame to update Finn's state.
+// @param obj: A pointer to the Object that this script is attached to.
+// Contains logic for Finn's movement and animations.
+/***************************************************************************/
 void Finn::Update(Object* obj) {
 	if (obj == nullptr) {
 		return;
@@ -104,8 +113,14 @@ void Finn::Update(Object* obj) {
 	}
 }
 
+/***************************************************************************/
+// Shutdown method, called when the Finn script is stopped.
+// @param obj: A pointer to the Object that this script is attached to.
+// Performs cleanup tasks for Finn.
+/***************************************************************************/
 void Finn::Shutdown(Object* obj) {
 	std::cout << "Finn Script Shutdown : " << obj->GetName() << std::endl;
 }
 
+// Creating an instance of the Finn class.
 Finn finn("Finn");
