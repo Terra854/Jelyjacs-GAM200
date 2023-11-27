@@ -29,7 +29,10 @@ std::map<AudioType, std::variant<std::string, std::vector<std::string>>> AssetMa
 
 GLuint AssetManager::missing_texture;
 
-// Looked through the asset file and load all assets
+/******************************************************************************
+Initialize
+-	Looked through the asset folder and load all assets
+*******************************************************************************/
 void AssetManager::Initialize()
 {
 	std::cout << "File List: " << std::endl;
@@ -92,6 +95,10 @@ void AssetManager::Initialize()
 
 }
 
+/******************************************************************************
+Free
+-	Free the assets stored in cleanprefab as necessary
+*******************************************************************************/
 void AssetManager::Free()
 {
 	// No freeing needed for textures and animations
@@ -99,6 +106,10 @@ void AssetManager::Free()
 	// Freeing of sound is called in audio.cpp when audio system is destroyed
 }
 
+/******************************************************************************
+SystemName
+-	Return the system name
+*******************************************************************************/
 std::string AssetManager::SystemName()
 {
 	return "AssetManager";
@@ -109,7 +120,11 @@ void AssetManager::Update()
 	
 }
 
-// Load all textures
+/******************************************************************************
+loadalltextures
+-	The function looks through the directory for textures to load and store
+them in the assetmanager
+*******************************************************************************/
 void AssetManager::loadalltextures()
 {
 	GLuint textureuint;
@@ -122,7 +137,10 @@ void AssetManager::loadalltextures()
 	}
 }
 
-// Unload all textures
+/******************************************************************************
+unloadalltextures
+-	Unload all the loaded textures stored
+*******************************************************************************/
 void AssetManager::unloadalltextures()
 {
 	for (const auto& t : textures) {
@@ -131,6 +149,11 @@ void AssetManager::unloadalltextures()
 	textures.clear();
 }
 
+/******************************************************************************
+loadanimations
+-	The function looks through the directory for animations to load and store
+them in the assetmanager
+*******************************************************************************/
 void AssetManager::loadanimations()
 {
 	GLuint textureuint;
@@ -143,6 +166,11 @@ void AssetManager::loadanimations()
 	}
 }
 
+/******************************************************************************
+createprefablist
+-	The function looks through the directory for prefabs to load and store
+them in the assetmanager
+*******************************************************************************/
 void AssetManager::createprefablist()
 {
 	for (const auto& list : std::filesystem::directory_iterator(objectprefabs))
@@ -162,6 +190,11 @@ void AssetManager::createprefablist()
 	}
 }
 
+/******************************************************************************
+loadsounds
+-	The function looks through the directory for sounds to load and store
+them in the assetmanager
+*******************************************************************************/
 void AssetManager::loadsounds()
 {
 	for (const auto& list : std::filesystem::directory_iterator(pathaudio))
@@ -199,6 +232,10 @@ void AssetManager::loadsounds()
 	}
 }
 
+/******************************************************************************
+clearsounds
+-	The function frees and clear the stored sounds from the assetmanager
+*******************************************************************************/
 void AssetManager::clearsounds()
 {
 	for (const auto& s : sounds)
@@ -206,6 +243,14 @@ void AssetManager::clearsounds()
 	sounds.clear();
 }
 
+/******************************************************************************
+texturecheckexist
+-	Checks if a texture exist in the assetmanager when given the texture name
+
+@param str - the name of the texture
+
+@return - true / false
+*******************************************************************************/
 bool AssetManager::texturecheckexist(std::string str)
 {
 	std::map<std::string, GLuint>::iterator it = textures.find(str);
@@ -215,6 +260,14 @@ bool AssetManager::texturecheckexist(std::string str)
 		return true;
 }
 
+/******************************************************************************
+textureval
+-	Returns the ID for the textures
+
+@param str - the name of the texture
+
+@return - GLuint value of the texture
+*******************************************************************************/
 GLuint AssetManager::textureval(std::string str)
 {
 	try {
@@ -225,6 +278,14 @@ GLuint AssetManager::textureval(std::string str)
 	}
 }
 
+/******************************************************************************
+animationcheckexist
+-	The function checks whether an animation spirte sheet exist
+
+@param str - the name of the sprite sheet
+
+@return - true / false
+*******************************************************************************/
 bool AssetManager::animationcheckexist(std::string str)
 {
 	std::map<std::string, GLuint>::iterator it = animations.find(str);
@@ -234,11 +295,27 @@ bool AssetManager::animationcheckexist(std::string str)
 		return true;
 }
 
+/******************************************************************************
+animationval
+-	Returns the GLuint for an animation texture
+
+@param str - the name of the animation
+
+@return - the GLuint value of the texture
+*******************************************************************************/
 GLuint AssetManager::animationval(std::string str)
 {
 	return animations[str];
 }
 
+/******************************************************************************
+prefabsval
+-	The function return an object* based on the name of the object
+
+@param str - the prefab name of the object
+
+@return - an Object item
+*******************************************************************************/
 Object* AssetManager::prefabsval(std::string str)
 {
 	try {
@@ -249,7 +326,15 @@ Object* AssetManager::prefabsval(std::string str)
 	}
 }
 
-//Returns a game prefab from the map with a specific id
+
+/******************************************************************************
+prefabById
+-	The function returns an prefab obect through id instead
+
+@param id - the id for the object
+
+@return - an object item
+*******************************************************************************/
 Object* AssetManager::prefabById(long id)
 {
 	auto it = prefabs.begin();
@@ -257,16 +342,33 @@ Object* AssetManager::prefabById(long id)
 	return it->second;
 }
 
+/******************************************************************************
+updateprefab
+-	The function update the prefab data
+
+@param str - the name of the object
+@param o - the Object item
+*******************************************************************************/
 void AssetManager::updateprefab(std::string str, Object* o)
 {
 	prefabs[str] = o;
 }
 
+/******************************************************************************
+objectprefabsval
+-	Returns the path of the directory for prefabs
+
+@return - path of the directory for prefabs
+*******************************************************************************/
 std::string AssetManager::objectprefabsval()
 {
 	return objectprefabs.string();
 }
 
+/******************************************************************************
+cleanprefab
+-	Clean the prefab list
+*******************************************************************************/
 void AssetManager::cleanprefab()
 {
 	for (const auto& p : prefabs)
@@ -275,6 +377,14 @@ void AssetManager::cleanprefab()
 	prefabs.clear();
 }
 
+/******************************************************************************
+soundsval
+-	Returns the FMOD::Sound based on the name of the audio
+
+@param str - name of the sound
+
+@return - FMOD::Sound
+*******************************************************************************/
 FMOD::Sound* AssetManager::soundsval(std::string str)
 {
 	try {
@@ -285,6 +395,16 @@ FMOD::Sound* AssetManager::soundsval(std::string str)
 	}
 }
 
+/******************************************************************************
+getsoundbyaudiotype
+-	return the FMOD::Sound based on the type of audio
+
+@param a - AudioType enum
+@param random - if audio should be random
+@param seq_num - the audio based on the sequence number
+
+@return - FMOD::Sound
+*******************************************************************************/
 FMOD::Sound* AssetManager::getsoundbyaudiotype(AudioType a, bool random, int seq_num) {
 	try {
 		auto& sound = soundMapping.at(a);
@@ -313,21 +433,46 @@ FMOD::Sound* AssetManager::getsoundbyaudiotype(AudioType a, bool random, int seq
 	}
 }
 
+/******************************************************************************
+addtextures
+-	Add textures to the assetmanager texture list
+
+@param str - name of the texture
+@param tex - GLuint of the texture
+*******************************************************************************/
 void AssetManager::addtextures(std::string str, GLuint tex)
 {
 	textures.emplace(str, tex);
 }
 
+/******************************************************************************
+updateSoundMap
+-	Add sounds into the soundmap
+
+@param a - AudioType enum
+@param file - sound name
+*******************************************************************************/
 void AssetManager::updateSoundMap(AudioType a, std::string file)
 {
 	soundMapping.emplace(a, file);
 }
 
+/******************************************************************************
+updateSoundMap
+-	The overload of the function allowing for vectors of sound
+
+@param a - AudioType enum
+@param file - std::vector of sound
+*******************************************************************************/
 void AssetManager::updateSoundMap(AudioType a, std::vector<std::string> file)
 {
 	soundMapping.emplace(a, file);
 }
 
+/******************************************************************************
+clearSoundMap
+-	The function clears the soundMapping
+*******************************************************************************/
 void AssetManager::clearSoundMap()
 {
 	soundMapping.clear();
