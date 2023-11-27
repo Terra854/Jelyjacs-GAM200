@@ -27,6 +27,7 @@ public:
 	virtual void Update();
 	virtual std::string SystemName();
 
+	// Setup of the assets
 	static void loadalltextures();
 	static void unloadalltextures();
 	
@@ -35,13 +36,14 @@ public:
 	void loadsounds();
 	static void clearsounds();
 
-	// Access value
+	// Access value of animation and textures
 	static bool texturecheckexist(std::string str);
 	static GLuint textureval(std::string str);
 
 	static bool animationcheckexist(std::string str);
 	static GLuint animationval(std::string str);
 
+	// Get prefab objects and related data
 	static Object* prefabsval(std::string str);
 	static Object* prefabById(long id);
 	static void updateprefab(std::string str, Object* o);
@@ -49,9 +51,11 @@ public:
 	static std::string objectprefabsval();
 	static void cleanprefab();
 
+	// Get value of sounds
 	static FMOD::Sound* soundsval(std::string str);
 	static FMOD::Sound* getsoundbyaudiotype(AudioType a, bool random = true, int seq_num = 0);
 
+	// Adding sounds into soundmap and clearing them
 	static void updateSoundMap(AudioType a, std::string);
 	static void updateSoundMap(AudioType a, std::vector<std::string>);
 	static void clearSoundMap();
