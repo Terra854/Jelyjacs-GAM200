@@ -14,25 +14,33 @@ This file contains the script for Spark, the player character (Cat)
 #include <input.h>
 #include <message.h>
 
-
+// Static variable to track if Spark has just detached from Finn.
 bool Spark::Just_detached;
 
 float spark_move_time = 0.f;
-
+// Constructor for the Spark class.
+// @param name: A string representing the name of the Spark instance.
 Spark::Spark(std::string name) : LogicScript(name)
 { 
 	std::cout << name << " Created" << std::endl;
 	Connected_to_Finn = true;
 	Just_detached = false;
 }
-
-
+/***************************************************************************/
+// Start method, called when the Spark script is first activated.
+// @param obj: A pointer to the Object that this script is attached to.
+// Performs initial setup and configuration for Spark.
+/***************************************************************************/
 void Spark::Start(Object* obj) {
 	std::cout << "Spark Script Ready : " << obj->GetName() << std::endl;
 	Connected_to_Finn = true;
 	Just_detached = false;
 }
-
+/*******************************************************************************/
+// Update method, called on every frame to update Spark's state.
+// @param obj: A pointer to the Object that this script is attached to.
+// Contains logic for Spark's movement, interactions with Finn, and animations.
+/*******************************************************************************/
 void Spark::Update(Object* obj) {
 	if (obj == nullptr || GameLogic::playerObj == nullptr) {
 		//std::cout << "NIL OBJ : Spark" << std::endl;
@@ -170,8 +178,13 @@ void Spark::Update(Object* obj) {
 	
 }
 
+/***************************************************************************/
+// Shutdown method, called when the Spark script is being deactivated or destroyed.
+// @param obj: A pointer to the Object that this script is attached to.
+// Performs cleanup tasks for Spark.
+/***************************************************************************/
 void Spark::Shutdown(Object* obj) {
 	std::cout << "Spark Script Shutdown : " << obj->GetName() << std::endl;
 }
-
+// Creating an instance of the Spark class.
 Spark spark("Spark");

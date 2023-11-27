@@ -18,15 +18,25 @@ This file contains the script the player characters
 #include <input.h>
 #include <message.h>
 
+// Constructor for the Player class.
+// @param name: A string representing the name of the Player instance.
 Player::Player(std::string name) : LogicScript(name)
 {
 	std::cout << name << " Created" << std::endl;
 }
-
+/***************************************************************************/
+// Start method, called when the Player script is first activated.
+// @param obj: A pointer to the Object that this script is attached to.
+// Performs initial setup and configuration for Player.
+/***************************************************************************/
 void Player::Start(Object* obj) {
 	std::cout << "Player Script Ready : "<< obj->GetName() << std::endl;
 }
-
+/***************************************************************************/
+// Update method, called on every frame to update the player's state.
+// @param obj: A pointer to the Object that this script is attached to.
+// Contains logic for player's movement and animations.
+/***************************************************************************/
 void Player::Update(Object* obj) {
 	if (obj == nullptr) { 
 		//std::cout << "NIL OBJ : Player" << std::endl;
@@ -102,12 +112,16 @@ void Player::Update(Object* obj) {
 	*/
 
 }
-
+/***************************************************************************/
+// Shutdown method, called when the Player script is being deactivated or destroyed.
+// @param obj: A pointer to the Object that this script is attached to.
+// Performs cleanup tasks for the player.
+/***************************************************************************/
 void Player::Shutdown(Object* obj){
 
 	std::cout << "Player Script Shutdown : " << obj->GetName() << std::endl;
 
 }
-
+// Creating an instance of the Player class.
 Player player("Player");
 

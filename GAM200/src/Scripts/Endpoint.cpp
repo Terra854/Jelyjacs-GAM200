@@ -16,11 +16,20 @@ Endpoint::Endpoint(std::string name) : LogicScript(name)
 	std::cout << name << " Created" << std::endl;
 }
 
-
+/***************************************************************************/
+// Start method, called when the Endpoint script is first activated.
+// @param obj: A pointer to the Object that this script is attached to.
+// Performs initial setup and configuration for Endpoint.
+/***************************************************************************/
 void Endpoint::Start(Object* obj) {
 	std::cout << "Endpoint Script Ready : " << obj->GetName() << std::endl;
 }
 
+/***************************************************************************/
+// Update method, called on every frame to update Endpoint's state.
+// @param obj: A pointer to the Object that this script is attached to.
+// Contains logic for Endpoint's interactions with player, and animations.
+/***************************************************************************/
 void Endpoint::Update(Object* obj) {
 	if (obj == nullptr || GameLogic::playerObj == nullptr) {
 		//std::cout << "NIL OBJ : Endpoint" << std::endl;
@@ -69,6 +78,11 @@ void Endpoint::Update(Object* obj) {
 	}
 }
 
+
+/***************************************************************************/
+// Shutdown method, called when the Endpoint script is stopped.
+// @param obj: A pointer to the Object that this script is attached to.
+/***************************************************************************/
 void Endpoint::Shutdown(Object* obj) {
 	std::cout << "Endpoint Script Shutdown : " << obj->GetName() << std::endl;
 }
