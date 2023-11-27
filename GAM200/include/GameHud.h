@@ -1,8 +1,8 @@
 #pragma once
 /* !
 @file	GameHud.h
-@author	Yeo Jia Ming
-@date	02/11/2023
+@author	Yeo Jia Ming , Tay Sen Chuan , Guo chen
+@date	27/11/2023
 
 This file contains declarations for the in-game hud
 *//*__________________________________________________________________________*/
@@ -45,7 +45,7 @@ extern std::vector<Button> Buttons;
 //creates a new button with data initialised by function parameters
 void create_button(std::string const& text, Button button, float scale, FONT font , GLuint id);
 
-
+//change to winning screen
 void set_win();
 
 class GameHud
@@ -60,6 +60,7 @@ public:
 private:
 };
 
+//creates buttons based on json
 void createHudFromConfig(std::string file);
 
 

@@ -1,7 +1,7 @@
 /* !
 @file GameHud.cpp
-@author Yeo Jia Ming
-@date	3/11/2023
+@author Yeo Jia Ming, Tay Sen Chuan , Guo chen
+@date	27/11/2023
 //
 This file contains the definition of the functions of GameHud 
 *//*__________________________________________________________________________*/
@@ -19,24 +19,39 @@ namespace
 	bool win = false;
 }
 
+//container of buttons
 std::vector<Button> Buttons;
+
+//button map to track button according to index in vector
 std::map <std::string, int> index;
 
-int menu_index = 0;
-int win_menu_index = 0;
+//menu trackers
+bool settings_menu = false;
+bool how_to_play_menu = false;
 int number_of_buttons = 0;
+int begin_index = 0;
+int end_index = 0;
 
+//helper functions
+
+//draw outline of button
 void draw_outline(Vec2 pos1, Vec2 pos2);
 
+//draw a single line
 void drawline(Vec2 start, Vec2 end, glm::vec3 color);
 
+//change pos and scaling of buttons based on resolution
 void Buttons_change_resolution();
+
+//draw how to play screen text
+void draw_how_to_play_string();
 
 /******************************************************************************
 	Inialise gamehud buttons and assets
 *******************************************************************************/
 void GameHud::Initialize()
 {
+	//create buttons from json
 	createHudFromConfig("Asset/UI/Pause.json");
 	button_tracker = "nil";
 }
@@ -46,36 +61,55 @@ void GameHud::Initialize()
 *******************************************************************************/
 void GameHud::Update()
 {
-	
+	//switching between the various menus
+	if (win)
+	{
+		begin_index = index.at("win_menu");
+		end_index = number_of_buttons;
+	}
+	else if (how_to_play_menu)
+	{
+		begin_index = index.at("how to play_menu");
+		end_index = index.at("win_menu");
+	}
+	else if (settings_menu)
+	{
+		begin_index = index.at("settings_menu");
+		end_index = index.at("how to play_menu");
+	}
+	else if (engine->isPaused())
+	{
+		begin_index = index.at("menu");
+		end_index = index.at("settings_menu");
+	}
+	else 
+	{
+		begin_index = 0;
+		end_index = index.at("menu");
+	}
+
+	//tracking mouse if on buttons
 	if (input::MouseMoved())
 	{
-			for (int i = 0; i < Buttons.size(); ++i)
+			for (int i = begin_index; i < end_index; ++i)
 			{
 				button_tracker = "nil";
-				if (win && i < win_menu_index)
+				if (Buttons[i].string.text == "menu" || Buttons[i].string.text == "win_menu" || Buttons[i].string.text == "you win!" || Buttons[i].string.text == "settings_menu")
 				{
-					i = win_menu_index + 1;
-				}
-				else if (engine->isPaused() && i < menu_index)
-				{
-					i = menu_index + 1;
-				}
-				else if ((!engine->isPaused() && i >= menu_index && !win) || (!win && i >= win_menu_index))
-				{
-					break;
+					continue;
 				}
 				if (input::GetMouseX() > Buttons[i].pos1.x && input::GetMouseX() < Buttons[i].pos2.x)
 				{
 					if (input::GetMouseY() > Buttons[i].pos2.y && input::GetMouseY() < Buttons[i].pos1.y)
 					{
 						button_tracker = Buttons[i].string.text;
-
 						break;
 					}
 				}
 			}
 	}
 	
+	//set outcome if button is pressed
 	if ((input::IsPressed(KEY::mouseL) && button_tracker != "nil"))
 		{
 			audio->playSfx(AudioType::Button_Click);
@@ -151,6 +185,22 @@ void GameHud::Update()
 				Message_Handler msg(MessageID::Event_Type::Quit);
 				engine->Broadcast(&msg);
 			}
+			else if (button_tracker == "settings")
+			{
+				settings_menu = true;
+			}
+			else if (button_tracker == "back")
+			{
+				settings_menu = false;
+			}
+			else if (button_tracker == "how to play")
+			{
+				how_to_play_menu = true;
+			}
+			else if (button_tracker == "close")
+			{
+				how_to_play_menu = false;
+			}
 			button_tracker = "nil";
 		}
 }
@@ -160,31 +210,20 @@ void GameHud::Update()
 *******************************************************************************/
 void GameHud::Draw()
 {
-	for (int i =0 ; i< Buttons.size(); ++i)
+	//draw only based on the menu setting
+	for (int i =begin_index ; i< end_index; ++i)
 	{
-		if (win && i < win_menu_index)
-		{
-			i = win_menu_index;
-		}
-		else if (engine->isPaused() && i < menu_index)
-		{
-			i = menu_index;
-		}
-		else if ((!engine->isPaused() && i >= menu_index && !win) || (!win && i >= win_menu_index))
-		{
-			break;
-		}
 		Buttons[i].draw_hud_texture();
-		if (menu_index == i || win_menu_index == i)
-		{
-			continue;
-		}
 		SetFont(Buttons[i].string.font);
 		DrawText(Buttons[i].string.text, Buttons[i].string.pos.x, Buttons[i].string.pos.y, Buttons[i].string.scale);
+		if (Buttons[i].string.text == button_tracker && button_tracker != "you win!")
+		{
+			draw_outline(Buttons[index.at(button_tracker)].pos1, Buttons[index.at(button_tracker)].pos2);
+		}
 	}
-	if (button_tracker != "nil" && button_tracker != "you win!")
+	if (how_to_play_menu)
 	{
-		draw_outline(Buttons[index.at(button_tracker)].pos1, Buttons[index.at(button_tracker)].pos2);
+		draw_how_to_play_string();
 	}
 }
 
@@ -197,14 +236,6 @@ void create_button(std::string const& text, Button button, float scale , FONT f,
 	button.string.font = f;
 	button.texture_id = id;
 	Buttons.push_back(button);
-	if (text == "menu")
-	{
-		menu_index = number_of_buttons;
-	}
-	else if (text == "win_menu")
-	{
-		win_menu_index = number_of_buttons;
-	}
 	index[text] = number_of_buttons++;
 }
 
@@ -393,3 +424,10 @@ void Buttons_change_resolution()
 }
 
 
+void draw_how_to_play_string()
+{
+	SetFont(FONT::AldrichRegular);
+	DrawText("press wasd to move", -400, -100, 1);
+	DrawText("step on buttons to open door", -400, -150, 1);
+	DrawText("press e to change character", -400, -200, 1);
+}

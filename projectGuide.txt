@@ -1,7 +1,3 @@
-Input key:
-
-Player movement: W, A, S, D
-Camera zoom: C
-Debug drawing: L
-
-Switch play/edit mode: P
+(List your different project settings, different configuration setup (if any),
+differences in different projects under the same solution (if you have more than
+one), how to run editor mode vs only game mode.)

@@ -13,6 +13,12 @@ This file contains the definitions for loading and saving scenes
 #include "Scenes.h"
 #include <iostream>
 
+/******************************************************************************
+LoadScene
+-	This function reads a json file and loads all the objects
+
+@param filename - the name of the json file
+*******************************************************************************/
 void LoadScene(std::string filename)
 {
 	
@@ -110,6 +116,12 @@ void LoadScene(std::string filename)
 	Logic->Initialize();
 }
 
+/******************************************************************************
+SaveScene
+-	This function reads the list of all the objects and save them into a json file
+
+@param filename - the name of the json file
+*******************************************************************************/
 void SaveScene(std::string filename)
 {
 	// Save Scene Name

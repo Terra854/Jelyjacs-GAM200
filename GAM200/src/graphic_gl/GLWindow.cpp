@@ -20,6 +20,7 @@ includes all the functions to create and update the window
 #include <sstream>
 
 #include "Core_Engine.h"
+#include <SceneManager.h>
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
 // static data members declared in
@@ -274,11 +275,13 @@ void GLWindow::window_iconify_callback(GLFWwindow* w, int iconified)
 	{
 		// The window was iconified
 		std::cout << "Window was iconified" << std::endl;
+        SceneManager::PauseScene();
 	}
 	else
 	{
 		// The window was restored
 		std::cout << "Window was restored" << std::endl;
+        SceneManager::PlayScene();
 	}
 
 }
