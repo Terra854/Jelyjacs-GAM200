@@ -90,19 +90,18 @@ void CatPortal::Update(Object* obj) {
             else {
                 std::cout << "Player is in the cat portal" << std::endl;
                 //Find the other cat portal
-                if (otherCatPortal_t == nullptr) {
-                    std::cout << "NIL OTHER CAT PORTAL TRANSFORM : CatPortal" << std::endl;
-                    return;
-                }
-                else {
                     // Teleport the player to the other CatPortal's position.
                     audio->playSfx(AudioType::Cat_Teleport);
                     player_t->Position.x = otherCatPortal_t->Position.x;
                     player_t->Position.y = otherCatPortal_t->Position.y;
                     justTeleported = true;
-                }
             }
         }
+		else if ((player_t->Position.x > otherCatPortal_t->Position.x - 50 && player_t->Position.x < otherCatPortal_t->Position.x + 50)
+			&& (player_t->Position.y > otherCatPortal_t->Position.y - 50 && player_t->Position.y < otherCatPortal_t->Position.y + 50))
+		{
+
+		}
         else {
             // Reset teleportation status and animation when the player is not near the portal.
             if (catPortal_animation != nullptr) {
@@ -123,3 +122,5 @@ void CatPortal::Shutdown(Object* obj) {
 
 // Creating an instance of CatPortal.
 CatPortal catPortal("CatPortal");
+
+
