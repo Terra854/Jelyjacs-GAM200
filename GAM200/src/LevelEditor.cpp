@@ -178,7 +178,7 @@ void LevelEditor::ObjectProperties() {
 
 	if (selectedNum < 0) {
 		auto it = AssetManager::prefabs.begin();
-		std::advance(it, -(selectedNum+1));
+		std::advance(it, -(selectedNum + 1));
 		object = it->second;
 	}
 	else
@@ -215,9 +215,9 @@ void LevelEditor::ObjectProperties() {
 
 		ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImGui::GetContentRegionAvail(), uv0, uv1);
 	}
-	else if (te != nullptr) 
+	else if (te != nullptr)
 	{
-		if (tr->Scale.x > tr->Scale.y) 
+		if (tr->Scale.x > tr->Scale.y)
 		{
 			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
 			ImGui::Dummy(ImVec2(0, padding));
@@ -225,7 +225,7 @@ void LevelEditor::ObjectProperties() {
 		}
 		else if (tr->Scale.x == tr->Scale.y)
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImGui::GetContentRegionAvail());
-		else 
+		else
 		{
 			float padding = ImGui::GetContentRegionAvail().x * (tr->Scale.x / tr->Scale.y) * 0.5f;
 			ImGui::Dummy(ImVec2(padding, 0));
@@ -305,12 +305,12 @@ void LevelEditor::ObjectProperties() {
 				object->AddComponent(new Physics());
 				UpdateAllObjectInstances(object);
 			}
-		if(be == nullptr)
+		if (be == nullptr)
 			if (ImGui::Selectable("Behaviour")) {
 				object->AddComponent(new Behaviour());
 				Logic->AddBehaviourComponent(static_cast<Behaviour*>(object->GetComponent(ComponentType::Behaviour)));
 				UpdateAllObjectInstances(object);
-				std::cout << "Object Name : " << object->GetName() <<  " | Object ID : " << object->GetId() << " Behaviour Added" << std::endl;
+				std::cout << "Object Name : " << object->GetName() << " | Object ID : " << object->GetId() << " Behaviour Added" << std::endl;
 			}
 
 		ImGui::EndPopup();
@@ -339,14 +339,14 @@ void LevelEditor::ObjectProperties() {
 	ImGui::EndChild();
 	ImGui::BeginChild("ObjectPropertiesScroll", ImGui::GetContentRegionAvail());
 	// Texture
-	if (te != nullptr) 
+	if (te != nullptr)
 	{
-		if (ImGui::CollapsingHeader("Texture")) 
+		if (ImGui::CollapsingHeader("Texture"))
 		{
 
-			for (const auto& pair : AssetManager::textures) 
+			for (const auto& pair : AssetManager::textures)
 			{
-				if (pair.first == te->textureName) 
+				if (pair.first == te->textureName)
 				{
 					ImGui::Text("Texture: %s", pair.first.c_str());
 				}
@@ -1067,15 +1067,16 @@ void LevelEditor::DisplaySelectedTexture() {
 
 		ImGui::SetNextWindowPos(ImVec2((float)window->width * 0.15f, (float)window->height * 0.15f), ImGuiCond_Appearing);
 
-		ImVec2 image_size((float) width, (float)height);
+		ImVec2 image_size((float)width, (float)height);
 
 		if (width > window->width * 0.3) {
-			image_size = ImVec2((float)window->width * 0.3f, (float)height * ((float)window->width * 0.3f / (float) width));
-		} else if (height > window->height * 0.3) {
+			image_size = ImVec2((float)window->width * 0.3f, (float)height * ((float)window->width * 0.3f / (float)width));
+		}
+		else if (height > window->height * 0.3) {
 			image_size = ImVec2(((float)width * ((float)window->height * 0.3f / (float)height)), (float)window->height * 0.3f);
 		}
 
-		
+
 		ImGui::SetNextWindowSize(ImVec2(image_size.x + 20, image_size.y + 40), ImGuiCond_Always);
 
 		ImGui::Begin(selectedTexture.first.c_str(), &display_selected_texture);
@@ -1093,13 +1094,13 @@ void LevelEditor::DisplaySelectedTexture() {
 	AssetList
 	- This window displays the lists of assets that are loaded by the engine
 *******************************************************************************/
-void LevelEditor::AssetList() 
+void LevelEditor::AssetList()
 {
 	ImGui::Begin("Asset List");
 
-	if (ImGui::BeginTabBar("##AssetList")) 
+	if (ImGui::BeginTabBar("##AssetList"))
 	{
-		if (ImGui::BeginTabItem("Textures")) 
+		if (ImGui::BeginTabItem("Textures"))
 		{
 
 			if (ImGui::Button("Refresh Textures"))
@@ -1111,12 +1112,12 @@ void LevelEditor::AssetList()
 			ImGui::BeginChild("AssetListScroll", ImGui::GetContentRegionAvail());
 			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-			for (const std::pair<std::string, GLuint>& t : AssetManager::textures) 
+			for (const std::pair<std::string, GLuint>& t : AssetManager::textures)
 			{
 				sprintf_s(buffer, "##%s", t.first.c_str());
 
 				// Start the invisible button
-				
+
 				if (ImGui::Button(buffer, button_size))
 				{
 					selectedTexture = t;
@@ -1148,12 +1149,12 @@ void LevelEditor::AssetList()
 			ImGui::EndTabItem();
 		}
 	}
-	if (ImGui::BeginTabItem("Prefabs")) 
+	if (ImGui::BeginTabItem("Prefabs"))
 	{
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		//int i = 0;
-		for (const std::pair<std::string, Object *>& p : AssetManager::prefabs) 
+		for (const std::pair<std::string, Object*>& p : AssetManager::prefabs)
 		{
 			//i--;
 
@@ -1164,7 +1165,7 @@ void LevelEditor::AssetList()
 			{
 				selected = true;
 				//selectedNum = i;
-				selectedNum = (int) -(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
+				selectedNum = (int)-(std::distance(AssetManager::prefabs.begin(), AssetManager::prefabs.find(p.first))) - 1;
 
 				// Cancel all edits inside the property editor
 				Transform_EditMode = false;
@@ -1189,7 +1190,7 @@ void LevelEditor::AssetList()
 			if (t != nullptr)
 				ImGui::Image((void*)(intptr_t)AssetManager::textureval(t->textureName), ImVec2(64, 64));
 			// or Animation
-			else if (a != nullptr) 
+			else if (a != nullptr)
 			{
 				GLint width, height;
 
@@ -1312,6 +1313,11 @@ void LevelEditor::PlayPauseGame() {
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
 			SceneManager::PlayScene();
+			if (camera2D->isFreeCamEnabled()) {
+				camera2D->scale = { 1.f, 1.f };
+				camera2D->position = { 0.f, 0.f };
+				camera2D->toggleFreeCam();
+			}
 		}
 	}
 	else {
@@ -1388,7 +1394,7 @@ void CameraControl() {
 
 	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + 50.f, ImGui::GetCursorPosY()));
 
-	if(ImGui::Button("Reset to Player##CameraControl")) { camera2D->SetToPlayer(); }
+	if (ImGui::Button("Reset to Player##CameraControl")) { camera2D->SetToPlayer(); }
 
 	ImGui::SameLine();
 
@@ -1406,7 +1412,7 @@ void CameraControl() {
 
 	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + 50.f, ImGui::GetCursorPosY()));
 
-	if(ImGui::Button("Reset Zoom##CameraControl")) { camera2D->scale = {1.f, 1.f}; }
+	if (ImGui::Button("Reset Zoom##CameraControl")) { camera2D->scale = { 1.f, 1.f }; }
 
 	if (!camera2D->isFreeCamEnabled()) {
 		// End the disabled section
@@ -1415,7 +1421,7 @@ void CameraControl() {
 		// Restore original style
 		//ImGui::PopStyleVar();
 	}
-		
+
 	ImGui::End();
 }
 
@@ -1505,7 +1511,7 @@ void LevelEditor::SaveAsDialog() {
 	static char text[100];
 
 	ImGui::Begin("Save as", &save_as_dialog);
-	
+
 	ImGui::Text("Save to file:");
 	ImGui::InputText("##Filename", text, 100);
 
@@ -1551,7 +1557,7 @@ void LevelEditor::SaveAsDialog() {
 					same name (including prefabs) will be updated
 *******************************************************************************/
 void LevelEditor::UpdateAllObjectInstances(Object* object) {
-	
+
 	// Do not copy Transform
 	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
 	Body* bo = (Body*)object->GetComponent(ComponentType::Body);
@@ -1683,7 +1689,7 @@ void LevelEditor::Initialize() {
 
 	Vec4 HoveredModifier = Vec4(32.f, 32.f, 32.f, 1.f) / NormalizeColor;
 	Vec4 ActiveModifier = Vec4(-64.f, -64.f, -64.f, 1.f) / NormalizeColor;
-	
+
 	//Vec4 ShadowModifier(0.8f, 0.8f, 0.8f, 0.8f);
 
 	Vec4 BorderModifier(1.2f, 1.2f, 1.2f, 1.f);
@@ -1696,7 +1702,7 @@ void LevelEditor::Initialize() {
 
 	Vec4 ProgressBarColor = Vec4(66.f, 150.f, 250.f, 1.f) / NormalizeColor;
 
-	
+
 	// Text
 	style->Colors[ImGuiCol_Text] = TextColor.ToImVec4();
 	style->Colors[ImGuiCol_TextDisabled] = Vec4(TextColor * DisabledModifier).ToImVec4();
@@ -1735,7 +1741,7 @@ void LevelEditor::Initialize() {
 	//style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
 	//style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
 	style->Colors[ImGuiCol_MenuBarBg] = Vec4(BackgroundColor + Vec4(0.2f, 0.2f, 0.2f, 0.f)).ToImVec4();;
-	
+
 	// Default buttons
 	style->Colors[ImGuiCol_Button] = ButtonColor.ToImVec4();
 	style->Colors[ImGuiCol_ButtonHovered] = Vec4(ButtonColor * HoveredModifier).ToImVec4();
@@ -1746,7 +1752,7 @@ void LevelEditor::Initialize() {
 	style->Colors[ImGuiCol_TabHovered] = Vec4(ButtonColor * HoveredModifier).ToImVec4();
 	style->Colors[ImGuiCol_TabActive] = Vec4(ButtonColor * ActiveModifier).ToImVec4();
 
-	
+
 
 	style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
@@ -1834,7 +1840,7 @@ void LevelEditor::Update() {
 
 					SceneManager::ClearInitialObjectMap(false);
 				}
-				
+
 				SaveScene(engine->loaded_filename.c_str());
 			}
 			if (ImGui::MenuItem("Save as...")) {
