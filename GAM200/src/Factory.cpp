@@ -319,7 +319,7 @@ void Factory::destroyObject(Object* obj)
 //This deletes all objects to be deleted
 void Factory::Update() {
 	long temp_id;
-	//bool delete_flag = false;
+
 	std::set<Object*>::iterator it = gameObjsToBeDeleted.begin();
 	for (; it != gameObjsToBeDeleted.end(); ++it)
 	{
@@ -408,7 +408,6 @@ Object* Factory::getPlayerObject()
 //This clones an object
 Object* Factory::cloneObject(Object* object)
 {
-	//Object* obj = createEmptyObject();
 	Object* obj = new Object(); 
 
 	// Clone the object name

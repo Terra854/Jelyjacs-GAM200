@@ -84,9 +84,6 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 *******************************************************************************/
 void GameLogic::Initialize()
 {
-	//LoadScene("Asset/Levels/testsave.json");
-	//SaveScene("Asset/Levels/testsave.json");
-
 	// Clear all behaviours from the container
 	behaviours.clear();
 
@@ -107,7 +104,6 @@ void GameLogic::Initialize()
 	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
 
 	GameLogic::playerObj = objectFactory->getPlayerObject();
-	//std::cout << "Player's behaviour is " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName() << " || " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex() << std::endl;
 }
 
 /******************************************************************************
@@ -148,8 +144,6 @@ void GameLogic::Update() {
 	*********************************************************************************/
 	// If press esc button, quit the game
 	if (input::IsPressed(KEY::esc)) {
-		//Message_Handler msg(MessageID::Event_Type::Quit);
-		//engine->Broadcast(&msg);
 		engine->setPause();
 	}
 
@@ -171,13 +165,6 @@ void GameLogic::Update() {
 				GameLogic::playerObj = GameLogic::playerObj;
 			}
 		}
-
-		/*for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
-			Object* obj = objectFactory->getObjectWithID((long)i);
-
-			if (obj == nullptr)
-				continue;
-		}*/
 	}
 	/*****************************************************************************************
 	*
@@ -223,51 +210,12 @@ void GameLogic::Update() {
 	*	Debugging
 	*
 	*******************************************************************************************/
-	//std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
 	// If Left Click, show mouse position
 	if (input::IsPressed(KEY::mouseL)) {
 		std::cout << "Mouse Position is :  X = " << input::GetMouseX() << ", Y = " << input::GetMouseY() << std::endl;
 		Message_Handler msg(MessageID::Event_Type::MouseClick);
 		engine->Broadcast(&msg);
 	}
-
-	
-	/*
-	// Rotation of an object
-	Transform* t2 = static_cast<Transform*>(scale_and_rotate->GetComponent(ComponentType::Transform));
-
-	if (input::IsPressedRepeatedly(KEY::up)) {
-		t2->Scale_x += 1.0f;
-		t2->Scale_y += 1.0f;
-	}
-	if (input::IsPressedRepeatedly(KEY::down)) {
-		t2->Scale_x = t2->Scale_x >= 1.0f ? t2->Scale_x - 1.0f : 0.f;
-		t2->Scale_y = t2->Scale_y >= 1.0f ? t2->Scale_y - 1.0f : 0.f;
-	}
-	if (input::IsPressedRepeatedly(KEY::left)) {
-		t2->Rotation += 0.01f;
-	}
-	if (input::IsPressedRepeatedly(KEY::right)) {
-		t2->Rotation -= 0.01f;
-	}
-	*/
-
-	// Dynamic collision
-	//Physics* dynamic_collision_p = static_cast<Physics*>(dynamic_collision->GetComponent(ComponentType::Physics));
-	//dynamic_collision_p->Velocity.x = 200.0f;
-	//Transform* dynamic_collision_t = static_cast<Transform*>(dynamic_collision->GetComponent(ComponentType::Transform));
-	//dynamic_collision_t->Position.x = dynamic_collision_t->Position.x < 1000.0f ? dynamic_collision_t->Position.x : -1000.0f;
-
-	/*
-	// DEBUG: Print out collision flags
-	int c_flag = static_cast<Rectangular*>(playerObj->GetComponent(ComponentType::Body))->collision_flag;
-	std::cout << "FLAG: " << c_flag <<
-		" LEFT: " << ((c_flag & COLLISION_LEFT) ? "YES" : "NO") <<
-		" RIGHT: " << ((c_flag & COLLISION_RIGHT) ? "YES" : "NO") <<
-		" TOP: " << ((c_flag & COLLISION_TOP) ? "YES" : "NO") <<
-		" BOTTOM: " << ((c_flag & COLLISION_BOTTOM) ? "YES" : "NO") << std::endl;
-	std::cout << "#####################################################################" << std::endl;
-	*/
 }
 /******************************************************************************
 *

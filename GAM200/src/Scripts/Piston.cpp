@@ -29,20 +29,16 @@ void Piston::Start(Object* obj) {
 void Piston::Update(Object* obj) {
 	// For some reason, the player is not changing position
 	if (obj == nullptr) {
-		//std::cout << "NIL OBJ : Piston" << std::endl;
 		return;
 	}
 	Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
-	//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 	if (piston_b == nullptr) {
-		//std::cout << "NIL BODY : Piston" << std::endl;
 		return;
 	};
 	// if piston collides with player, change the animation of piston
 	if (piston_b->collision_flag & COLLISION_TOP) {
 		Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 		if (piston_animation == nullptr) {
-			//std::cout << "NIL ANIMATION : Piston" << std::endl;
 			return;
 		}
 		piston_animation->fixed = true;

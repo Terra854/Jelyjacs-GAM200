@@ -175,18 +175,9 @@ void GLWindow::Update()
 				break;
 			}
         }
-        //glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
-        ////set window position to the center of the screen
-        //int pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
-        //int pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
-        //pos_y += 100;
-        //glfwSetWindowPos(ptr_window, pos_x, pos_y);
         int pos_x, pos_y;
         switch (window_size)
         {
-        /*case Window_size::fullscreen:
-            glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
-            break;*/
         case Window_size::high:
             width = 1920;
             height = 1080;
@@ -229,7 +220,6 @@ void GLWindow::Update()
     if (glfwWindowShouldClose(ptr_window)) {
         Message_Handler msg(MessageID::Event_Type::Quit);
         engine->Broadcast(&msg);
-        //engine->game_active = false; // Tells the engine to terminate
     }
     
 }

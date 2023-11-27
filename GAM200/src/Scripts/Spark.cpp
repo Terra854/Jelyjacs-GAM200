@@ -35,7 +35,6 @@ void Spark::Start(Object* obj) {
 
 void Spark::Update(Object* obj) {
 	if (obj == nullptr || GameLogic::playerObj == nullptr) {
-		//std::cout << "NIL OBJ : Spark" << std::endl;
 		return;
 	}
 
@@ -107,11 +106,8 @@ void Spark::Update(Object* obj) {
 		if (input::IsPressed(KEY::w)) {
 			MovementKey msg(up);
 			engine->Broadcast(&msg);
-			//if (static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 			if (player_physics->Velocity.y == 0.0f) {
-				//player_physics->Velocity.y = 1000.0f;
 				player_physics->Force = 85000.0f;
-				//audio->playJump();
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 				audio->playSfx(AudioType::Spark_Jumping);
 			}
@@ -145,7 +141,6 @@ void Spark::Update(Object* obj) {
 
 		// Audio for Character Movement
 		if ((player_physics->Velocity.y == 0.f) && moving) {
-			//audio->startWalking();
 			spark_move_time += engine->GetDt();
 
 			if (spark_move_time > 0.4f) {
@@ -164,7 +159,6 @@ void Spark::Update(Object* obj) {
 		player_animation->current_type = AnimationType::Idle;
 		player_animation->face_right = true;
 		player_animation->jump_fixed = false;
-		//audio->stopWalking();
 	}
 
 	

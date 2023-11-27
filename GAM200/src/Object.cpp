@@ -25,13 +25,6 @@ Object::~Object(){
 *******************************************************************************/
 Component* Object::GetComponent(ComponentType typeID)
 {
-	/*
-	//loop through component map to find the game component
-	for (const std::pair<ComponentType, Component*>& c : Components) {
-		if (c.first == typeID)
-			return c.second;
-	}
-	*/
 	if(Components.find(typeID) != Components.end())
 		return (Components.find(typeID))->second;
 	else

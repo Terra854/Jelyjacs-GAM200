@@ -26,7 +26,6 @@ void Finn::Start(Object* obj) {
 
 void Finn::Update(Object* obj) {
 	if (obj == nullptr) {
-		//std::cout << "NIL OBJ : Player" << std::endl;
 		return;
 	}
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
@@ -34,7 +33,6 @@ void Finn::Update(Object* obj) {
 	if (GameLogic::playerObj->GetName() == "Finn")
 	{
 		if (player_physics == nullptr || player_animation == nullptr) {
-			//std::cout << "NIL COMPONENT : Player" << std::endl;
 			return;
 		};
 		player_physics->Velocity.x = 0.0f;
@@ -50,11 +48,8 @@ void Finn::Update(Object* obj) {
 		if (input::IsPressed(KEY::w)) {
 			MovementKey msg(up);
 			engine->Broadcast(&msg);
-			//if (static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 			if (player_physics->Velocity.y == 0.0f) {
-				//player_physics->Velocity.y = 1000.0f;
 				player_physics->Force = 85000.0f;
-				//audio->playJump();
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 				audio->playSfx(AudioType::Finn_Jumping);
 				
@@ -89,7 +84,6 @@ void Finn::Update(Object* obj) {
 
 		// Audio for Character Movement
 		if ((player_physics->Velocity.y == 0.f) && moving) {
-			//audio->startWalking();
 			finn_move_time += engine->GetDt();
 
 			if (finn_move_time > 0.4f) {
@@ -98,7 +92,6 @@ void Finn::Update(Object* obj) {
 			}
 		}
 		else {
-			//audio->stopWalking();
 			finn_move_time = 0.f;
 			moving = false;
 		}
@@ -108,7 +101,6 @@ void Finn::Update(Object* obj) {
 		player_animation->current_type = AnimationType::Idle;
 		player_animation->face_right = true;
 		player_animation->jump_fixed = false;
-		//audio->stopWalking();
 	}
 }
 

@@ -1080,9 +1080,6 @@ void LevelEditor::DisplaySelectedTexture() {
 
 		ImGui::Begin(selectedTexture.first.c_str(), &display_selected_texture);
 
-		//ImVec2 windowSize = ImGui::GetWindowSize();
-		//ImVec2 displaySize = ImVec2(windowSize.x, windowSize.y);
-
 		ImGui::Image((void*)(intptr_t)selectedTexture.second, image_size);
 
 		ImGui::End();
@@ -1724,56 +1721,6 @@ void LevelEditor::Initialize() {
 
 	// Progress bar
 	style->Colors[ImGuiCol_PlotHistogram] = ProgressBarColor.ToImVec4();
-
-	/*
-	// ImGui window borders
-	style->Colors[ImGuiCol_Border] = Vec4(BackgroundColor * BorderModifier).ToImVec4();
-	//style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
-	//style->Colors[ImGuiCol_BorderShadow] = Vec4(BackgroundColor * ShadowModifier).ToImVec4();
-
-	// Checkbox, radio button, plot, slider, text input
-	style->Colors[ImGuiCol_FrameBg] = FrameColor.ToImVec4();
-	style->Colors[ImGuiCol_FrameBgHovered] = Vec4(FrameColor * HoveredModifier).ToImVec4();
-	style->Colors[ImGuiCol_FrameBgActive] = Vec4(FrameColor * ActiveModifier).ToImVec4();
-
-	//style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	//style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
-	//style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_MenuBarBg] = Vec4(BackgroundColor + Vec4(0.2f, 0.2f, 0.2f, 0.f)).ToImVec4();;
-
-	// Default buttons
-	style->Colors[ImGuiCol_Button] = ButtonColor.ToImVec4();
-	style->Colors[ImGuiCol_ButtonHovered] = Vec4(ButtonColor * HoveredModifier).ToImVec4();
-	style->Colors[ImGuiCol_ButtonActive] = Vec4(ButtonColor * ActiveModifier).ToImVec4();
-
-	// Tabs
-	style->Colors[ImGuiCol_Tab] = ButtonColor.ToImVec4();
-	style->Colors[ImGuiCol_TabHovered] = Vec4(ButtonColor * HoveredModifier).ToImVec4();
-	style->Colors[ImGuiCol_TabActive] = Vec4(ButtonColor * ActiveModifier).ToImVec4();
-
-
-
-	style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_CheckMark] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-	style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-	style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-	style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-	style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-	style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
-	style->Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
-
-	*/
 
 	ImGuiIO& io = ImGui::GetIO();
 	font = io.Fonts->AddFontFromFileTTF("Asset/Fonts/Roboto-Regular.ttf", 15);

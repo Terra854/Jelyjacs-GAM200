@@ -43,7 +43,6 @@ void Camera::Update() {
 				scale = { 1.0f, 1.0f };
 			}
 		}
-		//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
 
 		SetToPlayer();
 
@@ -52,7 +51,6 @@ void Camera::Update() {
 
 	world_to_ndc = Mat3Scale(scale.x, scale.y) * Mat3Translate(position.x, position.y);
 	Vec2 window_scaling = {(float)window->width_init/(float)window->width,(float)window->height_init/(float)window->height};
-	//world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
 
 }
 
@@ -98,22 +96,5 @@ void Camera::SetToPlayer() {
 		position.x = 0.f - trans->Position.x * 2.0f / window->width_init;
 
 		position.y = 0.f - trans->Position.y * 2.0f / window->height_init;
-		// make sure the camera is not out of bounds
-		/*
-		if (position.x > 0.6f - 1.f / scale.x) {
-			position.x = 0.6f - 1.f / scale.x;
-		}
-		else if (position.x < -0.6f + 1.f / scale.x) {
-			position.x = -0.6f + 1.f / scale.x;
-		}
-
-		if (position.y > 0.8f - 1.f / scale.y) {
-			position.y = 0.8f - 1.f / scale.y;
-		}
-		else if (position.y < -0.8f + 1.f / scale.y) {
-			position.y = -0.8f + 1.f / scale.y;
-		}
-		*/
-
 	}
 }

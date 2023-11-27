@@ -30,21 +30,6 @@ void LoadScene(std::string filename)
 	jsonobj.readString(levelname, "SceneName");
 	std::cout << "Loading Scene: " << levelname << std::endl;
 
-	//AssetManager::clearSoundMap();
-	/*if (jsonobj.isMember("SoundMap"))
-	{
-		std::cout << "Linking sound map..." << std::endl;
-		std::string soundmap;
-		jsonobj.readString(soundmap, "SoundMap");
-		linkSoundMap(soundmap);
-	}*/
-	
-	/*
-	std::string soundmap = "Asset/Sounds/sounds.json";
-	linkSoundMap(soundmap);
-
-	audio->setupSound();
-	*/
 	Vec2 start_coord;
 	jsonobj.readFloat(start_coord.x, "Size", "startX");
 	jsonobj.readFloat(start_coord.y, "Size", "startY");
@@ -100,7 +85,7 @@ void LoadScene(std::string filename)
 			jsonloop.readInt(event_pt->linked_event, "linkedevent");
 		}
 
-		// Add here to read oher types of data if necessary WIP
+		// Add here to read other types of data if necessary WIP
 
 
 		obj->Initialize();
@@ -127,8 +112,6 @@ void SaveScene(std::string filename)
 	// Save Scene Name
 	Json::Value jsonobj;
 	jsonobj["SceneName"] = "testsaving";
-
-	//jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
 
 	Vec2 start_coord = engine->Get_Start_Coords();
 
@@ -194,55 +177,4 @@ void SaveScene(std::string filename)
 	}
 	else
 		std::cerr << "Failed to open file for writing." << std::endl;
-	
-	// GETTING ERROR, TEMPORARY NOT USING JSONSERILIZATION.H
-	// 
-	//JsonSerialization jsonobj;
-	//jsonobj.writeData("SceneName", filename);	
-
-	//for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) 
-	//{
-	//	Object* obj = objectFactory->getObjectWithID((long)i);
-
-	//	if (obj == nullptr)
-	//		continue;
-
-	//	std::string name = obj->GetName() + ".json";
-	//	jsonobj.writeArrData("Prefabs", name);
-
-	//	if (obj->GetComponent(ComponentType::Transform) != nullptr)
-	//	{
-	//		Transform* trans = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-	//		jsonobj.writeArrData("Type", "Transform");
-	//		Json::Value position;
-	//		position["x"] = trans->Position.x;
-	//		position["y"] = trans->Position.y;
-	//		jsonobj.writeArrData("Position", position);
-	//		Json::Value scale;
-	//		scale["x"] = trans->Scale.x;
-	//		scale["y"] = trans->Scale.y;
-	//		jsonobj.writeArrData("Scale", scale);
-	//		jsonobj.writeArrData("Rotation", trans->Rotation);
-	//	}
-
-	//	if (obj->GetComponent(ComponentType::Event) != nullptr)
-	//	{
-	//		Event* event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-	//		jsonobj.writeArrData("linkedevent", event->linked_event);
-	//	}
-
-	//	jsonobj.appendToArr();
-	//}
-
-	//jsonobj.openFileWrite(filename);
-	//jsonobj.closeFile();
 }
-
-
-
-
-
-
-
-
-

@@ -55,11 +55,7 @@ CoreEngine::CoreEngine()
 	level_size = Vec2(1920.f, 1080.f);
 	start_coord = Vec2(-960.0f, -540.0f);
 
-//#if defined(DEBUG) | defined(_DEBUG)
 	paused = true;
-//#else
-//	paused = false;
-//#endif
 }
 /******************************************************************************
 * Destructor
@@ -109,8 +105,6 @@ void CoreEngine::Initialize()
 
 // Variables that will be needed by Update and GameLoop
 long long start_system_time, end_system_time;
-//std::map<std::string, double> elapsed_time;
-//double total_time = 0.0;
 
 #if defined(DEBUG) | defined(_DEBUG)
 void Update(ISystems* sys)
@@ -118,8 +112,6 @@ void Update(ISystems* sys)
 	start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	sys->Update();
 	end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	//elapsed_time[sys->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
-	//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 	level_editor->SetSystemElapsedTime(sys->SystemName(), (double)(end_system_time - start_system_time) / 1000000.0);
 	level_editor->AddTotalTime((double)(end_system_time - start_system_time) / 1000000.0);
 }
@@ -197,11 +189,6 @@ void CoreEngine::GameLoop()
 
 #if defined(DEBUG) | defined(_DEBUG)	
 		hud.NewGuiFrame(0);
-
-		// Toggle Button to Display Debug Information in IMGui
-		//if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
-
-		//show_performance_viewer ? Debug_Update() : Update();
 #endif
 		input::Update();
 
@@ -237,7 +224,6 @@ void CoreEngine::GameLoop()
 			Update(Systems["Graphics"]);
 
 			Update(Systems["Window"]);
-			//editor_grid->drawleveleditor();
 
 			// End rendering into imgui window 
 
@@ -246,7 +232,6 @@ void CoreEngine::GameLoop()
 			Update(Systems["LevelEditor"]);
 
 			// Display the game inside the ImGui window
-			//ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
 			ImGui::Begin("Game Viewport", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 			ImVec2 windowSize = ImGui::GetWindowSize();
 
@@ -266,7 +251,6 @@ void CoreEngine::GameLoop()
 			ImVec2 viewportPos = ImGui::GetWindowPos();
 
 			// Estimate the height of the title bar
-			//float titleBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
 			float titleBarHeight = 0.f;
 
 			// Translate the ImGui-relative coordinates to application window-relative coordinates
@@ -542,15 +526,8 @@ void CoreEngine::GameLoop()
 		// Update delta_time every second
 		if (time_in_seconds > prev_time_in_seconds)
 		{
-			//std::cout << "FPS: " << core_fps << std::endl;
-			//std::cout << "DT: " << dt << std::endl;
 			prev_time_in_seconds = time_in_seconds;
 		}
-
-
-		// Updating Frame Times
-		//m_BeginFrame = m_EndFrame;
-		//m_EndFrame = m_BeginFrame + invFpsLimit;
 	}
 
 #if defined(DEBUG) | defined(_DEBUG)
@@ -594,66 +571,3 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 		sys.second->MessageRelay(msg);
 	}
 }
-
-/*
-int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
-{
-	if (axis == Axis::X)
-	{
-		int xPos = gridPos + static_cast<int>(window->width / 2);
-		return xPos;
-	}
-	else //axis == Axis::Y
-	{
-		int yPos = static_cast<int>(window->height / 2) - gridPos;
-		return yPos;
-	}
-}
-int CoreEngine::convertMousePosToGridPos(Axis axis)
-{
-	if (axis == Axis::X)
-	{
-		int xPos = static_cast<int>(input::GetMouseX()) - static_cast<int>(window->width / 2);
-		return xPos;
-	}
-	else //axis == Axis::Y
-	{
-		int yPos = static_cast<int>(window->height / 2) - static_cast<int>(input::GetMouseY());
-		return yPos;
-	}
-}
-
-bool CoreEngine::checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int bottomY)
-{
-	int leftXPos = convertGridToWorldPos(leftX, Axis::X);
-	int rightXPos = convertGridToWorldPos(rightX, Axis::X);
-	int topYPos = convertGridToWorldPos(topY, Axis::Y);
-	int bottomYPos = convertGridToWorldPos(bottomY, Axis::Y);
-
-	if (input::GetMouseX() < (double)leftXPos)
-	{
-		std::cout << "Mouse too far left\n";
-		return false;
-	}
-
-	if (input::GetMouseX() > (double)rightXPos)
-	{
-		std::cout << "Mouse too far right\n";
-		return false;
-	}
-
-	if (input::GetMouseY() < (double)topYPos)
-	{
-		std::cout << "Mouse too far up\n";
-		return false;
-	}
-
-	if (input::GetMouseY() > (double)bottomYPos)
-	{
-		std::cout << "Mouse too far down\n";
-		return false;
-	}
-
-	return true;
-}
-*/

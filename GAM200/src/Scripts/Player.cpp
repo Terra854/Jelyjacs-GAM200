@@ -29,13 +29,11 @@ void Player::Start(Object* obj) {
 
 void Player::Update(Object* obj) {
 	if (obj == nullptr) { 
-		//std::cout << "NIL OBJ : Player" << std::endl;
 		return; 
 	}
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 	if (player_physics == nullptr || player_animation == nullptr) {
-		//std::cout << "NIL COMPONENT : Player" << std::endl;
 		return;
 	};
 	player_physics->Velocity.x = 0.0f;
@@ -51,11 +49,8 @@ void Player::Update(Object* obj) {
 	if (input::IsPressed(KEY::w)) {
 		MovementKey msg(up);
 		engine->Broadcast(&msg);
-		//if (static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 		if (player_physics->Velocity.y == 0.0f) {
-			//player_physics->Velocity.y = 1000.0f;
 			player_physics->Force = 85000.0f;
-			//audio->playJump();
 			std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 			
 			if (player_physics->GetOwner()->GetName() == "Finn")
@@ -88,19 +83,6 @@ void Player::Update(Object* obj) {
 		else player_animation->current_type = AnimationType::Jump_left;
 	}
 	else player_animation->jump_fixed = false;
-
-
-	/*
-	// Audio for Character Movement
-	if ((player_physics->Velocity.y == 0.f) && moving) {
-		audio->startWalking();
-	}
-	else {
-		audio->stopWalking();
-		moving = false;
-	}
-	*/
-
 }
 
 void Player::Shutdown(Object* obj){

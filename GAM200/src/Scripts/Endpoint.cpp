@@ -23,7 +23,6 @@ void Endpoint::Start(Object* obj) {
 
 void Endpoint::Update(Object* obj) {
 	if (obj == nullptr || GameLogic::playerObj == nullptr) {
-		//std::cout << "NIL OBJ : Endpoint" << std::endl;
 		return;
 	}
 	
@@ -54,7 +53,7 @@ void Endpoint::Update(Object* obj) {
 		if (player_t->Position.y > endpoint_t->Position.y - 50 && player_t->Position.y < endpoint_t->Position.y + 50) {
 			if (other_player_t->Position.x > endpoint_t->Position.x - 50 && other_player_t->Position.x < endpoint_t->Position.x + 50) {
 				if (other_player_t->Position.y > endpoint_t->Position.y - 50 && other_player_t->Position.y < endpoint_t->Position.y + 50) {
-					//std::cout << "Both player is in the endpoint" << std::endl;
+
 					//Get Animation and change the animation to jump
 					endpoint_animation->fixed = true;
 					endpoint_animation->current_type = AnimationType::Jump;

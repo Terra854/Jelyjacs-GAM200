@@ -27,14 +27,11 @@ void Vert_Elevator::Start(Object* obj)
 void Vert_Elevator::Update(Object* obj) {
 	// For some reason, the player is not changing position
 	if (obj == nullptr) {
-		//std::cout << "NIL OBJ : V_Elevator" << std::endl;
 		return;
 	}
-	//std::cout << obj->GetName() << std::endl;
 	Physics* moving_platform_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Transform* moving_platform_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 	if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
-		//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
 		return;
 	};
 	moving_platform_physics->Velocity.x = 0.0f;

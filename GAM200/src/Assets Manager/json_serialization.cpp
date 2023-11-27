@@ -250,31 +250,3 @@ auto JsonSerialization::read(std::string str) -> decltype((*jsonObject)[str])
 {
 	return (*jsonObject)[str];
 }
-
-//template <typename T>
-//void JsonSerialization::writeData(std::string param, T value)
-//{
-//	(*jsonObject)[param] = value;
-//}
-//
-//template <typename T>
-//void JsonSerialization::writeArrData(std::string param, T value)
-//{
-//	jsonArr[param] = value;
-//}
-//
-//void JsonSerialization::appendToArr()
-//{
-//	jsonObject->append(jsonArr);
-//	jsonArr.clear();
-//}
-
-
-
-
-
-
-
-
-
-

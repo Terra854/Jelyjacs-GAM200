@@ -27,30 +27,6 @@ namespace Collision {
 
 	extern std::vector<std::vector<std::vector<Object*>>> uniform_grid;
 
-	/*
-	bool Check_Circle_Line(const Circle& circle,
-		const Vec2& ptEnd,
-		const Line& lineSeg,
-		Vec2& interPt,
-		Vec2& normalAtCollision,
-		float& interTime);
-
-	bool Check_Circle_LineEdge(bool withinBothLines,
-		const Circle& circle,
-		const Vec2& ptEnd,
-		const Line& lineSeg,
-		Vec2& interPt,
-		Vec2& normalAtCollision,
-		float& interTime);
-
-	bool Check_AABB_Line(const AABB& aabb,
-		const Vec2& ptEnd,
-		const Line& lineSeg,
-		Vec2& interPt,
-		Vec2& normalAtCollision,
-		float& interTime);
-	*/
-
 	bool Check_AABB_AABB(const AABB& aabb1,
 		const Vec2& vel1,
 		const AABB& aabb2,

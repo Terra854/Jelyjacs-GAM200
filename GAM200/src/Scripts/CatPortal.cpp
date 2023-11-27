@@ -24,13 +24,10 @@ void CatPortal::Start(Object* obj) {
 void CatPortal::Update(Object* obj) {
 	// For some reason, the player is not changing position
 	if (obj == nullptr) {
-		//std::cout << "NIL OBJ : CatPortal" << std::endl;
 		return;
 	}
 	
 	Animation* catPortal_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
-	//catPortal_animation->fixed = true;
-	//catPortal_animation->current_type = AnimationType::Jump;
 	
 	Object* Checkplayer = objectFactory->FindObject("Spark");
 	if (GameLogic::playerObj != nullptr && GameLogic::playerObj == Checkplayer)
@@ -74,7 +71,6 @@ void CatPortal::Update(Object* obj) {
 					audio->playSfx(AudioType::Cat_Teleport);
 					player_t->Position.x = otherCatPortal_t->Position.x;
 					player_t->Position.y = otherCatPortal_t->Position.y;
-					//std::cout << "Player position changed to the other cat portal's position" << std::endl;
 					justTeleported = true;
 						
 					
