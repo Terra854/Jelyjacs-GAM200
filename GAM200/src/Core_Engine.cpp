@@ -250,16 +250,16 @@ void CoreEngine::GameLoop()
 			ImGui::Begin("Game Viewport", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 			ImVec2 windowSize = ImGui::GetWindowSize();
 
-			ImVec2 displaySize, viewportStartPos;
+			Vec2 viewportStartPos;
 			if (windowSize.y < (windowSize.x / 16.f * 9.f))
 			{
-				viewportStartPos = ImVec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 0.f);
-				displaySize = ImVec2(windowSize.y * 16.f / 9.f, windowSize.y);
+				viewportStartPos = Vec2((windowSize.x - (windowSize.y * 16.f / 9.f)) / 2.f, 0.f);
+				viewportDisplaySize = Vec2(windowSize.y * 16.f / 9.f, windowSize.y);
 			}
 			else
 			{
-				viewportStartPos = ImVec2(0.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f);
-				displaySize = ImVec2(windowSize.x, (windowSize.x / 16.f * 9.f));
+				viewportStartPos = Vec2(0.f, (windowSize.y - ((windowSize.x - 20.f) / 16.f * 9.f)) / 2.f);
+				viewportDisplaySize = Vec2(windowSize.x, (windowSize.x / 16.f * 9.f));
 			}
 
 			// Get the top-left position of the viewport window
@@ -271,16 +271,16 @@ void CoreEngine::GameLoop()
 
 			// Translate the ImGui-relative coordinates to application window-relative coordinates
 			ImVec2 viewport_min = ImVec2(viewportStartPos.x + viewportPos.x, viewportStartPos.y + viewportPos.y + titleBarHeight);
-			ImVec2 viewport_max = ImVec2(viewport_min.x + displaySize.x, viewport_min.y + displaySize.y);
+			ImVec2 viewport_max = ImVec2(viewport_min.x + viewportDisplaySize.x, viewport_min.y + viewportDisplaySize.y);
 
 			// Render the viewport
-			ImGui::SetCursorPos(viewportStartPos);
-			ImGui::Image((void*)(intptr_t)level_editor_texture, displaySize, ImVec2(0, 1), ImVec2(1, 0));
+			ImGui::SetCursorPos(ImVec2(viewportStartPos.x, viewportStartPos.y));
+			ImGui::Image((void*)(intptr_t)level_editor_texture, ImVec2(viewportDisplaySize.x, viewportDisplaySize.y), ImVec2(0, 1), ImVec2(1, 0));
 			
 			// Calculate the mouse position relative to the game world
 			ImVec2 clickPos = ImGui::GetMousePos();
 			ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
-			ImVec2 displayPos(relativePos.x / displaySize.x * 1920, 1080 - (relativePos.y / displaySize.y * 1080)); // Hardcoded to 1920x1080 as other resolutions bugged for now
+			ImVec2 displayPos(relativePos.x / viewportDisplaySize.x * 1920, 1080 - (relativePos.y / viewportDisplaySize.y * 1080)); // Hardcoded to 1920x1080 as other resolutions bugged for now
 			ImVec2 openGlDisplayCoord((displayPos.x - (1920 / 2)) / camera2D->scale.x, (displayPos.y - (1080 / 2)) / camera2D->scale.y);
 
 			// Camera is stationary, it's the scene that is moving, so inverse pos
@@ -327,7 +327,7 @@ void CoreEngine::GameLoop()
 				std::cout << "ViewportMin " << viewport_min.x << ", " << viewport_min.y << std::endl;
 				std::cout << "ViewportMax " << viewport_max.x << ", " << viewport_max.y << std::endl;
 				std::cout << "ClickPos relative to viewport " << relativePos.x << ", " << relativePos.y << std::endl;
-				std::cout << "DisplaySize " << displaySize.x << ", " << displaySize.y << std::endl;
+				std::cout << "DisplaySize " << viewportDisplaySize.x << ", " << viewportDisplaySize.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of opengl display) " << displayPos.x << ", " << displayPos.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of opengl display coord) " << openGlDisplayCoord.x << ", " << openGlDisplayCoord.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of game world) " << gameWorldPos.x << ", " << gameWorldPos.y << std::endl;
@@ -345,7 +345,7 @@ void CoreEngine::GameLoop()
 					}
 				}
 			}
-			
+
 			// Dragging the selected object in the viewport
 			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true && !DraggingPrefabIntoViewport) {
 				Object* object;

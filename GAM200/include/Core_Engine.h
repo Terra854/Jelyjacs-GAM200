@@ -75,6 +75,7 @@ public:
 #if defined(DEBUG) | defined(_DEBUG)
 	friend class LevelEditor; // For displaying performance info
 	bool debug_gui_active = true;
+	Vec2 viewportDisplaySize;
 #else
 	bool debug_gui_active = false;
 #endif
