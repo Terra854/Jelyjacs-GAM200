@@ -94,6 +94,17 @@ void LoadScene(std::string filename)
 			jsonloop.readFloat(tran_pt->Rotation, "Rotation");
 		}
 
+		if (jsonloop.isMember("Properties"))
+		{
+			Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+			if (temp->GetShape() == Shape::Rectangle)
+			{
+				Rectangular* temp2 = static_cast<Rectangular*>(temp);
+				jsonloop.readFloat(temp2->width, "Properties", "width");
+				jsonloop.readFloat(temp2->height, "Properties", "height");
+			}
+		}
+
 		if (jsonloop.isMember("linkedevent"))
 		{
 			Event* event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
@@ -169,6 +180,19 @@ void SaveScene(std::string filename)
 			innerobj["Scale"] = scale;
 
 			innerobj["Rotation"] = trans->Rotation;
+		}
+
+		if (obj->GetComponent(ComponentType::Body) != nullptr)
+		{
+			Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+			if (temp->GetShape() == Shape::Rectangle)
+			{
+				Rectangular* temp2 = static_cast<Rectangular*>(temp);
+				Json::Value properties;
+				properties["width"] = temp2->width;
+				properties["height"] = temp2->height;
+				innerobj["Properties"] = properties;
+			}
 		}
 
 		// Save objects event data
