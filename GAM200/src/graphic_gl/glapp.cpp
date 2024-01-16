@@ -516,8 +516,8 @@ void GLApp::Update()
 		gizmoXPos = Vec2((gizmoPos.x + 72.f) * 2.0f / window->width, gizmoPos.y * 2.0f / window->height);
 		gizmoYPos = Vec2(gizmoPos.x * 2.0f / window->width, (gizmoPos.y + 72.f) * 2.0f / window->height);
 
-		gizmoXScaling = Vec2(128.f / window->width, 8.f / window->height);
-		gizmoYScaling = Vec2(8.f / window->width, 128.f / window->height);
+		gizmoXScaling = Vec2(128.f / window->width, 16.f / window->height);
+		gizmoYScaling = Vec2(16.f / window->width, 128.f / window->height);
 
 
 		gizmoXMat = Mat3Translate(gizmoXPos) * Mat3Scale(gizmoXScaling) * Mat3RotDeg(0);
