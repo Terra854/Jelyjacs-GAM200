@@ -345,7 +345,7 @@ void CoreEngine::GameLoop()
 				YGizmo.Scale = Vec2(16.f, 128.f);
 
 				/* X Gizmo */
-				if (isObjectClicked(&XGizmo, gameWorldPos))
+				if (isObjectClicked(&XGizmo, gameWorldPos) && !object_being_moved_y)
 				{
 					object_being_moved_x = true;
 				}
@@ -363,7 +363,7 @@ void CoreEngine::GameLoop()
 				}
 
 				/* Y Gizmo */
-				if (isObjectClicked(&YGizmo, gameWorldPos))
+				if (isObjectClicked(&YGizmo, gameWorldPos) && !object_being_moved_x)
 				{
 					object_being_moved_y = true;
 				}
