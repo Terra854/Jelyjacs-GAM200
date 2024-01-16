@@ -406,7 +406,7 @@ Object* Factory::getPlayerObject()
 }
 
 //This clones an object
-Object* Factory::cloneObject(Object* object)
+Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 {
 	//Object* obj = createEmptyObject();
 	Object* obj = new Object(); 
@@ -423,8 +423,8 @@ Object* Factory::cloneObject(Object* object)
 			Transform* trans = (Transform*)((ComponentCreator<Transform>*) componentMap["Transform"])->Create();
 			Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 
-			trans->Position.x = tran_pt->Position.x;
-			trans->Position.y = tran_pt->Position.y;
+			trans->Position.x = tran_pt->Position.x + posoffsetx;
+			trans->Position.y = tran_pt->Position.y + posoffsety;
 
 			trans->PrevPosition = tran_pt->PrevPosition;
 
