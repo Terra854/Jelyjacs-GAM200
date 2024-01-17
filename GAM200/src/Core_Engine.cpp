@@ -434,7 +434,7 @@ void CoreEngine::GameLoop()
 						level_editor->selected = true;
 						level_editor->selectedNum = (int)i;
 						selectedObjectID = static_cast<long>(i);
-						gizmo.SetObject(objTransform);
+						//gizmo.SetObject(objTransform);
 					}
 				}
 			}

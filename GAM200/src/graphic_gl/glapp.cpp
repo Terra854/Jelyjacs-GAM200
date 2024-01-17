@@ -506,6 +506,7 @@ void GLApp::Update()
 			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
 		}
 
+		gizmo.SetObject(tr);
 		gizmo.RenderGizmo();
 
 		/* Gizmo 
