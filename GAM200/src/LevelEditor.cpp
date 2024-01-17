@@ -150,6 +150,8 @@ static Vec2 edited_velocity;
 static float edited_mass;
 static bool edited_gravity;
 
+
+
 void LevelEditor::ObjectProperties() {
 
 	ImGui::SetNextWindowSize(ImVec2(450, 0));
@@ -269,9 +271,15 @@ void LevelEditor::ObjectProperties() {
 		}
 	}
 	else {
+		static char newName[256];
+		strncpy_s(newName, object->GetName().c_str(), sizeof(newName));
 		ImGui::InputInt("Object Layer", &(object->layer));
 		ImGui::Text("Object ID: %d", object->GetId());
 		//ImGui::Text("Object Layer: %d", object->GetLayer());
+		ImGui::InputText("Name", newName, sizeof(newName));
+
+		object->SetName(newName);
+
 		ImGui::Text("Object Name: %s", object->GetName().c_str());
 		ImGui::Text("Number of components: %d", object->GetNumComponents());
 
