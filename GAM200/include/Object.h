@@ -48,6 +48,8 @@ public:
 	//Get the object's name
 	std::string GetName() { return name; }
 
+	void SetName(std::string newName) { name = newName; }
+
 	int GetNumComponents() { return static_cast<int>(Components.size()); }
 
 	int layer = 0;
