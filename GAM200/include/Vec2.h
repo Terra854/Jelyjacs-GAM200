@@ -10,6 +10,7 @@ This file contains the declaration for the Vec2 class used to represent a 2D vec
 
 #include <glm/glm.hpp>
 #include <ostream>
+#include <ImGui/imgui.h>
 
 struct Vec2
 {
@@ -33,6 +34,9 @@ struct Vec2
 
 	// To be used with OpenGL calls only
 	glm::vec2 ToGlmVec2();
+
+	// To be used with ImGui calls
+	ImVec2 ToImVec2();
 
 	// For std::cout << vec2_variable
 	friend std::ostream& operator<<(std::ostream& os, const Vec2& v);

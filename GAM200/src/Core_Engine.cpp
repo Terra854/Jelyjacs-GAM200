@@ -233,8 +233,6 @@ void CoreEngine::GameLoop()
 		if (input::IsPressed(KEY::p)) { debug_gui_active = !debug_gui_active; }
 		if (debug_gui_active) {
 
-
-
 			// For rendering into imgui window 
 			glBindFramebuffer(GL_FRAMEBUFFER, level_editor_fb);
 
@@ -468,7 +466,27 @@ void CoreEngine::GameLoop()
 				}
 			}
 
-			ImGui::End();
+			//ImVec2 customButtonPos = ImVec2(viewportPos.x + viewportDisplaySize.x - 100.f, viewportPos.y + viewportDisplaySize.y - 100.f);
+
+			//ImGui::SetCursorPos(viewportStartPos.ToImVec2());
+			//ImVec2 cPos = ImVec2(customButtonPos.x - windowSize.x, customButtonPos.y - windowSize.y);
+
+			Vec2 gizmoControlButtonPos(viewportStartPos.x + viewportDisplaySize.x - 100.f, viewportStartPos.y + 100.f);
+
+			//ImGui::SetCursorPos(ImVec2(viewportStartPos.x + viewportDisplaySize.x - 100.f, viewportStartPos.y + 100.f));
+			
+			ImGui::SetCursorPos(gizmoControlButtonPos.ToImVec2());
+			if (ImGui::Button("Scale")) {};
+
+			gizmoControlButtonPos.y += 30.f;
+			ImGui::SetCursorPos(gizmoControlButtonPos.ToImVec2());
+			if (ImGui::Button("Rotate")) {};
+
+			gizmoControlButtonPos.y += 30.f;
+			ImGui::SetCursorPos(gizmoControlButtonPos.ToImVec2());
+			if (ImGui::Button("Translate")) {};
+
+			ImGui::End(); // End Game Viewport
 
 			ImGui::Begin("DEBUG: Gizmo");
 
