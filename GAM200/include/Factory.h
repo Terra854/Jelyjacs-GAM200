@@ -57,7 +57,7 @@ public:
 	Object* getPlayerObject();
 
 	//This clones a game object
-	Object* cloneObject(Object* object);
+	Object* cloneObject(Object* object, float posoffsetx = 0, float posoffsety = 0);
 
 	//This adds a new component creator which is necessary for the creation of game objects
 	//Call this at the very start of the game loop in Initialize

@@ -43,6 +43,8 @@ public:
 	///Get the game object's Id
 	long GetId() { return ObjectId; }
 
+	long GetLayer() { return layer; }
+
 	//Get the object's name
 	std::string GetName() { return name; }
 
@@ -55,6 +57,8 @@ private:
 	//A unique id for each object used to safely reference 
 	//Objects.
 	long ObjectId = -1;
+
+	long layer = 0;
 
 	//A unique name for each object used to name objects
 	std::string name;

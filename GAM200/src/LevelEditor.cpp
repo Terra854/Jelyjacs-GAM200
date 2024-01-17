@@ -270,12 +270,22 @@ void LevelEditor::ObjectProperties() {
 	}
 	else {
 		ImGui::Text("Object ID: %d", object->GetId());
+		ImGui::Text("Object Layer: %d", object->GetLayer());
 		ImGui::Text("Object Name: %s", object->GetName().c_str());
 		ImGui::Text("Number of components: %d", object->GetNumComponents());
 
 		if (ImGui::Button("Clone"))
 		{
-			Object* o = objectFactory->cloneObject(object);
+			Object* o = objectFactory->cloneObject(object, 64);
+			objectFactory->assignIdToObject(o);
+			selectedNum = o->GetId();
+			cloneSuccessful = selectedNum;
+		}
+
+		// For convinence
+		if (ImGui::Button("Cloneup"))
+		{
+			Object* o = objectFactory->cloneObject(object, 0, 64);
 			objectFactory->assignIdToObject(o);
 			selectedNum = o->GetId();
 			cloneSuccessful = selectedNum;

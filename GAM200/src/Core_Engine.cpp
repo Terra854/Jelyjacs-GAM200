@@ -189,6 +189,9 @@ void CoreEngine::GameLoop()
 	static Vec2 offset(NAN, NAN);
 	static bool object_being_moved = false;
 
+	static bool object_being_moved_x = false;
+	static bool object_being_moved_y = false;
+
 	audio->setupSound();
 
 	while (game_active)
@@ -320,8 +323,94 @@ void CoreEngine::GameLoop()
 				ImGui::EndDragDropTarget();
 			}
 
+			static Transform XGizmo, YGizmo;
+
+			// Dragging the selected object in the viewport
+			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true && !DraggingPrefabIntoViewport) {
+				Object* object;
+				if (level_editor->selectedNum >= 0)
+					object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				else
+					object = AssetManager::prefabById(static_cast<long>(level_editor->selectedNum));
+
+				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
+
+				XGizmo.Position = objTransform->Position + Vec2(72.f, 0.f);
+				XGizmo.Rotation = 0.f;
+				XGizmo.Scale = Vec2(128.f, 16.f);
+
+				YGizmo.Position = objTransform->Position + Vec2(0.f, 72.f);
+				YGizmo.Rotation = 0.f;
+				YGizmo.Scale = Vec2(16.f, 128.f);
+
+				/* X Gizmo */
+				if (isObjectClicked(&XGizmo, gameWorldPos) && !object_being_moved_y)
+				{
+					object_being_moved_x = true;
+				}
+				if (object_being_moved_x) {
+					// Offset to account for mouse not being in the center of the selected object
+					if (isnan(offset.x))
+						offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+
+					std::cout << "Offset: " << offset << std::endl;
+
+					objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
+					//objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
+
+					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
+				}
+
+				/* Y Gizmo */
+				if (isObjectClicked(&YGizmo, gameWorldPos) && !object_being_moved_x)
+				{
+					object_being_moved_y = true;
+				}
+				if (object_being_moved_y) {
+					// Offset to account for mouse not being in the center of the selected object
+					if (isnan(offset.x))
+						offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+
+					std::cout << "Offset: " << offset << std::endl;
+
+					//objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
+					objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
+
+					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
+				}
+
+				/*
+				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
+
+				if (isObjectClicked(objTransform, gameWorldPos))
+				{
+					object_being_moved = true;
+				}
+				
+				// This arrangement is to account for the mouse that sometimes can be outside of the selected object
+				if (object_being_moved) {
+
+					// Offset to account for mouse not being in the center of the selected object
+					if (isnan(offset.x))
+						offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+
+					std::cout << "Offset: " << offset << std::endl;
+
+					objTransform->Position.x = (float) std::round(gameWorldPos.x - offset.x);
+					objTransform->Position.y = (float) std::round(gameWorldPos.y - offset.y);
+
+					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
+				}
+				*/
+				if (objBody != nullptr)
+				{
+					RecalculateBody(objTransform, objBody);
+				}
+			}
 			// Select object in the viewport
-			if (ImGui::IsItemClicked()) {
+			else if (ImGui::IsItemClicked() && !isObjectClicked(&XGizmo, gameWorldPos) && !isObjectClicked(&YGizmo, gameWorldPos)) {
 				std::cout << "################################################################" << std::endl;
 				std::cout << "ClickPos " << clickPos.x << ", " << clickPos.y << std::endl;
 				std::cout << "ViewportMin " << viewport_min.x << ", " << viewport_min.y << std::endl;
@@ -345,47 +434,13 @@ void CoreEngine::GameLoop()
 					}
 				}
 			}
-
-			// Dragging the selected object in the viewport
-			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true && !DraggingPrefabIntoViewport) {
-				Object* object;
-				if (level_editor->selectedNum >= 0)
-					object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
-				else
-					object = AssetManager::prefabById(static_cast<long>(level_editor->selectedNum));
-
-				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
-
-				if (isObjectClicked(objTransform, gameWorldPos))
-				{
-					object_being_moved = true;
-				}
-				
-				// This arrangement is to account for the mouse that sometimes can be outside of the selected object
-				if (object_being_moved) {
-
-					// Offset to account for mouse not being in the center of the selected object
-					if (isnan(offset.x))
-						offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
-
-					std::cout << "Offset: " << offset << std::endl;
-
-					objTransform->Position.x = (float) std::round(gameWorldPos.x - offset.x);
-					objTransform->Position.y = (float) std::round(gameWorldPos.y - offset.y);
-
-					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
-				}
-
-				if (objBody != nullptr)
-				{
-					RecalculateBody(objTransform, objBody);
-				}
-			}
 			else {
 				offset = Vec2(NAN, NAN);
 				object_being_moved = false;
+				object_being_moved_x = false;
+				object_being_moved_y = false;
 			}
+
 
 			// Deselect the object
 			if (input::IsPressed(KEY::mouseR) && level_editor->selected == true)
