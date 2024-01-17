@@ -73,6 +73,12 @@
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{19f1a132-fce9-4d57-9178-de5d9ed0ef81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Systems\LevelEditor">
+      <UniqueIdentifier>{1c122882-3be3-4744-af41-2ed7b94518b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems\LevelEditor">
+      <UniqueIdentifier>{0e95b224-8fa6-46e2-bf0b-e82889b65950}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mat3.cpp">
@@ -162,9 +168,6 @@
     <ClCompile Include="src\Scenes.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
-    <ClCompile Include="src\LevelEditor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ThreadPool.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
@@ -218,6 +221,12 @@
     </ClCompile>
     <ClCompile Include="src\Body.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelEditor.cpp">
+      <Filter>Source Files\Systems\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gizmo.cpp">
+      <Filter>Source Files\Systems\LevelEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,9 +362,6 @@
     <ClInclude Include="include\Font.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="include\LevelEditor.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="include\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -388,6 +394,12 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\CatPortal.h">
       <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LevelEditor.h">
+      <Filter>Header Files\Systems\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Gizmo.h">
+      <Filter>Header Files\Systems\LevelEditor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

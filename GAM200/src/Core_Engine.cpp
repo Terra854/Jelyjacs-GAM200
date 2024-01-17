@@ -31,6 +31,7 @@ This file contains the definitions of the functions that are part of the Core En
 #include <Camera.h>
 #include <SceneManager.h>
 #include <cmath> 
+#include <Gizmo.h>
 
 CoreEngine* CORE = NULL;
 
@@ -336,6 +337,7 @@ void CoreEngine::GameLoop()
 				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
 
+				/*
 				XGizmo.Position = objTransform->Position + Vec2(72.f, 0.f);
 				XGizmo.Rotation = 0.f;
 				XGizmo.Scale = Vec2(128.f, 16.f);
@@ -343,9 +345,10 @@ void CoreEngine::GameLoop()
 				YGizmo.Position = objTransform->Position + Vec2(0.f, 72.f);
 				YGizmo.Rotation = 0.f;
 				YGizmo.Scale = Vec2(16.f, 128.f);
+				*/
 
 				/* X Gizmo */
-				if (isObjectClicked(&XGizmo, gameWorldPos) && !object_being_moved_y)
+				if (isObjectClicked(gizmo.getX(), gameWorldPos) && !object_being_moved_y)
 				{
 					object_being_moved_x = true;
 				}
@@ -363,7 +366,7 @@ void CoreEngine::GameLoop()
 				}
 
 				/* Y Gizmo */
-				if (isObjectClicked(&YGizmo, gameWorldPos) && !object_being_moved_x)
+				if (isObjectClicked(gizmo.getY(), gameWorldPos) && !object_being_moved_x)
 				{
 					object_being_moved_y = true;
 				}
@@ -410,7 +413,7 @@ void CoreEngine::GameLoop()
 				}
 			}
 			// Select object in the viewport
-			else if (ImGui::IsItemClicked() && !isObjectClicked(&XGizmo, gameWorldPos) && !isObjectClicked(&YGizmo, gameWorldPos)) {
+			else if (ImGui::IsItemClicked() && !isObjectClicked(gizmo.getX(), gameWorldPos) && !isObjectClicked(gizmo.getY(), gameWorldPos)) {
 				std::cout << "################################################################" << std::endl;
 				std::cout << "ClickPos " << clickPos.x << ", " << clickPos.y << std::endl;
 				std::cout << "ViewportMin " << viewport_min.x << ", " << viewport_min.y << std::endl;
@@ -431,6 +434,7 @@ void CoreEngine::GameLoop()
 						level_editor->selected = true;
 						level_editor->selectedNum = (int)i;
 						selectedObjectID = static_cast<long>(i);
+						gizmo.SetObject(objTransform);
 					}
 				}
 			}
@@ -463,6 +467,18 @@ void CoreEngine::GameLoop()
 					RecalculateBody(objTransform, objBody);
 				}
 			}
+
+			ImGui::End();
+
+			ImGui::Begin("DEBUG: Gizmo");
+
+			ImGui::Text("XGizmo.Position = (%.6f, %.6f)", gizmo.getX()->Position.x, gizmo.getX()->Position.y);
+			ImGui::Text("XGizmo.Scale = (%.6f, %.6f)", gizmo.getX()->Scale.x, gizmo.getX()->Scale.y);
+
+			ImGui::Text("YGizmo.Position = (%.6f, %.6f)", gizmo.getY()->Position.x, gizmo.getY()->Position.y);
+			ImGui::Text("YGizmo.Scale = (%.6f, %.6f)", gizmo.getY()->Scale.x, gizmo.getY()->Scale.y);
+
+			ImGui::Text("Camera.Scale = (%.6f, %.6f)", camera2D->scale.x, camera2D->scale.y);
 
 			ImGui::End();
 

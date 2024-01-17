@@ -26,6 +26,7 @@ includes all the functions to draw objects
 #include <LevelEditor.h>
 #include "../Assets Manager/asset_manager.h"
 #include "Particle.h"
+#include <Gizmo.h>
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
@@ -505,7 +506,9 @@ void GLApp::Update()
 			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
 		}
 
-		/* Gizmo */
+		gizmo.RenderGizmo();
+
+		/* Gizmo 
 		Mat3 gizmoXMat, gizmoYMat;
 
 		// get pos and scale from transform component
@@ -547,6 +550,7 @@ void GLApp::Update()
 		// unbind VAO and unload shader program
 		glBindVertexArray(0);
 		shdrpgms["shape"].UnUse();
+		*/
 	}
 #endif
 	
