@@ -679,3 +679,37 @@ void GLApp::drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	glBindVertexArray(0);
 	shdrpgms["shape"].UnUse();
 }
+
+
+void GLApp::drawtriangle(Vec2 tri_pos, Vec2 tri_scale, float tri_r, glm::vec3 tri_color) {
+	float pos_x;
+	float pos_y;
+	float scaling_x;
+	float scaling_y;
+
+	scaling_x = tri_scale.x * 2.0f / window->width_init;
+	scaling_y = tri_scale.y * 2.0f / window->height_init;
+	pos_x = tri_pos.x * 2.0f / window->width_init;
+	pos_y = tri_pos.y * 2.0f / window->height_init;
+
+	Mat3 mat_test;
+	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(tri_r);
+	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	mat_test = camera2D->world_to_ndc * mat_test;
+
+	//draw triangle
+	shdrpgms["shape"].Use();
+	// bind VAO of this object's model
+	glBindVertexArray(models["triangle"].vaoid);
+	// copy object's model-to-NDC matrix to vertex shader's
+	// uniform variable uModelToNDC
+	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	shdrpgms["shape"].SetUniform("uColor", tri_color);
+	// call glDrawElements with appropriate arguments
+	glDrawElements(models["triangle"].primitive_type, models["triangle"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+	// unbind VAO and unload shader program
+	glBindVertexArray(0);
+	shdrpgms["shape"].UnUse();
+}
