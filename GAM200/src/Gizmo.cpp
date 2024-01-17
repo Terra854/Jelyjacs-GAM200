@@ -22,13 +22,13 @@ void Gizmo::RenderGizmo(){
 	//gizmoPos = Vec2(selectedObject->Position.x * camera2D->scale.x, selectedObject->Position.y * camera2D->scale.y);
 	gizmoPos = Vec2(selectedObject->Position.x, selectedObject->Position.y);
 
-	XGizmo.Position = gizmoPos + Vec2(72.f, 0.f);
-	XGizmo.Rotation = 0.f;\
-	XGizmo.Scale = Vec2(128.f, 16.f);
+	XGizmo.Position = gizmoPos + Vec2(72.f / camera2D->scale.x, 0.f);
+	XGizmo.Rotation = 0.f;
+	XGizmo.Scale = Vec2(128.f, 16.f) / camera2D->scale.x;
 
-	YGizmo.Position = gizmoPos + Vec2(0.f, 72.f);
+	YGizmo.Position = gizmoPos + Vec2(0.f, 72.f / camera2D->scale.y);
 	YGizmo.Rotation = 0.f;
-	YGizmo.Scale = Vec2(16.f, 128.f);
+	YGizmo.Scale = Vec2(16.f, 128.f) / camera2D->scale.x;
 
 	/* Gizmo */
 	Mat3 gizmoXMat, gizmoYMat;
@@ -38,8 +38,8 @@ void Gizmo::RenderGizmo(){
 	gizmoXPos = Vec2(XGizmo.Position.x * 2.0f / window->width, XGizmo.Position.y * 2.0f / window->height);
 	gizmoYPos = Vec2(YGizmo.Position.x * 2.0f / window->width, YGizmo.Position.y * 2.0f / window->height);
 
-	gizmoXScaling = Vec2(128.f / window->width, 16.f / window->height);
-	gizmoYScaling = Vec2(16.f / window->width, 128.f / window->height);
+	gizmoXScaling = Vec2(XGizmo.Scale.x / window->width, XGizmo.Scale.y / window->height);
+	gizmoYScaling = Vec2(YGizmo.Scale.x / window->width, YGizmo.Scale.y / window->height);
 
 	gizmoXMat = Mat3Translate(gizmoXPos) * Mat3Scale(gizmoXScaling) * Mat3RotDeg(0);
 	gizmoYMat = Mat3Translate(gizmoYPos) * Mat3Scale(gizmoYScaling) * Mat3RotDeg(0);
@@ -49,10 +49,10 @@ void Gizmo::RenderGizmo(){
 
 	// matrix after camrea
 
-	Mat3 gizmoCam = Mat3Scale(1.f, 1.f) * Mat3Translate(camera2D->position.x * camera2D->scale.x, camera2D->position.y * camera2D->scale.y);
+	//Mat3 gizmoCam = Mat3Scale(1.f, 1.f) * Mat3Translate(camera2D->position.x * camera2D->scale.x, camera2D->position.y * camera2D->scale.y);
 
-	gizmoXMat = gizmoCam * gizmoXMat;
-	gizmoYMat = gizmoCam * gizmoYMat;
+	//gizmoXMat = gizmoCam * gizmoXMat;
+	//gizmoYMat = gizmoCam * gizmoYMat;
 
 	GLApp::shdrpgms["shape"].Use();
 	// bind VAO of this object's model
