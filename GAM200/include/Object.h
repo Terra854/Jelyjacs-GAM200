@@ -43,12 +43,14 @@ public:
 	///Get the game object's Id
 	long GetId() { return ObjectId; }
 
-	long GetLayer() { return layer; }
+	int GetLayer() { return layer; }
 
 	//Get the object's name
 	std::string GetName() { return name; }
 
 	int GetNumComponents() { return static_cast<int>(Components.size()); }
+
+	int layer = 0;
 
 private:
 	//contains all components of the current object
@@ -57,8 +59,6 @@ private:
 	//A unique id for each object used to safely reference 
 	//Objects.
 	long ObjectId = -1;
-
-	long layer = 0;
 
 	//A unique name for each object used to name objects
 	std::string name;

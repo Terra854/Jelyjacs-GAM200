@@ -67,7 +67,7 @@ void ParticleSystem::Init()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 
-    particle_texture = GLApp::setup_texobj("Asset/Picture/particle.png");
+    particle_texture = GLApp::setup_texobj("Asset/Picture/p2.png");
 }
 
 /*  _________________________________________________________________________ */

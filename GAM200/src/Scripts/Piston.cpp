@@ -36,6 +36,7 @@ void Piston::Start(Object* obj) {
 // Contains logic for Piston's interactions with door, and animations.
 /***************************************************************************/
 void Piston::Update(Object* obj) {
+
 	// For some reason, the player is not changing position
 	if (obj == nullptr) {
 		//std::cout << "NIL OBJ : Piston" << std::endl;
@@ -47,6 +48,7 @@ void Piston::Update(Object* obj) {
 		//std::cout << "NIL BODY : Piston" << std::endl;
 		return;
 	};
+
 	// if piston collides with player, change the animation of piston
 	if (piston_b->collision_flag & COLLISION_TOP) {
 		Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
