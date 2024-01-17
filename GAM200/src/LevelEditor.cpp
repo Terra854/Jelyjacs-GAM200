@@ -269,8 +269,9 @@ void LevelEditor::ObjectProperties() {
 		}
 	}
 	else {
+		ImGui::InputInt("Object Layer", &(object->layer));
 		ImGui::Text("Object ID: %d", object->GetId());
-		ImGui::Text("Object Layer: %d", object->GetLayer());
+		//ImGui::Text("Object Layer: %d", object->GetLayer());
 		ImGui::Text("Object Name: %s", object->GetName().c_str());
 		ImGui::Text("Number of components: %d", object->GetNumComponents());
 
