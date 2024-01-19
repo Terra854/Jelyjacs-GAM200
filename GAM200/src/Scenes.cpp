@@ -94,6 +94,20 @@ void LoadScene(std::string filename)
 			jsonloop.readFloat(tran_pt->Rotation, "Rotation");
 		}
 
+		if (jsonloop.isMember("Name"))
+		{
+			std::string tempstr;
+			jsonloop.readString(tempstr, "Name");
+			obj->SetName(tempstr);
+		}
+		else
+			obj->SetName("");
+
+		if (jsonloop.isMember("Layer"))
+		{
+			jsonloop.readInt(obj->layer, "Layer");
+		}
+
 		if (jsonloop.isMember("Properties"))
 		{
 			Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
@@ -161,7 +175,9 @@ void SaveScene(std::string filename)
 		std::string name = obj->GetName() + ".json";
 		Json::Value innerobj;
 
+		innerobj["Name"] = name;
 		innerobj["Prefabs"] = name;
+		innerobj["Layer"] = obj->GetLayer();
 
 		// Save object transform data
 		if (obj->GetComponent(ComponentType::Transform) != nullptr)
