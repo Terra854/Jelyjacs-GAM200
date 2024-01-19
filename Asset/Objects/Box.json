@@ -1,0 +1,40 @@
+{
+  "Name": "Box",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale_x": 64.0,
+        "Scale_y": 64.0,
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Body",
+      "Shape": "Rectangle",
+      "Properties": {
+        "width": 64,
+        "height": 32
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "Box.png"
+      }
+    },
+    {
+      "Type": "Physics",
+      "Properties": {
+        "X_Velocity": 0.0,
+        "Y_Velocity": 0.0,
+        "AffectedByGravity": true,
+        "Mass": 1.0
+      }
+    }
+  ]
+}

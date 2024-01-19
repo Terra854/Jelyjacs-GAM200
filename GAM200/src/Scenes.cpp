@@ -172,11 +172,13 @@ void SaveScene(std::string filename)
 			continue;
 
 		// Save object prefabs data
-		std::string name = obj->GetName() + ".json";
+		std::string name = obj->GetName();
+		std::string prefab = (obj->GetPrefab())->GetName() + ".json";
 		Json::Value innerobj;
 
+		// 
 		innerobj["Name"] = name;
-		innerobj["Prefabs"] = name;
+		innerobj["Prefabs"] = prefab;
 		innerobj["Layer"] = obj->GetLayer();
 
 		// Save object transform data
