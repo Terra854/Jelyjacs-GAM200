@@ -52,6 +52,8 @@ public:
 
 	int GetNumComponents() { return static_cast<int>(Components.size()); }
 
+	Object* GetPrefab() { return usingPrefab; }
+
 	int layer = 0;
 
 private:
@@ -64,5 +66,9 @@ private:
 
 	//A unique name for each object used to name objects
 	std::string name;
+
+	// Link to the prefab that this object is created with
+	// leave this as nullptr if this object itself is a prefab
+	Object* usingPrefab = nullptr;
 };
 
