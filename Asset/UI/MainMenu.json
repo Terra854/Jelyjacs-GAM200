@@ -1,0 +1,44 @@
+{
+  "Menu": [
+    {
+      "text": "mainmenu",
+      "button_x": 0,
+      "button_y": 0,
+      "button_w": 500,
+      "button_h": 500,
+      "scale": 0.0,
+      "font": "AldrichRegular",
+      "texture": "Titlex4"
+    },
+    {
+      "text": "Start Game",
+      "button_x": 0,
+      "button_y": -200,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": ""
+    },
+    {
+      "text": "Options",
+      "button_x": 0,
+      "button_y": -275,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": ""
+    },
+    {
+      "text": "Quit",
+      "button_x": 0,
+      "button_y": -350,
+      "button_w": 200,
+      "button_h": 70,
+      "scale": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    }
+  ]
+}
