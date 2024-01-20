@@ -698,7 +698,7 @@ void GLApp::drawtriangle(Vec2 tri_pos, Vec2 tri_scale, float tri_r, glm::vec3 tr
 	pos_y = tri_pos.y * 2.0f / window->height_init;
 
 	Mat3 mat_test;
-	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(tri_r);
+	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotDeg(tri_r);
 	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
 	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
 	mat_test = camera2D->world_to_ndc * mat_test;
