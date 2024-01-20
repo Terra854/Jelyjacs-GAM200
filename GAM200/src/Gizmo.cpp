@@ -72,6 +72,14 @@ void Gizmo::RenderGizmo(){
 	glBindVertexArray(0);
 	GLApp::shdrpgms["shape"].UnUse();
 
-	GLApp::drawtriangle(XGizmo.Position + Vec2(XGizmo.Scale.x / 2.f, 0.f), Vec2(32.f, 32.f) / camera2D->scale.x, 270.f, x_gizmo_color);
-	GLApp::drawtriangle(YGizmo.Position + Vec2(0.f, YGizmo.Scale.y / 2.f), Vec2(32.f, 32.f) / camera2D->scale.x, 0.f, y_gizmo_color);
+	switch (type) {
+	case GizmoType::Scale:
+		break;
+	case GizmoType::Rotate:
+		break;
+	case GizmoType::Translate:
+		GLApp::drawtriangle(XGizmo.Position + Vec2(XGizmo.Scale.x / 2.f, 0.f), Vec2(32.f, 32.f) / camera2D->scale.x, 270.f, x_gizmo_color);
+		GLApp::drawtriangle(YGizmo.Position + Vec2(0.f, YGizmo.Scale.y / 2.f), Vec2(32.f, 32.f) / camera2D->scale.x, 0.f, y_gizmo_color);
+		break;
+	}
 }

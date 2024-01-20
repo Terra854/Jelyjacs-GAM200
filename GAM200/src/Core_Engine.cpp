@@ -471,34 +471,68 @@ void CoreEngine::GameLoop()
 			//ImGui::SetCursorPos(viewportStartPos.ToImVec2());
 			//ImVec2 cPos = ImVec2(customButtonPos.x - windowSize.x, customButtonPos.y - windowSize.y);
 
-			Vec2 gizmoControlButtonPos(viewportStartPos.x + viewportDisplaySize.x - 100.f, viewportStartPos.y + 100.f);
+
+			
 
 			//ImGui::SetCursorPos(ImVec2(viewportStartPos.x + viewportDisplaySize.x - 100.f, viewportStartPos.y + 100.f));
-			
+			/*
 			ImGui::SetCursorPos(gizmoControlButtonPos.ToImVec2());
-			if (ImGui::Button("Scale")) {};
+			if (ImGui::Button("Scale")) {}
 
 			gizmoControlButtonPos.y += 30.f;
 			ImGui::SetCursorPos(gizmoControlButtonPos.ToImVec2());
-			if (ImGui::Button("Rotate")) {};
+			if (ImGui::Button("Rotate")) {}
 
 			gizmoControlButtonPos.y += 30.f;
 			ImGui::SetCursorPos(gizmoControlButtonPos.ToImVec2());
-			if (ImGui::Button("Translate")) {};
-
+			if (ImGui::Button("Translate")) {}
+			*/
 			ImGui::End(); // End Game Viewport
 
-			ImGui::Begin("DEBUG: Gizmo");
+			if (level_editor->selected) {
 
-			ImGui::Text("XGizmo.Position = (%.6f, %.6f)", gizmo.getX()->Position.x, gizmo.getX()->Position.y);
-			ImGui::Text("XGizmo.Scale = (%.6f, %.6f)", gizmo.getX()->Scale.x, gizmo.getX()->Scale.y);
+				Object* selectObj = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
+				Transform* selectObjTransform = static_cast<Transform*>(selectObj->GetComponent(ComponentType::Transform));
 
-			ImGui::Text("YGizmo.Position = (%.6f, %.6f)", gizmo.getY()->Position.x, gizmo.getY()->Position.y);
-			ImGui::Text("YGizmo.Scale = (%.6f, %.6f)", gizmo.getY()->Scale.x, gizmo.getY()->Scale.y);
+				Vec2 vecnum1(
+					(selectObjTransform->Position.x + (camera2D->position.x * 1920.f / 2.f)),
+					(selectObjTransform->Position.y + (camera2D->position.y * 1080.f / 2.f))
+				);
+				Vec2 vecnum2(
+					(vecnum1.x* camera2D->scale.x) + (1920 / 2),
+					(vecnum1.y* camera2D->scale.y) + (1080 / 2)
+				);
 
-			ImGui::Text("Camera.Scale = (%.6f, %.6f)", camera2D->scale.x, camera2D->scale.y);
+				Vec2 vecnum3(
+					vecnum2.x / 1920 * viewportDisplaySize.x,
+					(1080 - vecnum2.y) / 1080 * viewportDisplaySize.y
+				);
 
-			ImGui::End();
+				Vec2 vecnum4(
+					vecnum3.x + viewport_min.x,
+					vecnum3.y + viewport_min.y
+				);
+
+				Vec2 gizmoControlButtonPos = vecnum4 + Vec2(-90.f, 10.f);
+
+				ImGui::SetNextWindowPos(gizmoControlButtonPos.ToImVec2());
+				ImGui::SetNextWindowSize(ImVec2(180.f, 60.f)); // Optional: if you know the content size
+				ImGui::Begin("Gizmo Controls", nullptr, ImGuiWindowFlags_NoResize);
+
+				if (ImGui::Button("Scale")) {
+					gizmo.SetType(GizmoType::Scale);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Rotate")) {
+					gizmo.SetType(GizmoType::Rotate);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Translate")) {
+					gizmo.SetType(GizmoType::Translate);
+				}
+
+				ImGui::End();
+			}
 
 			if (show_tileset) {
 				ImGui::Begin("Tileset", &show_tileset);
