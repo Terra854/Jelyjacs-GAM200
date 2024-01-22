@@ -324,8 +324,8 @@ void CoreEngine::GameLoop()
 
 			static Transform XGizmo, YGizmo;
 
-			// Dragging the selected object in the viewport
-			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true && !DraggingPrefabIntoViewport) {
+			// Dragging the selected object in the viewport (only when the engine is paused)
+			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true && !DraggingPrefabIntoViewport && engine->isPaused()) {
 				Object* object;
 				if (level_editor->selectedNum >= 0)
 					object = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
@@ -334,16 +334,6 @@ void CoreEngine::GameLoop()
 
 				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
-
-				/*
-				XGizmo.Position = objTransform->Position + Vec2(72.f, 0.f);
-				XGizmo.Rotation = 0.f;
-				XGizmo.Scale = Vec2(128.f, 16.f);
-
-				YGizmo.Position = objTransform->Position + Vec2(0.f, 72.f);
-				YGizmo.Rotation = 0.f;
-				YGizmo.Scale = Vec2(16.f, 128.f);
-				*/
 
 				/* X Gizmo */
 				if (isObjectClicked(gizmo.getX(), gameWorldPos) && !object_being_moved_y)
@@ -381,30 +371,6 @@ void CoreEngine::GameLoop()
 					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
 				}
 
-				/*
-				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
-
-				if (isObjectClicked(objTransform, gameWorldPos))
-				{
-					object_being_moved = true;
-				}
-				
-				// This arrangement is to account for the mouse that sometimes can be outside of the selected object
-				if (object_being_moved) {
-
-					// Offset to account for mouse not being in the center of the selected object
-					if (isnan(offset.x))
-						offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
-
-					std::cout << "Offset: " << offset << std::endl;
-
-					objTransform->Position.x = (float) std::round(gameWorldPos.x - offset.x);
-					objTransform->Position.y = (float) std::round(gameWorldPos.y - offset.y);
-
-					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
-				}
-				*/
 				if (objBody != nullptr)
 				{
 					RecalculateBody(objTransform, objBody);
@@ -432,7 +398,6 @@ void CoreEngine::GameLoop()
 						level_editor->selected = true;
 						level_editor->selectedNum = (int)i;
 						selectedObjectID = static_cast<long>(i);
-						//gizmo.SetObject(objTransform);
 					}
 				}
 			}
@@ -466,37 +431,18 @@ void CoreEngine::GameLoop()
 				}
 			}
 
-			//ImVec2 customButtonPos = ImVec2(viewportPos.x + viewportDisplaySize.x - 100.f, viewportPos.y + viewportDisplaySize.y - 100.f);
-
-			//ImGui::SetCursorPos(viewportStartPos.ToImVec2());
-			//ImVec2 cPos = ImVec2(customButtonPos.x - windowSize.x, customButtonPos.y - windowSize.y);
-
-
-			
-
-			//ImGui::SetCursorPos(ImVec2(viewportStartPos.x + viewportDisplaySize.x - 100.f, viewportStartPos.y + 100.f));
-			/*
-			ImGui::SetCursorPos(gizmoControlButtonPos.ToImVec2());
-			if (ImGui::Button("Scale")) {}
-
-			gizmoControlButtonPos.y += 30.f;
-			ImGui::SetCursorPos(gizmoControlButtonPos.ToImVec2());
-			if (ImGui::Button("Rotate")) {}
-
-			gizmoControlButtonPos.y += 30.f;
-			ImGui::SetCursorPos(gizmoControlButtonPos.ToImVec2());
-			if (ImGui::Button("Translate")) {}
-			*/
 			ImGui::End(); // End Game Viewport
 
-			if (level_editor->selected) {
+			// Gizmo controls window (hide when game is running)
+			if (level_editor->selected && engine->isPaused()) {
 
 				Object* selectObj = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
 				Transform* selectObjTransform = static_cast<Transform*>(selectObj->GetComponent(ComponentType::Transform));
 
+				// Calculate location of the window
 				Vec2 vecnum1(
 					(selectObjTransform->Position.x + (camera2D->position.x * 1920.f / 2.f)),
-					(selectObjTransform->Position.y + (camera2D->position.y * 1080.f / 2.f))
+					(selectObjTransform->Position.y - (selectObjTransform->Scale.y / 2.f) + (camera2D->position.y * 1080.f / 2.f))
 				);
 				Vec2 vecnum2(
 					(vecnum1.x* camera2D->scale.x) + (1920 / 2),
@@ -516,7 +462,7 @@ void CoreEngine::GameLoop()
 				Vec2 gizmoControlButtonPos = vecnum4 + Vec2(-90.f, 10.f);
 
 				ImGui::SetNextWindowPos(gizmoControlButtonPos.ToImVec2());
-				ImGui::SetNextWindowSize(ImVec2(180.f, 60.f)); // Optional: if you know the content size
+				ImGui::SetNextWindowSize(ImVec2(180.f, 60.f));
 				ImGui::Begin("Gizmo Controls", nullptr, ImGuiWindowFlags_NoResize);
 
 				if (ImGui::Button("Scale")) {

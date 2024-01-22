@@ -507,51 +507,9 @@ void GLApp::Update()
 		}
 
 		gizmo.SetObject(tr);
-		gizmo.RenderGizmo();
-
-		/* Gizmo 
-		Mat3 gizmoXMat, gizmoYMat;
-
-		// get pos and scale from transform component
-		Vec2 gizmoPos, gizmoXPos, gizmoYPos, gizmoXScaling, gizmoYScaling;
-
-		gizmoPos = Vec2(tr->Position.x * camera2D->scale.x, tr->Position.y * camera2D->scale.y);
-
-		gizmoXPos = Vec2((gizmoPos.x + 72.f) * 2.0f / window->width, gizmoPos.y * 2.0f / window->height);
-		gizmoYPos = Vec2(gizmoPos.x * 2.0f / window->width, (gizmoPos.y + 72.f) * 2.0f / window->height);
-
-		gizmoXScaling = Vec2(128.f / window->width, 16.f / window->height);
-		gizmoYScaling = Vec2(16.f / window->width, 128.f / window->height);
-
-
-		gizmoXMat = Mat3Translate(gizmoXPos) * Mat3Scale(gizmoXScaling) * Mat3RotDeg(0);
-		gizmoYMat = Mat3Translate(gizmoYPos) * Mat3Scale(gizmoYScaling) * Mat3RotDeg(0);
-
-		// matrix after camrea
-
-		Mat3 gizmoCam = Mat3Scale(1.f, 1.f) * Mat3Translate(camera2D->position.x * camera2D->scale.x, camera2D->position.y * camera2D->scale.y);
-
-		gizmoXMat = gizmoCam * gizmoXMat;
-		gizmoYMat = gizmoCam * gizmoYMat;
-
-		shdrpgms["shape"].Use();
-		// bind VAO of this object's model
-		glBindVertexArray(models["square"].vaoid);
 		
-		// Render X arrow
-		shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoXMat.ToGlmMat3());
-		shdrpgms["shape"].SetUniform("uColor", red_box_color);
-		glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
-
-		// Render Y arrow
-		shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoYMat.ToGlmMat3());
-		shdrpgms["shape"].SetUniform("uColor", green_box_color);
-		glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
-
-		// unbind VAO and unload shader program
-		glBindVertexArray(0);
-		shdrpgms["shape"].UnUse();
-		*/
+		if (engine->isPaused())
+			gizmo.RenderGizmo();
 	}
 #endif
 	

@@ -19,7 +19,6 @@ void Gizmo::RenderGizmo(){
 
 	Vec2 gizmoPos, gizmoXPos, gizmoYPos, gizmoXScaling, gizmoYScaling;
 
-	//gizmoPos = Vec2(selectedObject->Position.x * camera2D->scale.x, selectedObject->Position.y * camera2D->scale.y);
 	gizmoPos = Vec2(selectedObject->Position.x, selectedObject->Position.y);
 
 	XGizmo.Position = gizmoPos + Vec2(72.f / camera2D->scale.x, 0.f);
@@ -46,13 +45,6 @@ void Gizmo::RenderGizmo(){
 
 	gizmoXMat = camera2D->world_to_ndc * gizmoXMat;
 	gizmoYMat = camera2D->world_to_ndc * gizmoYMat;
-
-	// matrix after camrea
-
-	//Mat3 gizmoCam = Mat3Scale(1.f, 1.f) * Mat3Translate(camera2D->position.x * camera2D->scale.x, camera2D->position.y * camera2D->scale.y);
-
-	//gizmoXMat = gizmoCam * gizmoXMat;
-	//gizmoYMat = gizmoCam * gizmoYMat;
 
 	GLApp::shdrpgms["shape"].Use();
 	// bind VAO of this object's model
