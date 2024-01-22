@@ -174,6 +174,7 @@ void input::Update()
 	buttons[at(KEY::z)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_Z));
 	buttons[at(KEY::x)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_X));
 	buttons[at(KEY::c)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_C));
+	buttons[at(KEY::k)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_K));
 	buttons[at(KEY::mouseL)].SetKeyState(glfwGetMouseButton(Pwindow, GLFW_MOUSE_BUTTON_1));
 	buttons[at(KEY::mouseR)].SetKeyState(glfwGetMouseButton(Pwindow, GLFW_MOUSE_BUTTON_2));
 	buttons[at(KEY::up)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_UP));

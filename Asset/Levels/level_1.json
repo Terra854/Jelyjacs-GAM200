@@ -59,8 +59,8 @@
       "Prefabs": "Box.json",
       "Type": "Transform",
       "Position": {
-        "x": 160.0,
-        "y": 704.0
+        "x": -80.0,
+        "y": 10.0
       }
     },
 
