@@ -1034,7 +1034,7 @@ void LevelEditor::ListOfObjects() {
 			}
 			ImGui::TableNextColumn();
 			Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
-			char buf[32];
+			char buf[256];
 			if (object->GetName().empty())
 				sprintf_s(buf, "%d) Object", static_cast<int>(i));
 			else

@@ -228,6 +228,12 @@
     <ClCompile Include="src\Gizmo.cpp">
       <Filter>Source Files\Systems\LevelEditor</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\PressurePlate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Hori_Elevator.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -400,6 +406,12 @@
     </ClInclude>
     <ClInclude Include="include\Gizmo.h">
       <Filter>Header Files\Systems\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\PressurePlate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Hori_Elevator.h">
+      <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

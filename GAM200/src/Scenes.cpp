@@ -74,8 +74,8 @@ void LoadScene(std::string filename)
 		}
 
 		// Create object via cloning the prefab
-		
 		obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
+		obj->SetPrefab(AssetManager::prefabsval(objprefabs)); // Update the clone object to have usingPrefab value
 		
 		// Assign an ID. It will be added to the objectMap
 		objectFactory->assignIdToObject(obj);
@@ -100,8 +100,9 @@ void LoadScene(std::string filename)
 			jsonloop.readString(tempstr, "Name");
 			obj->SetName(tempstr);
 		}
-		else
-			obj->SetName("");
+		//else
+		//	obj->SetName("");
+		// ^Default name for objects is the name set in prefabs object list
 
 		if (jsonloop.isMember("Layer"))
 		{
@@ -173,12 +174,19 @@ void SaveScene(std::string filename)
 
 		// Save object prefabs data
 		std::string name = obj->GetName();
-		std::string prefab = (obj->GetPrefab())->GetName() + ".json";
+		Object* prefab = obj->GetPrefab();
+		std::string prefabname = "MISSINGNAME";
+		
+		if (prefab == nullptr)
+			std::cout << "OBJECT: " << name << " is missing usingPrefab!" <<std::endl;
+		else
+			prefabname = prefab->GetName() + ".json";
+
 		Json::Value innerobj;
 
-		// 
+		
 		innerobj["Name"] = name;
-		innerobj["Prefabs"] = prefab;
+		innerobj["Prefabs"] = prefabname;
 		innerobj["Layer"] = obj->GetLayer();
 
 		// Save object transform data

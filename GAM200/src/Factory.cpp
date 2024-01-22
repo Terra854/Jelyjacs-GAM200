@@ -411,8 +411,9 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 	//Object* obj = createEmptyObject();
 	Object* obj = new Object(); 
 
-	// Clone the object name
+	// Clone the object name and the prefab it is using
 	obj->name = object->GetName();
+	obj->usingPrefab = object->usingPrefab;
 
 	// Clone all components (specific copying might be better to be at their component itself)
 	for (const std::pair<ComponentType, Component*>& component : object->Components)

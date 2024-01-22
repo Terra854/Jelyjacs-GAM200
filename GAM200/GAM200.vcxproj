@@ -163,6 +163,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
+    <ClInclude Include="include\Scripts\Hori_Elevator.h" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
@@ -232,8 +233,10 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
     <ClCompile Include="src\Scripts\Finn.cpp" />
+    <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
     <ClCompile Include="src\Scripts\Player.cpp" />
+    <ClCompile Include="src\Scripts\PressurePlate.cpp" />
     <ClCompile Include="src\Scripts\Spark.cpp" />
     <ClCompile Include="src\Scripts\Vert_Elevator.cpp" />
     <ClCompile Include="src\ThreadPool.cpp" />
@@ -291,6 +294,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Scripts\Finn.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
     <ClInclude Include="include\Scripts\Player.h" />
+    <ClInclude Include="include\Scripts\PressurePlate.h" />
     <ClInclude Include="include\Scripts\Spark.h" />
     <ClInclude Include="include\Scripts\Vert_Elevator.h" />
     <ClInclude Include="include\ThreadPool.h" />
