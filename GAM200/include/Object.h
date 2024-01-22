@@ -54,6 +54,8 @@ public:
 
 	Object* GetPrefab() { return usingPrefab; }
 
+	void SetPrefab(Object* Prefab) { usingPrefab = Prefab; }
+
 	int layer = 0;
 
 private:
@@ -65,10 +67,11 @@ private:
 	long ObjectId = -1;
 
 	//A unique name for each object used to name objects
-	std::string name;
+	std::string name = "";
 
 	// Link to the prefab that this object is created with
 	// leave this as nullptr if this object itself is a prefab
+	// This method might have issue with cloning through the "level editor insert prefabs button", you might need to update the object prefab through there - Sen Chuan
 	Object* usingPrefab = nullptr;
 };
 
