@@ -18,7 +18,7 @@
       "button_h": 70,
       "scale": 0.8,
       "font": "AldrichRegular",
-      "texture": ""
+      "texture": "transparent.png"
     },
     {
       "text": "Options",
@@ -28,7 +28,7 @@
       "button_h": 70,
       "scale": 0.8,
       "font": "AldrichRegular",
-      "texture": ""
+      "texture": "transparent.png"
     },
     {
       "text": "Quit",
