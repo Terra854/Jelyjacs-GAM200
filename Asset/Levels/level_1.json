@@ -40,6 +40,7 @@
       }
     },
     {
+      "Name": "Finn",
       "Prefabs": "Finn.json",
       "Type": "Transform",
       "Position": {
@@ -48,6 +49,7 @@
       }
     },
     {
+      "Name": "Spark",
       "Prefabs": "Spark.json",
       "Type": "Transform",
       "Position": {

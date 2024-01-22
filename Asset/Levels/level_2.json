@@ -18,19 +18,20 @@
       }
     },
     {
+      "Name": "Finn",
       "Prefabs": "Finn.json",
       "Type": "Transform",
       "Position": {
         "x": 0.0,
         "y": 0.0
       },
-      "Properties":
-      {
+      "Properties": {
         "width": 20.0,
         "height": 30.0
       }
     },
     {
+      "Name": "Spark",
       "Prefabs": "Spark.json",
       "Type": "Transform",
       "Position": {
