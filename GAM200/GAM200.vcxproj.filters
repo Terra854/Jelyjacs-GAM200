@@ -231,11 +231,8 @@
     <ClCompile Include="src\Scripts\PressurePlate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Scripts\Hori_Elevator.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -412,6 +409,9 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\PressurePlate.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Hori_Elevator.h">
+      <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

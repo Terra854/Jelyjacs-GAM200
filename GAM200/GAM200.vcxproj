@@ -163,7 +163,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
-    <ClCompile Include="include\Scripts\Hori_Elevator.h" />
+    <ClInclude Include="include\Scripts\Hori_Elevator.h" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
