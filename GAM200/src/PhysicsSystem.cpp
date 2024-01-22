@@ -141,7 +141,7 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 			t1->Position.y = ((Rectangular*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Body))->aabb.min.y - (((Rectangular*)b1)->height / 2);
 
 			// For objects on moving platforms
-			if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics)) != nullptr ) {
+			if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics)) != nullptr) {
 				if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y < 0.f) { // Check to see if the platform is going down
 					p1->Velocity.y += ((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y + (gravity * fixed_dt); // Inherit the platform's velocity and add gravity
 					t1->Position.y += p1->Velocity.y * fixed_dt;
@@ -304,15 +304,15 @@ void PhysicsSystem::Update() {
 				if (p.y < 0.f)
 					h_index--;
 				*/
-				
+
 				w_index = (((int)p.x - (int)start_coord.x) / (total_grid_width / num_of_grids_per_side));
 				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
 				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
-				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
-					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
-					b->inGrid.push_back({ w_index, h_index });
-				}
+					if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
+						Collision::uniform_grid[w_index][h_index].push_back(obj->second);
+						b->inGrid.push_back({ w_index, h_index });
+					}
 
 				p = ((Rectangular*)b)->aabb.P1();
 
@@ -329,10 +329,10 @@ void PhysicsSystem::Update() {
 				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
 				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
-				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
-					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
-					b->inGrid.push_back({ w_index, h_index });
-				}
+					if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
+						Collision::uniform_grid[w_index][h_index].push_back(obj->second);
+						b->inGrid.push_back({ w_index, h_index });
+					}
 
 				p = ((Rectangular*)b)->aabb.P2();
 
@@ -349,10 +349,10 @@ void PhysicsSystem::Update() {
 				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
 				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
-				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
-					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
-					b->inGrid.push_back({ w_index, h_index });
-				}
+					if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
+						Collision::uniform_grid[w_index][h_index].push_back(obj->second);
+						b->inGrid.push_back({ w_index, h_index });
+					}
 
 				p = ((Rectangular*)b)->aabb.P3();
 
@@ -369,84 +369,85 @@ void PhysicsSystem::Update() {
 				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
 				if (w_index >= 0 && w_index < num_of_grids_per_side && h_index >= 0 && h_index < num_of_grids_per_side)
-				if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
-					Collision::uniform_grid[w_index][h_index].push_back(obj->second);
-					b->inGrid.push_back({ w_index, h_index });
-				}
-			}
-		}
-	}
-
-	// Update velocity for each object
-	for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
-
-		if (p == nullptr)
-			continue; // No physics in that object, move along
-
-		// No acceleration, not needed in the game
-
-		// Apply gravity
-		if (p->AffectedByGravity) {
-			float acceleration = p->Force * (1.f / p->Mass) + gravity;
-			p->Velocity.y += acceleration * fixed_dt;
-		}
-		p->Velocity.y *= 0.99f; // Account for air resistance
-
-		p->Force = 0.0f; // Reset force
-	}
-
-	// Loop through each object to update positiona and see if it's colliding with something
-	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
-		Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
-		Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
-
-		// For physics
-		if (p != nullptr) {
-		
-			// Save current position to previous position
-			t->PrevPosition = t->Position;
-
-			if (p->Velocity.x == 0.f && p->Velocity.y == 0.f)
-				continue; // No movement, so no need to calculate collision.
-
-			// Calculate new position
-			t->Position += p->Velocity * fixed_dt;
-		}
-
-		if (b == nullptr)
-			continue; // No body in this object or disabled, move to next object
-
-		// Reset collision flags
-		if (b->GetShape() == Shape::Rectangle)
-			((Rectangular*)b)->ResetCollisionFlags();
-
-		RecalculateBody(t, b);
-
-		if (!b->active)
-			continue; // Don't calculate collision for this object if active flag is unset
-
-		bool collision_has_occured = false;
-
-		for (const auto& grid : b->inGrid) {
-			for (const auto& anotherobj : Collision::uniform_grid[grid.first][grid.second]) {
-				if (obj->second == anotherobj)
-					continue; // Can't collide with yourself
-
-				Body* b2 = (Body*)anotherobj->GetComponent(ComponentType::Body);
-
-				if (b2 == nullptr)
-					continue; // No body in the other object, no way it's collidable
-				
-				if (Check_Collision(b, b2, fixed_dt)) {
-					collision_has_occured = true;
-				}
+					if (std::find(Collision::uniform_grid[w_index][h_index].begin(), Collision::uniform_grid[w_index][h_index].end(), obj->second) == Collision::uniform_grid[w_index][h_index].end()) {
+						Collision::uniform_grid[w_index][h_index].push_back(obj->second);
+						b->inGrid.push_back({ w_index, h_index });
+					}
 			}
 		}
 
-		if (collision_has_occured && b->collision_response && p != nullptr)
-			Response_Collision(t, b, p);
+
+		// Update velocity for each object
+		for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
+			Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
+
+			if (p == nullptr)
+				continue; // No physics in that object, move along
+
+			// No acceleration, not needed in the game
+
+			// Apply gravity
+			if (p->AffectedByGravity) {
+				float acceleration = p->Force * (1.f / p->Mass) + gravity;
+				p->Velocity.y += acceleration * fixed_dt;
+			}
+			p->Velocity.y *= 0.99f; // Account for air resistance
+
+			p->Force = 0.0f; // Reset force
+		}
+
+		// Loop through each object to update positiona and see if it's colliding with something
+		for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
+			Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
+			Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
+			Body* b = (Body*)obj->second->GetComponent(ComponentType::Body);
+
+			// For physics
+			if (p != nullptr) {
+
+				// Save current position to previous position
+				t->PrevPosition = t->Position;
+
+				if (p->Velocity.x == 0.f && p->Velocity.y == 0.f)
+					continue; // No movement, so no need to calculate collision.
+
+				// Calculate new position
+				t->Position += p->Velocity * fixed_dt;
+			}
+
+			if (b == nullptr)
+				continue; // No body in this object or disabled, move to next object
+
+			// Reset collision flags
+			if (b->GetShape() == Shape::Rectangle)
+				((Rectangular*)b)->ResetCollisionFlags();
+
+			RecalculateBody(t, b);
+
+			if (!b->active)
+				continue; // Don't calculate collision for this object if active flag is unset
+
+			bool collision_has_occured = false;
+
+			for (const auto& grid : b->inGrid) {
+				for (const auto& anotherobj : Collision::uniform_grid[grid.first][grid.second]) {
+					if (obj->second == anotherobj)
+						continue; // Can't collide with yourself
+
+					Body* b2 = (Body*)anotherobj->GetComponent(ComponentType::Body);
+
+					if (b2 == nullptr)
+						continue; // No body in the other object, no way it's collidable
+
+					if (Check_Collision(b, b2, fixed_dt)) {
+						collision_has_occured = true;
+					}
+				}
+			}
+
+			if (collision_has_occured && b->collision_response && p != nullptr)
+				Response_Collision(t, b, p);
+		}
 	}
 }
 
