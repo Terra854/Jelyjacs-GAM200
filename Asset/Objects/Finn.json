@@ -8,8 +8,8 @@
           "x": 0.0,
           "y": 0.0
         },
-        "Scale_x": 54.0,
-        "Scale_y": 54.0,
+        "Scale_x": 64.0,
+        "Scale_y": 64.0,
         "Rotation": 0.0
       }
     },
@@ -17,8 +17,8 @@
       "Type": "Body",
       "Shape": "Rectangle",
       "Properties": {
-        "width": 29.7,
-        "height": 43.7
+        "width": 32,
+        "height": 64
       }
     },
     {

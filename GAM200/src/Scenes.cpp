@@ -12,6 +12,7 @@ This file contains the definitions for loading and saving scenes
 #include "../include/components/Event.h"
 #include "Scenes.h"
 #include <iostream>
+#include "LevelEditor.h"
 
 /******************************************************************************
 LoadScene
@@ -126,11 +127,22 @@ void LoadScene(std::string filename)
 			jsonloop.readInt(event_pt->linked_event, "linkedevent");
 		}
 
+		if (jsonloop.isMember("scripts"))
+		{
+			Behaviour* o_be = (Behaviour*)obj->GetComponent(ComponentType::Behaviour);
+			std::string behvstr;
+			jsonloop.readString(behvstr, "scripts");
+
+			if (o_be != nullptr) // Existing behaviour, delete it to be readded
+				objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
+
+			obj->AddComponent(new Behaviour(0, behvstr));
+		}
+
 		// Add here to read oher types of data if necessary WIP
 
 
 		obj->Initialize();
-
 	}
 
 	// Save the name of the level to engine to track
@@ -226,6 +238,12 @@ void SaveScene(std::string filename)
 		{
 			Event* event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
 			innerobj["linkedevent"] = event->linked_event;
+		}
+
+		if (obj->GetComponent(ComponentType::Behaviour))
+		{
+			Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+			innerobj["scripts"] = behv->GetBehaviourName();
 		}
 
 		jsonobj["Objects"].append(innerobj);
