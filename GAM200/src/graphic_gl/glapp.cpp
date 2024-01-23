@@ -467,8 +467,8 @@ void GLApp::Update()
 
 		}		
     }
-	drawline_circle(Vec2(0, 0), Vec2(5005, 5005), line_color);
-	drawtriangle(Vec2(0, 0), Vec2(5005, 5005), 0.f, line_color);
+	drawline_circle(Vec2(0, 0), Vec2(50, 50), line_color);
+	//drawtriangle(Vec2(0, 0), Vec2(5005, 5005), 0.f, line_color);
 
 #if defined(DEBUG) | defined(_DEBUG)
 	// Draw the bove around the selected object

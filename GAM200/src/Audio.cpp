@@ -65,7 +65,7 @@ void Audio::setupSound()
 		std::string audio_type;
 		switch (i) // Set audio value based on current AudioType
 		{
-		case AudioType::Background:
+		case AudioType::Background_Music:
 			audio_type = "background";
 			break;
 		case AudioType::Button_Click:
@@ -125,7 +125,7 @@ void Audio::setupSound()
 	jsonobj.closeFile();
 
     // Set the background music
-    system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, true, &background);
+    system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background_Music), 0, true, &background);
     background->setVolume(0.2f);
 }
 
@@ -167,6 +167,6 @@ restartBackgroundAudio
 *******************************************************************************/
 void Audio::restartBackgroundAudio() {
 	background->stop();
-	system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background), 0, true, &background);
+	system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background_Music), 0, true, &background);
 	background->setVolume(0.2f);
 }

@@ -1274,7 +1274,7 @@ void LevelEditor::AssetList()
 			std::string AudioTypeString;
 
 			switch (audioPair.first) {
-			case AudioType::Background:
+			case AudioType::Background_Music:
 				AudioTypeString = "Background";
 				break;
 			case AudioType::Button_Click:
