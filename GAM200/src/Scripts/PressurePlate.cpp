@@ -77,7 +77,7 @@ namespace PressurePlate {
 			// if piston collides with player, change the animation of piston
 			if (plate_b->collision_flag & COLLISION_TOP) {
 				std::cout << obj->GetName() << "PP Open" << std::endl;
-				//plate_animation->fixed = true;
+				plate_animation->fixed = true;
 				if (plate_animation->current_type == AnimationType::Jump) {}
 				else {
 					plate_animation->current_type = AnimationType::Jump;
@@ -102,9 +102,9 @@ namespace PressurePlate {
 					}
 				}
 			}
-			else /*if (plate_animation->fixed)*/ {
+			else if (plate_animation->fixed) {
 				std::cout << obj->GetName() << "PP Closed" << std::endl;
-				//plate_animation->fixed = false;
+				plate_animation->fixed = false;
 				if (plate_animation->current_type == AnimationType::Idle) {}
 				else {
 					plate_animation->current_type = AnimationType::Idle;
