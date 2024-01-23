@@ -76,8 +76,8 @@ namespace PressurePlate {
 		for (; num_of_steps; num_of_steps--) {
 			// if piston collides with player, change the animation of piston
 			if (plate_b->collision_flag & COLLISION_TOP) {
-				std::cout << "PP Open" << std::endl;
-				plate_animation->fixed = true;
+				std::cout << obj->GetName() << "PP Open" << std::endl;
+				//plate_animation->fixed = true;
 				if (plate_animation->current_type == AnimationType::Jump) {}
 				else {
 					plate_animation->current_type = AnimationType::Jump;
@@ -96,14 +96,15 @@ namespace PressurePlate {
 								door_animation->current_type = AnimationType::Jump;
 								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
 								door_body->active = false;
+								break;
 							}
 						}
 					}
 				}
 			}
-			else if(!(plate_b->collision_flag & COLLISION_TOP) && plate_animation->fixed) {
-				//std::cout << "PP Closed" << std::endl;
-				/*plate_animation->fixed = false;
+			else /*if (plate_animation->fixed)*/ {
+				std::cout << obj->GetName() << "PP Closed" << std::endl;
+				//plate_animation->fixed = false;
 				if (plate_animation->current_type == AnimationType::Idle) {}
 				else {
 					plate_animation->current_type = AnimationType::Idle;
@@ -118,10 +119,11 @@ namespace PressurePlate {
 								door_animation->current_type = AnimationType::Idle;
 								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
 								door_body->active = true;
+								break;
 							}
 						}
 					}
-				}*/
+				}
 
 			}
 		}

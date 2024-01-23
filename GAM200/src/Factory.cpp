@@ -38,6 +38,14 @@ ID aand is stored as part of a private map
 
 Factory* objectFactory = NULL;
 
+std::vector<std::pair<std::vector<Object*>, bool>> layers;
+
+std::vector<Object*> BackgroundObjects;
+std::vector<Object*> GameObjects;
+
+std::pair<std::vector<Object*>, bool> backgroundLayer;
+std::pair<std::vector<Object*>, bool> objectLayer;
+
 //Ctor
 Factory::Factory()
 {
@@ -55,6 +63,12 @@ Factory::Factory()
 	AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
 	AddComponentCreator("Event", new ComponentCreator<Event>());
 	AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
+
+	backgroundLayer = std::make_pair(BackgroundObjects, true);
+	layers.push_back(backgroundLayer);
+
+	objectLayer = std::make_pair(GameObjects, true);
+	layers.push_back(objectLayer);
 }
 
 //Dtor
