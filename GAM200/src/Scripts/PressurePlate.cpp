@@ -95,7 +95,8 @@ namespace PressurePlate {
 								door_animation->fixed = true;
 								door_animation->current_type = AnimationType::Jump;
 								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
-								//door_body->active = false;
+								door_body->active = false;
+								break;
 							}
 						}
 					}
@@ -117,7 +118,8 @@ namespace PressurePlate {
 								door_animation->fixed = false;
 								door_animation->current_type = AnimationType::Idle;
 								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
-								//door_body->active = true;
+								door_body->active = true;
+								break;
 							}
 						}
 					}
