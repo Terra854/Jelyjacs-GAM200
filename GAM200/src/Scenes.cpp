@@ -152,7 +152,7 @@ void SaveScene(std::string filename)
 {
 	// Save Scene Name
 	Json::Value jsonobj;
-	jsonobj["SceneName"] = "testsaving";
+	jsonobj["SceneName"] = filename;
 
 	//jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
 
