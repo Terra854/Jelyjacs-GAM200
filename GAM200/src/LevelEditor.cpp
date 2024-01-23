@@ -272,13 +272,16 @@ void LevelEditor::ObjectProperties() {
 	}
 	else {
 		static char newName[256];
+		int newLayer;
+		newLayer = object->GetLayer();
 		strncpy_s(newName, object->GetName().c_str(), sizeof(newName));
-		ImGui::InputInt("Object Layer", &(object->layer));
+		ImGui::InputInt("Object Layer", &(newLayer));
 		ImGui::Text("Object ID: %d", object->GetId());
-		//ImGui::Text("Object Layer: %d", object->GetLayer());
+		ImGui::Text("Object Layer: %d", object->GetLayer());
 		ImGui::InputText("Name", newName, sizeof(newName));
 
 		object->SetName(newName);
+		object->SetLayer(newLayer);
 
 		ImGui::Text("Object Name: %s", object->GetName().c_str());
 		ImGui::Text("Number of components: %d", object->GetNumComponents());
