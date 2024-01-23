@@ -51,7 +51,7 @@ GLApp::GLApp()
 {
 	app = this;
 }
-ParticleSystem particleSystem;
+//ParticleSystem particleSystem;
 
 /*  _________________________________________________________________________ */
 /*
@@ -69,7 +69,7 @@ void GLApp::Initialize()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	particleSystem.Init();
+	//particleSystem.Init();
 }
 
 /*  _________________________________________________________________________ */
@@ -357,8 +357,8 @@ void GLApp::Update()
 			// if is player
 			if (static_cast<PlayerControllable*>((objectFactory->getObjectWithID(i))->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 				// draw object with animation
-				particleSystem.Update();
-				particleSystem.Draw();
+				//particleSystem.Update();
+				//particleSystem.Draw();
 				if (ani_pt->current_type != ani_pt->previous_type && !ani_pt->jump_fixed)
 					ani_pt->frame_num = 0;
 				else if (ani_pt->frame_count >= ani_pt->frame_rate) {
@@ -467,8 +467,7 @@ void GLApp::Update()
 
 		}		
     }
-	drawline_circle(Vec2(0, 0), Vec2(50, 50), line_color);
-	//drawtriangle(Vec2(0, 0), Vec2(5005, 5005), 0.f, line_color);
+	drawline_circle(Vec2(0, 0), Vec2(50, 50), 10.f,line_color);
 
 #if defined(DEBUG) | defined(_DEBUG)
 	// Draw the bove around the selected object
@@ -530,7 +529,7 @@ void GLApp::Update()
 */
 void GLApp::cleanup()
 {
-	particleSystem.Free();
+	//particleSystem.Free();
 	//delete all models
 	for (auto& model : models)
 	{
@@ -686,7 +685,7 @@ void GLApp::drawtriangle(Vec2 tri_pos, Vec2 tri_scale, float tri_r, glm::vec3 tr
 	shdrpgms["shape"].UnUse();
 }
 
-void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, glm::vec3 l_c_color)
+void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, float l_c_width, glm::vec3 l_c_color)
 {
 	float pos_x;
 	float pos_y;
@@ -704,6 +703,7 @@ void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, glm::vec3 l_c_color)
 	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
 	mat_test = camera2D->world_to_ndc * mat_test;
 
+	glLineWidth(l_c_width);
 	//draw line_circle
 	shdrpgms["shape"].Use();
 	// bind VAO of this object's model

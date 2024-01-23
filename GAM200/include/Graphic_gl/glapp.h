@@ -66,7 +66,7 @@ public:
 
 	static void drawline(Vec2 start, Vec2 end, glm::vec3 color);
 	static void drawtriangle(Vec2 position, Vec2 Scale, float rotation, glm::vec3 color);
-	static void drawline_circle(Vec2 position, Vec2 Scale, glm::vec3 color);
+	static void drawline_circle(Vec2 position, Vec2 Scale, float kuandu, glm::vec3 color);
 	//helper function set up model
 	// container for shader programs and models
 	static std::map<std::string, GLSLShader> shdrpgms; 
