@@ -22,6 +22,12 @@ ID aand is stored as part of a private map
 #include <string>
 #include "ComponentCreator.h"
 
+enum LayerName
+{
+	Background,
+	Objects
+};
+
 class Factory : public ISystems
 {
 public:
