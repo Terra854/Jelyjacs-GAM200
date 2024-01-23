@@ -17,9 +17,9 @@ This file contains the script for PPlate trigger to open door
 #include <Audio.h>
 
 namespace PressurePlate {
-	float accumulator = 0.f;
-	float fixed_dt = 1.f / 60.f;
-	int num_of_steps = 0;
+	//float accumulator = 0.f;
+	//float fixed_dt = 1.f / 60.f;
+	//int num_of_steps = 0;
 
 	PPlate::PPlate(std::string name) : LogicScript(name)
 	{
@@ -60,28 +60,27 @@ namespace PressurePlate {
 			return;
 		};
 
-		accumulator += engine->GetDt();
+		//accumulator += engine->GetDt();
 
 		// Only run the Pressure Plate script if fixed_dt has passed 
-		if (accumulator < fixed_dt) {
-			return;
-		}
+		//if (accumulator < fixed_dt) {
+		//	return;
+		//}
 
 		// Check and see how many loops the script needs to update
-		while (accumulator > fixed_dt) {
-			num_of_steps++;
-			accumulator -= fixed_dt;
-		}
+		//while (accumulator > fixed_dt) {
+		//	num_of_steps++;
+		//	accumulator -= fixed_dt;
+		//}
 
-		for (; num_of_steps; num_of_steps--) {
-			// if piston collides with player, change the animation of piston
+		//for (; num_of_steps; num_of_steps--) {
+			// if pressure plate collides with player, change the animation of pressure plate
 			if (plate_b->collision_flag & COLLISION_TOP) {
-				std::cout << obj->GetName() << "PP Open" << std::endl;
+				std::cout << obj->GetName() << " PP Open" << std::endl;
 				plate_animation->fixed = true;
-				if (plate_animation->current_type == AnimationType::Jump) {}
-				else {
+				if (plate_animation->current_type != AnimationType::Jump) {
 					plate_animation->current_type = AnimationType::Jump;
-					std::cout << "Pressure Plate event linked event:";
+					std::cout << obj->GetName() << " event linked event:";
 					std::cout << plate_event->linked_event << std::endl;
 
 					//  Change the animation of door and disable the body of door
@@ -101,12 +100,12 @@ namespace PressurePlate {
 						}
 					}
 				}
+				
 			}
-			else if (plate_animation->fixed) {
-				std::cout << obj->GetName() << "PP Closed" << std::endl;
+			else {
+				std::cout << obj->GetName() << " PP Closed" << std::endl;
 				plate_animation->fixed = false;
-				if (plate_animation->current_type == AnimationType::Idle) {}
-				else {
+				if (plate_animation->current_type != AnimationType::Idle) {
 					plate_animation->current_type = AnimationType::Idle;
 					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
 						Object* obj2 = objectFactory->getObjectWithID((long)j);
@@ -126,7 +125,7 @@ namespace PressurePlate {
 				}
 
 			}
-		}
+		//}
 	}
 
 	/***************************************************************************/
@@ -138,5 +137,5 @@ namespace PressurePlate {
 		std::cout << "PPlate Script Shutdown : " << obj->GetName() << std::endl;
 	}
 
-	PPlate piston("PPlate");
+	PPlate pplate("PPlate");
 }
