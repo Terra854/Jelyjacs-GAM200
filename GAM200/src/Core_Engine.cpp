@@ -434,7 +434,7 @@ void CoreEngine::GameLoop()
 			ImGui::End(); // End Game Viewport
 
 			// Gizmo controls window (hide when game is running)
-			if (level_editor->selected && engine->isPaused()) {
+			if (level_editor->selected && level_editor->selectedNum >= 0 && engine->isPaused()) {
 
 				Object* selectObj = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
 				Transform* selectObjTransform = static_cast<Transform*>(selectObj->GetComponent(ComponentType::Transform));
