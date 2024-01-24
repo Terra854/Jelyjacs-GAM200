@@ -86,7 +86,7 @@ namespace PressurePlate {
 					//  Change the animation of door and disable the body of door
 					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
 						Object* obj2 = objectFactory->getObjectWithID((long)j);
-						if (obj2->GetComponent(ComponentType::Event) != nullptr) {
+						if (obj != obj2 && obj2->GetComponent(ComponentType::Event) != nullptr) {
 							Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
 							if (plate_event->linked_event == door_event->linked_event) {
 								audio->playSfx(AudioType::Sliding_Door_Open);
@@ -95,7 +95,6 @@ namespace PressurePlate {
 								door_animation->current_type = AnimationType::Jump;
 								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
 								door_body->active = false;
-								break;
 							}
 						}
 					}
@@ -109,7 +108,7 @@ namespace PressurePlate {
 					plate_animation->current_type = AnimationType::Idle;
 					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
 						Object* obj2 = objectFactory->getObjectWithID((long)j);
-						if (obj2->GetComponent(ComponentType::Event) != nullptr) {
+						if (obj != obj2 && obj2->GetComponent(ComponentType::Event) != nullptr) {
 							Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
 							if (plate_event->linked_event == door_event->linked_event) {
 								audio->playSfx(AudioType::Sliding_Door_Open); // Should be Closing sound
@@ -118,7 +117,6 @@ namespace PressurePlate {
 								door_animation->current_type = AnimationType::Idle;
 								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
 								door_body->active = true;
-								break;
 							}
 						}
 					}
