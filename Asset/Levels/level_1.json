@@ -65,7 +65,14 @@
         "y": 10.0
       }
     },
-
+    {
+      "Prefabs": "Box.json",
+      "Type": "Transform",
+      "Position": {
+        "x": 164.0,
+        "y": 700.0
+      }
+    },
     {
       "Prefabs": "platform_1.json",
       "Type": "Transform",
@@ -1579,8 +1586,7 @@
         "x": 64.0,
         "y": 282.0
       },
-      "linkedevent": 8,
-      "scripts": "Piston"
+      "linkedevent": 8
     },
     {
       "Prefabs": "GreenHorizontalDoor.json",

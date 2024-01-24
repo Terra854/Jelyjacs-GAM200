@@ -40,7 +40,7 @@
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "PPlate",
+        "Script": "Piston",
         "Index" : 0
       }
     }
