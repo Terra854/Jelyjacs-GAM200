@@ -112,8 +112,11 @@ void Finn::Update(Object* obj) {
 			moving = false;
 		}
 
-		//box
-		//get box object
+		/**************************************************************/
+		//	Box Collision
+		//	- Get find box object
+		/**************************************************************/
+		/*
 		Object* box_obj = objectFactory->FindObject("Box");
 
 		//get aabb
@@ -142,6 +145,7 @@ void Finn::Update(Object* obj) {
 				}
 			}
 		}
+		*/
 	}
 
 	else {

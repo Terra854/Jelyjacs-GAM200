@@ -80,8 +80,8 @@ namespace PressurePlate {
 				plate_animation->fixed = true;
 				if (plate_animation->current_type != AnimationType::Jump) {
 					plate_animation->current_type = AnimationType::Jump;
-					std::cout << obj->GetName() << " event linked event:";
-					std::cout << plate_event->linked_event << std::endl;
+					//std::cout << obj->GetName() << " event linked event:";
+					//std::cout << plate_event->linked_event << std::endl;
 
 					//  Change the animation of door and disable the body of door
 					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
@@ -102,7 +102,7 @@ namespace PressurePlate {
 				
 			}
 			else {
-				std::cout << obj->GetName() << " PP Closed" << std::endl;
+				//std::cout << obj->GetName() << " PP Closed" << std::endl;
 				plate_animation->fixed = false;
 				if (plate_animation->current_type != AnimationType::Idle) {
 					plate_animation->current_type = AnimationType::Idle;

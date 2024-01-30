@@ -163,6 +163,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
+    <ClInclude Include="include\Scripts\Box.h" />
     <ClInclude Include="include\Scripts\Hori_Elevator.h" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Application.cpp" />
@@ -230,6 +231,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Scenes.cpp" />
+    <ClCompile Include="src\Scripts\Box.cpp" />
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
     <ClCompile Include="src\Scripts\Finn.cpp" />

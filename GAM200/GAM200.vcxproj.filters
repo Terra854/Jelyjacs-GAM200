@@ -234,6 +234,9 @@
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\Box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -412,6 +415,9 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\Hori_Elevator.h">
       <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Box.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
