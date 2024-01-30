@@ -9,6 +9,7 @@ This file contains the definitions of the functions that manages the game scene
 #include <Core_Engine.h>
 #include <GameLogic.h>
 #include <Audio.h>
+#include <Scenes.h>
 
 SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
@@ -19,6 +20,18 @@ Factory::objectIDMap SceneManager::initialObjectMap;
 SceneManager::~SceneManager(){
 	ClearInitialObjectMap(true);
 }
+
+/******************************************************************************
+	LoadScene
+	- Used to switch between scenes by clearing the current object map before
+	  loading the new scene
+*******************************************************************************/
+void SceneManager::LoadScene(const std::string filepath) {
+	objectFactory->destroyAllObjects();
+	SceneManager::ClearInitialObjectMap(true);
+	LoadSceneFromJson(filepath.c_str());
+}
+
 
 /******************************************************************************
 	PlayScene

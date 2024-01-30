@@ -9,7 +9,7 @@ This file contains the declaration for loading and saving scenes
 #include <string>
 
 // Load all objects from a json scene file
-void LoadScene(std::string);
+void LoadSceneFromJson(std::string);
 
 // Save all objects into a json file
 void SaveScene(std::string);

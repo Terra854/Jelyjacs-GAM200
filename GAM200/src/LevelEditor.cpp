@@ -1480,9 +1480,7 @@ void LevelEditor::LoadLevelPanel() {
 					//engine->setPause();
 					SceneManager::PauseScene();
 				selected = false;
-				objectFactory->destroyAllObjects();
-				SceneManager::ClearInitialObjectMap(true);
-				LoadScene(path + filename.c_str());
+				sceneManager->LoadScene(path + filename);
 			}
 		}
 

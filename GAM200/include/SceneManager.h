@@ -14,6 +14,7 @@ public:
 	~SceneManager();
 	virtual void Initialize() {}
 	virtual void Update() {}
+	static void LoadScene(const std::string filepath);
 	static void PlayScene();
 	static void PauseScene();
 	static void RestartScene();

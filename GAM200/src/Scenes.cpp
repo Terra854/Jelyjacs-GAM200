@@ -15,12 +15,12 @@ This file contains the definitions for loading and saving scenes
 #include "LevelEditor.h"
 
 /******************************************************************************
-LoadScene
+LoadSceneFromJson
 -	This function reads a json file and loads all the objects
 
 @param filename - the name of the json file
 *******************************************************************************/
-void LoadScene(std::string filename)
+void LoadSceneFromJson(std::string filename)
 {
 	
 	// Check if the given file exists

@@ -84,7 +84,7 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 *******************************************************************************/
 void GameLogic::Initialize()
 {
-	//LoadScene("Asset/Levels/testsave.json");
+	//LoadSceneFromJson("Asset/Levels/testsave.json");
 	//SaveScene("Asset/Levels/testsave.json");
 
 	// Clear all behaviours from the container
