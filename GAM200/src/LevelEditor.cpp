@@ -292,6 +292,8 @@ void LevelEditor::ObjectProperties() {
 			objectFactory->assignIdToObject(o);
 			selectedNum = o->GetId();
 			cloneSuccessful = selectedNum;
+
+			objectFactory->FindLayerThatHasThisObject(object)->second.second.push_back(o);
 		}
 
 		// For convinence
@@ -301,6 +303,8 @@ void LevelEditor::ObjectProperties() {
 			objectFactory->assignIdToObject(o);
 			selectedNum = o->GetId();
 			cloneSuccessful = selectedNum;
+
+			objectFactory->FindLayerThatHasThisObject(object)->second.second.push_back(o);
 		}
 	}
 

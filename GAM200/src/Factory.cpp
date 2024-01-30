@@ -628,3 +628,14 @@ void Factory::AddToLayer(int layerNum, Object* obj) {
 		sceneManager->layers[layerNum].second.second.push_back(obj);
 	}
 }
+
+std::pair<std::string, std::pair<bool, std::vector<Object*>>>* Factory::FindLayerThatHasThisObject(Object* obj) {
+	for (auto& l : sceneManager->layers) {
+		std::vector<Object*>& v = l.second.second;
+		auto it = std::find(v.begin(), v.end(), obj);
+		if (it != v.end()) {
+			return &l;
+		}
+	}
+	return nullptr;
+}
