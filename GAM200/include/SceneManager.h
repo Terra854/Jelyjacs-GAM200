@@ -25,9 +25,12 @@ public:
 	virtual std::string SystemName() { return "SceneManager"; }
 
 	friend class LevelEditor;
+	friend class Factory;
+	friend class GLApp;
 
 private:
 	static Factory::objectIDMap initialObjectMap;
+	std::vector<std::pair<std::string, std::pair<bool, std::vector<Object*>>>> layers;
 };
 
 extern SceneManager* sceneManager;

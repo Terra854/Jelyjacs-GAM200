@@ -373,7 +373,6 @@ void LevelEditor::ObjectProperties() {
 				}
 			}
 
-
 			if (ImGui::Button("Change Texture"))
 				ImGui::OpenPopup("ChangeTexture");
 
@@ -1028,6 +1027,36 @@ void LevelEditor::ListOfObjects() {
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
 
+		for (auto& l : sceneManager->layers) {
+			ImGui::TableNextColumn();
+			char buf[256];
+			sprintf_s(buf, "##%s", l.first.c_str());
+			ImGui::Checkbox(buf, &l.second.first);
+			ImGui::SameLine();
+			if (ImGui::TreeNode(l.first.c_str())) {
+				for (auto& object : l.second.second) {
+					if (object->GetName().empty())
+						sprintf_s(buf, "%d) Object", static_cast<int>(object->GetId()));
+					else
+						sprintf_s(buf, "%d) %s", static_cast<int>(object->GetId()), object->GetName().c_str());
+
+					// Creating button for each object
+					if (ImGui::Selectable(buf, selectedNum == static_cast<int>(object->GetId()))) {
+						selected = true;
+						selectedNum = static_cast<int>(object->GetId());
+
+						// Cancel all edits inside the property editor
+						Transform_EditMode = false;
+						Body_EditMode = false;
+						AABB_EditMode = false;
+						Physics_EditMode = false;
+					}
+				}
+				ImGui::TreePop();
+			}
+
+		}
+		/*
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
 
@@ -1055,6 +1084,7 @@ void LevelEditor::ListOfObjects() {
 				Physics_EditMode = false;
 			}
 		}
+		*/
 		ImGui::EndTable();
 	}
 	ImGui::EndChild();

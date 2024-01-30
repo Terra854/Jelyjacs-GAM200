@@ -106,8 +106,6 @@ private:
 
 	//Set of game objects to be deleted every frame
 	std::set<Object*> gameObjsToBeDeleted;
-
-	std::vector<std::pair<std::string, std::pair<bool, std::vector<Object*>>>> layers;
 };
 
 extern Factory* objectFactory;

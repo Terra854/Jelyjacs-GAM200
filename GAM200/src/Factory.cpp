@@ -29,6 +29,7 @@ ID aand is stored as part of a private map
 #include "Object.h"
 #include <components/Behaviour.h>
 #include "GameLogic.h"
+#include <SceneManager.h>
 
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
@@ -331,6 +332,17 @@ void Factory::Update() {
 		if (gameObjectInMap != objectMap.end())
 		{
 			temp_id = obj->ObjectId;
+
+			// Delete the reference to the object in the layer
+			for (auto& l : sceneManager->layers) {
+				std::vector<Object*>& v = l.second.second;
+				auto it = std::find(v.begin(), v.end(), obj);
+				if (it != v.end()) {
+					v.erase(it);
+					break; // The reference is deleted. Stop the loop
+				}
+			}
+
 			//Delete it and remove its entry in the Id map
 			delete obj;
 			objectMap.erase(gameObjectInMap);
@@ -605,14 +617,14 @@ void Factory::CreateLayer(std::string layerName, bool isVisible) {
 	std::pair<std::string, std::pair<bool, std::vector<Object*>>> layer = std::make_pair(layerName, innerPair);
 
 	// Add the newly created pair to the layers vector
-	layers.push_back(layer);
+	sceneManager->layers.push_back(layer);
 }
 
 void Factory::AddToLayer(int layerNum, Object* obj) {
 	
 	// Check if out of bounds
-	if (layerNum < layers.size()) {
+	if (layerNum < sceneManager->layers.size()) {
 		// If not out of bounds, push the object pointer
-		layers[layerNum].second.second.push_back(obj);
+		sceneManager->layers[layerNum].second.second.push_back(obj);
 	}
 }
