@@ -56,93 +56,107 @@ void LoadSceneFromJson(std::string filename)
 	jsonobj.readFloat(level_size.y, "Size", "height");
 	engine->Set_Level_Size(level_size);
 
-	for (auto& component : jsonobj.read("Objects"))
-	{
-		JsonSerialization jsonloop;
-		jsonloop.jsonObject = &component;
+	int layerNum = 0;
 
-		std::string objprefabs;
-		jsonloop.readString(objprefabs, "Prefabs");
-		Object* obj;
-		// Create the prefab if it doesn't exist
-		if (AssetManager::prefabsval(objprefabs) == nullptr)
+	for (auto& layer : jsonobj.read("Layers")) {
+		std::string layername = layer["Name"].asCString();
+
+		//jsonobj.readString(layername, "Name");
+		objectFactory->CreateLayer(layername, true);
+
+		//for (auto& component : jsonobj.read("Objects"))
+		for (auto& component : layer["Objects"])
 		{
-			// Create new prefab
-			std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
-			Object* newPrefab = objectFactory->createObject(tempobjprefabs);
+			JsonSerialization jsonloop;
+			jsonloop.jsonObject = &component;
 
-			AssetManager::updateprefab(newPrefab->GetName(), newPrefab);
-		}
-
-		// Create object via cloning the prefab
-		obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
-		obj->SetPrefab(AssetManager::prefabsval(objprefabs)); // Update the clone object to have usingPrefab value
-		
-		// Assign an ID. It will be added to the objectMap
-		objectFactory->assignIdToObject(obj);
-
-		// Read extra data to update object
-		std::string type;
-		jsonloop.readString(type, "Type");
-
-		if (type == "Transform")
-		{
-			Transform* tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-			jsonloop.readFloat(tran_pt->Position.x, "Position", "x");
-			jsonloop.readFloat(tran_pt->Position.y, "Position", "y");
-			jsonloop.readFloat(tran_pt->Scale.x, "Scale", "x");
-			jsonloop.readFloat(tran_pt->Scale.y, "Scale", "y");
-			jsonloop.readFloat(tran_pt->Rotation, "Rotation");
-		}
-
-		if (jsonloop.isMember("Name"))
-		{
-			std::string tempstr;
-			jsonloop.readString(tempstr, "Name");
-			obj->SetName(tempstr);
-		}
-		//else
-		//	obj->SetName("");
-		// ^Default name for objects is the name set in prefabs object list
-
-		if (jsonloop.isMember("Layer"))
-		{
-			jsonloop.readInt(obj->layer, "Layer");
-		}
-
-		if (jsonloop.isMember("Properties"))
-		{
-			Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
-			if (temp->GetShape() == Shape::Rectangle)
+			std::string objprefabs;
+			jsonloop.readString(objprefabs, "Prefabs");
+			Object* obj;
+			// Create the prefab if it doesn't exist
+			if (AssetManager::prefabsval(objprefabs) == nullptr)
 			{
-				Rectangular* temp2 = static_cast<Rectangular*>(temp);
-				jsonloop.readFloat(temp2->width, "Properties", "width");
-				jsonloop.readFloat(temp2->height, "Properties", "height");
+				// Create new prefab
+				std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
+				Object* newPrefab = objectFactory->createObject(tempobjprefabs);
+
+				AssetManager::updateprefab(newPrefab->GetName(), newPrefab);
 			}
+
+			// Create object via cloning the prefab
+			obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
+			obj->SetPrefab(AssetManager::prefabsval(objprefabs)); // Update the clone object to have usingPrefab value
+
+			// Assign an ID. It will be added to the objectMap
+			objectFactory->assignIdToObject(obj);
+
+			// Read extra data to update object
+			std::string type;
+			jsonloop.readString(type, "Type");
+
+			if (type == "Transform")
+			{
+				Transform* tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+				jsonloop.readFloat(tran_pt->Position.x, "Position", "x");
+				jsonloop.readFloat(tran_pt->Position.y, "Position", "y");
+				jsonloop.readFloat(tran_pt->Scale.x, "Scale", "x");
+				jsonloop.readFloat(tran_pt->Scale.y, "Scale", "y");
+				jsonloop.readFloat(tran_pt->Rotation, "Rotation");
+			}
+
+			if (jsonloop.isMember("Name"))
+			{
+				std::string tempstr;
+				jsonloop.readString(tempstr, "Name");
+				obj->SetName(tempstr);
+			}
+			//else
+			//	obj->SetName("");
+			// ^Default name for objects is the name set in prefabs object list
+
+			if (jsonloop.isMember("Layer"))
+			{
+				jsonloop.readInt(obj->layer, "Layer");
+			}
+
+			if (jsonloop.isMember("Properties"))
+			{
+				Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+				if (temp->GetShape() == Shape::Rectangle)
+				{
+					Rectangular* temp2 = static_cast<Rectangular*>(temp);
+					jsonloop.readFloat(temp2->width, "Properties", "width");
+					jsonloop.readFloat(temp2->height, "Properties", "height");
+				}
+			}
+
+			if (jsonloop.isMember("linkedevent"))
+			{
+				Event* event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+				jsonloop.readInt(event_pt->linked_event, "linkedevent");
+			}
+
+			if (jsonloop.isMember("scripts"))
+			{
+				Behaviour* o_be = (Behaviour*)obj->GetComponent(ComponentType::Behaviour);
+				std::string behvstr;
+				jsonloop.readString(behvstr, "scripts");
+
+				if (o_be != nullptr) // Existing behaviour, delete it to be readded
+					objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
+
+				obj->AddComponent(new Behaviour(0, behvstr));
+			}
+
+			// Add here to read oher types of data if necessary WIP
+
+
+			obj->Initialize();
+
+			objectFactory->AddToLayer(layerNum, obj);
 		}
 
-		if (jsonloop.isMember("linkedevent"))
-		{
-			Event* event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-			jsonloop.readInt(event_pt->linked_event, "linkedevent");
-		}
-
-		if (jsonloop.isMember("scripts"))
-		{
-			Behaviour* o_be = (Behaviour*)obj->GetComponent(ComponentType::Behaviour);
-			std::string behvstr;
-			jsonloop.readString(behvstr, "scripts");
-
-			if (o_be != nullptr) // Existing behaviour, delete it to be readded
-				objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
-
-			obj->AddComponent(new Behaviour(0, behvstr));
-		}
-
-		// Add here to read oher types of data if necessary WIP
-
-
-		obj->Initialize();
+		layerNum++;
 	}
 
 	// Save the name of the level to engine to track
