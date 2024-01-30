@@ -46,28 +46,32 @@ void Gizmo::RenderGizmo(){
 	gizmoXMat = camera2D->world_to_ndc * gizmoXMat;
 	gizmoYMat = camera2D->world_to_ndc * gizmoYMat;
 
-	GLApp::shdrpgms["shape"].Use();
-	// bind VAO of this object's model
-	glBindVertexArray(GLApp::models["square"].vaoid);
+	if (type == GizmoType::Scale || type == GizmoType::Translate) {
 
-	// Render X arrow
-	GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoXMat.ToGlmMat3());
-	GLApp::shdrpgms["shape"].SetUniform("uColor", x_gizmo_color);
-	glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		GLApp::shdrpgms["shape"].Use();
+		// bind VAO of this object's model
+		glBindVertexArray(GLApp::models["square"].vaoid);
 
-	// Render Y arrow
-	GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoYMat.ToGlmMat3());
-	GLApp::shdrpgms["shape"].SetUniform("uColor", y_gizmo_color);
-	glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		// Render X arrow
+		GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoXMat.ToGlmMat3());
+		GLApp::shdrpgms["shape"].SetUniform("uColor", x_gizmo_color);
+		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
 
-	// unbind VAO and unload shader program
-	glBindVertexArray(0);
-	GLApp::shdrpgms["shape"].UnUse();
+		// Render Y arrow
+		GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoYMat.ToGlmMat3());
+		GLApp::shdrpgms["shape"].SetUniform("uColor", y_gizmo_color);
+		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+		// unbind VAO and unload shader program
+		glBindVertexArray(0);
+		GLApp::shdrpgms["shape"].UnUse();
+	}
 
 	switch (type) {
 	case GizmoType::Scale:
 		break;
 	case GizmoType::Rotate:
+		GLApp::drawline_circle(selectedObject->Position, Vec2(50, 50), 10.f, y_gizmo_color);
 		break;
 	case GizmoType::Translate:
 		GLApp::drawtriangle(XGizmo.Position + Vec2(XGizmo.Scale.x / 2.f, 0.f), Vec2(32.f, 32.f) / camera2D->scale.x, 270.f, x_gizmo_color);
