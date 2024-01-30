@@ -467,7 +467,6 @@ void GLApp::Update()
 
 		}		
     }
-	drawline_circle(Vec2(0, 0), Vec2(50, 50), 10.f,line_color);
 
 #if defined(DEBUG) | defined(_DEBUG)
 	// Draw the bove around the selected object
