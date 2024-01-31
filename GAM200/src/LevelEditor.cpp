@@ -1058,11 +1058,12 @@ void LevelEditor::ListOfObjects() {
 
 		for (auto& l : sceneManager->layers) {
 			ImGui::TableNextColumn();
-			char buf[256];
-			sprintf_s(buf, "##%s", l.first.c_str());
+			char buf[512];
+			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());
 			ImGui::Checkbox(buf, &l.second.first);
 			ImGui::SameLine();
-			if (ImGui::TreeNode(l.first.c_str())) {
+			sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
+			if (ImGui::TreeNode(buf)) {
 				// For all objects in the layer
 				for (auto& object : l.second.second) {
 					if (object->GetName().empty())
