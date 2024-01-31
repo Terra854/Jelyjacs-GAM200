@@ -7,6 +7,7 @@
 This file contains the declarations for the SceneManager system class
 *//*__________________________________________________________________________*/
 #include <Factory.h>
+#include "Scenes.h"
 
 class SceneManager : public ISystems {
 public:
@@ -27,6 +28,7 @@ public:
 	friend class LevelEditor;
 	friend class Factory;
 	friend class GLApp;
+	friend void ::SaveScene(std::string);
 
 private:
 	static Factory::objectIDMap initialObjectMap;

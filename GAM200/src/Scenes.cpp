@@ -13,6 +13,7 @@ This file contains the definitions for loading and saving scenes
 #include "Scenes.h"
 #include <iostream>
 #include "LevelEditor.h"
+#include <SceneManager.h>
 
 /******************************************************************************
 LoadSceneFromJson
@@ -114,11 +115,6 @@ void LoadSceneFromJson(std::string filename)
 			//	obj->SetName("");
 			// ^Default name for objects is the name set in prefabs object list
 
-			if (jsonloop.isMember("Layer"))
-			{
-				jsonloop.readInt(obj->layer, "Layer");
-			}
-
 			if (jsonloop.isMember("Properties"))
 			{
 				Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
@@ -191,6 +187,85 @@ void SaveScene(std::string filename)
 	jsonobj["Size"]["width"] = level_size.x;
 	jsonobj["Size"]["height"] = level_size.y;
 
+	auto& layers = jsonobj["Layers"];
+
+	for (auto& l : sceneManager->layers) {
+		Json::Value layer;
+
+		layer["Name"] = l.first;
+
+		for (Object* obj : l.second.second) {
+
+			if (obj == nullptr)
+				continue;
+
+			// Save object prefabs data
+			std::string name = obj->GetName();
+			Object* prefab = obj->GetPrefab();
+			std::string prefabname = "MISSINGNAME";
+
+			if (prefab == nullptr)
+				std::cout << "OBJECT: " << name << " is missing usingPrefab!" << std::endl;
+			else
+				prefabname = prefab->GetName() + ".json";
+
+			Json::Value innerobj;
+
+
+			innerobj["Name"] = name;
+			innerobj["Prefabs"] = prefabname;
+
+			// Save object transform data
+			if (obj->GetComponent(ComponentType::Transform) != nullptr)
+			{
+				Transform* trans = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+				innerobj["Type"] = "Transform";
+
+				Json::Value position;
+				position["x"] = trans->Position.x;
+				position["y"] = trans->Position.y;
+				innerobj["Position"] = position;
+
+				Json::Value scale;
+				scale["x"] = trans->Scale.x;
+				scale["y"] = trans->Scale.y;
+				innerobj["Scale"] = scale;
+
+				innerobj["Rotation"] = trans->Rotation;
+			}
+
+			if (obj->GetComponent(ComponentType::Body) != nullptr)
+			{
+				Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+				if (temp->GetShape() == Shape::Rectangle)
+				{
+					Rectangular* temp2 = static_cast<Rectangular*>(temp);
+					Json::Value properties;
+					properties["width"] = temp2->width;
+					properties["height"] = temp2->height;
+					innerobj["Properties"] = properties;
+				}
+			}
+
+			// Save objects event data
+			if (obj->GetComponent(ComponentType::Event) != nullptr)
+			{
+				Event* event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+				innerobj["linkedevent"] = event->linked_event;
+			}
+
+			if (obj->GetComponent(ComponentType::Behaviour))
+			{
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				innerobj["scripts"] = behv->GetBehaviourName();
+			}
+
+			layer["Objects"].append(innerobj);
+		}
+
+		layers.append(layer);
+	}
+	/*
 	for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 	{
 		Object* obj = objectFactory->getObjectWithID(static_cast<long>(i));
@@ -213,7 +288,6 @@ void SaveScene(std::string filename)
 		
 		innerobj["Name"] = name;
 		innerobj["Prefabs"] = prefabname;
-		innerobj["Layer"] = obj->GetLayer();
 
 		// Save object transform data
 		if (obj->GetComponent(ComponentType::Transform) != nullptr)
@@ -262,6 +336,7 @@ void SaveScene(std::string filename)
 
 		jsonobj["Objects"].append(innerobj);
 	}
+	*/
 
 	// Write file
 	std::ofstream outputFile(filename);
