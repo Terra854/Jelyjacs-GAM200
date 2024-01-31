@@ -35,6 +35,7 @@ public:
 			keys[size++] = pair.first;
 		}
 	}
+
 	///adds a component to be a part of the object by adding it into the component map
 	void AddComponent(Component* component);
 
@@ -43,23 +44,16 @@ public:
 	///Get the game object's Id
 	long GetId() { return ObjectId; }
 
-	int GetLayer() { return layer; }
-
 	//Get the object's name
 	std::string GetName() { return name; }
 
 	void SetName(std::string newName) { name = newName; }
-
-	void SetLayer(int newLayer) { layer = newLayer; }
 
 	int GetNumComponents() { return static_cast<int>(Components.size()); }
 
 	Object* GetPrefab() { return usingPrefab; }
 
 	void SetPrefab(Object* Prefab) { usingPrefab = Prefab; }
-
-
-	int layer = 0;
 
 private:
 	//contains all components of the current object
@@ -68,8 +62,6 @@ private:
 	//A unique id for each object used to safely reference 
 	//Objects.
 	long ObjectId = -1;
-
-
 
 	//A unique name for each object used to name objects
 	std::string name = "";

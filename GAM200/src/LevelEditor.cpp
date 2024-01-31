@@ -264,44 +264,73 @@ void LevelEditor::ObjectProperties() {
 
 		if (ImGui::Button("Insert Prefab"))
 		{
+			/*
 			Object* o = objectFactory->cloneObject(object);
 			objectFactory->assignIdToObject(o);
 			selectedNum = o->GetId();
 			cloneSuccessful = selectedNum;
+			*/
+			ImGui::OpenPopup("CloneObject");
 		}
 	}
 	else {
 		static char newName[256];
-		int newLayer;
-		newLayer = object->GetLayer();
 		strncpy_s(newName, object->GetName().c_str(), sizeof(newName));
-		ImGui::InputInt("Object Layer", &(newLayer));
 		ImGui::Text("Object ID: %d", object->GetId());
-		ImGui::Text("Object Layer: %d", object->GetLayer());
+		ImGui::Text("In Layer: %s", objectFactory->FindLayerThatHasThisObject(object)->first.c_str());
 		ImGui::InputText("Name", newName, sizeof(newName));
 
 		object->SetName(newName);
-		object->SetLayer(newLayer);
 
 		ImGui::Text("Object Name: %s", object->GetName().c_str());
 		ImGui::Text("Number of components: %d", object->GetNumComponents());
 
-		if (ImGui::Button("Clone"))
+		/*
+		if (ImGui::Button("Clone (To be deleted)"))
 		{
 			Object* o = objectFactory->cloneObject(object, 64);
 			objectFactory->assignIdToObject(o);
 			selectedNum = o->GetId();
 			cloneSuccessful = selectedNum;
+
+			objectFactory->FindLayerThatHasThisObject(object)->second.second.push_back(o);
 		}
 
 		// For convinence
-		if (ImGui::Button("Cloneup"))
+		if (ImGui::Button("Cloneup (To be deleted)"))
 		{
 			Object* o = objectFactory->cloneObject(object, 0, 64);
 			objectFactory->assignIdToObject(o);
 			selectedNum = o->GetId();
 			cloneSuccessful = selectedNum;
+
+			objectFactory->FindLayerThatHasThisObject(object)->second.second.push_back(o);
 		}
+
+		*/
+
+		// For convinence
+		if (ImGui::Button("Clone"))
+		{
+			ImGui::OpenPopup("CloneObject");
+		}
+	}
+
+	if (ImGui::BeginPopup("CloneObject"))
+	{
+		ImGui::Text("Select layer to insert the new object to:");
+		for (auto& l : sceneManager->layers) {
+			if (ImGui::Selectable(l.first.c_str())) {
+				Object* o = objectFactory->cloneObject(object, 0, 64);
+				objectFactory->assignIdToObject(o);
+				selectedNum = o->GetId();
+				cloneSuccessful = selectedNum;
+
+				l.second.second.push_back(o);
+			}
+		}
+
+		ImGui::EndPopup();
 	}
 
 	ImGui::SameLine();
@@ -372,7 +401,6 @@ void LevelEditor::ObjectProperties() {
 					ImGui::Text("Texture: %s", pair.first.c_str());
 				}
 			}
-
 
 			if (ImGui::Button("Change Texture"))
 				ImGui::OpenPopup("ChangeTexture");
@@ -1028,6 +1056,37 @@ void LevelEditor::ListOfObjects() {
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
 
+		for (auto& l : sceneManager->layers) {
+			ImGui::TableNextColumn();
+			char buf[512];
+			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());
+			ImGui::Checkbox(buf, &l.second.first);
+			ImGui::SameLine();
+			sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
+			if (ImGui::TreeNode(buf)) {
+				// For all objects in the layer
+				for (auto& object : l.second.second) {
+					if (object->GetName().empty())
+						sprintf_s(buf, "%d) Object", static_cast<int>(object->GetId()));
+					else
+						sprintf_s(buf, "%d) %s", static_cast<int>(object->GetId()), object->GetName().c_str());
+
+					// Creating button for each object
+					if (ImGui::Selectable(buf, selectedNum == static_cast<int>(object->GetId()))) {
+						selected = true;
+						selectedNum = static_cast<int>(object->GetId());
+
+						// Cancel all edits inside the property editor
+						Transform_EditMode = false;
+						Body_EditMode = false;
+						AABB_EditMode = false;
+						Physics_EditMode = false;
+					}
+				}
+				ImGui::TreePop();
+			}
+		}
+		/*
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 		{
 
@@ -1055,6 +1114,7 @@ void LevelEditor::ListOfObjects() {
 				Physics_EditMode = false;
 			}
 		}
+		*/
 		ImGui::EndTable();
 	}
 	ImGui::EndChild();

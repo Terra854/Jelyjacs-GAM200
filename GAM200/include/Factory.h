@@ -81,6 +81,12 @@ public:
 
 	void DeleteComponent(Object* o, ComponentType c);
 
+	void CreateLayer(std::string layerName, bool isVisible);
+
+	void AddToLayer(int layerNum, Object* obj);
+
+	std::pair<std::string, std::pair<bool, std::vector<Object*>>>* FindLayerThatHasThisObject(Object* obj);
+
 	int GetNextId() { return nextObjectId; };
 
 	friend class PhysicsSystem; // Needed to apply physics onto each object
