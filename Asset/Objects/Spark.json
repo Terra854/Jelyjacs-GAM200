@@ -25,12 +25,13 @@
       "Type": "Animation",
       "Properties": {
         "texturepath": "Spark.png",
-        "jumpfixframe": 6,
-        "framerate": 0.1,
-        "frame": [7, 3],
-        "idle": [5, 1],
-        "jump": [7, 3],
-        "run": [6, 2]
+        "jumpfixframe": 7,
+        "framerate": 0.05,
+        "frame": [68, 4],
+        "idle": [13, 1],
+        "push": [68, 3],
+        "jump": [13, 2],
+        "run": [12, 4]
       }
     },
     {

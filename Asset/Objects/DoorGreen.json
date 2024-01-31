@@ -9,7 +9,7 @@
           "y": 0.0
         },
         "Scale_x": 64.0,
-        "Scale_y": 192.0,
+        "Scale_y": 320.0,
         "Rotation": 0.0
       }
     },
@@ -18,7 +18,7 @@
       "Shape": "Rectangle",
       "Properties": {
         "width": 32.0,
-        "height": 128.0
+        "height": 160.0
       }
     },
     {
@@ -26,9 +26,9 @@
       "Properties": {
         "texturepath": "DoorGreen.png",
         "framerate": 0.1,
-        "frame": [11, 1],
+        "frame": [33, 1],
         "idle": [1, 1],
-        "jump": [11, 1]
+        "jump": [33, 1]
       }
     },
     {

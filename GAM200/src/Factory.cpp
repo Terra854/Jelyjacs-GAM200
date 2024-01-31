@@ -130,6 +130,9 @@ Object* Factory::createObject(const std::string& filename)
 				if (jsonloop.isMember("Collision Response"))
 					jsonloop.readBool(r->collision_response, "Collision Response");
 
+				if (jsonloop.isMember("Active"))
+					jsonloop.readBool(r->active, "Active");
+
 				jsonloop.readFloat(r->width, "Properties", "width");
 				jsonloop.readFloat(r->height, "Properties", "height");
 
@@ -472,6 +475,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 				r->height = ((Rectangular*)body_pt)->height;
 				r->aabb = ((Rectangular*)body_pt)->aabb;
 				r->collision_flag = ((Rectangular*)body_pt)->collision_flag;
+				r->active = ((Rectangular*)body_pt)->active;
 
 				obj->AddComponent(r);
 			}
