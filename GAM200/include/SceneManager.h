@@ -32,7 +32,8 @@ public:
 
 private:
 	static Factory::objectIDMap initialObjectMap;
-	std::vector<std::pair<std::string, std::pair<bool, std::vector<Object*>>>> layers;
+	static std::vector<std::pair<std::string, std::pair<bool, std::vector<Object*>>>> layers;
+	static std::multimap<std::string, int> initialLayer;
 };
 
 extern SceneManager* sceneManager;

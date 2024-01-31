@@ -319,7 +319,7 @@ void LevelEditor::ObjectProperties() {
 	if (ImGui::BeginPopup("CloneObject"))
 	{
 		ImGui::Text("Select layer to insert the new object to:");
-		for (auto& l : sceneManager->layers) {
+		for (auto& l : SceneManager::layers) {
 			if (ImGui::Selectable(l.first.c_str())) {
 				Object* o = objectFactory->cloneObject(object, 0, 64);
 				objectFactory->assignIdToObject(o);
@@ -1056,7 +1056,7 @@ void LevelEditor::ListOfObjects() {
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
 
-		for (auto& l : sceneManager->layers) {
+		for (auto& l : SceneManager::layers) {
 			ImGui::TableNextColumn();
 			char buf[512];
 			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());

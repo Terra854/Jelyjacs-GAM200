@@ -190,7 +190,7 @@ void SaveScene(std::string filename)
 
 	auto& layers = jsonobj["Layers"];
 
-	for (auto& l : sceneManager->layers) {
+	for (auto& l : SceneManager::layers) {
 		Json::Value layer;
 
 		layer["Name"] = l.first;

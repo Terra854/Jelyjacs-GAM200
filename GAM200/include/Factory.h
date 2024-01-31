@@ -81,9 +81,11 @@ public:
 
 	void DeleteComponent(Object* o, ComponentType c);
 
-	void CreateLayer(std::string layerName, bool isVisible);
+	int CreateLayer(std::string layerName, bool isVisible);
 
 	void AddToLayer(int layerNum, Object* obj);
+
+	int GetLayerNum(std::string layerName);
 
 	std::pair<std::string, std::pair<bool, std::vector<Object*>>>* FindLayerThatHasThisObject(Object* obj);
 

@@ -337,7 +337,7 @@ void Factory::Update() {
 			temp_id = obj->ObjectId;
 
 			// Delete the reference to the object in the layer
-			for (auto& l : sceneManager->layers) {
+			for (auto& l : SceneManager::layers) {
 				std::vector<Object*>& v = l.second.second;
 				auto it = std::find(v.begin(), v.end(), obj);
 				if (it != v.end()) {
@@ -612,7 +612,7 @@ void Factory::DeleteComponent(Object* o, ComponentType c) {
 	o->Components.erase(c);
 }
 
-void Factory::CreateLayer(std::string layerName, bool isVisible) {
+int Factory::CreateLayer(std::string layerName, bool isVisible) {
 
 	// Create the inner pair with layer visibility and empty vector of object pointers
 	std::pair<bool, std::vector<Object*>> innerPair = std::make_pair(isVisible, std::vector<Object*>());
@@ -621,20 +621,35 @@ void Factory::CreateLayer(std::string layerName, bool isVisible) {
 	std::pair<std::string, std::pair<bool, std::vector<Object*>>> layer = std::make_pair(layerName, innerPair);
 
 	// Add the newly created pair to the layers vector
-	sceneManager->layers.push_back(layer);
+	SceneManager::layers.push_back(layer);
+
+	return SceneManager::layers.size() - 1;
 }
 
 void Factory::AddToLayer(int layerNum, Object* obj) {
 	
 	// Check if out of bounds
-	if (layerNum < sceneManager->layers.size()) {
+	if (layerNum < SceneManager::layers.size()) {
 		// If not out of bounds, push the object pointer
-		sceneManager->layers[layerNum].second.second.push_back(obj);
+		SceneManager::layers[layerNum].second.second.push_back(obj);
+	}
+}
+
+int Factory::GetLayerNum(std::string layerName) {
+	auto it = std::find_if(SceneManager::layers.begin(), SceneManager::layers.end(), [&layerName](const auto& layer) {
+		return layer.first == layerName;
+	});
+
+	if (it != SceneManager::layers.end()) {
+		return it - SceneManager::layers.begin();
+	}
+	else {
+		return -1;
 	}
 }
 
 std::pair<std::string, std::pair<bool, std::vector<Object*>>>* Factory::FindLayerThatHasThisObject(Object* obj) {
-	for (auto& l : sceneManager->layers) {
+	for (auto& l : SceneManager::layers) {
 		std::vector<Object*>& v = l.second.second;
 		auto it = std::find(v.begin(), v.end(), obj);
 		if (it != v.end()) {

@@ -275,7 +275,7 @@ void GLApp::Update()
 
 	//draw objects
 	
-	for (auto& l : sceneManager->layers) {
+	for (auto& l : SceneManager::layers) {
 		if (l.second.first) {
 			for (auto& object : l.second.second) {
 				GLuint tex_test;
