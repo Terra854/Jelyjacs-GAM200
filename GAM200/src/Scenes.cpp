@@ -134,14 +134,15 @@ void LoadSceneFromJson(std::string filename)
 
 			if (jsonloop.isMember("scripts"))
 			{
-				Behaviour* o_be = (Behaviour*)obj->GetComponent(ComponentType::Behaviour);
+				// THIS DOESN'T REALLY WORK FOR CHANGING THE SCRIPTS OF INDIVIDUAL OBJECTS
 				std::string behvstr;
 				jsonloop.readString(behvstr, "scripts");
 
-				if (o_be != nullptr) // Existing behaviour, delete it to be readded
-					objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
-
+				objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
 				obj->AddComponent(new Behaviour(0, behvstr));
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+
+				behv->SetBehaviourName(behvstr);
 			}
 
 			// Add here to read oher types of data if necessary WIP

@@ -23,7 +23,8 @@ public:
 	~GameLogic();
 
 	// Override of the MessageRelay method from ISystems.
-	// @param msg: A pointer to the Message_Handler to handle messages.
+	// @param msg: A pointer to the Message_Handler to handle messages.				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+
 	virtual void MessageRelay(Message_Handler* msg);
 
 	// Initialize method for setting up the GameLogic.

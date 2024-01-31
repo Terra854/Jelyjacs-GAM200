@@ -98,8 +98,10 @@ void GameLogic::Initialize()
 			std::cout << "Behaviour " << iter->GetBehaviourName() << " is null" << std::endl;
 			continue;
 		}
-		else 
+		else {
 			behaviours[iter->GetBehaviourName()]->Start(iter->GetOwner());
+			std::cout << "Owner ID: " << iter->GetOwner()->GetId() << std::endl;
+		}
 	}
 	cheat = false;
 	std::cout << "GameLogic Initialized" << std::endl;
