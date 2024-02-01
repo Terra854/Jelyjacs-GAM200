@@ -335,40 +335,46 @@ void CoreEngine::GameLoop()
 				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
 
-				/* X Gizmo */
-				if (isObjectClicked(gizmo.getX(), gameWorldPos) && !object_being_moved_y)
-				{
-					object_being_moved_x = true;
+				if (gizmo.GetType() == GizmoType::Translate || gizmo.GetType() == GizmoType::Scale) {
+
+					/* X Gizmo */
+					if (isObjectClicked(gizmo.getX(), gameWorldPos) && !object_being_moved_y)
+					{
+						object_being_moved_x = true;
+					}
+					if (object_being_moved_x) {
+						// Offset to account for mouse not being in the center of the selected object
+						if (isnan(offset.x))
+							offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+
+						std::cout << "Offset: " << offset << std::endl;
+
+						objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
+						//objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
+
+						std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
+					}
+
+					/* Y Gizmo */
+					if (isObjectClicked(gizmo.getY(), gameWorldPos) && !object_being_moved_x)
+					{
+						object_being_moved_y = true;
+					}
+					if (object_being_moved_y) {
+						// Offset to account for mouse not being in the center of the selected object
+						if (isnan(offset.x))
+							offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+
+						std::cout << "Offset: " << offset << std::endl;
+
+						//objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
+						objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
+
+						std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
+					}
 				}
-				if (object_being_moved_x) {
-					// Offset to account for mouse not being in the center of the selected object
-					if (isnan(offset.x))
-						offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+				else if (gizmo.GetType() == GizmoType::Rotate) {
 
-					std::cout << "Offset: " << offset << std::endl;
-
-					objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
-					//objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
-
-					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
-				}
-
-				/* Y Gizmo */
-				if (isObjectClicked(gizmo.getY(), gameWorldPos) && !object_being_moved_x)
-				{
-					object_being_moved_y = true;
-				}
-				if (object_being_moved_y) {
-					// Offset to account for mouse not being in the center of the selected object
-					if (isnan(offset.x))
-						offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
-
-					std::cout << "Offset: " << offset << std::endl;
-
-					//objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
-					objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
-
-					std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
 				}
 
 				if (objBody != nullptr)
