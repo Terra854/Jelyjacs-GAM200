@@ -372,32 +372,32 @@ void GLApp::Update()
 								ani_pt->frame_num = ani_pt->jump_fixed_frame;
 						}
 					}
-					else if (!ani_pt->fixed) {//object with animation
-						if (ani_pt->frame_count >= ani_pt->frame_rate)
-						{
+					else {
+						// frame number change to 0 if animation type change
+						if (ani_pt->current_type != ani_pt->previous_type)
+							ani_pt->frame_num = 0;
+						if (!ani_pt->fixed) {//object with animation
+							if (ani_pt->frame_count >= ani_pt->frame_rate)
+							{
+								ani_pt->frame_count = 0.f;
+								ani_pt->frame_num++;
+								if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
+									ani_pt->frame_num = 0;
+							}
+						}
+						else if (ani_pt->frame_count >= ani_pt->frame_rate) {
 							ani_pt->frame_count = 0.f;
 							ani_pt->frame_num++;
 							if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
-								ani_pt->frame_num = 0;
+								ani_pt->frame_num = static_cast<int>(ani_pt->animation_Map[ani_pt->current_type].size()) - 1;
 						}
 					}
-					else if (ani_pt->frame_count >= ani_pt->frame_rate) {
-						ani_pt->frame_count = 0.f;
-						ani_pt->frame_num++;
-						if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
-							ani_pt->frame_num = static_cast<int>(ani_pt->animation_Map[ani_pt->current_type].size()) - 1;
-					}
-
 					glBindTextureUnit(6, tex_test);
 					glBindTexture(GL_TEXTURE_2D, tex_test);
 					//glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 					// load shader program in use by this object
 					shdrpgms["image"].Use();
 					// bind VAO of this object's model
-					if (object->GetId() == 176) {
-						std::cout << "ObjNum: " << object->GetId() << std::endl;
-						std::cout << "AnimationType: " << ani_pt->current_type << "\nFrame Num: " << ani_pt->frame_num << std::endl;
-					}
 					glBindVertexArray(ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].vaoid);
 					// copy object's model-to-NDC matrix to vertex shader's
 					// uniform variable uModelToNDC
