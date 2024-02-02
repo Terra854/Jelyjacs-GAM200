@@ -394,6 +394,10 @@ void GLApp::Update()
 					// load shader program in use by this object
 					shdrpgms["image"].Use();
 					// bind VAO of this object's model
+					if (object->GetId() == 176) {
+						std::cout << "ObjNum: " << object->GetId() << std::endl;
+						std::cout << "AnimationType: " << ani_pt->current_type << "\nFrame Num: " << ani_pt->frame_num << std::endl;
+					}
 					glBindVertexArray(ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].vaoid);
 					// copy object's model-to-NDC matrix to vertex shader's
 					// uniform variable uModelToNDC
