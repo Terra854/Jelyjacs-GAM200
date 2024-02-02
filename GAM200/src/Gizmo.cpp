@@ -71,7 +71,7 @@ void Gizmo::RenderGizmo(){
 	case GizmoType::Scale:
 		break;
 	case GizmoType::Rotate:
-		GLApp::drawline_circle(selectedObject->Position, Vec2(50, 50), 10.f, y_gizmo_color);
+		GLApp::drawline_circle(selectedObject->Position, Vec2(R_Radius, R_Radius) / camera2D->scale.x, R_Thickness, y_gizmo_color);
 		break;
 	case GizmoType::Translate:
 		GLApp::drawtriangle(XGizmo.Position + Vec2(XGizmo.Scale.x / 2.f, 0.f), Vec2(32.f, 32.f) / camera2D->scale.x, 270.f, x_gizmo_color);
