@@ -16,6 +16,7 @@ This file contains the script for Spark, the player character (Cat)
 
 // Static variable to track if Spark has just detached from Finn.
 bool Spark::Just_detached;
+bool Spark::Connected_to_Finn;
 
 float spark_move_time = 0.f;
 // Constructor for the Spark class.
@@ -46,8 +47,6 @@ void Spark::Update(Object* obj) {
 		//std::cout << "NIL OBJ : Spark" << std::endl;
 		return;
 	}
-
-	// Check if Finn is in the spark
 	Object* Finnobj = objectFactory->FindObject("Finn");
 
 	Transform* Finn_t = static_cast<Transform*>(Finnobj->GetComponent(ComponentType::Transform));
@@ -56,37 +55,8 @@ void Spark::Update(Object* obj) {
 		std::cout << "NIL COMPONENT : Spark" << std::endl;
 		return;
 	};
-	/*******************************************************************************************************
-	*					Connecting to Finn if Finn is close enough to Spark
-	**********************************************************************************************************/
-	if (Finn_t->Position.x > spark_t->Position.x - 100 && Finn_t->Position.x < spark_t->Position.x + 100) {
-		if (Finn_t->Position.y > spark_t->Position.y - 100 && Finn_t->Position.y < spark_t->Position.y + 100) {
-			if (!Just_detached) {
-				GameLogic::playerObj = Finnobj;
-				Connected_to_Finn = true;
-			}
-		}
-	}
-	if (Finn_t->Position.x < spark_t->Position.x - 50 && Finn_t->Position.x > spark_t->Position.x + 50) {
-		if (Finn_t->Position.y < spark_t->Position.y - 50 && Finn_t->Position.y > spark_t->Position.y + 50) {
-			Just_detached = false;
-		}
-	}
-
-	if (Connected_to_Finn) {
-		static_cast<Body*>(obj->GetComponent(ComponentType::Body))->active = false;
-		spark_t->Position.x = Finn_t->Position.x;
-		spark_t->Position.y = Finn_t->Position.y;
-
-		// Need to make sure Spark doesn't fall through the map
-		static_cast<Physics*>(obj->GetComponent(ComponentType::Physics))->AffectedByGravity = false;
-	}
-	else {
-		static_cast<Body*>(obj->GetComponent(ComponentType::Body))->active = true;
-		static_cast<Physics*>(obj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
-	}
-
-
+	
+	
 	/********************************************************************************************************
 	*
 	*	If player is Spark, then control Spark
@@ -96,8 +66,31 @@ void Spark::Update(Object* obj) {
 	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 	if (GameLogic::playerObj->GetName() == "Spark")
 	{
-		Connected_to_Finn = false;
-		
+
+		/*******************************************************************************************************
+		*
+		*					Connecting to Finn if Finn is close enough to Spark
+		*
+		**********************************************************************************************************/
+		if (Just_detached) {
+			if ((Finn_t->Position.x < (spark_t->Position.x - 50) && Finn_t->Position.x > (spark_t->Position.x + 50)) &&
+				(Finn_t->Position.y < (spark_t->Position.y - 50) && Finn_t->Position.y > (spark_t->Position.y + 50))) {
+				Just_detached = false;
+				std::cout << "Ready to Attach" << std::endl;
+			}
+		}
+		else if ((Finn_t->Position.x > spark_t->Position.x - 50 && Finn_t->Position.x < spark_t->Position.x + 50) &&
+			(Finn_t->Position.y > spark_t->Position.y - 50 && Finn_t->Position.y < spark_t->Position.y + 50)) {
+			if (!Just_detached) {
+				GameLogic::playerObj = Finnobj;
+				Connected_to_Finn = true;
+				std::cout << "Attached to Finn" << std::endl;
+				return;
+			}
+		}
+
+		if (Connected_to_Finn) return;
+
 		if (player_physics == nullptr || player_animation == nullptr) {
 			//std::cout << "NIL COMPONENT : Player" << std::endl;
 			return;
@@ -173,6 +166,22 @@ void Spark::Update(Object* obj) {
 		player_animation->face_right = true;
 		player_animation->jump_fixed = false;
 		//audio->stopWalking();
+
+		/*
+		if (Connected_to_Finn) {
+			static_cast<Body*>(obj->GetComponent(ComponentType::Body))->active = false;
+			spark_t->Position.x = Finn_t->Position.x;
+			spark_t->Position.y = Finn_t->Position.y;
+
+			// Need to make sure Spark doesn't fall through the map
+			static_cast<Physics*>(obj->GetComponent(ComponentType::Physics))->AffectedByGravity = false;
+		}
+		else {
+			static_cast<Body*>(obj->GetComponent(ComponentType::Body))->active = true;
+			static_cast<Physics*>(obj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
+		}
+		*/
+
 	}
 
 	

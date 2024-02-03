@@ -79,6 +79,6 @@ void Box::Shutdown(Object* obj) {
 }
 
 // Creating an instance of Box.
-Box Box("Box");
+Box box("Box");
 
 
