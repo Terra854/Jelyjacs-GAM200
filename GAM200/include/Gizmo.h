@@ -16,11 +16,15 @@ public:
 	Transform* getY() { return &YGizmo; }
 	void SetType(GizmoType g) { type = g; }
 	GizmoType GetType() { return type; }
+	bool IsRGizmoClicked(ImVec2 mousePos);
+	void SetRGizmoActive(bool b) { RGizmoActive = b; }
+	bool IsRGizmoActive() { return RGizmoActive; }
 private:
 	Transform* selectedObject;
 	Transform XGizmo, YGizmo;
 	float R_Radius = 100.f, R_Thickness = 10.f;
 	GizmoType type = GizmoType::Translate;
+	bool RGizmoActive = false;
 };
 
 extern Gizmo gizmo;
