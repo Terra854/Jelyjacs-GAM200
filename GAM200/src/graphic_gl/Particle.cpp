@@ -19,28 +19,22 @@ void ParticleSystem::Init()
     
     int index = 0;
     
-    for (int y = 0;y < 10;y++)
-    {
-        for (int x = 0; x < 10; x++)
-        {
-            //Vec2 translation;
-            //translation.x = 1.0f - (float) (x * x) / 50.0f;
-            //translation.y = (float) ((y-5) * x) / 50.0f;
-            translations[index] = random_position(); //translation;
-            Particle* particle = new Particle(&translations[index]); 
-            particle->velocity = random_velocity(); 
-            particle->life_time = random_life_time();
-            particles.push_back(particle);
-            index++;
-
-        }
-    }
+   
+    for(int i=0; i< PARTICLE_NUM; i++){
+        translations[index] = random_position(); //translation;
+        Particle* particle = new Particle(&translations[index]); 
+        particle->velocity = random_velocity(); 
+        particle->life_time = random_life_time();
+        particles.push_back(particle);
+        index++;
+     }
+ 
 
 
     
     glGenBuffers(1, &instanceVBO);
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * 100, &translations[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * PARTICLE_NUM, &translations[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     // set up vertex data (and buffer(s)) and configure vertex attributes
    // ------------------------------------------------------------------
@@ -93,7 +87,7 @@ void ParticleSystem::Update()
 		
 	}
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * 100, &translations[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * PARTICLE_NUM, &translations[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     Object* player = objectFactory->getPlayerObject();
@@ -156,7 +150,7 @@ void ParticleSystem::Draw()
     GLuint tex_loc = glGetUniformLocation(GLApp::shdrpgms["instancing"].GetHandle(), "uTex2d");
     glUniform1i(tex_loc, 6);
 
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100); // 100 triangles of 6 vertices each
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, PARTICLE_NUM); // 100 triangles of 6 vertices each
     glBindVertexArray(0);
     GLApp::shdrpgms["instancing"].UnUse();
 
