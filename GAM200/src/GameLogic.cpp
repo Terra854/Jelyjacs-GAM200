@@ -59,6 +59,7 @@ GameLogic::~GameLogic() {
 void GameLogic::MessageRelay(Message_Handler* msg) {
 	// For Movement Key Display
 	if (msg->GetMessage() == MessageID::Movement) {
+		/*
 		MovementKey* temp = static_cast<MovementKey*>(msg);
 		switch (temp->dir) {
 			case up:
@@ -76,6 +77,7 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 			default:
 				break;
 		}
+		*/
 	}
 }
 /******************************************************************************
@@ -154,13 +156,13 @@ void GameLogic::Update() {
 		//engine->Broadcast(&msg);
 		engine->setPause();
 	}
-
 	if (GameLogic::playerObj != nullptr) {
 		if (input::IsPressed(KEY::e)) {
 			if (GameLogic::playerObj->GetName() == "Finn") {
 				Object* temp = objectFactory->FindObject("Spark");
 				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Spark");
 				Spark::Just_detached = true;
+				Spark::Connected_to_Finn = false;
 				static_cast<Body*>(temp->GetComponent(ComponentType::Body))->active = true;
 				std::cout << "Switched to Spark" << std::endl;
 			}
@@ -169,17 +171,14 @@ void GameLogic::Update() {
 				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Finn");
 				std::cout << "Switched to Finn" << std::endl;
 			}
-			else {
-				GameLogic::playerObj = GameLogic::playerObj;
-			}
 		}
-
-		/*for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
+	
+		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID((long)i);
 
 			if (obj == nullptr)
 				continue;
-		}*/
+		}
 	}
 	/*****************************************************************************************
 	*

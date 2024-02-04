@@ -26,7 +26,7 @@
       "Properties": {
         "texturepath": "Spark.png",
         "jumpfixframe": 7,
-        "framerate": 0.05,
+        "framerate": 0.025,
         "frame": [68, 4],
         "idle": [13, 1],
         "push": [68, 3],

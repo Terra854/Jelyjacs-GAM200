@@ -41,7 +41,7 @@ public:
 
     // A boolean member variable to track if Spark is currently connected to another character/entity named Finn.
     // This might be used to handle interactions or dependencies between Spark and Finn.
-    bool Connected_to_Finn;
+    static bool Connected_to_Finn;
 
     // A static boolean member variable to track if Spark has just detached from Finn.
     // This could be used to manage the transition or effects of detachment in the game logic.

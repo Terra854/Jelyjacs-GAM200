@@ -18,6 +18,11 @@ This file contains the script the player characters
 #include <input.h>
 #include <message.h>
 
+/***********************************************************************************
+/
+/		NOT IN USE
+/
+/***********************************************************************************
 // Constructor for the Player class.
 // @param name: A string representing the name of the Player instance.
 Player::Player(std::string name) : LogicScript(name)
@@ -42,6 +47,8 @@ void Player::Update(Object* obj) {
 		//std::cout << "NIL OBJ : Player" << std::endl;
 		return; 
 	}
+
+	std::cout << " Player Script Update : " << obj->GetName() << std::endl;
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 	if (player_physics == nullptr || player_animation == nullptr) {

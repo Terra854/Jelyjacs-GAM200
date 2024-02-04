@@ -204,9 +204,6 @@
     <ClCompile Include="src\Scripts\Piston.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Player.cpp">
-      <Filter>Source Files\Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripts\CatPortal.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
@@ -387,9 +384,6 @@
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\Spark.h">
-      <Filter>Header Files\Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Scripts\Player.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\Piston.h">

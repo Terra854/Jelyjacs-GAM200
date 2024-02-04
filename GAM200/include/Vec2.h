@@ -19,6 +19,7 @@ struct Vec2
 	// Constructors
 	Vec2() : x(0.0f), y(0.0f) {}
 	Vec2(float _x, float _y) : x(_x), y(_y) {}
+	Vec2(ImVec2 v) : x(v.x), y(v.y) {}
 
 	Vec2& operator=(const Vec2& rhs) = default;
 	Vec2(const Vec2& rhs) = default;

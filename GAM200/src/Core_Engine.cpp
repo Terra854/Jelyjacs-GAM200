@@ -374,7 +374,13 @@ void CoreEngine::GameLoop()
 					}
 				}
 				else if (gizmo.GetType() == GizmoType::Rotate) {
+					if (gizmo.IsRGizmoClicked(gameWorldPos)) {
+						gizmo.SetRGizmoActive(true);
+					}
 
+					if (gizmo.IsRGizmoActive()) {
+						// TODO: Actual rotation
+					}
 				}
 
 				if (objBody != nullptr)
@@ -383,7 +389,7 @@ void CoreEngine::GameLoop()
 				}
 			}
 			// Select object in the viewport
-			else if (ImGui::IsItemClicked() && !isObjectClicked(gizmo.getX(), gameWorldPos) && !isObjectClicked(gizmo.getY(), gameWorldPos)) {
+			else if (ImGui::IsItemClicked() && !isObjectClicked(gizmo.getX(), gameWorldPos) && !isObjectClicked(gizmo.getY(), gameWorldPos) && !gizmo.IsRGizmoActive()) {
 				std::cout << "################################################################" << std::endl;
 				std::cout << "ClickPos " << clickPos.x << ", " << clickPos.y << std::endl;
 				std::cout << "ViewportMin " << viewport_min.x << ", " << viewport_min.y << std::endl;
@@ -412,6 +418,7 @@ void CoreEngine::GameLoop()
 				object_being_moved = false;
 				object_being_moved_x = false;
 				object_being_moved_y = false;
+				gizmo.SetRGizmoActive(false);
 			}
 
 
