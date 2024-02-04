@@ -23,18 +23,24 @@ void ParticleSystem::Init()
     {
         for (int x = 0; x < 10; x++)
         {
-            glm::vec2 translation;
-            translation.x = 1.0f - (float) (x * x) / 50.0f;
-            translation.y = (float) ((y-5) * x) / 50.0f;
-            translations[index++] = translation;
+            //Vec2 translation;
+            //translation.x = 1.0f - (float) (x * x) / 50.0f;
+            //translation.y = (float) ((y-5) * x) / 50.0f;
+            translations[index] = random_position(); //translation;
+            Particle* particle = new Particle(&translations[index]); 
+            particle->velocity = random_velocity(); 
+            particle->life_time = random_life_time();
+            particles.push_back(particle);
+            index++;
+
         }
     }
 
 
-    instanceVBO;
+    
     glGenBuffers(1, &instanceVBO);
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * 100, &translations[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     // set up vertex data (and buffer(s)) and configure vertex attributes
    // ------------------------------------------------------------------
@@ -48,7 +54,7 @@ void ParticleSystem::Init()
          0.05f, -0.05f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
          0.05f,  0.05f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f
     };
-    quadVAO, quadVBO;
+    
     glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);
     glBindVertexArray(quadVAO);
@@ -78,6 +84,18 @@ void ParticleSystem::Init()
 */
 void ParticleSystem::Update()
 {
+   
+
+    for (auto& ptc : particles)
+    {
+        
+			ptc->Update();
+		
+	}
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * 100, &translations[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
     Object* player = objectFactory->getPlayerObject();
 
     if (player != nullptr) {
@@ -92,19 +110,25 @@ void ParticleSystem::Update()
                 draw_particle = false;
                 return;
             }
+
             draw_particle = true;
+            float orientation = atan2(Vy, Vx);
+
+
             Vec2 pos = tran_pt->Position;
-            pos.x -= Vx * 0.1f;
-            pos.y -= Vy * 0.1f;
+            pos.x -= tran_pt->Scale.x * cos(orientation) *0.7f;
+            pos.y -= tran_pt->Scale.y * sin(orientation) *0.7f;
             pos.x = pos.x * 2.0f / window->width_init;
             pos.y = pos.y * 2.0f / window->height_init;
             Vec2 scale{ 0.f,0.f };
             scale.x = tran_pt->Scale.x / window->width_init;
             scale.y = tran_pt->Scale.y / window->height_init;
-            scale.x *= sqrt(Vx * Vx + Vy * Vy) * 0.002f;
+            /*scale.x *= sqrt(Vx * Vx + Vy * Vy) * 0.002f;
             scale.y *= sqrt(Vx * Vx + Vy * Vy) * 0.002f;
+            if (scale.x > 0.1f) scale.x = 0.1f;
+            if (scale.y > 0.1f) scale.y = 0.1f;*/
             //calculate rotation
-            float orientation = atan2(Vy, Vx);
+           
 
             world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
             Vec2 window_scaling{(float)window->width / (float)window->width_init, (float)window->height / (float) window->height_init};
@@ -150,3 +174,44 @@ void ParticleSystem::Free()
 	glDeleteBuffers(1, &quadVBO);
 }
 
+Vec2 random_position()
+{
+    Vec2 pos_return;
+    pos_return.x = 1.0f;
+    // y is from -0.5 to 0.5
+    pos_return.y = (rand() % 1000) / 1000.0f - 0.5f;
+
+    return pos_return;
+}
+
+Vec2 random_velocity()
+{
+    Vec2 vel_return;
+    // x is from -1.0 to -0.5
+    vel_return.x = (rand() % 500) / 1000.0f - 1.0f;
+    vel_return.y = 0.f;
+    return vel_return;
+}
+
+float random_life_time()
+{
+    // life time is from 0.7 to 2.0
+    return (rand() % 1300) / 1000.0f + 0.7f;
+}
+
+void Particle::Update()
+{
+    if (life_count < life_time) {
+        Vec2 replacement = velocity*engine->GetDt();
+        *position += replacement;
+        if (position->x > 1.0f)position->x = -1.0f;
+        life_count += engine->GetDt();
+    }
+    else {
+        life_count = 0.0f;
+        Vec2 new_pos = random_position();
+        *position = new_pos;
+        velocity = random_velocity();
+        life_time = random_life_time();
+    }
+}
