@@ -407,17 +407,17 @@
     <ClInclude Include="include\Gizmo.h">
       <Filter>Header Files\Systems\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\PressurePlate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Scripts\Hori_Elevator.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\Box.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Scripts\PressurePlate.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
     <ClInclude Include="include\Scripts\PowerLiquid.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
