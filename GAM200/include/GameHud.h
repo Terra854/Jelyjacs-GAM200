@@ -34,13 +34,25 @@ public:
 	float width;
 	float height;
 	Text string{};
+	bool selected{false};
 	//to attach an empty box texture to the button
 	GLuint texture_id;
 	void draw_hud_texture();
 };
 
+struct Menu
+{
+	Menu(float , float ,float , float, GLuint);
+	Vec2 pos;
+	Vec2 scale;
+	GLuint texture_id;
+	void draw_menu();
+};
+
 //map container to store all buttons created
 extern std::vector<Button> Buttons;
+
+extern std::vector<Menu> Menus;
 
 //creates a new button with data initialised by function parameters
 void create_button(std::string const& text, Button button, float scale, FONT font , GLuint id);
@@ -55,6 +67,7 @@ public:
 	void Initialize() ;
 	void Update() ;
 	void Draw();
+	void Menu();
 	~GameHud();
 	
 private:
