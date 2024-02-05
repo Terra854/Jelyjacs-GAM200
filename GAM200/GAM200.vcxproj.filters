@@ -225,9 +225,6 @@
     <ClCompile Include="src\Gizmo.cpp">
       <Filter>Source Files\Systems\LevelEditor</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\PressurePlate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
@@ -235,7 +232,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripts\PowerLiquid.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\PressurePlate.cpp">
+      <Filter>Source Files\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
