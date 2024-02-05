@@ -755,6 +755,7 @@ void GLApp::cleanup()
 	{
 		glDeleteProgram(shdrpgm.second.GetHandle());
 	}
+	particleSystem.Free();
 }
 
 /*  _________________________________________________________________________ */
