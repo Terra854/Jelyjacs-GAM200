@@ -1,11 +1,11 @@
 /* !
-@file	Vert_Elevator.cpp
+@file	Hori_Elevator.cpp
 @author Luke Goh
-@date	27/11/2023
+@date	5/2/2024
 
-This file contains the script for the vertical elevator
+This file contains the script for the Horizontal elevator
 *//*__________________________________________________________________________*/
-#include "Scripts/Vert_Elevator.h"
+#include "Scripts/Hori_Elevator.h"
 #include <PhysicsSystem.h>
 #include <components/Physics.h>
 #include <components/Transform.h>
@@ -13,34 +13,33 @@ This file contains the script for the vertical elevator
 #include <Factory.h>
 #include <Core_Engine.h>
 
-float counter, dt;
-Vert_Elevator::Vert_Elevator(std::string name) : LogicScript(name)
+float count, deltaT;
+Hori_Elevator::Hori_Elevator(std::string name) : LogicScript(name)
 {
 	std::cout << name << " Created" << std::endl;
 	moving_platform_direction = false;
 }
 /***************************************************************************/
-// Start method, called when the Vert_Elevator script is first activated.
+// Start method, called when the Hori_Elevator script is first activated.
 // @param obj: A pointer to the Object that this script is attached to.
-// Performs initial setup and configuration for Vert_Elevator.
+// Performs initial setup and configuration for Hori_Elevator.
 /***************************************************************************/
-void Vert_Elevator::Start(Object* obj)
+void Hori_Elevator::Start(Object* obj)
 {
-	std::cout << "Vert_Elevator Script Ready : " << obj->GetName() << std::endl;
-	counter = 0.f;
-	dt = engine->GetDt();
-	
+	std::cout << "Hori_Elevator Script Ready : " << obj->GetName() << std::endl;
+	count = 0.f;
+	deltaT = engine->GetDt();
+
 }
 
 /***************************************************************************/
-// Update method, called on every frame to update Vert_Elevator's state.
+// Update method, called on every frame to update Hori_Elevator's state.
 // @param obj: A pointer to the Object that this script is attached to.
-// Contains logic for Vert_Elevator's movement and animations.
+// Contains logic for Hori_Elevator's movement and animations.
 /***************************************************************************/
-void Vert_Elevator::Update(Object* obj) {
+void Hori_Elevator::Update(Object* obj) {
 	// For some reason, the player is not changing position
 	if (obj == nullptr) {
-		//std::cout << "NIL OBJ : V_Elevator" << std::endl;
 		return;
 	}
 	//std::cout << obj->GetName() << std::endl;
@@ -53,26 +52,26 @@ void Vert_Elevator::Update(Object* obj) {
 	moving_platform_physics->Velocity.x = 0.0f;
 	float moving_platform_speed;
 
-	// if the platform reach the max/min height, change direction
-	if (counter >= 5.f) { // 160 is the max height of the platform
+	// if the count >= 5, change direction
+	if (count >= 5.f) {
 		std::cout << "change dir\n";
 		moving_platform_direction = !moving_platform_direction;
-		counter = 0;
+		count = 0;
 	}
 	else {
-		counter += dt;
+		count += deltaT;
 	}
 	moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
-	moving_platform_physics->Velocity.y = moving_platform_speed;
+	moving_platform_physics->Velocity.x = moving_platform_speed;
 }
 
 /***************************************************************************/
-// Shutdown method, called when the Vert_Elevator script is stopped.
+// Shutdown method, called when the Hori_Elevator script is stopped.
 // @param obj: A pointer to the Object that this script is attached to.
-// Contains cleanup logic for Vert_Elevator.
+// Contains cleanup logic for Hori_Elevator.
 /***************************************************************************/
-void Vert_Elevator::Shutdown(Object* obj) {
-	std::cout << "Vert_Elevator Script Shutdown : " << obj->GetName() << std::endl;
+void Hori_Elevator::Shutdown(Object* obj) {
+	std::cout << "Hori_Elevator Script Shutdown : " << obj->GetName() << std::endl;
 }
 
-Vert_Elevator vert_elevator("Vert_Elevator");
+Hori_Elevator vert_elevator("Hori_Elevator");

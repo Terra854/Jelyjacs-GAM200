@@ -22,6 +22,12 @@ ID aand is stored as part of a private map
 #include <string>
 #include "ComponentCreator.h"
 
+enum LayerName
+{
+	Background,
+	Objects
+};
+
 class Factory : public ISystems
 {
 public:
@@ -74,6 +80,14 @@ public:
 	void DeleteComponent(int id, ComponentType c);
 
 	void DeleteComponent(Object* o, ComponentType c);
+
+	int CreateLayer(std::string layerName, bool isVisible);
+
+	void AddToLayer(int layerNum, Object* obj);
+
+	int GetLayerNum(std::string layerName);
+
+	std::pair<std::string, std::pair<bool, std::vector<Object*>>>* FindLayerThatHasThisObject(Object* obj);
 
 	int GetNextId() { return nextObjectId; };
 

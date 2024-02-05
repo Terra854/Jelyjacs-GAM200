@@ -19,7 +19,6 @@ void Gizmo::RenderGizmo(){
 
 	Vec2 gizmoPos, gizmoXPos, gizmoYPos, gizmoXScaling, gizmoYScaling;
 
-	//gizmoPos = Vec2(selectedObject->Position.x * camera2D->scale.x, selectedObject->Position.y * camera2D->scale.y);
 	gizmoPos = Vec2(selectedObject->Position.x, selectedObject->Position.y);
 
 	XGizmo.Position = gizmoPos + Vec2(72.f / camera2D->scale.x, 0.f);
@@ -47,28 +46,46 @@ void Gizmo::RenderGizmo(){
 	gizmoXMat = camera2D->world_to_ndc * gizmoXMat;
 	gizmoYMat = camera2D->world_to_ndc * gizmoYMat;
 
-	// matrix after camrea
+	if (type == GizmoType::Scale || type == GizmoType::Translate) {
 
-	//Mat3 gizmoCam = Mat3Scale(1.f, 1.f) * Mat3Translate(camera2D->position.x * camera2D->scale.x, camera2D->position.y * camera2D->scale.y);
+		GLApp::shdrpgms["shape"].Use();
+		// bind VAO of this object's model
+		glBindVertexArray(GLApp::models["square"].vaoid);
 
-	//gizmoXMat = gizmoCam * gizmoXMat;
-	//gizmoYMat = gizmoCam * gizmoYMat;
+		// Render X arrow
+		GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoXMat.ToGlmMat3());
+		GLApp::shdrpgms["shape"].SetUniform("uColor", x_gizmo_color);
+		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
 
-	GLApp::shdrpgms["shape"].Use();
-	// bind VAO of this object's model
-	glBindVertexArray(GLApp::models["square"].vaoid);
+		// Render Y arrow
+		GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoYMat.ToGlmMat3());
+		GLApp::shdrpgms["shape"].SetUniform("uColor", y_gizmo_color);
+		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
 
-	// Render X arrow
-	GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoXMat.ToGlmMat3());
-	GLApp::shdrpgms["shape"].SetUniform("uColor", x_gizmo_color);
-	glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		// unbind VAO and unload shader program
+		glBindVertexArray(0);
+		GLApp::shdrpgms["shape"].UnUse();
+	}
 
-	// Render Y arrow
-	GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoYMat.ToGlmMat3());
-	GLApp::shdrpgms["shape"].SetUniform("uColor", y_gizmo_color);
-	glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+	switch (type) {
+	case GizmoType::Scale:
+		GLApp::draw_rect(XGizmo.Position + Vec2(XGizmo.Scale.x / 2.f, 0.f), Vec2(20.f, 20.f) / camera2D->scale.x, 0.f, x_gizmo_color);
+		GLApp::draw_rect(YGizmo.Position + Vec2(0.f, YGizmo.Scale.y / 2.f), Vec2(20.f, 20.f) / camera2D->scale.x, 0.f, y_gizmo_color);
+		break;
+	case GizmoType::Rotate:
+		if (RGizmoActive)
+			GLApp::drawline_circle(selectedObject->Position, Vec2(R_Radius, R_Radius) / camera2D->scale.x, R_Thickness, y_gizmo_color);
+		else
+			GLApp::drawline_circle(selectedObject->Position, Vec2(R_Radius, R_Radius) / camera2D->scale.x, R_Thickness, x_gizmo_color);
+		break;
+	case GizmoType::Translate:
+		GLApp::drawtriangle(XGizmo.Position + Vec2(XGizmo.Scale.x / 2.f, 0.f), Vec2(32.f, 32.f) / camera2D->scale.x, 270.f, x_gizmo_color);
+		GLApp::drawtriangle(YGizmo.Position + Vec2(0.f, YGizmo.Scale.y / 2.f), Vec2(32.f, 32.f) / camera2D->scale.x, 0.f, y_gizmo_color);
+		break;
+	}
+}
 
-	// unbind VAO and unload shader program
-	glBindVertexArray(0);
-	GLApp::shdrpgms["shape"].UnUse();
+bool Gizmo::IsRGizmoClicked(ImVec2 mousePos)
+{
+	return (Vec2Distance(selectedObject->Position, Vec2(mousePos)) > (R_Radius / camera2D->scale.x) - (R_Thickness / camera2D->scale.x)) && (Vec2Distance(selectedObject->Position, Vec2(mousePos)) < (R_Radius / camera2D->scale.x) + (R_Thickness / camera2D->scale.x));
 }

@@ -204,9 +204,6 @@
     <ClCompile Include="src\Scripts\Piston.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Player.cpp">
-      <Filter>Source Files\Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripts\CatPortal.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
@@ -227,6 +224,18 @@
     </ClCompile>
     <ClCompile Include="src\Gizmo.cpp">
       <Filter>Source Files\Systems\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Hori_Elevator.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\PowerLiquid.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\PressurePlate.cpp">
+      <Filter>Source Files\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -380,9 +389,6 @@
     <ClInclude Include="include\Scripts\Spark.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\Player.h">
-      <Filter>Header Files\Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="include\Scripts\Piston.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
@@ -400,6 +406,18 @@
     </ClInclude>
     <ClInclude Include="include\Gizmo.h">
       <Filter>Header Files\Systems\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Hori_Elevator.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\PressurePlate.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\PowerLiquid.h">
+      <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,9 +9,12 @@ This file contains the definitions of the functions that manages the game scene
 #include <Core_Engine.h>
 #include <GameLogic.h>
 #include <Audio.h>
+#include <Scenes.h>
 
 SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
+std::vector<std::pair<std::string, std::pair<bool, std::vector<Object*>>>> SceneManager::layers;
+std::multimap<std::string, int> SceneManager::initialLayer;
 
 /******************************************************************************
 	Destructor for SceneManager
@@ -19,6 +22,19 @@ Factory::objectIDMap SceneManager::initialObjectMap;
 SceneManager::~SceneManager(){
 	ClearInitialObjectMap(true);
 }
+
+/******************************************************************************
+	LoadScene
+	- Used to switch between scenes by clearing the current object map before
+	  loading the new scene
+*******************************************************************************/
+void SceneManager::LoadScene(const std::string filepath) {
+	objectFactory->destroyAllObjects();
+	SceneManager::ClearInitialObjectMap(true);
+	SceneManager::layers.clear();
+	LoadSceneFromJson(filepath.c_str());
+}
+
 
 /******************************************************************************
 	PlayScene
@@ -33,6 +49,12 @@ void SceneManager::PlayScene() {
 		if (initialObjectMap.empty()) {
 			for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
 				initialObjectMap[p.first] = objectFactory->cloneObject(p.second);
+			}
+
+			for (auto& l : SceneManager::layers) {
+				for (auto& object : l.second.second) {
+					initialLayer.insert(std::make_pair(l.first, object->GetId()));
+				}
 			}
 		}
 		engine->setPause();
@@ -68,6 +90,23 @@ void SceneManager::RestartScene() {
 		ClearInitialObjectMap(false);
 	}
 	Logic->playerObj = objectFactory->FindObject("Finn");
+
+	// Clear the layers, all the object pointers are invalid
+	layers.clear();
+
+	// Loop through the initialLayer multimap to refill the layers
+	for (auto& p : initialLayer) {
+		int layerNum = objectFactory->GetLayerNum(p.first);
+
+		if (layerNum == -1) {
+			layerNum = objectFactory->CreateLayer(p.first, true);
+		}
+
+		objectFactory->AddToLayer(layerNum, objectFactory->getObjectWithID(p.second));
+	}
+
+	// The data inside initialLayer is not needed anymore now that the reset is complete
+	initialLayer.clear();
 }
 
 /******************************************************************************

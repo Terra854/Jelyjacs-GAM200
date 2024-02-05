@@ -5,6 +5,7 @@
 //
 This file contains the definition of the functions of GameHud 
 *//*__________________________________________________________________________*/
+#include <Debug.h>
 #include "GameHud.h"
 #include "Font.h"
 #include "GLApp.h"

@@ -45,6 +45,9 @@ class Camera : public ISystems
 	// Check if the free camera is enabled
 	bool isFreeCamEnabled() { return free_cam; }
 
+	// Set free cam status
+	void setFreeCamEnabled(bool b) { free_cam = b; }
+
 private:
 	bool free_cam = false;
 

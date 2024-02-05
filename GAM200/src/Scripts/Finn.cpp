@@ -62,7 +62,7 @@ void Finn::Update(Object* obj) {
 			//if (static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 			if (player_physics->Velocity.y == 0.0f) {
 				//player_physics->Velocity.y = 1000.0f;
-				player_physics->Force = 85000.0f;
+				player_physics->Force = 175000.0f;
 				//audio->playJump();
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 				audio->playSfx(AudioType::Finn_Jumping);
@@ -112,8 +112,11 @@ void Finn::Update(Object* obj) {
 			moving = false;
 		}
 
-		//box
-		//get box object
+		/**************************************************************/
+		//	Box Collision
+		//	- Get find box object
+		/**************************************************************/
+		/*
 		Object* box_obj = objectFactory->FindObject("Box");
 
 		//get aabb
@@ -142,6 +145,7 @@ void Finn::Update(Object* obj) {
 				}
 			}
 		}
+		*/
 	}
 
 	else {

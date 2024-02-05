@@ -184,6 +184,7 @@ void input::Update()
 	buttons[at(KEY::esc)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_ESCAPE));
 	buttons[at(KEY::q)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_Q));
 	buttons[at(KEY::e)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_E));
+	buttons[at(KEY::t)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_T));
 	buttons[at(KEY::tab)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_TAB));
 	buttons[at(KEY::enter)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_ENTER));
 	buttons[at(KEY::del)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_DELETE));

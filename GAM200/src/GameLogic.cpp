@@ -33,9 +33,8 @@ std::map<std::string, LogicScript*> LogicScript::temp_scriptmap;
 GameLogic* Logic = NULL;
 Object* scale_and_rotate;
 Object* GameLogic::playerObj;
-Object* MovingPlatform;
 Object* dynamic_collision;
-bool moving_platform_direction = false;
+int CatPower = 0;
 
 bool one_time = false;
 bool cheat = false;
@@ -43,9 +42,7 @@ bool cheat = false;
 GameLogic::GameLogic() {
 	Logic = this;
 	GameLogic::playerObj = nullptr;
-	MovingPlatform = nullptr;
 	dynamic_collision = nullptr;
-	moving_platform_direction = false;
 }
 
 GameLogic::~GameLogic() {
@@ -59,6 +56,7 @@ GameLogic::~GameLogic() {
 void GameLogic::MessageRelay(Message_Handler* msg) {
 	// For Movement Key Display
 	if (msg->GetMessage() == MessageID::Movement) {
+		/*
 		MovementKey* temp = static_cast<MovementKey*>(msg);
 		switch (temp->dir) {
 			case up:
@@ -76,6 +74,7 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 			default:
 				break;
 		}
+		*/
 	}
 }
 /******************************************************************************
@@ -84,7 +83,7 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 *******************************************************************************/
 void GameLogic::Initialize()
 {
-	//LoadScene("Asset/Levels/testsave.json");
+	//LoadSceneFromJson("Asset/Levels/testsave.json");
 	//SaveScene("Asset/Levels/testsave.json");
 
 	// Clear all behaviours from the container
@@ -98,10 +97,13 @@ void GameLogic::Initialize()
 			std::cout << "Behaviour " << iter->GetBehaviourName() << " is null" << std::endl;
 			continue;
 		}
-		else 
+		else {
 			behaviours[iter->GetBehaviourName()]->Start(iter->GetOwner());
+			std::cout << "Owner ID: " << iter->GetOwner()->GetId() << std::endl;
+		}
 	}
 	cheat = false;
+	CatPower = 0;
 	std::cout << "GameLogic Initialized" << std::endl;
 	std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
 	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
@@ -152,13 +154,13 @@ void GameLogic::Update() {
 		//engine->Broadcast(&msg);
 		engine->setPause();
 	}
-
 	if (GameLogic::playerObj != nullptr) {
 		if (input::IsPressed(KEY::e)) {
 			if (GameLogic::playerObj->GetName() == "Finn") {
 				Object* temp = objectFactory->FindObject("Spark");
 				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Spark");
 				Spark::Just_detached = true;
+				Spark::Connected_to_Finn = false;
 				static_cast<Body*>(temp->GetComponent(ComponentType::Body))->active = true;
 				std::cout << "Switched to Spark" << std::endl;
 			}
@@ -167,17 +169,14 @@ void GameLogic::Update() {
 				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Finn");
 				std::cout << "Switched to Finn" << std::endl;
 			}
-			else {
-				GameLogic::playerObj = GameLogic::playerObj;
-			}
 		}
-
-		/*for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
+	
+		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID((long)i);
 
 			if (obj == nullptr)
 				continue;
-		}*/
+		}
 	}
 	/*****************************************************************************************
 	*

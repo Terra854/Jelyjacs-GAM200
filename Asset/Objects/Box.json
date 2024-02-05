@@ -18,7 +18,7 @@
       "Shape": "Rectangle",
       "Properties": {
         "width": 64,
-        "height": 48
+        "height": 32
       }
     },
     {
@@ -34,6 +34,13 @@
         "Y_Velocity": 0.0,
         "AffectedByGravity": true,
         "Mass": 1.0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "Box",
+        "Index": 0
       }
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "Name": "DoorGreen",
+  "Name": "PistonPurple",
   "Components": [
     {
       "Type": "Transform",
@@ -9,7 +9,7 @@
           "y": 0.0
         },
         "Scale_x": 64.0,
-        "Scale_y": 320.0,
+        "Scale_y": 64.0,
         "Rotation": 0.0
       }
     },
@@ -17,24 +17,31 @@
       "Type": "Body",
       "Shape": "Rectangle",
       "Properties": {
-        "width": 32.0,
-        "height": 160.0
+        "width": 64.0,
+        "height": 16.0
       }
     },
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "DoorGreen.png",
+        "texturepath": "Props_PressurePlatePurple.png",
         "framerate": 0.1,
-        "frame": [33, 1],
+        "frame": [3, 1],
         "idle": [1, 1],
-        "jump": [33, 1]
+        "jump": [3, 1]
       }
     },
     {
       "Type": "Event",
       "Properties": {
         "linkedevent" : 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "Piston",
+        "Index" : 0
       }
     }
   ]

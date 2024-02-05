@@ -11,7 +11,7 @@ This file contains the declaration for the Audio system class
 #include <fmod_errors.h>
 
 enum AudioType {
-	Background,
+	Background_Music,
 	Button_Click,
 	Cat_Teleport,
 	Finn_Jumping,

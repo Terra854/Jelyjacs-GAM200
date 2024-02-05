@@ -1,5 +1,5 @@
 {
-  "Name": "DoorLightOrange",
+  "Name": "CatPowerLiquid",
   "Components": [
     {
       "Type": "Transform",
@@ -16,6 +16,8 @@
     {
       "Type": "Body",
       "Shape": "Rectangle",
+      "Active": true,
+      "Collision Response": true,
       "Properties": {
         "width": 64.0,
         "height": 64.0
@@ -24,10 +26,23 @@
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "Props_DoorLightOrange.png",
+        "texturepath": "CatPowerLiquid.png",
         "framerate": 0.1,
-        "frame": [10, 1],
-        "idle": [10, 1]
+        "frame": [16, 1],
+        "idle": [16, 1]
+      }
+    },
+    {
+      "Type": "Event",
+      "Properties": {
+        "linkedevent" : 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script" : "Power_Liquid",
+        "Index": 0
       }
     }
   ]

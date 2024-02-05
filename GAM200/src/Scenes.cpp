@@ -12,14 +12,16 @@ This file contains the definitions for loading and saving scenes
 #include "../include/components/Event.h"
 #include "Scenes.h"
 #include <iostream>
+#include "LevelEditor.h"
+#include <SceneManager.h>
 
 /******************************************************************************
-LoadScene
+LoadSceneFromJson
 -	This function reads a json file and loads all the objects
 
 @param filename - the name of the json file
 *******************************************************************************/
-void LoadScene(std::string filename)
+void LoadSceneFromJson(std::string filename)
 {
 	
 	// Check if the given file exists
@@ -55,67 +57,103 @@ void LoadScene(std::string filename)
 	jsonobj.readFloat(level_size.y, "Size", "height");
 	engine->Set_Level_Size(level_size);
 
-	for (auto& component : jsonobj.read("Objects"))
-	{
-		JsonSerialization jsonloop;
-		jsonloop.jsonObject = &component;
+	int layerNum = 0;
 
-		std::string objprefabs;
-		jsonloop.readString(objprefabs, "Prefabs");
-		Object* obj;
-		// Create the prefab if it doesn't exist
-		if (AssetManager::prefabsval(objprefabs) == nullptr)
+	for (auto& layer : jsonobj.read("Layers")) {
+		std::string layername = layer["Name"].asCString();
+
+		//jsonobj.readString(layername, "Name");
+		objectFactory->CreateLayer(layername, true);
+
+		//for (auto& component : jsonobj.read("Objects"))
+		for (auto& component : layer["Objects"])
 		{
-			// Create new prefab
-			std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
-			Object* newPrefab = objectFactory->createObject(tempobjprefabs);
+			JsonSerialization jsonloop;
+			jsonloop.jsonObject = &component;
 
-			AssetManager::updateprefab(newPrefab->GetName(), newPrefab);
-		}
-
-		// Create object via cloning the prefab
-		
-		obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
-		
-		// Assign an ID. It will be added to the objectMap
-		objectFactory->assignIdToObject(obj);
-
-		// Read extra data to update object
-		std::string type;
-		jsonloop.readString(type, "Type");
-
-		if (type == "Transform")
-		{
-			Transform* tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-			jsonloop.readFloat(tran_pt->Position.x, "Position", "x");
-			jsonloop.readFloat(tran_pt->Position.y, "Position", "y");
-			jsonloop.readFloat(tran_pt->Scale.x, "Scale", "x");
-			jsonloop.readFloat(tran_pt->Scale.y, "Scale", "y");
-			jsonloop.readFloat(tran_pt->Rotation, "Rotation");
-		}
-
-		if (jsonloop.isMember("Properties"))
-		{
-			Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
-			if (temp->GetShape() == Shape::Rectangle)
+			std::string objprefabs;
+			jsonloop.readString(objprefabs, "Prefabs");
+			Object* obj;
+			// Create the prefab if it doesn't exist
+			if (AssetManager::prefabsval(objprefabs) == nullptr)
 			{
-				Rectangular* temp2 = static_cast<Rectangular*>(temp);
-				jsonloop.readFloat(temp2->width, "Properties", "width");
-				jsonloop.readFloat(temp2->height, "Properties", "height");
+				// Create new prefab
+				std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
+				Object* newPrefab = objectFactory->createObject(tempobjprefabs);
+
+				AssetManager::updateprefab(newPrefab->GetName(), newPrefab);
 			}
+
+			// Create object via cloning the prefab
+			obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
+			obj->SetPrefab(AssetManager::prefabsval(objprefabs)); // Update the clone object to have usingPrefab value
+
+			// Assign an ID. It will be added to the objectMap
+			objectFactory->assignIdToObject(obj);
+
+			// Read extra data to update object
+			std::string type;
+			jsonloop.readString(type, "Type");
+
+			if (type == "Transform")
+			{
+				Transform* tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+				jsonloop.readFloat(tran_pt->Position.x, "Position", "x");
+				jsonloop.readFloat(tran_pt->Position.y, "Position", "y");
+				jsonloop.readFloat(tran_pt->Scale.x, "Scale", "x");
+				jsonloop.readFloat(tran_pt->Scale.y, "Scale", "y");
+				jsonloop.readFloat(tran_pt->Rotation, "Rotation");
+			}
+
+			if (jsonloop.isMember("Name"))
+			{
+				std::string tempstr;
+				jsonloop.readString(tempstr, "Name");
+				obj->SetName(tempstr);
+			}
+			//else
+			//	obj->SetName("");
+			// ^Default name for objects is the name set in prefabs object list
+
+			if (jsonloop.isMember("Properties"))
+			{
+				Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+				if (temp->GetShape() == Shape::Rectangle)
+				{
+					Rectangular* temp2 = static_cast<Rectangular*>(temp);
+					jsonloop.readFloat(temp2->width, "Properties", "width");
+					jsonloop.readFloat(temp2->height, "Properties", "height");
+				}
+			}
+
+			if (jsonloop.isMember("linkedevent"))
+			{
+				Event* event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+				jsonloop.readInt(event_pt->linked_event, "linkedevent");
+			}
+
+			if (jsonloop.isMember("scripts"))
+			{
+				// THIS DOESN'T REALLY WORK FOR CHANGING THE SCRIPTS OF INDIVIDUAL OBJECTS
+				std::string behvstr;
+				jsonloop.readString(behvstr, "scripts");
+
+				objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
+				obj->AddComponent(new Behaviour(0, behvstr));
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+
+				behv->SetBehaviourName(behvstr);
+			}
+
+			// Add here to read oher types of data if necessary WIP
+
+
+			obj->Initialize();
+
+			objectFactory->AddToLayer(layerNum, obj);
 		}
 
-		if (jsonloop.isMember("linkedevent"))
-		{
-			Event* event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-			jsonloop.readInt(event_pt->linked_event, "linkedevent");
-		}
-
-		// Add here to read oher types of data if necessary WIP
-
-
-		obj->Initialize();
-
+		layerNum++;
 	}
 
 	// Save the name of the level to engine to track
@@ -137,7 +175,7 @@ void SaveScene(std::string filename)
 {
 	// Save Scene Name
 	Json::Value jsonobj;
-	jsonobj["SceneName"] = "testsaving";
+	jsonobj["SceneName"] = filename;
 
 	//jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
 
@@ -150,6 +188,85 @@ void SaveScene(std::string filename)
 	jsonobj["Size"]["width"] = level_size.x;
 	jsonobj["Size"]["height"] = level_size.y;
 
+	auto& layers = jsonobj["Layers"];
+
+	for (auto& l : SceneManager::layers) {
+		Json::Value layer;
+
+		layer["Name"] = l.first;
+
+		for (Object* obj : l.second.second) {
+
+			if (obj == nullptr)
+				continue;
+
+			// Save object prefabs data
+			std::string name = obj->GetName();
+			Object* prefab = obj->GetPrefab();
+			std::string prefabname = "MISSINGNAME";
+
+			if (prefab == nullptr)
+				std::cout << "OBJECT: " << name << " is missing usingPrefab!" << std::endl;
+			else
+				prefabname = prefab->GetName() + ".json";
+
+			Json::Value innerobj;
+
+
+			innerobj["Name"] = name;
+			innerobj["Prefabs"] = prefabname;
+
+			// Save object transform data
+			if (obj->GetComponent(ComponentType::Transform) != nullptr)
+			{
+				Transform* trans = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+				innerobj["Type"] = "Transform";
+
+				Json::Value position;
+				position["x"] = trans->Position.x;
+				position["y"] = trans->Position.y;
+				innerobj["Position"] = position;
+
+				Json::Value scale;
+				scale["x"] = trans->Scale.x;
+				scale["y"] = trans->Scale.y;
+				innerobj["Scale"] = scale;
+
+				innerobj["Rotation"] = trans->Rotation;
+			}
+
+			if (obj->GetComponent(ComponentType::Body) != nullptr)
+			{
+				Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+				if (temp->GetShape() == Shape::Rectangle)
+				{
+					Rectangular* temp2 = static_cast<Rectangular*>(temp);
+					Json::Value properties;
+					properties["width"] = temp2->width;
+					properties["height"] = temp2->height;
+					innerobj["Properties"] = properties;
+				}
+			}
+
+			// Save objects event data
+			if (obj->GetComponent(ComponentType::Event) != nullptr)
+			{
+				Event* event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+				innerobj["linkedevent"] = event->linked_event;
+			}
+
+			if (obj->GetComponent(ComponentType::Behaviour))
+			{
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				innerobj["scripts"] = behv->GetBehaviourName();
+			}
+
+			layer["Objects"].append(innerobj);
+		}
+
+		layers.append(layer);
+	}
+	/*
 	for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 	{
 		Object* obj = objectFactory->getObjectWithID(static_cast<long>(i));
@@ -158,10 +275,20 @@ void SaveScene(std::string filename)
 			continue;
 
 		// Save object prefabs data
-		std::string name = obj->GetName() + ".json";
+		std::string name = obj->GetName();
+		Object* prefab = obj->GetPrefab();
+		std::string prefabname = "MISSINGNAME";
+		
+		if (prefab == nullptr)
+			std::cout << "OBJECT: " << name << " is missing usingPrefab!" <<std::endl;
+		else
+			prefabname = prefab->GetName() + ".json";
+
 		Json::Value innerobj;
 
-		innerobj["Prefabs"] = name;
+		
+		innerobj["Name"] = name;
+		innerobj["Prefabs"] = prefabname;
 
 		// Save object transform data
 		if (obj->GetComponent(ComponentType::Transform) != nullptr)
@@ -202,8 +329,15 @@ void SaveScene(std::string filename)
 			innerobj["linkedevent"] = event->linked_event;
 		}
 
+		if (obj->GetComponent(ComponentType::Behaviour))
+		{
+			Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+			innerobj["scripts"] = behv->GetBehaviourName();
+		}
+
 		jsonobj["Objects"].append(innerobj);
 	}
+	*/
 
 	// Write file
 	std::ofstream outputFile(filename);

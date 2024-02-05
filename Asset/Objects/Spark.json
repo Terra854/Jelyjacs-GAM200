@@ -8,8 +8,8 @@
           "x": 0.0,
           "y": 0.0
         },
-        "Scale_x": 54.0,
-        "Scale_y": 54.0,
+        "Scale_x": 64.0,
+        "Scale_y": 64.0,
         "Rotation": 0.0
       }
     },
@@ -17,20 +17,21 @@
       "Type": "Body",
       "Shape": "Rectangle",
       "Properties": {
-        "width": 29.7,
-        "height": 43.7
+        "width": 32,
+        "height": 48
       }
     },
     {
       "Type": "Animation",
       "Properties": {
         "texturepath": "Spark.png",
-        "jumpfixframe": 6,
-        "framerate": 0.1,
-        "frame": [7, 3],
-        "idle": [5, 1],
-        "jump": [7, 3],
-        "run": [6, 2]
+        "jumpfixframe": 7,
+        "framerate": 0.025,
+        "frame": [68, 4],
+        "idle": [13, 3],
+        "push": [68, 1],
+        "jump": [13, 4],
+        "run": [12, 2]
       }
     },
     {

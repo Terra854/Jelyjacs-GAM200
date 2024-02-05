@@ -2,3 +2,4 @@ square
 triangle
 circle
 line
+line_circle
