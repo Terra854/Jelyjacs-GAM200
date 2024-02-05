@@ -1,9 +1,9 @@
 /* !
 @file	Hori_Elevator.cpp
 @author Luke Goh
-@date	27/11/2023
+@date	5/2/2024
 
-This file contains the script for the horizontal elevator
+This file contains the script for the Horizontal elevator
 *//*__________________________________________________________________________*/
 #include "Scripts/Hori_Elevator.h"
 #include <PhysicsSystem.h>
@@ -11,7 +11,9 @@ This file contains the script for the horizontal elevator
 #include <components/Transform.h>
 #include <components/Body.h>
 #include <Factory.h>
+#include <Core_Engine.h>
 
+float count, deltaT;
 Hori_Elevator::Hori_Elevator(std::string name) : LogicScript(name)
 {
 	std::cout << name << " Created" << std::endl;
@@ -25,6 +27,8 @@ Hori_Elevator::Hori_Elevator(std::string name) : LogicScript(name)
 void Hori_Elevator::Start(Object* obj)
 {
 	std::cout << "Hori_Elevator Script Ready : " << obj->GetName() << std::endl;
+	count = 0.f;
+	deltaT = engine->GetDt();
 
 }
 
@@ -36,7 +40,6 @@ void Hori_Elevator::Start(Object* obj)
 void Hori_Elevator::Update(Object* obj) {
 	// For some reason, the player is not changing position
 	if (obj == nullptr) {
-		//std::cout << "NIL OBJ : V_Elevator" << std::endl;
 		return;
 	}
 	//std::cout << obj->GetName() << std::endl;
@@ -49,15 +52,17 @@ void Hori_Elevator::Update(Object* obj) {
 	moving_platform_physics->Velocity.x = 0.0f;
 	float moving_platform_speed;
 
-	// if the platform reach the max/min height, change direction
-	if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
-		moving_platform_direction = true;
+	// if the count >= 5, change direction
+	if (count >= 5.f) {
+		std::cout << "change dir\n";
+		moving_platform_direction = !moving_platform_direction;
+		count = 0;
 	}
-	if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
-		moving_platform_direction = false;
+	else {
+		count += deltaT;
 	}
 	moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
-	moving_platform_physics->Velocity.y = moving_platform_speed;
+	moving_platform_physics->Velocity.x = moving_platform_speed;
 }
 
 /***************************************************************************/

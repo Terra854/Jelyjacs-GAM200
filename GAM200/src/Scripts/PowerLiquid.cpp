@@ -17,9 +17,6 @@ This file contains the script for the p_liquid for the human to move
 // Constructor for the P_liquid class.
 // @param name: The name of the p_liquid.
 
-float counter;
-float dt;
-
 P_liquid::P_liquid(std::string name) : LogicScript(name)
 {
     std::cout << name << " Created" << std::endl;
@@ -30,8 +27,6 @@ P_liquid::P_liquid(std::string name) : LogicScript(name)
 /*********************************************************************/
 void P_liquid::Start(Object* obj) {
     std::cout << "P_liquid Script Ready : " << obj->GetName() << std::endl;
-    counter = 0.f;
-    dt = engine->Get_Fixed_DT();
 }
 
 /*********************************************************************/
@@ -44,14 +39,14 @@ void P_liquid::Update(Object* obj) {
         return;
     }
 
-    // Get the Animation component of the P_liquid.
-    Animation* p_liquid_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
-    Physics* p_liquid_phy = (Physics*)obj->GetComponent(ComponentType::Physics);
-    Rectangular* p_liquid_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
+    
 
-    // Get the Transform components of the player and the P_liquid.
+    // Get the Transform components of the Power Liquid
     Transform* player_t = static_cast<Transform*>(GameLogic::playerObj->GetComponent(ComponentType::Transform));
     Transform* p_liquid_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+
+    // Get the Body components of Power Liquid
+    Rectangular* p_liquid_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 
 
     if (player_t == nullptr || p_liquid_t == nullptr) {

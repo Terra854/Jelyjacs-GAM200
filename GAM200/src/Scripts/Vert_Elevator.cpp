@@ -11,7 +11,9 @@ This file contains the script for the vertical elevator
 #include <components/Transform.h>
 #include <components/Body.h>
 #include <Factory.h>
+#include <Core_Engine.h>
 
+float counter, dt;
 Vert_Elevator::Vert_Elevator(std::string name) : LogicScript(name)
 {
 	std::cout << name << " Created" << std::endl;
@@ -25,6 +27,8 @@ Vert_Elevator::Vert_Elevator(std::string name) : LogicScript(name)
 void Vert_Elevator::Start(Object* obj)
 {
 	std::cout << "Vert_Elevator Script Ready : " << obj->GetName() << std::endl;
+	counter = 0.f;
+	dt = engine->GetDt();
 	
 }
 
@@ -50,11 +54,13 @@ void Vert_Elevator::Update(Object* obj) {
 	float moving_platform_speed;
 
 	// if the platform reach the max/min height, change direction
-	if (moving_platform_t->Position.y >= 160.0f) { // 160 is the max height of the platform
-		moving_platform_direction = true;
+	if (counter >= 5.f) { // 160 is the max height of the platform
+		std::cout << "change dir\n";
+		moving_platform_direction = !moving_platform_direction;
+		counter = 0;
 	}
-	if (moving_platform_t->Position.y <= -160.0f) { // -160 is the min height of the platform
-		moving_platform_direction = false;
+	else {
+		counter += dt;
 	}
 	moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
 	moving_platform_physics->Velocity.y = moving_platform_speed;
