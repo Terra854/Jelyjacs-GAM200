@@ -69,6 +69,8 @@ void Gizmo::RenderGizmo(){
 
 	switch (type) {
 	case GizmoType::Scale:
+		GLApp::draw_rect(XGizmo.Position + Vec2(XGizmo.Scale.x / 2.f, 0.f), Vec2(20.f, 20.f) / camera2D->scale.x, 0.f, x_gizmo_color);
+		GLApp::draw_rect(YGizmo.Position + Vec2(0.f, YGizmo.Scale.y / 2.f), Vec2(20.f, 20.f) / camera2D->scale.x, 0.f, y_gizmo_color);
 		break;
 	case GizmoType::Rotate:
 		if (RGizmoActive)
