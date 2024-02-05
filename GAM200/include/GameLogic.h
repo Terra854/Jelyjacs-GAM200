@@ -82,6 +82,7 @@ public:
 };
 
 extern GameLogic* Logic;
+extern int CatPower;
 
 class LogicScript
 {

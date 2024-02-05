@@ -77,7 +77,7 @@ namespace PressurePlate {
 		//for (; num_of_steps; num_of_steps--) {
 			// if pressure plate collides with player, change the animation of pressure plate
 			if (plate_b->collision_flag & COLLISION_TOP) {
-				std::cout << obj->GetName() << " PP Open" << std::endl;
+				//std::cout << obj->GetName() << " PP Open" << std::endl;
 				plate_animation->fixed = true;
 				if (plate_animation->current_type != AnimationType::Jump) {
 					plate_animation->current_type = AnimationType::Jump;

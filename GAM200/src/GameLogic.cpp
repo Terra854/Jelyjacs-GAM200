@@ -33,9 +33,8 @@ std::map<std::string, LogicScript*> LogicScript::temp_scriptmap;
 GameLogic* Logic = NULL;
 Object* scale_and_rotate;
 Object* GameLogic::playerObj;
-Object* MovingPlatform;
 Object* dynamic_collision;
-bool moving_platform_direction = false;
+int CatPower = 0;
 
 bool one_time = false;
 bool cheat = false;
@@ -43,9 +42,7 @@ bool cheat = false;
 GameLogic::GameLogic() {
 	Logic = this;
 	GameLogic::playerObj = nullptr;
-	MovingPlatform = nullptr;
 	dynamic_collision = nullptr;
-	moving_platform_direction = false;
 }
 
 GameLogic::~GameLogic() {
@@ -106,6 +103,7 @@ void GameLogic::Initialize()
 		}
 	}
 	cheat = false;
+	CatPower = 0;
 	std::cout << "GameLogic Initialized" << std::endl;
 	std::cout << "Number of Behaviour Components: " << behaviourComponents.size() << std::endl;
 	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;

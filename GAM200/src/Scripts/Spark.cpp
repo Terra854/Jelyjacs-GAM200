@@ -142,6 +142,20 @@ void Spark::Update(Object* obj) {
 		}
 		else player_animation->jump_fixed = false;
 
+		/****************************************************************************************/
+		//			 Teleport the cat to Finn if the cat has the enough energy
+		/*****************************************************************************************/
+		if (input::IsPressed(KEY::t)) {
+			if (CatPower) {
+				spark_t->Position.x = Finn_t->Position.x;
+				spark_t->Position.y = Finn_t->Position.y;
+				CatPower--;
+			}
+			else {
+				std::cout << "Not Enough Energy\n";
+			}
+		}
+
 
 
 		// Audio for Character Movement

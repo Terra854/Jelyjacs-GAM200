@@ -62,6 +62,8 @@ void Box::Update(Object* obj) {
             && player_t->Position.y > box_t->Position.y - 50 && player_t->Position.y < box_t->Position.y + 50) {
             if ((box_b->collision_flag & COLLISION_RIGHT) || (box_b->collision_flag & COLLISION_LEFT)) {
                 box_phy->Velocity.x = finn_phy->Velocity.x * 0.2f;
+                if(box_phy->Velocity.x != 0.0f)
+                    std::cout << "Box is moving" << std::endl;
             }
             
         }
