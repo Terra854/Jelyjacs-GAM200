@@ -166,6 +166,12 @@ void ParticleSystem::Free()
     glDeleteTextures(1, &particle_texture);
     glDeleteVertexArrays(1, &quadVAO);
 	glDeleteBuffers(1, &quadVBO);
+
+    for (auto& ptc : particles)
+    {
+		delete ptc;
+	}
+	particles.clear();
 }
 
 Vec2 random_position()
