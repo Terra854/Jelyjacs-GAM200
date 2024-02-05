@@ -17,7 +17,7 @@
       "Type": "Body",
       "Shape": "Rectangle",
       "Properties": {
-        "width": 32,
+        "width": 64,
         "height": 64
       }
     },

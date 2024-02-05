@@ -26,21 +26,10 @@
           "Name" : "Finn",
           "Position" : 
           {
-            "x" : 0.0,
+            "x" : -118.0,
             "y" : 0.0
           },
           "Prefabs" : "Finn.json",
-          "Properties" : 
-          {
-            "height" : 43.700000762939453,
-            "width" : 29.700000762939453
-          },
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 54.0,
-            "y" : 54.0
-          },
           "Type" : "Transform",
           "scripts" : "Finn"
         },
@@ -48,21 +37,10 @@
           "Name" : "Spark",
           "Position" : 
           {
-            "x" : -118.0,
+            "x" : 0.0,
             "y" : 0.0
           },
           "Prefabs" : "Spark.json",
-          "Properties" : 
-          {
-            "height" : 43.700000762939453,
-            "width" : 29.700000762939453
-          },
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 54.0,
-            "y" : 54.0
-          },
           "Type" : "Transform",
           "scripts" : "Spark"
         },

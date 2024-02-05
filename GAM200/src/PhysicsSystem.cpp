@@ -29,7 +29,7 @@ float top_collision_cooldown = 0.f;
 
 // For fixed physics
 float accumulator = 0.f;
-float fixed_dt = 1.f / 60.f;
+float fixed_dt = 1.f / 120.f;
 int num_of_steps = 0;
 
 // Old version of Check_Collision, might be deleted at some point
@@ -391,7 +391,7 @@ void PhysicsSystem::Update() {
 				float acceleration = p->Force * (1.f / p->Mass) + gravity;
 				p->Velocity.y += acceleration * fixed_dt;
 			}
-			p->Velocity.y *= 0.99f; // Account for air resistance
+			p->Velocity.y *= 0.999f; // Account for air resistance
 
 			p->Force = 0.0f; // Reset force
 		}
