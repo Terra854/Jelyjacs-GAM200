@@ -22,11 +22,11 @@ void ParticleSystem::Init()
     
    
     for(int i=0; i< PARTICLE_NUM; i++){
-        translations[index] = random_position(); //translation;
-        Particle* particle = new Particle(&translations[index]); 
-        particle->velocity = random_velocity(); 
-        particle->life_time = random_life_time();
-        particles.push_back(particle);
+        translations[index] = random_position(); 
+        auto particle = std::make_unique<Particle>(&translations[index]); 
+        particle->velocity = random_velocity();
+        particle->life_time = random_life_time(); 
+        particles.push_back(std::move(particle)); 
         index++;
      }
  
@@ -168,11 +168,6 @@ void ParticleSystem::Free()
     glDeleteVertexArrays(1, &quadVAO);
 	glDeleteBuffers(1, &quadVBO);
 
-    for (auto& ptc : particles)
-    {
-		delete ptc;
-	}
-	particles.clear();
 }
 
 Vec2 random_position()

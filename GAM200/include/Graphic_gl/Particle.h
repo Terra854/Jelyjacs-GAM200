@@ -46,7 +46,7 @@ public:
 	void Draw();
 	void Free();
 
-	std::vector<Particle*> particles{};
+	std::vector<std::unique_ptr<Particle>> particles{};
 	bool draw_particle = false;
 	Vec2 translations[PARTICLE_NUM]{};
 	GLuint		instanceVBO{}, quadVAO{}, quadVBO{};
