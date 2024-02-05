@@ -48,6 +48,7 @@ void Box::Update(Object* obj) {
     {
         // Get the Transform components of the player and the Box.
         Transform* player_t = static_cast<Transform*>(GameLogic::playerObj->GetComponent(ComponentType::Transform));
+        Rectangular* player_b = static_cast<Rectangular*>(GameLogic::playerObj->GetComponent(ComponentType::Body));
         Physics* finn_phy = (Physics*)Checkplayer->GetComponent(ComponentType::Physics);
         Transform* box_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 
@@ -56,7 +57,7 @@ void Box::Update(Object* obj) {
             std::cout << "NIL COMPONENT : Box" << std::endl;
             return;
         }
-
+        /*
         // Check if the player is within the box's range.
         if (player_t->Position.x > box_t->Position.x - 50 && player_t->Position.x < box_t->Position.x + 50
             && player_t->Position.y > box_t->Position.y - 50 && player_t->Position.y < box_t->Position.y + 50) {
@@ -67,9 +68,17 @@ void Box::Update(Object* obj) {
             }
             
         }
+        */
+        // Check if the player is within the box's range.
+        if (((player_b->collision_flag & COLLISION_RIGHT) && static_cast<Rectangular*>(player_b->right_collision->GetComponent(ComponentType::Body)) == box_b) || (player_b->collision_flag & COLLISION_LEFT) && static_cast<Rectangular*>(player_b->left_collision->GetComponent(ComponentType::Body)) == box_b) {
+            box_phy->Velocity.x = finn_phy->Velocity.x * 0.2f;
+            if (box_phy->Velocity.x != 0.0f)
+                std::cout << "Box is moving" << std::endl;
+        }
         // Else, stop the box.
         else {
-            box_phy->Velocity.x = 0.0f;
+            if (box_b->collision_flag & COLLISION_BOTTOM)
+                box_phy->Velocity.x = 0.0f;
         }
     }
 }
