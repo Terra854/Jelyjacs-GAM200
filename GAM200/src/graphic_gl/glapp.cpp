@@ -936,3 +936,37 @@ void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, float l_c_width, glm::
 	shdrpgms["shape"].UnUse();
 }
 
+void GLApp::draw_rect(Vec2 rec_pos, Vec2 rec_scale, float rec_r, glm::vec3 rec_color)
+{
+	float pos_x;
+	float pos_y;
+	float scaling_x;
+	float scaling_y;
+
+	scaling_x = rec_scale.x * 2.0f / window->width_init;
+	scaling_y = rec_scale.y * 2.0f / window->height_init;
+	pos_x = rec_pos.x * 2.0f / window->width_init;
+	pos_y = rec_pos.y * 2.0f / window->height_init;
+
+	Mat3 mat_test;
+	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotDeg(rec_r);
+	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	mat_test = camera2D->world_to_ndc * mat_test;
+
+	//draw square
+	shdrpgms["shape"].Use();
+	// bind VAO of this object's model
+	glBindVertexArray(models["square"].vaoid);
+	// copy object's model-to-NDC matrix to vertex shader's
+	// uniform variable uModelToNDC
+	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	shdrpgms["shape"].SetUniform("uColor", rec_color);
+	// call glDrawElements with appropriate arguments
+	glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+	// unbind VAO and unload shader program
+	glBindVertexArray(0);
+	shdrpgms["shape"].UnUse();
+}
+
