@@ -1404,7 +1404,7 @@
           "linkedevent": 1
         },
         {
-          "Prefabs": "PressurePlatePurple.json",
+          "Prefabs": "PistonPurple.json",
           "Type": "Transform",
           "Position": {
             "x": 448.0,
@@ -1431,14 +1431,14 @@
           "linkedevent": 2
         },
         {
-          "Prefabs": "PressurePlateOrange.json",
+          "Prefabs": "PistonOrange.json",
           "Type": "Transform",
           "Position": {
             "x": 1216.0,
             "y": -230.0
           },
-          "linkedevent": 3,
-          "scripts": "Piston"
+          "linkedevent": 3
+          //"scripts": "Piston"
         },
         {
           "Prefabs": "DoorOrange.json",
@@ -1450,14 +1450,14 @@
           "linkedevent": 3
         },
         {
-          "Prefabs": "PressurePlateDarkBlue.json",
+          "Prefabs": "PistonDarkBlue.json",
           "Type": "Transform",
           "Position": {
             "x": 1184.0,
             "y": 602.0
           },
-          "linkedevent": 4,
-          "scripts": "Piston"
+          "linkedevent": 4
+          //"scripts": "Piston"
         },
         {
           "Prefabs": "DoorDarkBlue.json",
@@ -1506,14 +1506,14 @@
           "linkedevent": 5
         },
         {
-          "Prefabs": "PressurePlatePink.json",
+          "Prefabs": "PistonPink.json",
           "Type": "Transform",
           "Position": {
             "x": 448.0,
             "y": 282.0
           },
-          "linkedevent": 6,
-          "scripts": "Piston"
+          "linkedevent": 6
+          //"scripts": "Piston"
         },
         {
           "Prefabs": "LaserPink.json",
@@ -1553,14 +1553,14 @@
           "linkedevent": 7
         },
         {
-          "Prefabs": "PressurePlateGreen.json",
+          "Prefabs": "PistonGreen.json",
           "Type": "Transform",
           "Position": {
             "x": 64.0,
             "y": 282.0
           },
-          "linkedevent": 8,
-          "scripts": "Piston"
+          "linkedevent": 8
+          //"scripts": "Piston"
         },
         {
           "Prefabs": "GreenHorizontalDoor.json",

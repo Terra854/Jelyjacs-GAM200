@@ -357,8 +357,6 @@ void CoreEngine::GameLoop()
 
 					/* X Gizmo */
 					if (object_being_moved_x) {
-						std::cout << "Offset: " << offset << std::endl;
-
 						if (gizmo.GetType() == GizmoType::Translate)
 							objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
 						else if (gizmo.GetType() == GizmoType::Scale) {
@@ -368,8 +366,6 @@ void CoreEngine::GameLoop()
 
 					/* Y Gizmo */
 					if (object_being_moved_y) {
-						std::cout << "Offset: " << offset << std::endl;
-
 						if (gizmo.GetType() == GizmoType::Translate)
 							objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
 						else if (gizmo.GetType() == GizmoType::Scale)
