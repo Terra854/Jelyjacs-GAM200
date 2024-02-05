@@ -33,7 +33,9 @@ class GLApp : public ISystems
 {
 public:
 	GLApp();
-	~GLApp() {}
+	~GLApp() {
+		cleanup();
+	}
 	virtual void Initialize() ;
 	virtual void Update();
 
