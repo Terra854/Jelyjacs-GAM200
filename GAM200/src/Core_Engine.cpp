@@ -323,6 +323,7 @@ void CoreEngine::GameLoop()
 			}
 
 			static Transform XGizmo, YGizmo;
+			static float RGizmo_Angle, Initial_Rotation;
 
 			// Dragging the selected object in the viewport (only when the engine is paused)
 			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true && !DraggingPrefabIntoViewport && engine->isPaused()) {
@@ -374,12 +375,26 @@ void CoreEngine::GameLoop()
 					}
 				}
 				else if (gizmo.GetType() == GizmoType::Rotate) {
-					if (gizmo.IsRGizmoClicked(gameWorldPos)) {
+					if (gizmo.IsRGizmoClicked(gameWorldPos) && !gizmo.IsRGizmoActive()) {
 						gizmo.SetRGizmoActive(true);
+						RGizmo_Angle = calculateAngle(objTransform->Position, Vec2(gameWorldPos));
+						Initial_Rotation = objTransform->Rotation;
 					}
 
 					if (gizmo.IsRGizmoActive()) {
-						// TODO: Actual rotation
+						objTransform->Rotation = (float)((int) (Initial_Rotation + (calculateAngle(objTransform->Position, Vec2(gameWorldPos)) - RGizmo_Angle)));
+
+						if (objTransform->Rotation > 360.0f)
+							objTransform->Rotation -= 360.f;
+						else if (objTransform->Rotation < 0.0f)
+							objTransform->Rotation += 360.f;
+
+
+						std::cout << "Initial_Rotation: " << Initial_Rotation << std::endl;
+						std::cout << "RGizmo_Angle: " << RGizmo_Angle << std::endl;
+						std::cout << "calculateAngle: " << calculateAngle(objTransform->Position, Vec2(gameWorldPos)) << std::endl;
+						std::cout << "Angle result: " << calculateAngle(objTransform->Position, Vec2(gameWorldPos)) - RGizmo_Angle << std::endl;
+						std::cout << "Angle: " << objTransform->Rotation << std::endl;
 					}
 				}
 

@@ -22,7 +22,7 @@ public:
 private:
 	Transform* selectedObject;
 	Transform XGizmo, YGizmo;
-	float R_Radius = 100.f, R_Thickness = 10.f;
+	float R_Radius = 100.f, R_Thickness = 25.f;
 	GizmoType type = GizmoType::Translate;
 	bool RGizmoActive = false;
 };
