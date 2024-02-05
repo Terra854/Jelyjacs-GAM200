@@ -5,6 +5,7 @@
 
 This file contains the script for the box for the human to move
 *//*__________________________________________________________________________*/
+#include <Debug.h>
 #include "Scripts/Box.h"
 #include <components/Body.h>
 #include <components/Animation.h>

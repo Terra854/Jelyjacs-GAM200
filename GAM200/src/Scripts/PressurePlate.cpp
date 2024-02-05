@@ -5,6 +5,7 @@
 
 This file contains the script for PPlate trigger to open door
 *//*__________________________________________________________________________*/
+#include <Debug.h>
 #include "Scripts/PressurePlate.h"
 #include <Factory.h>
 #include <Object.h>

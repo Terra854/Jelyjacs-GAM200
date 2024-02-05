@@ -9,6 +9,7 @@ the engine itself or the game objects within it
 *//*__________________________________________________________________________*/
 
 #include "Utils.h"
+#include <Debug.h>
 #include <cmath>
 #define PI 3.14159265358979323846
 
