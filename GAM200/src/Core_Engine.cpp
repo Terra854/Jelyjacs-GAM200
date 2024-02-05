@@ -324,7 +324,7 @@ void CoreEngine::GameLoop()
 
 			static Transform XGizmo, YGizmo;
 			static float RGizmo_Angle, Initial_Rotation;
-			static Vec2 initial;
+			static Vec2 initialScale, initialScaleFactor;
 
 			// Dragging the selected object in the viewport (only when the engine is paused)
 			if (input::IsPressedRepeatedlyDelayed(KEY::mouseL, 0.1f) && level_editor->selected == true && !DraggingPrefabIntoViewport && engine->isPaused()) {
@@ -338,64 +338,45 @@ void CoreEngine::GameLoop()
 				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
 
 				if (gizmo.GetType() == GizmoType::Translate || gizmo.GetType() == GizmoType::Scale) {
-					
-					
-					/* X Gizmo Check */
-					if (isObjectClicked(gizmo.getX(), gameWorldPos) && !object_being_moved_y)
+					/* Gizmo check for Scale and Translate*/
+					if (!object_being_moved_x && !object_being_moved_y)
 					{
-						object_being_moved_x = true;
+
+						if (isObjectClicked(gizmo.getX(), gameWorldPos))
+							object_being_moved_x = true;
+						else if (isObjectClicked(gizmo.getY(), gameWorldPos))
+							object_being_moved_y = true;
 
 						// Offset to account for mouse not being in the center of the selected object
 						if (isnan(offset.x))
 							offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
 
-						initial = objTransform->Position - offset;
-					}
-					
-
-					/* Y Gizmo Check */
-					if (isObjectClicked(gizmo.getY(), gameWorldPos) && !object_being_moved_x)
-					{
-						object_being_moved_y = true;
-
-						// Offset to account for mouse not being in the center of the selected object
-						if (isnan(offset.x))
-							offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
-
-						initial = objTransform->Position - offset;
+						initialScale = objTransform->Scale;
+						initialScaleFactor = gameWorldPos;
 					}
 
 					/* X Gizmo */
 					if (object_being_moved_x) {
-
 						std::cout << "Offset: " << offset << std::endl;
 
 						if (gizmo.GetType() == GizmoType::Translate)
 							objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
 						else if (gizmo.GetType() == GizmoType::Scale) {
-							objTransform->Scale.x = (float)std::round(gameWorldPos.x - offset.x);
+							objTransform->Scale.x = (float)std::round((Vec2(gameWorldPos).x - initialScaleFactor.x + 100.f) / 100.f * initialScale.x);
 						}
-						//objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
-
-						//std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
 					}
 
 					/* Y Gizmo */
 					if (object_being_moved_y) {
-						// Offset to account for mouse not being in the center of the selected object
-						//if (isnan(offset.x))
-						//	offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
-
 						std::cout << "Offset: " << offset << std::endl;
 
 						if (gizmo.GetType() == GizmoType::Translate)
 							objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
 						else if (gizmo.GetType() == GizmoType::Scale)
-							objTransform->Scale.y = (float)std::round(gameWorldPos.y - offset.y);
-
-						//std::cout << "objTransform->Position: " << objTransform->Position << std::endl;
+							objTransform->Scale.y = (float)std::round((Vec2(gameWorldPos).y - initialScaleFactor.y + 100.f) / 100.f * initialScale.y);
 					}
 				}
+				/* R Gizmo */
 				else if (gizmo.GetType() == GizmoType::Rotate) {
 					if (gizmo.IsRGizmoClicked(gameWorldPos) && !gizmo.IsRGizmoActive()) {
 						gizmo.SetRGizmoActive(true);
@@ -420,6 +401,7 @@ void CoreEngine::GameLoop()
 					}
 				}
 
+				// Recalculate body if it exists
 				if (objBody != nullptr)
 				{
 					RecalculateBody(objTransform, objBody);
