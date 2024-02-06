@@ -355,6 +355,13 @@ void GLApp::Update()
 				else {
 					// if is player
 					if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
+						ParticleSystem* particleSystem = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
+						if(particleSystem!=nullptr)
+							
+						{
+							particleSystem->Update(object);
+							particleSystem->Draw();
+						}
 						// draw object with animation
 						//particleSystem.Update();
 						//particleSystem.Draw();

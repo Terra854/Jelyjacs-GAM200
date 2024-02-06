@@ -20,6 +20,7 @@ void ParticleSystem::Init()
     
     int index = 0;
     
+    if(particles.size()>= PARTICLE_NUM) return;
    
     for(int i=0; i< PARTICLE_NUM; i++){
         // x =-1 y = -0.5 to 0.5
@@ -76,11 +77,11 @@ void ParticleSystem::Init()
 * get the player's position
 * set the particle's position
 */
-void ParticleSystem::Update()
+void ParticleSystem::Update(Object* player)
 {
    
 
-    for (auto& ptc : particles)
+    for (auto& ptc : this->particles)
     {
         
 			ptc->Update();
@@ -97,7 +98,7 @@ void ParticleSystem::Update()
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * PARTICLE_NUM, &translations[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
-    Object* player = objectFactory->getPlayerObject();
+    
 
     if (player != nullptr) {
         // get the player's position
@@ -124,12 +125,7 @@ void ParticleSystem::Update()
             Vec2 scale{ 0.f,0.f };
             scale.x = tran_pt->Scale.x / window->width_init;
             scale.y = tran_pt->Scale.y / window->height_init;
-            /*scale.x *= sqrt(Vx * Vx + Vy * Vy) * 0.002f;
-            scale.y *= sqrt(Vx * Vx + Vy * Vy) * 0.002f;
-            if (scale.x > 0.1f) scale.x = 0.1f;
-            if (scale.y > 0.1f) scale.y = 0.1f;*/
-            //calculate rotation
-           
+            
 
             world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
             Vec2 window_scaling{(float)window->width / (float)window->width_init, (float)window->height / (float) window->height_init};
@@ -173,6 +169,8 @@ void ParticleSystem::Free()
     glDeleteTextures(1, &particle_texture);
     glDeleteVertexArrays(1, &quadVAO);
 	glDeleteBuffers(1, &quadVBO);
+	glDeleteBuffers(1, &instanceVBO);
+	particles.clear();
 
 }
 

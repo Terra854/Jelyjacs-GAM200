@@ -45,7 +45,7 @@ public:
 	
 
 		void Init();
-		void Update();
+		void Update(Object* player);
 		void Draw();
 		void Free();
 
