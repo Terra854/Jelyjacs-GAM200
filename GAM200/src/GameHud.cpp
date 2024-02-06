@@ -62,9 +62,9 @@ void GameHud::Initialize()
 	createHudFromConfig("Asset/UI/Pause.json");
 	createMenuFromConfig("Asset/UI/MainMenu.json");
 	button_tracker = "nil";
-	create_Menu_button("", Button(Vec2(-420.0f, -390.0f), Vec2(-220.0f,-430.0f) ), 1, FONT::AldrichRegular);
-	create_Menu_button("", Button(Vec2(-420.0f, -435.0f), Vec2(-220.0f, -475.0f)), 1, FONT::AldrichRegular);
-	create_Menu_button("", Button(Vec2(-420.0f, -480.0f), Vec2(-220.0f, -520.0f)), 1, FONT::AldrichRegular);
+	create_Menu_button("", Button(Vec2(-140.0f, -350.0f), Vec2(170.0f, -390.0f)), 1, FONT::AldrichRegular);
+	create_Menu_button("", Button(Vec2(-80.0f, -415.0f), Vec2(120.0f, -455.0f)), 1, FONT::AldrichRegular);
+	create_Menu_button("", Button(Vec2(-80.0f, -480.0f), Vec2(120.0f, -520.0f)), 1, FONT::AldrichRegular);
 
 }
 
