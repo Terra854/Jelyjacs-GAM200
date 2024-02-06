@@ -7,7 +7,7 @@ Partical system using instancing rendering.
 
 *//*__________________________________________________________________________*/
 #include <Debug.h>
-#include "Particle.h"
+#include "../include/components/Particle.h"
 
 /*  _________________________________________________________________________ */
 /*
@@ -66,7 +66,7 @@ void ParticleSystem::Init()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 
-    particle_texture = GLApp::setup_texobj("Asset/Picture/p2.png");
+ 
 }
 
 /*  _________________________________________________________________________ */
@@ -203,7 +203,7 @@ float random_life_time(float min, float max)
     else return (rand() % 1000) / 1000.0f * (max - min) + min;
 }
 
-void Particle::Update()
+void ParticleSystem::Particle::Update()
 {
     
         Vec2 replacement = velocity*engine->GetDt();
