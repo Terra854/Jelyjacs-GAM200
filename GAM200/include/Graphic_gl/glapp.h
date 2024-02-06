@@ -74,6 +74,9 @@ public:
 	// container for shader programs and models
 	static std::map<std::string, GLSLShader> shdrpgms; 
 	static std::map<std::string, GLModel> models;
+
+	static Vec2 game_to_ndc(Vec2 position);
+	static float game_to_ndc(float position);
 };
 extern GLApp* app;
 #endif  /*GLAPP_H */

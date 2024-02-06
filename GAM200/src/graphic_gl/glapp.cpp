@@ -25,7 +25,7 @@ includes all the functions to draw objects
 #include <components/Animation.h>
 #include <LevelEditor.h>
 #include "../Assets Manager/asset_manager.h"
-#include "Particle.h"
+
 #include <Gizmo.h>
 #include <SceneManager.h>
 
@@ -52,7 +52,7 @@ GLApp::GLApp()
 {
 	app = this;
 }
-ParticleSystem particleSystem;
+//ParticleSystem particleSystem;
 
 /*  _________________________________________________________________________ */
 /*
@@ -70,7 +70,7 @@ void GLApp::Initialize()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	particleSystem.Init();
+	//particleSystem.Init();
 }
 
 /*  _________________________________________________________________________ */
@@ -356,8 +356,8 @@ void GLApp::Update()
 					// if is player
 					if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 						// draw object with animation
-						particleSystem.Update();
-						particleSystem.Draw();
+						//particleSystem.Update();
+						//particleSystem.Draw();
 						if (ani_pt->current_type != ani_pt->previous_type && !ani_pt->jump_fixed)
 							ani_pt->frame_num = 0;
 						else if (ani_pt->frame_count >= ani_pt->frame_rate) {
@@ -553,7 +553,7 @@ void GLApp::cleanup()
 	{
 		glDeleteProgram(shdrpgm.second.GetHandle());
 	}
-	particleSystem.Free();
+	//particleSystem.Free();
 }
 
 /*  _________________________________________________________________________ */
@@ -766,5 +766,19 @@ void GLApp::draw_rect(Vec2 rec_pos, Vec2 rec_scale, float rec_r, glm::vec3 rec_c
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
 	shdrpgms["shape"].UnUse();
+}
+
+Vec2 GLApp::game_to_ndc(Vec2 position)
+{
+	Vec2 result;
+	result.x = position.x * 2.0f / window->width_init;
+	result.y = position.y * 2.0f / window->height_init;
+
+	return result;
+}
+
+float GLApp::game_to_ndc(float position)
+{
+	return position * 2.0f / window->width_init;
 }
 
