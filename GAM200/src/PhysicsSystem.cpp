@@ -19,9 +19,6 @@ This file contains the definitions of the functions that are part of the Physics
 #include <input.h>
 #include <Audio.h> // Direct call the audio functions cause messaging system is not ready
 
-//Vec2 interPt, normalAtCollision;
-//float interTime = 0.0f;
-
 int collision_flag;
 
 // A workaround to prevent sticking onto the top of the walls
@@ -31,41 +28,6 @@ float top_collision_cooldown = 0.f;
 float accumulator = 0.f;
 float fixed_dt = 1.f / 60.f;
 int num_of_steps = 0;
-
-// Old version of Check_Collision, might be deleted at some point
-
-/*
-bool Check_Collision(Body* b1, Body* b2, float dt) {
-
-	// Circle and Line
-	if (typeid(*b1) == typeid(Circular) && typeid(*b2) == typeid(Lines)) {
-		return Collision::Check_Circle_Line(((Circular*)b1)->circle, ((Transform*)b1)->Position, ((Lines*)b2)->line, interPt, normalAtCollision, interTime);
-	}
-	if (typeid(*b1) == typeid(Lines) && typeid(*b2) == typeid(Circular)) {
-		return Collision::Check_Circle_Line(((Circular*)b2)->circle, ((Transform*)b2)->Position, ((Lines*)b1)->line, interPt, normalAtCollision, interTime);
-	}
-
-	// Rectangle and Line
-	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Lines)) {
-		return Collision::Check_AABB_Line(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Lines*)b2)->line, interPt, normalAtCollision, interTime);
-	}
-	else if (typeid(*b1) == typeid(Lines) && typeid(*b2) == typeid(Rectangular)) {
-		return Collision::Check_AABB_Line(((Rectangular*)b2)->aabb, ((Transform*)b2)->Position, ((Lines*)b1)->line, interPt, normalAtCollision, interTime);
-	}
-
-	// 2 Rectangles
-	else if (typeid(*b1) == typeid(Rectangular) && typeid(*b2) == typeid(Rectangular)) {
-		if (Collision::Check_AABB_AABB(((Rectangular*)b1)->aabb, ((Transform*)b1)->Position, ((Rectangular*)b2)->aabb, ((Transform*)b2)->PrevPosition, interPt, normalAtCollision, interTime)){
-			int collision_flag = Collision::Check_Rect_Rect((Rectangular*)b1, (Rectangular*)b2);
-			return true;
-		}
-	}
-
-	else {
-		return false; // Unsupported collision
-	}
-}
-*/
 
 // Check if both bodies are rectangular
 // If they are, use Check AABB with AABB function and return collision flag.
@@ -187,9 +149,6 @@ int total_grid_width, total_grid_height, num_of_grids_per_side;
 	- Prepares the uniform grid to insert objects into
 *******************************************************************************/
 void PrepareUniformGrid() {
-	// All values here will need to eventually be read from the level files
-	//int level_width = 1920;
-	//int level_height = 1080;
 
 	Vec2 level_size = engine->Get_Level_Size();
 
@@ -247,50 +206,6 @@ void PhysicsSystem::Update() {
 
 		top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= fixed_dt : 0.0f;
 
-		// Update velocity for player
-		// Check all the objects, if it have the player controllable component, change its physics
-		/*
-		for (auto obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj) {
-
-			if ((PlayerControllable*)obj->second->GetComponent(ComponentType::PlayerControllable) == nullptr)
-				continue; // That object is not controlled by the player, move to the next object
-
-			Physics* p = (Physics*)obj->second->GetComponent(ComponentType::Physics);
-			Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
-
-			p->Velocity.x = 0.0f; // Reset velocity
-
-			// Move right
-			if (input::IsPressedRepeatedly(KEY::d)) {
-				p->Velocity.x += 17500.0f * dt;
-				std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
-				if (p->Velocity.y == 0.f)
-					audio->startWalking();
-			}
-
-			// Move left
-			if (input::IsPressedRepeatedly(KEY::a)) {
-				p->Velocity.x -= 17500.0f * dt;
-				std::cout << "Current player position: x=" << t->Position.x << ", y=" << t->Position.y << std::endl;
-				if (p->Velocity.y == 0.f)
-					audio->startWalking();
-			}
-
-			// Stop the walking audio if the player is neither walking nor on solid ground
-			if ((!(input::IsPressedRepeatedly(KEY::d)) && !(input::IsPressedRepeatedly(KEY::a))) || p->Velocity.y != 0.f){
-				audio->stopWalking();
-			}
-
-			// Jump. Make sure vertical velocity is 0 first
-			if (input::IsPressedRepeatedly(KEY::w) && p->Velocity.y == 0.0f && top_collision_cooldown == 0.0f) {
-				p->Velocity.y = 2500.0f;
-				audio->playJump();
-			}
-
-			break; // There should only be one object that is player controlled for now
-		}
-		*/
-
 		/* Uniform grid */
 
 		PrepareUniformGrid();
@@ -312,15 +227,6 @@ void PhysicsSystem::Update() {
 
 				Vec2 p = ((Rectangular*)b)->aabb.P0();
 
-				/*
-				int w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
-				if (p.x < 0.f)
-					w_index--;
-				int h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
-				if (p.y < 0.f)
-					h_index--;
-				*/
-
 				w_index = (((int)p.x - (int)start_coord.x) / (total_grid_width / num_of_grids_per_side));
 				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
@@ -331,15 +237,6 @@ void PhysicsSystem::Update() {
 					}
 
 				p = ((Rectangular*)b)->aabb.P1();
-
-				/*
-				int w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
-				if (p.x < 0.f)
-					w_index--;
-				int h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
-				if (p.y < 0.f)
-					h_index--;
-				*/
 
 				w_index = (((int)p.x - (int)start_coord.x) / (total_grid_width / num_of_grids_per_side));
 				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
@@ -352,15 +249,6 @@ void PhysicsSystem::Update() {
 
 				p = ((Rectangular*)b)->aabb.P2();
 
-				/*
-				int w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
-				if (p.x < 0.f)
-					w_index--;
-				int h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
-				if (p.y < 0.f)
-					h_index--;
-				*/
-
 				w_index = (((int)p.x - (int)start_coord.x) / (total_grid_width / num_of_grids_per_side));
 				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
 
@@ -371,15 +259,6 @@ void PhysicsSystem::Update() {
 					}
 
 				p = ((Rectangular*)b)->aabb.P3();
-
-				/*
-				int w_index = (int)p.x / (total_grid_width / num_of_grids_per_side) + (num_of_grids_per_side / 2);
-				if (p.x < 0.f)
-					w_index--;
-				int h_index = (int)p.y / (total_grid_height / num_of_grids_per_side) + (num_of_grids_per_side / 2);
-				if (p.y < 0.f)
-					h_index--;
-				*/
 
 				w_index = (((int)p.x - (int)start_coord.x) / (total_grid_width / num_of_grids_per_side));
 				h_index = (((int)p.y - (int)start_coord.y) / (total_grid_height / num_of_grids_per_side));
