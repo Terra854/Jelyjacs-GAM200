@@ -75,5 +75,5 @@ namespace HE_Script {
 		std::cout << "Hori_Elevator Script Shutdown : " << obj->GetName() << std::endl;
 	}
 
-	Hori_Elevator vert_elevator("Hori_Elevator");
+	Hori_Elevator hori_elevator("Hori_Elevator");
 }

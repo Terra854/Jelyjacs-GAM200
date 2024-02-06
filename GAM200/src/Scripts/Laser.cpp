@@ -76,5 +76,5 @@ namespace L_Script {
 		std::cout << "Laser Script Shutdown : " << obj->GetName() << std::endl;
 	}
 
-	Laser vert_elevator("Laser");
+	Laser laser("Laser");
 }
