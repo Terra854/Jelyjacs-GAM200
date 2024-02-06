@@ -177,9 +177,6 @@
     <ClCompile Include="src\Assets Manager\json_serialization.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphic_gl\Particle.cpp">
-      <Filter>Source Files\Systems\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -242,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="src\Scripts\Laser.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Particle.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -355,9 +355,6 @@
     </ClInclude>
     <ClInclude Include="include\components\Event.h">
       <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphic_gl\Particle.h">
-      <Filter>Header Files\Systems\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\Application.h">
       <Filter>Header Files</Filter>
