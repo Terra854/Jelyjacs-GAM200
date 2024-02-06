@@ -137,6 +137,7 @@ Object* Factory::createObject(const std::string& filename)
 
 				jsonloop.readFloat(r->width, "Properties", "width");
 				jsonloop.readFloat(r->height, "Properties", "height");
+				jsonloop.readBool(r->pushable, "Properties", "pushable");
 
 				obj->AddComponent(r);
 			}
@@ -185,6 +186,8 @@ Object* Factory::createObject(const std::string& filename)
 			jsonloop.readFloat(p->Mass, "Properties", "Mass");
 
 			jsonloop.readBool(p->AffectedByGravity, "Properties", "AffectedByGravity");
+
+			jsonloop.readBool(p->AbleToPushObjects, "Properties", "AbleToPushObjects");
 
 			obj->AddComponent(p);
 		}
@@ -510,6 +513,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 				r->aabb = ((Rectangular*)body_pt)->aabb;
 				r->collision_flag = ((Rectangular*)body_pt)->collision_flag;
 				r->active = ((Rectangular*)body_pt)->active;
+				r->pushable = ((Rectangular*)body_pt)->pushable;
 
 				obj->AddComponent(r);
 			}
@@ -539,6 +543,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			p->Velocity = p_pt->Velocity;
 			p->Mass = p_pt->Mass;
 			p->AffectedByGravity = p_pt->AffectedByGravity;
+			p->AbleToPushObjects = p_pt->AbleToPushObjects;
 
 			obj->AddComponent(p);
 		}
