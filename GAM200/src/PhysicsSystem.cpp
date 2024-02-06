@@ -29,7 +29,7 @@ float top_collision_cooldown = 0.f;
 
 // For fixed physics
 float accumulator = 0.f;
-float fixed_dt = 1.f / 60.f;
+float fixed_dt = 1.f / 45.f;
 int num_of_steps = 0;
 
 // Old version of Check_Collision, might be deleted at some point

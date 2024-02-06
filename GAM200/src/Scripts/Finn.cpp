@@ -62,7 +62,7 @@ void Finn::Update(Object* obj) {
 			//if (static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 			if (player_physics->Velocity.y == 0.0f) {
 				//player_physics->Velocity.y = 1000.0f;
-				player_physics->Force = 75000.0f;
+				player_physics->Force = 56250.f;
 				//audio->playJump();
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 				audio->playSfx(AudioType::Finn_Jumping);
