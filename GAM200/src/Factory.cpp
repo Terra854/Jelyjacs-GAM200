@@ -317,8 +317,8 @@ Object* Factory::createObject(const std::string& filename)
 			ParticleSystem* p = (ParticleSystem*)((ComponentCreator<ParticleSystem>*) componentMap["Particle"])->Create();
 			jsonloop.readFloat(p->pos_x_min, "Properties", "posx", 0);
 			jsonloop.readFloat(p->pos_x_max, "Properties", "posx", 1);
-			jsonloop.readFloat(p->pos_x_min, "Properties", "posy", 0);
-			jsonloop.readFloat(p->pos_x_max, "Properties", "posy", 1);
+			jsonloop.readFloat(p->pos_y_min, "Properties", "posy", 0);
+			jsonloop.readFloat(p->pos_y_max, "Properties", "posy", 1);
 			jsonloop.readFloat(p->vel_x_min, "Properties", "velx", 0);
 			jsonloop.readFloat(p->vel_x_max, "Properties", "velx", 1);
 			jsonloop.readFloat(p->vel_y_min, "Properties", "vely", 0);
