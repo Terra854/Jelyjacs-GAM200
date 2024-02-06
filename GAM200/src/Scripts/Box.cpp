@@ -71,7 +71,7 @@ void Box::Update(Object* obj) {
         */
         // Check if the player is within the box's range.
         if (((player_b->collision_flag & COLLISION_RIGHT) && static_cast<Rectangular*>(player_b->right_collision->GetComponent(ComponentType::Body)) == box_b) || (player_b->collision_flag & COLLISION_LEFT) && static_cast<Rectangular*>(player_b->left_collision->GetComponent(ComponentType::Body)) == box_b) {
-            box_phy->Velocity.x = finn_phy->Velocity.x * 0.2f;
+            box_t->Position.x += finn_phy->Velocity.x * 0.2f * engine->GetDt();
             if (box_phy->Velocity.x != 0.0f)
                 std::cout << "Box is moving" << std::endl;
         }
