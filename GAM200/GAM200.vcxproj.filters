@@ -240,6 +240,9 @@
     <ClCompile Include="src\Scripts\Piston_H_Elev.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\Laser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -424,6 +427,9 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\Piston_H_Elev.h">
       <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Laser.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
