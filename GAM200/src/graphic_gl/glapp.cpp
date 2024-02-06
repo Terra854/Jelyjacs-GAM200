@@ -25,7 +25,7 @@ includes all the functions to draw objects
 #include <components/Animation.h>
 #include <LevelEditor.h>
 #include "../Assets Manager/asset_manager.h"
-
+#include "components/Particle.h"
 #include <Gizmo.h>
 #include <SceneManager.h>
 

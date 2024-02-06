@@ -21,7 +21,7 @@ public:
 
 	ParticleSystem() {};
 	~ParticleSystem() {};
-	void Initialize() override {};
+	void Initialize() override { Init(); };
 
 
 	class Particle
@@ -57,7 +57,7 @@ public:
 
 
 		// texture
-		GLuint particle_texture= GLApp::setup_texobj("Asset/Picture/p2.png");
+		GLuint particle_texture{};
 
 		// position
 		float pos_x_min = 1.6f;
