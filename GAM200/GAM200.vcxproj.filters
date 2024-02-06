@@ -428,5 +428,8 @@
     <ClInclude Include="include\Scripts\Laser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\components\Particle.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
