@@ -29,7 +29,7 @@ float top_collision_cooldown = 0.f;
 
 // For fixed physics
 float accumulator = 0.f;
-float fixed_dt = 1.f / 45.f;
+float fixed_dt = 1.f / 60.f;
 int num_of_steps = 0;
 
 // Old version of Check_Collision, might be deleted at some point
@@ -128,12 +128,28 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 	if (typeid(*b1) == typeid(Rectangular)) {
 
 		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
-			p1->Velocity.x = 0.0f;
-			t1->Position.x = ((Rectangular*)((Rectangular*)b1)->left_collision->GetComponent(ComponentType::Body))->aabb.max.x + (((Rectangular*)b1)->width / 2);
+			Object* leftObj = ((Rectangular*)b1)->left_collision;
+			if (p1->AbleToPushObjects && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->pushable) {
+				p1->Velocity.x *= 0.2f;
+				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * fixed_dt);
+				((Transform*)leftObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x - (((Rectangular*)b1)->width / 2.f) - (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->width / 2.f);
+			}
+			else {
+				p1->Velocity.x = 0.0f;
+				t1->Position.x = ((Rectangular*)((Rectangular*)b1)->left_collision->GetComponent(ComponentType::Body))->aabb.max.x + (((Rectangular*)b1)->width / 2);
+			}
 		}
 		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
-			p1->Velocity.x = 0.0f;
-			t1->Position.x = ((Rectangular*)((Rectangular*)b1)->right_collision->GetComponent(ComponentType::Body))->aabb.min.x - (((Rectangular*)b1)->width / 2);
+			Object* rightObj = ((Rectangular*)b1)->right_collision;
+			if (p1->AbleToPushObjects && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->pushable) {
+				p1->Velocity.x *= 0.2f;
+				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * fixed_dt);
+				((Transform*)rightObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x + (((Rectangular*)b1)->width / 2.f) + (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->width / 2.f);
+			}
+			else {
+				p1->Velocity.x = 0.0f;
+				t1->Position.x = ((Rectangular*)((Rectangular*)b1)->right_collision->GetComponent(ComponentType::Body))->aabb.min.x - (((Rectangular*)b1)->width / 2);
+			}
 		}
 		if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
 			top_collision_cooldown = 0.1f;

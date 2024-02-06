@@ -138,6 +138,7 @@ static bool Body_EditMode = false;
 
 static bool edited_active;
 static bool edited_collision_response;
+static bool edited_pushable;
 
 static bool AABB_EditMode = false;
 
@@ -149,6 +150,7 @@ static bool Physics_EditMode = false;
 static Vec2 edited_velocity;
 static float edited_mass;
 static bool edited_gravity;
+static bool edited_able_to_push_objects;
 
 
 
@@ -604,6 +606,7 @@ void LevelEditor::ObjectProperties() {
 					// Display input fields
 					ImGui::InputFloat("AABB Width", &edited_aabb_width);
 					ImGui::InputFloat("AABB Height", &edited_aabb_height);
+					ImGui::Checkbox("Pushable", &edited_pushable);
 
 					// Button to exit edit mode
 					if (ImGui::Button("Done##AABB"))
@@ -611,6 +614,7 @@ void LevelEditor::ObjectProperties() {
 						AABB_EditMode = false;
 						r->width = edited_aabb_width;
 						r->height = edited_aabb_height;
+						r->pushable = edited_pushable;
 
 						UpdateAllObjectInstances(object);
 					}
@@ -667,12 +671,17 @@ void LevelEditor::ObjectProperties() {
 						r->height += engine->GetDt() * 2.f;
 					}
 
+					ImGui::Text("Pushable: ");
+					ImGui::SameLine();
+					r->pushable ? ImGui::Text("true") : ImGui::Text("false");
+
 					// Button to enter edit mode
 					if (ImGui::Button("Edit##AABB"))
 					{
 						AABB_EditMode = true;
 						edited_aabb_width = r->width;
 						edited_aabb_height = r->height;
+						edited_pushable = r->pushable;
 					}
 				}
 
@@ -942,6 +951,7 @@ void LevelEditor::ObjectProperties() {
 				ImGui::Text("All values below will apply to all instances of %s", object->GetName().c_str());
 				ImGui::InputFloat("Mass", &(edited_mass));
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
+				ImGui::Checkbox("Able to push objects: ", &edited_able_to_push_objects);
 
 				// Button to exit edit mode
 				if (ImGui::Button("Done##Physics"))
@@ -950,6 +960,7 @@ void LevelEditor::ObjectProperties() {
 					ph->Velocity = edited_velocity;
 					ph->Mass = edited_mass;
 					ph->AffectedByGravity = edited_gravity;
+					ph->AbleToPushObjects = edited_able_to_push_objects;
 
 					UpdateAllObjectInstances(object);
 				}
@@ -970,10 +981,14 @@ void LevelEditor::ObjectProperties() {
 				// Display the values as text
 				ImGui::Text("Velocity: %.5f, %.5f", ph->Velocity.x, ph->Velocity.y);
 				ImGui::Text("Mass: %.5f", ph->Mass);
+
 				ImGui::Text("Affected by gravity: ");
 				ImGui::SameLine();
 				ph->AffectedByGravity ? ImGui::Text("true") : ImGui::Text("false");
 
+				ImGui::Text("Able to push objects: ");
+				ImGui::SameLine();
+				ph->AbleToPushObjects ? ImGui::Text("true") : ImGui::Text("false");
 				// Button to enter edit mode
 				if (ImGui::Button("Edit##Physics"))
 				{
@@ -981,6 +996,7 @@ void LevelEditor::ObjectProperties() {
 					edited_velocity = ph->Velocity;
 					edited_mass = ph->Mass;
 					edited_gravity = ph->AffectedByGravity;
+					edited_able_to_push_objects = ph->AbleToPushObjects;
 				}
 
 				ImGui::SameLine();
@@ -1697,6 +1713,7 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 					o_r->aabb = r->aabb;
 					o_r->width = r->width;
 					o_r->height = r->height;
+					o_r->pushable = r->pushable;
 
 					o_r->Initialize();
 				}
@@ -1717,6 +1734,7 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 				// Do not copy velocity
 				o_ph->AffectedByGravity = ph->AffectedByGravity;
 				o_ph->Mass = ph->Mass;
+				o_ph->AbleToPushObjects = ph->AbleToPushObjects;
 			}
 			if (a != nullptr && o_a != nullptr) {
 				o_a->animation_tex_obj = a->animation_tex_obj;

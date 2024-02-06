@@ -17,7 +17,7 @@
       "Type": "Body",
       "Shape": "Rectangle",
       "Properties": {
-        "width": 64,
+        "width": 32,
         "height": 64
       }
     },
@@ -40,7 +40,8 @@
         "X_Velocity": 0.0,
         "Y_Velocity": 0.0,
         "AffectedByGravity": true,
-        "Mass": 1.0
+        "Mass": 1.0,
+        "AbleToPushObjects": true
       }
     },
     {
