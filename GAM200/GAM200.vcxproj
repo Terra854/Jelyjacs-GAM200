@@ -237,6 +237,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Scripts\Finn.cpp" />
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
+    <ClCompile Include="src\Scripts\Piston_H_Elev.cpp" />
     <ClCompile Include="src\Scripts\PowerLiquid.cpp" />
     <ClCompile Include="src\Scripts\PressurePlate.cpp" />
     <ClCompile Include="src\Scripts\Spark.cpp" />
@@ -295,6 +296,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Scripts\Endpoint.h" />
     <ClInclude Include="include\Scripts\Finn.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
+    <ClInclude Include="include\Scripts\Piston_H_Elev.h" />
     <ClInclude Include="include\Scripts\PowerLiquid.h" />
     <ClInclude Include="include\Scripts\PressurePlate.h" />
     <ClInclude Include="include\Scripts\Spark.h" />
