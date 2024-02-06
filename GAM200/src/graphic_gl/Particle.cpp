@@ -30,9 +30,6 @@ void ParticleSystem::Init()
         particles.push_back(std::move(particle)); 
         index++;
      }
- 
-
-
     
     glGenBuffers(1, &instanceVBO);
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
@@ -119,8 +116,8 @@ void ParticleSystem::Update()
 
 
             Vec2 pos = tran_pt->Position;
-            pos.x -= tran_pt->Scale.x * cos(orientation) *0.7f;
-            pos.y -= tran_pt->Scale.y * sin(orientation) *0.7f;
+            pos.x -= tran_pt->Scale.x * cos(orientation);
+            pos.y -= tran_pt->Scale.y * sin(orientation);
             pos.x = pos.x * 2.0f / window->width_init;
             pos.y = pos.y * 2.0f / window->height_init;
             Vec2 scale{ 0.f,0.f };

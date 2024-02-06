@@ -20,7 +20,7 @@ Header file for Particle.cpp
 class Particle
 {
 public:
-	Particle(Vec2* pos_in) : position(pos_in), velocity(1.0f, 0.0f), life_time(2.0f), size(0.1f), life_count(0.0f),active(true) {};
+	Particle(Vec2* pos_in) : position(pos_in) {};
 	~Particle() {};
 
 	//void Init();
@@ -30,9 +30,9 @@ public:
 	Vec2* position{};
 	Vec2 velocity{};
 	float life_time{};
-	float size{};
+	//float size{};
 	float life_count{};
-	bool active{};
+	//bool active{};
 };
 
 class ParticleSystem
@@ -51,11 +51,14 @@ public:
 	Vec2 translations[PARTICLE_NUM]{};
 	GLuint		instanceVBO{}, quadVAO{}, quadVBO{};
 	Mat3 world_to_ndc{};
+
+
+	// texture
 	GLuint particle_texture{};
 
 	// position
-	float pos_x_min = 1.0f;
-	float pos_x_max = 1.0f;
+	float pos_x_min = 1.6f;
+	float pos_x_max = 1.6f;
 	float pos_y_min = -0.5f;
 	float pos_y_max = 0.5f;
 
