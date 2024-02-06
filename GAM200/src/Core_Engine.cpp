@@ -182,7 +182,7 @@ void CoreEngine::GameLoop()
 	gamehud.Initialize();
 
 #if !(defined(DEBUG) | defined(_DEBUG))
-	LoadSceneFromJson("Asset/Levels/level_1.json");
+	sceneManager->LoadScene("Asset/Levels/level_1.json");
 	SceneManager::PlayScene();
 #endif
 
