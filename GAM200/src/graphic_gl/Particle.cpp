@@ -22,10 +22,11 @@ void ParticleSystem::Init()
     
    
     for(int i=0; i< PARTICLE_NUM; i++){
-        translations[index] = random_position(); 
+        // x =-1 y = -0.5 to 0.5
+        translations[index] = random_position(pos_x_min,pos_x_max,pos_y_min,pos_y_max); 
         auto particle = std::make_unique<Particle>(&translations[index]); 
-        particle->velocity = random_velocity();
-        particle->life_time = random_life_time(); 
+        particle->velocity = random_velocity(vel_x_min,vel_x_max,vel_y_min,vel_y_max);
+        particle->life_time = random_life_time(life_min,life_max); 
         particles.push_back(std::move(particle)); 
         index++;
      }
@@ -85,6 +86,13 @@ void ParticleSystem::Update()
     {
         
 			ptc->Update();
+            if (ptc->life_count > ptc->life_time) {
+				ptc->life_count = 0.0f;
+				ptc->position->x = random_position(pos_x_min, pos_x_max, pos_y_min, pos_y_max).x;
+				ptc->position->y = random_position(pos_x_min, pos_x_max, pos_y_min, pos_y_max).y;
+				ptc->velocity = random_velocity(vel_x_min, vel_x_max, vel_y_min, vel_y_max);
+				ptc->life_time = random_life_time(life_min, life_max);
+			}
 		
 	}
     glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
@@ -170,44 +178,39 @@ void ParticleSystem::Free()
 
 }
 
-Vec2 random_position()
+Vec2 random_position(float x_min, float x_max, float y_min, float y_max)
 {
     Vec2 pos_return;
-    pos_return.x = 1.0f;
-    // y is from -0.5 to 0.5
-    pos_return.y = (rand() % 1000) / 1000.0f - 0.5f;
+   if(x_min == x_max) pos_return.x = x_min;
+   else pos_return.x = (rand() % 1000) / 1000.0f * (x_max - x_min) + x_min;
+   if(y_min == y_max) pos_return.y = y_min;
+   else pos_return.y = (rand() % 1000) / 1000.0f * (y_max - y_min) + y_min;
 
     return pos_return;
 }
 
-Vec2 random_velocity()
+Vec2 random_velocity(float x_min, float x_max, float y_min, float y_max)
 {
     Vec2 vel_return;
     // x is from -1.0 to -0.5
-    vel_return.x = (rand() % 500) / 1000.0f - 1.0f;
-    vel_return.y = 0.f;
+    if (x_min == x_max) vel_return.x = x_min;
+    else vel_return.x = (rand() % 1000) / 1000.0f * (x_max - x_min) + x_min;
+    if (y_min == y_max) vel_return.y = y_min;
+    else vel_return.y = (rand() % 1000) / 1000.0f * (y_max - y_min) + y_min;
     return vel_return;
 }
 
-float random_life_time()
+float random_life_time(float min, float max)
 {
-    // life time is from 0.7 to 2.0
-    return (rand() % 1300) / 1000.0f + 0.7f;
+    if(min== max) return min;
+    else return (rand() % 1000) / 1000.0f * (max - min) + min;
 }
 
 void Particle::Update()
 {
-    if (life_count < life_time) {
+    
         Vec2 replacement = velocity*engine->GetDt();
         *position += replacement;
-        if (position->x > 1.0f)position->x = -1.0f;
         life_count += engine->GetDt();
-    }
-    else {
-        life_count = 0.0f;
-        Vec2 new_pos = random_position();
-        *position = new_pos;
-        velocity = random_velocity();
-        life_time = random_life_time();
-    }
+  
 }
