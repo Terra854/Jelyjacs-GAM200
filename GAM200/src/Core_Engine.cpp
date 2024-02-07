@@ -371,6 +371,13 @@ void CoreEngine::GameLoop()
 						else if (gizmo.GetType() == GizmoType::Scale)
 							objTransform->Scale.y = (float)std::round((Vec2(gameWorldPos).y - initialScaleFactor.y + 100.f) / 100.f * initialScale.y);
 					}
+
+					if (object_being_moved_x || object_being_moved_y) {
+						if (gizmo.GetType() == GizmoType::Translate)
+							ImGui::SetTooltip("x: %.6f\ny: %.6f", objTransform->Position.x, objTransform->Position.y);
+						else if (gizmo.GetType() == GizmoType::Scale)
+							ImGui::SetTooltip("Width: %.6f\nHeight: %.6f", objTransform->Scale.x, objTransform->Scale.y);
+					}
 				}
 				/* R Gizmo */
 				else if (gizmo.GetType() == GizmoType::Rotate) {
@@ -388,6 +395,7 @@ void CoreEngine::GameLoop()
 						else if (objTransform->Rotation < 0.0f)
 							objTransform->Rotation += 360.f;
 
+						ImGui::SetTooltip("Rotation: %.6f", objTransform->Rotation);
 
 						std::cout << "Initial_Rotation: " << Initial_Rotation << std::endl;
 						std::cout << "RGizmo_Angle: " << RGizmo_Angle << std::endl;
