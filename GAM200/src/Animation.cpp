@@ -96,6 +96,7 @@ void Animation::Update_objects()
 
 void Animation::Update_time()
 {
+	this->previous_type = this->current_type;
 	static float accum_time = 0.0f;
 	static int frame_dt_count = 0;
 
@@ -114,7 +115,7 @@ void Animation::Update_time()
 
 	while (frame_dt_count) {
 		frame_dt_count--;
-		this->previous_type = this->current_type;
+		
 		this->frame_count += engine->Get_Fixed_DT();
 	}
 }
