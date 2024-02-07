@@ -108,5 +108,7 @@ void Gizmo::RenderGizmo(){
 *******************************************************************************/
 bool Gizmo::IsRGizmoClicked(ImVec2 mousePos)
 {
-	return (Vec2Distance(selectedObject->Position, Vec2(mousePos)) > (R_Radius / camera2D->scale.x) - (R_Thickness / camera2D->scale.x)) && (Vec2Distance(selectedObject->Position, Vec2(mousePos)) < (R_Radius / camera2D->scale.x) + (R_Thickness / camera2D->scale.x));
+	return (selectedObject != nullptr) // Make sure an object is selected in the level editor first
+		&& (Vec2Distance(selectedObject->Position, Vec2(mousePos)) > (R_Radius / camera2D->scale.x) - (R_Thickness / camera2D->scale.x)) // Check if distance between mouse and object is > inner circle radius 
+		&& (Vec2Distance(selectedObject->Position, Vec2(mousePos)) < (R_Radius / camera2D->scale.x) + (R_Thickness / camera2D->scale.x)); // Check if distance between mouse and object is < outer circle radius 
 }
