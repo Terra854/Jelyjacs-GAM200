@@ -3,7 +3,7 @@
 @author Luke Goh
 @date	5/2/2024
 
-This file contains the script for the Horizontal elevator
+This file contains the script for the Laser
 *//*__________________________________________________________________________*/
 #include "Scripts/Laser.h"
 #include <PhysicsSystem.h>

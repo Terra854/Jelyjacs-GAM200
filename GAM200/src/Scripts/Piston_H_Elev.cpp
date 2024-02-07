@@ -3,7 +3,7 @@
 @author Luke Goh
 @date	27/11/2023
 
-This file contains the script for Piston_H_Elev trigger to open H_Elev
+This file contains the script for piston to trigger the horizontal elevator
 *//*__________________________________________________________________________*/
 #include "Scripts/Piston_H_Elev.h"
 #include <Factory.h>
@@ -24,6 +24,8 @@ namespace PHE_Script
 	{
 		std::cout << name << " Created" << std::endl;
 		moving_platform_direction = false;
+		activated = false;
+		H_Elev = nullptr;
 	}
 	/***************************************************************************/
 	// Start method, called when the Piston_H_Elev script is first activated.
@@ -70,8 +72,8 @@ namespace PHE_Script
 				Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
 				std::cout << "piston event linked event:";
 				std::cout << piston_event->linked_event << std::endl;
-
-				//  Change the animation of H_Elev and disable the body of H_Elev
+				
+				//  Change the animation and disable the body of the horizontal elevator
 				for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
 					Object* obj2 = objectFactory->getObjectWithID((long)j);
 					if (obj2->GetComponent(ComponentType::Event) != nullptr) {
@@ -79,14 +81,17 @@ namespace PHE_Script
 						if (piston_event->linked_event == H_Elev_event->linked_event) {
 							H_Elev = obj2;
 							activated = !activated;
-
 						}
 					}
 				}
 			}
 		}
 
+		// if the piston is activated, move the horizontal elevator
 		if (activated) {
+			if (H_Elev == nullptr) {
+				return;
+			}
 			Physics* moving_platform_physics = static_cast<Physics*>(H_Elev->GetComponent(ComponentType::Physics));
 			Transform* moving_platform_t = static_cast<Transform*>(H_Elev->GetComponent(ComponentType::Transform));
 			if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
@@ -119,5 +124,4 @@ namespace PHE_Script
 		std::cout << "Piston_H_Elev Script Shutdown : " << obj->GetName() << std::endl;
 	}
 
-	Piston_H_Elev piston_H_Elev("Piston_H_Elev");
-}
+	Piston_H_Elev piston_H_Elev("Piston_H_Elev"); }

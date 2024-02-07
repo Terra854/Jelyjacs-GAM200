@@ -2,7 +2,7 @@
 /* !
 @file	Piston_H_Elev.h
 @author Luke Goh
-@date	27/11/2023
+@date	7/2/2024
 
 This file contains the script for Piston_H_Elev
 *//*__________________________________________________________________________*/
@@ -19,7 +19,7 @@ namespace PHE_Script{
     public:
         // Constructor for the Piston_H_Elev class.
         // @param name: A string representing the name of the Piston_H_Elev instance.
-        // This constructor initializes the piston, setting up any necessary states or configurations.
+        // This constructor initializes the piston and horizontal elevator, setting up any necessary states or configurations.
         Piston_H_Elev(std::string name);
 
         // Default destructor for the Piston_H_Elev class.
@@ -28,12 +28,12 @@ namespace PHE_Script{
 
         // Start method, called when the Piston_H_Elev script is first activated.
         // @param obj: A pointer to the Object that this script is attached to.
-        // Typically used for initial setup and configuration of the piston.
+        // Typically used for initial setup and configuration of the piston and horizontal elevator.
         void Start(Object* obj);
 
         // Update method, called on every frame to update the piston's state.
         // @param obj: A pointer to the Object that this script is attached to.
-        // Contains the logic for the piston's movement, interactions, and other behaviors.
+        // Contains the logic for detecting piston collision and reacting by moving the horizontal platform.
         void Update(Object* obj);
 
         // Shutdown method, called when the Piston_H_Elev script is being deactivated or destroyed.
@@ -42,11 +42,8 @@ namespace PHE_Script{
         void Shutdown(Object* obj);
 
     private:
-        // A boolean variable to store the moving direction of the piston.
-        // False indicates moving downwards, and true indicates moving upwards.
-        // It is used in the Update method to control the piston's movement.
-        bool moving_platform_direction;
-        bool activated;
-        Object* H_Elev;
+        bool moving_platform_direction; // A boolean variable to store the moving direction of the horizontal elevator.
+        bool activated; // A boolean variable to store the activation state of the piston.
+        Object* H_Elev; // Pointer to the horizontal elevator object.
     };
 }

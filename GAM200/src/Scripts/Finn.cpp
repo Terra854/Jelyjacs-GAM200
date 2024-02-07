@@ -111,41 +111,6 @@ void Finn::Update(Object* obj) {
 			finn_move_time = 0.f;
 			moving = false;
 		}
-
-		/**************************************************************/
-		//	Box Collision
-		//	- Get find box object
-		/**************************************************************/
-		/*
-		Object* box_obj = objectFactory->FindObject("Box");
-
-		//get aabb
-		Rectangular* finn_body = (Rectangular*)obj->GetComponent(ComponentType::Body);
-		AABB finn_aabb_extended = { {(finn_body->aabb.min.x - 5) ,finn_body->aabb.min.y} ,  {(finn_body->aabb.max.x + 5) ,finn_body->aabb.max.y} };
-		Rectangular* box_body = (Rectangular*)box_obj->GetComponent(ComponentType::Body);
-
-
-		//get physics
-		Physics* finn_phy = (Physics*)obj->GetComponent(ComponentType::Physics);
-		Physics* box_phy = (Physics*)box_obj->GetComponent(ComponentType::Physics);
-		box_phy->Velocity.x = 0;
-
-		if (input::IsPressedRepeatedly(KEY::k))
-		{
-			//check if box colliding with extended finn's aabb
-			if (Collision::Check_AABB_AABB(finn_aabb_extended, finn_phy->Velocity, box_body->aabb, box_phy->Velocity, 1.f / 60.f))
-			{
-				if (input::IsPressedRepeatedly(KEY::d))
-				{
-					box_phy->Velocity.x = 200;
-				}
-				else if (input::IsPressedRepeatedly(KEY::a))
-				{
-					box_phy->Velocity.x = -200;
-				}
-			}
-		}
-		*/
 	}
 
 	else {
