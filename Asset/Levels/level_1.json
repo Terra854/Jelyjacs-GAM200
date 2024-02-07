@@ -33,6 +33,18 @@
         },
         {
           "Prefabs": "level1_background_8.json"
+        },
+        {
+          "Prefabs": "Fan.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 612.0,
+            "y": 530.0
+          },
+          "Scale": {
+            "x": 128.0,
+            "y": 128.0
+          }
         }
       ]
     },
