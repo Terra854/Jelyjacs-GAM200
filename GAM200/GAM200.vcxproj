@@ -165,6 +165,8 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
     <ClInclude Include="include\components\Particle.h" />
     <ClInclude Include="include\Scripts\Box.h" />
+    <ClInclude Include="include\Scripts\Door.h" />
+    <ClInclude Include="include\Scripts\HorizontalDoor.h" />
     <ClInclude Include="include\Scripts\Hori_Elevator.h" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Application.cpp" />
@@ -236,10 +238,13 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Scenes.cpp" />
     <ClCompile Include="src\Scripts\Box.cpp" />
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
+    <ClCompile Include="src\Scripts\Door.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
     <ClCompile Include="src\Scripts\Finn.cpp" />
+    <ClCompile Include="src\Scripts\HorizontalDoor.cpp" />
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
     <ClCompile Include="src\Scripts\Laser.cpp" />
+    <ClCompile Include="src\Scripts\LaserDoor.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
     <ClCompile Include="src\Scripts\Piston_H_Elev.cpp" />
     <ClCompile Include="src\Scripts\PowerLiquid.cpp" />
@@ -299,6 +304,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Scripts\Endpoint.h" />
     <ClInclude Include="include\Scripts\Finn.h" />
     <ClInclude Include="include\Scripts\Laser.h" />
+    <ClInclude Include="include\Scripts\LaserDoor.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
     <ClInclude Include="include\Scripts\Piston_H_Elev.h" />
     <ClInclude Include="include\Scripts\PowerLiquid.h" />

@@ -92,8 +92,12 @@ void Animation::Update_objects()
 		}
 		else if (this->frame_count >= this->frame_rate) {
 			this->frame_count = 0.f;
-			this->frame_num++;
-			if (this->frame_num >= this->animation_Map[this->current_type].size())
+			
+			this->reverse ? this->frame_num-- : this->frame_num++;
+
+			if (this->frame_num < 0)
+				this->frame_num = 0;
+			else if (this->frame_num >= this->animation_Map[this->current_type].size())
 				this->frame_num = static_cast<int>(this->animation_Map[this->current_type].size()) - 1;
 		}
 	}

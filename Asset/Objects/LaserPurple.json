@@ -26,15 +26,22 @@
       "Properties": {
         "texturepath": "Props_LasersPurple.png",
         "framerate": 0.1,
-        "frame": [3, 1],
-        "idle": [1, 1],
-        "jump": [3, 1]
+        "frame": [ 3, 1 ],
+        "idle": [ 1, 1 ],
+        "jump": [ 3, 1 ]
       }
     },
     {
       "Type": "Event",
       "Properties": {
-        "linkedevent" : 0
+        "linkedevent": 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "LaserDoor",
+        "Index": 0
       }
     }
   ]

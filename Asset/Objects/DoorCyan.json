@@ -26,15 +26,22 @@
       "Properties": {
         "texturepath": "DoorCyan.png",
         "framerate": 0.1,
-        "frame": [33, 1],
-        "idle": [1, 1],
-        "jump": [33, 1]
+        "frame": [ 33, 1 ],
+        "idle": [ 1, 1 ],
+        "jump": [ 33, 1 ]
       }
     },
     {
       "Type": "Event",
       "Properties": {
-        "linkedevent" : 0
+        "linkedevent": 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "Door",
+        "Index": 0
       }
     }
   ]
