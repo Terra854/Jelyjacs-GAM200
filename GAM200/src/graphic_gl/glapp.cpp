@@ -405,264 +405,283 @@ void GLApp::init_shdrpgms() {
 */
 void GLApp::Update()
 {
-	//check debug
-	if (input::IsPressed(KEY::l))
+	static float accum_time = 0.0f;
+	static int frame_dt_count = 0;
+
+	if(engine->isPaused())
+		return;
+
+	accum_time += engine->GetDt();
+
+	if (accum_time < engine->Get_Fixed_DT()) return;
+
+	while (accum_time >= engine->Get_Fixed_DT())
 	{
-		graphics_debug = !graphics_debug;
-		std::cout << "graphics_debug" << std::endl;
+		accum_time -= engine->Get_Fixed_DT();
+		frame_dt_count++;
 	}
 
-	//clear screen
-	glClearColor(0.11f, 0.094f, 0.161f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	while (frame_dt_count) {
+		frame_dt_count--;
+		//check debug
+		if (input::IsPressed(KEY::l))
+		{
+			graphics_debug = !graphics_debug;
+			std::cout << "graphics_debug" << std::endl;
+		}
 
-	//update window bar
-	std::stringstream sstr;
-	sstr << "Feline Felony";
-	glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
+		//clear screen
+		glClearColor(0.11f, 0.094f, 0.161f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 
-	//draw objects
-	
-	for (auto& l : SceneManager::layers) {
-		if (l.second.first) {
-			for (auto& object : l.second.second) {
-				GLuint tex_test;
-				Animation* ani_pt = nullptr;
-				Mat3 mat_test;
-				Vec2 pos;
-				float orientation;
-				Vec2 scaling;
-				Vec2 window_scaling;
-				bool texture_bool = true;
-				//get texture		
-				Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
+		//update window bar
+		std::stringstream sstr;
+		sstr << "Feline Felony";
+		glfwSetWindowTitle(window->ptr_window, sstr.str().c_str());
 
-				// skip to next object if there is no texture, then check for animation
-				if (!tex_pt)
-				{
-					texture_bool = false;
-					ani_pt = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
-					if (!ani_pt)
+		//draw objects
+
+		for (auto& l : SceneManager::layers) {
+			if (l.second.first) {
+				for (auto& object : l.second.second) {
+					GLuint tex_test;
+					Animation* ani_pt = nullptr;
+					Mat3 mat_test;
+					Vec2 pos;
+					float orientation;
+					Vec2 scaling;
+					Vec2 window_scaling;
+					bool texture_bool = true;
+					//get texture		
+					Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
+
+					// skip to next object if there is no texture, then check for animation
+					if (!tex_pt)
+					{
+						texture_bool = false;
+						ani_pt = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
+						if (!ani_pt)
+							continue;
+						else
+							tex_test = ani_pt->animation_tex_obj;
+					}
+					else
+						tex_test = AssetManager::textureval(tex_pt->textureName);
+
+					//get orientation
+					Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+
+					// skip to next object if there is no transformation
+					if (!tran_pt)
 						continue;
 					else
-						tex_test = ani_pt->animation_tex_obj;
-				}
-				else
-					tex_test = AssetManager::textureval(tex_pt->textureName);
+						orientation = tran_pt->Rotation;
 
-				//get orientation
-				Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-
-				// skip to next object if there is no transformation
-				if (!tran_pt)
-					continue;
-				else
-					orientation = tran_pt->Rotation;
-
-				// get pos and scale from transform component
-				pos.x = tran_pt->Position.x * 2.0f / window->width_init;
-				pos.y = tran_pt->Position.y * 2.0f / window->height_init;
-				scaling.x = tran_pt->Scale.x / window->width_init;
-				scaling.y = tran_pt->Scale.y / window->height_init;
+					// get pos and scale from transform component
+					pos.x = tran_pt->Position.x * 2.0f / window->width_init;
+					pos.y = tran_pt->Position.y * 2.0f / window->height_init;
+					scaling.x = tran_pt->Scale.x / window->width_init;
+					scaling.y = tran_pt->Scale.y / window->height_init;
 
 
-				//get matrix
-				mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotDeg(orientation);
+					//get matrix
+					mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotDeg(orientation);
 
-				window_scaling = { (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+					window_scaling = { (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
 
-				mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
-				// matrix after camrea
-				mat_test = camera2D->world_to_ndc * mat_test;
+					mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
+					// matrix after camrea
+					mat_test = camera2D->world_to_ndc * mat_test;
 
-				
-				// draw image with texture
-				if (texture_bool) {
-					// draw object with textuer
-					glBindTextureUnit(6, tex_test);
-					glBindTexture(GL_TEXTURE_2D, tex_test);
-					// load shader program in use by this object
-					shdrpgms["image"].Use();
-					// bind VAO of this object's model
-					glBindVertexArray(models["square"].vaoid);
-					// copy object's model-to-NDC matrix to vertex shader's
-					// uniform variable uModelToNDC
-					shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
 
-					// tell fragment shader sampler uTex2d will use texture image unit 6
-					GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
-					glUniform1i(tex_loc, 6);
+					// draw image with texture
+					if (texture_bool) {
+						// draw object with textuer
+						glBindTextureUnit(6, tex_test);
+						glBindTexture(GL_TEXTURE_2D, tex_test);
+						// load shader program in use by this object
+						shdrpgms["image"].Use();
+						// bind VAO of this object's model
+						glBindVertexArray(models["square"].vaoid);
+						// copy object's model-to-NDC matrix to vertex shader's
+						// uniform variable uModelToNDC
+						shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
 
-					// call glDrawElements with appropriate arguments
-					glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+						// tell fragment shader sampler uTex2d will use texture image unit 6
+						GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
+						glUniform1i(tex_loc, 6);
 
-					// unbind VAO and unload shader program
-					glBindVertexArray(0);
-					shdrpgms["image"].UnUse();
-				}
-				else {
-					// if is player
-					if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
-						ParticleSystem* particleSystem = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
-						if(particleSystem!=nullptr)
-							
-						{
-							particleSystem->Update(object);
-							particleSystem->Draw();
-						}
-						// draw object with animation
-					
-						ani_pt->Update_player();
+						// call glDrawElements with appropriate arguments
+						glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+						// unbind VAO and unload shader program
+						glBindVertexArray(0);
+						shdrpgms["image"].UnUse();
 					}
 					else {
-						// frame number change to 0 if animation type change
+						// if is player
+						if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
+							ParticleSystem* particleSystem = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
+							if (particleSystem != nullptr)
 
-						ani_pt->Update_objects();
-						
+							{
+								particleSystem->Update(object);
+								particleSystem->Draw();
+							}
+							// draw object with animation
+
+							ani_pt->Update_player();
+						}
+						else {
+							// frame number change to 0 if animation type change
+
+							ani_pt->Update_objects();
+
+						}
+						glBindTextureUnit(6, tex_test);
+						glBindTexture(GL_TEXTURE_2D, tex_test);
+						//glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+						// load shader program in use by this object
+						shdrpgms["image"].Use();
+						// bind VAO of this object's model
+						glBindVertexArray(ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].vaoid);
+						// copy object's model-to-NDC matrix to vertex shader's
+						// uniform variable uModelToNDC
+						shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+
+						// tell fragment shader sampler uTex2d will use texture image unit 6
+						GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
+						glUniform1i(tex_loc, 6);
+
+						// call glDrawElements with appropriate arguments
+						glDrawElements(ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].primitive_type, ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+						// unbind VAO and unload shader program
+						glBindVertexArray(0);
+						shdrpgms["image"].UnUse();
+
+						ani_pt->Update_time();
+
 					}
-					glBindTextureUnit(6, tex_test);
-					glBindTexture(GL_TEXTURE_2D, tex_test);
-					//glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-					// load shader program in use by this object
-					shdrpgms["image"].Use();
-					// bind VAO of this object's model
-					glBindVertexArray(ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].vaoid);
-					// copy object's model-to-NDC matrix to vertex shader's
-					// uniform variable uModelToNDC
-					shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-
-					// tell fragment shader sampler uTex2d will use texture image unit 6
-					GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
-					glUniform1i(tex_loc, 6);
-
-					// call glDrawElements with appropriate arguments
-					glDrawElements(ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].primitive_type, ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].draw_cnt, GL_UNSIGNED_SHORT, 0);
-
-					// unbind VAO and unload shader program
-					glBindVertexArray(0);
-					shdrpgms["image"].UnUse();
-
-					ani_pt->Update_time();
-					
-				}
 #if defined(DEBUG) | defined(_DEBUG)
-				if (graphics_debug && object->GetComponent(ComponentType::Body) != nullptr) {
+					if (graphics_debug && object->GetComponent(ComponentType::Body) != nullptr) {
 
-					Rectangular* rec_pt = static_cast<Rectangular*>(object->GetComponent(ComponentType::Body));
+						Rectangular* rec_pt = static_cast<Rectangular*>(object->GetComponent(ComponentType::Body));
 
-					if (rec_pt == nullptr)
-						break; // Don't continue if there is no body component
+						if (rec_pt == nullptr)
+							break; // Don't continue if there is no body component
 
-					Vec2 botleft = rec_pt->aabb.min;
-					Vec2 topright = rec_pt->aabb.max;
+						Vec2 botleft = rec_pt->aabb.min;
+						Vec2 topright = rec_pt->aabb.max;
 
-					if (rec_pt->active) {
-						drawline(Vec2(topright.x, botleft.y), botleft, box_color);
-						drawline(topright, Vec2(topright.x, botleft.y), box_color);
-						drawline(topright, Vec2(botleft.x, topright.y), box_color);
-						drawline(Vec2(botleft.x, topright.y), botleft, box_color);
-					}
-					else {
-						drawline(Vec2(topright.x, botleft.y), botleft, red_box_color);
-						drawline(topright, Vec2(topright.x, botleft.y), red_box_color);
-						drawline(topright, Vec2(botleft.x, topright.y), red_box_color);
-						drawline(Vec2(botleft.x, topright.y), botleft, red_box_color);
-					}
-					// draw movement line for player
-					if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
-						//get velocity
-						Physics* phy_pt = static_cast<Physics*>(object->GetComponent(ComponentType::Physics));
-
-						// Make sure it's not null pointer before continuing
-						if (phy_pt != nullptr) {
-
-							float Vx = phy_pt->Velocity.x;
-							float Vy = phy_pt->Velocity.y;
-
-							//calculate rotation
-							orientation = atan2(Vy, Vx);
-
-							//get slcae of line based on length of line
-							Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width_init / 2, sqrt(Vx * Vx + Vy * Vy) / window->height_init / 2 };
-
-							mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
-							mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
-							mat_test = camera2D->world_to_ndc * mat_test;
-							//draw line
-							shdrpgms["shape"].Use();
-							// bind VAO of this object's model
-							glBindVertexArray(models["line"].vaoid);
-							// copy object's model-to-NDC matrix to vertex shader's
-							// uniform variable uModelToNDC
-							shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-							shdrpgms["shape"].SetUniform("uColor", line_color);
-							// call glDrawElements with appropriate arguments
-							glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
-
-							// unbind VAO and unload shader program
-							glBindVertexArray(0);
-							shdrpgms["shape"].UnUse();
+						if (rec_pt->active) {
+							drawline(Vec2(topright.x, botleft.y), botleft, box_color);
+							drawline(topright, Vec2(topright.x, botleft.y), box_color);
+							drawline(topright, Vec2(botleft.x, topright.y), box_color);
+							drawline(Vec2(botleft.x, topright.y), botleft, box_color);
 						}
-					}
+						else {
+							drawline(Vec2(topright.x, botleft.y), botleft, red_box_color);
+							drawline(topright, Vec2(topright.x, botleft.y), red_box_color);
+							drawline(topright, Vec2(botleft.x, topright.y), red_box_color);
+							drawline(Vec2(botleft.x, topright.y), botleft, red_box_color);
+						}
+						// draw movement line for player
+						if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
+							//get velocity
+							Physics* phy_pt = static_cast<Physics*>(object->GetComponent(ComponentType::Physics));
 
-				}
+							// Make sure it's not null pointer before continuing
+							if (phy_pt != nullptr) {
+
+								float Vx = phy_pt->Velocity.x;
+								float Vy = phy_pt->Velocity.y;
+
+								//calculate rotation
+								orientation = atan2(Vy, Vx);
+
+								//get slcae of line based on length of line
+								Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width_init / 2, sqrt(Vx * Vx + Vy * Vy) / window->height_init / 2 };
+
+								mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
+								mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
+								mat_test = camera2D->world_to_ndc * mat_test;
+								//draw line
+								shdrpgms["shape"].Use();
+								// bind VAO of this object's model
+								glBindVertexArray(models["line"].vaoid);
+								// copy object's model-to-NDC matrix to vertex shader's
+								// uniform variable uModelToNDC
+								shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+								shdrpgms["shape"].SetUniform("uColor", line_color);
+								// call glDrawElements with appropriate arguments
+								glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+								// unbind VAO and unload shader program
+								glBindVertexArray(0);
+								shdrpgms["shape"].UnUse();
+							}
+						}
+
+					}
 #endif
+				}
 			}
 		}
-	}
-	
+
 
 #if defined(DEBUG) | defined(_DEBUG)
-	// Draw the bove around the selected object
-	if (level_editor->selected && level_editor->selectedNum >= 0) {
-		Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Animation));
-		Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Texture));
-		Transform* tr = static_cast<Transform*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Transform));
+		// Draw the bove around the selected object
+		if (level_editor->selected && level_editor->selectedNum >= 0) {
+			Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Animation));
+			Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Texture));
+			Transform* tr = static_cast<Transform*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Transform));
 
-		GLint width, height;
-		Vec2 botleft, topright;
+			GLint width, height;
+			Vec2 botleft, topright;
 
-		if (te != nullptr) {
-			// Bind the texture
-			glBindTexture(GL_TEXTURE_2D, AssetManager::textureval(te->textureName));
+			if (te != nullptr) {
+				// Bind the texture
+				glBindTexture(GL_TEXTURE_2D, AssetManager::textureval(te->textureName));
 
-			// Get the texture width
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+				// Get the texture width
+				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
 
-			// Get the texture height
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+				// Get the texture height
+				glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
 
-			// Unbind the texture
-			glBindTexture(GL_TEXTURE_2D, 0);
+				// Unbind the texture
+				glBindTexture(GL_TEXTURE_2D, 0);
 
-			//botleft = tr->Position + Vec2(-(width / 2.f), -(height / 2.f));
-			botleft = tr->Position + -tr->Scale / 2.f;
-			//topright = tr->Position + Vec2(width / 2.f, height / 2.f);
-			topright = tr->Position + tr->Scale / 2.f;
+				//botleft = tr->Position + Vec2(-(width / 2.f), -(height / 2.f));
+				botleft = tr->Position + -tr->Scale / 2.f;
+				//topright = tr->Position + Vec2(width / 2.f, height / 2.f);
+				topright = tr->Position + tr->Scale / 2.f;
 
-			drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
-			drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
-			drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
-			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
+				drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
+				drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
+				drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
+				drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
+			}
+			else if (a != nullptr) {
+				// TODO: Get the size of the animations
+				// Right now, it's hardcoded to 64x64
+				botleft = tr->Position + Vec2(-32.f, -32.f);
+				topright = tr->Position + Vec2(32.f, 32.f);
+
+				drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
+				drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
+				drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
+				drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
+			}
+
+			gizmo.SetObject(tr);
+
+			if (engine->isPaused())
+				gizmo.RenderGizmo();
 		}
-		else if (a != nullptr) {
-			// TODO: Get the size of the animations
-			// Right now, it's hardcoded to 64x64
-			botleft = tr->Position + Vec2(-32.f, -32.f);
-			topright = tr->Position + Vec2(32.f, 32.f);
-
-			drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
-			drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
-			drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
-			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
-		}
-
-		gizmo.SetObject(tr);
-		
-		if (engine->isPaused())
-			gizmo.RenderGizmo();
-	}
 #endif
+	}
 	
 }
 
