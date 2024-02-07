@@ -134,6 +134,9 @@ glm::vec2 Vec2::ToGlmVec2() {
 	return glm::vec2(x, y);
 }
 
+/******************************************************************************
+	Converts the vector for use in ImGui calls
+*******************************************************************************/
 ImVec2 Vec2::ToImVec2()
 {
 	return ImVec2(x, y);

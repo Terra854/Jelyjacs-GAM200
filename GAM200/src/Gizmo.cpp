@@ -1,3 +1,11 @@
+/* !
+@file	Gizmo.cpp
+@author Tan Yee Ann
+@date	7/2/2024
+
+This file contains functions to render the gizmo as part of the level editor
+*//*__________________________________________________________________________*/
+
 #include "Gizmo.h"
 #include <Mat3.h>
 #include <GL/glew.h> // for access to OpenGL API declarations 
@@ -10,17 +18,26 @@ glm::vec3 y_gizmo_color{ 0.0f, 1.0f, 0.0f };
 
 Gizmo gizmo;
 
+/******************************************************************************
+	SetObject
+	- Sets the object as the center for the gizmo
+*******************************************************************************/
 void Gizmo::SetObject(Transform* t){
 	selectedObject = t;
 
 }
 
+/******************************************************************************
+	RenderGizmo
+	- Renders the gizmo
+*******************************************************************************/
 void Gizmo::RenderGizmo(){
 
 	Vec2 gizmoPos, gizmoXPos, gizmoYPos, gizmoXScaling, gizmoYScaling;
 
 	gizmoPos = Vec2(selectedObject->Position.x, selectedObject->Position.y);
 
+	// Calculate the position of the X gizmo
 	XGizmo.Position = gizmoPos + Vec2(72.f / camera2D->scale.x, 0.f);
 	XGizmo.Rotation = 0.f;
 	XGizmo.Scale = Vec2(128.f, 16.f) / camera2D->scale.x;
@@ -85,6 +102,10 @@ void Gizmo::RenderGizmo(){
 	}
 }
 
+/******************************************************************************
+	IsRGizmoClicked
+	- Helper function to check if the mouse is inside the rotate gizmo
+*******************************************************************************/
 bool Gizmo::IsRGizmoClicked(ImVec2 mousePos)
 {
 	return (Vec2Distance(selectedObject->Position, Vec2(mousePos)) > (R_Radius / camera2D->scale.x) - (R_Thickness / camera2D->scale.x)) && (Vec2Distance(selectedObject->Position, Vec2(mousePos)) < (R_Radius / camera2D->scale.x) + (R_Thickness / camera2D->scale.x));
