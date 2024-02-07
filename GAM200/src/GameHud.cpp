@@ -127,7 +127,7 @@ void GameHud::Update()
 	//set outcome if button is pressed
 	if ((input::IsPressed(KEY::mouseL) && button_tracker != "nil"))
 		{
-			audio->playSfx(AudioType::Button_Click);
+			audio->playSfx("button_click");
 			if (button_tracker == "pause")
 			{
 				SceneManager::PauseScene();

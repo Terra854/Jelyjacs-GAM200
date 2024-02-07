@@ -10,18 +10,6 @@ This file contains the declaration for the Audio system class
 #include <fmod.hpp>
 #include <fmod_errors.h>
 
-enum AudioType {
-	Background_Music,
-	Button_Click,
-	Cat_Teleport,
-	Finn_Jumping,
-	Finn_Walking,
-	Spark_Jumping,
-	Spark_Walking,
-	Sliding_Door_Open,
-	END
-};
-
 class Audio : public ISystems {
 public:
 	~Audio();
@@ -34,7 +22,7 @@ public:
 	void setupSound();
 	void createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound);
 
-	void playSfx(AudioType a);
+	void playSfx(std::string audioName);
 	void restartBackgroundAudio();
 private:
 	FMOD::System* system;

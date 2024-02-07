@@ -27,7 +27,7 @@ std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;
 std::map<std::string, Object*> AssetManager::prefabs;
 std::map<std::string, FMOD::Sound*> AssetManager::sounds;
-std::map<AudioType, std::variant<std::string, std::vector<std::string>>> AssetManager::soundMapping;
+std::map<std::string, std::variant<std::string, std::vector<std::string>>> AssetManager::soundMapping;
 std::map<std::string, GLSLShader> AssetManager::shaders;
 std::map<std::string, GLApp::GLModel> AssetManager::models;
 
@@ -480,9 +480,9 @@ getsoundbyaudiotype
 
 @return - FMOD::Sound
 *******************************************************************************/
-FMOD::Sound* AssetManager::getsoundbyaudiotype(AudioType a, bool random, int seq_num) {
+FMOD::Sound* AssetManager::getsoundbyaudiotype(std::string audioType, bool random, int seq_num) {
 	try {
-		auto& sound = soundMapping.at(a);
+		auto& sound = soundMapping.at(audioType);
 
 		if (std::holds_alternative<std::string>(sound)) {
 			return soundsval(std::get<std::string>(sound));
@@ -527,9 +527,9 @@ updateSoundMap
 @param a - AudioType enum
 @param file - sound name
 *******************************************************************************/
-void AssetManager::updateSoundMap(AudioType a, std::string file)
+void AssetManager::updateSoundMap(std::string audioType, std::string file)
 {
-	soundMapping.emplace(a, file);
+	soundMapping.emplace(audioType, file);
 }
 
 /******************************************************************************
@@ -539,9 +539,9 @@ updateSoundMap
 @param a - AudioType enum
 @param file - std::vector of sound
 *******************************************************************************/
-void AssetManager::updateSoundMap(AudioType a, std::vector<std::string> file)
+void AssetManager::updateSoundMap(std::string audioType, std::vector<std::string> file)
 {
-	soundMapping.emplace(a, file);
+	soundMapping.emplace(audioType, file);
 }
 
 /******************************************************************************

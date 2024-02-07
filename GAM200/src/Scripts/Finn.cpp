@@ -65,7 +65,7 @@ void Finn::Update(Object* obj) {
 				player_physics->Force = 75000.f;
 				//audio->playJump();
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
-				audio->playSfx(AudioType::Finn_Jumping);
+				audio->playSfx("finn_jumping");
 				
 			}
 		}
@@ -102,7 +102,7 @@ void Finn::Update(Object* obj) {
 			finn_move_time += engine->GetDt();
 
 			if (finn_move_time > 0.4f) {
-				audio->playSfx(AudioType::Finn_Walking);
+				audio->playSfx("finn_walking");
 				finn_move_time -= 0.4f;
 			}
 		}

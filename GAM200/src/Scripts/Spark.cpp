@@ -114,7 +114,7 @@ void Spark::Update(Object* obj) {
 				player_physics->Force = 75000.f;
 				//audio->playJump();
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
-				audio->playSfx(AudioType::Spark_Jumping);
+				audio->playSfx("spark_jumping");
 			}
 		}
 		if (input::IsPressedRepeatedly(KEY::a)) {
@@ -164,7 +164,7 @@ void Spark::Update(Object* obj) {
 			spark_move_time += engine->GetDt();
 
 			if (spark_move_time > 0.4f) {
-				audio->playSfx(AudioType::Spark_Walking);
+				audio->playSfx("spark_walking");
 				spark_move_time -= 0.4f;
 			}
 		}

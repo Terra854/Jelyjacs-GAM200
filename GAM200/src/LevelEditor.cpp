@@ -1347,34 +1347,7 @@ void LevelEditor::AssetList()
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		for (const auto& audioPair : AssetManager::soundMapping)
 		{
-			std::string AudioTypeString;
-
-			switch (audioPair.first) {
-			case AudioType::Background_Music:
-				AudioTypeString = "Background";
-				break;
-			case AudioType::Button_Click:
-				AudioTypeString = "Button_Click";
-				break;
-			case AudioType::Cat_Teleport:
-				AudioTypeString = "Cat_Teleport";
-				break;
-			case AudioType::Finn_Jumping:
-				AudioTypeString = "Finn_Jumping";
-				break;
-			case AudioType::Finn_Walking:
-				AudioTypeString = "Finn_Walking";
-				break;
-			case AudioType::Sliding_Door_Open:
-				AudioTypeString = "Sliding_Door_Open";
-				break;
-			case AudioType::Spark_Jumping:
-				AudioTypeString = "Spark_Jumping";
-				break;
-			case AudioType::Spark_Walking:
-				AudioTypeString = "Spark_Walking";
-				break;
-			}
+			std::string AudioTypeString = audioPair.first;
 
 			if (ImGui::TreeNode(AudioTypeString.c_str())) {
 				if (std::holds_alternative<std::string>(audioPair.second)) {

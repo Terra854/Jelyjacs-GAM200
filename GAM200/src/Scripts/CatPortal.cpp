@@ -91,7 +91,7 @@ void CatPortal::Update(Object* obj) {
                 std::cout << "Player is in the cat portal" << std::endl;
                 //Find the other cat portal
                     // Teleport the player to the other CatPortal's position.
-                    audio->playSfx(AudioType::Cat_Teleport);
+                    audio->playSfx("cat_teleport");
                     player_t->Position.x = otherCatPortal_t->Position.x;
                     player_t->Position.y = otherCatPortal_t->Position.y;
                     justTeleported = true;

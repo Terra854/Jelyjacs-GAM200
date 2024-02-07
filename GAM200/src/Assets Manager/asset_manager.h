@@ -64,11 +64,11 @@ public:
 
 	// Get value of sounds
 	static FMOD::Sound* soundsval(std::string str);
-	static FMOD::Sound* getsoundbyaudiotype(AudioType a, bool random = true, int seq_num = 0);
+	static FMOD::Sound* getsoundbyaudiotype(std::string audioType, bool random = true, int seq_num = 0);
 
 	// Adding sounds into soundmap and clearing them
-	static void updateSoundMap(AudioType a, std::string);
-	static void updateSoundMap(AudioType a, std::vector<std::string>);
+	static void updateSoundMap(std::string audioType, std::string);
+	static void updateSoundMap(std::string audioType, std::vector<std::string>);
 	static void clearSoundMap();
 
 	// Add textures while the game is running (defaults to missing texture if no textures are provided)
@@ -98,7 +98,7 @@ private:
 
 	// std::string if there is only 1 audio mapped to a sound type.
 	// vector of strings otherwise if there is more then 1
-	static std::map<AudioType, std::variant<std::string, std::vector<std::string>>> soundMapping;
+	static std::map<std::string, std::variant<std::string, std::vector<std::string>>> soundMapping;
 
 	static GLuint missing_texture;
 };
