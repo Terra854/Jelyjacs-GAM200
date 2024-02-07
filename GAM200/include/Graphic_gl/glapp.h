@@ -73,8 +73,8 @@ public:
 	static void draw_rect(Vec2 position, Vec2 Scale, float rotation, glm::vec3 color);
 	//helper function set up model
 	// container for shader programs and models
-	static std::map<std::string, GLSLShader> shdrpgms; 
-	static std::map<std::string, GLModel> models;
+	//static std::map<std::string, GLSLShader> shdrpgms; 
+	//static std::map<std::string, GLModel> models;
 
 	static Vec2 game_to_ndc(Vec2 position);
 	static float game_to_ndc(float position);

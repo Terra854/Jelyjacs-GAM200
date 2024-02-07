@@ -164,15 +164,18 @@ void ParticleSystem::Draw()
     if (!draw_particle) return;
     glBindTextureUnit(6, particle_texture);
     glBindTexture(GL_TEXTURE_2D, particle_texture);
-    GLApp::shdrpgms["instancing"].Use();
+    
+    
+    AssetManager::shaderval("instancing").Use();
+    
     glBindVertexArray(quadVAO);
-    GLApp::shdrpgms["instancing"].SetUniform("uModel_to_NDC", world_to_ndc.ToGlmMat3());
-    GLuint tex_loc = glGetUniformLocation(GLApp::shdrpgms["instancing"].GetHandle(), "uTex2d");
+    AssetManager::shaderval("instancing").SetUniform("uModel_to_NDC", world_to_ndc.ToGlmMat3());
+    GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("instancing").GetHandle(), "uTex2d");
     glUniform1i(tex_loc, 6);
 
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, PARTICLE_NUM); // 100 triangles of 6 vertices each
     glBindVertexArray(0);
-    GLApp::shdrpgms["instancing"].UnUse();
+    AssetManager::shaderval("instancing").UnUse();
 
    
 }

@@ -12,7 +12,7 @@ This file contains the declaration for the Particle game component class
 #include "Object.h"
 #include "../../src/Assets Manager/serialization.h"
 #include "../Graphic_gl/glapp.h"
-
+#include "../../src/Assets Manager/asset_manager.h"
 #define PARTICLE_NUM 100
 
 class ParticleSystem : public Component

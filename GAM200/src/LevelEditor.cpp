@@ -19,7 +19,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <Vec4.h>
 #include <components/Event.h>
 #include <SceneManager.h>
-
+#include "../../src/Assets Manager/asset_manager.h"
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
@@ -2024,19 +2024,21 @@ void LevelEditorGrid::drawleveleditor()
 			Vec2 pos = pos_botleft + Vec2(i * box_size * 2 / window->width, j * box_size * 2 / window->height);
 			Mat3 mat_test = Mat3Translate(pos.x, pos.y) * Mat3Scale(scaling.x, scaling.y);
 			mat_test = camera2D->world_to_ndc * mat_test;
-			app->shdrpgms["shape"].Use();
+			
+			AssetManager::shaderval("shape").Use();
 			// bind VAO of this object's model
-			glBindVertexArray(app->models["square"].vaoid);
+			
+			glBindVertexArray(AssetManager::modelval("square").vaoid);
 			// copy object's model-to-NDC matrix to vertex shader's
 			// uniform variable uModelToNDC
-			app->shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-			app->shdrpgms["shape"].SetUniform("uColor", box_color_editor);
+			AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+			AssetManager::shaderval("shape").SetUniform("uColor", box_color_editor);
 			// call glDrawElements with appropriate arguments
-			glDrawElements(app->models["square"].primitive_type, app->models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+			glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 			// unbind VAO and unload shader program
 			glBindVertexArray(0);
-			app->shdrpgms["shape"].UnUse();
+			AssetManager::shaderval("shape").UnUse();
 			Vec2 botleft = { (i - num.x / 2) * box_size, (j - num.y / 2) * box_size };
 			Vec2 topright = { botleft.x + box_size,botleft.y + box_size };
 			app->drawline(Vec2(topright.x, botleft.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });
