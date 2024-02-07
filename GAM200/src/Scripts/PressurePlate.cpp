@@ -32,6 +32,7 @@ namespace PressurePlate {
 	// Performs initial setup and configuration for PPlate.
 	/***************************************************************************/
 	void PPlate::Start(Object* obj) {
+
 		std::cout << "PPlate Script Ready : " << obj->GetName() << std::endl;
 	}
 
@@ -63,18 +64,7 @@ namespace PressurePlate {
 
 		//accumulator += engine->GetDt();
 
-		// Only run the Pressure Plate script if fixed_dt has passed 
-		//if (accumulator < fixed_dt) {
-		//	return;
-		//}
-
-		// Check and see how many loops the script needs to update
-		//while (accumulator > fixed_dt) {
-		//	num_of_steps++;
-		//	accumulator -= fixed_dt;
-		//}
-
-		//for (; num_of_steps; num_of_steps--) {
+		
 			// if pressure plate collides with player, change the animation of pressure plate
 			if (plate_b->collision_flag & COLLISION_TOP) {
 				//std::cout << obj->GetName() << " PP Open" << std::endl;
@@ -92,9 +82,9 @@ namespace PressurePlate {
 							if (plate_event->linked_event == door_event->linked_event) {
 								audio->playSfx("sliding_door_open");
 								Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
+								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
 								door_animation->fixed = true;
 								door_animation->current_type = AnimationType::Jump;
-								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
 								door_body->active = false;
 							}
 						}
@@ -103,6 +93,7 @@ namespace PressurePlate {
 				
 			}
 			else {
+				// Change the animation of door and disable the body of door
 				//std::cout << obj->GetName() << " PP Closed" << std::endl;
 				plate_animation->fixed = false;
 				if (plate_animation->current_type != AnimationType::Idle) {
@@ -114,9 +105,9 @@ namespace PressurePlate {
 							if (plate_event->linked_event == door_event->linked_event) {
 								audio->playSfx("sliding_door_open"); // Should be Closing sound
 								Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
-								door_animation->fixed = false;
-								door_animation->current_type = AnimationType::Idle;
 								Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
+								door_animation->fixed = false;
+								door_animation->current_type = AnimationType::Idle;		
 								door_body->active = true;
 							}
 						}
@@ -124,7 +115,6 @@ namespace PressurePlate {
 				}
 
 			}
-		//}
 	}
 
 	/***************************************************************************/

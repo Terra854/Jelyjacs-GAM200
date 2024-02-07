@@ -2,7 +2,7 @@
 /* !
 @file	Laser.h
 @author Luke Goh
-@date	27/11/2023
+@date	7/2/2024
 
 This file contains the script for the horizontal elevator
 *//*__________________________________________________________________________*/
@@ -11,8 +11,8 @@ This file contains the script for the horizontal elevator
 #include <GameLogic.h>
 
 // Class Laser, derived from LogicScript.
-// This class is specifically designed to manage a vertical moving platform or elevator within the game. 
-// It handles the elevator's movements and direction changes.
+// This class is specifically designed to manage a timed laser in the game. 
+// It handles the timing of the opening and closing of the laser in the game.
 namespace L_Script {
     class Laser : public LogicScript
     {
@@ -28,17 +28,17 @@ namespace L_Script {
 
         // Start method, called when the Laser script is first activated.
         // @param obj: A pointer to the Object that this script is attached to.
-        // Typically used for initial setup and configuration for the elevator.
+        // Typically used for initial setup and configuration for the laser.
         void Start(Object* obj) override;
 
-        // Update method, called on every frame to update the elevator's state.
+        // Update method, called on every frame to update the laser's state.
         // @param obj: A pointer to the Object that this script is attached to.
-        // Contains the logic for moving the elevator and changing its direction.
+        // Contains the logic for opening and closing the laser.
         void Update(Object* obj) override;
 
         // Shutdown method, called when the Laser script is being deactivated or destroyed.
         // @param obj: A pointer to the Object that this script is attached to.
-        // Used for cleanup tasks or to reset the state of the elevator.
+        // Used for cleanup tasks or to reset the state of the laser.
         void Shutdown(Object* obj) override;
 
     private:

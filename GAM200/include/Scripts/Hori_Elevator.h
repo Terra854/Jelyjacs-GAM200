@@ -1,7 +1,7 @@
 /* !
 @file	Hori_Elevator.h
 @author Luke Goh
-@date	27/11/2023
+@date	7/2/2024
 
 This file contains the script for the horizontal elevator
 *//*__________________________________________________________________________*/
@@ -10,7 +10,7 @@ This file contains the script for the horizontal elevator
 #include <GameLogic.h>
 
 // Class Hori_Elevator, derived from LogicScript.
-// This class is specifically designed to manage a vertical moving platform or elevator within the game. 
+// This class is specifically designed to manage a horizontal moving platform or elevator within the game. 
 // It handles the elevator's movements and direction changes.
 namespace HE_Script{
     class Hori_Elevator : public LogicScript
@@ -42,7 +42,7 @@ namespace HE_Script{
 
     private:
         // A boolean variable to store the moving direction of the elevator.
-        // False indicates moving downwards, and true indicates moving upwards.
+        // False indicates moving left, and true indicates moving right.
         // It is used in the Update method to control the elevator's movement.
         bool moving_platform_direction;
     };
