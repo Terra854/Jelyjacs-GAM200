@@ -55,7 +55,7 @@ public:
 	*/
 	float GetDt() { return dt; }
 	float Get_FPS() { return core_fps; }
-	float Get_Fixed_DT() { return fixed_dt; }
+	float Get_Fixed_DT() { return 1.f / fixed_dt; }
 
 	// Check if the game is paused
 	void setPause() { paused = !paused; }

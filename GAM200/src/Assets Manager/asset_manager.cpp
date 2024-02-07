@@ -96,13 +96,14 @@ void AssetManager::Initialize()
 	}
 	else
 		std::cout << pathaudio << " does not exist!" << std::endl;
-
+	/*
 	if (std::filesystem::exists(pathshaders))
 	{
 		loadshaders();
 	}
 	else
 		std::cout << pathshaders << " does not exsit!" << std::endl;
+		*/
 
 	if (std::filesystem::exists(pathmodels))
 	{

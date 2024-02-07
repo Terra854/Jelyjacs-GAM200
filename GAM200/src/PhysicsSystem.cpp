@@ -26,7 +26,6 @@ float top_collision_cooldown = 0.f;
 
 // For fixed physics
 float accumulator = 0.f;
-float fixed_dt = 1.f / 60.f;
 int num_of_steps = 0;
 
 // Check if both bodies are rectangular
@@ -91,9 +90,11 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 
 		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
 			Object* leftObj = ((Rectangular*)b1)->left_collision;
+
+			// For objects that are pushable
 			if (p1->AbleToPushObjects && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->pushable) {
 				p1->Velocity.x *= 0.2f;
-				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * fixed_dt);
+				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
 				((Transform*)leftObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x - (((Rectangular*)b1)->width / 2.f) - (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->width / 2.f);
 			}
 			else {
@@ -103,9 +104,11 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 		}
 		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
 			Object* rightObj = ((Rectangular*)b1)->right_collision;
+
+			// For objects that are pushable
 			if (p1->AbleToPushObjects && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->pushable) {
 				p1->Velocity.x *= 0.2f;
-				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * fixed_dt);
+				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
 				((Transform*)rightObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x + (((Rectangular*)b1)->width / 2.f) + (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->width / 2.f);
 			}
 			else {
@@ -121,8 +124,8 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 			// For objects on moving platforms
 			if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics)) != nullptr) {
 				if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y < 0.f) { // Check to see if the platform is going down
-					p1->Velocity.y += ((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y + (gravity * fixed_dt); // Inherit the platform's velocity and add gravity
-					t1->Position.y += p1->Velocity.y * fixed_dt;
+					p1->Velocity.y += ((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y + (gravity * engine->Get_Fixed_DT()); // Inherit the platform's velocity and add gravity
+					t1->Position.y += p1->Velocity.y * engine->Get_Fixed_DT();
 				}
 			}
 		}
@@ -132,8 +135,8 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 
 			// For objects on moving platforms
 			if (((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics)) != nullptr && !(((Rectangular*)b1)->collision_flag & COLLISION_LEFT) && !(((Rectangular*)b1)->collision_flag & COLLISION_RIGHT)) {
-				t1->Position.x += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.x * fixed_dt;
-				t1->Position.y += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.y * fixed_dt;
+				t1->Position.x += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.x * engine->Get_Fixed_DT();
+				t1->Position.y += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.y * engine->Get_Fixed_DT();
 			}
 		}
 
@@ -189,14 +192,14 @@ void PhysicsSystem::Update() {
 	accumulator += engine->GetDt();
 
 	// Only run the physics code if fixed_dt has passed 
-	if (accumulator < fixed_dt) {
+	if (accumulator < engine->Get_Fixed_DT()) {
 		return;
 	}
 
 	// Check and see how many loops the physics needs to update
-	while (accumulator > fixed_dt) {
+	while (accumulator > engine->Get_Fixed_DT()) {
 		num_of_steps++;
-		accumulator -= fixed_dt;
+		accumulator -= engine->Get_Fixed_DT();
 	}
 
 	// Loop the physics code
@@ -204,7 +207,7 @@ void PhysicsSystem::Update() {
 
 		Collision::uniform_grid.clear();
 
-		top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= fixed_dt : 0.0f;
+		top_collision_cooldown = (top_collision_cooldown > 0.0f) ? top_collision_cooldown -= engine->Get_Fixed_DT() : 0.0f;
 
 		/* Uniform grid */
 
@@ -284,7 +287,7 @@ void PhysicsSystem::Update() {
 			// Apply gravity
 			if (p->AffectedByGravity) {
 				float acceleration = p->Force * (1.f / p->Mass) + gravity;
-				p->Velocity.y += acceleration * fixed_dt;
+				p->Velocity.y += acceleration * engine->Get_Fixed_DT();
 			}
 			p->Velocity.y *= 0.999f; // Account for air resistance
 
@@ -307,7 +310,7 @@ void PhysicsSystem::Update() {
 					continue; // No movement, so no need to calculate collision.
 
 				// Calculate new position
-				t->Position += p->Velocity * fixed_dt;
+				t->Position += p->Velocity * engine->Get_Fixed_DT();
 			}
 
 			if (b == nullptr)
@@ -334,7 +337,7 @@ void PhysicsSystem::Update() {
 					if (b2 == nullptr)
 						continue; // No body in the other object, no way it's collidable
 
-					if (Check_Collision(b, b2, fixed_dt)) {
+					if (Check_Collision(b, b2, engine->Get_Fixed_DT())) {
 						collision_has_occured = true;
 					}
 				}
