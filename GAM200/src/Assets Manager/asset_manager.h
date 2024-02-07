@@ -36,6 +36,16 @@ public:
 	void loadsounds();
 	static void clearsounds();
 
+	void loadshaders();
+	static void addshader(std::string, GLSLShader);
+	void freeshader();
+	static GLSLShader shaderval(std::string);
+
+	void loadmodels();
+	static void addmodel(std::string, GLApp::GLModel);
+	void freemodel();
+	static GLApp::GLModel modelval(std::string);
+
 	// Access value of animation and textures
 	static bool texturecheckexist(std::string str);
 	static GLuint textureval(std::string str);
@@ -74,12 +84,16 @@ private:
 	static std::filesystem::path objectprefabs;
 	static std::filesystem::path pathaudio;
 	static std::filesystem::path pathfonts;
+	static std::filesystem::path pathshaders;
+	static std::filesystem::path pathmodels;
 
 	// Asset Manager private data
 	static std::map<std::string, GLuint> textures;
 	static std::map<std::string, GLuint> animations;
 	static std::map<std::string, Object*> prefabs;
 	static std::map<std::string, FMOD::Sound*> sounds;
+	static std::map<std::string, GLSLShader> shaders;
+	static std::map<std::string, GLApp::GLModel> models;
 
 	// std::string if there is only 1 audio mapped to a sound type.
 	// vector of strings otherwise if there is more then 1

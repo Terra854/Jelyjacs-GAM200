@@ -237,6 +237,154 @@ void GLApp::init_models() {
 	}
 }
 
+/*
+* get all he models from the list.txt file and store them in the models map
+* @Guo Chen, this is the modified version of your init_model that works with assetmanager, you might want to delete your other one and this line
+*/
+void GLApp::insert_models(std::string model_name) {
+
+		//check if model already exists
+		if (models.find(model_name) == models.end()) {
+			GLModel Model;
+			std::ifstream ifs_msh{ "meshes/" + model_name + ".msh", std::ios::in };
+			if (!ifs_msh)
+			{
+				std::cout << "ERROR: Unable to open mesh file: "
+					<< model_name << "\n";
+				exit(EXIT_FAILURE);
+			}
+			ifs_msh.seekg(0, std::ios::beg);
+			std::string line_mesh;
+			getline(ifs_msh, line_mesh);
+			std::istringstream line_sstm_mesh{ line_mesh };
+			char obj_prefix;
+			std::string mesh_name;
+			line_sstm_mesh >> obj_prefix >> mesh_name;
+
+			//get model data
+			std::vector < float > pos_vtx;
+			std::vector < float > clr_vtx;
+			std::vector < float > tex_coor;
+			std::vector < GLushort > gl_tri_primitives;
+
+			GLuint vbo, vao, ebo;
+
+			while (getline(ifs_msh, line_mesh))
+			{
+				std::istringstream line_sstm_mdl{ line_mesh };
+				line_sstm_mdl >> obj_prefix;
+				float float_data;
+				GLushort glushort_data;
+
+				if (obj_prefix == 'v')
+				{
+					while (line_sstm_mdl >> float_data)
+					{
+						pos_vtx.push_back(float_data);
+					}
+				}
+				if (obj_prefix == 'c')
+				{
+					while (line_sstm_mdl >> float_data)
+					{
+						clr_vtx.push_back(float_data);
+					}
+				}
+				if (obj_prefix == 'x')
+				{
+					while (line_sstm_mdl >> float_data)
+					{
+						tex_coor.push_back(float_data);
+					}
+				}
+				if (obj_prefix == 't')
+				{
+					while (line_sstm_mdl >> glushort_data)
+					{
+						gl_tri_primitives.push_back(glushort_data);
+					}
+					Model.primitive_type = GL_TRIANGLES;
+				}
+				if (obj_prefix == 'l')
+				{
+					while (line_sstm_mdl >> glushort_data)
+					{
+						gl_tri_primitives.push_back(glushort_data);
+					}
+					Model.primitive_type = GL_LINES;
+				}
+				if (obj_prefix == 'f')
+				{
+					while (line_sstm_mdl >> glushort_data)
+					{
+						gl_tri_primitives.push_back(glushort_data);
+					}
+					Model.primitive_type = GL_TRIANGLE_FAN;
+				}
+				if (obj_prefix == 'p')
+				{
+					while (line_sstm_mdl >> glushort_data)
+					{
+						gl_tri_primitives.push_back(glushort_data);
+					}
+					Model.primitive_type = GL_POINTS;
+				}
+				if (obj_prefix == 'o')
+				{
+					while (line_sstm_mdl >> glushort_data)
+					{
+						gl_tri_primitives.push_back(glushort_data);
+					}
+					Model.primitive_type = GL_LINE_LOOP;
+				}
+			}
+			// Set VAO
+
+
+			glCreateBuffers(1, &vbo);
+			glNamedBufferStorage(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size() + sizeof(glm::vec2) * tex_coor.size(), nullptr, GL_DYNAMIC_STORAGE_BIT);
+			glNamedBufferSubData(vbo, 0, sizeof(glm::vec2) * pos_vtx.size(), pos_vtx.data());
+			glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3) * clr_vtx.size(), clr_vtx.data());
+			glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(),
+				sizeof(glm::vec2) * tex_coor.size(), tex_coor.data());
+
+
+			glCreateVertexArrays(1, &vao);
+
+			glEnableVertexArrayAttrib(vao, 0);
+			glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(glm::vec2));
+			glVertexArrayAttribFormat(vao, 0, 2, GL_FLOAT, GL_FALSE, 0);
+			glVertexArrayAttribBinding(vao, 0, 0);
+
+			glEnableVertexArrayAttrib(vao, 1);
+			glVertexArrayVertexBuffer(vao, 1, vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3));
+			glVertexArrayAttribFormat(vao, 1, 3, GL_FLOAT, GL_FALSE, 0);
+			glVertexArrayAttribBinding(vao, 1, 1);
+
+			glEnableVertexArrayAttrib(vao, 2);
+			glVertexArrayVertexBuffer(vao, 2, vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(), sizeof(glm::vec2));
+			glVertexArrayAttribFormat(vao, 2, 2, GL_FLOAT, GL_FALSE, 0);
+			glVertexArrayAttribBinding(vao, 2, 2);
+
+			glCreateBuffers(1, &ebo);
+			glNamedBufferStorage(ebo, sizeof(GLushort) * gl_tri_primitives.size(), gl_tri_primitives.data(), GL_DYNAMIC_STORAGE_BIT);
+			glVertexArrayElementBuffer(vao, ebo);
+			glBindVertexArray(0);
+
+			Model.vaoid = vao;
+			Model.primitive_cnt = (unsigned int)gl_tri_primitives.size();
+			Model.draw_cnt = (unsigned int)gl_tri_primitives.size();
+
+			AssetManager::addmodel(model_name, Model);
+
+			//delete vbo, ebo
+
+			glDeleteBuffers(1, &vbo);
+			glDeleteBuffers(1, &ebo);
+			std::cout << model_name << " model created" << std::endl;
+		}
+}
+
 /*  _________________________________________________________________________ */
 /*
 * get all he shader programs
@@ -591,6 +739,8 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 		std::make_pair(GL_FRAGMENT_SHADER, frg_shdr)
 	};
 
+	std::cout << shdr_pgm_name << " | " << vtx_shdr << " | " << frg_shdr << std::endl;
+
 	GLSLShader shdr_pgm;
 	shdr_pgm.CompileLinkValidate(shdr_files);
 	if (GL_FALSE == shdr_pgm.IsLinked())
@@ -603,6 +753,9 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 	// add compiled, linked, and validated shader program to
 	// std::map container GLApp::shdrpgms
 	GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
+
+	// @Chen Guo when you removed your own map, leave this here ^delete the line above
+	AssetManager::addshader(shdr_pgm_name, shdr_pgm);
 }
 
 /*  _________________________________________________________________________ */

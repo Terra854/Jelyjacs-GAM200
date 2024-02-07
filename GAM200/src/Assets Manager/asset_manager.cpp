@@ -20,12 +20,16 @@ std::filesystem::path AssetManager::pathanimations = "Asset/Animation";
 std::filesystem::path AssetManager::objectprefabs = "Asset/Objects";
 std::filesystem::path AssetManager::pathaudio = "Asset/Sounds";
 std::filesystem::path AssetManager::pathfonts = "Asset/Fonts";
+std::filesystem::path AssetManager::pathshaders = "Asset/shaders";
+std::filesystem::path AssetManager::pathmodels = "Asset/meshes";
 
 std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;
 std::map<std::string, Object*> AssetManager::prefabs;
 std::map<std::string, FMOD::Sound*> AssetManager::sounds;
 std::map<AudioType, std::variant<std::string, std::vector<std::string>>> AssetManager::soundMapping;
+std::map<std::string, GLSLShader> AssetManager::shaders;
+std::map<std::string, GLApp::GLModel> AssetManager::models;
 
 GLuint AssetManager::missing_texture;
 
@@ -93,6 +97,20 @@ void AssetManager::Initialize()
 	else
 		std::cout << pathaudio << " does not exist!" << std::endl;
 
+	if (std::filesystem::exists(pathshaders))
+	{
+		loadshaders();
+	}
+	else
+		std::cout << pathshaders << " does not exsit!" << std::endl;
+
+	if (std::filesystem::exists(pathmodels))
+	{
+		loadmodels();
+	}
+	else
+		std::cout << pathmodels << " does not exsit!" << std::endl;
+
 }
 
 /******************************************************************************
@@ -103,6 +121,9 @@ void AssetManager::Free()
 {
 	// No freeing needed for textures and animations
 	cleanprefab();
+
+	freeshader();
+	freemodel();
 	// Freeing of sound is called in audio.cpp when audio system is destroyed
 }
 
@@ -229,6 +250,57 @@ void AssetManager::loadsounds()
 				}
 			}
 		}
+	}
+}
+
+/******************************************************************************
+loadshaders
+-	The function looks through the directory for shaders to load and store
+them in the assetmanager
+*******************************************************************************/
+void AssetManager::loadshaders()
+{
+	for (const auto& list : std::filesystem::directory_iterator(pathshaders))
+	{
+		std::filesystem::path filename = list.path().filename();
+		std::string name = filename.stem().string();
+
+		std::cout << "SHADER NAME TESTING!! == " << name << std::endl;
+
+		auto it = shaders.find(name);
+		if (it != shaders.end())
+		{
+			continue;
+		}
+		else
+		{
+			// Filename should always have both vert and frag extensions
+			GLApp::insert_shdrpgm(name, name + ".vert", name + ".frag");
+		}
+
+	}
+}
+
+/******************************************************************************
+loadmodels
+-	The function looks through the directory for models/mesh to load and store
+them in the assetmanager
+*******************************************************************************/
+void AssetManager::loadmodels()
+{
+	GLApp::GLModel model;
+	for (const auto& list : std::filesystem::directory_iterator(pathmodels))
+	{
+		std::filesystem::path filename = list.path().filename();
+		std::string name = filename.stem().string();
+
+		// Ensure only .msh
+		if (filename.extension() == ".msh")
+		{
+			GLApp::insert_models(name);
+		}
+		else
+			continue;
 	}
 }
 
@@ -476,6 +548,78 @@ clearSoundMap
 void AssetManager::clearSoundMap()
 {
 	soundMapping.clear();
+}
+
+/******************************************************************************
+addshader
+-	The function adds a shader to the map
+*******************************************************************************/
+void AssetManager::addshader(std::string str, GLSLShader shd)
+{
+	shaders[str] = shd;
+}
+
+/******************************************************************************
+freeshader
+-	The function frees all the shaders
+*******************************************************************************/
+void AssetManager::freeshader()
+{
+	for (auto& shd : shaders)
+	{
+		glDeleteProgram(shd.second.GetHandle());
+	}
+}
+
+/******************************************************************************
+shaderval
+-	The function returns a value from the shader map
+*******************************************************************************/
+GLSLShader AssetManager::shaderval(std::string str)
+{
+	try {
+		return shaders.at(str);
+	}
+	catch (std::out_of_range) {
+		std::cout << "MISSING SHADERS IN MAP!" << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
+}
+
+/******************************************************************************
+addmodel
+-	The function adds a model to the map
+*******************************************************************************/
+void AssetManager::addmodel(std::string str, GLApp::GLModel model)
+{
+	models[str] = model;
+}
+
+/******************************************************************************
+freemodel
+-	The function fress all the model
+*******************************************************************************/
+void AssetManager::freemodel()
+{
+	for (auto& model : models)
+	{
+		glDeleteVertexArrays(1, &model.second.vaoid);
+	}
+}
+
+/******************************************************************************
+modelval
+-	The function returns the value of a model from the map
+*******************************************************************************/
+GLApp::GLModel AssetManager::modelval(std::string str)
+{
+	try {
+		return models.at(str);
+	}
+	catch (std::out_of_range) {
+		std::cout << "MISSING MODELS IN MAP!" << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
 }
 
 

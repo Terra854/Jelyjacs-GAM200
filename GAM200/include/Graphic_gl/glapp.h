@@ -46,6 +46,7 @@ public:
 
 	//initial functions
 	static void init_models();
+	static void insert_models(std::string);
 	static void init_shdrpgms();
 
 	// container for shader programs and helper function(s) ...
