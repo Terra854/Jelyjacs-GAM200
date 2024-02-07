@@ -625,7 +625,17 @@ GLApp::GLModel AssetManager::modelval(std::string str)
 	}
 }
 
-
+/******************************************************************************
+modelexist
+-	The function checks whether the model already exist in the map
+*******************************************************************************/
+bool AssetManager::modelexist(std::string str)
+{
+	if (models.find(str) == models.end())
+		return true;
+	else
+		return false;
+}
 
 
 

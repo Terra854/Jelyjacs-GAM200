@@ -45,6 +45,7 @@ public:
 	static void addmodel(std::string, GLApp::GLModel);
 	void freemodel();
 	static GLApp::GLModel modelval(std::string);
+	static bool modelexist(std::string);
 
 	// Access value of animation and textures
 	static bool texturecheckexist(std::string str);
