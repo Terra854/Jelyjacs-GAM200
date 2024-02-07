@@ -245,6 +245,7 @@ void GameHud::Update()
 			{
 				sceneManager->LoadScene("Asset/Levels/level_1.json");
 				menu_page = false;
+				SceneManager::PlayScene();
 			}
 			else if (Menu_Buttons.at(2).selected)
 			{

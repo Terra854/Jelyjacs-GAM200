@@ -181,11 +181,6 @@ void CoreEngine::GameLoop()
 	// Game Loop
 	gamehud.Initialize();
 
-#if !(defined(DEBUG) | defined(_DEBUG))
-	sceneManager->LoadScene("Asset/Levels/level_1.json");
-	SceneManager::PlayScene();
-#endif
-
 	// For dragging objects in level editor
 	static Vec2 offset(NAN, NAN);
 	static bool object_being_moved = false;
