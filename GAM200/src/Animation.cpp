@@ -21,6 +21,8 @@ void Animation::Update_player()
 	static float accum_time = 0.0f;
 	static int frame_dt_count = 0;
 
+	if (this->current_type != this->previous_type && !this->jump_fixed)
+		this->frame_num = 0;
 	if (engine->isPaused())
 		return;
 
@@ -33,6 +35,7 @@ void Animation::Update_player()
 		accum_time -= engine->Get_Fixed_DT();
 		frame_dt_count++;
 	}
+	
 
 	while (frame_dt_count) {
 		frame_dt_count--;
@@ -59,6 +62,8 @@ void Animation::Update_objects()
 	static float accum_time = 0.0f;
 	static int frame_dt_count = 0;
 
+	if (this->current_type != this->previous_type)
+		this->frame_num = 0;
 	if (engine->isPaused())
 		return;
 
@@ -71,11 +76,11 @@ void Animation::Update_objects()
 		accum_time -= engine->Get_Fixed_DT();
 		frame_dt_count++;
 	}
+	
 
 	while (frame_dt_count) {
 		frame_dt_count--;
-		if (this->current_type != this->previous_type)
-			this->frame_num = 0;
+		
 		if (!this->fixed) {//object with animation
 			if (this->frame_count >= this->frame_rate)
 			{
