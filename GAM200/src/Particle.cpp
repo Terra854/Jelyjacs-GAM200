@@ -205,8 +205,8 @@ float random_life_time(float min, float max)
 void ParticleSystem::Particle::Update()
 {
     
-        Vec2 replacement = velocity*engine->GetDt();
+    Vec2 replacement = velocity * engine->Get_Fixed_DT();
         *position += replacement;
-        life_count += engine->GetDt();
+        life_count += engine->Get_Fixed_DT();
   
 }

@@ -59,7 +59,7 @@ void Animation::Update_objects()
 void Animation::Update_time()
 {
 	this->previous_type = this->current_type;
-	this->frame_count += engine->GetDt();
+	this->frame_count += engine->Get_Fixed_DT();
 }
 
 
