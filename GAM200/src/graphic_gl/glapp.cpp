@@ -363,42 +363,14 @@ void GLApp::Update()
 							particleSystem->Draw();
 						}
 						// draw object with animation
-						//particleSystem.Update();
-						//particleSystem.Draw();
-						if (ani_pt->current_type != ani_pt->previous_type && !ani_pt->jump_fixed)
-							ani_pt->frame_num = 0;
-						else if (ani_pt->frame_count >= ani_pt->frame_rate) {
-							ani_pt->frame_count = 0.f;
-							ani_pt->frame_num++;
-							if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
-								ani_pt->frame_num = 0;
-						}
-						if (ani_pt->jump_fixed) {
-							if (ani_pt->previous_type != AnimationType::Jump && ani_pt->previous_type != AnimationType::Jump_left)
-								ani_pt->frame_num = 0;
-							if (ani_pt->frame_num >= ani_pt->jump_fixed_frame)
-								ani_pt->frame_num = ani_pt->jump_fixed_frame;
-						}
+					
+						ani_pt->Update_player();
 					}
 					else {
 						// frame number change to 0 if animation type change
-						if (ani_pt->current_type != ani_pt->previous_type)
-							ani_pt->frame_num = 0;
-						if (!ani_pt->fixed) {//object with animation
-							if (ani_pt->frame_count >= ani_pt->frame_rate)
-							{
-								ani_pt->frame_count = 0.f;
-								ani_pt->frame_num++;
-								if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
-									ani_pt->frame_num = 0;
-							}
-						}
-						else if (ani_pt->frame_count >= ani_pt->frame_rate) {
-							ani_pt->frame_count = 0.f;
-							ani_pt->frame_num++;
-							if (ani_pt->frame_num >= ani_pt->animation_Map[ani_pt->current_type].size())
-								ani_pt->frame_num = static_cast<int>(ani_pt->animation_Map[ani_pt->current_type].size()) - 1;
-						}
+
+						ani_pt->Update_objects();
+						
 					}
 					glBindTextureUnit(6, tex_test);
 					glBindTexture(GL_TEXTURE_2D, tex_test);
@@ -421,9 +393,11 @@ void GLApp::Update()
 					// unbind VAO and unload shader program
 					glBindVertexArray(0);
 					shdrpgms["image"].UnUse();
-					ani_pt->previous_type = ani_pt->current_type;
-					ani_pt->frame_count += engine->GetDt();
+
+					ani_pt->Update_time();
+					
 				}
+#if defined(DEBUG) | defined(_DEBUG)
 				if (graphics_debug && object->GetComponent(ComponentType::Body) != nullptr) {
 
 					Rectangular* rec_pt = static_cast<Rectangular*>(object->GetComponent(ComponentType::Body));
@@ -484,6 +458,7 @@ void GLApp::Update()
 					}
 
 				}
+#endif
 			}
 		}
 	}

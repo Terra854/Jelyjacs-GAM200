@@ -16,6 +16,54 @@ void Animation::Initialize()
 
 }
 
+void Animation::Update_player()
+{
+
+	if (this->current_type != this->previous_type && !this->jump_fixed)
+		this->frame_num = 0;
+	else if (this->frame_count >= this->frame_rate) {
+		this->frame_count = 0.f;
+		this->frame_num++;
+		if (this->frame_num >= this->animation_Map[this->current_type].size())
+			this->frame_num = 0;
+	}
+	if (this->jump_fixed) {
+		if (this->previous_type != AnimationType::Jump && this->previous_type != AnimationType::Jump_left)
+			this->frame_num = 0;
+		if (this->frame_num >= this->jump_fixed_frame)
+			this->frame_num = this->jump_fixed_frame;
+	}
+}
+
+void Animation::Update_objects()
+{
+	if (this->current_type != this->previous_type)
+		this->frame_num = 0;
+	if (!this->fixed) {//object with animation
+		if (this->frame_count >= this->frame_rate)
+		{
+			this->frame_count = 0.f;
+			this->frame_num++;
+			if (this->frame_num >= this->animation_Map[this->current_type].size())
+				this->frame_num = 0;
+		}
+	}
+	else if (this->frame_count >= this->frame_rate) {
+		this->frame_count = 0.f;
+		this->frame_num++;
+		if (this->frame_num >= this->animation_Map[this->current_type].size())
+			this->frame_num = static_cast<int>(this->animation_Map[this->current_type].size()) - 1;
+	}
+}
+
+void Animation::Update_time()
+{
+	this->previous_type = this->current_type;
+	this->frame_count += engine->GetDt();
+}
+
+
+
 /******************************************************************************
 	to create a model
 *******************************************************************************/

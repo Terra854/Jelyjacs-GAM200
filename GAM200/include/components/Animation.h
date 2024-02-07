@@ -31,6 +31,12 @@ public:
 	Animation();
 	void Initialize() override;
 
+	void Update_player();
+	void Update_objects();
+	void Update_time();
+
+	void draw();
+
 	AnimationType current_type=AnimationType::Idle;
 	AnimationType previous_type=AnimationType::Idle;
 	bool face_right = true;
