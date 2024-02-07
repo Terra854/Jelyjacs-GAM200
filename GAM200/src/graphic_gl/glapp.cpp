@@ -405,24 +405,7 @@ void GLApp::init_shdrpgms() {
 */
 void GLApp::Update()
 {
-	static float accum_time = 0.0f;
-	static int frame_dt_count = 0;
-
-	if(engine->isPaused())
-		return;
-
-	accum_time += engine->GetDt();
-
-	if (accum_time < engine->Get_Fixed_DT()) return;
-
-	while (accum_time >= engine->Get_Fixed_DT())
-	{
-		accum_time -= engine->Get_Fixed_DT();
-		frame_dt_count++;
-	}
-
-	while (frame_dt_count) {
-		frame_dt_count--;
+	
 		//check debug
 		if (input::IsPressed(KEY::l))
 		{
@@ -681,7 +664,7 @@ void GLApp::Update()
 				gizmo.RenderGizmo();
 		}
 #endif
-	}
+	
 	
 }
 
