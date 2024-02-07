@@ -43,8 +43,8 @@ glm::vec3 line_color{ 0.0f, 1.0f, 0.0f };
 
 
 //Declarations of shdrpgms models objects map
-std::map<std::string, GLSLShader> GLApp::shdrpgms;
-std::map<std::string, GLApp::GLModel> GLApp::models;
+//std::map<std::string, GLSLShader> GLApp::shdrpgms;
+//std::map<std::string, GLApp::GLModel> GLApp::models;
 
 //Global pointer to GLApp
 GLApp* app = NULL;
@@ -63,8 +63,8 @@ void GLApp::Initialize()
 	glClearColor(1.f, 1.f, 1.f, 1.f);
 
 	glViewport(0, 0, window->width_init, window->height_init);
-	init_models();
-	init_shdrpgms();
+	//init_models();
+	//init_shdrpgms();
 	
 	// enable alpha blending
 	glEnable(GL_BLEND);
@@ -76,7 +76,7 @@ void GLApp::Initialize()
 /*  _________________________________________________________________________ */
 /*
 * get all he models from the list.txt file and store them in the models map
-*/
+
 void GLApp::init_models() {
 	//open list of meshes
 	std::ifstream ifs{ "meshes/list.txt", std::ios::in };
@@ -388,7 +388,7 @@ void GLApp::insert_models(std::string model_name) {
 /*  _________________________________________________________________________ */
 /*
 * get all he shader programs
-*/
+
 void GLApp::init_shdrpgms() {
 
 	insert_shdrpgm("image", "shaders/image.vert", "shaders/image.frag");
@@ -483,23 +483,23 @@ void GLApp::Update()
 						glBindTextureUnit(6, tex_test);
 						glBindTexture(GL_TEXTURE_2D, tex_test);
 						// load shader program in use by this object
-						shdrpgms["image"].Use();
+						AssetManager::shaderval("image").Use();
 						// bind VAO of this object's model
-						glBindVertexArray(models["square"].vaoid);
+						glBindVertexArray(AssetManager::modelval("square").vaoid);
 						// copy object's model-to-NDC matrix to vertex shader's
 						// uniform variable uModelToNDC
-						shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+						AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
 
 						// tell fragment shader sampler uTex2d will use texture image unit 6
-						GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
+						GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
 						glUniform1i(tex_loc, 6);
 
 						// call glDrawElements with appropriate arguments
-						glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+						glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 						// unbind VAO and unload shader program
 						glBindVertexArray(0);
-						shdrpgms["image"].UnUse();
+						AssetManager::shaderval("image").UnUse();
 					}
 					else {
 						// if is player
@@ -525,15 +525,15 @@ void GLApp::Update()
 						glBindTexture(GL_TEXTURE_2D, tex_test);
 						//glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 						// load shader program in use by this object
-						shdrpgms["image"].Use();
+						AssetManager::shaderval("image").Use();
 						// bind VAO of this object's model
 						glBindVertexArray(ani_pt->animation_Map[ani_pt->current_type][ani_pt->frame_num].vaoid);
 						// copy object's model-to-NDC matrix to vertex shader's
 						// uniform variable uModelToNDC
-						shdrpgms["image"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+						AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
 
 						// tell fragment shader sampler uTex2d will use texture image unit 6
-						GLuint tex_loc = glGetUniformLocation(shdrpgms["image"].GetHandle(), "uTex2d");
+						GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
 						glUniform1i(tex_loc, 6);
 
 						// call glDrawElements with appropriate arguments
@@ -541,7 +541,7 @@ void GLApp::Update()
 
 						// unbind VAO and unload shader program
 						glBindVertexArray(0);
-						shdrpgms["image"].UnUse();
+						AssetManager::shaderval("image").UnUse();
 
 						ani_pt->Update_time();
 
@@ -590,19 +590,19 @@ void GLApp::Update()
 								mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
 								mat_test = camera2D->world_to_ndc * mat_test;
 								//draw line
-								shdrpgms["shape"].Use();
+								AssetManager::shaderval("shape").Use();
 								// bind VAO of this object's model
-								glBindVertexArray(models["line"].vaoid);
+								glBindVertexArray(AssetManager::modelval("line").vaoid);
 								// copy object's model-to-NDC matrix to vertex shader's
 								// uniform variable uModelToNDC
-								shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-								shdrpgms["shape"].SetUniform("uColor", line_color);
+								AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+								AssetManager::shaderval("shape").SetUniform("uColor", line_color);
 								// call glDrawElements with appropriate arguments
-								glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+								glDrawElements(AssetManager::modelval("line").primitive_type, AssetManager::modelval("line").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 								// unbind VAO and unload shader program
 								glBindVertexArray(0);
-								shdrpgms["shape"].UnUse();
+								AssetManager::shaderval("shape").UnUse();
 							}
 						}
 
@@ -676,15 +676,15 @@ void GLApp::cleanup()
 {
 	//particleSystem.Free();
 	//delete all models
-	for (auto& model : models)
-	{
-		glDeleteVertexArrays(1, &model.second.vaoid);
-	}
-	//delete all shader programs
-	for (auto& shdrpgm : shdrpgms)
-	{
-		glDeleteProgram(shdrpgm.second.GetHandle());
-	}
+	//for (auto& model : models)
+	//{
+	//	glDeleteVertexArrays(1, &model.second.vaoid);
+	//}
+	////delete all shader programs
+	//for (auto& shdrpgm : shdrpgms)
+	//{
+	//	glDeleteProgram(shdrpgm.second.GetHandle());
+	//}
 	//particleSystem.Free();
 }
 
@@ -753,8 +753,7 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 	}
 
 	// add compiled, linked, and validated shader program to
-	// std::map container GLApp::shdrpgms
-	GLApp::shdrpgms[shdr_pgm_name] = shdr_pgm;
+	
 
 	// @Chen Guo when you removed your own map, leave this here ^delete the line above
 	AssetManager::addshader(shdr_pgm_name, shdr_pgm);
@@ -787,19 +786,19 @@ void GLApp::drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
 	mat_test = camera2D->world_to_ndc * mat_test;
 	//draw line
-	shdrpgms["shape"].Use();
+	AssetManager::shaderval("shape").Use();
 	// bind VAO of this object's model
-	glBindVertexArray(models["line"].vaoid);
+	glBindVertexArray(AssetManager::modelval("line").vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
-	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-	shdrpgms["shape"].SetUniform("uColor", color);
+	AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	AssetManager::shaderval("shape").SetUniform("uColor", color);
 	// call glDrawElements with appropriate arguments
-	glDrawElements(models["line"].primitive_type, models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(AssetManager::modelval("line").primitive_type, AssetManager::modelval("line").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
-	shdrpgms["shape"].UnUse();
+	AssetManager::shaderval("shape").UnUse();
 }
 
 
@@ -821,19 +820,20 @@ void GLApp::drawtriangle(Vec2 tri_pos, Vec2 tri_scale, float tri_r, glm::vec3 tr
 	mat_test = camera2D->world_to_ndc * mat_test;
 
 	//draw triangle
-	shdrpgms["shape"].Use();
+	AssetManager::shaderval("shape").Use();
+	
 	// bind VAO of this object's model
-	glBindVertexArray(models["triangle"].vaoid);
+	glBindVertexArray(AssetManager::modelval("triangle").vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
-	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-	shdrpgms["shape"].SetUniform("uColor", tri_color);
+	AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	AssetManager::shaderval("shape").SetUniform("uColor", tri_color);
 	// call glDrawElements with appropriate arguments
-	glDrawElements(models["triangle"].primitive_type, models["triangle"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(AssetManager::modelval("triangle").primitive_type, AssetManager::modelval("triangle").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
-	shdrpgms["shape"].UnUse();
+	AssetManager::shaderval("shape").UnUse();
 }
 
 void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, float l_c_width, glm::vec3 l_c_color)
@@ -856,19 +856,19 @@ void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, float l_c_width, glm::
 
 	glLineWidth(l_c_width);
 	//draw line_circle
-	shdrpgms["shape"].Use();
+	AssetManager::shaderval("shape");
 	// bind VAO of this object's model
-	glBindVertexArray(models["line_circle"].vaoid);
+	glBindVertexArray(AssetManager::modelval("line_circle").vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
-	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-	shdrpgms["shape"].SetUniform("uColor", l_c_color);
+	AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	AssetManager::shaderval("shape").SetUniform("uColor", l_c_color);
 	// call glDrawElements with appropriate arguments
-	glDrawElements(models["line_circle"].primitive_type, models["line_circle"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(AssetManager::modelval("line_circle").primitive_type, AssetManager::modelval("line_circle").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
-	shdrpgms["shape"].UnUse();
+	AssetManager::shaderval("shape").UnUse();
 }
 
 void GLApp::draw_rect(Vec2 rec_pos, Vec2 rec_scale, float rec_r, glm::vec3 rec_color)
@@ -890,19 +890,19 @@ void GLApp::draw_rect(Vec2 rec_pos, Vec2 rec_scale, float rec_r, glm::vec3 rec_c
 	mat_test = camera2D->world_to_ndc * mat_test;
 
 	//draw square
-	shdrpgms["shape"].Use();
+	AssetManager::shaderval("shape").Use();
 	// bind VAO of this object's model
-	glBindVertexArray(models["square"].vaoid);
+	glBindVertexArray(AssetManager::modelval("square").vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
-	shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-	shdrpgms["shape"].SetUniform("uColor", rec_color);
+	AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	AssetManager::shaderval("shape").SetUniform("uColor", rec_color);
 	// call glDrawElements with appropriate arguments
-	glDrawElements(models["square"].primitive_type, models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
-	shdrpgms["shape"].UnUse();
+	AssetManager::shaderval("shape").UnUse();
 }
 
 Vec2 GLApp::game_to_ndc(Vec2 position)

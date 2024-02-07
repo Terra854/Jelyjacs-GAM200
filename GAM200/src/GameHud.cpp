@@ -14,6 +14,7 @@ This file contains the definition of the functions of GameHud
 #include "Assets Manager/json_serialization.h"
 #include "Assets Manager/asset_manager.h"
 #include "SceneManager.h"
+#include "../../src/Assets Manager/asset_manager.h"
 namespace
 {
 	std::string button_tracker;
@@ -353,8 +354,10 @@ void Button::draw_hud_texture()
 		glBindTextureUnit(6, texture_id);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
 		// load shader program in use by this object
-		GLApp::shdrpgms["image"].Use();
-		glBindVertexArray(GLApp::models["square"].vaoid);
+		
+		AssetManager::shaderval("image").Use();
+		
+		glBindVertexArray(AssetManager::modelval("square").vaoid);
 		// copy object's model-to-NDC matrix to vertex shader's
 		// uniform variable uModelToNDC
 		Vec2 posM;
@@ -367,15 +370,15 @@ void Button::draw_hud_texture()
 		scale.x = (width *1.6f)/ current_width;
 		scale.y = (height *2.5f)/ current_height;
 		Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale) * Mat3RotRad(0.f);
-		GLApp::shdrpgms["image"].SetUniform("uModel_to_NDC", mat.ToGlmMat3());
+		AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat.ToGlmMat3());
 		// tell fragment shader sampler uTex2d will use texture image unit 6
-		GLuint tex_loc = glGetUniformLocation(GLApp::shdrpgms["image"].GetHandle(), "uTex2d");
+		GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
 		glUniform1i(tex_loc, 6);
 		// call glDrawElements with appropriate arguments
-		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 		// unbind VAO and unload shader program
 		glBindVertexArray(0);
-		GLApp::shdrpgms["image"].UnUse();
+		AssetManager::shaderval("image").UnUse();
 }
 
 void draw_outline(Vec2 pos1 , Vec2 pos2)
@@ -405,19 +408,19 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
 	//draw line
-	GLApp::shdrpgms["shape"].Use();
+	AssetManager::shaderval("shape").Use();
 	// bind VAO of this object's model
-	glBindVertexArray(GLApp::models["line"].vaoid);
+	glBindVertexArray(AssetManager::modelval("line").vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
-	GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-	GLApp::shdrpgms["shape"].SetUniform("uColor", color);
+	AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	AssetManager::shaderval("shape").SetUniform("uColor", color);
 	// call glDrawElements with appropriate arguments
-	glDrawElements(GLApp::models["line"].primitive_type, GLApp::models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(AssetManager::modelval("line").primitive_type, AssetManager::modelval("line").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
-	GLApp::shdrpgms["shape"].UnUse();
+	AssetManager::shaderval("shape").UnUse();
 }
 
 void createHudFromConfig(std::string file)
@@ -567,8 +570,8 @@ void Menu::draw_menu()
 	glBindTextureUnit(6, texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 	// load shader program in use by this object
-	GLApp::shdrpgms["image"].Use();
-	glBindVertexArray(GLApp::models["square"].vaoid);
+	AssetManager::shaderval("image").Use();
+	glBindVertexArray(AssetManager::modelval("square").vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
 	Vec2 posM;
@@ -581,15 +584,15 @@ void Menu::draw_menu()
 	scale_mat.x = scale.x ;
 	scale_mat.y = scale.y ;
 	Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale_mat) * Mat3RotRad(0.f);
-	GLApp::shdrpgms["image"].SetUniform("uModel_to_NDC", mat.ToGlmMat3());
+	AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat.ToGlmMat3());
 	// tell fragment shader sampler uTex2d will use texture image unit 6
-	GLuint tex_loc = glGetUniformLocation(GLApp::shdrpgms["image"].GetHandle(), "uTex2d");
+	GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
 	glUniform1i(tex_loc, 6);
 	// call glDrawElements with appropriate arguments
-	glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
-	GLApp::shdrpgms["image"].UnUse();
+	AssetManager::shaderval("image").UnUse();
 }
 
 Menu::Menu(float x, float y, float w, float h, GLuint id)

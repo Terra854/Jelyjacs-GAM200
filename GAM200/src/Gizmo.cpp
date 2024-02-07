@@ -12,6 +12,7 @@ This file contains functions to render the gizmo as part of the level editor
 #include <GLFW/glfw3.h>
 #include <Camera.h>
 #include "graphic_gl/glapp.h"
+#include "../../src/Assets Manager/asset_manager.h"
 
 glm::vec3 x_gizmo_color{ 1.0f, 0.0f, 0.0f };
 glm::vec3 y_gizmo_color{ 0.0f, 1.0f, 0.0f };
@@ -65,23 +66,25 @@ void Gizmo::RenderGizmo(){
 
 	if (type == GizmoType::Scale || type == GizmoType::Translate) {
 
-		GLApp::shdrpgms["shape"].Use();
+		
+		AssetManager::shaderval("shape").Use();
 		// bind VAO of this object's model
-		glBindVertexArray(GLApp::models["square"].vaoid);
+		
+		glBindVertexArray(AssetManager::modelval("square").vaoid);
 
 		// Render X arrow
-		GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoXMat.ToGlmMat3());
-		GLApp::shdrpgms["shape"].SetUniform("uColor", x_gizmo_color);
-		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", gizmoXMat.ToGlmMat3());
+		AssetManager::shaderval("shape").SetUniform("uColor", x_gizmo_color);
+		glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 		// Render Y arrow
-		GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoYMat.ToGlmMat3());
-		GLApp::shdrpgms["shape"].SetUniform("uColor", y_gizmo_color);
-		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", gizmoYMat.ToGlmMat3());
+		AssetManager::shaderval("shape").SetUniform("uColor", y_gizmo_color);
+		glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 		// unbind VAO and unload shader program
 		glBindVertexArray(0);
-		GLApp::shdrpgms["shape"].UnUse();
+		AssetManager::shaderval("shape").UnUse();
 	}
 
 	switch (type) {
