@@ -59,6 +59,10 @@ private:
 	// When the play button os pressed, the level editor will make a copy of the initial
 	// state of the level so that the user can reset it later
 	Factory::objectIDMap initialObjectMap;
+
+	void LE_InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0);
+	void LE_InputFloat(const char* label, float* v);
+	void LE_InputFloat2(const char* label, float* v);
 };
 
 class LevelEditorGrid {
@@ -70,7 +74,6 @@ public:
 	void drawleveleditor();
 	Vec2 num{ 0,0 };
 	float box_size{ 0 };
-
 };
 
 extern LevelEditor* level_editor; // declared in LevelEditor.cpp

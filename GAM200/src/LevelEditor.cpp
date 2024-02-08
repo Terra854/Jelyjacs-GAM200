@@ -280,7 +280,7 @@ void LevelEditor::ObjectProperties() {
 		strncpy_s(newName, object->GetName().c_str(), sizeof(newName));
 		ImGui::Text("Object ID: %d", object->GetId());
 		ImGui::Text("In Layer: %s", objectFactory->FindLayerThatHasThisObject(object)->first.c_str());
-		ImGui::InputText("Name", newName, sizeof(newName));
+		LE_InputText("Name", newName, sizeof(newName));
 
 		object->SetName(newName);
 
@@ -484,9 +484,9 @@ void LevelEditor::ObjectProperties() {
 			if (Transform_EditMode)
 			{
 				// Display input fields
-				ImGui::InputFloat2("Position", &(edited_position.x));
-				ImGui::InputFloat("Rotation", &edited_rotation);
-				ImGui::InputFloat2("Scale", &(edited_scale.x));
+				LE_InputFloat2("Position", &(edited_position.x));
+				LE_InputFloat("Rotation", &edited_rotation);
+				LE_InputFloat2("Scale", &(edited_scale.x));
 
 				// Button to exit edit mode
 				if (ImGui::Button("Done##Transform"))
@@ -604,8 +604,8 @@ void LevelEditor::ObjectProperties() {
 				{
 					ImGui::Text("All values will apply to all instances of %s", object->GetName().c_str());
 					// Display input fields
-					ImGui::InputFloat("AABB Width", &edited_aabb_width);
-					ImGui::InputFloat("AABB Height", &edited_aabb_height);
+					LE_InputFloat("AABB Width", &edited_aabb_width);
+					LE_InputFloat("AABB Height", &edited_aabb_height);
 					ImGui::Checkbox("Pushable", &edited_pushable);
 
 					// Button to exit edit mode
@@ -947,9 +947,9 @@ void LevelEditor::ObjectProperties() {
 			if (Physics_EditMode)
 			{
 				// Display input fields
-				ImGui::InputFloat2("Velocity", &(edited_velocity.x));
+				LE_InputFloat2("Velocity", &(edited_velocity.x));
 				ImGui::Text("All values below will apply to all instances of %s", object->GetName().c_str());
-				ImGui::InputFloat("Mass", &(edited_mass));
+				LE_InputFloat("Mass", &(edited_mass));
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
 				ImGui::Checkbox("Able to push objects: ", &edited_able_to_push_objects);
 
@@ -1595,7 +1595,7 @@ void LevelEditor::SaveAsDialog() {
 	if (ImGui::BeginPopupModal("Save as", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
 
 		ImGui::Text("Save to file:");
-		ImGui::InputText("##Filename", text, 100);
+		LE_InputText("##Filename", text, 100);
 
 		ImGui::SameLine();
 
@@ -1874,6 +1874,9 @@ void LevelEditor::Initialize() {
 *******************************************************************************/
 void LevelEditor::Update() {
 
+	// Reset flag for every loop
+	input::LevelEditorTextActive = false;
+
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
@@ -1977,6 +1980,35 @@ void LevelEditor::Update() {
 		selectedNum = -1;
 		selected = false;
 	}
+}
+
+/******************************************************************************
+	These are basically helper functions that encapsulates the actual ImGui
+	text inputs. These functions will disable the game's input system whenever the
+	text boxes are in focus so that the game doesn't trigger whenever something
+	is getting typed in those boxes. ImGui itself will not be affected as it has it's
+	own input system seperate from the engine
+*******************************************************************************/
+
+void LevelEditor::LE_InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags) {
+	ImGui::InputText(label, buf, buf_size, flags);
+
+	if (!input::LevelEditorTextActive)
+		input::LevelEditorTextActive = ImGui::IsItemActive();
+}
+
+void LevelEditor::LE_InputFloat(const char* label, float* v) {
+	ImGui::InputFloat(label, v);
+
+	if (!input::LevelEditorTextActive)
+		input::LevelEditorTextActive = ImGui::IsItemActive();
+}
+
+void LevelEditor::LE_InputFloat2(const char* label, float* v) {
+	ImGui::InputFloat2(label, v);
+
+	if (!input::LevelEditorTextActive)
+		input::LevelEditorTextActive = ImGui::IsItemActive();
 }
 
 /************************************LEVEL EDITOR GRID************************************/

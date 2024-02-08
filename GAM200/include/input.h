@@ -100,4 +100,7 @@ namespace input
 
 	//updates input scaling if resolution changed
 	void update_resolution();
+
+	//A bool to see if any text box in the level editor is active
+	extern bool LevelEditorTextActive;
 }
