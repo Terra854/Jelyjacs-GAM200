@@ -367,7 +367,7 @@ void AssetManager::loadcutscenes()
 			// Now sort the entries so that we can create an ordered vector for the cutscenes
 			std::sort(entries.begin(), entries.end(), [](const auto& a, const auto& b) 
 			{
-				return a.path().filename().string() < b.path().filename().string();
+				return std::stoi(a.path().filename().stem().string()) < std::stoi(b.path().filename().stem().string());
 			});
 
 			// Access the sorted vectors to store the ordered textures and text in assetmanager
