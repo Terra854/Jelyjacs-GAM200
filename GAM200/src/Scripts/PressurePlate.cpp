@@ -70,6 +70,7 @@ namespace PressurePlate {
 				//std::cout << obj->GetName() << " PP Open" << std::endl;
 				plate_animation->fixed = true;
 				if (plate_animation->current_type != AnimationType::Jump) {
+					audio->playSfx("piston_plate_press");
 					plate_animation->current_type = AnimationType::Jump;
 					//std::cout << obj->GetName() << " event linked event:";
 					//std::cout << plate_event->linked_event << std::endl;
@@ -98,6 +99,7 @@ namespace PressurePlate {
 				//std::cout << obj->GetName() << " PP Closed" << std::endl;
 				plate_animation->fixed = false;
 				if (plate_animation->current_type != AnimationType::Idle) {
+					audio->playSfx("piston_plate_press");
 					plate_animation->current_type = AnimationType::Idle;
 					for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
 						Object* obj2 = objectFactory->getObjectWithID((long)j);
