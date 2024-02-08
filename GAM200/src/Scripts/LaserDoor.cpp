@@ -11,6 +11,8 @@ This file contains the script for the laser "doors"
 #include <components/Event.h>
 #include <Audio.h>
 
+static float LaserOffSfxCooldown = 0.f;
+
 // Constructor for the LaserDoor class.
 // @param name: The name of the portal.
 LaserDoor::LaserDoor(std::string name) : LogicScript(name)
@@ -30,6 +32,9 @@ void LaserDoor::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void LaserDoor::Update(Object* obj) {
+    LaserOffSfxCooldown -= engine->GetDt();
+    LaserOffSfxCooldown = LaserOffSfxCooldown < 0.f ? 0.f : LaserOffSfxCooldown;
+
     if (obj == nullptr) {
         //std::cout << "NIL OBJ : LaserDoor" << std::endl;
         return;
@@ -44,6 +49,11 @@ void LaserDoor::Update(Object* obj) {
 
     // Disable collision only when the laser is off
     LaserDoor_b->active = (LaserDoor_a->frame_num != 2);
+
+    if (LaserDoor_a->frame_num == 1 && !LaserOffSfxCooldown) {
+        audio->playSfx("laser_off");
+        LaserOffSfxCooldown = 1.5f;
+    }
     
 }
 /*********************************************************************/
