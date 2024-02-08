@@ -70,12 +70,9 @@ void Piston::Update(Object* obj) {
 				if (obj2->GetComponent(ComponentType::Event) != nullptr) {
 					Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
 					if (piston_event->linked_event == door_event->linked_event) {
-						audio->playSfx("sliding_door_open");
 						Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
 						door_animation->fixed = true;
 						door_animation->current_type = AnimationType::Jump;
-						//Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
-						//door_body->active = false;
 					}
 				}
 			}
