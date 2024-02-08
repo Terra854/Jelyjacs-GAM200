@@ -1,6 +1,6 @@
 /* !
 @file	SceneManager.cpp
-@author Tan Yee Ann
+@author Tan Yee Ann (t.yeeann@digipen.edu)
 @date	26/11/2023
 
 This file contains the definitions of the functions that manages the game scene

@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	HorizontalDoor.h
-@author Tan Yee Ann
+@author Tan Yee Ann (t.yeeann@digipen.edu)
 @date	8/2/2023
 
 This file contains the script for the horizontal doors
