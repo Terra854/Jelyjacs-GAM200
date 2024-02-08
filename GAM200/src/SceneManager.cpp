@@ -159,7 +159,11 @@ void SceneManager::PlayCutScene(std::string str)
 		//GLApp::draw_texture(Vec2{ 0.f, 0.f }, Vec2{ static_cast<float>(window->width_init), static_cast<float>(window->height_init) }, 0, frametexture, false);
 		GLApp::draw_texture(Vec2{ 0.f, 0.f }, Vec2{ static_cast<float>(window->width / 2), static_cast<float>(window->height / 2) }, 0, frametexture, false);
 		SetFont(FONT::AldrichRegular);
-		DrawText(frametext, 0.f, 0.f, 1.f);
+
+		float textscale{};
+		textscale = (3 / 4.0 * window->width) / window->width;
+
+		DrawText(frametext, -static_cast<float>(find_width(frametext, FONT::AldrichRegular)) / 2 * textscale, -static_cast<float>(window->height / 8) * 3, textscale);
 		glfwSwapBuffers(window->ptr_window);
 
 		while (timer < 5.0) {
