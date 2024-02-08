@@ -1554,23 +1554,28 @@ void ObjectClonedSuccessfully(int i) {
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
 	char text[50];
 
-	ImGui::Begin("Clone Successful");
-	sprintf_s(text, "New object ID is: %d", i);
+	if (cloneSuccessful != -1)
+		ImGui::OpenPopup("Clone Successful");
 
-	ImVec2 textSize = ImGui::CalcTextSize(text);
-	ImVec2 windowSize = ImGui::GetWindowSize();
-	ImVec2 textPos = {
-		(windowSize.x - textSize.x) * 0.5f,
-		(windowSize.y - textSize.y) * 0.5f
-	};
-	ImGui::SetCursorPos(textPos);
-	ImGui::Text(text);
+	if (ImGui::BeginPopupModal("Clone Successful", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		sprintf_s(text, "New object ID is: %d", i);
 
-	if (ImGui::Button("OK"))
-	{
-		cloneSuccessful = -1;
+		ImVec2 textSize = ImGui::CalcTextSize(text);
+		ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 textPos = {
+			(windowSize.x - textSize.x) * 0.5f,
+			(windowSize.y - textSize.y) * 0.5f
+		};
+		ImGui::SetCursorPos(textPos);
+		ImGui::Text(text);
+
+		if (ImGui::Button("OK"))
+		{
+			cloneSuccessful = -1;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
 	}
-	ImGui::End();
 }
 
 bool save_as_dialog = false;
@@ -1584,43 +1589,48 @@ void LevelEditor::SaveAsDialog() {
 	ImGui::SetNextWindowSize(ImVec2(300, 0));
 	static char text[100];
 
-	ImGui::Begin("Save as", &save_as_dialog);
+	if (save_as_dialog)
+		ImGui::OpenPopup("Save as");
 
-	ImGui::Text("Save to file:");
-	ImGui::InputText("##Filename", text, 100);
+	if (ImGui::BeginPopupModal("Save as", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-	ImGui::SameLine();
+		ImGui::Text("Save to file:");
+		ImGui::InputText("##Filename", text, 100);
 
-	ImGui::Text(".json");
+		ImGui::SameLine();
 
-	if (ImGui::Button("OK"))
-	{
-		if (!initialObjectMap.empty()) {
-			objectFactory->destroyAllObjects();
+		ImGui::Text(".json");
 
-			for (const std::pair<int, Object*>& p : initialObjectMap) {
-				objectFactory->assignIdToObject(p.second);
+		if (ImGui::Button("OK"))
+		{
+			if (!initialObjectMap.empty()) {
+				objectFactory->destroyAllObjects();
+
+				for (const std::pair<int, Object*>& p : initialObjectMap) {
+					objectFactory->assignIdToObject(p.second);
+				}
+
+				SceneManager::ClearInitialObjectMap(false);
 			}
 
-			SceneManager::ClearInitialObjectMap(false);
+			char saveLocation[110];
+
+			sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
+
+			SaveScene(saveLocation);
+			save_as_dialog = false;
+			ImGui::CloseCurrentPopup();
 		}
 
-		char saveLocation[110];
+		ImGui::SameLine();
 
-		sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
-
-		SaveScene(saveLocation);
-		save_as_dialog = false;
+		if (ImGui::Button("Cancel"))
+		{
+			save_as_dialog = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
 	}
-
-	ImGui::SameLine();
-
-	if (ImGui::Button("Cancel"))
-	{
-		save_as_dialog = false;
-	}
-
-	ImGui::End();
 }
 
 /******************************************************************************
