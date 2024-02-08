@@ -53,6 +53,7 @@ namespace PL_Script {
             || ((player_b->collision_flag & COLLISION_LEFT) && static_cast<Rectangular*>(player_b->left_collision->GetComponent(ComponentType::Body)) == p_liquid_b))
             || ((((player_b->collision_flag & COLLISION_TOP) && static_cast<Rectangular*>(player_b->top_collision->GetComponent(ComponentType::Body)) == p_liquid_b)
             || ((player_b->collision_flag & COLLISION_BOTTOM) && static_cast<Rectangular*>(player_b->bottom_collision->GetComponent(ComponentType::Body)) == p_liquid_b)))){
+            audio->playSfx("collect_power_liquid");
                 objectFactory->destroyObject(obj);
                 CatPower++;
                 return;
