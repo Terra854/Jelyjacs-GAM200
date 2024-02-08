@@ -11,6 +11,8 @@ This file contains the definitions of the functions that manages the game scene
 #include <Audio.h>
 #include <Scenes.h>
 #include "Assets Manager/asset_manager.h"
+#include "../include/Font.h"
+#include "../include/input.h"
 
 SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
@@ -141,16 +143,47 @@ void SceneManager::PlayCutScene(std::string str)
 		GLuint frametexture = frame.first;
 		std::string frametext = frame.second;
 
-		// frametexture is the jpg and frametext is the text
-		// Draw the img and font here along with the click test to proceed to the next frame
+		std::cout << "CUTSCENE PLAYING!\n";
+
+		// Cutscenes are fullscreen
+		while (true)
+		{
+			std::cout << frametexture << "FRAME PLAYING!\n";
+
+			input::Update();
+
+			GLApp::draw_texture(Vec2{ 0,0 }, Vec2{ static_cast<float>(window->width_init), static_cast<float>(window->height_init) }, 0, frametexture, false);
+			SetFont(FONT::AldrichRegular);
+			DrawText(frametext, 0, -(window->height_init / 4.0), window->width_init / 2.0);
+
+			if (input::IsPressed(KEY::mouseL)) break;
+
+			if (input::IsPressed(KEY::esc)) // Skip cutscene
+			{
+				std::cout << "CUTSCENE SKIPPED!\n";
+				return;
+			}
+		}
+
+		//float time{};
+		//while (time < 200)
+		//{
+		//	std::cout << frametexture << "FRAME PLAYING!\n";
+
+		//	GLApp::draw_texture(Vec2{ 0,0 }, Vec2{ static_cast<float>(window->width_init), static_cast<float>(window->height_init) }, 0, frametexture, false);
+		//	SetFont(FONT::AldrichRegular);
+		//	DrawText(frametext, 0, -(window->height_init / 4.0), window->width_init / 2.0);
 
 
+		//	if (input::IsPressed(KEY::esc)) // Skip cutscene
+		//	{
+		//		std::cout << "CUTSCENE SKIPPED!\n";
+		//		return;
+		//	}
 
-
+		//	time += engine->GetDt();
+		//}
 	}
-
-
-
 }
 
 

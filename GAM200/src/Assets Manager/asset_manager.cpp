@@ -383,6 +383,14 @@ void AssetManager::loadcutscenes()
 			}
 			// Create the final map
 			cutscenes.emplace(cutscenename, cutscenedata);
+
+
+			// DUMP into console for testing
+			for (const auto& frame : cutscenedata)
+			{
+				std::cout << cutscenename << " | " << frame.first << " | " << frame.second << std::endl;
+			}
+
 		}
 	}
 }
