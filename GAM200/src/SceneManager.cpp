@@ -22,7 +22,7 @@ std::multimap<std::string, int> SceneManager::initialLayer;
 /******************************************************************************
 	Destructor for SceneManager
 *******************************************************************************/
-SceneManager::~SceneManager(){
+SceneManager::~SceneManager() {
 	ClearInitialObjectMap(true);
 }
 
@@ -133,10 +133,14 @@ void SceneManager::ClearInitialObjectMap(bool deleteObjects) {
 	initialObjectMap.clear();
 }
 
+
 void SceneManager::PlayCutScene(std::string str)
 {
 	std::vector<std::pair<GLuint, std::string>> cutscene;
 	cutscene = AssetManager::cutsceneval(str);
+
+	double timer = 0.0;
+	long long prevTime = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 	for (const auto& frame : cutscene)
 	{
@@ -145,25 +149,43 @@ void SceneManager::PlayCutScene(std::string str)
 
 		std::cout << "CUTSCENE PLAYING!\n";
 
-		// Cutscenes are fullscreen
-		while (true)
-		{
-			std::cout << frametexture << "FRAME PLAYING!\n";
+		std::cout << frametexture << "FRAME PLAYING!\n";
+
+		input::Update();
+
+		glClearColor(0.11f, 0.094f, 0.161f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		//GLApp::draw_texture(Vec2{ 0.f, 0.f }, Vec2{ static_cast<float>(window->width_init), static_cast<float>(window->height_init) }, 0, frametexture, false);
+		GLApp::draw_texture(Vec2{ 0.f, 0.f }, Vec2{ 960.f, 540.f }, 0, frametexture, false);
+		SetFont(FONT::AldrichRegular);
+		DrawText(frametext, 0.f, 0.f, 1.f);
+		glfwSwapBuffers(window->ptr_window);
+
+		while (timer < 5.0) {
+
+			long long newTime = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+			timer += static_cast<double>(newTime - prevTime) / 1000000.0;
+			prevTime = newTime;
+
+			std::cout << timer << std::endl;
 
 			input::Update();
 
-			GLApp::draw_texture(Vec2{ 0,0 }, Vec2{ static_cast<float>(window->width_init), static_cast<float>(window->height_init) }, 0, frametexture, false);
-			SetFont(FONT::AldrichRegular);
-			DrawText(frametext, 0, -(window->height_init / 4.0), window->width_init / 2.0);
-
-			if (input::IsPressed(KEY::mouseL)) break;
+			if (input::IsPressed(KEY::mouseL))
+				timer = 5.0;
 
 			if (input::IsPressed(KEY::esc)) // Skip cutscene
 			{
 				std::cout << "CUTSCENE SKIPPED!\n";
 				return;
 			}
+			window->Update();
 		}
+		timer = 0.0;
+		window->Update();
+
+		//}
 
 		//float time{};
 		//while (time < 200)
@@ -184,6 +206,8 @@ void SceneManager::PlayCutScene(std::string str)
 		//	time += engine->GetDt();
 		//}
 	}
+	glClearColor(0.11f, 0.094f, 0.161f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 
