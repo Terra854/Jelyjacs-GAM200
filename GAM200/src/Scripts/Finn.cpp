@@ -40,6 +40,7 @@ void Finn::Update(Object* obj) {
 	}
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+	Rectangular* player_body = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 	if (GameLogic::playerObj->GetName() == "Finn")
 	{
 		if (player_physics == nullptr || player_animation == nullptr) {
@@ -75,7 +76,10 @@ void Finn::Update(Object* obj) {
 			player_physics->Velocity.x -= 500.0f;
 			moving = true;
 			player_animation->face_right = false;
-			player_animation->current_type = AnimationType::Run_left;
+			if (player_body->left_collision != nullptr && static_cast<Rectangular*>(player_body->left_collision->GetComponent(ComponentType::Body))->pushable)
+				player_animation->current_type = AnimationType::Push_left;
+			else
+				player_animation->current_type = AnimationType::Run_left;
 		}
 		if (input::IsPressedRepeatedly(KEY::d)) {
 			MovementKey msg(right);
@@ -83,7 +87,10 @@ void Finn::Update(Object* obj) {
 			player_physics->Velocity.x += 500.0f;
 			moving = true;
 			player_animation->face_right = true;
-			player_animation->current_type = AnimationType::Run;
+			if (player_body->right_collision != nullptr && static_cast<Rectangular*>(player_body->right_collision->GetComponent(ComponentType::Body))->pushable)
+				player_animation->current_type = AnimationType::Push;
+			else
+				player_animation->current_type = AnimationType::Run;
 		}
 
 		if (player_physics->Velocity.y != 0.0f) {
