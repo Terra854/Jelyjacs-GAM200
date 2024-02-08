@@ -157,7 +157,7 @@ void SceneManager::PlayCutScene(std::string str)
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//GLApp::draw_texture(Vec2{ 0.f, 0.f }, Vec2{ static_cast<float>(window->width_init), static_cast<float>(window->height_init) }, 0, frametexture, false);
-		GLApp::draw_texture(Vec2{ 0.f, 0.f }, Vec2{ 960.f, 540.f }, 0, frametexture, false);
+		GLApp::draw_texture(Vec2{ 0.f, 0.f }, Vec2{ static_cast<float>(window->width / 2), static_cast<float>(window->height / 2) }, 0, frametexture, false);
 		SetFont(FONT::AldrichRegular);
 		DrawText(frametext, 0.f, 0.f, 1.f);
 		glfwSwapBuffers(window->ptr_window);
