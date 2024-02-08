@@ -13,6 +13,7 @@ to be referenced from when needed.
 #include <Windows.h>
 #include <iostream>
 #include <random>
+#include "json_serialization.h"
 
 // Creating of static data members
 std::filesystem::path AssetManager::pathtexture = "Asset/Picture";
@@ -22,6 +23,7 @@ std::filesystem::path AssetManager::pathaudio = "Asset/Sounds";
 std::filesystem::path AssetManager::pathfonts = "Asset/Fonts";
 std::filesystem::path AssetManager::pathshaders = "Asset/shaders";
 std::filesystem::path AssetManager::pathmodels = "Asset/meshes";
+std::filesystem::path AssetManager::pathcutscene = "Asset/cutscenes";
 
 std::map<std::string, GLuint> AssetManager::textures;
 std::map<std::string, GLuint> AssetManager::animations;
@@ -30,6 +32,8 @@ std::map<std::string, FMOD::Sound*> AssetManager::sounds;
 std::map<std::string, std::variant<std::string, std::vector<std::string>>> AssetManager::soundMapping;
 std::map<std::string, GLSLShader> AssetManager::shaders;
 std::map<std::string, GLApp::GLModel> AssetManager::models;
+std::map<std::string, std::vector<std::pair<GLuint, std::string>>> AssetManager::cutscenes;
+
 
 GLuint AssetManager::missing_texture;
 
@@ -111,6 +115,13 @@ void AssetManager::Initialize()
 	}
 	else
 		std::cout << pathmodels << " does not exsit!" << std::endl;
+
+	if (std::filesystem::exists(pathcutscene))
+	{
+		loadcutscenes();
+	}
+	else
+		std::cout << pathcutscene << " does not exsit!" << std::endl;
 
 }
 
@@ -304,6 +315,75 @@ void AssetManager::loadmodels()
 		}
 		else
 			continue;
+	}
+}
+
+/******************************************************************************
+loadcutscene
+-	The function looks through the directory for cutscenes to load and store
+them in the assetmanager
+*******************************************************************************/
+void AssetManager::loadcutscenes()
+{
+	GLApp::GLModel model;
+	for (const auto& list : std::filesystem::directory_iterator(pathcutscene))
+	{
+		if (list.is_directory()) // Only loads files within the sub-directory
+		{
+			std::string cutscenename = list.path().filename().string();
+			std::vector <std::pair<GLuint, std::string>> cutscenedata;
+
+			auto innerscene = std::filesystem::directory_entry(list);
+
+			std::vector<std::filesystem::directory_entry> entries;
+			std::vector<std::string> description;
+
+			for (const auto& innerlist : std::filesystem::directory_iterator(innerscene))
+			{
+				// Retrieve the names of the cutscenes first and store them in a vector
+				if (innerlist.path().extension() == ".png" || innerlist.path().extension() == ".jpg")
+				{
+					entries.push_back(innerlist);
+				}
+				else if (innerlist.path().extension() == ".json") // Access the jsonfile containing the cutscene txt
+				{
+					JsonSerialization jsonobj;
+					jsonobj.openFileRead(innerlist.path().string());
+
+					for (auto& frame : jsonobj.read("Frame"))
+					{
+						JsonSerialization jsonloop;
+						jsonloop.jsonObject = &frame;
+
+						std::string temptext = "";
+						jsonloop.readString(temptext, "Text");
+						description.push_back(temptext);
+					}
+
+					jsonobj.closeFile();
+				}
+			}
+
+			// Now sort the entries so that we can create an ordered vector for the cutscenes
+			std::sort(entries.begin(), entries.end(), [](const auto& a, const auto& b) 
+			{
+				return a.path().filename().string() < b.path().filename().string();
+			});
+
+			// Access the sorted vectors to store the ordered textures and text in assetmanager
+			int temp{};
+			for (const auto& entry : entries) 
+			{
+				GLuint textureuint;
+				textureuint = GLApp::setup_texobj(entry.path().string().c_str()); 
+
+				cutscenedata.push_back(std::make_pair(textureuint, description[temp]));
+
+				temp++;
+			}
+			// Create the final map
+			cutscenes.emplace(cutscenename, cutscenedata);
+		}
 	}
 }
 
@@ -635,6 +715,21 @@ bool AssetManager::modelexist(std::string str)
 		return true;
 	else
 		return false;
+}
+
+/******************************************************************************
+cutsceneval
+-	The function returns the vector containing all the cutscene for the scene
+*******************************************************************************/
+std::vector<std::pair<GLuint, std::string>> AssetManager::cutsceneval(std::string str)
+{
+	try {
+		return cutscenes.at(str);
+	}
+	catch (std::out_of_range) {
+		std::cout << "MISSING CUTSCENES IN MAP!" << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
 }
 
 

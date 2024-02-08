@@ -47,6 +47,13 @@ public:
 	static GLApp::GLModel modelval(std::string);
 	static bool modelexist(std::string);
 
+	void loadcutscenes();
+	static std::vector<std::pair<GLuint, std::string>> cutsceneval(std::string);
+
+
+
+
+
 	// Access value of animation and textures
 	static bool texturecheckexist(std::string str);
 	static GLuint textureval(std::string str);
@@ -87,6 +94,7 @@ private:
 	static std::filesystem::path pathfonts;
 	static std::filesystem::path pathshaders;
 	static std::filesystem::path pathmodels;
+	static std::filesystem::path pathcutscene;
 
 	// Asset Manager private data
 	static std::map<std::string, GLuint> textures;
@@ -95,6 +103,7 @@ private:
 	static std::map<std::string, FMOD::Sound*> sounds;
 	static std::map<std::string, GLSLShader> shaders;
 	static std::map<std::string, GLApp::GLModel> models;
+	static std::map<std::string, std::vector<std::pair<GLuint, std::string>>> cutscenes;
 
 	// std::string if there is only 1 audio mapped to a sound type.
 	// vector of strings otherwise if there is more then 1

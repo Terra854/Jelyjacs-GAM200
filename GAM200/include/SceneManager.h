@@ -21,6 +21,7 @@ public:
 	static void RestartScene();
 	static void ClearInitialObjectMap(bool deleteObjects);
 	static bool IsInitialObjectMapEmpty() { return initialObjectMap.empty(); };
+	static void PlayCutScene(std::string);
 
 	// Returns name of the component
 	virtual std::string SystemName() { return "SceneManager"; }
