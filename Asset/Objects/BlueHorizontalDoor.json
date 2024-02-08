@@ -26,15 +26,22 @@
       "Properties": {
         "texturepath": "Blue_Horizontal_Door.png",
         "framerate": 0.1,
-        "frame": [5, 1],
-        "idle": [1, 1],
-        "jump": [5, 1]
+        "frame": [ 5, 1 ],
+        "idle": [ 1, 1 ],
+        "jump": [ 5, 1 ]
       }
     },
     {
       "Type": "Event",
       "Properties": {
-        "linkedevent" : 0
+        "linkedevent": 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "HorizontalDoor",
+        "Index": 0
       }
     }
   ]

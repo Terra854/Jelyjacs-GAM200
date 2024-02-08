@@ -59,73 +59,35 @@ void Audio::setupSound()
 	JsonSerialization jsonobj;
 	jsonobj.openFileRead(soundmap);
 
-	// Loop through AudioType
-	for (int i = 0; i < AudioType::END; i++)
-	{
-		std::string audio_type;
-		switch (i) // Set audio value based on current AudioType
-		{
-		case AudioType::Background_Music:
-			audio_type = "background";
-			break;
-		case AudioType::Button_Click:
-			audio_type = "button_click";
-			break;
-		case AudioType::Cat_Teleport:
-			audio_type = "cat_teleport";
-			break;
-		case AudioType::Finn_Jumping:
-			audio_type = "finn_jumping";
-			break;
-		case AudioType::Finn_Walking:
-			audio_type = "finn_walking";
-			break;
-		case AudioType::Spark_Jumping:
-			audio_type = "spark_jumping";
-			break;
-		case AudioType::Spark_Walking:
-			audio_type = "spark_walking";
-			break;
-		case AudioType::Sliding_Door_Open:
-			audio_type = "sliding_door_open";
-			break;
-		default:
-			audio_type = "END";
-			break;
-		}
-
-		AudioType a = static_cast<AudioType>(i);
-
-		// Check if AudioType exist in audiomap json and then update it
-		if (jsonobj.isMember(audio_type))
-		{
-			if (jsonobj.isArray(audio_type))
+	// Loop through audio types
+	for (const auto& key : jsonobj.jsonObject->getMemberNames()) {
+		
+			if (jsonobj.isArray(key))
 			{
-				size_t pos = jsonobj.size(audio_type);
+				size_t pos = jsonobj.size(key);
 				std::vector<std::string> audioarr;
 				for (size_t j = 0; j < pos; j++)
 				{
 					std::string audioval;
-					jsonobj.readString(audioval, audio_type, (int)j);
+					jsonobj.readString(audioval, key, (int)j);
 					audioarr.push_back(audioval);
 					std::cout << "AudioMap arrvalue: " << audioval << std::endl;
 				}
-				AssetManager::updateSoundMap(a, audioarr);
+				AssetManager::updateSoundMap(key, audioarr);
 			}
 			else
 			{
 				std::string audioval;
-				jsonobj.readString(audioval, audio_type);
-				AssetManager::updateSoundMap(a, audioval);
+				jsonobj.readString(audioval, key);
+				AssetManager::updateSoundMap(key, audioval);
 				std::cout << "AudioMap value: " << audioval << std::endl;
 			}
-		}
 	}
 
 	jsonobj.closeFile();
 
     // Set the background music
-    system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background_Music), 0, true, &background);
+	system->playSound(AssetManager::getsoundbyaudiotype("background"), 0, true, &background);
     background->setVolume(0.2f);
 }
 
@@ -154,8 +116,8 @@ playSfx
 
 @param a - The sfx type to play
 *******************************************************************************/
-void Audio::playSfx(AudioType a) {
-    system->playSound(AssetManager::getsoundbyaudiotype(a), 0, false, &sfx);
+void Audio::playSfx(std::string audioType) {
+    system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
     sfx->setVolume(0.2f);
 }
 
@@ -167,6 +129,6 @@ restartBackgroundAudio
 *******************************************************************************/
 void Audio::restartBackgroundAudio() {
 	background->stop();
-	system->playSound(AssetManager::getsoundbyaudiotype(AudioType::Background_Music), 0, true, &background);
+	system->playSound(AssetManager::getsoundbyaudiotype("background"), 0, true, &background);
 	background->setVolume(0.2f);
 }

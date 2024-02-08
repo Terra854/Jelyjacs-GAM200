@@ -43,5 +43,6 @@ This file contains the main function that is used to run the game
 		app->Init();
 		app->Run();
 		delete app;
+		return 0;
 	}
 #endif // GAM200_PLATFORM_WINDOWS

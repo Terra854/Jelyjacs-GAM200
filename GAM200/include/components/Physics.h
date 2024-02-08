@@ -18,6 +18,7 @@ public:
 	bool AffectedByGravity = true;
 	float Mass = 1.f;
 	float Force = 0.f;
+	bool AbleToPushObjects = false;
 
 	virtual void Initialize() override {}
 

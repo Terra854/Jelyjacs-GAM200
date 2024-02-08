@@ -24,7 +24,8 @@ enum class ComponentType
 	PlayerControllable,
 	Animation,
 	Event,
-	Behaviour
+	Behaviour,
+	ParticleSystem
 };
 
 class Component

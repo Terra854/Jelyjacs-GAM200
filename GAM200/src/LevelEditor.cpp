@@ -19,7 +19,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <Vec4.h>
 #include <components/Event.h>
 #include <SceneManager.h>
-
+#include "../../src/Assets Manager/asset_manager.h"
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
@@ -138,6 +138,7 @@ static bool Body_EditMode = false;
 
 static bool edited_active;
 static bool edited_collision_response;
+static bool edited_pushable;
 
 static bool AABB_EditMode = false;
 
@@ -149,6 +150,7 @@ static bool Physics_EditMode = false;
 static Vec2 edited_velocity;
 static float edited_mass;
 static bool edited_gravity;
+static bool edited_able_to_push_objects;
 
 
 
@@ -604,6 +606,7 @@ void LevelEditor::ObjectProperties() {
 					// Display input fields
 					ImGui::InputFloat("AABB Width", &edited_aabb_width);
 					ImGui::InputFloat("AABB Height", &edited_aabb_height);
+					ImGui::Checkbox("Pushable", &edited_pushable);
 
 					// Button to exit edit mode
 					if (ImGui::Button("Done##AABB"))
@@ -611,6 +614,7 @@ void LevelEditor::ObjectProperties() {
 						AABB_EditMode = false;
 						r->width = edited_aabb_width;
 						r->height = edited_aabb_height;
+						r->pushable = edited_pushable;
 
 						UpdateAllObjectInstances(object);
 					}
@@ -667,12 +671,17 @@ void LevelEditor::ObjectProperties() {
 						r->height += engine->GetDt() * 2.f;
 					}
 
+					ImGui::Text("Pushable: ");
+					ImGui::SameLine();
+					r->pushable ? ImGui::Text("true") : ImGui::Text("false");
+
 					// Button to enter edit mode
 					if (ImGui::Button("Edit##AABB"))
 					{
 						AABB_EditMode = true;
 						edited_aabb_width = r->width;
 						edited_aabb_height = r->height;
+						edited_pushable = r->pushable;
 					}
 				}
 
@@ -942,6 +951,7 @@ void LevelEditor::ObjectProperties() {
 				ImGui::Text("All values below will apply to all instances of %s", object->GetName().c_str());
 				ImGui::InputFloat("Mass", &(edited_mass));
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
+				ImGui::Checkbox("Able to push objects: ", &edited_able_to_push_objects);
 
 				// Button to exit edit mode
 				if (ImGui::Button("Done##Physics"))
@@ -950,6 +960,7 @@ void LevelEditor::ObjectProperties() {
 					ph->Velocity = edited_velocity;
 					ph->Mass = edited_mass;
 					ph->AffectedByGravity = edited_gravity;
+					ph->AbleToPushObjects = edited_able_to_push_objects;
 
 					UpdateAllObjectInstances(object);
 				}
@@ -970,10 +981,14 @@ void LevelEditor::ObjectProperties() {
 				// Display the values as text
 				ImGui::Text("Velocity: %.5f, %.5f", ph->Velocity.x, ph->Velocity.y);
 				ImGui::Text("Mass: %.5f", ph->Mass);
+
 				ImGui::Text("Affected by gravity: ");
 				ImGui::SameLine();
 				ph->AffectedByGravity ? ImGui::Text("true") : ImGui::Text("false");
 
+				ImGui::Text("Able to push objects: ");
+				ImGui::SameLine();
+				ph->AbleToPushObjects ? ImGui::Text("true") : ImGui::Text("false");
 				// Button to enter edit mode
 				if (ImGui::Button("Edit##Physics"))
 				{
@@ -981,6 +996,7 @@ void LevelEditor::ObjectProperties() {
 					edited_velocity = ph->Velocity;
 					edited_mass = ph->Mass;
 					edited_gravity = ph->AffectedByGravity;
+					edited_able_to_push_objects = ph->AbleToPushObjects;
 				}
 
 				ImGui::SameLine();
@@ -1052,6 +1068,12 @@ void LevelEditor::ListOfObjects() {
 
 	ImGui::Begin("Object List");
 	ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+	if (ImGui::Button("Create new layer")) {
+		std::string layerName = std::string("Layer " + static_cast<char>(sceneManager->layers.size()));
+		//buffer
+		sprintf_s(buffer, "Layer %d", sceneManager->layers.size());
+		objectFactory->CreateLayer(std::string(buffer), true);
+	}
 	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
@@ -1331,34 +1353,7 @@ void LevelEditor::AssetList()
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		for (const auto& audioPair : AssetManager::soundMapping)
 		{
-			std::string AudioTypeString;
-
-			switch (audioPair.first) {
-			case AudioType::Background_Music:
-				AudioTypeString = "Background";
-				break;
-			case AudioType::Button_Click:
-				AudioTypeString = "Button_Click";
-				break;
-			case AudioType::Cat_Teleport:
-				AudioTypeString = "Cat_Teleport";
-				break;
-			case AudioType::Finn_Jumping:
-				AudioTypeString = "Finn_Jumping";
-				break;
-			case AudioType::Finn_Walking:
-				AudioTypeString = "Finn_Walking";
-				break;
-			case AudioType::Sliding_Door_Open:
-				AudioTypeString = "Sliding_Door_Open";
-				break;
-			case AudioType::Spark_Jumping:
-				AudioTypeString = "Spark_Jumping";
-				break;
-			case AudioType::Spark_Walking:
-				AudioTypeString = "Spark_Walking";
-				break;
-			}
+			std::string AudioTypeString = audioPair.first;
 
 			if (ImGui::TreeNode(AudioTypeString.c_str())) {
 				if (std::holds_alternative<std::string>(audioPair.second)) {
@@ -1697,6 +1692,7 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 					o_r->aabb = r->aabb;
 					o_r->width = r->width;
 					o_r->height = r->height;
+					o_r->pushable = r->pushable;
 
 					o_r->Initialize();
 				}
@@ -1717,6 +1713,7 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 				// Do not copy velocity
 				o_ph->AffectedByGravity = ph->AffectedByGravity;
 				o_ph->Mass = ph->Mass;
+				o_ph->AbleToPushObjects = ph->AbleToPushObjects;
 			}
 			if (a != nullptr && o_a != nullptr) {
 				o_a->animation_tex_obj = a->animation_tex_obj;
@@ -2006,19 +2003,21 @@ void LevelEditorGrid::drawleveleditor()
 			Vec2 pos = pos_botleft + Vec2(i * box_size * 2 / window->width, j * box_size * 2 / window->height);
 			Mat3 mat_test = Mat3Translate(pos.x, pos.y) * Mat3Scale(scaling.x, scaling.y);
 			mat_test = camera2D->world_to_ndc * mat_test;
-			app->shdrpgms["shape"].Use();
+			
+			AssetManager::shaderval("shape").Use();
 			// bind VAO of this object's model
-			glBindVertexArray(app->models["square"].vaoid);
+			
+			glBindVertexArray(AssetManager::modelval("square").vaoid);
 			// copy object's model-to-NDC matrix to vertex shader's
 			// uniform variable uModelToNDC
-			app->shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-			app->shdrpgms["shape"].SetUniform("uColor", box_color_editor);
+			AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+			AssetManager::shaderval("shape").SetUniform("uColor", box_color_editor);
 			// call glDrawElements with appropriate arguments
-			glDrawElements(app->models["square"].primitive_type, app->models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+			glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 			// unbind VAO and unload shader program
 			glBindVertexArray(0);
-			app->shdrpgms["shape"].UnUse();
+			AssetManager::shaderval("shape").UnUse();
 			Vec2 botleft = { (i - num.x / 2) * box_size, (j - num.y / 2) * box_size };
 			Vec2 topright = { botleft.x + box_size,botleft.y + box_size };
 			app->drawline(Vec2(topright.x, botleft.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });

@@ -10,6 +10,7 @@ This file contains the definitions of the functions that manages the game scene
 #include <GameLogic.h>
 #include <Audio.h>
 #include <Scenes.h>
+#include "Assets Manager/asset_manager.h"
 
 SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
@@ -129,3 +130,30 @@ void SceneManager::ClearInitialObjectMap(bool deleteObjects) {
 
 	initialObjectMap.clear();
 }
+
+void SceneManager::PlayCutScene(std::string str)
+{
+	std::vector<std::pair<GLuint, std::string>> cutscene;
+	cutscene = AssetManager::cutsceneval(str);
+
+	for (const auto& frame : cutscene)
+	{
+		GLuint frametexture = frame.first;
+		std::string frametext = frame.second;
+
+		// frametexture is the jpg and frametext is the text
+		// Draw the img and font here along with the click test to proceed to the next frame
+
+
+
+
+	}
+
+
+
+}
+
+
+
+
+

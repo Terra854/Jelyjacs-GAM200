@@ -39,3 +39,51 @@ public:
     // Used for cleanup tasks or to reset the state of the piston.
     void Shutdown(Object* obj);
 };
+
+/*
+class StateMachine 
+{
+public:
+    StateMachine();
+	~StateMachine();
+
+	void AddState(State* state);
+	void AddTransition(Transition* transition);
+	void SetInitialState(State* state);
+	void SetCurrentState(State* state);
+	void Update();
+	void Shutdown();
+private:
+	std::vector<State*> states;
+	std::vector<Transition*> transitions;
+	State* initial_state;
+	State* current_state;
+};
+
+class State
+{
+public:
+    State();
+	~State();
+private:
+	std::string state_name;
+	StateMachine* state_machine;
+	std::vector<Transition*> transitions;
+};
+};
+
+class Transition
+{
+public:
+	Transition();
+	~Transition();
+
+	void OnEnter();
+	void OnUpdate();
+	void OnExit();
+private:
+    std::string transition_name;
+	State* from_state;
+	State* to_state;
+};
+*/

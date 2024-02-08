@@ -177,9 +177,6 @@
     <ClCompile Include="src\Assets Manager\json_serialization.cpp">
       <Filter>Source Files\Miscellanous</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphic_gl\Particle.cpp">
-      <Filter>Source Files\Systems\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -235,6 +232,24 @@
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripts\PressurePlate.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Piston_H_Elev.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Laser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Particle.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Door.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\LaserDoor.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\HorizontalDoor.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
@@ -350,9 +365,6 @@
     <ClInclude Include="include\components\Event.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphic_gl\Particle.h">
-      <Filter>Header Files\Systems\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -411,12 +423,30 @@
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\Box.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\PressurePlate.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\PowerLiquid.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Piston_H_Elev.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Laser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Particle.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Door.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\LaserDoor.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\HorizontalDoor.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>

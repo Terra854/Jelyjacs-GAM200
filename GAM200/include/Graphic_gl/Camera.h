@@ -15,6 +15,7 @@ Header file for Camera.cpp
 #include <Factory.h>
 #include <GLWindow.h>
 #include <GameLogic.h>
+#include <glapp.h>
 
 #ifndef CAMERA_H
 #define CAMERA_H
@@ -48,8 +49,24 @@ class Camera : public ISystems
 	// Set free cam status
 	void setFreeCamEnabled(bool b) { free_cam = b; }
 
+	void updatelimit(float x_min_, float y_min_, float x_max_, float y_max_) {
+		this->x_min = x_min_;
+		this->y_min = y_min_;
+		this->x_max = x_max_;
+		this->y_max = y_max_;
+	}
+
+	float game_to_camera(float in){
+		return in * 2.0f / window->width_init;
+	}
+
 private:
 	bool free_cam = false;
+	float x_min = game_to_camera(-672.0f);
+	float y_min = game_to_camera(-352.0f);
+	float x_max = game_to_camera(-672.0f + 2176.0f);
+	float y_max = game_to_camera(-352.0f + 1344.0f);
+
 
 };
 extern Camera* camera2D;

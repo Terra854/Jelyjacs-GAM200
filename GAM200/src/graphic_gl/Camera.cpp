@@ -51,7 +51,7 @@ void Camera::Update() {
 
 
 	world_to_ndc = Mat3Scale(scale.x, scale.y) * Mat3Translate(position.x, position.y);
-	Vec2 window_scaling = {(float)window->width_init/(float)window->width,(float)window->height_init/(float)window->height};
+	//Vec2 window_scaling = {(float)window->width_init/(float)window->width,(float)window->height_init/(float)window->height};
 	//world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
 
 }
@@ -95,25 +95,19 @@ void Camera::SetToPlayer() {
 		// get the player's position
 		Transform* trans = static_cast<Transform*>(player->GetComponent(ComponentType::Transform));
 
-		position.x = 0.f - trans->Position.x * 2.0f / window->width_init;
+		position.x = trans->Position.x ;
 
-		position.y = 0.f - trans->Position.y * 2.0f / window->height_init;
+		position.y = trans->Position.y ;
+		
+
+		position.x = -position.x * 2.0f / window->width_init;
+
+		position.y = -position.y * 2.0f / window->height_init;
 		// make sure the camera is not out of bounds
-		/*
-		if (position.x > 0.6f - 1.f / scale.x) {
-			position.x = 0.6f - 1.f / scale.x;
-		}
-		else if (position.x < -0.6f + 1.f / scale.x) {
-			position.x = -0.6f + 1.f / scale.x;
-		}
-
-		if (position.y > 0.8f - 1.f / scale.y) {
-			position.y = 0.8f - 1.f / scale.y;
-		}
-		else if (position.y < -0.8f + 1.f / scale.y) {
-			position.y = -0.8f + 1.f / scale.y;
-		}
-		*/
+		if (position.x < x_min ) position.x = x_min;
+		if (position.y < y_min) position.y = y_min;
+		if (position.x > x_max ) position.x = x_max;
+		if (position.y > y_max) position.y = y_max;
 
 	}
 }

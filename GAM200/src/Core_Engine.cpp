@@ -181,11 +181,6 @@ void CoreEngine::GameLoop()
 	// Game Loop
 	gamehud.Initialize();
 
-#if !(defined(DEBUG) | defined(_DEBUG))
-	LoadSceneFromJson("Asset/Levels/level_1.json");
-	SceneManager::PlayScene();
-#endif
-
 	// For dragging objects in level editor
 	static Vec2 offset(NAN, NAN);
 	static bool object_being_moved = false;
@@ -200,7 +195,7 @@ void CoreEngine::GameLoop()
 		auto m_BeginFrame = std::chrono::system_clock::now();
 
 #if defined(DEBUG) | defined(_DEBUG)	
-		hud.NewGuiFrame(1);
+		hud.NewGuiFrame(0);
 
 		// Toggle Button to Display Debug Information in IMGui
 		//if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
@@ -371,6 +366,13 @@ void CoreEngine::GameLoop()
 						else if (gizmo.GetType() == GizmoType::Scale)
 							objTransform->Scale.y = (float)std::round((Vec2(gameWorldPos).y - initialScaleFactor.y + 100.f) / 100.f * initialScale.y);
 					}
+
+					if (object_being_moved_x || object_being_moved_y) {
+						if (gizmo.GetType() == GizmoType::Translate)
+							ImGui::SetTooltip("x: %.6f\ny: %.6f", objTransform->Position.x, objTransform->Position.y);
+						else if (gizmo.GetType() == GizmoType::Scale)
+							ImGui::SetTooltip("Width: %.6f\nHeight: %.6f", objTransform->Scale.x, objTransform->Scale.y);
+					}
 				}
 				/* R Gizmo */
 				else if (gizmo.GetType() == GizmoType::Rotate) {
@@ -388,6 +390,7 @@ void CoreEngine::GameLoop()
 						else if (objTransform->Rotation < 0.0f)
 							objTransform->Rotation += 360.f;
 
+						ImGui::SetTooltip("Rotation: %.6f", objTransform->Rotation);
 
 						std::cout << "Initial_Rotation: " << Initial_Rotation << std::endl;
 						std::cout << "RGizmo_Angle: " << RGizmo_Angle << std::endl;
@@ -404,7 +407,7 @@ void CoreEngine::GameLoop()
 				}
 			}
 			// Select object in the viewport
-			else if (ImGui::IsItemClicked() && !isObjectClicked(gizmo.getX(), gameWorldPos) && !isObjectClicked(gizmo.getY(), gameWorldPos) && !gizmo.IsRGizmoActive()) {
+			else if (ImGui::IsItemClicked() && !isObjectClicked(gizmo.getX(), gameWorldPos) && !isObjectClicked(gizmo.getY(), gameWorldPos) && !gizmo.IsRGizmoClicked(gameWorldPos)) {
 				std::cout << "################################################################" << std::endl;
 				std::cout << "ClickPos " << clickPos.x << ", " << clickPos.y << std::endl;
 				std::cout << "ViewportMin " << viewport_min.x << ", " << viewport_min.y << std::endl;

@@ -36,6 +36,24 @@ public:
 	void loadsounds();
 	static void clearsounds();
 
+	void loadshaders();
+	static void addshader(std::string, GLSLShader);
+	void freeshader();
+	static GLSLShader shaderval(std::string);
+
+	void loadmodels();
+	static void addmodel(std::string, GLApp::GLModel);
+	void freemodel();
+	static GLApp::GLModel modelval(std::string);
+	static bool modelexist(std::string);
+
+	void loadcutscenes();
+	static std::vector<std::pair<GLuint, std::string>> cutsceneval(std::string);
+
+
+
+
+
 	// Access value of animation and textures
 	static bool texturecheckexist(std::string str);
 	static GLuint textureval(std::string str);
@@ -53,11 +71,11 @@ public:
 
 	// Get value of sounds
 	static FMOD::Sound* soundsval(std::string str);
-	static FMOD::Sound* getsoundbyaudiotype(AudioType a, bool random = true, int seq_num = 0);
+	static FMOD::Sound* getsoundbyaudiotype(std::string audioType, bool random = true, int seq_num = 0);
 
 	// Adding sounds into soundmap and clearing them
-	static void updateSoundMap(AudioType a, std::string);
-	static void updateSoundMap(AudioType a, std::vector<std::string>);
+	static void updateSoundMap(std::string audioType, std::string);
+	static void updateSoundMap(std::string audioType, std::vector<std::string>);
 	static void clearSoundMap();
 
 	// Add textures while the game is running (defaults to missing texture if no textures are provided)
@@ -74,16 +92,22 @@ private:
 	static std::filesystem::path objectprefabs;
 	static std::filesystem::path pathaudio;
 	static std::filesystem::path pathfonts;
+	static std::filesystem::path pathshaders;
+	static std::filesystem::path pathmodels;
+	static std::filesystem::path pathcutscene;
 
 	// Asset Manager private data
 	static std::map<std::string, GLuint> textures;
 	static std::map<std::string, GLuint> animations;
 	static std::map<std::string, Object*> prefabs;
 	static std::map<std::string, FMOD::Sound*> sounds;
+	static std::map<std::string, GLSLShader> shaders;
+	static std::map<std::string, GLApp::GLModel> models;
+	static std::map<std::string, std::vector<std::pair<GLuint, std::string>>> cutscenes;
 
 	// std::string if there is only 1 audio mapped to a sound type.
 	// vector of strings otherwise if there is more then 1
-	static std::map<AudioType, std::variant<std::string, std::vector<std::string>>> soundMapping;
+	static std::map<std::string, std::variant<std::string, std::vector<std::string>>> soundMapping;
 
 	static GLuint missing_texture;
 };

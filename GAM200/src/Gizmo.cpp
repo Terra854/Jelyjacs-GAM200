@@ -1,26 +1,44 @@
+/* !
+@file	Gizmo.cpp
+@author Tan Yee Ann
+@date	7/2/2024
+
+This file contains functions to render the gizmo as part of the level editor
+*//*__________________________________________________________________________*/
+
 #include "Gizmo.h"
 #include <Mat3.h>
 #include <GL/glew.h> // for access to OpenGL API declarations 
 #include <GLFW/glfw3.h>
 #include <Camera.h>
 #include "graphic_gl/glapp.h"
+#include "../../src/Assets Manager/asset_manager.h"
 
 glm::vec3 x_gizmo_color{ 1.0f, 0.0f, 0.0f };
 glm::vec3 y_gizmo_color{ 0.0f, 1.0f, 0.0f };
 
 Gizmo gizmo;
 
+/******************************************************************************
+	SetObject
+	- Sets the object as the center for the gizmo
+*******************************************************************************/
 void Gizmo::SetObject(Transform* t){
 	selectedObject = t;
 
 }
 
+/******************************************************************************
+	RenderGizmo
+	- Renders the gizmo
+*******************************************************************************/
 void Gizmo::RenderGizmo(){
 
 	Vec2 gizmoPos, gizmoXPos, gizmoYPos, gizmoXScaling, gizmoYScaling;
 
 	gizmoPos = Vec2(selectedObject->Position.x, selectedObject->Position.y);
 
+	// Calculate the position of the X gizmo
 	XGizmo.Position = gizmoPos + Vec2(72.f / camera2D->scale.x, 0.f);
 	XGizmo.Rotation = 0.f;
 	XGizmo.Scale = Vec2(128.f, 16.f) / camera2D->scale.x;
@@ -48,23 +66,25 @@ void Gizmo::RenderGizmo(){
 
 	if (type == GizmoType::Scale || type == GizmoType::Translate) {
 
-		GLApp::shdrpgms["shape"].Use();
+		
+		AssetManager::shaderval("shape").Use();
 		// bind VAO of this object's model
-		glBindVertexArray(GLApp::models["square"].vaoid);
+		
+		glBindVertexArray(AssetManager::modelval("square").vaoid);
 
 		// Render X arrow
-		GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoXMat.ToGlmMat3());
-		GLApp::shdrpgms["shape"].SetUniform("uColor", x_gizmo_color);
-		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", gizmoXMat.ToGlmMat3());
+		AssetManager::shaderval("shape").SetUniform("uColor", x_gizmo_color);
+		glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 		// Render Y arrow
-		GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", gizmoYMat.ToGlmMat3());
-		GLApp::shdrpgms["shape"].SetUniform("uColor", y_gizmo_color);
-		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", gizmoYMat.ToGlmMat3());
+		AssetManager::shaderval("shape").SetUniform("uColor", y_gizmo_color);
+		glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 		// unbind VAO and unload shader program
 		glBindVertexArray(0);
-		GLApp::shdrpgms["shape"].UnUse();
+		AssetManager::shaderval("shape").UnUse();
 	}
 
 	switch (type) {
@@ -85,7 +105,13 @@ void Gizmo::RenderGizmo(){
 	}
 }
 
+/******************************************************************************
+	IsRGizmoClicked
+	- Helper function to check if the mouse is inside the rotate gizmo
+*******************************************************************************/
 bool Gizmo::IsRGizmoClicked(ImVec2 mousePos)
 {
-	return (Vec2Distance(selectedObject->Position, Vec2(mousePos)) > (R_Radius / camera2D->scale.x) - (R_Thickness / camera2D->scale.x)) && (Vec2Distance(selectedObject->Position, Vec2(mousePos)) < (R_Radius / camera2D->scale.x) + (R_Thickness / camera2D->scale.x));
+	return (selectedObject != nullptr) // Make sure an object is selected in the level editor first
+		&& (Vec2Distance(selectedObject->Position, Vec2(mousePos)) > (R_Radius / camera2D->scale.x) - (R_Thickness / camera2D->scale.x)) // Check if distance between mouse and object is > inner circle radius 
+		&& (Vec2Distance(selectedObject->Position, Vec2(mousePos)) < (R_Radius / camera2D->scale.x) + (R_Thickness / camera2D->scale.x)); // Check if distance between mouse and object is < outer circle radius 
 }

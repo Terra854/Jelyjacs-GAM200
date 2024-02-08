@@ -14,15 +14,18 @@ This file contains the definition of the functions of GameHud
 #include "Assets Manager/json_serialization.h"
 #include "Assets Manager/asset_manager.h"
 #include "SceneManager.h"
+#include "../../src/Assets Manager/asset_manager.h"
 namespace
 {
 	std::string button_tracker;
 	bool win = false;
+	bool menu_page = true;
 }
 
 //container of buttons
 std::vector<Button> Buttons;
-
+std::vector<Button> Menu_Buttons;
+std::vector<Menu> Menus;
 //button map to track button according to index in vector
 std::map <std::string, int> index;
 
@@ -47,6 +50,10 @@ void Buttons_change_resolution();
 //draw how to play screen text
 void draw_how_to_play_string();
 
+void createMenuFromConfig(std::string);
+
+void create_Menu_button(std::string const& text, Button button, float scale, FONT f);
+
 /******************************************************************************
 	Inialise gamehud buttons and assets
 *******************************************************************************/
@@ -54,7 +61,12 @@ void GameHud::Initialize()
 {
 	//create buttons from json
 	createHudFromConfig("Asset/UI/Pause.json");
+	createMenuFromConfig("Asset/UI/MainMenu.json");
 	button_tracker = "nil";
+	create_Menu_button("", Button(Vec2(-140.0f, -350.0f), Vec2(170.0f, -390.0f)), 1, FONT::AldrichRegular);
+	create_Menu_button("", Button(Vec2(-80.0f, -415.0f), Vec2(120.0f, -455.0f)), 1, FONT::AldrichRegular);
+	create_Menu_button("", Button(Vec2(-80.0f, -480.0f), Vec2(120.0f, -520.0f)), 1, FONT::AldrichRegular);
+
 }
 
 /******************************************************************************
@@ -62,6 +74,8 @@ void GameHud::Initialize()
 *******************************************************************************/
 void GameHud::Update()
 {
+	if(!menu_page)
+	{ 
 	//switching between the various menus
 	if (win)
 	{
@@ -113,7 +127,7 @@ void GameHud::Update()
 	//set outcome if button is pressed
 	if ((input::IsPressed(KEY::mouseL) && button_tracker != "nil"))
 		{
-			audio->playSfx(AudioType::Button_Click);
+			audio->playSfx("button_click");
 			if (button_tracker == "pause")
 			{
 				SceneManager::PauseScene();
@@ -183,8 +197,9 @@ void GameHud::Update()
 			}
 			else if (button_tracker == "Quit Game")
 			{
-				Message_Handler msg(MessageID::Event_Type::Quit);
-				engine->Broadcast(&msg);
+				//Message_Handler msg(MessageID::Event_Type::Quit);
+				//engine->Broadcast(&msg);
+				menu_page = true;
 			}
 			else if (button_tracker == "settings")
 			{
@@ -204,6 +219,43 @@ void GameHud::Update()
 			}
 			button_tracker = "nil";
 		}
+	}
+	else//menu page
+	{
+		if (input::MouseMoved())
+		{
+			for (size_t i = 0; i < Menu_Buttons.size(); ++i)
+			{
+				Menu_Buttons.at(i).selected = false;
+			}
+			for (size_t i = 0; i < Menu_Buttons.size(); ++i)
+			{
+				if (input::GetMouseX() > Menu_Buttons[i].pos1.x && input::GetMouseX() < Menu_Buttons[i].pos2.x)
+				{
+					if (input::GetMouseY() > Menu_Buttons[i].pos2.y && input::GetMouseY() < Menu_Buttons[i].pos1.y)
+					{
+						Menu_Buttons.at(i).selected = true;
+					}
+				}
+			}
+		}
+		if (input::IsPressed(KEY::mouseL))
+		{
+			if (Menu_Buttons.at(0).selected)
+			{
+				sceneManager->LoadScene("Asset/Levels/level_1.json");
+				menu_page = false;
+				SceneManager::PlayScene();
+			}
+			else if (Menu_Buttons.at(2).selected)
+			{
+				Message_Handler msg(MessageID::Event_Type::Quit);
+				engine->Broadcast(&msg);
+			}
+		}
+	}
+
+
 }
 
 /******************************************************************************
@@ -211,20 +263,37 @@ void GameHud::Update()
 *******************************************************************************/
 void GameHud::Draw()
 {
-	//draw only based on the menu setting
-	for (int i =begin_index ; i< end_index; ++i)
+	if (!menu_page)
 	{
-		Buttons[i].draw_hud_texture();
-		SetFont(Buttons[i].string.font);
-		DrawText(Buttons[i].string.text, Buttons[i].string.pos.x, Buttons[i].string.pos.y, Buttons[i].string.scale);
-		if (Buttons[i].string.text == button_tracker && button_tracker != "you win!")
+		//draw only based on the menu setting
+		for (int i = begin_index; i < end_index; ++i)
 		{
-			draw_outline(Buttons[index.at(button_tracker)].pos1, Buttons[index.at(button_tracker)].pos2);
+			Buttons[i].draw_hud_texture();
+			SetFont(Buttons[i].string.font);
+			DrawText(Buttons[i].string.text, Buttons[i].string.pos.x, Buttons[i].string.pos.y, Buttons[i].string.scale);
+			if (Buttons[i].string.text == button_tracker && button_tracker != "you win!")
+			{
+				draw_outline(Buttons[index.at(button_tracker)].pos1, Buttons[index.at(button_tracker)].pos2);
+			}
+		}
+		if (how_to_play_menu)
+		{
+			draw_how_to_play_string();
 		}
 	}
-	if (how_to_play_menu)
+	else//menu
 	{
-		draw_how_to_play_string();
+		for (size_t i = 0; i < Menus.size(); ++i)
+		{
+			Menus.at(i).draw_menu();
+		}
+		for (size_t i = 0; i < Menu_Buttons.size(); ++i)
+		{
+			if (Menu_Buttons.at(i).selected)
+			{
+				draw_outline(Menu_Buttons.at(i).pos1, Menu_Buttons.at(i).pos2);
+			}
+		}
 	}
 }
 
@@ -239,6 +308,17 @@ void create_button(std::string const& text, Button button, float scale , FONT f,
 	Buttons.push_back(button);
 	index[text] = number_of_buttons++;
 }
+
+void create_Menu_button(std::string const& text, Button button, float scale, FONT f)
+{
+	button.string.pos.x = button.centre.x - static_cast<float>(find_width(text, f)) / 2 * scale;
+	button.string.pos.y -= 14 * scale;
+	button.string.text = text;
+	button.string.scale = scale;
+	button.string.font = f;
+	Menu_Buttons.push_back(button);
+}
+
 
 Button::Button(Vec2 Pos1,Vec2 Pos2)
 	:pos1{Pos1}, pos2{Pos2}
@@ -275,8 +355,10 @@ void Button::draw_hud_texture()
 		glBindTextureUnit(6, texture_id);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
 		// load shader program in use by this object
-		GLApp::shdrpgms["image"].Use();
-		glBindVertexArray(GLApp::models["square"].vaoid);
+		
+		AssetManager::shaderval("image").Use();
+		
+		glBindVertexArray(AssetManager::modelval("square").vaoid);
 		// copy object's model-to-NDC matrix to vertex shader's
 		// uniform variable uModelToNDC
 		Vec2 posM;
@@ -289,15 +371,15 @@ void Button::draw_hud_texture()
 		scale.x = (width *1.6f)/ current_width;
 		scale.y = (height *2.5f)/ current_height;
 		Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale) * Mat3RotRad(0.f);
-		GLApp::shdrpgms["image"].SetUniform("uModel_to_NDC", mat.ToGlmMat3());
+		AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat.ToGlmMat3());
 		// tell fragment shader sampler uTex2d will use texture image unit 6
-		GLuint tex_loc = glGetUniformLocation(GLApp::shdrpgms["image"].GetHandle(), "uTex2d");
+		GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
 		glUniform1i(tex_loc, 6);
 		// call glDrawElements with appropriate arguments
-		glDrawElements(GLApp::models["square"].primitive_type, GLApp::models["square"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+		glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
 		// unbind VAO and unload shader program
 		glBindVertexArray(0);
-		GLApp::shdrpgms["image"].UnUse();
+		AssetManager::shaderval("image").UnUse();
 }
 
 void draw_outline(Vec2 pos1 , Vec2 pos2)
@@ -327,19 +409,19 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
 	//draw line
-	GLApp::shdrpgms["shape"].Use();
+	AssetManager::shaderval("shape").Use();
 	// bind VAO of this object's model
-	glBindVertexArray(GLApp::models["line"].vaoid);
+	glBindVertexArray(AssetManager::modelval("line").vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
 	// uniform variable uModelToNDC
-	GLApp::shdrpgms["shape"].SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-	GLApp::shdrpgms["shape"].SetUniform("uColor", color);
+	AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	AssetManager::shaderval("shape").SetUniform("uColor", color);
 	// call glDrawElements with appropriate arguments
-	glDrawElements(GLApp::models["line"].primitive_type, GLApp::models["line"].draw_cnt, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(AssetManager::modelval("line").primitive_type, AssetManager::modelval("line").draw_cnt, GL_UNSIGNED_SHORT, 0);
 
 	// unbind VAO and unload shader program
 	glBindVertexArray(0);
-	GLApp::shdrpgms["shape"].UnUse();
+	AssetManager::shaderval("shape").UnUse();
 }
 
 void createHudFromConfig(std::string file)
@@ -386,6 +468,40 @@ void createHudFromConfig(std::string file)
 	jsonobj.closeFile();
 }
 
+void createMenuFromConfig(std::string file)
+{
+	JsonSerialization jsonobj;
+	if (!jsonobj.openFileRead(file))
+	{
+		std::cout << "can't open file" << std::endl;
+	}
+
+	for (auto& menu : jsonobj.read("Menu"))
+	{
+		JsonSerialization jsonloop;
+		jsonloop.jsonObject = &menu;
+
+		std::string texture;
+		float x, y, w, h;
+		jsonloop.readFloat(x, "position_x");
+		jsonloop.readFloat(y, "position_y");
+		jsonloop.readFloat(w, "scale_x");
+		jsonloop.readFloat(h, "scale_y");
+
+		GLuint val;
+		jsonloop.readString(texture, "texture");
+		val = AssetManager::textureval(texture);
+
+		if (!AssetManager::texturecheckexist(texture))
+		{
+			std::cout << "TEXTURE MISSING FOR MENU!!!\n";
+		}
+		Menus.push_back(Menu(x,y,w,h,val));
+	}
+
+
+	jsonobj.closeFile();
+}
 
 void set_win()
 {
@@ -422,6 +538,23 @@ void Buttons_change_resolution()
 		it->width *= scaleX;
 		it->height *= scaleY;
 	}
+	for (auto it = Menu_Buttons.begin(); it != Menu_Buttons.end(); ++it)
+	{
+		it->centre.x *= scaleX;
+		it->centre.y *= scaleY;
+		it->pos1.x *= scaleX;
+		it->pos1.y *= scaleY;
+		it->pos2.x *= scaleX;
+		it->pos2.y *= scaleY;
+		it->width *= scaleX;
+		it->height *= scaleY;
+	}
+	for (auto it = Menus.begin(); it != Menus.end(); ++it)
+	{
+		it->pos.x *= scaleX;
+		it->pos.y *= scaleY;
+	}
+
 }
 
 
@@ -431,4 +564,39 @@ void draw_how_to_play_string()
 	DrawText("press wasd to move", -400, -100, 1);
 	DrawText("step on buttons to open door", -400, -150, 1);
 	DrawText("press e to change character", -400, -200, 1);
+}
+
+void Menu::draw_menu()
+{
+	glBindTextureUnit(6, texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	// load shader program in use by this object
+	AssetManager::shaderval("image").Use();
+	glBindVertexArray(AssetManager::modelval("square").vaoid);
+	// copy object's model-to-NDC matrix to vertex shader's
+	// uniform variable uModelToNDC
+	Vec2 posM;
+	int current_width;
+	int current_height;
+	glfwGetFramebufferSize(GLWindow::ptr_window, &current_width, &current_height);
+	posM.x = pos.x / current_width;
+	posM.y = pos.y / current_height;
+	Vec2 scale_mat;
+	scale_mat.x = scale.x ;
+	scale_mat.y = scale.y ;
+	Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale_mat) * Mat3RotRad(0.f);
+	AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat.ToGlmMat3());
+	// tell fragment shader sampler uTex2d will use texture image unit 6
+	GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
+	glUniform1i(tex_loc, 6);
+	// call glDrawElements with appropriate arguments
+	glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
+	// unbind VAO and unload shader program
+	glBindVertexArray(0);
+	AssetManager::shaderval("image").UnUse();
+}
+
+Menu::Menu(float x, float y, float w, float h, GLuint id)
+	:pos{x,y} , scale{w,h} , texture_id{id}
+{
 }

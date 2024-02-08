@@ -13,65 +13,67 @@ This file contains the script for the Horizontal elevator
 #include <Factory.h>
 #include <Core_Engine.h>
 
-float count, deltaT;
-Hori_Elevator::Hori_Elevator(std::string name) : LogicScript(name)
-{
-	std::cout << name << " Created" << std::endl;
-	moving_platform_direction = false;
-}
-/***************************************************************************/
-// Start method, called when the Hori_Elevator script is first activated.
-// @param obj: A pointer to the Object that this script is attached to.
-// Performs initial setup and configuration for Hori_Elevator.
-/***************************************************************************/
-void Hori_Elevator::Start(Object* obj)
-{
-	std::cout << "Hori_Elevator Script Ready : " << obj->GetName() << std::endl;
-	count = 0.f;
-	deltaT = engine->GetDt();
-
-}
-
-/***************************************************************************/
-// Update method, called on every frame to update Hori_Elevator's state.
-// @param obj: A pointer to the Object that this script is attached to.
-// Contains logic for Hori_Elevator's movement and animations.
-/***************************************************************************/
-void Hori_Elevator::Update(Object* obj) {
-	// For some reason, the player is not changing position
-	if (obj == nullptr) {
-		return;
+namespace HE_Script {
+	float count, deltaT;
+	Hori_Elevator::Hori_Elevator(std::string name) : LogicScript(name)
+	{
+		std::cout << name << " Created" << std::endl;
+		moving_platform_direction = false;
 	}
-	//std::cout << obj->GetName() << std::endl;
-	Physics* moving_platform_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
-	Transform* moving_platform_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-	if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
-		//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
-		return;
-	};
-	moving_platform_physics->Velocity.x = 0.0f;
-	float moving_platform_speed;
+	/***************************************************************************/
+	// Start method, called when the Hori_Elevator script is first activated.
+	// @param obj: A pointer to the Object that this script is attached to.
+	// Performs initial setup and configuration for Hori_Elevator.
+	/***************************************************************************/
+	void Hori_Elevator::Start(Object* obj)
+	{
+		std::cout << "Hori_Elevator Script Ready : " << obj->GetName() << std::endl;
+		count = 0.f;
+		deltaT = engine->GetDt();
 
-	// if the count >= 5, change direction
-	if (count >= 5.f) {
-		std::cout << "change dir\n";
-		moving_platform_direction = !moving_platform_direction;
-		count = 0;
 	}
-	else {
-		count += deltaT;
+
+	/***************************************************************************/
+	// Update method, called on every frame to update Hori_Elevator's state.
+	// @param obj: A pointer to the Object that this script is attached to.
+	// Contains logic for Hori_Elevator's movement and animations.
+	/***************************************************************************/
+	void Hori_Elevator::Update(Object* obj) {
+		// For some reason, the player is not changing position
+		if (obj == nullptr) {
+			return;
+		}
+		//std::cout << obj->GetName() << std::endl;
+		Physics* moving_platform_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
+		Transform* moving_platform_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+		if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
+			//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
+			return;
+		};
+		moving_platform_physics->Velocity.x = 0.0f;
+		float moving_platform_speed;
+
+		// if the count >= 5, change direction
+		if (count >= 5.f) {
+			std::cout << "change dir\n";
+			moving_platform_direction = !moving_platform_direction;
+			count = 0;
+		}
+		else {
+			count += deltaT;
+		}
+		moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
+		moving_platform_physics->Velocity.x = moving_platform_speed;
 	}
-	moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
-	moving_platform_physics->Velocity.x = moving_platform_speed;
-}
 
-/***************************************************************************/
-// Shutdown method, called when the Hori_Elevator script is stopped.
-// @param obj: A pointer to the Object that this script is attached to.
-// Contains cleanup logic for Hori_Elevator.
-/***************************************************************************/
-void Hori_Elevator::Shutdown(Object* obj) {
-	std::cout << "Hori_Elevator Script Shutdown : " << obj->GetName() << std::endl;
-}
+	/***************************************************************************/
+	// Shutdown method, called when the Hori_Elevator script is stopped.
+	// @param obj: A pointer to the Object that this script is attached to.
+	// Contains cleanup logic for Hori_Elevator.
+	/***************************************************************************/
+	void Hori_Elevator::Shutdown(Object* obj) {
+		std::cout << "Hori_Elevator Script Shutdown : " << obj->GetName() << std::endl;
+	}
 
-Hori_Elevator vert_elevator("Hori_Elevator");
+	Hori_Elevator hori_elevator("Hori_Elevator");
+}

@@ -48,6 +48,8 @@ public:
 
 	int collision_flag = 0;
 	
+	bool pushable = false;
+
 	// Get link to the object that is colliding with this object
 	Object* top_collision = nullptr;    // get from the other object's bottom y
 	Object* bottom_collision = nullptr; // get from the other object's top y

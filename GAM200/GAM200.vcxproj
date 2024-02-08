@@ -58,15 +58,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include;$(SolutionDir)lib\imgui-1.87;$(SolutionDir)lib\freetype\include</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include;$(SolutionDir)lib\imgui-1.87;$(SolutionDir)lib\freetype\include;$(ProjectDirsrc\Assets Manager;$(ProjectDir)src\Assets Manager;$(ProjectDir)src\Assets Manager</IncludePath>
     <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)lib\fmod\lib;$(SolutionDir)lib\freetype;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include;;$(SolutionDir)lib\freetype\include</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include;;$(SolutionDir)lib\freetype\include;$(ProjectDirsrc\Assets Manager;$(ProjectDir)src\Assets Manager;$(ProjectDir)src\Assets Manager</IncludePath>
     <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)lib\fmod\lib;$(SolutionDir)lib\freetype;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Installer|x64'">
-    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include;;$(SolutionDir)lib\freetype\include</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)lib\glew-2.2.0\include;$(ProjectDir)include;$(SolutionDir)lib\stb-master;$(SolutionDir)lib\glm-0.9.9.8;$(ProjectDir)include\Graphic_gl;$(SolutionDir)lib\jsoncpp;$(SolutionDir)lib\fmod\include;;$(SolutionDir)lib\freetype\include;$(ProjectDirsrc\Assets Manager;$(ProjectDir)src\Assets Manager;$(ProjectDir)src\Assets Manager</IncludePath>
     <LibraryPath>$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(SolutionDir)lib\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)lib\fmod\lib;$(SolutionDir)lib\freetype;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -163,7 +163,10 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
+    <ClInclude Include="include\components\Particle.h" />
     <ClInclude Include="include\Scripts\Box.h" />
+    <ClInclude Include="include\Scripts\Door.h" />
+    <ClInclude Include="include\Scripts\HorizontalDoor.h" />
     <ClInclude Include="include\Scripts\Hori_Elevator.h" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Application.cpp" />
@@ -172,8 +175,9 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Body.cpp" />
     <ClCompile Include="src\GameHud.cpp" />
-    <ClCompile Include="src\Gizmo.cpp" />
-    <ClCompile Include="src\graphic_gl\Particle.cpp" />
+    <ClCompile Include="src\Gizmo.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\LevelEditor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Installer|x64'">true</ExcludedFromBuild>
@@ -228,15 +232,21 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\graphic_gl\glslshader.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\Mat3.cpp" />
+    <ClCompile Include="src\Particle.cpp" />
     <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Scenes.cpp" />
     <ClCompile Include="src\Scripts\Box.cpp" />
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
+    <ClCompile Include="src\Scripts\Door.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
     <ClCompile Include="src\Scripts\Finn.cpp" />
+    <ClCompile Include="src\Scripts\HorizontalDoor.cpp" />
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
+    <ClCompile Include="src\Scripts\Laser.cpp" />
+    <ClCompile Include="src\Scripts\LaserDoor.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
+    <ClCompile Include="src\Scripts\Piston_H_Elev.cpp" />
     <ClCompile Include="src\Scripts\PowerLiquid.cpp" />
     <ClCompile Include="src\Scripts\PressurePlate.cpp" />
     <ClCompile Include="src\Scripts\Spark.cpp" />
@@ -268,7 +278,6 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Debug.h" />
     <ClInclude Include="include\GameHud.h" />
     <ClInclude Include="include\Gizmo.h" />
-    <ClInclude Include="include\Graphic_gl\Particle.h" />
     <ClInclude Include="include\LevelEditor.h" />
     <ClInclude Include="include\EngineHud.h" />
     <ClInclude Include="include\Font.h" />
@@ -294,7 +303,10 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Scripts\CatPortal.h" />
     <ClInclude Include="include\Scripts\Endpoint.h" />
     <ClInclude Include="include\Scripts\Finn.h" />
+    <ClInclude Include="include\Scripts\Laser.h" />
+    <ClInclude Include="include\Scripts\LaserDoor.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
+    <ClInclude Include="include\Scripts\Piston_H_Elev.h" />
     <ClInclude Include="include\Scripts\PowerLiquid.h" />
     <ClInclude Include="include\Scripts\PressurePlate.h" />
     <ClInclude Include="include\Scripts\Spark.h" />

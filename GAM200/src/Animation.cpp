@@ -16,6 +16,121 @@ void Animation::Initialize()
 
 }
 
+void Animation::Update_player()
+{
+	static float accum_time = 0.0f;
+	static int frame_dt_count = 0;
+
+	if (this->current_type != this->previous_type && !this->jump_fixed)
+		this->frame_num = 0;
+	if (engine->isPaused())
+		return;
+
+	accum_time += engine->GetDt();
+
+	if (accum_time < engine->Get_Fixed_DT()) return;
+
+	while (accum_time >= engine->Get_Fixed_DT())
+	{
+		accum_time -= engine->Get_Fixed_DT();
+		frame_dt_count++;
+	}
+	
+
+	while (frame_dt_count) {
+		frame_dt_count--;
+
+		if (this->current_type != this->previous_type && !this->jump_fixed)
+			this->frame_num = 0;
+		else if (this->frame_count >= this->frame_rate) {
+			this->frame_count = 0.f;
+			this->frame_num++;
+			if (this->frame_num >= this->animation_Map[this->current_type].size())
+				this->frame_num = 0;
+		}
+		if (this->jump_fixed) {
+			if (this->previous_type != AnimationType::Jump && this->previous_type != AnimationType::Jump_left)
+				this->frame_num = 0;
+			if (this->frame_num >= this->jump_fixed_frame)
+				this->frame_num = this->jump_fixed_frame;
+		}
+	}
+}
+
+void Animation::Update_objects()
+{
+	static float accum_time = 0.0f;
+	static int frame_dt_count = 0;
+
+	if (this->current_type != this->previous_type)
+		this->frame_num = 0;
+	if (engine->isPaused())
+		return;
+
+	accum_time += engine->GetDt();
+
+	if (accum_time < engine->Get_Fixed_DT()) return;
+
+	while (accum_time >= engine->Get_Fixed_DT())
+	{
+		accum_time -= engine->Get_Fixed_DT();
+		frame_dt_count++;
+	}
+	
+
+	while (frame_dt_count) {
+		frame_dt_count--;
+		
+		if (!this->fixed) {//object with animation
+			if (this->frame_count >= this->frame_rate)
+			{
+				this->frame_count = 0.f;
+				this->frame_num++;
+				if (this->frame_num >= this->animation_Map[this->current_type].size())
+					this->frame_num = 0;
+			}
+		}
+		else if (this->frame_count >= this->frame_rate) {
+			this->frame_count = 0.f;
+			
+			this->reverse ? this->frame_num-- : this->frame_num++;
+
+			if (this->frame_num < 0)
+				this->frame_num = 0;
+			else if (this->frame_num >= this->animation_Map[this->current_type].size())
+				this->frame_num = static_cast<int>(this->animation_Map[this->current_type].size()) - 1;
+		}
+	}
+}
+
+void Animation::Update_time()
+{
+	this->previous_type = this->current_type;
+	static float accum_time = 0.0f;
+	static int frame_dt_count = 0;
+
+	if (engine->isPaused())
+		return;
+
+	accum_time += engine->GetDt();
+
+	if (accum_time < engine->Get_Fixed_DT()) return;
+
+	while (accum_time >= engine->Get_Fixed_DT())
+	{
+		accum_time -= engine->Get_Fixed_DT();
+		frame_dt_count++;
+	}
+
+	while (frame_dt_count) {
+		frame_dt_count--;
+		
+		this->frame_count += engine->Get_Fixed_DT();
+	}
+}
+
+
+
 /******************************************************************************
 	to create a model
 *******************************************************************************/
