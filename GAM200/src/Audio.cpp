@@ -48,7 +48,7 @@ void Audio::Initialize(){
 
 /******************************************************************************
 setupSound
--	This function loads the sound mappings and sets the background and walking sounds
+-	This function loads the sound mappings and sets the background sound
 *******************************************************************************/
 void Audio::setupSound()
 {
@@ -112,9 +112,9 @@ void Audio::Update(){
 
 /******************************************************************************
 playSfx
--	This function tells Fmod to play the given sfx type
+-	This function tells Fmod to play the given sfx name
 
-@param a - The sfx type to play
+@param a - The sfx name to play
 *******************************************************************************/
 void Audio::playSfx(std::string audioType) {
     system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
@@ -125,7 +125,7 @@ void Audio::playSfx(std::string audioType) {
 restartBackgroundAudio
 -	This function restarts the background the audio from the beginning
 -	To be called if you are changing or restarting a scene or if the sound
-	linked to AudioType::Background changes
+	linked to background changes
 *******************************************************************************/
 void Audio::restartBackgroundAudio() {
 	background->stop();
