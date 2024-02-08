@@ -905,6 +905,47 @@ void GLApp::draw_rect(Vec2 rec_pos, Vec2 rec_scale, float rec_r, glm::vec3 rec_c
 	AssetManager::shaderval("shape").UnUse();
 }
 
+void GLApp::draw_texture(Vec2 tex_t, Vec2 tex_s, float tex_r, GLuint tex_in, bool tex_camera)
+{
+	float pos_x;
+	float pos_y;
+	float scaling_x;
+	float scaling_y;
+
+	scaling_x = tex_s.x * 2.0f / window->width_init;
+	scaling_y = tex_s.y * 2.0f / window->height_init;
+	pos_x = tex_t.x * 2.0f / window->width_init;
+	pos_y = tex_t.y * 2.0f / window->height_init;
+
+	Mat3 mat_test;
+	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotDeg(tex_r);
+	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	if (tex_camera)
+		mat_test = camera2D->world_to_ndc * mat_test;
+	
+
+	glBindTextureUnit(6, tex_in);
+	glBindTexture(GL_TEXTURE_2D, tex_in);
+	//draw texture
+	AssetManager::shaderval("image").Use();
+	// bind VAO of this object's model
+	glBindVertexArray(AssetManager::modelval("square").vaoid);
+	// copy object's model-to-NDC matrix to vertex shader's
+	// uniform variable uModelToNDC
+	AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+	// tell fragment shader sampler uTex2d will use texture image unit 6
+	GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
+	glUniform1i(tex_loc, 6);
+	// call glDrawElements with appropriate arguments
+	glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+	// unbind VAO and unload shader program
+	glBindVertexArray(0);
+	AssetManager::shaderval("image").UnUse();
+
+}
+
 Vec2 GLApp::game_to_ndc(Vec2 position)
 {
 	Vec2 result;
