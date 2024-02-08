@@ -11,7 +11,8 @@ This file contains the script for the doors
 #include <components/Event.h>
 #include <Audio.h>
 
-static float DoorSfxCooldown = 0.f;
+static float DoorOpenSfxCooldown = 0.f;
+static float DoorActivatedSfxCooldown = 0.f;
 
 // Constructor for the Door class.
 // @param name: The name of the portal.
@@ -32,8 +33,11 @@ void Door::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void Door::Update(Object* obj) {
-    DoorSfxCooldown -= engine->GetDt();
-    DoorSfxCooldown = DoorSfxCooldown < 0.f ? 0.f : DoorSfxCooldown;
+    DoorOpenSfxCooldown -= engine->GetDt();
+    DoorOpenSfxCooldown = DoorOpenSfxCooldown < 0.f ? 0.f : DoorOpenSfxCooldown;
+
+    DoorActivatedSfxCooldown -= engine->GetDt();
+    DoorActivatedSfxCooldown = DoorActivatedSfxCooldown < 0.f ? 0.f : DoorActivatedSfxCooldown;
 
     if (obj == nullptr) {
         //std::cout << "NIL OBJ : Door" << std::endl;
@@ -47,9 +51,16 @@ void Door::Update(Object* obj) {
     if (door_a == nullptr || door_b == nullptr)
         return;
 
-    if (((!door_a->reverse && door_a->frame_num == 22) || (door_a->reverse && door_a->frame_num == 27)) && !DoorSfxCooldown) {
+    // SFX for when the door activates
+    if (!door_a->reverse && door_a->frame_num == 1 && !DoorActivatedSfxCooldown) {
+        audio->playSfx("door_activated");
+        DoorActivatedSfxCooldown = 1.5f;
+    }
+
+    // SFX for when the door opens/closes
+    if (((!door_a->reverse && door_a->frame_num == 22) || (door_a->reverse && door_a->frame_num == 27)) && !DoorOpenSfxCooldown) {
         audio->playSfx("sliding_door_open");
-        DoorSfxCooldown = 1.5f; // Make sure the audio only plays once
+        DoorOpenSfxCooldown = 1.5f; // Make sure the audio only plays once
     }
 
     // Disable collision only when the door is fully opened
