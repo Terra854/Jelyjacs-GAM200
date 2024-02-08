@@ -1068,6 +1068,12 @@ void LevelEditor::ListOfObjects() {
 
 	ImGui::Begin("Object List");
 	ImGui::Text("Number of game objects in level: %d", objectFactory->NumberOfObjects());
+	if (ImGui::Button("Create new layer")) {
+		std::string layerName = std::string("Layer " + static_cast<char>(sceneManager->layers.size()));
+		//buffer
+		sprintf_s(buffer, "Layer %d", sceneManager->layers.size());
+		objectFactory->CreateLayer(std::string(buffer), true);
+	}
 	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
