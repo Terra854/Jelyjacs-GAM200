@@ -856,7 +856,7 @@ void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, float l_c_width, glm::
 
 	glLineWidth(l_c_width);
 	//draw line_circle
-	AssetManager::shaderval("shape");
+	AssetManager::shaderval("shape").Use();
 	// bind VAO of this object's model
 	glBindVertexArray(AssetManager::modelval("line_circle").vaoid);
 	// copy object's model-to-NDC matrix to vertex shader's
