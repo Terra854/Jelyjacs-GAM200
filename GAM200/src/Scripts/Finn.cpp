@@ -67,7 +67,7 @@ void Finn::Update(Object* obj) {
 				//audio->playJump();
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 				audio->playSfx("finn_jumping");
-				
+
 			}
 		}
 		if (input::IsPressedRepeatedly(KEY::a)) {
@@ -108,7 +108,11 @@ void Finn::Update(Object* obj) {
 			//audio->startWalking();
 			finn_move_time += engine->GetDt();
 
-			if (finn_move_time > 0.4f) {
+			if ((player_animation->current_type == AnimationType::Push_left || player_animation->current_type == AnimationType::Push) && finn_move_time > 1.f) {
+				audio->playSfx("finn_walking");
+				finn_move_time -= 1.f;
+			}
+			else if (!(player_animation->current_type == AnimationType::Push_left || player_animation->current_type == AnimationType::Push) && finn_move_time > 0.4f) {
 				audio->playSfx("finn_walking");
 				finn_move_time -= 0.4f;
 			}
