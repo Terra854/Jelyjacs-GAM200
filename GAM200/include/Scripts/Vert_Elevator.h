@@ -9,6 +9,7 @@ This file contains the script for the vertical elevator
 #include <Object.h>
 #include <GameLogic.h>
 
+
 // Class Vert_Elevator, derived from LogicScript.
 // This class is specifically designed to manage a vertical moving platform or elevator within the game. 
 // It handles the elevator's movements and direction changes.
@@ -39,9 +40,34 @@ public:
     // Used for cleanup tasks or to reset the state of the elevator.
     void Shutdown(Object* obj) override;
 
+    float GetSpeed() const;
+    void SetSpeed(float speed);
+
+    enum states {
+        UP,
+        DOWN
+    };
+
+    class StateManager {
+    public:
+        StateManager();
+        bool ChangeDirection(Object* obj);
+        void SetState(states state);
+        states GetState();
+    private:
+        states currentstate;
+        float counter;
+        float timing;
+    };
+
+
+    
+
 private:
     // A boolean variable to store the moving direction of the elevator.
     // False indicates moving downwards, and true indicates moving upwards.
     // It is used in the Update method to control the elevator's movement.
     bool moving_platform_direction;
+    float moving_platform_speed;
+    StateManager stateManager;
 };
