@@ -31,4 +31,4 @@ ImVec2 convertMouseToGameViewportPos(ImVec2 displaySize);
 bool isObjectClicked(Transform* trans, ImVec2 mousePos);
 
 //Calculates and return the angle between 2 Vec2 in degrees
-double calculateAngle(const Vec2& a, const Vec2& b);
+float calculateAngle(const Vec2& a, const Vec2& b);

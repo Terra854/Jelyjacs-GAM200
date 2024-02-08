@@ -67,6 +67,7 @@ Vert_Elevator::StateManager::StateManager() {
 }
 
 bool Vert_Elevator::StateManager::ChangeDirection(Object* obj) {
+
 	float dt = engine->Get_Fixed_DT();
 	if(counter >= timing) {
 		currentstate = currentstate ? UP : DOWN;

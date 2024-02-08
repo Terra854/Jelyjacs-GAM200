@@ -37,8 +37,6 @@ void Box::Update(Object* obj) {
         return;
     }
 
-    // Get the Animation component of the Box.
-    Animation* box_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
     Physics* box_phy = (Physics*)obj->GetComponent(ComponentType::Physics);
     Rectangular* box_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 
