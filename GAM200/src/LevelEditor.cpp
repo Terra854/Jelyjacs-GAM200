@@ -237,17 +237,7 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
 		}
 
-		//Accept drag and drop for game texture
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
-			{
-				const std::pair<std::string, GLuint>* dropped_object = (const std::pair<std::string, GLuint>*)payload->Data;
-				te->textureName = dropped_object->first;
-				UpdateAllObjectInstances(object);
-				ImGui::EndDragDropTarget();
-			}
-		}
+		
 	}
 	else {
 		ImGui::Text("This object has");
@@ -255,6 +245,27 @@ void LevelEditor::ObjectProperties() {
 		ImGui::Text("animations");
 	}
 	ImGui::EndChild();
+
+	//Accept drag and drop for game texture
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
+		{
+			const std::pair<std::string, GLuint>* dropped_object = (const std::pair<std::string, GLuint>*)payload->Data;
+
+			if (te == nullptr) {
+				object->AddComponent(new Texture(dropped_object->first));
+				tr->Scale = { 64.f, 64.f };
+			}
+			else
+				te->textureName = dropped_object->first;
+			
+
+
+			UpdateAllObjectInstances(object);
+			ImGui::EndDragDropTarget();
+		}
+	}
 
 	ImGui::SameLine();
 
@@ -1873,6 +1884,8 @@ void LevelEditor::Initialize() {
 	font = io.Fonts->AddFontFromFileTTF("Asset/Fonts/Roboto-Regular.ttf", 15);
 
 	io.Fonts->Build();
+
+	objectFactory->CreateLayer("Layer 0", true);
 }
 
 /******************************************************************************

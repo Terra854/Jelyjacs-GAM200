@@ -29,6 +29,7 @@ public:
 	friend class LevelEditor;
 	friend class Factory;
 	friend class GLApp;
+	friend class CoreEngine;
 	friend void ::SaveScene(std::string);
 
 private:
