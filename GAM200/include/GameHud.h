@@ -17,45 +17,35 @@ class Text
 {
 public:
 	Vec2 pos{};
-	float scale;
 	std::string text{};
-	FONT font;
+	Vec2 scale;
+	FONT font = FONT::AldrichRegular;
 };
 
 //the dimensions of button
 class Button
 {
 public:
-	Button(Vec2 pos1, Vec2 pos2);
 	Button(Vec2 centre, float width, float height);
-	Vec2 pos1;
-	Vec2 pos2;
 	Vec2 centre;
 	float width;
 	float height;
 	Text string{};
-	bool selected{false};
-	//to attach an empty box texture to the button
+	bool selected{};
 	GLuint texture_id;
-	void draw_hud_texture();
+	Vec2 get_pos1() const;
+	Vec2 get_pos2() const;
 };
 
 struct Menu
 {
+	Menu();
 	Menu(float , float ,float , float, GLuint);
 	Vec2 pos;
 	Vec2 scale;
 	GLuint texture_id;
-	void draw_menu();
+	void init();
 };
-
-//map container to store all buttons created
-extern std::vector<Button> Buttons;
-
-extern std::vector<Menu> Menus;
-
-//creates a new button with data initialised by function parameters
-void create_button(std::string const& text, Button button, float scale, FONT font , GLuint id);
 
 //change to winning screen
 void set_win();
@@ -73,7 +63,6 @@ public:
 private:
 };
 
-//creates buttons based on json
-void createHudFromConfig(std::string file);
+
 
 
