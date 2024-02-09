@@ -164,6 +164,7 @@ void SceneManager::PlayCutScene(std::string str)
 		textscale = static_cast<float>((3 / 4.0 * window->width) / window->width);
 
 		DrawText(frametext, -static_cast<float>(find_width(frametext, FONT::AldrichRegular)) / 2 * textscale, -static_cast<float>(window->height / 8) * 3, textscale);
+		DrawText("click anywhere to continue", -250, -500, 0.7);
 		glfwSwapBuffers(window->ptr_window);
 
 		while (timer < 5.0) {
