@@ -32,6 +32,9 @@ std::map<std::string,std::vector<Menu>> menu_background;
 Button* button_tracker;
 std::string menu_tracker;
 
+bool win = false;
+float counter = 0.f;
+
 void create_buttons_from_config(std::string file);
 void create_menus_from_config(std::string file);
 Button setup_button(Vec2 centre, float width, float height, Vec2 scale, std::string string, GLuint textreid, FONT f);
@@ -110,6 +113,22 @@ void GameHud::Draw()
 	{
 		draw_outline(button_tracker->get_pos1(), button_tracker->get_pos2());
 	}
+	if (counter > 3.f) {
+		win = false;
+		counter = 0.f;
+		sceneManager->LoadScene("Asset/Levels/level_1.json");
+		current_page = PAGE::main_menu;
+	}
+
+	if (win) {
+		SetFont(FONT::AldrichRegular);
+		DrawText("You Win", 0, 0, 1.0f);
+		counter += engine->GetDt();
+		std::cout << counter << std::endl;
+	}
+
+	
+	
 	
 }
 
@@ -137,7 +156,7 @@ GameHud::~GameHud()
 
 void set_win()
 {
-	
+	win = true;
 }
 
 void create_buttons_from_config(std::string file)

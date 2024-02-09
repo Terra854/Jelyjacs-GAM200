@@ -70,6 +70,7 @@ void Endpoint::Update(Object* obj) {
 					endpoint_animation->current_type = AnimationType::Jump;
 					audio->playSfx("level_complete");
 					set_win();
+					std::cout << "ongoing" << std::endl;
 				}
 			}
 		}
