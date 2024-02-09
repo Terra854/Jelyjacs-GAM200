@@ -42,9 +42,7 @@ glm::vec3 white_box_color{ 1.0f, 1.0f, 1.0f };
 glm::vec3 line_color{ 0.0f, 1.0f, 0.0f };
 
 
-//Declarations of shdrpgms models objects map
-//std::map<std::string, GLSLShader> GLApp::shdrpgms;
-//std::map<std::string, GLApp::GLModel> GLApp::models;
+
 
 //Global pointer to GLApp
 GLApp* app = NULL;
@@ -63,179 +61,15 @@ void GLApp::Initialize()
 	glClearColor(1.f, 1.f, 1.f, 1.f);
 
 	glViewport(0, 0, window->width_init, window->height_init);
-	//init_models();
-	//init_shdrpgms();
 	
 	// enable alpha blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//particleSystem.Init();
+	
 }
 
-/*  _________________________________________________________________________ */
-/*
-* get all he models from the list.txt file and store them in the models map
 
-void GLApp::init_models() {
-	//open list of meshes
-	std::ifstream ifs{ "meshes/list.txt", std::ios::in };
-	if (!ifs)
-	{
-		std::cout << "ERROR: Unable to open mesh file: "
-			<< "list" << "\n";
-		exit(EXIT_FAILURE);
-	}
-	ifs.seekg(0, std::ios::beg);
-	std::string line;
-	//get models from list
-	while (getline(ifs, line)) {
-		//get model name
-		std::istringstream line_model_name{ line };
-		std::string model_name;
-		line_model_name >> model_name;
-
-		//check if model already exists
-		if (models.find(model_name) == models.end()) {
-			GLModel Model;
-			std::ifstream ifs_msh{ "meshes/" + model_name + ".msh", std::ios::in };
-			if (!ifs_msh)
-			{
-				std::cout << "ERROR: Unable to open mesh file: "
-					<< model_name << "\n";
-				exit(EXIT_FAILURE);
-			}
-			ifs_msh.seekg(0, std::ios::beg);
-			std::string line_mesh;
-			getline(ifs_msh, line_mesh);
-			std::istringstream line_sstm_mesh{ line_mesh };
-			char obj_prefix;
-			std::string mesh_name;
-			line_sstm_mesh >> obj_prefix >> mesh_name;
-
-			//get model data
-			std::vector < float > pos_vtx;
-			std::vector < float > clr_vtx;
-			std::vector < float > tex_coor;
-			std::vector < GLushort > gl_tri_primitives;
-
-			GLuint vbo, vao, ebo;
-
-			while (getline(ifs_msh, line_mesh))
-			{
-				std::istringstream line_sstm_mdl{ line_mesh };
-				line_sstm_mdl >> obj_prefix;
-				float float_data;
-				GLushort glushort_data;
-
-				if (obj_prefix == 'v')
-				{
-					while (line_sstm_mdl >> float_data)
-					{
-						pos_vtx.push_back(float_data);
-					}
-				}
-				if (obj_prefix == 'c')
-				{
-					while (line_sstm_mdl >> float_data)
-					{
-						clr_vtx.push_back(float_data);
-					}
-				}
-				if (obj_prefix == 'x')
-				{
-					while (line_sstm_mdl >> float_data)
-					{
-						tex_coor.push_back(float_data);
-					}
-				}
-				if (obj_prefix == 't')
-				{
-					while (line_sstm_mdl >> glushort_data)
-					{
-						gl_tri_primitives.push_back(glushort_data);
-					}
-					Model.primitive_type = GL_TRIANGLES;
-				}
-				if (obj_prefix == 'l')
-				{
-					while (line_sstm_mdl >> glushort_data)
-					{
-						gl_tri_primitives.push_back(glushort_data);
-					}
-					Model.primitive_type = GL_LINES;
-				}
-				if (obj_prefix == 'f')
-				{
-					while (line_sstm_mdl >> glushort_data)
-					{
-						gl_tri_primitives.push_back(glushort_data);
-					}
-					Model.primitive_type = GL_TRIANGLE_FAN;
-				}
-				if (obj_prefix == 'p')
-				{
-					while (line_sstm_mdl >> glushort_data)
-					{
-						gl_tri_primitives.push_back(glushort_data);
-					}
-					Model.primitive_type = GL_POINTS;
-				}
-				if (obj_prefix == 'o')
-				{
-					while (line_sstm_mdl >> glushort_data)
-					{
-						gl_tri_primitives.push_back(glushort_data);
-					}
-					Model.primitive_type = GL_LINE_LOOP;
-				}
-			}
-			// Set VAO
-
-
-			glCreateBuffers(1, &vbo);
-			glNamedBufferStorage(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size() + sizeof(glm::vec2) * tex_coor.size(), nullptr, GL_DYNAMIC_STORAGE_BIT);
-			glNamedBufferSubData(vbo, 0, sizeof(glm::vec2) * pos_vtx.size(), pos_vtx.data());
-			glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3) * clr_vtx.size(), clr_vtx.data());
-			glNamedBufferSubData(vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(),
-				sizeof(glm::vec2) * tex_coor.size(), tex_coor.data());
-
-
-			glCreateVertexArrays(1, &vao);
-
-			glEnableVertexArrayAttrib(vao, 0);
-			glVertexArrayVertexBuffer(vao, 0, vbo, 0, sizeof(glm::vec2));
-			glVertexArrayAttribFormat(vao, 0, 2, GL_FLOAT, GL_FALSE, 0);
-			glVertexArrayAttribBinding(vao, 0, 0);
-
-			glEnableVertexArrayAttrib(vao, 1);
-			glVertexArrayVertexBuffer(vao, 1, vbo, sizeof(glm::vec2) * pos_vtx.size(), sizeof(glm::vec3));
-			glVertexArrayAttribFormat(vao, 1, 3, GL_FLOAT, GL_FALSE, 0);
-			glVertexArrayAttribBinding(vao, 1, 1);
-
-			glEnableVertexArrayAttrib(vao, 2);
-			glVertexArrayVertexBuffer(vao, 2, vbo, sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(), sizeof(glm::vec2));
-			glVertexArrayAttribFormat(vao, 2, 2, GL_FLOAT, GL_FALSE, 0);
-			glVertexArrayAttribBinding(vao, 2, 2);
-
-			glCreateBuffers(1, &ebo);
-			glNamedBufferStorage(ebo, sizeof(GLushort) * gl_tri_primitives.size(), gl_tri_primitives.data(), GL_DYNAMIC_STORAGE_BIT);
-			glVertexArrayElementBuffer(vao, ebo);
-			glBindVertexArray(0);
-
-			Model.vaoid = vao;
-			Model.primitive_cnt = (unsigned int)gl_tri_primitives.size();
-			Model.draw_cnt = (unsigned int)gl_tri_primitives.size();
-			models[model_name] = Model;
-
-			//delete vbo, ebo
-
-			glDeleteBuffers(1, &vbo);
-			glDeleteBuffers(1, &ebo);
-			std::cout << model_name << " model created" << std::endl;
-		}
-	}
-}
 
 /*
 * get all he models from the list.txt file and store them in the models map
@@ -385,19 +219,7 @@ void GLApp::insert_models(std::string model_name) {
 		}
 }
 
-/*  _________________________________________________________________________ */
-/*
-* get all he shader programs
 
-void GLApp::init_shdrpgms() {
-
-	insert_shdrpgm("image", "shaders/image.vert", "shaders/image.frag");
-	std::cout << "test shader program: " << "image-shdrpgm" << std::endl;
-	insert_shdrpgm("shape", "shaders/shape.vert", "shaders/shape.frag");
-	std::cout << "test shader program: " << "shape-shdrpgm" << std::endl;
-	insert_shdrpgm("instancing", "shaders/instancing.vert", "shaders/instancing.frag");
-
-}
 
 /*  _________________________________________________________________________ */
 /*
@@ -521,6 +343,7 @@ void GLApp::Update()
 							ani_pt->Update_objects();
 
 						}
+						// render animation
 						glBindTextureUnit(6, tex_test);
 						glBindTexture(GL_TEXTURE_2D, tex_test);
 						//glTextureSubImage2D(tex_test, 0, 0, 0, window->width, window->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -674,18 +497,7 @@ void GLApp::Update()
 */
 void GLApp::cleanup()
 {
-	//particleSystem.Free();
-	//delete all models
-	//for (auto& model : models)
-	//{
-	//	glDeleteVertexArrays(1, &model.second.vaoid);
-	//}
-	////delete all shader programs
-	//for (auto& shdrpgm : shdrpgms)
-	//{
-	//	glDeleteProgram(shdrpgm.second.GetHandle());
-	//}
-	//particleSystem.Free();
+	
 }
 
 /*  _________________________________________________________________________ */
@@ -801,6 +613,14 @@ void GLApp::drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	AssetManager::shaderval("shape").UnUse();
 }
 
+/*  _________________________________________________________________________ */
+/*
+* a function to draw triangle
+* @param tri_pos The position of the triangle
+* @param tri_scale The scale of the triangle
+* @param tri_r The rotation of the triangle
+* @param tri_color The color of the triangle
+* */
 
 void GLApp::drawtriangle(Vec2 tri_pos, Vec2 tri_scale, float tri_r, glm::vec3 tri_color) {
 	float pos_x;
@@ -835,6 +655,15 @@ void GLApp::drawtriangle(Vec2 tri_pos, Vec2 tri_scale, float tri_r, glm::vec3 tr
 	glBindVertexArray(0);
 	AssetManager::shaderval("shape").UnUse();
 }
+
+/*  _________________________________________________________________________ */
+/*
+* a function to draw circle
+* @param c_pos The position of the circle
+* @param c_scale The scale of the circle
+* @param c_r The rotation of the circle
+* @param c_color The color of the circle
+* */
 
 void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, float l_c_width, glm::vec3 l_c_color)
 {
@@ -871,6 +700,15 @@ void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, float l_c_width, glm::
 	AssetManager::shaderval("shape").UnUse();
 }
 
+/*  _________________________________________________________________________ */
+/*
+* a function to draw rect
+* @param rec_pos The position of the rect
+* @param rec_scale The scale of the rect
+* @param rec_r The rotation of the rect
+* @param rec_color The color of the rect
+* */
+
 void GLApp::draw_rect(Vec2 rec_pos, Vec2 rec_scale, float rec_r, glm::vec3 rec_color)
 {
 	float pos_x;
@@ -904,6 +742,17 @@ void GLApp::draw_rect(Vec2 rec_pos, Vec2 rec_scale, float rec_r, glm::vec3 rec_c
 	glBindVertexArray(0);
 	AssetManager::shaderval("shape").UnUse();
 }
+
+
+/*  _________________________________________________________________________ */
+/*
+* a function to draw texture
+* @param tex_t The position of the texture
+* @param tex_s The scale of the texture
+* @param tex_r The rotation of the texture
+* @param tex_in The texture
+* @param tex_camera The texture is camera
+* */
 
 void GLApp::draw_texture(Vec2 tex_t, Vec2 tex_s, float tex_r, GLuint tex_in, bool tex_camera)
 {
@@ -945,6 +794,12 @@ void GLApp::draw_texture(Vec2 tex_t, Vec2 tex_s, float tex_r, GLuint tex_in, boo
 	AssetManager::shaderval("image").UnUse();
 
 }
+
+/*  _________________________________________________________________________ */
+/*
+* a function to ndc position
+* @param position of the game
+* */
 
 Vec2 GLApp::game_to_ndc(Vec2 position)
 {
