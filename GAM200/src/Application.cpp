@@ -61,7 +61,7 @@ void Application::Init() {
 
 	// Initialise Pointer to Systems
 	engine = new CoreEngine();
-	GLWindow* windows = new GLWindow();
+	window = new GLWindow();
 	Factory* factory = new Factory();
 	PhysicsSystem* physics = new PhysicsSystem();
 	AssetManager* assetmanager = new AssetManager();
@@ -75,7 +75,7 @@ void Application::Init() {
 
 
 	// Add System to the engine 
-	engine->AddSystem(windows);
+	engine->AddSystem(window);
 	engine->AddSystem(thread_pool);
 	engine->AddSystem(audio);
 	engine->AddSystem(assetmanager);
@@ -96,7 +96,7 @@ void Application::Init() {
 
 	// Initialize and Start Game Loop
 	engine->Initialize();
-	windows->print_specs();
+	window->print_specs();
 }
 void Application::Run() {
 

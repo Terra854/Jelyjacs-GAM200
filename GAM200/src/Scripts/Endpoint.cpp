@@ -10,6 +10,7 @@ This file contains the script for the endpoint door
 #include <components/Transform.h>
 #include <components/Animation.h>
 #include "gamehud.h"
+#include <Audio.h>
 
 Endpoint::Endpoint(std::string name) : LogicScript(name)
 {
@@ -67,6 +68,7 @@ void Endpoint::Update(Object* obj) {
 					//Get Animation and change the animation to jump
 					endpoint_animation->fixed = true;
 					endpoint_animation->current_type = AnimationType::Jump;
+					audio->playSfx("level_complete");
 					set_win();
 				}
 			}

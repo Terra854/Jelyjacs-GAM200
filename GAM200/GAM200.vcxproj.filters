@@ -225,20 +225,11 @@
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Box.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripts\PowerLiquid.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripts\PressurePlate.cpp">
       <Filter>Source Files\Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripts\Piston_H_Elev.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripts\Laser.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Particle.cpp">
       <Filter>Source Files\Components</Filter>
@@ -250,6 +241,15 @@
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripts\HorizontalDoor.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Piston_H_Elev.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Laser.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Box.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
   </ItemGroup>

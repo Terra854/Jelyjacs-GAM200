@@ -104,10 +104,10 @@ void Camera::SetToPlayer() {
 
 		position.y = -position.y * 2.0f / window->height_init;
 		// make sure the camera is not out of bounds
-		if (position.x < x_min ) position.x = x_min;
+		/*if (position.x < x_min ) position.x = x_min;
 		if (position.y < y_min) position.y = y_min;
 		if (position.x > x_max ) position.x = x_max;
-		if (position.y > y_max) position.y = y_max;
+		if (position.y > y_max) position.y = y_max;*/
 
 	}
 }

@@ -280,7 +280,7 @@ void LevelEditor::ObjectProperties() {
 		strncpy_s(newName, object->GetName().c_str(), sizeof(newName));
 		ImGui::Text("Object ID: %d", object->GetId());
 		ImGui::Text("In Layer: %s", objectFactory->FindLayerThatHasThisObject(object)->first.c_str());
-		ImGui::InputText("Name", newName, sizeof(newName));
+		LE_InputText("Name", newName, sizeof(newName));
 
 		object->SetName(newName);
 
@@ -484,9 +484,9 @@ void LevelEditor::ObjectProperties() {
 			if (Transform_EditMode)
 			{
 				// Display input fields
-				ImGui::InputFloat2("Position", &(edited_position.x));
-				ImGui::InputFloat("Rotation", &edited_rotation);
-				ImGui::InputFloat2("Scale", &(edited_scale.x));
+				LE_InputFloat2("Position", &(edited_position.x));
+				LE_InputFloat("Rotation", &edited_rotation);
+				LE_InputFloat2("Scale", &(edited_scale.x));
 
 				// Button to exit edit mode
 				if (ImGui::Button("Done##Transform"))
@@ -604,8 +604,8 @@ void LevelEditor::ObjectProperties() {
 				{
 					ImGui::Text("All values will apply to all instances of %s", object->GetName().c_str());
 					// Display input fields
-					ImGui::InputFloat("AABB Width", &edited_aabb_width);
-					ImGui::InputFloat("AABB Height", &edited_aabb_height);
+					LE_InputFloat("AABB Width", &edited_aabb_width);
+					LE_InputFloat("AABB Height", &edited_aabb_height);
 					ImGui::Checkbox("Pushable", &edited_pushable);
 
 					// Button to exit edit mode
@@ -947,9 +947,9 @@ void LevelEditor::ObjectProperties() {
 			if (Physics_EditMode)
 			{
 				// Display input fields
-				ImGui::InputFloat2("Velocity", &(edited_velocity.x));
+				LE_InputFloat2("Velocity", &(edited_velocity.x));
 				ImGui::Text("All values below will apply to all instances of %s", object->GetName().c_str());
-				ImGui::InputFloat("Mass", &(edited_mass));
+				LE_InputFloat("Mass", &(edited_mass));
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
 				ImGui::Checkbox("Able to push objects: ", &edited_able_to_push_objects);
 
@@ -1554,23 +1554,28 @@ void ObjectClonedSuccessfully(int i) {
 	ImGui::SetNextWindowSize(ImVec2(0, 0));
 	char text[50];
 
-	ImGui::Begin("Clone Successful");
-	sprintf_s(text, "New object ID is: %d", i);
+	if (cloneSuccessful != -1)
+		ImGui::OpenPopup("Clone Successful");
 
-	ImVec2 textSize = ImGui::CalcTextSize(text);
-	ImVec2 windowSize = ImGui::GetWindowSize();
-	ImVec2 textPos = {
-		(windowSize.x - textSize.x) * 0.5f,
-		(windowSize.y - textSize.y) * 0.5f
-	};
-	ImGui::SetCursorPos(textPos);
-	ImGui::Text(text);
+	if (ImGui::BeginPopupModal("Clone Successful", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		sprintf_s(text, "New object ID is: %d", i);
 
-	if (ImGui::Button("OK"))
-	{
-		cloneSuccessful = -1;
+		ImVec2 textSize = ImGui::CalcTextSize(text);
+		ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 textPos = {
+			(windowSize.x - textSize.x) * 0.5f,
+			(windowSize.y - textSize.y) * 0.5f
+		};
+		ImGui::SetCursorPos(textPos);
+		ImGui::Text(text);
+
+		if (ImGui::Button("OK"))
+		{
+			cloneSuccessful = -1;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
 	}
-	ImGui::End();
 }
 
 bool save_as_dialog = false;
@@ -1584,43 +1589,48 @@ void LevelEditor::SaveAsDialog() {
 	ImGui::SetNextWindowSize(ImVec2(300, 0));
 	static char text[100];
 
-	ImGui::Begin("Save as", &save_as_dialog);
+	if (save_as_dialog)
+		ImGui::OpenPopup("Save as");
 
-	ImGui::Text("Save to file:");
-	ImGui::InputText("##Filename", text, 100);
+	if (ImGui::BeginPopupModal("Save as", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-	ImGui::SameLine();
+		ImGui::Text("Save to file:");
+		LE_InputText("##Filename", text, 100);
 
-	ImGui::Text(".json");
+		ImGui::SameLine();
 
-	if (ImGui::Button("OK"))
-	{
-		if (!initialObjectMap.empty()) {
-			objectFactory->destroyAllObjects();
+		ImGui::Text(".json");
 
-			for (const std::pair<int, Object*>& p : initialObjectMap) {
-				objectFactory->assignIdToObject(p.second);
+		if (ImGui::Button("OK"))
+		{
+			if (!initialObjectMap.empty()) {
+				objectFactory->destroyAllObjects();
+
+				for (const std::pair<int, Object*>& p : initialObjectMap) {
+					objectFactory->assignIdToObject(p.second);
+				}
+
+				SceneManager::ClearInitialObjectMap(false);
 			}
 
-			SceneManager::ClearInitialObjectMap(false);
+			char saveLocation[110];
+
+			sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
+
+			SaveScene(saveLocation);
+			save_as_dialog = false;
+			ImGui::CloseCurrentPopup();
 		}
 
-		char saveLocation[110];
+		ImGui::SameLine();
 
-		sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
-
-		SaveScene(saveLocation);
-		save_as_dialog = false;
+		if (ImGui::Button("Cancel"))
+		{
+			save_as_dialog = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
 	}
-
-	ImGui::SameLine();
-
-	if (ImGui::Button("Cancel"))
-	{
-		save_as_dialog = false;
-	}
-
-	ImGui::End();
 }
 
 /******************************************************************************
@@ -1864,6 +1874,9 @@ void LevelEditor::Initialize() {
 *******************************************************************************/
 void LevelEditor::Update() {
 
+	// Reset flag for every loop
+	input::LevelEditorTextActive = false;
+
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
@@ -1967,6 +1980,35 @@ void LevelEditor::Update() {
 		selectedNum = -1;
 		selected = false;
 	}
+}
+
+/******************************************************************************
+	These are basically helper functions that encapsulates the actual ImGui
+	text inputs. These functions will disable the game's input system whenever the
+	text boxes are in focus so that the game doesn't trigger whenever something
+	is getting typed in those boxes. ImGui itself will not be affected as it has it's
+	own input system seperate from the engine
+*******************************************************************************/
+
+void LevelEditor::LE_InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags) {
+	ImGui::InputText(label, buf, buf_size, flags);
+
+	if (!input::LevelEditorTextActive)
+		input::LevelEditorTextActive = ImGui::IsItemActive();
+}
+
+void LevelEditor::LE_InputFloat(const char* label, float* v) {
+	ImGui::InputFloat(label, v);
+
+	if (!input::LevelEditorTextActive)
+		input::LevelEditorTextActive = ImGui::IsItemActive();
+}
+
+void LevelEditor::LE_InputFloat2(const char* label, float* v) {
+	ImGui::InputFloat2(label, v);
+
+	if (!input::LevelEditorTextActive)
+		input::LevelEditorTextActive = ImGui::IsItemActive();
 }
 
 /************************************LEVEL EDITOR GRID************************************/

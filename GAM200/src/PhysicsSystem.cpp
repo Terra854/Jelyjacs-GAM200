@@ -92,7 +92,7 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 			Object* leftObj = ((Rectangular*)b1)->left_collision;
 
 			// For objects that are pushable
-			if (p1->AbleToPushObjects && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->pushable) {
+			if (p1->AbleToPushObjects && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->pushable && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->left_collision == nullptr) {
 				p1->Velocity.x *= 0.2f;
 				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
 				((Transform*)leftObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x - (((Rectangular*)b1)->width / 2.f) - (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->width / 2.f);
@@ -106,7 +106,7 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 			Object* rightObj = ((Rectangular*)b1)->right_collision;
 
 			// For objects that are pushable
-			if (p1->AbleToPushObjects && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->pushable) {
+			if (p1->AbleToPushObjects && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->pushable && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->right_collision == nullptr) {
 				p1->Velocity.x *= 0.2f;
 				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
 				((Transform*)rightObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x + (((Rectangular*)b1)->width / 2.f) + (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->width / 2.f);

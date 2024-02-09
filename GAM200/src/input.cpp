@@ -151,8 +151,15 @@ bool mouse_update()
 
 }
 
+bool input::LevelEditorTextActive = false;
+
 void input::Update()
 {
+	//If any text box in the level editor is active
+	//Do not register any inputs. ImGui uses it's own input system seperate from this
+	if (LevelEditorTextActive)
+		return;
+
 	//updates each key if it was pressed previous frame
 	for (int i = 0; i < at(KEY::total); ++i)
 	{

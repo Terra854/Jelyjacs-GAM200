@@ -13,11 +13,13 @@ This file contains the script for the vertical elevator
 #include <Factory.h>
 #include <Core_Engine.h>
 
-float counter, dt;
+
 Vert_Elevator::Vert_Elevator(std::string name) : LogicScript(name)
 {
 	std::cout << name << " Created" << std::endl;
 	moving_platform_direction = false;
+	moving_platform_speed = -70.0f;
+	stateManager.SetState(UP);
 }
 /***************************************************************************/
 // Start method, called when the Vert_Elevator script is first activated.
@@ -27,8 +29,8 @@ Vert_Elevator::Vert_Elevator(std::string name) : LogicScript(name)
 void Vert_Elevator::Start(Object* obj)
 {
 	std::cout << "Vert_Elevator Script Ready : " << obj->GetName() << std::endl;
-	counter = 0.f;
-	dt = engine->GetDt();
+	Physics* moving_platform_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
+	moving_platform_physics->Velocity.y = moving_platform_speed;
 	
 }
 
@@ -43,27 +45,10 @@ void Vert_Elevator::Update(Object* obj) {
 		//std::cout << "NIL OBJ : V_Elevator" << std::endl;
 		return;
 	}
-	//std::cout << obj->GetName() << std::endl;
+	stateManager.ChangeDirection(obj);
 	Physics* moving_platform_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
-	Transform* moving_platform_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-	if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
-		//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
-		return;
-	};
-	moving_platform_physics->Velocity.x = 0.0f;
-	float moving_platform_speed;
-
-	// if the platform reach the max/min height, change direction
-	if (counter >= 5.f) { // 160 is the max height of the platform
-		std::cout << "change dir\n";
-		moving_platform_direction = !moving_platform_direction;
-		counter = 0;
-	}
-	else {
-		counter += dt;
-	}
-	moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
-	moving_platform_physics->Velocity.y = moving_platform_speed;
+	moving_platform_physics->Velocity.y = stateManager.ChangeDirection(obj) ? moving_platform_speed : -moving_platform_speed;
+	//std::cout << "Speed of platform : " << moving_platform_physics->Velocity.y << std::endl;
 }
 
 /***************************************************************************/
@@ -74,5 +59,34 @@ void Vert_Elevator::Update(Object* obj) {
 void Vert_Elevator::Shutdown(Object* obj) {
 	std::cout << "Vert_Elevator Script Shutdown : " << obj->GetName() << std::endl;
 }
+
+Vert_Elevator::StateManager::StateManager() {
+	currentstate = UP;
+	counter = 0;
+	timing = 6.0f;
+}
+
+bool Vert_Elevator::StateManager::ChangeDirection(Object* obj) {
+	float dt = engine->Get_Fixed_DT();
+	if(counter >= timing) {
+		currentstate = currentstate ? UP : DOWN;
+		counter = 0;
+	}
+	else {
+		counter += dt;
+	}
+
+	std::cout << "Counter Check" << counter << std::endl;
+	return static_cast<bool>(currentstate);
+}
+
+void Vert_Elevator::StateManager::SetState(states state) {
+	currentstate = state;
+}
+
+Vert_Elevator::states Vert_Elevator::StateManager::GetState() {
+	return currentstate;
+}
+
 
 Vert_Elevator vert_elevator("Vert_Elevator");
