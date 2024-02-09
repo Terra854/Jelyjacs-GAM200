@@ -1,0 +1,170 @@
+{
+  "play": 
+  [
+    {
+      "text": "pause",
+      "button_x": 800,
+      "button_y": 400,
+      "button_w": 140,
+      "button_h": 140,
+      "scale_x": 138,
+      "scale_y": 133,
+      "texture": "Pause.PNG"
+    },
+    {
+      "text": "zoom",
+      "button_x": 800,
+      "button_y": 250,
+      "button_w": 140,
+      "button_h": 140,
+      "scale_x": 138,
+      "scale_y": 133,
+      "texture": "Zoom.PNG"
+    }
+
+  ],
+  "pause":
+  [
+    {
+      "text": "resume",
+      "button_x": 0,
+      "button_y": 292,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "restart",
+      "button_x": 0,
+      "button_y": 162,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "quit game",
+      "button_x": 0,
+      "button_y": -220,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "settings",
+      "button_x": 0,
+      "button_y": -320,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    }
+  ],
+  "settings":
+  [
+    {
+      "text": "back",
+      "button_x": 0,
+      "button_y": 310,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "how to play",
+      "button_x": 0,
+      "button_y": -220,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "fullscreen",
+      "button_x": 0,
+      "button_y": -320,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    }
+  ],
+  "main_menu":
+  [
+    {
+      "text": "New game",
+      "button_x": 30,
+      "button_y": -350,
+      "button_w": 350,
+      "button_h": 40,
+      "scale_x": 1,
+      "scale_y": 1,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "Options",
+      "button_x": 30,
+      "button_y": -410,
+      "button_w": 350,
+      "button_h": 40,
+      "scale_x": 1,
+      "scale_y": 1,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "Quit",
+      "button_x": 30,
+      "button_y": -460,
+      "button_w": 350,
+      "button_h": 40,
+      "scale_x": 1,
+      "scale_y": 1,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    }
+  ],
+  "menu_level_select":
+  [
+    {
+      "text": "Level 1",
+      "button_x": 30,
+      "button_y": -350,
+      "button_w": 350,
+      "button_h": 40,
+      "scale_x": 1,
+      "scale_y": 1,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "Level 2",
+      "button_x": 30,
+      "button_y": -410,
+      "button_w": 350,
+      "button_h": 40,
+      "scale_x": 1,
+      "scale_y": 1,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    }
+  ]
+}
