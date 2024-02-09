@@ -44,7 +44,7 @@ public:
 		Initialize();
 	}
 	AABB aabb;
-	float width, height;
+	float width{}, height{};
 
 	int collision_flag = 0;
 	

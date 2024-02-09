@@ -20,7 +20,7 @@ public:
 	Vec2 Position;
 	Vec2 PrevPosition;
 	Vec2 Scale;
-	float Rotation;
+	float Rotation{};
 
 	virtual void Initialize() override
 	{
