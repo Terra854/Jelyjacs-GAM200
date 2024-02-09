@@ -166,5 +166,51 @@
       "font": "AldrichRegular",
       "texture": "transparent.png"
     }
+  ],"win":
+  [
+    {
+      "text": "YOU WIN!",
+      "button_x": 0,
+      "button_y": 292,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "restart",
+      "button_x": 0,
+      "button_y": 162,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "quit game",
+      "button_x": 0,
+      "button_y": -220,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    },
+    {
+      "text": "settings",
+      "button_x": 0,
+      "button_y": -320,
+      "button_w": 280,
+      "button_h": 70,
+      "scale_x": 0.8,
+      "scale_y": 0.8,
+      "font": "AldrichRegular",
+      "texture": "transparent.png"
+    }
   ]
 }
