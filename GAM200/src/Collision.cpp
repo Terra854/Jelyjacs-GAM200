@@ -1,6 +1,6 @@
 /* !
 @file	Collision.cpp
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains functions to calculate collisions between the different game objects
