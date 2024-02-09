@@ -58,16 +58,16 @@ namespace PL_Script {
 			// Make sure to remove any references to this object otherwise
 			// it will result in dangling pointers and eventually a crash
 			if (player_b->right_collision == obj) {
-				player_b->right_collision == nullptr;
+				player_b->right_collision = nullptr;
 			}
 			if (player_b->left_collision == obj) {
-				player_b->left_collision == nullptr;
+				player_b->left_collision = nullptr;
 			}
 			if (player_b->top_collision == obj) {
-				player_b->top_collision == nullptr;
+				player_b->top_collision = nullptr;
 			}
 			if (player_b->bottom_collision == obj) {
-				player_b->bottom_collision == nullptr;
+				player_b->bottom_collision = nullptr;
 			}
 
 			objectFactory->destroyObject(obj);

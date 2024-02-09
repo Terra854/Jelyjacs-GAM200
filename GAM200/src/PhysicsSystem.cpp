@@ -1,6 +1,6 @@
 /* !
 @file	PhysicsSystem.cpp
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains the definitions of the functions that are part of the Physics system
@@ -93,7 +93,8 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 
 			// For objects that are pushable
 			if (p1->AbleToPushObjects && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->pushable && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->left_collision == nullptr) {
-				p1->Velocity.x *= 0.2f;
+				// Will not make any sense for the velocity multiplier to exceed 1, 
+				p1->Velocity.x *= std::min(p1->Mass / ((Physics*)leftObj->GetComponent(ComponentType::Physics))->Mass, 1.f); 
 				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
 				((Transform*)leftObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x - (((Rectangular*)b1)->width / 2.f) - (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->width / 2.f);
 			}
@@ -107,7 +108,8 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 
 			// For objects that are pushable
 			if (p1->AbleToPushObjects && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->pushable && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->right_collision == nullptr) {
-				p1->Velocity.x *= 0.2f;
+				// Will not make any sense for the velocity multiplier to exceed 1, 
+				p1->Velocity.x *= std::min(p1->Mass / ((Physics*)rightObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
 				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
 				((Transform*)rightObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x + (((Rectangular*)b1)->width / 2.f) + (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->width / 2.f);
 			}

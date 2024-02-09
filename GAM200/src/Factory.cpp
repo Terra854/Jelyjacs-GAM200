@@ -376,9 +376,9 @@ void Factory::Update() {
 			// Delete the reference to the object in the layer
 			for (auto& l : SceneManager::layers) {
 				std::vector<Object*>& v = l.second.second;
-				auto it = std::find(v.begin(), v.end(), obj);
-				if (it != v.end()) {
-					v.erase(it);
+				auto it2 = std::find(v.begin(), v.end(), obj);
+				if (it2 != v.end()) {
+					v.erase(it2);
 					break; // The reference is deleted. Stop the loop
 				}
 			}
@@ -689,7 +689,7 @@ int Factory::CreateLayer(std::string layerName, bool isVisible) {
 	// Add the newly created pair to the layers vector
 	SceneManager::layers.push_back(layer);
 
-	return SceneManager::layers.size() - 1;
+	return static_cast<int>(SceneManager::layers.size() - 1);
 }
 
 void Factory::AddToLayer(int layerNum, Object* obj) {
@@ -707,7 +707,7 @@ int Factory::GetLayerNum(std::string layerName) {
 	});
 
 	if (it != SceneManager::layers.end()) {
-		return it - SceneManager::layers.begin();
+		return static_cast<int>(it - SceneManager::layers.begin());
 	}
 	else {
 		return -1;

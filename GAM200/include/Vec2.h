@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Vec2.h
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains the declaration for the Vec2 class used to represent a 2D vector

@@ -1,6 +1,6 @@
 /* !
 @file	SceneManager.cpp
-@author Tan Yee Ann
+@author Tan Yee Ann (t.yeeann@digipen.edu)
 @date	26/11/2023
 
 This file contains the definitions of the functions that manages the game scene
@@ -161,7 +161,7 @@ void SceneManager::PlayCutScene(std::string str)
 		SetFont(FONT::AldrichRegular);
 
 		float textscale{};
-		textscale = (3 / 4.0f * window->width) / window->width;
+		textscale = static_cast<float>((3 / 4.0 * window->width) / window->width);
 
 		DrawText(frametext, -static_cast<float>(find_width(frametext, FONT::AldrichRegular)) / 2 * textscale, -static_cast<float>(window->height / 8) * 3, textscale);
 		DrawText("click anywhere to continue", -250, -500, 0.7f);

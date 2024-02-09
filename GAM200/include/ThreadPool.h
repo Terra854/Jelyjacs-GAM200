@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	ThreadPool.h
-@author Tan Yee Ann
+@author Tan Yee Ann (t.yeeann@digipen.edu)
 @date	2/11/2023
 
 This file contains the declarations for the ThreadPool system class
