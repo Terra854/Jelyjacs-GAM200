@@ -51,10 +51,9 @@ public:
     class StateManager {
     public:
         StateManager();
-        bool ChangeDirection();
+        bool ChangeDirection(Object* obj);
         void SetState(states state);
         states GetState();
-        void ResetCounter();
     private:
         states currentstate;
         float counter;

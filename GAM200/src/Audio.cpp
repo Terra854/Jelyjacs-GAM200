@@ -1,6 +1,6 @@
 /* !
 @file	Audio.cpp
-@author	Tan Yee Ann (t.yeeann@digipen.edu)
+@author	Tan Yee Ann
 @date	28/9/2023
 
 This file contains the definitions of the functions that are part of the Audio system
@@ -48,7 +48,7 @@ void Audio::Initialize(){
 
 /******************************************************************************
 setupSound
--	This function loads the sound mappings and sets the background sound
+-	This function loads the sound mappings and sets the background and walking sounds
 *******************************************************************************/
 void Audio::setupSound()
 {
@@ -112,9 +112,9 @@ void Audio::Update(){
 
 /******************************************************************************
 playSfx
--	This function tells Fmod to play the given sfx name
+-	This function tells Fmod to play the given sfx type
 
-@param a - The sfx name to play
+@param a - The sfx type to play
 *******************************************************************************/
 void Audio::playSfx(std::string audioType) {
     system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
@@ -125,7 +125,7 @@ void Audio::playSfx(std::string audioType) {
 restartBackgroundAudio
 -	This function restarts the background the audio from the beginning
 -	To be called if you are changing or restarting a scene or if the sound
-	linked to background changes
+	linked to AudioType::Background changes
 *******************************************************************************/
 void Audio::restartBackgroundAudio() {
 	background->stop();

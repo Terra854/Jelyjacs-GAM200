@@ -1,6 +1,6 @@
 /* !
 @file	Gizmo.cpp
-@author Tan Yee Ann (t.yeeann@digipen.edu)
+@author Tan Yee Ann
 @date	7/2/2024
 
 This file contains functions to render the gizmo as part of the level editor

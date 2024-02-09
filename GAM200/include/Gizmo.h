@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Gizmo.h
-@author Tan Yee Ann (t.yeeann@digipen.edu)
+@author Tan Yee Ann
 @date	7/2/2024
 
 This file contains the declarations for the Gizmo class

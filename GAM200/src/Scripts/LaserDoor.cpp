@@ -1,6 +1,6 @@
 /* !
 @file	LaserDoor.cpp
-@author Tan Yee Ann (t.yeeann@digipen.edu)
+@author Tan Yee Ann
 @date	8/2/2023
 
 This file contains the script for the laser "doors"

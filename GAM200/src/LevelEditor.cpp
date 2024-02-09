@@ -1,6 +1,6 @@
 /* !
 @file	LevelEditor.cpp
-@author Tan Yee Ann (t.yeeann@digipen.edu)
+@author Tan Yee Ann
 @date	2/11/2023
 
 This file contains the definitions of the functions that are part of the level editor
@@ -1071,7 +1071,7 @@ void LevelEditor::ListOfObjects() {
 	if (ImGui::Button("Create new layer")) {
 		std::string layerName = std::string("Layer " + static_cast<char>(sceneManager->layers.size()));
 		//buffer
-		sprintf_s(buffer, "Layer %d", static_cast<int>(sceneManager->layers.size()));
+		sprintf_s(buffer, "Layer %d", sceneManager->layers.size());
 		objectFactory->CreateLayer(std::string(buffer), true);
 	}
 	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());

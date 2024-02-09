@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	SceneManager.h
-@author Tan Yee Ann (t.yeeann@digipen.edu)
+@author Tan Yee Ann
 @date	26/11/2023
 
 This file contains the declarations for the SceneManager system class

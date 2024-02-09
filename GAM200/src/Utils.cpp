@@ -11,7 +11,7 @@ the engine itself or the game objects within it
 #include "Utils.h"
 #include <Debug.h>
 #include <cmath>
-#define PI 3.14159265358979323846f
+#define PI 3.14159265358979323846
 
 ImVec2 convertImGuiPosToWorldPos(ImVec2 pos)
 {
@@ -53,14 +53,14 @@ bool isObjectClicked(Transform* trans, ImVec2 mousePos)
 	}
 }
 
-float calculateAngle(const Vec2& a, const Vec2& b) {
+double calculateAngle(const Vec2& a, const Vec2& b) {
 	// Calculate the direction vector components
-	float deltaX = b.x - a.x;
-	float deltaY = b.y - a.y;
+	double deltaX = b.x - a.x;
+	double deltaY = b.y - a.y;
 
 	// Calculate the angle in radians
-	float angleRadians = atan2(deltaY, deltaX);
+	double angleRadians = atan2(deltaY, deltaX);
 
 	// Return the angle in degrees
-	return angleRadians * (180.f / PI);
+	return angleRadians * (180.0 / PI);
 }

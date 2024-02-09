@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Vec4.h
-@author	Tan Yee Ann (t.yeeann@digipen.edu)
+@author	Tan Yee Ann
 @date	28/9/2023
 
 This file contains the declaration for the Vec4 class used to represent a 4D vector,

@@ -1,6 +1,6 @@
 /* !
 @file	Vec4.cpp
-@author	Tan Yee Ann (t.yeeann@digipen.edu)
+@author	Tan Yee Ann
 @date	21/11/2023
 
 This file contains the definitions of the member functions in the Vec4 class
