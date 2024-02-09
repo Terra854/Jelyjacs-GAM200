@@ -423,6 +423,14 @@ Object* Factory::createEmptyObject()
 	return obj;
 }
 
+//Creates an empty prefab with no components
+Object* Factory::createEmptyPrefab()
+{
+	Object* obj = new Object();
+	obj->ObjectId = -1;
+	return obj;
+}
+
 //This gives a game object an ID tag which can be used to find that same game object
 //Also sets the player object if the object is player controllable
 void Factory::assignIdToObject(Object* gameObj)
