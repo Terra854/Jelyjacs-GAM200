@@ -98,6 +98,7 @@ void ParticleSystem::Update(Object* player)
     while (frame_dt_count) {
         frame_dt_count--;
 
+        // undate the vbo
         for (auto& ptc : this->particles)
         {
 
@@ -194,6 +195,12 @@ void ParticleSystem::Free()
 
 }
 
+/*  _________________________________________________________________________ */
+/*
+* set the particle's position
+* @param x_min, x_max, y_min, y_max: the range of the position
+* 
+*/
 Vec2 random_position(float x_min, float x_max, float y_min, float y_max)
 {
     Vec2 pos_return;
@@ -205,6 +212,11 @@ Vec2 random_position(float x_min, float x_max, float y_min, float y_max)
     return pos_return;
 }
 
+/*  _________________________________________________________________________ */
+/*
+* set the particle's velocity
+* @param x_min, x_max, y_min, y_max: the range of the velocity
+*/
 Vec2 random_velocity(float x_min, float x_max, float y_min, float y_max)
 {
     Vec2 vel_return;
@@ -216,11 +228,21 @@ Vec2 random_velocity(float x_min, float x_max, float y_min, float y_max)
     return vel_return;
 }
 
+/*  _________________________________________________________________________ */
+/*
+* set the particle's life time
+* @param min, max: the range of the life time
+*/
 float random_life_time(float min, float max)
 {
     if(min== max) return min;
     else return (rand() % 1000) / 1000.0f * (max - min) + min;
 }
+
+/*  _________________________________________________________________________ */
+/*
+* update the particle
+*/
 
 void ParticleSystem::Particle::Update()
 {
