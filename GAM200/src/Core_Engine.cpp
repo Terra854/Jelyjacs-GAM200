@@ -295,7 +295,7 @@ void CoreEngine::GameLoop()
 
 					Object* createdObj = objectFactory->cloneObject(object->second);
 					objectFactory->assignIdToObject(createdObj);
-					objectFactory->AddToLayer(sceneManager->layers.size() - 1, createdObj);
+					objectFactory->AddToLayer(static_cast<int>(sceneManager->layers.size() - 1), createdObj);
 					Transform* objTransform = (Transform*)createdObj->GetComponent(ComponentType::Transform);
 					Body* objBody = (Body*)createdObj->GetComponent(ComponentType::Body);
 
