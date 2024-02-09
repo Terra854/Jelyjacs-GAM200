@@ -1254,9 +1254,16 @@ void LevelEditor::AssetList()
 	}
 	if (ImGui::BeginTabItem("Prefabs"))
 	{
+		if (ImGui::Button("Create Empty Prefab")) {
+			Object* o = objectFactory->createEmptyPrefab();
+			o->AddComponent(new Transform());
+			o->SetName("Empty Prefab");
+			AssetManager::prefabs.emplace("Empty Prefab.json", o);
+		}
+
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-		//int i = 0;
+		
 		for (const std::pair<std::string, Object*>& p : AssetManager::prefabs)
 		{
 			//i--;
