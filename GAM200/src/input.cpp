@@ -102,8 +102,8 @@ void input::Init(GLFWwindow* pWin)
 {
 	Pwindow = pWin;
 	glfwSetCursorPosCallback(pWin, MousePosCallBack);
-	old_width = static_cast<float>(window->width);
-	old_height = static_cast<float>(window->height);
+	old_width = (float)window->width;
+	old_height = (float)window->height;
 }
 
 

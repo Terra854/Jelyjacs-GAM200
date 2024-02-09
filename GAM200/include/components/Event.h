@@ -13,7 +13,7 @@ public:
 	Event() : Component() {};
 	virtual void Initialize() override {}
 
-	int linked_event;
+	int linked_event{};
 
 	// Returns name of the component
 	virtual ComponentType TypeId() const override { return ComponentType::Event; }
