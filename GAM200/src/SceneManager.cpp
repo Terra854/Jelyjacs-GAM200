@@ -161,7 +161,7 @@ void SceneManager::PlayCutScene(std::string str)
 		SetFont(FONT::AldrichRegular);
 
 		float textscale{};
-		textscale = (3 / 4.0 * window->width) / window->width;
+		textscale = static_cast<float>((3 / 4.0 * window->width) / window->width);
 
 		DrawText(frametext, -static_cast<float>(find_width(frametext, FONT::AldrichRegular)) / 2 * textscale, -static_cast<float>(window->height / 8) * 3, textscale);
 		glfwSwapBuffers(window->ptr_window);
