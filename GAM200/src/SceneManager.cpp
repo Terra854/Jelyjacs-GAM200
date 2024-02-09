@@ -133,6 +133,11 @@ void SceneManager::ClearInitialObjectMap(bool deleteObjects) {
 	initialObjectMap.clear();
 }
 
+void SceneManager::UnloadScene() {
+	objectFactory->destroyAllObjects();
+	SceneManager::ClearInitialObjectMap(true);
+	SceneManager::layers.clear();
+}
 
 void SceneManager::PlayCutScene(std::string str)
 {

@@ -20,6 +20,7 @@ public:
 	static void PauseScene();
 	static void RestartScene();
 	static void ClearInitialObjectMap(bool deleteObjects);
+	void UnloadScene();
 	static bool IsInitialObjectMapEmpty() { return initialObjectMap.empty(); };
 	static void PlayCutScene(std::string);
 
