@@ -53,6 +53,9 @@ public:
 	//Creates a game object with no components
 	Object* createEmptyObject();
 
+	//Creates an empty prefab with no components
+	Object* createEmptyPrefab();
+
 	//This gives a game object an ID tag which can be used to find that same game object
 	void assignIdToObject(Object* object);
 
