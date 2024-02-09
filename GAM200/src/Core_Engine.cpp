@@ -295,6 +295,7 @@ void CoreEngine::GameLoop()
 
 					Object* createdObj = objectFactory->cloneObject(object->second);
 					objectFactory->assignIdToObject(createdObj);
+					objectFactory->AddToLayer(sceneManager->layers.size() - 1, createdObj);
 					Transform* objTransform = (Transform*)createdObj->GetComponent(ComponentType::Transform);
 					Body* objBody = (Body*)createdObj->GetComponent(ComponentType::Body);
 
@@ -312,9 +313,11 @@ void CoreEngine::GameLoop()
 					level_editor->selected = true;
 					level_editor->selectedNum = (int)createdObj->GetId();
 					selectedObjectID = static_cast<long>(createdObj->GetId());
-					DraggingPrefabIntoViewport = false;
 				}
 				ImGui::EndDragDropTarget();
+			}
+			else {
+				DraggingPrefabIntoViewport = false;
 			}
 
 			static Transform XGizmo, YGizmo;
