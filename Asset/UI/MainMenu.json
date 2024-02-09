@@ -10,8 +10,8 @@
     },
     {
       "text": "title",
-      "position_x": 1200,
-      "position_y": 200,
+      "position_x": 0,
+      "position_y": 150,
       "scale_x": 1664,
       "scale_y": 640,
       "texture": "Titlex4.png"

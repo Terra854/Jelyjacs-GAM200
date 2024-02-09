@@ -394,7 +394,10 @@ void set_button_logic()
 	}
 	else if ("Level 1" == button_tracker->string.text)
 	{
-		current_page = PAGE::pause_menu;
+		SceneManager::PlayCutScene("startingcutscene");
+		sceneManager->LoadScene("Asset/Levels/level_1.json");
+		SceneManager::PlayScene();
+		current_page = PAGE::play;
 	}
 	else if ("Level 2" == button_tracker->string.text)
 	{
