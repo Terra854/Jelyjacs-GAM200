@@ -15,58 +15,42 @@ This file contains the definition of the functions of GameHud
 #include "Assets Manager/asset_manager.h"
 #include "SceneManager.h"
 #include "../../src/Assets Manager/asset_manager.h"
-namespace
+enum PAGE
 {
-	std::string button_tracker;
-	bool win = false;
-	bool menu_page = true;
-}
+	play,
+	pause_menu,
+	settings_menu,
+	main_menu,
+	menu_level_select,
+	total_page
+} current_page;
 
-//container of buttons
-std::vector<Button> Buttons;
-std::vector<Button> Menu_Buttons;
-std::vector<Menu> Menus;
-//button map to track button according to index in vector
-std::map <std::string, int> index;
+std::vector <std::vector<Button>> all_buttons(total_page);
 
-//menu trackers
-bool settings_menu = false;
-bool how_to_play_menu = false;
-int number_of_buttons = 0;
-int begin_index = 0;
-int end_index = 0;
+std::map<std::string,std::vector<Menu>> menu_background;
 
-//helper functions
+Button* button_tracker;
+std::string menu_tracker;
 
-//draw outline of button
-void draw_outline(Vec2 pos1, Vec2 pos2);
-
-//draw a single line
+void create_buttons_from_config(std::string file);
+void create_menus_from_config(std::string file);
+Button setup_button(Vec2 centre, float width, float height, Vec2 scale, std::string string, GLuint textreid, FONT f);
 void drawline(Vec2 start, Vec2 end, glm::vec3 color);
-
-//change pos and scaling of buttons based on resolution
-void Buttons_change_resolution();
-
-//draw how to play screen text
-void draw_how_to_play_string();
-
-void createMenuFromConfig(std::string);
-
-void create_Menu_button(std::string const& text, Button button, float scale, FONT f);
+void draw_outline(Vec2 pos1, Vec2 pos2);
+void draw_Button_texture(Button b);
+void draw_menu(Menu m);
+void set_button_logic();
+void set_background();
+void Buttons_update_resolution();
 
 /******************************************************************************
 	Inialise gamehud buttons and assets
 *******************************************************************************/
 void GameHud::Initialize()
 {
-	//create buttons from json
-	createHudFromConfig("Asset/UI/Pause.json");
-	createMenuFromConfig("Asset/UI/MainMenu.json");
-	button_tracker = "nil";
-	create_Menu_button("", Button(Vec2(-140.0f, -350.0f), Vec2(170.0f, -390.0f)), 1, FONT::AldrichRegular);
-	create_Menu_button("", Button(Vec2(-80.0f, -415.0f), Vec2(120.0f, -455.0f)), 1, FONT::AldrichRegular);
-	create_Menu_button("", Button(Vec2(-80.0f, -480.0f), Vec2(120.0f, -520.0f)), 1, FONT::AldrichRegular);
-
+	current_page = PAGE::main_menu;
+	create_buttons_from_config("Asset/UI/Pause.json");
+	create_menus_from_config("Asset/UI/MainMenu.json");
 }
 
 /******************************************************************************
@@ -74,187 +58,27 @@ void GameHud::Initialize()
 *******************************************************************************/
 void GameHud::Update()
 {
-	if(!menu_page)
-	{ 
-	//switching between the various menus
-	if (win)
+	button_tracker = nullptr;
+
+	for (size_t i = 0; i < all_buttons.at(current_page).size(); ++i)
 	{
-		begin_index = index.at("win_menu");
-		end_index = number_of_buttons;
-	}
-	else if (how_to_play_menu)
-	{
-		begin_index = index.at("how to play_menu");
-		end_index = index.at("win_menu");
-	}
-	else if (settings_menu)
-	{
-		begin_index = index.at("settings_menu");
-		end_index = index.at("how to play_menu");
-	}
-	else if (engine->isPaused())
-	{
-		begin_index = index.at("menu");
-		end_index = index.at("settings_menu");
-	}
-	else 
-	{
-		begin_index = 0;
-		end_index = index.at("menu");
+		if (input::GetMouseX() < all_buttons.at(current_page).at(i).get_pos1().x || input::GetMouseX() > all_buttons.at(current_page).at(i).get_pos2().x || input::GetMouseY() < all_buttons.at(current_page).at(i).get_pos2().y || input::GetMouseY() > all_buttons.at(current_page).at(i).get_pos1().y)
+		{
+			continue;
+		}
+		button_tracker = &all_buttons.at(current_page).at(i);
 	}
 
-	//tracking mouse if on buttons
-	if (input::MouseMoved())
+	if (button_tracker != nullptr)
 	{
-			for (int i = begin_index; i < end_index; ++i)
-			{
-				button_tracker = "nil";
-				if (Buttons[i].string.text == "menu" || Buttons[i].string.text == "win_menu" || Buttons[i].string.text == "you win!" || Buttons[i].string.text == "settings_menu")
-				{
-					continue;
-				}
-				if (input::GetMouseX() > Buttons[i].pos1.x && input::GetMouseX() < Buttons[i].pos2.x)
-				{
-					if (input::GetMouseY() > Buttons[i].pos2.y && input::GetMouseY() < Buttons[i].pos1.y)
-					{
-						button_tracker = Buttons[i].string.text;
-						break;
-					}
-				}
-			}
-	}
-	
-	//set outcome if button is pressed
-	if ((input::IsPressed(KEY::mouseL) && button_tracker != "nil"))
-		{
-			audio->playSfx("button_click");
-			if (button_tracker == "pause")
-			{
-				SceneManager::PauseScene();
-			}
-			else if (button_tracker == "resume")
-			{
-				SceneManager::PlayScene();
-			}
-			else if (button_tracker == "zoom")
-			{
-				if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
-					camera2D->scale = { 2.0f, 2.0f };
-				}
-				else camera2D->scale = { 1.0f, 1.0f };
-			}
-			else if (button_tracker == "resolution")
-			{
-				switch (window->window_size) {
-					case(Window_size::fullscreen):
-					{
-						window->change_window_size(Window_size::high);
-						window->window_size = Window_size::high;
-						break;
-					}
-					case(Window_size::high):
-					{
-						window->change_window_size(Window_size::medium);
-						window->window_size = Window_size::medium;
-						break;
-					}
-					case(Window_size::medium):
-					{
-						window->change_window_size(Window_size::low);
-						window->window_size = Window_size::low;
-						break;
-					}
-					case(Window_size::low):
-					{
-						window->change_window_size(Window_size::high);
-						window->window_size = Window_size::high;
-						break;
-					}
-				}
-			}
-			else if (button_tracker == "fullscreen")
-			{
-				static bool fullscreen = false;
-				if (fullscreen)
-				{
-					window->change_window_size(Window_size::high);
-					window->window_size = Window_size::high;
-				}
-				else
-				{
-					window->change_window_size_fullscreen();
-					window->window_size = Window_size::fullscreen;
-				}
-				fullscreen = !fullscreen;
-				input::update_resolution();
-				Buttons_change_resolution();
-			}
-			else if (button_tracker == "restart")
-			{
-					SceneManager::RestartScene();
-					SceneManager::PlayScene();
-					win = false;
-			}
-			else if (button_tracker == "Quit Game")
-			{
-				//Message_Handler msg(MessageID::Event_Type::Quit);
-				//engine->Broadcast(&msg);
-				menu_page = true;
-			}
-			else if (button_tracker == "settings")
-			{
-				settings_menu = true;
-			}
-			else if (button_tracker == "back")
-			{
-				settings_menu = false;
-			}
-			else if (button_tracker == "how to play")
-			{
-				how_to_play_menu = true;
-			}
-			else if (button_tracker == "close")
-			{
-				how_to_play_menu = false;
-			}
-			button_tracker = "nil";
-		}
-	}
-	else//menu page
-	{
-		if (input::MouseMoved())
-		{
-			for (size_t i = 0; i < Menu_Buttons.size(); ++i)
-			{
-				Menu_Buttons.at(i).selected = false;
-			}
-			for (size_t i = 0; i < Menu_Buttons.size(); ++i)
-			{
-				if (input::GetMouseX() > Menu_Buttons[i].pos1.x && input::GetMouseX() < Menu_Buttons[i].pos2.x)
-				{
-					if (input::GetMouseY() > Menu_Buttons[i].pos2.y && input::GetMouseY() < Menu_Buttons[i].pos1.y)
-					{
-						Menu_Buttons.at(i).selected = true;
-					}
-				}
-			}
-		}
 		if (input::IsPressed(KEY::mouseL))
 		{
-			if (Menu_Buttons.at(0).selected)
-			{
-				sceneManager->LoadScene("Asset/Levels/level_1.json");
-				menu_page = false;
-				SceneManager::PlayScene();
-			}
-			else if (Menu_Buttons.at(2).selected)
-			{
-				Message_Handler msg(MessageID::Event_Type::Quit);
-				engine->Broadcast(&msg);
-			}
+			set_button_logic();
 		}
 	}
+	set_background();
 
+	Buttons_update_resolution();
 
 }
 
@@ -263,133 +87,172 @@ void GameHud::Update()
 *******************************************************************************/
 void GameHud::Draw()
 {
-	if (!menu_page)
+	if (menu_tracker != "")
 	{
-		//draw only based on the menu setting
-		for (int i = begin_index; i < end_index; ++i)
+		for (size_t i = 0; i < menu_background[menu_tracker].size(); ++i)
 		{
-			Buttons[i].draw_hud_texture();
-			SetFont(Buttons[i].string.font);
-			DrawText(Buttons[i].string.text, Buttons[i].string.pos.x, Buttons[i].string.pos.y, Buttons[i].string.scale);
-			if (Buttons[i].string.text == button_tracker && button_tracker != "you win!")
-			{
-				draw_outline(Buttons[index.at(button_tracker)].pos1, Buttons[index.at(button_tracker)].pos2);
-			}
-		}
-		if (how_to_play_menu)
-		{
-			draw_how_to_play_string();
+			draw_menu(menu_background[menu_tracker].at(i));
 		}
 	}
-	else//menu
+
+	for (size_t j = 0; j < all_buttons.at(current_page).size(); ++j)
 	{
-		for (size_t i = 0; i < Menus.size(); ++i)
+		draw_Button_texture(all_buttons.at(current_page).at(j));
+		if (all_buttons.at(current_page).at(j).string.font != FONT::total)
 		{
-			Menus.at(i).draw_menu();
-		}
-		for (size_t i = 0; i < Menu_Buttons.size(); ++i)
-		{
-			if (Menu_Buttons.at(i).selected)
-			{
-				draw_outline(Menu_Buttons.at(i).pos1, Menu_Buttons.at(i).pos2);
-			}
+			SetFont(all_buttons.at(current_page).at(j).string.font);
+			DrawText(all_buttons.at(current_page).at(j).string.text, all_buttons.at(current_page).at(j).string.pos.x, all_buttons.at(current_page).at(j).string.pos.y, 1.0f);
 		}
 	}
+
+		
+	if (button_tracker != nullptr)
+	{
+		draw_outline(button_tracker->get_pos1(), button_tracker->get_pos2());
+	}
+	
 }
 
-void create_button(std::string const& text, Button button, float scale , FONT f, GLuint id)
+Button::Button(Vec2 pos, float width_, float height_)
+	:centre{pos}, width{ width_}, height{height_},
+	string{}, selected{ false }, texture_id{ 0 }
 {
-	button.string.pos.x = button.centre.x - static_cast<float>(find_width(text,f))/2 * scale ;
-	button.string.pos.y -= 14 * scale;
-	button.string.text = text;
-	button.string.scale = scale;
-	button.string.font = f;
-	button.texture_id = id;
-	Buttons.push_back(button);
-	index[text] = number_of_buttons++;
 }
-
-void create_Menu_button(std::string const& text, Button button, float scale, FONT f)
+Vec2 Button::get_pos1() const
 {
-	button.string.pos.x = button.centre.x - static_cast<float>(find_width(text, f)) / 2 * scale;
-	button.string.pos.y -= 14 * scale;
-	button.string.text = text;
-	button.string.scale = scale;
-	button.string.font = f;
-	Menu_Buttons.push_back(button);
+	return Vec2(centre.x - width / 2, centre.y + height/2);
 }
-
-
-Button::Button(Vec2 Pos1,Vec2 Pos2)
-	:pos1{Pos1}, pos2{Pos2}
+Vec2 Button::get_pos2() const
 {
-	centre = (pos1 + pos2) / 2;
-	width = pos1.x - pos2.x;
-	height = pos1.y - pos2.y;
-	string.pos.x = pos1.x + ((pos1.x + pos2.x) / 2);
-	string.pos.y = pos1.y + ((pos1.y + pos2.y) / 2);
+	return Vec2(centre.x + width / 2, centre.y - height / 2);
 }
 
-Button::Button(Vec2 pos, float width, float height)
-{
-	centre = pos;
-	Button::width = width;
-	Button::height = height;
-	string.pos = pos;
-	pos1.x = pos.x - width / 2;
-	pos2.x = pos.x + width / 2;
-	pos1.y = pos.y + height / 2;
-	pos2.y = pos.y - height / 2;
-}
 
 /******************************************************************************
 	dtor
 *******************************************************************************/
 GameHud::~GameHud()
 {
-	Buttons.clear();
 }
 
-void Button::draw_hud_texture()
+void set_win()
 {
-		glBindTextureUnit(6, texture_id);
-		glBindTexture(GL_TEXTURE_2D, texture_id);
-		// load shader program in use by this object
-		
-		AssetManager::shaderval("image").Use();
-		
-		glBindVertexArray(AssetManager::modelval("square").vaoid);
-		// copy object's model-to-NDC matrix to vertex shader's
-		// uniform variable uModelToNDC
-		Vec2 posM;
-		int current_width;
-		int current_height;
-		glfwGetFramebufferSize(GLWindow::ptr_window, &current_width, &current_height);
-		posM.x = ((centre.x-17.0f) * 2.0f / current_width) ;
-		posM.y = (centre.y+10.0f) * 2.0f / current_height;
-		Vec2 scale;
-		scale.x = (width *1.6f)/ current_width;
-		scale.y = (height *2.5f)/ current_height;
-		Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale) * Mat3RotRad(0.f);
-		AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat.ToGlmMat3());
-		// tell fragment shader sampler uTex2d will use texture image unit 6
-		GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
-		glUniform1i(tex_loc, 6);
-		// call glDrawElements with appropriate arguments
-		glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
-		// unbind VAO and unload shader program
-		glBindVertexArray(0);
-		AssetManager::shaderval("image").UnUse();
+	
 }
 
-void draw_outline(Vec2 pos1 , Vec2 pos2)
+void create_buttons_from_config(std::string file)
 {
-	drawline(pos1, Vec2(pos2.x, pos1.y), glm::vec3(1, 1, 1));
-	drawline(pos2, Vec2(pos1.x, pos2.y), glm::vec3(1, 1, 1));
-	drawline(pos1, Vec2(pos1.x, pos2.y), glm::vec3(1, 1, 1));
-	drawline(pos2, Vec2(pos2.x, pos1.y), glm::vec3(1, 1, 1));
+	
+	JsonSerialization jsonobj;
+	jsonobj.openFileRead(file);
+
+	std::array<std::string, 5> category
+	{ "play" , "pause" , "settings" , "main_menu" , "menu_level_select"};
+
+	for (size_t i=0 ; i<category.size() ; ++i)
+	{
+		//text, texture, pos, width, height 
+		for (auto& button : jsonobj.read(category.at(i)))
+		{
+			JsonSerialization jsonloop;
+			jsonloop.jsonObject = &button;
+
+			std::string text, font, texture;
+			jsonloop.readString(text, "text");
+			float x, y, w, h, scale_x , scale_y;
+			jsonloop.readFloat(x, "button_x");
+			jsonloop.readFloat(y, "button_y");
+			jsonloop.readFloat(w, "button_w");
+			jsonloop.readFloat(h, "button_h");
+			jsonloop.readFloat(scale_x, "scale_x");
+			jsonloop.readFloat(scale_y, "scale_y");
+			jsonloop.readString(font, "font");
+			FONT f = total;
+			if (font == "AldrichRegular")
+			{
+				f = FONT::AldrichRegular;
+			}
+			else if (font == "GeoRegular")
+			{
+				f = FONT::GeoRegular;
+			}
+			else
+			{
+			}
+
+			GLuint val;
+			jsonloop.readString(texture, "texture");
+			val = AssetManager::textureval(texture);
+
+			if (!AssetManager::texturecheckexist(texture))
+				std::cout << "TEXTURE MISSING FOR BUTTON!!!\n";
+
+			all_buttons.at(i).push_back(setup_button(Vec2(x, y), w, h, Vec2(scale_x , scale_y), text, val, f));
+		}
+	}
+	jsonobj.closeFile();
+	
 }
 
+
+
+void create_menus_from_config(std::string file)
+{
+	JsonSerialization jsonobj;
+	if (!jsonobj.openFileRead(file))
+	{
+		std::cout << "can't open file" << std::endl;
+	}
+
+	std::array< std::string, 2> categories
+	{"Menu" , "Pause_menu"};
+	for (size_t i = 0; i < categories.size(); ++i)
+	{
+		std::vector<Menu> tmp;
+		for (auto& menu : jsonobj.read(categories.at(i)))
+		{
+			JsonSerialization jsonloop;
+				jsonloop.jsonObject = &menu;
+
+				std::string texture, text;
+				float x, y, w, h;
+				jsonloop.readString(text, "text");
+				jsonloop.readFloat(x, "position_x");
+				jsonloop.readFloat(y, "position_y");
+				jsonloop.readFloat(w, "scale_x");
+				jsonloop.readFloat(h, "scale_y");
+
+			GLuint val;
+			jsonloop.readString(texture, "texture");
+			val = AssetManager::textureval(texture);
+
+			if (!AssetManager::texturecheckexist(texture))
+			{
+				std::cout << "TEXTURE MISSING FOR MENU!!!\n";
+			}
+			
+			tmp.push_back(Menu(x, y, w, h, val));
+		}
+		menu_background[categories.at(i)] = tmp;
+	}
+	jsonobj.closeFile();
+}
+
+
+Button setup_button(Vec2 centre, float width, float height, Vec2 scale, std::string string_, GLuint textreid, FONT f)
+{
+	Button b(centre, width, height);
+	if (f != FONT::total)
+	{
+		b.string.pos.x = centre.x - static_cast<float>(find_width(string_, f)) / 2;
+		b.string.pos.y = centre.y - 14;
+	}
+	b.string.scale = scale;
+	b.string.font = f;
+	b.string.text = string_;
+	b.texture_id = textreid;
+	return b;
+}
 
 
 void drawline(Vec2 start, Vec2 end, glm::vec3 color) {
@@ -401,7 +264,7 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	orientation = atan2(end.y - start.y, end.x - start.x);
 	int current_width;
 	int current_height;
-	glfwGetFramebufferSize(GLWindow::ptr_window,&current_width, &current_height);
+	glfwGetFramebufferSize(GLWindow::ptr_window, &current_width, &current_height);
 	scaling_x = abs(end.x - start.x) * 2 / current_width;
 	scaling_y = abs(end.y - start.y) * 2 / current_height;
 	pos_x = start.x * 2.0f / current_width;
@@ -424,152 +287,136 @@ void drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	AssetManager::shaderval("shape").UnUse();
 }
 
-void createHudFromConfig(std::string file)
+void draw_outline(Vec2 pos1, Vec2 pos2)
 {
-	JsonSerialization jsonobj;
-	jsonobj.openFileRead(file);
-
-	for (auto& button : jsonobj.read("Button"))
-	{
-		JsonSerialization jsonloop;
-		jsonloop.jsonObject = &button;
-
-		std::string text, font, texture;
-		jsonloop.readString(text, "text");
-		float x, y, w, h, scale;
-		jsonloop.readFloat(x, "button_x");
-		jsonloop.readFloat(y, "button_y");
-		jsonloop.readFloat(w, "button_w");
-		jsonloop.readFloat(h, "button_h");
-		jsonloop.readFloat(scale, "scale");
-
-		jsonloop.readString(font, "font");
-		FONT f = total;
-		if (font == "AldrichRegular")
-		{
-			f = FONT::AldrichRegular;
-		}
-		else if (font == "GeoRegular")
-		{
-			f = FONT::GeoRegular;
-		}
-
-		GLuint val;
-		jsonloop.readString(texture, "texture");
-		val = AssetManager::textureval(texture);
-
-		if (!AssetManager::texturecheckexist(texture))
-			std::cout << "TEXTURE MISSING FOR BUTTON!!!\n";
-
-		create_button(text, Button(Vec2(x, y), w, h), scale, f, val);
-	}
-
-
-	jsonobj.closeFile();
-}
-
-void createMenuFromConfig(std::string file)
-{
-	JsonSerialization jsonobj;
-	if (!jsonobj.openFileRead(file))
-	{
-		std::cout << "can't open file" << std::endl;
-	}
-
-	for (auto& menu : jsonobj.read("Menu"))
-	{
-		JsonSerialization jsonloop;
-		jsonloop.jsonObject = &menu;
-
-		std::string texture;
-		float x, y, w, h;
-		jsonloop.readFloat(x, "position_x");
-		jsonloop.readFloat(y, "position_y");
-		jsonloop.readFloat(w, "scale_x");
-		jsonloop.readFloat(h, "scale_y");
-
-		GLuint val;
-		jsonloop.readString(texture, "texture");
-		val = AssetManager::textureval(texture);
-
-		if (!AssetManager::texturecheckexist(texture))
-		{
-			std::cout << "TEXTURE MISSING FOR MENU!!!\n";
-		}
-		Menus.push_back(Menu(x,y,w,h,val));
-	}
-
-
-	jsonobj.closeFile();
-}
-
-void set_win()
-{
-	if (!win)
-	{
-		win = true;
-		if (!engine->isPaused())
-		{
-			SceneManager::PauseScene();
-		}
-	}
+	drawline(pos1, Vec2(pos2.x, pos1.y), glm::vec3(1, 1, 1));
+	drawline(pos2, Vec2(pos1.x, pos2.y), glm::vec3(1, 1, 1));
+	drawline(pos1, Vec2(pos1.x, pos2.y), glm::vec3(1, 1, 1));
+	drawline(pos2, Vec2(pos2.x, pos1.y), glm::vec3(1, 1, 1));
 }
 
 
-void Buttons_change_resolution()
+
+void draw_Button_texture( Button b)
 {
-	int current_width, current_height;
-	static int old_width{ window->width_init };
-	static int old_height{ window->height_init };
+	glBindTextureUnit(6, b.texture_id);
+	glBindTexture(GL_TEXTURE_2D, b.texture_id);
+	// load shader program in use by this object
+
+	AssetManager::shaderval("image").Use();
+
+	glBindVertexArray(AssetManager::modelval("square").vaoid);
+	// copy object's model-to-NDC matrix to vertex shader's
+	// uniform variable uModelToNDC
+	Vec2 posM;
+	int current_width;
+	int current_height;
 	glfwGetFramebufferSize(GLWindow::ptr_window, &current_width, &current_height);
-	float scaleX = static_cast<float>(current_width) / old_width;
-	float scaleY = static_cast<float>(current_height) / old_height;
-	old_width = current_width;
-	old_height = current_height;
+	posM.x = b.centre.x * 2 / current_width;
+	posM.y = b.centre.y * 2 / current_height;
+	Vec2 scale;
+	scale.x = b.string.scale.x / current_width;
+	scale.y = b.string.scale.y / current_height;
+	Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale) * Mat3RotRad(0.f);
+	AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat.ToGlmMat3());
+	// tell fragment shader sampler uTex2d will use texture image unit 6
+	GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
+	glUniform1i(tex_loc, 6);
+	// call glDrawElements with appropriate arguments
+	glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
+	// unbind VAO and unload shader program
+	glBindVertexArray(0);
+	AssetManager::shaderval("image").UnUse();
+}
 
-	for (auto it = Buttons.begin(); it != Buttons.end(); ++it)
+void set_button_logic()
+{
+	if ("pause" == button_tracker->string.text)
 	{
-		it->centre.x *= scaleX;
-		it->centre.y *= scaleY;
-		it->pos1.x *= scaleX;
-		it->pos1.y *= scaleY;
-		it-> pos2.x *= scaleX;
-		it->pos2.y *= scaleY;
-		it->width *= scaleX;
-		it->height *= scaleY;
+		current_page = PAGE::pause_menu;
+		SceneManager::PauseScene();
 	}
-	for (auto it = Menu_Buttons.begin(); it != Menu_Buttons.end(); ++it)
+	else if ("zoom" == button_tracker->string.text)
 	{
-		it->centre.x *= scaleX;
-		it->centre.y *= scaleY;
-		it->pos1.x *= scaleX;
-		it->pos1.y *= scaleY;
-		it->pos2.x *= scaleX;
-		it->pos2.y *= scaleY;
-		it->width *= scaleX;
-		it->height *= scaleY;
+		if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
+			camera2D->scale = { 2.0f, 2.0f };
+		}
+		else camera2D->scale = { 1.0f, 1.0f };
 	}
-	for (auto it = Menus.begin(); it != Menus.end(); ++it)
+	else if ("resume" == button_tracker->string.text)
 	{
-		it->pos.x *= scaleX;
-		it->pos.y *= scaleY;
+		current_page = PAGE::play;
+		SceneManager::PlayScene();
 	}
+	else if ("restart" == button_tracker->string.text)
+	{
+		SceneManager::RestartScene();
+		SceneManager::PlayScene();
+		current_page = PAGE::play;
+	}
+	else if ("quit game" == button_tracker->string.text)
+	{
+		current_page = PAGE::main_menu;
+	}
+	else if ("settings" == button_tracker->string.text)
+	{
+		current_page = PAGE::settings_menu;
+	}
+	else if ("back" == button_tracker->string.text)
+	{
+		current_page = PAGE::pause_menu;
+	}
+	else if ("how to play" == button_tracker->string.text)
+	{
 
+	}
+	else if ("fullscreen" == button_tracker->string.text)
+	{
+		if (window->window_size == Window_size::fullscreen)
+		{
+			window->change_window_size(Window_size::high);
+			window->window_size = Window_size::high;
+		}
+		else
+		{
+			window->change_window_size_fullscreen();
+			window->window_size = Window_size::fullscreen;
+		}
+	}
+	else if ("New game" == button_tracker->string.text)
+	{
+		current_page = PAGE::menu_level_select;
+	}
+	else if ("Quit" == button_tracker->string.text)
+	{
+		Message_Handler msg(MessageID::Event_Type::Quit);
+		engine->Broadcast(&msg);
+	}
+	else if ("Level 1" == button_tracker->string.text)
+	{
+		current_page = PAGE::pause_menu;
+	}
+	else if ("Level 2" == button_tracker->string.text)
+	{
+
+	}
 }
 
 
-void draw_how_to_play_string()
+Menu::Menu()
+	:pos{}, scale{}, texture_id{}
 {
-	SetFont(FONT::AldrichRegular);
-	DrawText("press wasd to move", -400, -100, 1);
-	DrawText("step on buttons to open door", -400, -150, 1);
-	DrawText("press e to change character", -400, -200, 1);
 }
 
-void Menu::draw_menu()
+Menu::Menu(float x, float y, float scale_x, float scale_y, GLuint textre)
+	:pos{Vec2(x,y)}, scale{Vec2(scale_x , scale_y)}, texture_id{ textre }
 {
-	glBindTextureUnit(6, texture_id);
-	glBindTexture(GL_TEXTURE_2D, texture_id);
+}
+
+void draw_menu( Menu m)
+{
+	glBindTextureUnit(6, m.texture_id);
+	glBindTexture(GL_TEXTURE_2D, m.texture_id);
 	// load shader program in use by this object
 	AssetManager::shaderval("image").Use();
 	glBindVertexArray(AssetManager::modelval("square").vaoid);
@@ -579,11 +426,11 @@ void Menu::draw_menu()
 	int current_width;
 	int current_height;
 	glfwGetFramebufferSize(GLWindow::ptr_window, &current_width, &current_height);
-	posM.x = pos.x / current_width;
-	posM.y = pos.y / current_height;
+	posM.x = m.pos.x * 2 / current_width ;
+	posM.y = m.pos.y * 2 / current_height;
 	Vec2 scale_mat;
-	scale_mat.x = scale.x ;
-	scale_mat.y = scale.y ;
+	scale_mat.x = m.scale.x / current_width;
+	scale_mat.y = m.scale.y / current_height;
 	Mat3 mat = Mat3Translate(posM) * Mat3Scale(scale_mat) * Mat3RotRad(0.f);
 	AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat.ToGlmMat3());
 	// tell fragment shader sampler uTex2d will use texture image unit 6
@@ -596,7 +443,60 @@ void Menu::draw_menu()
 	AssetManager::shaderval("image").UnUse();
 }
 
-Menu::Menu(float x, float y, float w, float h, GLuint id)
-	:pos{x,y} , scale{w,h} , texture_id{id}
+void set_background()
 {
+	if (current_page == PAGE::pause_menu || current_page == PAGE::settings_menu )
+	{
+		menu_tracker = "Pause_menu";
+	}
+	else if (current_page == PAGE::main_menu || current_page == PAGE::menu_level_select)
+	{
+		menu_tracker = "Menu";
+	}
+	else
+	{
+		menu_tracker = "";
+	}
+}
+
+
+void Buttons_update_resolution()
+{
+	int current_width, current_height;
+	static int old_width{ window->width_init };
+	static int old_height{ window->height_init };
+	glfwGetFramebufferSize(GLWindow::ptr_window, &current_width, &current_height);
+	if (old_width == current_width && old_height == current_height)
+	{
+		return;
+	}
+	float scaleX = static_cast<float>(current_width) / old_width;
+	float scaleY = static_cast<float>(current_height) / old_height;
+	old_width = current_width;
+	old_height = current_height;
+	input::update_resolution();
+
+	for (int i = 0; i < total_page; ++i)
+	{
+
+		for (std::vector<Button>::iterator it = all_buttons.at(i).begin(); it != all_buttons.at(i).end(); ++it)
+		{
+			it->centre.x *= scaleX;
+			it->centre.y *= scaleY;
+			it->width *= scaleX;
+			it->height *= scaleY;
+			it->string.pos.x += scaleX;
+			it->string.pos.y += scaleY;
+		}
+	}
+		for (std::map<std::string,std::vector<Menu>>::iterator it = menu_background.begin(); it != menu_background.end(); ++it)
+		{
+			for (size_t i = 0; i < it->second.size(); ++i)
+			{
+				it->second.at(i).pos.x *= scaleX;
+				it->second.at(i).pos.y *= scaleY;
+				it->second.at(i).scale.x *= scaleX;
+				it->second.at(i).scale.y *= scaleY;
+			}
+		}
 }
