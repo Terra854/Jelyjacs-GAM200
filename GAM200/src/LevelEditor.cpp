@@ -1402,7 +1402,7 @@ void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
 	// Make the buttons unclickable if Finn or Spark are not inside 
-	ImGui::BeginDisabled(objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr);
+	//ImGui::BeginDisabled(objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr);
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
@@ -1419,7 +1419,7 @@ void LevelEditor::PlayPauseGame() {
 			SceneManager::PauseScene();
 	}
 
-	ImGui::EndDisabled();
+	//ImGui::EndDisabled();
 
 	ImGui::SameLine();
 

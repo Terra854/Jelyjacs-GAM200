@@ -148,12 +148,15 @@ void GameLogic::Update() {
 	*	Basic Input Handling Logic
 	*
 	*********************************************************************************/
+	
 	// If press esc button, quit the game
 	if (input::IsPressed(KEY::esc)) {
 		//Message_Handler msg(MessageID::Event_Type::Quit);
 		//engine->Broadcast(&msg);
 		engine->setPause();
 	}
+	
+	// Only proceed if Finn and Spark are inside
 	if (GameLogic::playerObj != nullptr) {
 		if (input::IsPressed(KEY::e)) {
 			if (GameLogic::playerObj->GetName() == "Finn") {
@@ -170,53 +173,53 @@ void GameLogic::Update() {
 				std::cout << "Switched to Finn" << std::endl;
 			}
 		}
-	
+
 		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) {
 			Object* obj = objectFactory->getObjectWithID((long)i);
 
 			if (obj == nullptr)
 				continue;
 		}
-	}
-	/*****************************************************************************************
-	*
-	*		Cheat Codes 
-	*
-	******************************************************************************************/
-	if (input::IsPressed(KEY::one)) {
-		if (!cheat) {
-			std::cout << "Cheat Mode Activated" << std::endl;
-			cheat = true;
+
+		/*****************************************************************************************
+		*
+		*		Cheat Codes
+		*
+		******************************************************************************************/
+		if (input::IsPressed(KEY::one)) {
+			if (!cheat) {
+				std::cout << "Cheat Mode Activated" << std::endl;
+				cheat = true;
+			}
+			else {
+				std::cout << "Cheat Mode Deactivated" << std::endl;
+				cheat = false;
+
+			}
+		}
+		if (input::IsPressed(KEY::two)) {
+			if (objectFactory->FindObject("MainDoor") != nullptr && objectFactory->FindObject("Finn") != nullptr && objectFactory->FindObject("Spark") != nullptr) {
+				static_cast<Transform*>(objectFactory->FindObject("Finn")->GetComponent(ComponentType::Transform))->Position = static_cast<Transform*>(objectFactory->FindObject("MainDoor")->GetComponent(ComponentType::Transform))->Position;
+				static_cast<Transform*>(objectFactory->FindObject("Spark")->GetComponent(ComponentType::Transform))->Position = static_cast<Transform*>(objectFactory->FindObject("MainDoor")->GetComponent(ComponentType::Transform))->Position;
+			}
+		}
+
+		if (cheat) {
+			Physics* temp_p = static_cast<Physics*>(GameLogic::playerObj->GetComponent(ComponentType::Physics));
+			temp_p->AffectedByGravity = false;
+			static_cast<Body*>(playerObj->GetComponent(ComponentType::Body))->active = false;
+			if (input::IsPressed(KEY::w)) {
+				temp_p->Velocity.y = 300.00f;
+			}
+			if (input::IsPressed(KEY::s)) {
+				temp_p->Velocity.y = -300.0f;
+			}
 		}
 		else {
-			std::cout << "Cheat Mode Deactivated" << std::endl;
-			cheat = false;
-		
+			static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
+			static_cast<Body*>(playerObj->GetComponent(ComponentType::Body))->active = true;
 		}
 	}
-	if (input::IsPressed(KEY::two)) {
-		if (objectFactory->FindObject("MainDoor") != nullptr && objectFactory->FindObject("Finn")!= nullptr && objectFactory->FindObject("Spark") != nullptr) {
-			static_cast<Transform*>(objectFactory->FindObject("Finn")->GetComponent(ComponentType::Transform))->Position = static_cast<Transform*>(objectFactory->FindObject("MainDoor")->GetComponent(ComponentType::Transform))->Position;
-			static_cast<Transform*>(objectFactory->FindObject("Spark")->GetComponent(ComponentType::Transform))->Position = static_cast<Transform*>(objectFactory->FindObject("MainDoor")->GetComponent(ComponentType::Transform))->Position;
-		}
-	}
-
-	if (cheat) {
-		Physics* temp_p = static_cast<Physics*>(GameLogic::playerObj->GetComponent(ComponentType::Physics));
-		temp_p->AffectedByGravity = false;
-		static_cast<Body*>(playerObj->GetComponent(ComponentType::Body))->active = false;
-		if (input::IsPressed(KEY::w)) {
-			temp_p->Velocity.y = 300.00f;
-		}
-		if (input::IsPressed(KEY::s)) {
-			temp_p->Velocity.y = -300.0f;
-		}
-	}
-	else {
-		static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
-		static_cast<Body*>(playerObj->GetComponent(ComponentType::Body))->active = true;
-	}
-
 	/*****************************************************************************************
 	*
 	*	Debugging

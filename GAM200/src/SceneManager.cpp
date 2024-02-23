@@ -45,8 +45,8 @@ void SceneManager::LoadScene(const std::string filepath) {
 *******************************************************************************/
 void SceneManager::PlayScene() {
 	// Do not play scene if Finn or Spark isn't inside the level
-	if (objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr)
-		return;
+	//if (objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr)
+	//	return;
 
 	if (engine->isPaused()) {
 		if (initialObjectMap.empty()) {
