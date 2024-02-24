@@ -449,5 +449,8 @@
     <ClInclude Include="include\Scripts\HorizontalDoor.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="include\components\Text.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

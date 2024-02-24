@@ -20,6 +20,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <components/Event.h>
 #include <SceneManager.h>
 #include "../../src/Assets Manager/asset_manager.h"
+#include <components/Text.h>
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
@@ -134,6 +135,10 @@ static Vec2 edited_position;
 static float edited_rotation;
 static Vec2 edited_scale;
 
+static bool Text_EditMode = false;
+static char edited_text[1024] = "";
+static float edited_font_size;
+
 static bool Body_EditMode = false;
 
 static bool edited_active;
@@ -196,6 +201,7 @@ void LevelEditor::ObjectProperties() {
 	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
 	Event* e = (Event*)object->GetComponent(ComponentType::Event);
 	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
+	Text* t = (Text*)object->GetComponent(ComponentType::Text);
 
 	ImGui::BeginChild("Texture", ImVec2(128.f, 128.f));
 
@@ -486,6 +492,51 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Text("Current Type: %d", a->current_type);
 			ImGui::Text("Frame Number: %d", a->frame_num);
 
+		}
+	}
+
+	// Text
+	if (t != nullptr) {
+		if (ImGui::CollapsingHeader("Text")) {
+			if (Text_EditMode)
+			{
+				// Display input fields
+				LE_InputText("Text", edited_text, sizeof(edited_text));
+				LE_InputFloat("Font Size", &edited_font_size);
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done##Text"))
+				{
+					Text_EditMode = false;
+					t->text = edited_text;
+					t->fontSize = edited_font_size;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel##Text"))
+				{
+					Text_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
+			}
+			else
+			{
+				// Display the values as text
+				ImGui::Text("Text: %s", t->text.c_str());
+				ImGui::Text("Font Size: %.5f", t->fontSize);
+
+				// Button to enter edit mode
+				if (ImGui::Button("Edit##Text"))
+				{
+					Text_EditMode = true;
+					strcpy_s(edited_text, sizeof(edited_text), t->text.c_str());
+					edited_font_size = t->fontSize;
+				}
+			}
 		}
 	}
 

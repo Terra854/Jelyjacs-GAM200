@@ -26,6 +26,7 @@ ID aand is stored as part of a private map
 #include "components/Animation.h"
 #include "components/Event.h"
 #include "components/Particle.h"
+#include "components/Text.h"
 #include "Assets Manager/asset_manager.h"
 #include "Object.h"
 #include <components/Behaviour.h>
@@ -58,6 +59,8 @@ Factory::Factory()
 	AddComponentCreator("Event", new ComponentCreator<Event>());
 	AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 	AddComponentCreator("Particles", new ComponentCreator<ParticleSystem>());
+	AddComponentCreator("Animation", new ComponentCreator<Animation>());
+	AddComponentCreator("Text", new ComponentCreator<Text>());
 
 	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
 	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
@@ -344,6 +347,16 @@ Object* Factory::createObject(const std::string& filename)
 
 			obj->AddComponent(p);
 		}
+		else if (type == "Text")
+		{
+			Text* t = (Text*)((ComponentCreator<Text>*) componentMap["Text"])->Create();
+			jsonloop.readString(t->text, "Properties", "text");
+
+			if (jsonloop.isMember("fontSize", "Properties"))
+				jsonloop.readFloat(t->fontSize, "Properties", "fontSize");
+
+			obj->AddComponent(t);
+		}
 	}
 
 	// Run the initialization routines for each component (if there is any)
@@ -611,6 +624,16 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			p->particle_texture = p_tmp->particle_texture;
 
 			obj->AddComponent(p);
+		}
+		else if (component.first == ComponentType::Text)
+		{
+			Text* t = (Text*)((ComponentCreator<Text>*) componentMap["Text"])->Create();
+			Text* t_tmp = static_cast<Text*>(object->GetComponent(ComponentType::Text));
+
+			t->text = t_tmp->text;
+			t->fontSize = t_tmp->fontSize;
+
+			obj->AddComponent(t);
 		}
 	}
 
