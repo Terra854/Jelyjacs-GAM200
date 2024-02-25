@@ -501,7 +501,7 @@ void LevelEditor::ObjectProperties() {
 			if (Text_EditMode)
 			{
 				// Display input fields
-				LE_InputText("Text", edited_text, sizeof(edited_text));
+				LE_InputText("Text#TextInText", edited_text, 1000);
 				LE_InputFloat("Font Size", &edited_font_size);
 
 				// Button to exit edit mode
