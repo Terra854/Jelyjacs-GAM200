@@ -392,7 +392,8 @@ void GLApp::Update()
 					if (text != nullptr) {
 						// draw text
 						SetFont(FONT::GeoRegular);
-						DrawText(text->text, pos.x, pos.y, text->fontSize);
+						std::cout << pos.x << " " << pos.y << std::endl;
+						DrawText(text->text, pos.x * window->width / 2.f, pos.y * window->height / 2.f, text->fontSize);
 					}
 #if defined(DEBUG) | defined(_DEBUG)
 					if (graphics_debug && object->GetComponent(ComponentType::Body) != nullptr) {

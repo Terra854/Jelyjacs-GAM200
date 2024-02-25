@@ -11,6 +11,14 @@
       "Name": "Menu",
       "Objects": [
         {
+          "Prefabs": "text_test.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 100.0,
+            "y": 100.0
+          }
+        },
+        {
           "Prefabs": "text_test.json"
         }
       ]
