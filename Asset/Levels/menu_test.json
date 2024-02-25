@@ -19,7 +19,7 @@
           }
         },
         {
-          "Prefabs": "text_test.json"
+          "Prefabs": "button_test.json"
         }
       ]
     }

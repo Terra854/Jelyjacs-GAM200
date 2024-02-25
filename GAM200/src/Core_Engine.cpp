@@ -611,8 +611,8 @@ void CoreEngine::GameLoop()
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
 
 			Update(Systems["Graphics"]);
-			gamehud.Update();
-			gamehud.Draw();
+			//gamehud.Update();
+			//gamehud.Draw();
 			Update(Systems["Window"]);
 			hud.GuiRender();
 		}

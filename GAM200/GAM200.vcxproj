@@ -166,6 +166,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\components\Particle.h" />
     <ClInclude Include="include\components\Text.h" />
     <ClInclude Include="include\Scripts\Box.h" />
+    <ClInclude Include="include\Scripts\ButtonBase.h" />
     <ClInclude Include="include\Scripts\Door.h" />
     <ClInclude Include="include\Scripts\HorizontalDoor.h" />
     <ClInclude Include="include\Scripts\Hori_Elevator.h" />
@@ -238,6 +239,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Scenes.cpp" />
     <ClCompile Include="src\Scripts\Box.cpp" />
+    <ClCompile Include="src\Scripts\ButtonBase.cpp" />
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
     <ClCompile Include="src\Scripts\Door.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
