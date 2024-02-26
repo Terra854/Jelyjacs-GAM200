@@ -249,7 +249,7 @@ void GLApp::Update()
 		//draw objects
 
 		for (auto& l : SceneManager::layers) {
-			if (l.second.first) {
+			if (l.second.first.isVisible) {
 				for (auto& object : l.second.second) {
 					GLuint tex_test;
 					Animation* ani_pt = nullptr;
@@ -315,7 +315,9 @@ void GLApp::Update()
 
 					mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
 					// matrix after camrea
-					mat_test = camera2D->world_to_ndc * mat_test;
+
+					if (!l.second.first.static_layer)
+						mat_test = camera2D->world_to_ndc * mat_test;
 
 
 					// draw image with texture

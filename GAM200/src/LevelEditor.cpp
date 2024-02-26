@@ -1134,7 +1134,7 @@ void LevelEditor::ListOfObjects() {
 		std::string layerName = std::string("Layer " + static_cast<char>(sceneManager->layers.size()));
 		//buffer
 		sprintf_s(buffer, "Layer %d", static_cast<int>(sceneManager->layers.size()));
-		objectFactory->CreateLayer(std::string(buffer), true);
+		objectFactory->CreateLayer(std::string(buffer), true, true);
 	}
 	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
@@ -1144,7 +1144,7 @@ void LevelEditor::ListOfObjects() {
 			ImGui::TableNextColumn();
 			char buf[512];
 			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());
-			ImGui::Checkbox(buf, &l.second.first);
+			ImGui::Checkbox(buf, &l.second.first.isVisible);
 			ImGui::SameLine();
 			sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
 			if (ImGui::TreeNode(buf)) {
@@ -1936,7 +1936,7 @@ void LevelEditor::Initialize() {
 
 	io.Fonts->Build();
 
-	objectFactory->CreateLayer("Layer 0", true);
+	objectFactory->CreateLayer("Layer 0", true, true);
 }
 
 /******************************************************************************

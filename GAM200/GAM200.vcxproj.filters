@@ -85,6 +85,9 @@
     <Filter Include="Source Files\Scripts\Buttons">
       <UniqueIdentifier>{7ed0ad6a-2509-473b-afc7-697a76b360e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Systems\SceneManager">
+      <UniqueIdentifier>{8732e116-ee22-4434-82f5-4cdd86d975fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mat3.cpp">
@@ -404,9 +407,6 @@
     <ClInclude Include="include\components\Behaviour.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\SceneManager.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="include\Scripts\Vert_Elevator.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
@@ -469,6 +469,12 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\Laser.h">
       <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneManager.h">
+      <Filter>Header Files\Systems\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LayerSettings.h">
+      <Filter>Header Files\Systems\SceneManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

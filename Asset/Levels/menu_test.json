@@ -9,6 +9,10 @@
   "Layers": [
     {
       "Name": "Menu",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": true
+      },
       "Objects": [
         {
           "Prefabs": "text_test.json",

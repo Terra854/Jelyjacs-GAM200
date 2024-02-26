@@ -165,6 +165,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
     <ClInclude Include="include\components\Particle.h" />
     <ClInclude Include="include\components\Text.h" />
+    <ClInclude Include="include\LayerSettings.h" />
     <ClInclude Include="include\Scripts\Box.h" />
     <ClInclude Include="include\Scripts\ButtonBase.h" />
     <ClInclude Include="include\Scripts\Door.h" />

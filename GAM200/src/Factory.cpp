@@ -701,13 +701,16 @@ void Factory::DeleteComponent(Object* o, ComponentType c) {
 	o->Components.erase(c);
 }
 
-int Factory::CreateLayer(std::string layerName, bool isVisible) {
+int Factory::CreateLayer(std::string layerName, bool isVisible, bool static_layer) {
+	return CreateLayer(layerName, { isVisible, static_layer });
+}
 
-	// Create the inner pair with layer visibility and empty vector of object pointers
-	std::pair<bool, std::vector<Object*>> innerPair = std::make_pair(isVisible, std::vector<Object*>());
+int Factory::CreateLayer(std::string layerName, LayerSettings settings) {
+
+	std::pair<LayerSettings, std::vector<Object*>> innerPair = std::make_pair(settings, std::vector<Object*>());
 
 	// Create the outer pair with the layer name and the inner pair
-	std::pair<std::string, std::pair<bool, std::vector<Object*>>> layer = std::make_pair(layerName, innerPair);
+	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>> layer = std::make_pair(layerName, innerPair);
 
 	// Add the newly created pair to the layers vector
 	SceneManager::layers.push_back(layer);
@@ -737,7 +740,7 @@ int Factory::GetLayerNum(std::string layerName) {
 	}
 }
 
-std::pair<std::string, std::pair<bool, std::vector<Object*>>>* Factory::FindLayerThatHasThisObject(Object* obj) {
+std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::FindLayerThatHasThisObject(Object* obj) {
 	for (auto& l : SceneManager::layers) {
 		std::vector<Object*>& v = l.second.second;
 		auto it = std::find(v.begin(), v.end(), obj);

@@ -9,6 +9,10 @@
   "Layers": [
     {
       "Name": "Menu",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
       "Objects": [
         {
           "Prefabs": "zoom_button.json",
