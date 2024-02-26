@@ -1,0 +1,32 @@
+{
+  "SceneName": "menu_test",
+  "Size": {
+    "startX": -960.0,
+    "startY": -540.0,
+    "width": 1920.0,
+    "height": 1080.0
+  },
+  "Layers": [
+    {
+      "Name": "Menu",
+      "Objects": [
+        {
+          "Prefabs": "zoom_button.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 0.0,
+            "y": 200.0
+          }
+        },
+        {
+          "Prefabs": "pause_button.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "Name": "button_test",
+  "Name": "zoom_button",
   "Components": [
     {
       "Type": "Transform",
@@ -8,22 +8,21 @@
           "x": 0.0,
           "y": 0.0
         },
-        "Scale_x": 128.0,
-        "Scale_y": 64.0,
+        "Scale_x": 140.0,
+        "Scale_y": 140.0,
         "Rotation": 0.0
       }
     },
     {
-      "Type": "Text",
+      "Type": "Texture",
       "Properties": {
-        "text": "test_text",
-        "fontSize": 1.0
+        "texturepath": "Zoom.PNG"
       }
     },
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "PauseButton",
+        "Script": "ButtonBase",
         "Index": 0
       }
     }

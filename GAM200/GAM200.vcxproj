@@ -248,6 +248,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
     <ClCompile Include="src\Scripts\Laser.cpp" />
     <ClCompile Include="src\Scripts\LaserDoor.cpp" />
+    <ClCompile Include="src\Scripts\PauseButton.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
     <ClCompile Include="src\Scripts\Piston_H_Elev.cpp" />
     <ClCompile Include="src\Scripts\PowerLiquid.cpp" />
@@ -308,6 +309,7 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Scripts\Finn.h" />
     <ClInclude Include="include\Scripts\Laser.h" />
     <ClInclude Include="include\Scripts\LaserDoor.h" />
+    <ClInclude Include="include\Scripts\PauseButton.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
     <ClInclude Include="include\Scripts\Piston_H_Elev.h" />
     <ClInclude Include="include\Scripts\PowerLiquid.h" />

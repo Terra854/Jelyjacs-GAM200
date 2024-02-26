@@ -103,6 +103,9 @@ public:
 	virtual void Start(Object* obj) = 0;
 	virtual void Update(Object* obj) = 0;
 	virtual void Shutdown(Object* obj) = 0;
+
+	//Marks the script to be executed on pause
+	bool executeOnPause = false;
 private:
 	// Static map to hold temporary script mappings.
 	static std::map<std::string, LogicScript*> temp_scriptmap;

@@ -118,8 +118,8 @@ void GameLogic::Initialize()
 *******************************************************************************/
 void GameLogic::Update() {
 
-	// Do not update if the game is paused
-	if (engine->isPaused())
+	// Do not update if the game is paused and the level editor is active
+	if (engine->isPaused() && engine->debug_gui_active)
 		return;
 
 	// Update all behaviours
@@ -139,7 +139,8 @@ void GameLogic::Update() {
 			if (iter->GetBehaviourName() == "NULL") {
 				continue;
 			}
-			behaviours[iter->GetBehaviourName()]->Update(it);
+			if (!engine->isPaused() || behaviours[iter->GetBehaviourName()]->executeOnPause)
+				behaviours[iter->GetBehaviourName()]->Update(it);
 			counter++;
 		}
 	}
