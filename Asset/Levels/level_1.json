@@ -1446,8 +1446,8 @@
           "Prefabs": "PistonOrange.json",
           "Type": "Transform",
           "Position": {
-            "x": 1216.0,
-            "y": -230.0
+            "x": 896.0,
+            "y": 192.0
           },
           "linkedevent": 3
           //"scripts": "Piston"
@@ -1503,8 +1503,8 @@
           "Prefabs": "CatTeleport.json",
           "Type": "Transform",
           "Position": {
-            "x": 896.0,
-            "y": 192.0
+            "x": 1216.0,
+            "y": -230.0
           },
           "linkedevent": 5
         },
