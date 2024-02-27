@@ -1261,12 +1261,12 @@
           "Type": "Transform"
         },
         {
-          "Name": "LaserPink",
+          "Name": "LaserPurple",
           "Position": {
             "x": 129.0,
             "y": 124.0
           },
-          "Prefabs": "LaserPink.json",
+          "Prefabs": "LaserPurple.json",
           "Properties": {
             "height": 16.0,
             "width": 224.0
@@ -3401,12 +3401,12 @@
           "Type": "Transform"
         },
         {
-          "Name": "LaserPink",
+          "Name": "LaserPurple",
           "Position": {
             "x": 288.0,
             "y": 352.0
           },
-          "Prefabs": "LaserPink.json",
+          "Prefabs": "LaserPurple.json",
           "Properties": {
             "height": 224.0,
             "width": 16.0
@@ -3417,15 +3417,16 @@
             "y": 224.0
           },
           "Type": "Transform",
-          "linkedevent": 1
+          "linkedevent": 1,
+          "index": 1
         },
         {
-          "Name": "LaserPink",
+          "Name": "LaserPurple",
           "Position": {
             "x": 416.0,
             "y": 352.0
           },
-          "Prefabs": "LaserPink.json",
+          "Prefabs": "LaserPurple.json",
           "Properties": {
             "height": 224.0,
             "width": 16.0
@@ -3476,12 +3477,12 @@
           "scripts": "Vert_Elevator"
         },
         {
-          "Name": "LaserPink",
+          "Name": "LaserPurple",
           "Position": {
             "x": 1024.0,
             "y": 16.0
           },
-          "Prefabs": "LaserPink.json",
+          "Prefabs": "LaserPurple.json",
           "Properties": {
             "height": 128.0,
             "width": 16.0
@@ -3495,7 +3496,7 @@
           "linkedevent": 10
         },
         {
-          "Name": "LaserPink",
+          "Name": "LaserPink_Timed",
           "Position": {
             "x": 334.0,
             "y": 736.0
@@ -3514,7 +3515,7 @@
           "linkedevent": 2
         },
         {
-          "Name": "LaserPink",
+          "Name": "LaserPink_Timed",
           "Position": {
             "x": 367.0,
             "y": 736.0
@@ -3533,7 +3534,7 @@
           "linkedevent": 2
         },
         {
-          "Name": "LaserPink",
+          "Name": "LaserPink_Timed",
           "Position": {
             "x": 460.0,
             "y": 736.0
@@ -3552,7 +3553,7 @@
           "linkedevent": 2
         },
         {
-          "Name": "LaserPink",
+          "Name": "LaserPink_Timed",
           "Position": {
             "x": 622.0,
             "y": 736.0
@@ -3758,12 +3759,12 @@
           "scripts": "PPlate"
         },
         {
-          "Name": "PressurePlatePink",
+          "Name": "PressurePlatePurple",
           "Position": {
             "x": 840.0,
             "y": -38.0
           },
-          "Prefabs": "PressurePlatePink.json",
+          "Prefabs": "PressurePlatePurple.json",
           "Properties": {
             "height": 32.0,
             "width": 64.0

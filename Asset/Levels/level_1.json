@@ -1534,7 +1534,8 @@
           "linkedevent": 6
         },
         {
-          "Prefabs": "LaserPink.json",
+          "Name": "LaserPink_Timed",
+          "Prefabs": "LaserPink_Timed.json",
           "Type": "Transform",
           "Position": {
             "x": 338.0,
