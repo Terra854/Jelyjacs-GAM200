@@ -420,7 +420,7 @@ void CoreEngine::GameLoop()
 				std::cout << "Translated ClickPos (in terms of opengl display) " << displayPos.x << ", " << displayPos.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of opengl display coord) " << openGlDisplayCoord.x << ", " << openGlDisplayCoord.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of game world) " << gameWorldPos.x << ", " << gameWorldPos.y << std::endl;
-
+				/*
 				for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 				{
 					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
@@ -431,6 +431,21 @@ void CoreEngine::GameLoop()
 						level_editor->selected = true;
 						level_editor->selectedNum = (int)i;
 						selectedObjectID = static_cast<long>(i);
+					}
+				}*/
+
+				for (auto& l : SceneManager::layers) {
+					if (l.second.first.isVisible) {
+						for (auto& object : l.second.second) {
+							Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+
+							if (isObjectClicked(objTransform, gameWorldPos))
+							{
+								level_editor->selected = true;
+								level_editor->selectedNum = (int)object->GetId();
+								selectedObjectID = object->GetId();
+							}
+						}
 					}
 				}
 			}
