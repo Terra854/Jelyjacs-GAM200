@@ -128,6 +128,10 @@ namespace PressurePlate {
 								if (door_behv != nullptr)
 									index = door_behv->GetBehaviourIndex();
 
+								if (door_behv->GetBehaviourName() == "Timed_Laser") {
+									door_behv->SetBehaviourIndex(-1);
+									return;
+								}
 								// 0 means the door should be closed
 								if (index != 0) // Door is opened by default
 								{

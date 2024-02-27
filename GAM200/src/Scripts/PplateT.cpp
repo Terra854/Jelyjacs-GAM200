@@ -127,5 +127,5 @@ namespace PplateT {
 		std::cout << "PPlateT Script Shutdown : " << obj->GetName() << std::endl;
 	}
 
-	PPlateT pplate("PPlateT");
+	PPlateT pplate_t("Pplate_T");
 }

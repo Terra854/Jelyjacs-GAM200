@@ -273,6 +273,12 @@
     <ClCompile Include="src\Scripts\RestartButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
+    <ClCompile Include="include\Scripts\PplateT.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\PplateT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
