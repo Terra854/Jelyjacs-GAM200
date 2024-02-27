@@ -72,6 +72,7 @@ namespace Piston_Script {
 						if (piston_event->linked_event == door_event->linked_event) {
 							Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
 							//door_animation->reverse = false;
+							static_cast<Behaviour*>(obj2->GetComponent(ComponentType::Behaviour))->SetBehaviourIndex(-1);
 							door_animation->fixed = true;
 							door_animation->current_type = AnimationType::Jump;
 						}
