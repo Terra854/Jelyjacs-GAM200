@@ -8,6 +8,8 @@ This file contains the declarations for the SceneManager system class
 *//*__________________________________________________________________________*/
 #include <Factory.h>
 #include "Scenes.h"
+#include "LayerSettings.h"
+#include <queue>
 
 class SceneManager : public ISystems {
 public:
@@ -35,8 +37,9 @@ public:
 
 private:
 	static Factory::objectIDMap initialObjectMap;
-	static std::vector<std::pair<std::string, std::pair<bool, std::vector<Object*>>>> layers;
+	static std::vector<std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>> layers;
 	static std::multimap<std::string, int> initialLayer;
+	static std::queue<LayerSettings> initialLayerSettings;
 };
 
 extern SceneManager* sceneManager;

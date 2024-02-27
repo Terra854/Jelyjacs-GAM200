@@ -9,6 +9,10 @@
   "Layers": [
     {
       "Name": "Background",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
       "Objects": [
         {
           "Prefabs": "level1_background_1.json"
@@ -50,6 +54,10 @@
     },
     {
       "Name": "Level",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
       "Objects": [
         {
           "Prefabs": "MainDoor.json",
@@ -1598,6 +1606,31 @@
           "Position": {
             "x": 320.0,
             "y": -128.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Hud",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": true
+      },
+      "Objects": [
+        {
+          "Prefabs": "zoom_button.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 800.0,
+            "y": 400.0
+          }
+        },
+        {
+          "Prefabs": "pause_button.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 800.0,
+            "y": 250.0
           }
         }
       ]

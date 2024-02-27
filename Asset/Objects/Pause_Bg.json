@@ -1,0 +1,23 @@
+{
+  "Name": "Pause_Bg",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale_x": 1044.0,
+        "Scale_y": 1175.0,
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "MENU_back.png"
+      }
+    }
+  ]
+}

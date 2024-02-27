@@ -33,7 +33,7 @@ namespace PL_Script {
 	// @param obj: The object to which this script is attached.
 	/*********************************************************************/
 	void P_liquid::Update(Object* obj) {
-		if (obj == nullptr) {
+		if (obj == nullptr || GameLogic::playerObj == nullptr ) {
 			//std::cout << "NIL OBJ : P_liquid" << std::endl;
 			return;
 		}
