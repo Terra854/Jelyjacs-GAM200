@@ -84,7 +84,9 @@ namespace PressurePlate {
 								//audio->playSfx("sliding_door_open");
 
 								Behaviour* door_behv = static_cast<Behaviour*>(obj2->GetComponent(ComponentType::Behaviour));
-								int index = door_behv->GetBehaviourIndex();
+								int index{};
+								if (door_behv != nullptr)
+									index = door_behv->GetBehaviourIndex();
 
 								if (index != 0) // Default Open, close door
 								{
@@ -122,7 +124,9 @@ namespace PressurePlate {
 								//audio->playSfx("sliding_door_open"); // Should be Closing sound
 
 								Behaviour* door_behv = static_cast<Behaviour*>(obj2->GetComponent(ComponentType::Behaviour));
-								int index = door_behv->GetBehaviourIndex();
+								int index{};
+								if (door_behv != nullptr)
+									index = door_behv->GetBehaviourIndex();
 
 								// 0 means the door should be closed
 								if (index != 0) // Door is opened by default

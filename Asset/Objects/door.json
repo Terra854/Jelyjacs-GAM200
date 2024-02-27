@@ -36,6 +36,13 @@
       "Properties": {
         "linkedevent" : 0
       }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "Door",
+        "Index": 0
+      }
     }
   ]
 }

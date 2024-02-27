@@ -3667,18 +3667,18 @@
         {
           "Name": "door",
           "Position": {
-            "x": 1710.0,
-            "y": 952.0
+            "x": 1705.0,
+            "y": 965.0
           },
-          "Prefabs": "door.json",
+          "Prefabs": "DoorDarkBlue.json",
           "Properties": {
-            "height": 128.0,
+            "height": 196.0,
             "width": 32.0
           },
           "Rotation": 0.0,
           "Scale": {
             "x": 64.0,
-            "y": 164.0
+            "y": 360.0
           },
           "Type": "Transform",
           "linkedevent": 6
@@ -3803,7 +3803,7 @@
             "x": 1367.0,
             "y": 186.0
           },
-          "Prefabs": "PressurePlatePink.json",
+          "Prefabs": "PressurePlateDarkBlue.json",
           "Properties": {
             "height": 32.0,
             "width": 64.0
