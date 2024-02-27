@@ -16,6 +16,7 @@ This file contains the script for the Laser
 
 namespace L_Script {
 	float count, deltaT;
+	bool active;
 	Laser::Laser(std::string name) : LogicScript(name)
 	{
 		std::cout << name << " Created" << std::endl;
@@ -49,21 +50,22 @@ namespace L_Script {
 		Animation* door_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 		
 		Body* door_body = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
-		if (door_animation == nullptr || door_body == nullptr) {
+		Behaviour* door_behaviour = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+		if (door_animation == nullptr || door_body == nullptr || door_behaviour == nullptr) {
 			//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
 			return;
 		}
 		// if the count >= 5, change direction
-		if (count >= 5.f) {
+		if (door_behaviour->GetBehaviourIndex() >= 3.f) {
 			std::cout << "change dir\n";
 			door_animation->fixed = !door_animation->fixed;
 			if (door_animation->current_type == AnimationType::Jump) { door_animation->current_type = AnimationType::Idle; }
 			else { door_animation->current_type = AnimationType::Jump;}
 			door_body->active = !door_body->active;
-			count = 0;
+			door_behaviour->SetBehaviourIndex(0);
 		}
 		else {
-			count += deltaT;
+			door_behaviour->SetBehaviourIndex(door_behaviour->GetBehaviourIndex() + deltaT);
 		}
 	}
 

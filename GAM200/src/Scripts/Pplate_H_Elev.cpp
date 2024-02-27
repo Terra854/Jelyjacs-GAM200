@@ -1,11 +1,11 @@
 /* !
-@file	Piston_H_Elev.cpp
+@file	Pplate_H_Elev.cpp
 @author Luke Goh
 @date	27/11/2023
 
 This file contains the script for piston to trigger the horizontal elevator
 *//*__________________________________________________________________________*/
-#include "Scripts/Piston_H_Elev.h"
+#include "Scripts/Pplate_H_Elev.h"
 #include <Factory.h>
 #include <Object.h>
 #include <GameLogic.h>
@@ -20,7 +20,7 @@ This file contains the script for piston to trigger the horizontal elevator
 namespace PHE_Script
 {
 	float count, deltaT;
-	Piston_H_Elev::Piston_H_Elev(std::string name) : LogicScript(name)
+	Pplate_H_Elev::Pplate_H_Elev(std::string name) : LogicScript(name)
 	{
 		std::cout << name << " Created" << std::endl;
 		moving_platform_direction = false;
@@ -28,33 +28,33 @@ namespace PHE_Script
 		H_Elev = nullptr;
 	}
 	/***************************************************************************/
-	// Start method, called when the Piston_H_Elev script is first activated.
+	// Start method, called when the Pplate_H_Elev script is first activated.
 	// @param obj: A pointer to the Object that this script is attached to.
-	// Performs initial setup and configuration for Piston_H_Elev.
+	// Performs initial setup and configuration for Pplate_H_Elev.
 	/***************************************************************************/
-	void Piston_H_Elev::Start(Object* obj) {
-		std::cout << "Piston_H_Elev Script Ready : " << obj->GetName() << std::endl;
+	void Pplate_H_Elev::Start(Object* obj) {
+		std::cout << "Pplate_H_Elev Script Ready : " << obj->GetName() << std::endl;
 		count = 0.f;
 		deltaT = engine->GetDt();
 		activated = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex();
 	}
 
 	/***************************************************************************/
-	// Update method, called on every frame to update Piston_H_Elev's state.
+	// Update method, called on every frame to update Pplate_H_Elev's state.
 	// @param obj: A pointer to the Object that this script is attached to.
-	// Contains logic for Piston_H_Elev's interactions with H_Elev, and animations.
+	// Contains logic for Pplate_H_Elev's interactions with H_Elev, and animations.
 	/***************************************************************************/
-	void Piston_H_Elev::Update(Object* obj) {
+	void Pplate_H_Elev::Update(Object* obj) {
 
 		// For some reason, the player is not changing position
 		if (obj == nullptr) {
-			//std::cout << "NIL OBJ : Piston_H_Elev" << std::endl;
+			//std::cout << "NIL OBJ : Pplate_H_Elev" << std::endl;
 			return;
 		}
 		Rectangular* piston_b = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 		//Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 		if (piston_b == nullptr) {
-			//std::cout << "NIL BODY : Piston_H_Elev" << std::endl;
+			//std::cout << "NIL BODY : Pplate_H_Elev" << std::endl;
 			return;
 		};
 
@@ -62,7 +62,7 @@ namespace PHE_Script
 		if (piston_b->collision_flag & COLLISION_TOP) {
 			Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
 			if (piston_animation == nullptr) {
-				//std::cout << "NIL ANIMATION : Piston_H_Elev" << std::endl;
+				//std::cout << "NIL ANIMATION : Pplate_H_Elev" << std::endl;
 				return;
 			}
 			piston_animation->fixed = true;
@@ -116,12 +116,13 @@ namespace PHE_Script
 	}
 
 	/***************************************************************************/
-	// Shutdown method, called when the Piston_H_Elev script is stopped.
+	// Shutdown method, called when the Pplate_H_Elev script is stopped.
 	// @param obj: A pointer to the Object that this script is attached to.
 	/***************************************************************************/
 
-	void Piston_H_Elev::Shutdown(Object* obj) {
-		std::cout << "Piston_H_Elev Script Shutdown : " << obj->GetName() << std::endl;
+	void Pplate_H_Elev::Shutdown(Object* obj) {
+		std::cout << "Pplate_H_Elev Script Shutdown : " << obj->GetName() << std::endl;
 	}
 
-	Piston_H_Elev piston_H_Elev("Piston_H_Elev"); }
+	Pplate_H_Elev pplate_H_Elev("Pplate_H_Elev"); 
+}

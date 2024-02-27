@@ -40,8 +40,5 @@ namespace L_Script {
         // @param obj: A pointer to the Object that this script is attached to.
         // Used for cleanup tasks or to reset the state of the laser.
         void Shutdown(Object* obj) override;
-
-    private:
-        bool active;
     };
 }

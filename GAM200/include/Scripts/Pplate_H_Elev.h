@@ -1,32 +1,32 @@
 #pragma once
 /* !
-@file	Piston_H_Elev.h
+@file	Pplate_H_Elev.h
 @author Luke Goh
 @date	7/2/2024
 
-This file contains the script for Piston_H_Elev
+This file contains the script for Pplate_H_Elev
 *//*__________________________________________________________________________*/
 #pragma once
 #include <Object.h>
 #include <GameLogic.h>
 
-// Class Piston_H_Elev, derived from LogicScript.
+// Class Pplate_H_Elev, derived from LogicScript.
 // This class is intended to encapsulate the behavior and logic of a piston mechanism in a game.
 // It provides a framework for managing the piston's initialization, regular updates, and shutdown process.
 namespace PHE_Script{
-    class Piston_H_Elev : public LogicScript
+    class Pplate_H_Elev : public LogicScript
     {
     public:
-        // Constructor for the Piston_H_Elev class.
-        // @param name: A string representing the name of the Piston_H_Elev instance.
+        // Constructor for the Pplate_H_Elev class.
+        // @param name: A string representing the name of the Pplate_H_Elev instance.
         // This constructor initializes the piston and horizontal elevator, setting up any necessary states or configurations.
-        Piston_H_Elev(std::string name);
+        Pplate_H_Elev(std::string name);
 
-        // Default destructor for the Piston_H_Elev class.
+        // Default destructor for the Pplate_H_Elev class.
         // Marked as default to use the compiler-generated destructor.
-        ~Piston_H_Elev() = default;
+        ~Pplate_H_Elev() = default;
 
-        // Start method, called when the Piston_H_Elev script is first activated.
+        // Start method, called when the Pplate_H_Elev script is first activated.
         // @param obj: A pointer to the Object that this script is attached to.
         // Typically used for initial setup and configuration of the piston and horizontal elevator.
         void Start(Object* obj);
@@ -36,7 +36,7 @@ namespace PHE_Script{
         // Contains the logic for detecting piston collision and reacting by moving the horizontal platform.
         void Update(Object* obj);
 
-        // Shutdown method, called when the Piston_H_Elev script is being deactivated or destroyed.
+        // Shutdown method, called when the Pplate_H_Elev script is being deactivated or destroyed.
         // @param obj: A pointer to the Object that this script is attached to.
         // Used for cleanup tasks or to reset the state of the piston.
         void Shutdown(Object* obj);

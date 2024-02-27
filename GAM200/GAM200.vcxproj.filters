@@ -252,7 +252,7 @@
     <ClCompile Include="src\Scripts\HorizontalDoor.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Piston_H_Elev.cpp">
+    <ClCompile Include="src\Scripts\Pplate_H_Elev.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripts\Timed_Laser.cpp">
@@ -449,7 +449,7 @@
     <ClInclude Include="include\Scripts\PowerLiquid.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\Piston_H_Elev.h">
+    <ClInclude Include="include\Scripts\Pplate_H_Elev.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\Timed_Laser.h">

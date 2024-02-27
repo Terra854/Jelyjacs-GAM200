@@ -250,7 +250,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\LaserDoor.cpp" />
     <ClCompile Include="src\Scripts\PauseButton.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
-    <ClCompile Include="src\Scripts\Piston_H_Elev.cpp" />
+    <ClCompile Include="src\Scripts\Pplate_H_Elev.cpp" />
     <ClCompile Include="src\Scripts\PowerLiquid.cpp" />
     <ClCompile Include="src\Scripts\PressurePlate.cpp" />
     <ClCompile Include="src\Scripts\Spark.cpp" />
@@ -313,7 +313,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\LaserDoor.h" />
     <ClInclude Include="include\Scripts\PauseButton.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
-    <ClInclude Include="include\Scripts\Piston_H_Elev.h" />
+    <ClInclude Include="include\Scripts\Pplate_H_Elev.h" />
     <ClInclude Include="include\Scripts\PowerLiquid.h" />
     <ClInclude Include="include\Scripts\PressurePlate.h" />
     <ClInclude Include="include\Scripts\Spark.h" />
