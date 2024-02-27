@@ -10,6 +10,7 @@ This file contains the script for the in-game clickable buttons
 #include <Audio.h>
 #include <Factory.h>
 #include <Core_Engine.h>
+#include <SceneManager.h>
 
 // Constructor for the PauseButton class.
 // @param name: The name of the portal.
@@ -42,6 +43,9 @@ void PauseButton::Update(Object* obj) {
 
         // Pause the game.
         engine->setPause();
+
+        objectFactory->GetLayer("PauseMenu")->second.first.isVisible = true;
+        objectFactory->GetLayer("GameMenu")->second.first.isVisible = false;
 	}
 }
 /*********************************************************************/

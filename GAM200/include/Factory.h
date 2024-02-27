@@ -93,6 +93,9 @@ public:
 
 	int GetLayerNum(std::string layerName);
 
+	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* GetLayer(std::string layerName);
+	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* GetLayer(int layerNum);
+
 	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* FindLayerThatHasThisObject(Object* obj);
 
 	int GetNextId() { return nextObjectId; };

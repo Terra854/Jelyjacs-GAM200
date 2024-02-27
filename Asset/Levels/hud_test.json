@@ -8,27 +8,39 @@
   },
   "Layers": [
     {
-      "Name": "Menu",
+      "Name": "GameMenu",
       "Settings": {
         "isVisible": true,
-        "static_layer": false
+        "static_layer": true
       },
       "Objects": [
         {
           "Prefabs": "zoom_button.json",
           "Type": "Transform",
           "Position": {
-            "x": 0.0,
-            "y": 200.0
+            "x": 800.0,
+            "y": 400.0
           }
         },
         {
           "Prefabs": "pause_button.json",
           "Type": "Transform",
           "Position": {
-            "x": 0.0,
-            "y": 0.0
+            "x": 800.0,
+            "y": 250.0
           }
+        }
+      ]
+    },
+    {
+      "Name": "PauseMenu",
+      "Settings": {
+        "isVisible": false,
+        "static_layer": true
+      },
+      "Objects": [
+        {
+          "Prefabs": "Pause_Bg.json"
         }
       ]
     }

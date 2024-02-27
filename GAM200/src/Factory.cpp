@@ -740,6 +740,21 @@ int Factory::GetLayerNum(std::string layerName) {
 	}
 }
 
+std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::GetLayer(std::string layerName)
+{
+	for (auto& l : SceneManager::layers) {
+		if (l.first == layerName)
+			return &l;
+	}
+	
+	return nullptr;
+}
+
+std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::GetLayer(int layerNum)
+{
+	return &SceneManager::layers[layerNum];
+}
+
 std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::FindLayerThatHasThisObject(Object* obj) {
 	for (auto& l : SceneManager::layers) {
 		std::vector<Object*>& v = l.second.second;
