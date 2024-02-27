@@ -1448,7 +1448,8 @@
             "x": 664.0,
             "y": -96.0
           },
-          "linkedevent": 2
+          "linkedevent": 2,
+          "index": 1
         },
         {
           "Prefabs": "PistonOrange.json",
