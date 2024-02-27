@@ -213,6 +213,11 @@ void SaveScene(std::string filename)
 	auto& layers = jsonobj["Layers"];
 
 	for (auto& l : SceneManager::layers) {
+
+		// Do not save the inherited layers
+		if (l.second.first.isInherited)
+			continue;
+
 		Json::Value layer;
 
 		layer["Name"] = l.first;
