@@ -168,7 +168,6 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\Door.h" />
     <ClInclude Include="include\Scripts\HorizontalDoor.h" />
     <ClInclude Include="include\Scripts\Hori_Elevator.h" />
-    <ClCompile Include="include\Scripts\PplateT.h" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Assets Manager\asset_manager.cpp" />
@@ -245,7 +244,6 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\Finn.cpp" />
     <ClCompile Include="src\Scripts\HorizontalDoor.cpp" />
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
-    <ClCompile Include="src\Scripts\PplateT.cpp" />
     <ClCompile Include="src\Scripts\RestartButton.cpp" />
     <ClCompile Include="src\Scripts\ResumeButton.cpp" />
     <ClCompile Include="src\Scripts\Timed_Laser.cpp" />
