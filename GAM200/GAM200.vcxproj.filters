@@ -264,6 +264,15 @@
     <ClCompile Include="src\Scripts\PauseButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\Box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\ResumeButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\RestartButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -467,14 +476,17 @@
     <ClInclude Include="include\Scripts\PauseButton.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\Laser.h">
-      <Filter>Header Files\Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="include\SceneManager.h">
       <Filter>Header Files\Systems\SceneManager</Filter>
     </ClInclude>
     <ClInclude Include="include\LayerSettings.h">
       <Filter>Header Files\Systems\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\ResumeButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\RestartButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

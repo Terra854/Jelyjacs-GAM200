@@ -1,39 +1,39 @@
 /* !
-@file	PauseButton.cpp
+@file	RestartButton.cpp
 @author Tan Yee Ann (t.yeeann@digipen.edu)
 @date	26/2/2023
 
 This file contains the script for the in-game clickable buttons
 *//*__________________________________________________________________________*/
-#include "Scripts/PauseButton.h"
+#include "Scripts/RestartButton.h"
 #include <Utils.h>
 #include <Audio.h>
 #include <Factory.h>
 #include <Core_Engine.h>
 #include <SceneManager.h>
 
-// Constructor for the PauseButton class.
+// Constructor for the RestartButton class.
 // @param name: The name of the portal.
-PauseButton::PauseButton(std::string name) : LogicScript(name)
+RestartButton::RestartButton(std::string name) : LogicScript(name)
 {
     std::cout << name << " Created" << std::endl;
 }
 /*********************************************************************/
-// Start method called when the PauseButton script is ready.
+// Start method called when the RestartButton script is ready.
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
-void PauseButton::Start(Object* obj) {
+void RestartButton::Start(Object* obj) {
     executeOnPause = true;
-    std::cout << "PauseButton Script Ready : " << obj->GetName() << std::endl;
+    std::cout << "RestartButton Script Ready : " << obj->GetName() << std::endl;
 }
 
 /*********************************************************************/
-// Update method called every frame to update the PauseButton's logic.
+// Update method called every frame to update the RestartButton's logic.
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
-void PauseButton::Update(Object* obj) {
+void RestartButton::Update(Object* obj) {
     if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
-        //std::cout << "NIL OBJ : PauseButton" << std::endl;
+        //std::cout << "NIL OBJ : RestartButton" << std::endl;
         return;
     }
 
@@ -41,22 +41,24 @@ void PauseButton::Update(Object* obj) {
 		std::cout << "Button Clicked" << std::endl;
 		audio->playSfx("button_click");
 
-        // Pause the game.
-        sceneManager->PauseScene();
+        // Restart the level.
+        sceneManager->RestartScene();
+        sceneManager->PlayScene();
 
-        objectFactory->GetLayer("PauseMenu")->second.first.isVisible = true;
-        objectFactory->GetLayer("GameMenu")->second.first.isVisible = false;
+        objectFactory->GetLayer("PauseMenu")->second.first.isVisible = false;
+        objectFactory->GetLayer("GameMenu")->second.first.isVisible = true;
+
 	}
 }
 /*********************************************************************/
-// Shutdown method called when the PauseButton script is being shut down.
+// Shutdown method called when the RestartButton script is being shut down.
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
-void PauseButton::Shutdown(Object* obj) {
-    std::cout << "PauseButton Script Shutdown : " << obj->GetName() << std::endl;
+void RestartButton::Shutdown(Object* obj) {
+    std::cout << "RestartButton Script Shutdown : " << obj->GetName() << std::endl;
 }
 
-// Creating an instance of PauseButton.
-PauseButton PauseButton("PauseButton");
+// Creating an instance of RestartButton.
+RestartButton RestartButton("RestartButton");
 
 

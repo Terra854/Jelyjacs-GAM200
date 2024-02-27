@@ -1635,5 +1635,9 @@
         }
       ]
     }
+  ],
+  "AdditionalScenesToLoad": [
+    "game_hud.json",
+    "pause_menu.json"
   ]
 }
