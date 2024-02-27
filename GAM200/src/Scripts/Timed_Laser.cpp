@@ -48,7 +48,7 @@ namespace L_Script {
 		}
 		//audio->playSfx(AudioType::Sliding_Door_Open);
 		Animation* door_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
-		
+
 		Body* door_body = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
 		Behaviour* door_behaviour = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
 		if (door_animation == nullptr || door_body == nullptr || door_behaviour == nullptr) {
@@ -56,17 +56,28 @@ namespace L_Script {
 			return;
 		}
 		// if the count >= 5, change direction
-		if (door_behaviour->GetBehaviourIndex() >= 3.f) {
-			std::cout << "change dir\n";
-			door_animation->fixed = !door_animation->fixed;
-			if (door_animation->current_type == AnimationType::Jump) { door_animation->current_type = AnimationType::Idle; }
-			else { door_animation->current_type = AnimationType::Jump;}
-			door_body->active = !door_body->active;
-			door_behaviour->SetBehaviourIndex(0);
+		if (active) {
+			if (door_behaviour->GetBehaviourIndex() >= 3.f) {
+				std::cout << "change dir\n";
+				door_animation->fixed = !door_animation->fixed;
+				if (door_animation->current_type == AnimationType::Jump) { door_animation->current_type = AnimationType::Idle; }
+				else { door_animation->current_type = AnimationType::Jump; }
+				door_body->active = !door_body->active;
+				door_behaviour->SetBehaviourIndex(0);
+			}
+			else {
+				door_behaviour->SetBehaviourIndex(door_behaviour->GetBehaviourIndex() + deltaT);
+			}
 		}
 		else {
-			door_behaviour->SetBehaviourIndex(door_behaviour->GetBehaviourIndex() + deltaT);
+			//keep the door open
+			door_animation->fixed = true;
+			door_animation->current_type = AnimationType::Jump;
+			door_body->active = false;
 		}
+
+		active = (door_behaviour->GetBehaviourIndex() == -1) ? false : true;	
+			
 	}
 
 	/***************************************************************************/
