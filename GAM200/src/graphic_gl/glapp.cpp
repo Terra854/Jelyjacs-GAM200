@@ -82,7 +82,7 @@ void GLApp::insert_models(std::string model_name) {
 		//check if model already exists
 		if (AssetManager::modelexist(model_name)) {
 			GLModel Model;
-			std::ifstream ifs_msh{ "meshes/" + model_name + ".msh", std::ios::in };
+			std::ifstream ifs_msh{ "Asset/meshes/" + model_name + ".msh", std::ios::in };
 			if (!ifs_msh)
 			{
 				std::cout << "ERROR: Unable to open mesh file: "
