@@ -1,0 +1,24 @@
+{
+  "Name": "text_test",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale_x": 128.0,
+        "Scale_y": 64.0,
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Text",
+      "Properties": {
+        "text": "test_text",
+        "fontSize":  1.0
+      }
+    }
+  ]
+}

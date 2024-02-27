@@ -63,7 +63,9 @@ void LoadSceneFromJson(std::string filename)
 		std::string layername = layer["Name"].asCString();
 
 		//jsonobj.readString(layername, "Name");
-		objectFactory->CreateLayer(layername, true);
+		LayerSettings ls = { layer["Settings"]["isVisible"].asBool(), layer["Settings"]["static_layer"].asBool() };
+
+		objectFactory->CreateLayer(layername, ls);
 
 		//for (auto& component : jsonobj.read("Objects"))
 		for (auto& component : layer["Objects"])
@@ -194,6 +196,8 @@ void SaveScene(std::string filename)
 		Json::Value layer;
 
 		layer["Name"] = l.first;
+		layer["Settings"]["isVisible"] = l.second.first.isVisible;
+		layer["Settings"]["static_layer"] = l.second.first.static_layer;
 
 		for (Object* obj : l.second.second) {
 

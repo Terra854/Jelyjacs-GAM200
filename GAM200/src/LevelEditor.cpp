@@ -20,6 +20,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <components/Event.h>
 #include <SceneManager.h>
 #include "../../src/Assets Manager/asset_manager.h"
+#include <components/Text.h>
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
@@ -134,6 +135,10 @@ static Vec2 edited_position;
 static float edited_rotation;
 static Vec2 edited_scale;
 
+static bool Text_EditMode = false;
+static char edited_text[1024] = "";
+static float edited_font_size;
+
 static bool Body_EditMode = false;
 
 static bool edited_active;
@@ -196,6 +201,7 @@ void LevelEditor::ObjectProperties() {
 	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
 	Event* e = (Event*)object->GetComponent(ComponentType::Event);
 	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
+	Text* t = (Text*)object->GetComponent(ComponentType::Text);
 
 	ImGui::BeginChild("Texture", ImVec2(128.f, 128.f));
 
@@ -486,6 +492,51 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Text("Current Type: %d", a->current_type);
 			ImGui::Text("Frame Number: %d", a->frame_num);
 
+		}
+	}
+
+	// Text
+	if (t != nullptr) {
+		if (ImGui::CollapsingHeader("Text")) {
+			if (Text_EditMode)
+			{
+				// Display input fields
+				LE_InputText("Text#TextInText", edited_text, 1000);
+				LE_InputFloat("Font Size", &edited_font_size);
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done##Text"))
+				{
+					Text_EditMode = false;
+					t->text = edited_text;
+					t->fontSize = edited_font_size;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel##Text"))
+				{
+					Text_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
+			}
+			else
+			{
+				// Display the values as text
+				ImGui::Text("Text: %s", t->text.c_str());
+				ImGui::Text("Font Size: %.5f", t->fontSize);
+
+				// Button to enter edit mode
+				if (ImGui::Button("Edit##Text"))
+				{
+					Text_EditMode = true;
+					strcpy_s(edited_text, sizeof(edited_text), t->text.c_str());
+					edited_font_size = t->fontSize;
+				}
+			}
 		}
 	}
 
@@ -1083,7 +1134,7 @@ void LevelEditor::ListOfObjects() {
 		std::string layerName = std::string("Layer " + static_cast<char>(sceneManager->layers.size()));
 		//buffer
 		sprintf_s(buffer, "Layer %d", static_cast<int>(sceneManager->layers.size()));
-		objectFactory->CreateLayer(std::string(buffer), true);
+		objectFactory->CreateLayer(std::string(buffer), true, true);
 	}
 	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
@@ -1093,7 +1144,7 @@ void LevelEditor::ListOfObjects() {
 			ImGui::TableNextColumn();
 			char buf[512];
 			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());
-			ImGui::Checkbox(buf, &l.second.first);
+			ImGui::Checkbox(buf, &l.second.first.isVisible);
 			ImGui::SameLine();
 			sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
 			if (ImGui::TreeNode(buf)) {
@@ -1402,7 +1453,7 @@ void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
 	// Make the buttons unclickable if Finn or Spark are not inside 
-	ImGui::BeginDisabled(objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr);
+	//ImGui::BeginDisabled(objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr);
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
@@ -1419,7 +1470,7 @@ void LevelEditor::PlayPauseGame() {
 			SceneManager::PauseScene();
 	}
 
-	ImGui::EndDisabled();
+	//ImGui::EndDisabled();
 
 	ImGui::SameLine();
 
@@ -1885,7 +1936,7 @@ void LevelEditor::Initialize() {
 
 	io.Fonts->Build();
 
-	objectFactory->CreateLayer("Layer 0", true);
+	objectFactory->CreateLayer("Layer 0", true, true);
 }
 
 /******************************************************************************

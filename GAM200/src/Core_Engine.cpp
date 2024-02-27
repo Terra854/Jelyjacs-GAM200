@@ -277,12 +277,12 @@ void CoreEngine::GameLoop()
 			// Calculate the mouse position relative to the game world
 			ImVec2 clickPos = ImGui::GetMousePos();
 			ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
-			ImVec2 displayPos(relativePos.x / viewportDisplaySize.x * 1920, 1080 - (relativePos.y / viewportDisplaySize.y * 1080)); // Hardcoded to 1920x1080 as other resolutions bugged for now
-			ImVec2 openGlDisplayCoord((displayPos.x - (1920 / 2)) / camera2D->scale.x, (displayPos.y - (1080 / 2)) / camera2D->scale.y);
+			ImVec2 displayPos(relativePos.x / viewportDisplaySize.x * (float)window->width, (float)window->height - (relativePos.y / viewportDisplaySize.y * (float)window->height));
+			ImVec2 openGlDisplayCoord((displayPos.x - ((float)window->width / 2.f)) / camera2D->scale.x, (displayPos.y - ((float)window->height / 2.f)) / camera2D->scale.y);
 
 			// Camera is stationary, it's the scene that is moving, so inverse pos
 			// Also, need to divide camera coord by 2 
-			ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * 1920.f / 2.f)), (openGlDisplayCoord.y - (camera2D->position.y * 1080.f / 2.f)));
+			ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * (float)window->width / 2.f)), (openGlDisplayCoord.y - (camera2D->position.y * (float)window->height / 2.f)));
 
 			//Accept drag and drop of game prefabs into the game scene
 			if (ImGui::BeginDragDropTarget())
@@ -475,17 +475,17 @@ void CoreEngine::GameLoop()
 
 				// Calculate location of the window
 				Vec2 vecnum1(
-					(selectObjTransform->Position.x + (camera2D->position.x * 1920.f / 2.f)),
-					(selectObjTransform->Position.y - (selectObjTransform->Scale.y / 2.f) + (camera2D->position.y * 1080.f / 2.f))
+					(selectObjTransform->Position.x + (camera2D->position.x * (float)window->width / 2.f)),
+					(selectObjTransform->Position.y - (selectObjTransform->Scale.y / 2.f) + (camera2D->position.y * (float)window->height / 2.f))
 				);
 				Vec2 vecnum2(
-					(vecnum1.x* camera2D->scale.x) + (1920 / 2),
-					(vecnum1.y* camera2D->scale.y) + (1080 / 2)
+					(vecnum1.x* camera2D->scale.x) + ((float)window->width / 2),
+					(vecnum1.y* camera2D->scale.y) + ((float)window->height / 2)
 				);
 
 				Vec2 vecnum3(
-					vecnum2.x / 1920 * viewportDisplaySize.x,
-					(1080 - vecnum2.y) / 1080 * viewportDisplaySize.y
+					vecnum2.x / (float)window->width * viewportDisplaySize.x,
+					((float)window->height - vecnum2.y) / (float)window->height * viewportDisplaySize.y
 				);
 
 				Vec2 vecnum4(
@@ -611,8 +611,8 @@ void CoreEngine::GameLoop()
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
 
 			Update(Systems["Graphics"]);
-			gamehud.Update();
-			gamehud.Draw();
+			//gamehud.Update();
+			//gamehud.Draw();
 			Update(Systems["Window"]);
 			hud.GuiRender();
 		}

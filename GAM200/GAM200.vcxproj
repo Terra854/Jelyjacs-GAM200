@@ -161,7 +161,10 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
     <ClInclude Include="include\components\Particle.h" />
+    <ClInclude Include="include\components\Text.h" />
+    <ClInclude Include="include\LayerSettings.h" />
     <ClInclude Include="include\Scripts\Box.h" />
+    <ClInclude Include="include\Scripts\ButtonBase.h" />
     <ClInclude Include="include\Scripts\Door.h" />
     <ClInclude Include="include\Scripts\HorizontalDoor.h" />
     <ClInclude Include="include\Scripts\Hori_Elevator.h" />
@@ -234,6 +237,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Scenes.cpp" />
     <ClCompile Include="src\Scripts\Box.cpp" />
+    <ClCompile Include="src\Scripts\ButtonBase.cpp" />
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
     <ClCompile Include="src\Scripts\Door.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
@@ -242,6 +246,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
     <ClCompile Include="src\Scripts\Laser.cpp" />
     <ClCompile Include="src\Scripts\LaserDoor.cpp" />
+    <ClCompile Include="src\Scripts\PauseButton.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
     <ClCompile Include="src\Scripts\Piston_H_Elev.cpp" />
     <ClCompile Include="src\Scripts\PowerLiquid.cpp" />
@@ -302,6 +307,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\Finn.h" />
     <ClInclude Include="include\Scripts\Laser.h" />
     <ClInclude Include="include\Scripts\LaserDoor.h" />
+    <ClInclude Include="include\Scripts\PauseButton.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
     <ClInclude Include="include\Scripts\Piston_H_Elev.h" />
     <ClInclude Include="include\Scripts\PowerLiquid.h" />

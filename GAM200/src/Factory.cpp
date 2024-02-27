@@ -26,6 +26,7 @@ ID aand is stored as part of a private map
 #include "components/Animation.h"
 #include "components/Event.h"
 #include "components/Particle.h"
+#include "components/Text.h"
 #include "Assets Manager/asset_manager.h"
 #include "Object.h"
 #include <components/Behaviour.h>
@@ -58,6 +59,8 @@ Factory::Factory()
 	AddComponentCreator("Event", new ComponentCreator<Event>());
 	AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 	AddComponentCreator("Particles", new ComponentCreator<ParticleSystem>());
+	AddComponentCreator("Animation", new ComponentCreator<Animation>());
+	AddComponentCreator("Text", new ComponentCreator<Text>());
 
 	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
 	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
@@ -344,6 +347,16 @@ Object* Factory::createObject(const std::string& filename)
 
 			obj->AddComponent(p);
 		}
+		else if (type == "Text")
+		{
+			Text* t = (Text*)((ComponentCreator<Text>*) componentMap["Text"])->Create();
+			jsonloop.readString(t->text, "Properties", "text");
+
+			if (jsonloop.isMember("fontSize", "Properties"))
+				jsonloop.readFloat(t->fontSize, "Properties", "fontSize");
+
+			obj->AddComponent(t);
+		}
 	}
 
 	// Run the initialization routines for each component (if there is any)
@@ -612,6 +625,16 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 
 			obj->AddComponent(p);
 		}
+		else if (component.first == ComponentType::Text)
+		{
+			Text* t = (Text*)((ComponentCreator<Text>*) componentMap["Text"])->Create();
+			Text* t_tmp = static_cast<Text*>(object->GetComponent(ComponentType::Text));
+
+			t->text = t_tmp->text;
+			t->fontSize = t_tmp->fontSize;
+
+			obj->AddComponent(t);
+		}
 	}
 
 	obj->Initialize();
@@ -678,13 +701,16 @@ void Factory::DeleteComponent(Object* o, ComponentType c) {
 	o->Components.erase(c);
 }
 
-int Factory::CreateLayer(std::string layerName, bool isVisible) {
+int Factory::CreateLayer(std::string layerName, bool isVisible, bool static_layer) {
+	return CreateLayer(layerName, { isVisible, static_layer });
+}
 
-	// Create the inner pair with layer visibility and empty vector of object pointers
-	std::pair<bool, std::vector<Object*>> innerPair = std::make_pair(isVisible, std::vector<Object*>());
+int Factory::CreateLayer(std::string layerName, LayerSettings settings) {
+
+	std::pair<LayerSettings, std::vector<Object*>> innerPair = std::make_pair(settings, std::vector<Object*>());
 
 	// Create the outer pair with the layer name and the inner pair
-	std::pair<std::string, std::pair<bool, std::vector<Object*>>> layer = std::make_pair(layerName, innerPair);
+	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>> layer = std::make_pair(layerName, innerPair);
 
 	// Add the newly created pair to the layers vector
 	SceneManager::layers.push_back(layer);
@@ -714,7 +740,22 @@ int Factory::GetLayerNum(std::string layerName) {
 	}
 }
 
-std::pair<std::string, std::pair<bool, std::vector<Object*>>>* Factory::FindLayerThatHasThisObject(Object* obj) {
+std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::GetLayer(std::string layerName)
+{
+	for (auto& l : SceneManager::layers) {
+		if (l.first == layerName)
+			return &l;
+	}
+	
+	return nullptr;
+}
+
+std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::GetLayer(int layerNum)
+{
+	return &SceneManager::layers[layerNum];
+}
+
+std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::FindLayerThatHasThisObject(Object* obj) {
 	for (auto& l : SceneManager::layers) {
 		std::vector<Object*>& v = l.second.second;
 		auto it = std::find(v.begin(), v.end(), obj);

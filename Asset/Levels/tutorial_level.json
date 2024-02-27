@@ -9,6 +9,10 @@
   "Layers": [
     {
       "Name": "Background",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
       "Objects": [
         {
           "Prefabs": "tutorial_background.json"
@@ -17,6 +21,10 @@
     },
     {
       "Name": "Level",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
       "Objects": [
         {
           "Prefabs": "MainDoor.json",

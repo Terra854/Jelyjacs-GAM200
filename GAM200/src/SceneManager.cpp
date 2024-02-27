@@ -16,8 +16,9 @@ This file contains the definitions of the functions that manages the game scene
 
 SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
-std::vector<std::pair<std::string, std::pair<bool, std::vector<Object*>>>> SceneManager::layers;
+std::vector<std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>> SceneManager::layers;
 std::multimap<std::string, int> SceneManager::initialLayer;
+std::queue<LayerSettings> SceneManager::initialLayerSettings;
 
 /******************************************************************************
 	Destructor for SceneManager
@@ -45,8 +46,8 @@ void SceneManager::LoadScene(const std::string filepath) {
 *******************************************************************************/
 void SceneManager::PlayScene() {
 	// Do not play scene if Finn or Spark isn't inside the level
-	if (objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr)
-		return;
+	//if (objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr)
+	//	return;
 
 	if (engine->isPaused()) {
 		if (initialObjectMap.empty()) {
@@ -55,6 +56,8 @@ void SceneManager::PlayScene() {
 			}
 
 			for (auto& l : SceneManager::layers) {
+				initialLayerSettings.push(l.second.first);
+
 				for (auto& object : l.second.second) {
 					initialLayer.insert(std::make_pair(l.first, object->GetId()));
 				}
@@ -102,7 +105,8 @@ void SceneManager::RestartScene() {
 		int layerNum = objectFactory->GetLayerNum(p.first);
 
 		if (layerNum == -1) {
-			layerNum = objectFactory->CreateLayer(p.first, true);
+			layerNum = objectFactory->CreateLayer(p.first, initialLayerSettings.front());
+			initialLayerSettings.pop();
 		}
 
 		objectFactory->AddToLayer(layerNum, objectFactory->getObjectWithID(p.second));
