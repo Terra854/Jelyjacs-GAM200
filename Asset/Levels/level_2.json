@@ -3445,12 +3445,12 @@
           "Type": "Transform"
         },
         {
-          "Name": "elevator_hori",
+          "Name": "elevator",
           "Position": {
             "x": 855.0,
             "y": 497.0
           },
-          "Prefabs": "elevator_hori.json",
+          "Prefabs": "elevator.json",
           "Properties": {
             "height": 28.0,
             "width": 110.0
@@ -3461,7 +3461,7 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "scripts": "Hori_Elevator"
+          "scripts": "Vert_Elevator"
         },
         {
           "Name": "LaserPink",
