@@ -1455,7 +1455,7 @@
           "Type": "Transform",
           "Position": {
             "x": 896.0,
-            "y": 192.0
+            "y": 155.0
           },
           "linkedevent": 3
           //"scripts": "Piston"
@@ -1512,7 +1512,7 @@
           "Type": "Transform",
           "Position": {
             "x": 1216.0,
-            "y": -230.0
+            "y": -200.0
           },
           "linkedevent": 5
         },
