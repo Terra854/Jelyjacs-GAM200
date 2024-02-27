@@ -39,7 +39,7 @@ public:
 private:
 	static Factory::objectIDMap initialObjectMap;
 	static std::vector<std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>> layers;
-	static std::multimap<std::string, int> initialLayer;
+	static std::vector<std::pair<std::string, std::vector<int>>> initialLayer;
 	static std::queue<LayerSettings> initialLayerSettings;
 	static std::vector<std::string> AdditionalScenesLoadedConcurrently;
 };

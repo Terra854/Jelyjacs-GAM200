@@ -1146,7 +1146,12 @@ void LevelEditor::ListOfObjects() {
 			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());
 			ImGui::Checkbox(buf, &l.second.first.isVisible);
 			ImGui::SameLine();
-			sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
+
+			if (l.second.first.isInherited)
+				sprintf_s(buf, "%s (inherited from %s)##%s_%s", l.first.c_str(), l.second.first.inheritedJsonName.c_str(), engine->loaded_level.c_str(), l.first.c_str());
+			else
+				sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
+			
 			if (ImGui::TreeNode(buf)) {
 				// For all objects in the layer
 				for (auto& object : l.second.second) {

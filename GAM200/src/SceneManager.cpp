@@ -17,7 +17,7 @@ This file contains the definitions of the functions that manages the game scene
 SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
 std::vector<std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>> SceneManager::layers;
-std::multimap<std::string, int> SceneManager::initialLayer;
+std::vector<std::pair<std::string, std::vector<int>>> SceneManager::initialLayer;
 std::queue<LayerSettings> SceneManager::initialLayerSettings;
 std::vector<std::string> SceneManager::AdditionalScenesLoadedConcurrently;
 
@@ -59,9 +59,13 @@ void SceneManager::PlayScene() {
 			for (auto& l : SceneManager::layers) {
 				initialLayerSettings.push(l.second.first);
 
+				auto la = std::make_pair(l.first, std::vector<int>());
+
 				for (auto& object : l.second.second) {
-					initialLayer.insert(std::make_pair(l.first, object->GetId()));
+					la.second.push_back(object->GetId());
 				}
+
+				initialLayer.push_back(la);
 			}
 		}
 		engine->setPause();
@@ -101,7 +105,7 @@ void SceneManager::RestartScene() {
 	// Clear the layers, all the object pointers are invalid
 	layers.clear();
 
-	// Loop through the initialLayer multimap to refill the layers
+	// Loop through the initialLayer vector to refill the layers
 	for (auto& p : initialLayer) {
 		int layerNum = objectFactory->GetLayerNum(p.first);
 
@@ -110,7 +114,8 @@ void SceneManager::RestartScene() {
 			initialLayerSettings.pop();
 		}
 
-		objectFactory->AddToLayer(layerNum, objectFactory->getObjectWithID(p.second));
+		for (auto& objID : p.second)
+			objectFactory->AddToLayer(layerNum, objectFactory->getObjectWithID(objID));
 	}
 
 	// The data inside initialLayer is not needed anymore now that the reset is complete

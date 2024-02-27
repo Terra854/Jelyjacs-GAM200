@@ -11,4 +11,5 @@ struct LayerSettings {
 	bool isVisible;
 	bool static_layer;
 	bool isInherited = false;
+	std::string inheritedJsonName;
 };

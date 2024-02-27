@@ -66,11 +66,11 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 	for (auto& layer : jsonobj.read("Layers")) {
 		std::string layername = layer["Name"].asCString();
 
-		if (!isParentScene)
-			layername.append("(inherited from " + levelname + ")");
-
 		//jsonobj.readString(layername, "Name");
 		LayerSettings ls = { layer["Settings"]["isVisible"].asBool(), layer["Settings"]["static_layer"].asBool(), !isParentScene };
+
+		if (!isParentScene)
+			ls.inheritedJsonName = levelname;
 
 		objectFactory->CreateLayer(layername, ls);
 
