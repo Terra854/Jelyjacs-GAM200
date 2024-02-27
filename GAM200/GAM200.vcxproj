@@ -92,9 +92,8 @@ copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
 
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
-xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
 xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
-xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,9 +123,8 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
 
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
-xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
 xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
-xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Installer|x64'">
@@ -156,9 +154,8 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
 
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
-xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
 xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
-xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
