@@ -1458,7 +1458,6 @@
             "y": 155.0
           },
           "linkedevent": 3
-          //"scripts": "Piston"
         },
         {
           "Prefabs": "DoorOrange.json",
@@ -1477,7 +1476,6 @@
             "y": 602.0
           },
           "linkedevent": 4
-          //"scripts": "Piston"
         },
         {
           "Prefabs": "DoorDarkBlue.json",
@@ -1533,7 +1531,6 @@
             "y": 282.0
           },
           "linkedevent": 6
-          //"scripts": "Piston"
         },
         {
           "Prefabs": "LaserPink.json",
@@ -1580,7 +1577,6 @@
             "y": 282.0
           },
           "linkedevent": 8
-          //"scripts": "Piston"
         },
         {
           "Prefabs": "GreenHorizontalDoor.json",

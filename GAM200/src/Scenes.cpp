@@ -67,7 +67,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 		std::string layername = layer["Name"].asCString();
 
 		if (!isParentScene)
-			layername.append("(inherited from " + filename + ")");
+			layername.append("(inherited from " + levelname + ")");
 
 		//jsonobj.readString(layername, "Name");
 		LayerSettings ls = { layer["Settings"]["isVisible"].asBool(), layer["Settings"]["static_layer"].asBool(), !isParentScene };
@@ -171,9 +171,11 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 		layerNum++;
 	}
 
-	// Save the name of the level to engine to track
-	engine->loaded_level = levelname;
-	engine->loaded_filename = filename;
+	if (isParentScene) {
+		// Save the name of the level to engine to track
+		engine->loaded_level = levelname;
+		engine->loaded_filename = filename;
+	}
 
 	for (auto& additionalScenes : jsonobj.read("AdditionalScenesToLoad"))
 	{
@@ -295,6 +297,12 @@ void SaveScene(std::string filename)
 
 		layers.append(layer);
 	}
+
+	for (std::string& a : SceneManager::AdditionalScenesLoadedConcurrently)
+	{
+		jsonobj["AdditionalScenesToLoad"].append(a);
+	}
+
 	/*
 	for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 	{
