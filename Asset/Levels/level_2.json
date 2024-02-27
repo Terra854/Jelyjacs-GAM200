@@ -1265,7 +1265,7 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "linkedevent": 6
+          "linkedevent": 1
         },
         {
           "Name": "platform_25",
@@ -3405,7 +3405,7 @@
             "y": 224.0
           },
           "Type": "Transform",
-          "linkedevent": 6
+          "linkedevent": 1
         },
         {
           "Name": "LaserPink",
@@ -3424,7 +3424,7 @@
             "y": 224.0
           },
           "Type": "Transform",
-          "linkedevent": 6
+          "linkedevent": 1
         },
         {
           "Name": "platform_25",
@@ -3480,7 +3480,7 @@
             "y": 128.0
           },
           "Type": "Transform",
-          "linkedevent": 6
+          "linkedevent": 10
         },
         {
           "Name": "LaserPink",
@@ -3499,7 +3499,7 @@
             "y": 352.0
           },
           "Type": "Transform",
-          "linkedevent": 6
+          "linkedevent": 2
         },
         {
           "Name": "LaserPink",
@@ -3518,7 +3518,7 @@
             "y": 352.0
           },
           "Type": "Transform",
-          "linkedevent": 6
+          "linkedevent": 2
         },
         {
           "Name": "LaserPink",
@@ -3537,7 +3537,7 @@
             "y": 352.0
           },
           "Type": "Transform",
-          "linkedevent": 6
+          "linkedevent": 2
         },
         {
           "Name": "LaserPink",
@@ -3556,7 +3556,7 @@
             "y": 352.0
           },
           "Type": "Transform",
-          "linkedevent": 6
+          "linkedevent": 2
         },
         {
           "Name": "Box",
@@ -3594,7 +3594,7 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "scripts": "Vert_Elevator"
+          "scripts": "Hori_Elevator"
         },
         {
           "Name": "elevator",
@@ -3613,7 +3613,7 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "scripts": "Vert_Elevator"
+          "scripts": "Hori_Elevator"
         },
         {
           "Name": "elevator",
@@ -3632,7 +3632,7 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "scripts": "Vert_Elevator"
+          "scripts": "Hori_Elevator"
         },
         {
           "Name": "platform_9",
@@ -3742,7 +3742,7 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "linkedevent": 6,
+          "linkedevent": 2,
           "scripts": "PPlate"
         },
         {
@@ -3762,7 +3762,7 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "linkedevent": 6,
+          "linkedevent": 1,
           "scripts": "PPlate"
         },
         {
@@ -3782,8 +3782,8 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "linkedevent": 6,
-          "scripts": "PPlate"
+          "linkedevent": 8,
+          "scripts": "Piston_H_Elev"
         },
         {
           "Name": "PressurePlatePink",
