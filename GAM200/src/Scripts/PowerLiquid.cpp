@@ -13,6 +13,7 @@ This file contains the script for the p_liquid for the human to move
 #include <Core_Engine.h>
 #include <GameLogic.h>
 
+bool collected = false;
 namespace PL_Script {
 	// Constructor for the P_liquid class.
 	// @param name: The name of the p_liquid.
@@ -26,6 +27,7 @@ namespace PL_Script {
 	/*********************************************************************/
 	void P_liquid::Start(Object* obj) {
 		std::cout << "P_liquid Script Ready : " << obj->GetName() << std::endl;
+		collected = false;
 	}
 
 	/*********************************************************************/
@@ -47,12 +49,32 @@ namespace PL_Script {
 			std::cout << "NIL COMPONENT : P_liquid" << std::endl;
 			return;
 		}
+		if (player_b->collision_flag & COLLISION_RIGHT)
+		if (player_b->right_collision != nullptr && static_cast<Rectangular*>(player_b->right_collision->GetComponent(ComponentType::Body)) == p_liquid_b) {
+				std::cout << "Right Collision : " << player_b->right_collision->GetName() << std::endl;
+				collected = true;
+		}
 
+		if (player_b->collision_flag & COLLISION_LEFT)
+			if (player_b->left_collision != nullptr && static_cast<Rectangular*>(player_b->left_collision->GetComponent(ComponentType::Body)) == p_liquid_b) {
+				std::cout << "Left Collision : " << player_b->left_collision->GetName() << std::endl;
+				collected = true;
+		}
+
+		if (player_b->collision_flag & COLLISION_TOP)
+			if (player_b->top_collision != nullptr && static_cast<Rectangular*>(player_b->top_collision->GetComponent(ComponentType::Body)) == p_liquid_b) {
+				std::cout << "Top Collision : " << player_b->top_collision->GetName() << std::endl;
+				collected = true;
+		}
+
+		if (player_b->collision_flag & COLLISION_BOTTOM)
+			if (player_b->bottom_collision != nullptr && static_cast<Rectangular*>(player_b->bottom_collision->GetComponent(ComponentType::Body)) == p_liquid_b) {
+				std::cout << "Bottom Collision : " << player_b->bottom_collision->GetName() << std::endl;
+				collected = true;
+		}
+		
 		// Check if the player collides with the power liquid.
-		if ((((player_b->collision_flag & COLLISION_RIGHT) && static_cast<Rectangular*>(player_b->right_collision->GetComponent(ComponentType::Body)) == p_liquid_b)
-			|| ((player_b->collision_flag & COLLISION_LEFT) && static_cast<Rectangular*>(player_b->left_collision->GetComponent(ComponentType::Body)) == p_liquid_b))
-			|| ((((player_b->collision_flag & COLLISION_TOP) && static_cast<Rectangular*>(player_b->top_collision->GetComponent(ComponentType::Body)) == p_liquid_b)
-            || ((player_b->collision_flag & COLLISION_BOTTOM) && static_cast<Rectangular*>(player_b->bottom_collision->GetComponent(ComponentType::Body)) == p_liquid_b)))){
+		if (collected == true){
 			audio->playSfx("collect_power_liquid");
 
 			// Make sure to remove any references to this object otherwise
@@ -72,6 +94,7 @@ namespace PL_Script {
 
 			objectFactory->destroyObject(obj);
 			CatPower++;
+			collected = false;
 			return;
 		}
 
