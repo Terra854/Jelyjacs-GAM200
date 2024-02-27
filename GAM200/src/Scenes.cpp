@@ -157,7 +157,15 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
 
 				behv->SetBehaviourName(behvstr);
-				behv->SetBehaviourIndex(0);
+			}
+
+			if (jsonloop.isMember("index"))
+			{
+				int index{};
+				jsonloop.readInt(index, "index");
+
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				behv->SetBehaviourIndex(index);
 			}
 
 			// Add here to read oher types of data if necessary WIP
@@ -288,6 +296,7 @@ void SaveScene(std::string filename)
 			{
 				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
 				innerobj["scripts"] = behv->GetBehaviourName();
+				innerobj["index"] = behv->GetBehaviourIndex();
 			}
 
 			layer["Objects"].append(innerobj);
