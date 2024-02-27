@@ -140,8 +140,13 @@ void LoadSceneFromJson(std::string filename)
 				std::string behvstr;
 				jsonloop.readString(behvstr, "scripts");
 
+				Behaviour* b = (Behaviour*)(obj->GetComponent(ComponentType::Behaviour));
+				//Logic->RemoveBehaviourComponent(b);
 				objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
+
 				obj->AddComponent(new Behaviour(0, behvstr));
+				//Logic->AddBehaviourComponent((Behaviour*)obj->GetComponent(ComponentType::Behaviour));
+
 				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
 
 				behv->SetBehaviourName(behvstr);
