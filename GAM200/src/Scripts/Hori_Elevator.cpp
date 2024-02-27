@@ -15,10 +15,12 @@ This file contains the script for the Horizontal elevator
 
 namespace HE_Script {
 	float count, deltaT;
+	bool active;
 	Hori_Elevator::Hori_Elevator(std::string name) : LogicScript(name)
 	{
 		std::cout << name << " Created" << std::endl;
 		moving_platform_direction = false;
+		active = true;
 	}
 	/***************************************************************************/
 	// Start method, called when the Hori_Elevator script is first activated.
@@ -30,6 +32,7 @@ namespace HE_Script {
 		std::cout << "Hori_Elevator Script Ready : " << obj->GetName() << std::endl;
 		count = 0.f;
 		deltaT = engine->GetDt();
+		active = true;
 
 	}
 
@@ -52,18 +55,28 @@ namespace HE_Script {
 		};
 		moving_platform_physics->Velocity.x = 0.0f;
 		float moving_platform_speed;
-
-		// if the count >= 5, change direction
-		if (count >= 5.f) {
-			std::cout << "change dir\n";
-			moving_platform_direction = !moving_platform_direction;
-			count = 0;
+		if (active) {
+			if (static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex() == -1) {
+				active = false;
+				return;
+			}
+			// if the count >= 5, change direction
+			if (count >= 5.f) {
+				std::cout << "change dir\n";
+				moving_platform_direction = !moving_platform_direction;
+				count = 0;
+			}
+			else {
+				count += deltaT;
+			}
+			moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
+			moving_platform_physics->Velocity.x = moving_platform_speed;
 		}
 		else {
-			count += deltaT;
+			if (static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex() == 0) {
+				active = true;
+			}
 		}
-		moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
-		moving_platform_physics->Velocity.x = moving_platform_speed;
 	}
 
 	/***************************************************************************/

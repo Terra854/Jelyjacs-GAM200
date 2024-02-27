@@ -19,6 +19,7 @@ namespace Endpoint_Script {
 	Endpoint::Endpoint(std::string name) : LogicScript(name)
 	{
 		std::cout << name << " Created" << std::endl;
+		win = false;
 	}
 
 	/***************************************************************************/
@@ -28,6 +29,7 @@ namespace Endpoint_Script {
 	/***************************************************************************/
 	void Endpoint::Start(Object* obj) {
 		std::cout << "Endpoint Script Ready : " << obj->GetName() << std::endl;
+		win = false;
 	}
 
 	/***************************************************************************/

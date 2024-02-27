@@ -88,9 +88,9 @@ namespace PressurePlate {
 								if (door_behv != nullptr)
 									index = door_behv->GetBehaviourIndex();
 
-								if (door_behv->GetBehaviourName() == "Timed Laser") {
+								if (door_behv->GetBehaviourName() == "Timed Laser" || door_behv->GetBehaviourName() == "Hori_Elevator") {
 									door_behv->SetBehaviourIndex(-1);
-									std::cout << "Laser is getting switched off\n";
+									std::cout << "Getting switched off\n";
 									return;
 								}
 
@@ -134,9 +134,9 @@ namespace PressurePlate {
 								if (door_behv != nullptr)
 									index = door_behv->GetBehaviourIndex();
 
-								if (door_behv->GetBehaviourName() == "Timed Laser") {
+								if (door_behv->GetBehaviourName() == "Timed Laser" || door_behv->GetBehaviourName() == "Hori_Elevator"){
 									door_behv->SetBehaviourIndex(0);
-									std::cout << "Laser is getting switched off\n";
+									std::cout << "Laser is getting switched on\n";
 									return;
 								}
 								// 0 means the door should be closed
