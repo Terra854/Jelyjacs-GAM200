@@ -40,7 +40,7 @@
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "LaserDoor",
+        "Script": "Timed Laser",
         "Index": 0
       }
     }
