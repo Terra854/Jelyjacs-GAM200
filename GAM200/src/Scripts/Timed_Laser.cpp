@@ -55,10 +55,14 @@ namespace L_Script {
 			//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
 			return;
 		}
+		
 		// if the count >= 5, change direction
 		if (active) {
+			if (door_behaviour->GetBehaviourIndex() == -1) {
+				active = false;
+			}
 			if (door_behaviour->GetBehaviourIndex() >= 3.f) {
-				std::cout << "change dir\n";
+				std::cout << obj->GetId() <<": change dir\n";
 				door_animation->fixed = !door_animation->fixed;
 				if (door_animation->current_type == AnimationType::Jump) { door_animation->current_type = AnimationType::Idle; }
 				else { door_animation->current_type = AnimationType::Jump; }
@@ -70,13 +74,17 @@ namespace L_Script {
 			}
 		}
 		else {
+			if (door_behaviour->GetBehaviourIndex() == 0) {
+				active = true;
+			}
 			//keep the door open
-			door_animation->fixed = true;
 			door_animation->current_type = AnimationType::Jump;
+			door_animation->fixed = true;
 			door_body->active = false;
+			std::cout << obj->GetId() << "Laser is off\n";
 		}
 
-		active = (door_behaviour->GetBehaviourIndex() == -1) ? false : true;	
+			
 			
 	}
 
