@@ -11,6 +11,7 @@ This file contains the script for the box for the human to move
 #include <components/Animation.h>
 #include <components/Event.h>
 #include <Audio.h>
+#include <iostream>
 
 
 // Constructor for the Box class.
@@ -70,8 +71,13 @@ void Box::Update(Object* obj) {
         // Check if the player is within the box's range.
         if (((player_b->collision_flag & COLLISION_RIGHT) && static_cast<Rectangular*>(player_b->right_collision->GetComponent(ComponentType::Body)) == box_b) || (player_b->collision_flag & COLLISION_LEFT) && static_cast<Rectangular*>(player_b->left_collision->GetComponent(ComponentType::Body)) == box_b) {
             box_phy->Velocity.x = finn_phy->Velocity.x * 0.2f;
-            if (box_phy->Velocity.x != 0.0f)
+            if (box_phy->Velocity.x)
                 std::cout << "Box is moving" << std::endl;
+
+            if (input::IsPressedRepeatedly(KEY::k)) {
+                finn_phy->Velocity.x = box_phy->Velocity.x;
+                std::cout << "Pulling" << std::endl;
+            }
         }
         // Else, stop the box.
         else {

@@ -1,6 +1,6 @@
 #pragma once
 /* !
-@file	Laser.h
+@file	Timed_Laser.h
 @author Luke Goh
 @date	7/2/2024
 

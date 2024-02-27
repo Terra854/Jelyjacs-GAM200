@@ -13,7 +13,7 @@ This file contains the script for the vertical elevator
 #include <Factory.h>
 #include <Core_Engine.h>
 
-
+namespace Vert_Elevator_Script{
 
 Vert_Elevator::Vert_Elevator(std::string name) : LogicScript(name)
 {
@@ -79,7 +79,7 @@ bool Vert_Elevator::StateManager::ChangeDirection() {
 		counter += dt;
 	}
 
-	std::cout << "Counter Check" << counter << std::endl;
+	//std::cout << "Counter Check" << counter << std::endl;
 	return static_cast<bool>(currentstate);
 }
 
@@ -97,3 +97,4 @@ void Vert_Elevator::StateManager::ResetCounter() {
 
 
 Vert_Elevator vert_elevator("Vert_Elevator");
+}  // namespace Vert_Elevator_Script

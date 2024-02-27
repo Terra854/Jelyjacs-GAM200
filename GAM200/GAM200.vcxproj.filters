@@ -255,10 +255,7 @@
     <ClCompile Include="src\Scripts\Piston_H_Elev.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Laser.cpp">
-      <Filter>Source Files\Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripts\Box.cpp">
+    <ClCompile Include="src\Scripts\Timed_Laser.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripts\ButtonBase.cpp">
@@ -445,6 +442,9 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\Piston_H_Elev.h">
       <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\Timed_Laser.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\components\Particle.h">
       <Filter>Header Files\Components</Filter>

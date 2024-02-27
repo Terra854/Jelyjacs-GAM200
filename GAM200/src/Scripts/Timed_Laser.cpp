@@ -1,11 +1,11 @@
 /* !
-@file	Laser.cpp
+@file	Timed_Laser.cpp
 @author Luke Goh
 @date	5/2/2024
 
 This file contains the script for the Laser
 *//*__________________________________________________________________________*/
-#include "Scripts/Laser.h"
+#include "Scripts/Timed_Laser.h"
 #include <PhysicsSystem.h>
 #include <components/Physics.h>
 #include <components/Transform.h>
@@ -76,5 +76,5 @@ namespace L_Script {
 		std::cout << "Laser Script Shutdown : " << obj->GetName() << std::endl;
 	}
 
-	Laser laser("Laser");
+	Laser laser("Timed Laser");
 }
