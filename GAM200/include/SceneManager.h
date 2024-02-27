@@ -33,6 +33,7 @@ public:
 	friend class Factory;
 	friend class GLApp;
 	friend class CoreEngine;
+	friend void ::LoadSceneFromJson(std::string, bool);
 	friend void ::SaveScene(std::string);
 
 private:
@@ -40,6 +41,7 @@ private:
 	static std::vector<std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>> layers;
 	static std::multimap<std::string, int> initialLayer;
 	static std::queue<LayerSettings> initialLayerSettings;
+	static std::vector<std::string> AdditionalScenesLoadedConcurrently;
 };
 
 extern SceneManager* sceneManager;

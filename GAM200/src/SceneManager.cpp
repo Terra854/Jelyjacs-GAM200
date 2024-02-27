@@ -19,6 +19,7 @@ Factory::objectIDMap SceneManager::initialObjectMap;
 std::vector<std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>> SceneManager::layers;
 std::multimap<std::string, int> SceneManager::initialLayer;
 std::queue<LayerSettings> SceneManager::initialLayerSettings;
+std::vector<std::string> SceneManager::AdditionalScenesLoadedConcurrently;
 
 /******************************************************************************
 	Destructor for SceneManager

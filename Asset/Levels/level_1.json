@@ -1609,31 +1609,6 @@
           }
         }
       ]
-    },
-    {
-      "Name": "Hud",
-      "Settings": {
-        "isVisible": true,
-        "static_layer": true
-      },
-      "Objects": [
-        {
-          "Prefabs": "zoom_button.json",
-          "Type": "Transform",
-          "Position": {
-            "x": 800.0,
-            "y": 400.0
-          }
-        },
-        {
-          "Prefabs": "pause_button.json",
-          "Type": "Transform",
-          "Position": {
-            "x": 800.0,
-            "y": 250.0
-          }
-        }
-      ]
     }
   ],
   "AdditionalScenesToLoad": [

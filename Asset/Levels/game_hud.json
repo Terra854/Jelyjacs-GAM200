@@ -31,18 +31,6 @@
           }
         }
       ]
-    },
-    {
-      "Name": "PauseMenu",
-      "Settings": {
-        "isVisible": false,
-        "static_layer": true
-      },
-      "Objects": [
-        {
-          "Prefabs": "Pause_Bg.json"
-        }
-      ]
     }
   ]
 }

@@ -10,4 +10,5 @@ This file contains the declarations for the LayerSettings struct
 struct LayerSettings {
 	bool isVisible;
 	bool static_layer;
+	bool isInherited = false;
 };

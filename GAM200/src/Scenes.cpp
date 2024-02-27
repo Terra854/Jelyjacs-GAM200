@@ -21,9 +21,8 @@ LoadSceneFromJson
 
 @param filename - the name of the json file
 *******************************************************************************/
-void LoadSceneFromJson(std::string filename)
+void LoadSceneFromJson(std::string filename, bool isParentScene)
 {
-	
 	// Check if the given file exists
 	JsonSerialization jsonobj;
 	jsonobj.openFileRead(filename);
@@ -47,23 +46,31 @@ void LoadSceneFromJson(std::string filename)
 
 	audio->setupSound();
 	*/
-	Vec2 start_coord;
-	jsonobj.readFloat(start_coord.x, "Size", "startX");
-	jsonobj.readFloat(start_coord.y, "Size", "startY");
-	engine->Set_Start_Coords(start_coord);
 
-	Vec2 level_size;
-	jsonobj.readFloat(level_size.x, "Size", "width");
-	jsonobj.readFloat(level_size.y, "Size", "height");
-	engine->Set_Level_Size(level_size);
+	if (isParentScene) {
+		SceneManager::AdditionalScenesLoadedConcurrently.clear();
+
+		Vec2 start_coord;
+		jsonobj.readFloat(start_coord.x, "Size", "startX");
+		jsonobj.readFloat(start_coord.y, "Size", "startY");
+		engine->Set_Start_Coords(start_coord);
+
+		Vec2 level_size;
+		jsonobj.readFloat(level_size.x, "Size", "width");
+		jsonobj.readFloat(level_size.y, "Size", "height");
+		engine->Set_Level_Size(level_size);
+	}
 
 	int layerNum = 0;
 
 	for (auto& layer : jsonobj.read("Layers")) {
 		std::string layername = layer["Name"].asCString();
 
+		if (!isParentScene)
+			layername.append("(inherited from " + filename + ")");
+
 		//jsonobj.readString(layername, "Name");
-		LayerSettings ls = { layer["Settings"]["isVisible"].asBool(), layer["Settings"]["static_layer"].asBool() };
+		LayerSettings ls = { layer["Settings"]["isVisible"].asBool(), layer["Settings"]["static_layer"].asBool(), !isParentScene };
 
 		objectFactory->CreateLayer(layername, ls);
 
@@ -158,7 +165,7 @@ void LoadSceneFromJson(std::string filename)
 
 			obj->Initialize();
 
-			objectFactory->AddToLayer(layerNum, obj);
+			objectFactory->AddToLayer(layername, obj);
 		}
 
 		layerNum++;
@@ -167,6 +174,13 @@ void LoadSceneFromJson(std::string filename)
 	// Save the name of the level to engine to track
 	engine->loaded_level = levelname;
 	engine->loaded_filename = filename;
+
+	for (auto& additionalScenes : jsonobj.read("AdditionalScenesToLoad"))
+	{
+		std::string sceneFile = additionalScenes.asCString();
+		SceneManager::AdditionalScenesLoadedConcurrently.push_back(sceneFile);
+		::LoadSceneFromJson("Asset/Levels/" + sceneFile, false);
+	}
 
 	jsonobj.closeFile();
 

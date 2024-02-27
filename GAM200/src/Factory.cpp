@@ -727,6 +727,15 @@ void Factory::AddToLayer(int layerNum, Object* obj) {
 	}
 }
 
+void Factory::AddToLayer(std::string layerName, Object* obj) {
+	for (auto& layer : SceneManager::layers) {
+		if (layer.first == layerName) {
+			layer.second.second.push_back(obj);
+			return;
+		}
+	}
+}
+
 int Factory::GetLayerNum(std::string layerName) {
 	auto it = std::find_if(SceneManager::layers.begin(), SceneManager::layers.end(), [&layerName](const auto& layer) {
 		return layer.first == layerName;

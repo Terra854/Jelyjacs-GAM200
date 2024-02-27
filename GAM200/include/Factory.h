@@ -91,6 +91,8 @@ public:
 
 	void AddToLayer(int layerNum, Object* obj);
 
+	void AddToLayer(std::string layerName, Object* obj);
+
 	int GetLayerNum(std::string layerName);
 
 	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* GetLayer(std::string layerName);
