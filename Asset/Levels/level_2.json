@@ -1,7 +1,19 @@
 {
   "Layers": [
     {
-      "Name": "Layer",
+      "Name": "Background",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
+      "Objects": [
+        {
+          "Prefabs": "level2_background.json"
+        }
+      ]
+    },
+    {
+      "Name": "Level",
       "Settings": {
         "isVisible": true,
         "static_layer": false
