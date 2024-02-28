@@ -67,6 +67,9 @@ void Finn::Update(Object* obj) {
 
 			}
 		}
+		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
+			audio->playSfx("finn_walking");
+		}
 		if (input::IsPressedRepeatedly(KEY::a)) {
 			MovementKey msg(left);
 			engine->Broadcast(&msg);

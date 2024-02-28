@@ -114,6 +114,9 @@ void Spark::Update(Object* obj) {
 				audio->playSfx("spark_jumping");
 			}
 		}
+		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
+			audio->playSfx("spark_walking");
+		}
 		if (input::IsPressedRepeatedly(KEY::a)) {
 			MovementKey msg(left);
 			engine->Broadcast(&msg);
