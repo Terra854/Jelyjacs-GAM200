@@ -3461,7 +3461,7 @@
           "Name": "elevator",
           "Position": {
             "x": 855.0,
-            "y": 497.0
+            "y": 397.0
           },
           "Prefabs": "elevator.json",
           "Properties": {
@@ -3593,7 +3593,7 @@
         {
           "Name": "elevator_hori",
           "Position": {
-            "x": 1844.0,
+            "x": 1430.0,
             "y": 619.0
           },
           "Prefabs": "elevator_hori.json",
@@ -3612,7 +3612,7 @@
         {
           "Name": "elevator_hori",
           "Position": {
-            "x": 1844.0,
+            "x": 1430.0,
             "y": 683.0
           },
           "Prefabs": "elevator_hori.json",
@@ -3631,7 +3631,7 @@
         {
           "Name": "elevator_hori",
           "Position": {
-            "x": 1844.0,
+            "x": 1430.0,
             "y": 747.0
           },
           "Prefabs": "elevator_hori.json",
