@@ -142,6 +142,10 @@ Object* Factory::createObject(const std::string& filename)
 				jsonloop.readFloat(r->height, "Properties", "height");
 				jsonloop.readBool(r->pushable, "Properties", "pushable");
 
+				int material = 0;
+				jsonloop.readInt(material, "Properties", "material");
+				r->material = static_cast<Material>(material);
+
 				obj->AddComponent(r);
 			}
 			else if (shape == "Circle") {

@@ -264,14 +264,14 @@
     <ClCompile Include="src\Scripts\PauseButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Box.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripts\ResumeButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripts\RestartButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\Box.cpp">
+      <Filter>Source Files\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
