@@ -3579,7 +3579,7 @@
           },
           "Prefabs": "Box.json",
           "Properties": {
-            "height": 48.0,
+            "height": 32.0,
             "width": 64.0
           },
           "Rotation": 0.0,
