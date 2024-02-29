@@ -32,6 +32,7 @@ ID aand is stored as part of a private map
 #include <components/Behaviour.h>
 #include "GameLogic.h"
 #include <SceneManager.h>
+#include <LevelEditor.h>
 
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
@@ -412,6 +413,11 @@ void Factory::Update() {
 				objectMap[i + 1]->ObjectId--;
 				objectMap.erase((size_t)(i + 1));
 			}
+
+#if defined(DEBUG) | defined(_DEBUG)
+			if (level_editor->selectedNum > temp_id)
+				level_editor->selectedNum--;
+#endif
 		}
 	}
 	
