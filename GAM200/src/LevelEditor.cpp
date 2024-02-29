@@ -144,6 +144,7 @@ static bool Body_EditMode = false;
 static bool edited_active;
 static bool edited_collision_response;
 static bool edited_pushable;
+static Material edited_material;
 
 static bool AABB_EditMode = false;
 
@@ -670,6 +671,9 @@ void LevelEditor::ObjectProperties() {
 					LE_InputFloat("AABB Height", &edited_aabb_height);
 					ImGui::Checkbox("Pushable", &edited_pushable);
 
+					const char* materials[] = { "Concrete", "Metal" };
+					ImGui::Combo("Material", (int*)&edited_material, materials, IM_ARRAYSIZE(materials));
+
 					// Button to exit edit mode
 					if (ImGui::Button("Done##AABB"))
 					{
@@ -677,6 +681,7 @@ void LevelEditor::ObjectProperties() {
 						r->width = edited_aabb_width;
 						r->height = edited_aabb_height;
 						r->pushable = edited_pushable;
+						r->material = edited_material;
 
 						UpdateAllObjectInstances(object);
 					}
@@ -737,6 +742,17 @@ void LevelEditor::ObjectProperties() {
 					ImGui::SameLine();
 					r->pushable ? ImGui::Text("true") : ImGui::Text("false");
 
+					ImGui::Text("Material: ");
+					ImGui::SameLine();
+					switch (r->material) {
+						case Material::Concrete:
+							ImGui::Text("Concrete");
+							break;
+						case Material::Metal:
+							ImGui::Text("Metal");
+							break;
+					}
+
 					// Button to enter edit mode
 					if (ImGui::Button("Edit##AABB"))
 					{
@@ -744,6 +760,7 @@ void LevelEditor::ObjectProperties() {
 						edited_aabb_width = r->width;
 						edited_aabb_height = r->height;
 						edited_pushable = r->pushable;
+						edited_material = r->material;
 					}
 				}
 

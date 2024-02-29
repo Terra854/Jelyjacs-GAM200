@@ -19,7 +19,8 @@
       "Properties": {
         "width": 64,
         "height": 32,
-        "pushable": true
+        "pushable": true,
+        "material": 1
       }
     },
     {

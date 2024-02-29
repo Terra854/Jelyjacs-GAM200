@@ -68,7 +68,18 @@ void Finn::Update(Object* obj) {
 			}
 		}
 		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
-			audio->playSfx("finn_walking");
+			if (player_body->bottom_collision) {
+				Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
+
+				switch (collided_material) {
+				case Material::Concrete:
+					audio->playSfx("finn_concrete_walking");
+					break;
+				case Material::Metal:
+					audio->playSfx("finn_metal_walking");
+					break;
+				}
+			}
 		}
 		if (input::IsPressedRepeatedly(KEY::a)) {
 			MovementKey msg(left);
@@ -109,11 +120,32 @@ void Finn::Update(Object* obj) {
 			finn_move_time += engine->GetDt();
 
 			if ((player_animation->current_type == AnimationType::Push_left || player_animation->current_type == AnimationType::Push) && finn_move_time > 1.f) {
-				audio->playSfx("finn_walking");
+
+				//Material collided_material = static_cast<Rectangular*>(player_animation->face_right ? player_body->right_collision->GetComponent(ComponentType::Body) : player_body->left_collision->GetComponent(ComponentType::Body))->material;
+				Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
+
+				switch (collided_material) {
+					case Material::Concrete:
+						audio->playSfx("finn_concrete_walking");
+						break;
+					case Material::Metal:
+						audio->playSfx("finn_metal_walking");
+						break;
+				}
+				//audio->playSfx("finn_concrete_walking");
 				finn_move_time -= 1.f;
 			}
 			else if (!(player_animation->current_type == AnimationType::Push_left || player_animation->current_type == AnimationType::Push) && finn_move_time > 0.4f) {
-				audio->playSfx("finn_walking");
+				Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
+
+				switch (collided_material) {
+					case Material::Concrete:
+						audio->playSfx("finn_concrete_walking");
+						break;
+					case Material::Metal:
+						audio->playSfx("finn_metal_walking");
+						break;
+				}
 				finn_move_time -= 0.4f;
 			}
 		}

@@ -539,6 +539,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 				r->collision_flag = ((Rectangular*)body_pt)->collision_flag;
 				r->active = ((Rectangular*)body_pt)->active;
 				r->pushable = ((Rectangular*)body_pt)->pushable;
+				r->material = ((Rectangular*)body_pt)->material;
 
 				obj->AddComponent(r);
 			}
