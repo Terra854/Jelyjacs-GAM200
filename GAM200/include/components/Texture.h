@@ -22,4 +22,6 @@ public:
 
 	// Path to file for texture
 	std::string textureName;
+
+	float opacity = 1.f;
 };

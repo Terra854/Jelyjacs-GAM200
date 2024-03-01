@@ -422,6 +422,8 @@ void LevelEditor::ObjectProperties() {
 				}
 			}
 
+			LE_InputFloat("Opacity", &te->opacity);
+
 			if (ImGui::Button("Change Texture"))
 				ImGui::OpenPopup("ChangeTexture");
 
@@ -492,6 +494,7 @@ void LevelEditor::ObjectProperties() {
 
 			ImGui::Text("Current Type: %d", a->current_type);
 			ImGui::Text("Frame Number: %d", a->frame_num);
+			LE_InputFloat("Opacity", &a->opacity);
 
 		}
 	}

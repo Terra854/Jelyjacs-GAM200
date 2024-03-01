@@ -123,8 +123,11 @@ Object* Factory::createObject(const std::string& filename)
 				// Attempt to add the texture
 				AssetManager::addtextures(path);
 			}
-				Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(path);
-				obj->AddComponent(tex);
+			
+			Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(path);
+			
+			jsonloop.readFloat(tex->opacity, "Properties", "opacity");
+			obj->AddComponent(tex);
 						
 		}
 		else if (type == "Body") {
@@ -223,6 +226,8 @@ Object* Factory::createObject(const std::string& filename)
 
 			if (jsonloop.isMember("jumpfixframe", "Properties"))
 				jsonloop.readInt(a->jump_fixed_frame, "Properties", "jumpfixframe");
+
+			jsonloop.readFloat(a->opacity, "Properties", "opacity");
 
 			float col;
 			float row;

@@ -43,6 +43,7 @@ public:
 	bool jump_fixed = false;
 	bool reverse = false;
 
+	float opacity = 1.f;
 
 	int jump_fixed_frame = 0;
 
