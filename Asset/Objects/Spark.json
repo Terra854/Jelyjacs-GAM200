@@ -20,7 +20,7 @@
       "Shape": "Rectangle",
       "Properties": {
         "width": 32,
-        "height": 48
+        "height": 40
       }
     },
     {
@@ -29,10 +29,10 @@
         "texturepath": "Spark.png",
         "jumpfixframe": 7,
         "framerate": 0.025,
-        "frame": [68, 4],
-        "idle": [13, 3],
-        "push": [68, 1],
-        "jump": [13, 4],
+        "frame": [68, 5],
+        "idle": [13, 1],
+        "push": [68, 4],
+        "jump": [24, 3],
         "run": [12, 2]
       }
     },
