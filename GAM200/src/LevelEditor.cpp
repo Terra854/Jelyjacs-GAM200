@@ -32,6 +32,9 @@ ImFont* font;
 
 char buffer[256];
 
+bool save_as_dialog = false;
+bool new_prefab_dialog = false;
+
 /******************************************************************************
 	Default Constructor for LevelEditor
 *******************************************************************************/
@@ -431,9 +434,9 @@ void LevelEditor::ObjectProperties() {
 			{
 				ImGui::Text("Changes will apply to all instances of %s", object->GetName().c_str());
 				int i = 0;
-				for (const auto& t : AssetManager::textures) {
-					if (ImGui::ImageButton(t.first.c_str(), (void*)(intptr_t)t.second, ImVec2(64, 64))) {
-						te->textureName = t.first;
+				for (const auto& tex : AssetManager::textures) {
+					if (ImGui::ImageButton(tex.first.c_str(), (void*)(intptr_t)tex.second, ImVec2(64, 64))) {
+						te->textureName = tex.first;
 						UpdateAllObjectInstances(object);
 					}
 
@@ -1341,18 +1344,15 @@ void LevelEditor::AssetList()
 	}
 	if (ImGui::BeginTabItem("Prefabs"))
 	{
-		if (ImGui::Button("Create Empty Prefab")) {
-			Object* o = objectFactory->createEmptyPrefab();
-			o->AddComponent(new Transform());
-			o->SetName("Empty Prefab");
-			AssetManager::prefabs.emplace("Empty Prefab.json", o);
+		if (ImGui::Button("Create Prefab")) {
+			new_prefab_dialog = true;
 		}
 
 		ImGui::SameLine();
 
 		if (ImGui::Button("Save Prefabs")) {
 			for (auto& prefab : AssetManager::prefabs)
-				objectFactory->saveObject(prefab.second);
+				objectFactory->saveObject(prefab.first, prefab.second);
 		}
 
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
@@ -1679,8 +1679,6 @@ void ObjectClonedSuccessfully(int i) {
 	}
 }
 
-bool save_as_dialog = false;
-
 /******************************************************************************
 	SaveAsDialog
 	- This pop up a dialog box to ask where to save the level to
@@ -1728,6 +1726,43 @@ void LevelEditor::SaveAsDialog() {
 		if (ImGui::Button("Cancel"))
 		{
 			save_as_dialog = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+}
+
+/******************************************************************************
+	NewPrefabDialog
+	- This pop up a dialog box to ask the name of the new prefab
+*******************************************************************************/
+void LevelEditor::NewPrefabDialog() {
+	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f - 150, (float)window->height / 2.f));
+	ImGui::SetNextWindowSize(ImVec2(300, 0));
+	static char text[100];
+
+	if (new_prefab_dialog)
+		ImGui::OpenPopup("New Prefab");
+
+	if (ImGui::BeginPopupModal("New Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		ImGui::Text("Name of this new prefab:");
+		LE_InputText("##NewPrefabName", text, 100);
+
+		if (ImGui::Button("OK"))
+		{
+			Object* prefab = objectFactory->createEmptyPrefab();
+			prefab->SetName(text);
+			AssetManager::prefabs.emplace(text + std::string(".json"), prefab);
+			new_prefab_dialog = false;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel"))
+		{
+			new_prefab_dialog = false;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -2075,6 +2110,7 @@ void LevelEditor::Update() {
 	}
 
 	save_as_dialog ? SaveAsDialog() : DoNothing();
+	new_prefab_dialog ? NewPrefabDialog() : DoNothing();
 
 	ImGui::PopFont();
 

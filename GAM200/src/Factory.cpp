@@ -377,7 +377,7 @@ Object* Factory::createObject(const std::string& filename)
 	return obj;
 }
 
-void Factory::saveObject(Object* obj) {
+void Factory::saveObject(std::string filename, Object* obj) {
 
 	Json::Value jsonobj;
 
@@ -525,14 +525,14 @@ void Factory::saveObject(Object* obj) {
 
 	// Save the object to a file
 	
-	std::ofstream outputFile("Asset/Objects/" + obj->name + ".json");
+	std::ofstream outputFile("Asset/Objects/" + filename);
 	if (outputFile.is_open()) {
 		Json::StreamWriterBuilder writer;
 		writer["indentation"] = "  ";
 
 		outputFile << Json::writeString(writer, jsonobj);
 		outputFile.close();
-		std::cout << obj->name << " has been successfully saved." << std::endl;
+		std::cout << filename << " has been successfully saved." << std::endl;
 		return;
 	}
 	else

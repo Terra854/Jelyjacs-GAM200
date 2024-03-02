@@ -36,6 +36,8 @@ public:
 
 	void SaveAsDialog();
 
+	void NewPrefabDialog();
+
 	void UpdateAllObjectInstances(Object* object);
 
 	virtual void Initialize();

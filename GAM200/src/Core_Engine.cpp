@@ -294,6 +294,8 @@ void CoreEngine::GameLoop()
 					const std::pair<std::string, Object*>* object = (const std::pair<std::string, Object*>*)payload->Data;
 
 					Object* createdObj = objectFactory->cloneObject(object->second);
+					createdObj->SetPrefab(object->second);
+
 					objectFactory->assignIdToObject(createdObj);
 					objectFactory->AddToLayer(static_cast<int>(sceneManager->layers.size() - 1), createdObj);
 					Transform* objTransform = (Transform*)createdObj->GetComponent(ComponentType::Transform);
