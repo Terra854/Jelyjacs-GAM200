@@ -106,8 +106,8 @@ Object* Factory::createObject(const std::string& filename)
 			jsonloop.readFloat(trans->Position.x, "Properties", "Position", "x");
 			jsonloop.readFloat(trans->Position.y, "Properties", "Position", "y");
 
-			jsonloop.readFloat(trans->Scale.x, "Properties", "Scale_x");
-			jsonloop.readFloat(trans->Scale.y, "Properties", "Scale_y");
+			jsonloop.readFloat(trans->Scale.x, "Properties", "Scale", "x");
+			jsonloop.readFloat(trans->Scale.y, "Properties", "Scale", "y");
 			jsonloop.readFloat(trans->Rotation, "Properties", "Rotation");
 
 			obj->AddComponent(trans);
