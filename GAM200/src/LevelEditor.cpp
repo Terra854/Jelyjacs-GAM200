@@ -1348,6 +1348,13 @@ void LevelEditor::AssetList()
 			AssetManager::prefabs.emplace("Empty Prefab.json", o);
 		}
 
+		ImGui::SameLine();
+
+		if (ImGui::Button("Save Prefabs")) {
+			for (auto& prefab : AssetManager::prefabs)
+				objectFactory->saveObject(prefab.second);
+		}
+
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		

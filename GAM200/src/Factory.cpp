@@ -377,6 +377,168 @@ Object* Factory::createObject(const std::string& filename)
 	return obj;
 }
 
+void Factory::saveObject(Object* obj) {
+
+	Json::Value jsonobj;
+
+	Transform* tr = (Transform*)obj->GetComponent(ComponentType::Transform);
+	Texture* te = (Texture*)obj->GetComponent(ComponentType::Texture);
+	Body* bo = (Body*)obj->GetComponent(ComponentType::Body);
+	Physics* ph = (Physics*)obj->GetComponent(ComponentType::Physics);
+	PlayerControllable* pc = (PlayerControllable*)obj->GetComponent(ComponentType::PlayerControllable);
+	Animation* a = (Animation*)obj->GetComponent(ComponentType::Animation);
+	Event* e = (Event*)obj->GetComponent(ComponentType::Event);
+	Behaviour* be = (Behaviour*)obj->GetComponent(ComponentType::Behaviour);
+	Text* t = (Text*)obj->GetComponent(ComponentType::Text);
+
+	jsonobj["Name"] = obj->name;
+
+	// Transform
+	if (tr != nullptr) {
+		Json::Value transform;
+		transform["Type"] = "Transform";
+		transform["Properties"]["Position"]["x"] = tr->Position.x;
+		transform["Properties"]["Position"]["y"] = tr->Position.y;
+		transform["Properties"]["Scale"]["x"] = tr->Scale.x;
+		transform["Properties"]["Scale"]["y"] = tr->Scale.y;
+		transform["Properties"]["Rotation"] = tr->Rotation;
+		jsonobj["Components"].append(transform);
+	}
+
+	// Texture
+	if (te != nullptr){
+		Json::Value texture;
+		texture["Type"] = "Texture";
+		texture["Properties"]["texturepath"] = te->textureName;
+		texture["Properties"]["opacity"] = te->opacity;
+		jsonobj["Components"].append(texture);
+	
+	}
+
+	// Animation 
+	if (a != nullptr) {
+		Json::Value animation;
+		animation["Type"] = "Animation";
+		
+		// TODO: It's incomplete
+
+		for (const auto& pair : AssetManager::animations) {
+			if (pair.second == a->animation_tex_obj) {
+				animation["Properties"]["texturepath"] = pair.first;
+				break; // Stop searching after the first match is found
+			}
+		}
+
+		animation["Properties"]["jumpfixframe"] = a->jump_fixed_frame;
+		animation["Properties"]["framerate"] = a->frame_rate;
+		//animation["Properties"]["frame"] =
+		//animation["Properties"]["frame"] =
+		//animation["Properties"]["frame"] =
+		//animation["Properties"]["frame"] =
+		//animation["Properties"]["frame"] =
+		animation["Properties"]["opacity"] = a->opacity;
+
+		jsonobj["Components"].append(animation);
+	
+	}
+
+	// Text
+	if (t != nullptr) {
+		Json::Value text;
+		text["Type"] = "Text";
+		text["Properties"]["text"] = t->text;
+		text["Properties"]["fontSize"] = t->fontSize;
+		jsonobj["Components"].append(text);
+	}
+
+	
+	// Body
+	if (bo != nullptr) {
+		Json::Value body;
+		body["Type"] = "Body";
+		if (bo->GetShape() == Shape::Rectangle) {
+			Rectangular* r = (Rectangular*)bo;
+			body["Shape"] = "Rectangle";
+			body["Properties"]["width"] = r->width;
+			body["Properties"]["height"] = r->height;
+			body["Properties"]["pushable"] = r->pushable;
+			body["Properties"]["material"] = static_cast<int>(r->material);
+			body["Properties"]["active"] = r->active;
+			body["Properties"]["collision_response"] = r->collision_response;
+		}
+		else if (bo->GetShape() == Shape::Circle) {
+			Circular* c = (Circular*)bo;
+			body["Shape"] = "Circle";
+			body["Properties"]["radius"] = c->circle.radius;
+			body["Properties"]["center"]["x"] = c->circle.center.x;
+			body["Properties"]["center"]["y"] = c->circle.center.y;
+			body["Properties"]["collision_response"] = c->collision_response;
+		}
+		else if (bo->GetShape() == Shape::Line) {
+			Lines* l = (Lines*)bo;
+			body["Shape"] = "Line";
+			body["Properties"]["start"]["x"] = l->line.Pt0().x;
+			body["Properties"]["start"]["y"] = l->line.Pt0().y;
+			body["Properties"]["end"]["x"] = l->line.Pt1().x;
+			body["Properties"]["end"]["y"] = l->line.Pt1().y;
+			body["Properties"]["collision_response"] = l->collision_response;
+		}
+		jsonobj["Components"].append(body);
+	
+	}
+
+	// Physics
+	if (ph != nullptr) {
+		Json::Value physics;
+		physics["Type"] = "Physics";
+		physics["Properties"]["X_Velocity"] = ph->Velocity.x;
+		physics["Properties"]["Y_Velocity"] = ph->Velocity.y;
+		physics["Properties"]["Mass"] = ph->Mass;
+		physics["Properties"]["AffectedByGravity"] = ph->AffectedByGravity;
+		physics["Properties"]["AbleToPushObjects"] = ph->AbleToPushObjects;
+		jsonobj["Components"].append(physics);
+	}
+
+	// PlayerControllable
+	if (pc != nullptr) {
+		Json::Value player;
+		player["Type"] = "Player";
+		jsonobj["Components"].append(player);
+	}
+
+	// Event
+	if (e != nullptr) {
+		Json::Value event;
+		event["Type"] = "Event";
+		event["Properties"]["linkedevent"] = e->linked_event;
+		jsonobj["Components"].append(event);
+	}
+
+	// Behaviour
+	if (be != nullptr) {
+		Json::Value behaviour;
+		behaviour["Type"] = "Behaviour";
+		behaviour["Properties"]["Script"] = be->GetBehaviourName();
+		behaviour["Properties"]["Index"] = be->GetBehaviourIndex();
+		jsonobj["Components"].append(behaviour);
+	}
+
+	// Save the object to a file
+	
+	std::ofstream outputFile("Asset/Objects/" + obj->name + ".json");
+	if (outputFile.is_open()) {
+		Json::StreamWriterBuilder writer;
+		writer["indentation"] = "  ";
+
+		outputFile << Json::writeString(writer, jsonobj);
+		outputFile.close();
+		std::cout << obj->name << " has been successfully saved." << std::endl;
+		return;
+	}
+	else
+		std::cerr << "Failed to open file for writing." << std::endl;
+}
+
 //This doesn't destroy the game object instantly but will set it to be destroyed in the update loop
 void Factory::destroyObject(Object* obj)
 {

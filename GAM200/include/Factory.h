@@ -40,6 +40,8 @@ public:
 	// This creates a game object using the variables from the json file
 	Object* createObject(const std::string& filename);
 
+	void saveObject(Object* o);
+
 	//This doesn't destroy the game object instantly but will set it to be destroyed in the update loop
 	void destroyObject(Object* object);
 

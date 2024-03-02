@@ -83,6 +83,7 @@ public:
 
 	// Level Editor will need to access the private data
 	friend class LevelEditor;
+	friend class Factory;
 
 	// These data shouldn't be modified unless file location is changed
 private:
