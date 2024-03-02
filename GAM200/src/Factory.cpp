@@ -609,6 +609,7 @@ void Factory::destroyAllObjects()
 Object* Factory::createEmptyObject()
 {
 	Object* obj = new Object();
+	obj->AddComponent(new Transform());
 	assignIdToObject(obj);
 	return obj;
 }
@@ -618,6 +619,8 @@ Object* Factory::createEmptyPrefab()
 {
 	Object* obj = new Object();
 	obj->ObjectId = -1;
+	obj->AddComponent(new Transform());
+
 	return obj;
 }
 
