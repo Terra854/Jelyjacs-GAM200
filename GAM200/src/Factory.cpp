@@ -695,6 +695,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
 
 			tex->textureName = tex_pt->textureName;
+			tex->opacity = tex_pt->opacity;
 			obj->AddComponent(tex);
 		}
 		// Clone body data
@@ -762,6 +763,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			ani->animation_Map = ani_tmp->animation_Map;
 			ani->frame_rate = ani_tmp->frame_rate;
 			ani->jump_fixed_frame = ani_tmp->jump_fixed_frame;
+			ani->opacity = ani_tmp->opacity;
 			
 			obj->AddComponent(ani);
 		}
