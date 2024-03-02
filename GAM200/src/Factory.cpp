@@ -432,10 +432,10 @@ void Factory::saveObject(Object* obj) {
 		animation["Properties"]["jumpfixframe"] = a->jump_fixed_frame;
 		animation["Properties"]["framerate"] = a->frame_rate;
 		//animation["Properties"]["frame"] =
-		//animation["Properties"]["frame"] =
-		//animation["Properties"]["frame"] =
-		//animation["Properties"]["frame"] =
-		//animation["Properties"]["frame"] =
+		//animation["Properties"]["idle"] =
+		//animation["Properties"]["push"] =
+		//animation["Properties"]["jump"] =
+		//animation["Properties"]["run"] =
 		animation["Properties"]["opacity"] = a->opacity;
 
 		jsonobj["Components"].append(animation);
