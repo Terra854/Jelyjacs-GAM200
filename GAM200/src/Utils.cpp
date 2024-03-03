@@ -13,6 +13,43 @@ the engine itself or the game objects within it
 #include <cmath>
 #define PI 3.14159265358979323846f
 
+bool isObjectClicked(Transform* trans, Vec2 mousePos)
+{
+	Vec2 botLeft = trans->Position - (trans->Scale / 2);
+	Vec2 topRight = trans->Position + (trans->Scale / 2);
+
+	std::cout << "Transform Pos:" << trans->Position << std::endl;
+	std::cout << "BotLeft:" << botLeft << std::endl;
+	std::cout << "TopRight:" << topRight << std::endl;
+
+	if (mousePos.x >= botLeft.x && mousePos.x <= topRight.x && mousePos.y >= botLeft.y && mousePos.y <= topRight.y)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+#if defined(DEBUG) | defined(_DEBUG)
+
+bool isObjectClicked(Transform* trans, ImVec2 mousePos)
+{
+	/*
+	Vec2 botLeft = trans->Position - (trans->Scale / 2);
+	Vec2 topRight = trans->Position + (trans->Scale / 2);
+	if (mousePos.x >= botLeft.x && mousePos.x <= topRight.x && mousePos.y >= botLeft.y && mousePos.y <= topRight.y)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	*/
+	return isObjectClicked(trans, Vec2(mousePos));
+}
+
 ImVec2 convertImGuiPosToWorldPos(ImVec2 pos)
 {
 	ImVec2 output;
@@ -39,39 +76,6 @@ ImVec2 convertMouseToGameViewportPos(ImVec2 displaySize)
 	return output;
 }
 
-bool isObjectClicked(Transform* trans, ImVec2 mousePos)
-{
-	Vec2 botLeft = trans->Position - (trans->Scale / 2);
-	Vec2 topRight = trans->Position + (trans->Scale / 2);
-	if (mousePos.x >= botLeft.x && mousePos.x <= topRight.x && mousePos.y >= botLeft.y && mousePos.y <= topRight.y)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-bool isObjectClicked(Transform* trans, Vec2 mousePos)
-{
-	Vec2 botLeft = trans->Position - (trans->Scale / 2);
-	Vec2 topRight = trans->Position + (trans->Scale / 2);
-	
-	std::cout << "Transform Pos:" << trans->Position << std::endl;
-	std::cout << "BotLeft:" << botLeft << std::endl;
-	std::cout << "TopRight:" << topRight << std::endl;
-	
-	if (mousePos.x >= botLeft.x && mousePos.x <= topRight.x && mousePos.y >= botLeft.y && mousePos.y <= topRight.y)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 float calculateAngle(const Vec2& a, const Vec2& b) {
 	// Calculate the direction vector components
 	float deltaX = b.x - a.x;
@@ -83,3 +87,4 @@ float calculateAngle(const Vec2& a, const Vec2& b) {
 	// Return the angle in degrees
 	return angleRadians * (180.f / PI);
 }
+#endif
