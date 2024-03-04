@@ -23,7 +23,10 @@ public:
 	void createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound);
 
 	void playSfx(std::string audioName);
+	void playSfx(std::string audioName, FMOD::ChannelGroup *&sfxChannelGroup);
 	void restartBackgroundAudio();
+	void stopSfx(FMOD::ChannelGroup*& c);
+	void createChannelGroup(std::string name, FMOD::ChannelGroup*& c);
 private:
 	FMOD::System* system;
 	FMOD::Channel *background, *channel, *sfx;

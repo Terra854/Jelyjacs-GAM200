@@ -1074,6 +1074,11 @@ void LevelEditor::ObjectProperties() {
 				ImGui::Text("Able to push objects: ");
 				ImGui::SameLine();
 				ph->AbleToPushObjects ? ImGui::Text("true") : ImGui::Text("false");
+
+				ImGui::Text("IsBeingPushed: ");
+				ImGui::SameLine();
+				ph->IsBeingPushed ? ImGui::Text("true") : ImGui::Text("false");
+
 				// Button to enter edit mode
 				if (ImGui::Button("Edit##Physics"))
 				{

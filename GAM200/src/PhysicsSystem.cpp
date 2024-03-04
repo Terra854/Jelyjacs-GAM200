@@ -100,6 +100,7 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 						p1->Velocity.x = 500.f * std::min(p1->Mass / ((Physics*)leftObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
 						t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
 						((Transform*)leftObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x - (((Rectangular*)b1)->width / 2.f) - (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->width / 2.f) + 0.1f;
+						((Physics*)leftObj->GetComponent(ComponentType::Physics))->IsBeingPushed = true;
 					}
 				}
 				// Pushing the object
@@ -110,6 +111,7 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 						p1->Velocity.x *= std::min(p1->Mass / ((Physics*)leftObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
 						t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
 						((Transform*)leftObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x - (((Rectangular*)b1)->width / 2.f) - (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->width / 2.f);
+						((Physics*)leftObj->GetComponent(ComponentType::Physics))->IsBeingPushed = true;
 					}
 					else {
 						p1->Velocity.x = 0.0f;
@@ -133,6 +135,7 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 						p1->Velocity.x = 500.f * std::min(p1->Mass / ((Physics*)rightObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
 						t1->Position.x = t1->PrevPosition.x - (p1->Velocity.x * engine->Get_Fixed_DT());
 						((Transform*)rightObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x + (((Rectangular*)b1)->width / 2.f) + (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->width / 2.f) - 0.1f;
+						((Physics*)rightObj->GetComponent(ComponentType::Physics))->IsBeingPushed = true;
 					}
 				}
 				// Pushing the object
@@ -143,6 +146,7 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 						p1->Velocity.x *= std::min(p1->Mass / ((Physics*)rightObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
 						t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
 						((Transform*)rightObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x + (((Rectangular*)b1)->width / 2.f) + (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->width / 2.f);
+						((Physics*)rightObj->GetComponent(ComponentType::Physics))->IsBeingPushed = true;
 					}
 					else {
 						p1->Velocity.x = 0.0f;
@@ -325,6 +329,8 @@ void PhysicsSystem::Update() {
 				continue; // No physics in that object, move along
 
 			// No acceleration, not needed in the game
+
+			p->IsBeingPushed = false;
 
 			// Apply gravity
 			if (p->AffectedByGravity) {

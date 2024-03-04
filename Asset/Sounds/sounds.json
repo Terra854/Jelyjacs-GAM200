@@ -1,5 +1,7 @@
 {
   "background": "Game_Background.wav",
+  "box_landing_from_drop": "Metal_Crate_Landing.wav",
+  "box_moving": "Metal_Crate_Push.wav",
   "button_click": "Button_Click.ogg",
   "cat_teleport": "Cat_Teleport.wav",
   "collect_power_liquid": "Collect_Power_Liquid.wav",

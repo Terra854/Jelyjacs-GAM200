@@ -91,7 +91,8 @@
           "Position": {
             "x": -80.0,
             "y": 10.0
-          }
+          },
+          "linkedevent": 9
         },
         {
           "Prefabs": "Box.json",
@@ -99,7 +100,8 @@
           "Position": {
             "x": 164.0,
             "y": 700.0
-          }
+          },
+          "linkedevent": 10
         },
         {
           "Prefabs": "platform_1.json",

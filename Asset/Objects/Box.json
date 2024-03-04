@@ -39,6 +39,19 @@
         "AffectedByGravity": true,
         "Mass": 5.0
       }
+    },
+    {
+      "Type": "Event",
+      "Properties": {
+        "linkedevent": 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "Box",
+        "Index": 0
+      }
     }
   ]
 }

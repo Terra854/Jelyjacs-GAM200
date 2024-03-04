@@ -22,6 +22,8 @@ public:
 
 	virtual void Initialize() override {}
 
+	bool IsBeingPushed = false;
+
 	// Returns name of the component
 	virtual ComponentType TypeId() const override { return ComponentType::Physics; }
 };

@@ -115,10 +115,16 @@ playSfx
 -	This function tells Fmod to play the given sfx name
 
 @param a - The sfx name to play
+@param sfxChannel - The sfx channel group to play the sfx on. Will use the default sfx channel if left empty
 *******************************************************************************/
 void Audio::playSfx(std::string audioType) {
-    system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
-    sfx->setVolume(0.2f);
+	system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
+	sfx->setVolume(0.2f);
+}
+
+void Audio::playSfx(std::string audioType, FMOD::ChannelGroup *&sfxChannelGroup) {
+	system->playSound(AssetManager::getsoundbyaudiotype(audioType), sfxChannelGroup, false, &channel);
+	channel->setVolume(0.2f);
 }
 
 /******************************************************************************
@@ -131,4 +137,12 @@ void Audio::restartBackgroundAudio() {
 	background->stop();
 	system->playSound(AssetManager::getsoundbyaudiotype("background"), 0, true, &background);
 	background->setVolume(0.2f);
+}
+
+void Audio::stopSfx(FMOD::ChannelGroup* &c) {
+	c->stop();
+}
+
+void Audio::createChannelGroup(std::string name, FMOD::ChannelGroup* &c) {
+	system->createChannelGroup(name.c_str(), &c);
 }
