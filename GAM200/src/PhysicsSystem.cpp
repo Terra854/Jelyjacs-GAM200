@@ -89,6 +89,41 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular)) {
 
+		if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
+			top_collision_cooldown = 0.1f;
+			p1->Velocity.y = 0.0f;
+			t1->Position.y = ((Rectangular*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Body))->aabb.min.y - (((Rectangular*)b1)->height / 2);
+
+			// For objects on moving platforms
+			if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics)) != nullptr) {
+				if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y < 0.f) { // Check to see if the platform is going down
+					p1->Velocity.y += ((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y + (gravity * engine->Get_Fixed_DT()); // Inherit the platform's velocity and add gravity
+					t1->Position.y += p1->Velocity.y * engine->Get_Fixed_DT();
+				}
+			}
+		}
+		if (((Rectangular*)b1)->collision_flag & COLLISION_BOTTOM) {
+
+			// Just in case the left or right collision object is the same as the bootom collision object
+			// which can happen if the falling velocity is too fast
+			if (((Rectangular*)b1)->bottom_collision == ((Rectangular*)b1)->left_collision)
+				((Rectangular*)b1)->collision_flag &= ~COLLISION_LEFT;
+			if (((Rectangular*)b1)->bottom_collision == ((Rectangular*)b1)->right_collision)
+				((Rectangular*)b1)->collision_flag &= ~COLLISION_RIGHT;
+			
+			p1->Velocity.y = 0.0f;
+			t1->Position.y = ((Rectangular*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Body))->aabb.max.y + (((Rectangular*)b1)->height / 2);
+
+			// For objects on moving platforms
+
+			Physics* moving_platform = (Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics);
+
+			if (moving_platform != nullptr && moving_platform->Velocity.x && !(((Rectangular*)b1)->collision_flag & COLLISION_LEFT) && !(((Rectangular*)b1)->collision_flag & COLLISION_RIGHT)) {
+				t1->Position.x += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.x * engine->Get_Fixed_DT();
+				t1->Position.y += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.y * engine->Get_Fixed_DT();
+			}
+		}
+
 		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT) {
 			Object* leftObj = ((Rectangular*)b1)->left_collision;
 
@@ -160,32 +195,6 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 				t1->Position.x = ((Rectangular*)((Rectangular*)b1)->right_collision->GetComponent(ComponentType::Body))->aabb.min.x - (((Rectangular*)b1)->width / 2);
 			}
 		}
-		if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
-			top_collision_cooldown = 0.1f;
-			p1->Velocity.y = 0.0f;
-			t1->Position.y = ((Rectangular*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Body))->aabb.min.y - (((Rectangular*)b1)->height / 2);
-
-			// For objects on moving platforms
-			if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics)) != nullptr) {
-				if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y < 0.f) { // Check to see if the platform is going down
-					p1->Velocity.y += ((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y + (gravity * engine->Get_Fixed_DT()); // Inherit the platform's velocity and add gravity
-					t1->Position.y += p1->Velocity.y * engine->Get_Fixed_DT();
-				}
-			}
-		}
-		if (((Rectangular*)b1)->collision_flag & COLLISION_BOTTOM) {
-			p1->Velocity.y = 0.0f;
-			t1->Position.y = ((Rectangular*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Body))->aabb.max.y + (((Rectangular*)b1)->height / 2);
-
-			// For objects on moving platforms
-
-			Physics* moving_platform = (Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics);
-
-			if (moving_platform != nullptr && moving_platform->Velocity.x && !(((Rectangular*)b1)->collision_flag & COLLISION_LEFT) && !(((Rectangular*)b1)->collision_flag & COLLISION_RIGHT)) {
-				t1->Position.x += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.x * engine->Get_Fixed_DT();
-				t1->Position.y += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.y * engine->Get_Fixed_DT();
-			}
-		}
 
 		if (((Rectangular*)b1)->collision_flag)
 			RecalculateBody(t1, b1);
@@ -235,18 +244,18 @@ void PhysicsSystem::Update() {
 	// Do not update if the game is paused
 	if (!engine->isPaused()) {
 
-	accumulator += engine->GetDt();
+		accumulator += engine->GetDt();
 
-	// Only run the physics code if fixed_dt has passed 
-	if (accumulator < engine->Get_Fixed_DT()) {
-		return;
-	}
+		// Only run the physics code if fixed_dt has passed 
+		if (accumulator < engine->Get_Fixed_DT()) {
+			return;
+		}
 
-	// Check and see how many loops the physics needs to update
-	while (accumulator > engine->Get_Fixed_DT()) {
-		num_of_steps++;
-		accumulator -= engine->Get_Fixed_DT();
-	}
+		// Check and see how many loops the physics needs to update
+		while (accumulator > engine->Get_Fixed_DT()) {
+			num_of_steps++;
+			accumulator -= engine->Get_Fixed_DT();
+		}
 
 	}
 
