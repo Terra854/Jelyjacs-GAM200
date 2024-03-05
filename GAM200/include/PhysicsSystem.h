@@ -22,6 +22,10 @@ public:
 
 	// Returns name of the component
 	virtual std::string SystemName() { return "Physics"; }
+
+	int num_of_steps = 0;
 };
 
 void RecalculateBody(Transform* t, Body* b);
+
+extern PhysicsSystem* physics;

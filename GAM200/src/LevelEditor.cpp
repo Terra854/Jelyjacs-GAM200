@@ -1881,6 +1881,20 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 	}
 }
 
+void LevelEditor::PhysicsDebugControl() {
+	ImGui::Begin("Physics System Control");
+
+	if (ImGui::Button("Next DT")) {
+		if (initialObjectMap.empty()) {
+			SceneManager::PlayScene();
+			SceneManager::PauseScene();
+		}
+		physics->num_of_steps++;
+	}
+
+	ImGui::End();
+}
+
 /******************************************************************************
 	DoNothing
 	- Just a stub function. It does nothing
@@ -2107,6 +2121,8 @@ void LevelEditor::Update() {
 	PlayPauseGame();
 
 	CameraControl();
+
+	PhysicsDebugControl();
 
 	LoadLevelPanel();
 

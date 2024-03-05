@@ -40,6 +40,8 @@ public:
 
 	void UpdateAllObjectInstances(Object* object);
 
+	void PhysicsDebugControl();
+
 	virtual void Initialize();
 	void Update();
 

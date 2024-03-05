@@ -19,6 +19,8 @@ This file contains the definitions of the functions that are part of the Physics
 #include <input.h>
 #include <Audio.h> // Direct call the audio functions cause messaging system is not ready
 
+PhysicsSystem* physics;
+
 int collision_flag;
 
 // A workaround to prevent sticking onto the top of the walls
@@ -26,7 +28,6 @@ float top_collision_cooldown = 0.f;
 
 // For fixed physics
 float accumulator = 0.f;
-int num_of_steps = 0;
 
 // Check if both bodies are rectangular
 // If they are, use Check AABB with AABB function and return collision flag.
@@ -232,8 +233,7 @@ void PhysicsSystem::Initialize() {
 void PhysicsSystem::Update() {
 
 	// Do not update if the game is paused
-	if (engine->isPaused())
-		return;
+	if (!engine->isPaused()) {
 
 	accumulator += engine->GetDt();
 
@@ -246,6 +246,8 @@ void PhysicsSystem::Update() {
 	while (accumulator > engine->Get_Fixed_DT()) {
 		num_of_steps++;
 		accumulator -= engine->Get_Fixed_DT();
+	}
+
 	}
 
 	// Loop the physics code
