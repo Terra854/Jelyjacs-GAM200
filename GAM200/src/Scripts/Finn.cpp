@@ -145,6 +145,9 @@ void Finn::Update(Object* obj) {
 					case Material::Metal:
 						audio->playSfx("finn_metal_walking");
 						break;
+					default:
+						//audio->playSfx("finn_concrete_walking");
+						break;
 				}
 				finn_move_time -= 0.4f;
 			}
