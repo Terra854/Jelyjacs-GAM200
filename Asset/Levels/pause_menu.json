@@ -1,35 +1,76 @@
 {
-  "SceneName": "pause_menu",
-  "Size": {
-    "startX": -960.0,
-    "startY": -540.0,
-    "width": 1920.0,
-    "height": 1080.0
-  },
-  "Layers": [
+  "Layers" : 
+  [
     {
-      "Name": "PauseMenu",
-      "Settings": {
-        "isVisible": false,
-        "static_layer": true
-      },
-      "Objects": [
+      "Name" : "PauseMenu",
+      "Objects" : 
+      [
         {
-          "Prefabs": "Pause_Bg.json"
+          "Name" : "Pause_Bg",
+          "Position" : 
+          {
+            "x" : 0.0,
+            "y" : 0.0
+          },
+          "Prefabs" : "Pause_Bg.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 1044.0,
+            "y" : 1175.0
+          },
+          "Type" : "Transform"
         },
         {
-          "Prefabs": "resume_button.json",
-          "Type": "Transform",
-          "Position": {
-            "x": 0.0,
-            "y": 250.0
-          }
+          "Name" : "resume_button",
+          "Position" : 
+          {
+            "x" : 0.0,
+            "y" : 250.0
+          },
+          "Prefabs" : "resume_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 128.0,
+            "y" : 64.0
+          },
+          "Type" : "Transform",
+          "index" : 0.0,
+          "scripts" : "ResumeButton"
         },
         {
-            "Prefabs": "restart_button.json"
+          "Name" : "restart_button",
+          "Position" : 
+          {
+            "x" : 0.0,
+            "y" : 134.0
+          },
+          "Prefabs" : "restart_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 128.0,
+            "y" : 64.0
+          },
+          "Type" : "Transform",
+          "index" : 0.0,
+          "scripts" : "RestartButton"
         }
-        }
-      ]
+      ],
+      "Settings" : 
+      {
+        "isVisible" : true,
+        "static_layer" : true
+      }
     }
-  ]
+  ],
+  "SceneName" : "Asset/Levels/pause_menu.json",
+  "Size" : 
+  {
+    "height" : 1080.0,
+    "startX" : -960.0,
+    "startY" : -540.0,
+    "width" : 1920.0
+  }
 }
