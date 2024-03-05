@@ -22,8 +22,8 @@ public:
 	void setupSound();
 	void createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound);
 
-	void playSfx(std::string audioName);
-	void playSfx(std::string audioName, FMOD::ChannelGroup *&sfxChannelGroup);
+	void playSfx(std::string audioName, float volume_multiplier = 1.0f);
+	void playSfx(std::string audioName, FMOD::ChannelGroup *&sfxChannelGroup, float volume_multiplier = 1.0f);
 	void restartBackgroundAudio();
 	void stopSfx(FMOD::ChannelGroup*& c);
 	void createChannelGroup(std::string name, FMOD::ChannelGroup*& c);

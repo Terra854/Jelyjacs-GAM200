@@ -117,14 +117,14 @@ playSfx
 @param a - The sfx name to play
 @param sfxChannel - The sfx channel group to play the sfx on. Will use the default sfx channel if left empty
 *******************************************************************************/
-void Audio::playSfx(std::string audioType) {
+void Audio::playSfx(std::string audioType, float volume_multiplier) {
 	system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
-	sfx->setVolume(0.2f);
+	sfx->setVolume(0.2f * volume_multiplier);
 }
 
-void Audio::playSfx(std::string audioType, FMOD::ChannelGroup *&sfxChannelGroup) {
+void Audio::playSfx(std::string audioType, FMOD::ChannelGroup *&sfxChannelGroup, float volume_multiplier) {
 	system->playSound(AssetManager::getsoundbyaudiotype(audioType), sfxChannelGroup, false, &channel);
-	channel->setVolume(0.2f);
+	channel->setVolume(0.2f * volume_multiplier);
 }
 
 /******************************************************************************

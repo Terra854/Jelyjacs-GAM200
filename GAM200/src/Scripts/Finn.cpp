@@ -14,6 +14,7 @@ This file contains the script for Finn, the player character (Human)
 #include <Audio.h>
 
 float finn_move_time = 0.f;
+bool InTheAir = true;
 
 Finn::Finn(std::string name) : LogicScript(name)
 {
@@ -73,10 +74,10 @@ void Finn::Update(Object* obj) {
 
 				switch (collided_material) {
 				case Material::Concrete:
-					audio->playSfx("finn_concrete_walking");
+					audio->playSfx("finn_concrete_walking", 0.5f);
 					break;
 				case Material::Metal:
-					audio->playSfx("finn_metal_walking");
+					audio->playSfx("finn_metal_walking", 0.5f);
 					break;
 				}
 			}
@@ -126,10 +127,10 @@ void Finn::Update(Object* obj) {
 
 				switch (collided_material) {
 					case Material::Concrete:
-						audio->playSfx("finn_concrete_walking");
+						audio->playSfx("finn_concrete_walking", 0.5f);
 						break;
 					case Material::Metal:
-						audio->playSfx("finn_metal_walking");
+						audio->playSfx("finn_metal_walking", 0.5f);
 						break;
 				}
 				//audio->playSfx("finn_concrete_walking");
@@ -140,10 +141,10 @@ void Finn::Update(Object* obj) {
 
 				switch (collided_material) {
 					case Material::Concrete:
-						audio->playSfx("finn_concrete_walking");
+						audio->playSfx("finn_concrete_walking", 0.5f);
 						break;
 					case Material::Metal:
-						audio->playSfx("finn_metal_walking");
+						audio->playSfx("finn_metal_walking", 0.5f);
 						break;
 				}
 				finn_move_time -= 0.4f;
@@ -153,6 +154,25 @@ void Finn::Update(Object* obj) {
 			//audio->stopWalking();
 			finn_move_time = 0.f;
 			moving = false;
+		}
+
+		if (player_body->bottom_collision && InTheAir) {
+			Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
+
+			switch (collided_material) {
+			case Material::Concrete:
+				break;
+			case Material::Metal:
+				audio->playSfx("finn_landing_from_drop_metal");
+				break;
+			}
+			InTheAir = false;
+		}
+		else if (player_body->bottom_collision) {
+			InTheAir = false;
+		}
+		else {
+			InTheAir = true;
 		}
 	}
 
