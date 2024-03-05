@@ -164,6 +164,7 @@ void Finn::Update(Object* obj) {
 
 			switch (collided_material) {
 			case Material::Concrete:
+				audio->playSfx("finn_landing_from_drop_concrete");
 				break;
 			case Material::Metal:
 				audio->playSfx("finn_landing_from_drop_metal");

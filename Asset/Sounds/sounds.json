@@ -9,6 +9,7 @@
   "laser_off": "Laser_Off.ogg",
   "level_complete": "Level_Complete.wav",
   "finn_jumping": [ "Finn_Jump_1.wav", "Finn_Jump_2.wav", "Finn_Jump_3.wav", "Finn_Jump_4.wav", "Finn_Jump_5.wav" ],
+  "finn_landing_from_drop_concrete": [ "Footsteps_Jump-Land_Cocrete_Far-Small_1.wav", "Footsteps_Jump-Land_Cocrete_Far-Small_2.wav", "Footsteps_Jump-Land_Cocrete_Far-Small_3.wav", "Footsteps_Jump-Land_Cocrete_Far-Small_4.wav" ],
   "finn_landing_from_drop_metal": [ "Footsteps_Metal_Jump-Land_Far-Small_1.wav", "Footsteps_Metal_Jump-Land_Far-Small_2.wav", "Footsteps_Metal_Jump-Land_Far-Small_3.wav", "Footsteps_Metal_Jump-Land_Far-Small_4.wav", "Footsteps_Metal_Jump-Land_Far-Small_5.wav" ],
   "spark_jumping": [ "Spark_Jump_1.wav", "Spark_Jump_2.wav", "Spark_Jump_3.wav", "Spark_Jump_4.wav", "Spark_Jump_5.wav" ],
   "sliding_door_open": "Sliding_Door_Open.wav",
