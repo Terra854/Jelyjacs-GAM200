@@ -3837,7 +3837,7 @@
         {
           "Name": "CatTeleport",
           "Position": {
-            "x": 1098.0,
+            "x": 1343.0,
             "y": 0.0
           },
           "Prefabs": "CatTeleport.json",
@@ -3873,7 +3873,7 @@
         {
           "Name": "CatPowerLiquid",
           "Position": {
-            "x": 1343.0,
+            "x": 1098.0,
             "y": 0.0
           },
           "Prefabs": "CatPowerLiquid.json",
