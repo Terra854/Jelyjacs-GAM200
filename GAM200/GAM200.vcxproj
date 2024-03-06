@@ -244,6 +244,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\Finn.cpp" />
     <ClCompile Include="src\Scripts\HorizontalDoor.cpp" />
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
+    <ClCompile Include="src\Scripts\QuitButton.cpp" />
     <ClCompile Include="src\Scripts\RestartButton.cpp" />
     <ClCompile Include="src\Scripts\ResumeButton.cpp" />
     <ClCompile Include="src\Scripts\Timed_Laser.cpp" />
@@ -308,6 +309,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\CatPortal.h" />
     <ClInclude Include="include\Scripts\Endpoint.h" />
     <ClInclude Include="include\Scripts\Finn.h" />
+    <ClInclude Include="include\Scripts\QuitButton.h" />
     <ClInclude Include="include\Scripts\RestartButton.h" />
     <ClInclude Include="include\Scripts\ResumeButton.h" />
     <ClInclude Include="include\Scripts\Timed_Laser.h" />
