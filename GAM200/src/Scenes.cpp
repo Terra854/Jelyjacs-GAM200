@@ -143,20 +143,20 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 
 			if (jsonloop.isMember("scripts"))
 			{
-				// THIS DOESN'T REALLY WORK FOR CHANGING THE SCRIPTS OF INDIVIDUAL OBJECTS
-				std::string behvstr;
-				jsonloop.readString(behvstr, "scripts");
+				//// THIS DOESN'T REALLY WORK FOR CHANGING THE SCRIPTS OF INDIVIDUAL OBJECTS
+				//std::string behvstr;
+				//jsonloop.readString(behvstr, "scripts");
 
-				//Behaviour* b = (Behaviour*)(obj->GetComponent(ComponentType::Behaviour));
-				//Logic->RemoveBehaviourComponent(b);
-				objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
+				////Behaviour* b = (Behaviour*)(obj->GetComponent(ComponentType::Behaviour));
+				////Logic->RemoveBehaviourComponent(b);
+				//objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
 
-				obj->AddComponent(new Behaviour(0, behvstr));
-				//Logic->AddBehaviourComponent((Behaviour*)obj->GetComponent(ComponentType::Behaviour));
+				//obj->AddComponent(new Behaviour(0, behvstr));
+				////Logic->AddBehaviourComponent((Behaviour*)obj->GetComponent(ComponentType::Behaviour));
 
-				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				//Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
 
-				behv->SetBehaviourName(behvstr);
+				//behv->SetBehaviourName(behvstr);
 			}
 
 			if (jsonloop.isMember("index"))
@@ -166,6 +166,33 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 
 				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
 				behv->SetBehaviourIndex(index);
+			}
+
+			if (jsonloop.isMember("counter"))
+			{
+				float counter{};
+				jsonloop.readFloat(counter, "counter");
+
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				behv->SetBehaviourCounter(counter);
+			}
+
+			if (jsonloop.isMember("speed"))
+			{
+				float speed{};
+				jsonloop.readFloat(speed, "speed");
+
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				behv->SetBehaviourSpeed(speed);
+			}
+
+			if (jsonloop.isMember("distance"))
+			{
+				float distance{};
+				jsonloop.readFloat(distance, "distance");
+
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				behv->SetBehaviourDistance(distance);
 			}
 
 			// Add here to read oher types of data if necessary WIP
@@ -299,6 +326,9 @@ void SaveScene(std::string filename)
 				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
 				innerobj["scripts"] = behv->GetBehaviourName();
 				innerobj["index"] = behv->GetBehaviourIndex();
+				innerobj["counter"] = behv->GetBehaviourCounter();
+				innerobj["speed"] = behv->GetBehaviourSpeed();
+				innerobj["distance"] = behv->GetBehaviourDistance();
 			}
 
 			layer["Objects"].append(innerobj);

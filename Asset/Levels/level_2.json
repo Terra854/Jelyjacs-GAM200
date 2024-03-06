@@ -3593,7 +3593,7 @@
         {
           "Name": "elevator_hori",
           "Position": {
-            "x": 1430.0,
+            "x": 1850.0,
             "y": 619.0
           },
           "Prefabs": "elevator_hori.json",
@@ -3607,12 +3607,15 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "scripts": "Hori_Elevator"
+          "linkedevent": 8,
+          "scripts": "Hori_Elevator",
+          "speed": 35,
+          "distance": 420.0
         },
         {
           "Name": "elevator_hori",
           "Position": {
-            "x": 1430.0,
+            "x": 1850.0,
             "y": 683.0
           },
           "Prefabs": "elevator_hori.json",
@@ -3626,12 +3629,15 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "scripts": "Hori_Elevator"
+          "linkedevent": 8,
+          "scripts": "Hori_Elevator",
+          "speed": 115,
+          "distance": 420.0
         },
         {
           "Name": "elevator_hori",
           "Position": {
-            "x": 1430.0,
+            "x": 1850.0,
             "y": 747.0
           },
           "Prefabs": "elevator_hori.json",
@@ -3645,7 +3651,10 @@
             "y": 64.0
           },
           "Type": "Transform",
-          "scripts": "Hori_Elevator"
+          "linkedevent": 8,
+          "scripts": "Hori_Elevator",
+          "speed": 70,
+          "distance": 420.0
         },
         {
           "Name": "platform_9",
@@ -3746,7 +3755,7 @@
           },
           "Prefabs": "PressurePlatePink.json",
           "Properties": {
-            "height": 32.0,
+            "height": 16.0,
             "width": 64.0
           },
           "Rotation": 0.0,
@@ -3766,7 +3775,7 @@
           },
           "Prefabs": "PressurePlatePurple.json",
           "Properties": {
-            "height": 32.0,
+            "height": 16.0,
             "width": 64.0
           },
           "Rotation": 0.0,
@@ -3779,14 +3788,14 @@
           "scripts": "PPlate"
         },
         {
-          "Name": "PressurePlatePink",
+          "Name": "PressurePlatePink_Elevator",
           "Position": {
             "x": 1276.0,
             "y": -38.0
           },
-          "Prefabs": "PressurePlatePink.json",
+          "Prefabs": "PressurePlatePink_Elevator.json",
           "Properties": {
-            "height": 32.0,
+            "height": 16.0,
             "width": 64.0
           },
           "Rotation": 0.0,
@@ -3796,17 +3805,17 @@
           },
           "Type": "Transform",
           "linkedevent": 8,
-          "scripts": "Piston_H_Elev"
+          "scripts": "Pplate_H_Elev"
         },
         {
-          "Name": "PressurePlatePink",
+          "Name": "PressurePlateDarkBlue",
           "Position": {
             "x": 1367.0,
             "y": 186.0
           },
           "Prefabs": "PressurePlateDarkBlue.json",
           "Properties": {
-            "height": 32.0,
+            "height": 16.0,
             "width": 64.0
           },
           "Rotation": 0.0,

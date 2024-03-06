@@ -46,6 +46,10 @@ namespace HE_Script {
 		if (obj == nullptr) {
 			return;
 		}
+		// Ignore object if index is not 0
+		if (static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex() != 0)
+			return;
+
 		//std::cout << obj->GetName() << std::endl;
 		Physics* moving_platform_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 		Transform* moving_platform_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));

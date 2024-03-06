@@ -36,7 +36,7 @@ namespace PHE_Script
 		std::cout << "Pplate_H_Elev Script Ready : " << obj->GetName() << std::endl;
 		count = 0.f;
 		deltaT = engine->GetDt();
-		activated = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex();
+		activated = true;
 	}
 
 	/***************************************************************************/
@@ -58,6 +58,8 @@ namespace PHE_Script
 			return;
 		};
 
+		Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+
 		// if piston collides with player, change the animation of piston
 		if (piston_b->collision_flag & COLLISION_TOP) {
 			Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
@@ -66,53 +68,164 @@ namespace PHE_Script
 				return;
 			}
 			piston_animation->fixed = true;
-			if (piston_animation->current_type == AnimationType::Jump) {}
-			else {
+			if (piston_animation->current_type != AnimationType::Jump) {
+				audio->playSfx("piston_plate_press");
 				piston_animation->current_type = AnimationType::Jump;
-				Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-				std::cout << "piston event linked event:";
-				std::cout << piston_event->linked_event << std::endl;
-				
-				//  Change the animation and disable the body of the horizontal elevator
-				for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
-					Object* obj2 = objectFactory->getObjectWithID((long)j);
-					if (obj2->GetComponent(ComponentType::Event) != nullptr) {
-						Event* H_Elev_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
-						if (piston_event->linked_event == H_Elev_event->linked_event) {
-							H_Elev = obj2;
-							activated = !activated;
+				activated = false;
+			}
+
+		}
+		else {
+		Animation* piston_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+		if (piston_animation == nullptr) {
+			//std::cout << "NIL ANIMATION : Pplate_H_Elev" << std::endl;
+			return;
+		}
+			piston_animation->fixed = false;
+			if (piston_animation->current_type != AnimationType::Idle)
+			{
+				audio->playSfx("piston_plate_press");
+				piston_animation->current_type = AnimationType::Idle;
+
+				activated = true;
+			}
+		}
+
+		for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
+			Object* obj2 = objectFactory->getObjectWithID((long)j);
+			if (obj2->GetComponent(ComponentType::Event) != nullptr) {
+				Event* H_Elev_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
+				if (piston_event->linked_event == H_Elev_event->linked_event) {
+					H_Elev = obj2;
+
+					if (activated) {
+
+						if (H_Elev == nullptr) {
+							return;
 						}
+
+						Physics* moving_platform_physics = static_cast<Physics*>(H_Elev->GetComponent(ComponentType::Physics));
+						Transform* moving_platform_t = static_cast<Transform*>(H_Elev->GetComponent(ComponentType::Transform));
+						if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
+							//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
+							return;
+						};
+						moving_platform_physics->Velocity.x = 0.0f;
+						float moving_platform_speed{};
+						Behaviour* moving_platform_b = static_cast<Behaviour*>(H_Elev->GetComponent(ComponentType::Behaviour));
+
+						// Moving right
+						if (moving_platform_t->Position.x - moving_platform_b->GetBehaviourCounter() >= moving_platform_b->GetBehaviourDistance() && moving_platform_direction == false)
+						{
+							moving_platform_direction = true;
+							moving_platform_b->SetBehaviourCounter(moving_platform_t->Position.x);
+							std::cout << "change dir to left\n";
+						}
+						// Moving left
+						else if (moving_platform_b->GetBehaviourCounter() - moving_platform_t->Position.x >= moving_platform_b->GetBehaviourDistance() && moving_platform_direction == true)
+						{
+							moving_platform_direction = false;
+							moving_platform_b->SetBehaviourCounter(moving_platform_t->Position.x);
+							std::cout << "change dir to right\n";
+						}
+						// First move
+						else if (moving_platform_b->GetBehaviourCounter() == 0)
+						{
+							moving_platform_b->SetBehaviourCounter(moving_platform_t->Position.x);
+							std::cout << "ONLY SEE THIS ONCE PER OBJECT OF THIS SCRIPT\n";
+						}
+
+						moving_platform_speed = moving_platform_direction ? -moving_platform_b->GetBehaviourSpeed() : moving_platform_b->GetBehaviourSpeed();
+						moving_platform_physics->Velocity.x = moving_platform_speed;
 					}
+					else
+					{
+						if (H_Elev == nullptr) {
+							return;
+						}
+
+						Physics* moving_platform_physics = static_cast<Physics*>(H_Elev->GetComponent(ComponentType::Physics));
+						Transform* moving_platform_t = static_cast<Transform*>(H_Elev->GetComponent(ComponentType::Transform));
+						if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
+							//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
+							return;
+						};
+						moving_platform_physics->Velocity.x = 0.0f;
+					}
+
 				}
 			}
 		}
 
-		// if the piston is activated, move the horizontal elevator
-		if (activated) {
-			if (H_Elev == nullptr) {
-				return;
-			}
-			Physics* moving_platform_physics = static_cast<Physics*>(H_Elev->GetComponent(ComponentType::Physics));
-			Transform* moving_platform_t = static_cast<Transform*>(H_Elev->GetComponent(ComponentType::Transform));
-			if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
-				//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
-				return;
-			};
-			moving_platform_physics->Velocity.x = 0.0f;
-			float moving_platform_speed;
+		//// if the piston is not activated, move the horizontal elevator
+		//if (activated) {
 
-			// if the count >= 5, change direction
-			if (count >= 5.f) {
-				std::cout << "change dir\n";
-				moving_platform_direction = !moving_platform_direction;
-				count = 0;
-			}
-			else {
-				count += deltaT;
-			}
-			moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
-			moving_platform_physics->Velocity.x = moving_platform_speed;
-		}
+		//	for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
+		//		Object* obj2 = objectFactory->getObjectWithID((long)j);
+		//		if (obj2->GetComponent(ComponentType::Event) != nullptr) {
+		//			Event* H_Elev_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
+		//			if (piston_event->linked_event == H_Elev_event->linked_event) {
+		//				H_Elev = obj2;
+		//			}
+		//		}
+		//	}
+
+		//	if (H_Elev == nullptr) {
+		//		return;
+		//	}
+
+		//	Physics* moving_platform_physics = static_cast<Physics*>(H_Elev->GetComponent(ComponentType::Physics));
+		//	Transform* moving_platform_t = static_cast<Transform*>(H_Elev->GetComponent(ComponentType::Transform));
+		//	if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
+		//		//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
+		//		return;
+		//	};
+		//	moving_platform_physics->Velocity.x = 0.0f;
+		//	float moving_platform_speed{};
+
+		//	// if the count >= 5, change direction
+		//	if (count >= 420.f) {
+		//		std::cout << "change dir\n";
+		//		moving_platform_direction = !moving_platform_direction;
+		//		count = 0;
+		//	}
+		//	else {
+		//		//count += deltaT;
+		//		if (moving_platform_speed < 0)
+		//			count += -moving_platform_speed;
+		//		else
+		//			count += moving_platform_speed;
+		//	}
+		//	
+		//	Behaviour* moving_platform_b = static_cast<Behaviour*>(H_Elev->GetComponent(ComponentType::Behaviour));
+
+		//	moving_platform_speed = moving_platform_direction ? -moving_platform_b->GetBehaviourIndex() : moving_platform_b->GetBehaviourIndex();
+		//	moving_platform_physics->Velocity.x = moving_platform_speed;
+		//}
+		//else
+		//{
+		//	for (size_t j = 0; j < objectFactory->NumberOfObjects(); j++) {
+		//		Object* obj2 = objectFactory->getObjectWithID((long)j);
+		//		if (obj2->GetComponent(ComponentType::Event) != nullptr) {
+		//			Event* H_Elev_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
+		//			if (piston_event->linked_event == H_Elev_event->linked_event) {
+		//				H_Elev = obj2;
+		//			}
+		//		}
+		//	}
+
+		//	if (H_Elev == nullptr) {
+		//		return;
+		//	}
+
+		//	Physics* moving_platform_physics = static_cast<Physics*>(H_Elev->GetComponent(ComponentType::Physics));
+		//	Transform* moving_platform_t = static_cast<Transform*>(H_Elev->GetComponent(ComponentType::Transform));
+		//	if (moving_platform_physics == nullptr || moving_platform_t == nullptr) {
+		//		//std::cout << "NIL PHYSICS : V_Elevator" << std::endl;
+		//		return;
+		//	};
+		//	moving_platform_physics->Velocity.x = 0.0f;
+		//}
 	}
 
 	/***************************************************************************/

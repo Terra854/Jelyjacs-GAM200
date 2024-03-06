@@ -143,7 +143,10 @@ void GameLogic::Update() {
 				continue;
 			}
 			if (!engine->isPaused() || behaviours[iter->GetBehaviourName()]->executeOnPause)
+			{
+				std::cout << "Running behaviour: " << iter->GetBehaviourName() << std::endl;
 				behaviours[iter->GetBehaviourName()]->Update(it);
+			}
 			counter++;
 		}
 	}

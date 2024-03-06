@@ -1,5 +1,5 @@
 {
-  "Name": "elevator_hori",
+  "Name": "PressurePlatePink_Elevator",
   "Components": [
     {
       "Type": "Transform",
@@ -9,7 +9,7 @@
           "y": 0.0
         },
         "Scale": {
-          "x": 128.0,
+          "x": 64.0,
           "y": 64.0
         },
         "Rotation": 0.0
@@ -18,25 +18,19 @@
     {
       "Type": "Body",
       "Shape": "Rectangle",
-      "Collision Response":  false,
       "Properties": {
-        "width": 110.0,
-        "height": 28.0
+        "width": 64.0,
+        "height": 16.0
       }
     },
     {
-      "Type": "Texture",
+      "Type": "Animation",
       "Properties": {
-        "texturepath": "elevator.png"
-      }
-    },
-    {
-      "Type": "Physics",
-      "Properties": {
-        "X_Velocity": 0.0,
-        "Y_Velocity": 0.0,
-        "AffectedByGravity":  false,
-        "Mass": 0.0
+        "texturepath": "Props_PressurePlatePink.png",
+        "framerate": 0.1,
+        "frame": [3, 1],
+        "idle": [1, 1],
+        "jump": [3, 1]
       }
     },
     {
@@ -48,7 +42,7 @@
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "Hori_Elevator",
+        "Script": "Pplate_H_Elev",
         "Index" : 0
       }
     }
