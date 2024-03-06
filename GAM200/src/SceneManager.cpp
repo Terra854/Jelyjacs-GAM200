@@ -18,7 +18,7 @@ SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
 std::vector<std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>> SceneManager::layers;
 std::vector<std::pair<std::string, std::vector<int>>> SceneManager::initialLayer;
-std::queue<LayerSettings> SceneManager::initialLayerSettings;
+std::map<std::string, LayerSettings> SceneManager::initialLayerSettings;
 std::vector<std::string> SceneManager::AdditionalScenesLoadedConcurrently;
 
 /******************************************************************************
@@ -57,7 +57,7 @@ void SceneManager::PlayScene() {
 			}
 
 			for (auto& l : SceneManager::layers) {
-				initialLayerSettings.push(l.second.first);
+				initialLayerSettings[l.first] = l.second.first;
 
 				auto la = std::make_pair(l.first, std::vector<int>());
 
@@ -107,6 +107,7 @@ void SceneManager::RestartScene() {
 
 	// Loop through the initialLayer vector to refill the layers
 	for (auto& p : initialLayer) {
+		/*
 		int layerNum = objectFactory->GetLayerNum(p.first);
 
 		if (layerNum == -1) {
@@ -116,10 +117,19 @@ void SceneManager::RestartScene() {
 
 		for (auto& objID : p.second)
 			objectFactory->AddToLayer(layerNum, objectFactory->getObjectWithID(objID));
+			*/
+
+		layers.push_back(std::make_pair(p.first, std::pair<LayerSettings, std::vector<Object*>>(initialLayerSettings[p.first], std::vector<Object*>())));
+
+		for (auto& objID : p.second) {
+			layers.back().second.second.push_back(objectFactory->getObjectWithID(objID));
+		}
+
 	}
 
 	// The data inside initialLayer is not needed anymore now that the reset is complete
 	initialLayer.clear();
+	initialLayerSettings.clear();
 }
 
 /******************************************************************************
