@@ -75,6 +75,7 @@ namespace PL_Script {
 		
 		// Check if the player collides with the power liquid.
 		if (collected == true){
+			audio->playSfx("collect_power_liquid_notification");
 			audio->playSfx("collect_power_liquid");
 
 			// Make sure to remove any references to this object otherwise
