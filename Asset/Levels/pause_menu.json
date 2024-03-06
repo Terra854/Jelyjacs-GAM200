@@ -25,8 +25,8 @@
           "Name" : "resume_button",
           "Position" : 
           {
-            "x" : 0.0,
-            "y" : 250.0
+            "x" : 21.0,
+            "y" : 271.0
           },
           "Prefabs" : "resume_button.json",
           "Rotation" : 0.0,
@@ -43,8 +43,8 @@
           "Name" : "restart_button",
           "Position" : 
           {
-            "x" : 0.0,
-            "y" : 134.0
+            "x" : 21.0,
+            "y" : 151.0
           },
           "Prefabs" : "restart_button.json",
           "Rotation" : 0.0,
@@ -56,11 +56,29 @@
           "Type" : "Transform",
           "index" : 0.0,
           "scripts" : "RestartButton"
+        },
+        {
+          "Name" : "quit_button",
+          "Position" : 
+          {
+            "x" : 8.0,
+            "y" : -248.0
+          },
+          "Prefabs" : "quit_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 128.0,
+            "y" : 64.0
+          },
+          "Type" : "Transform",
+          "index" : 0.0,
+          "scripts" : "QuitButton"
         }
       ],
       "Settings" : 
       {
-        "isVisible" : false,
+        "isVisible" : true,
         "static_layer" : true
       }
     }
