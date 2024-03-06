@@ -804,7 +804,7 @@
           "linkedevent": 1
         },
         {
-          "Prefabs": "PistonDarkBlue.json",
+          "Prefabs": "PressurePlateDarkBlue.json",
           "Type": "Transform",
           "Position": {
             "x": -20.0,
@@ -829,6 +829,14 @@
             "y": 231.0
           },
           "linkedevent": 2
+        },
+        {
+          "Prefabs": "CatPowerLiquid.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 493.0,
+            "y": 180.0
+          }
         }
       ]
     }
