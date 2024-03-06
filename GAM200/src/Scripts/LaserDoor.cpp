@@ -117,7 +117,8 @@ namespace LaserDoor_Script {
         }
         if (intersecting) {
             std::cout << "(Intersecting with )" << obj->GetName() << std::endl;
-            //SceneManager::RestartScene();
+            GameLogic::restarting = true;
+            return;
         }
         LaserDoor_b->active = static_cast<bool>(LaserDoor_a->frame_num != 2);
 

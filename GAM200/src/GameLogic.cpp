@@ -27,6 +27,7 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include <Scenes.h>
 #include <PhysicsSystem.h>
 #include <Scripts/Spark.h>
+#include <SceneManager.h>
 
 
 std::map<std::string, LogicScript*> LogicScript::temp_scriptmap;
@@ -35,6 +36,7 @@ Object* scale_and_rotate;
 Object* GameLogic::playerObj;
 Object* dynamic_collision;
 int CatPower = 0;
+bool GameLogic::restarting;
 
 bool one_time = false;
 bool cheat = false;
@@ -43,6 +45,7 @@ GameLogic::GameLogic() {
 	Logic = this;
 	GameLogic::playerObj = nullptr;
 	dynamic_collision = nullptr;
+	GameLogic::restarting = false;
 }
 
 GameLogic::~GameLogic() {
@@ -144,13 +147,17 @@ void GameLogic::Update() {
 			counter++;
 		}
 	}
+	if (restarting) {
+		//SceneManager::RestartScene();
+		//SceneManager::PlayScene();
+	}
 	/********************************************************************************
 	*
 	*	Basic Input Handling Logic
 	*
 	*********************************************************************************/
 	
-	// If press esc button, quit the game
+	// If press esc button, pause the game
 	if (input::IsPressed(KEY::esc)) {
 		//Message_Handler msg(MessageID::Event_Type::Quit);
 		//engine->Broadcast(&msg);

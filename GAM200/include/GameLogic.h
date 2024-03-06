@@ -72,6 +72,9 @@ public:
 	// Static pointer to the player object, accessible globally.
 	static Object* playerObj;
 
+	// static bool to check if the game is restarting
+	static bool restarting;
+
 	// Map of behaviors to be added to objects on creation.
 	std::unordered_map<std::string, LogicScript*> behaviours; 
 
