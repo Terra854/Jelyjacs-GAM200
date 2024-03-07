@@ -133,8 +133,7 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 				if (input::IsPressedRepeatedly(KEY::k) && input::IsPressedRepeatedly(KEY::a)) {
 					// Make sure there's no objects on the right
 					if (((Rectangular*)b1)->right_collision == nullptr) {
-						p1->Velocity.x = 500.f * std::min(p1->Mass / ((Physics*)leftObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
-						t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
+						t1->Position.x = t1->PrevPosition.x + (500.f * std::min(p1->Mass / ((Physics*)leftObj->GetComponent(ComponentType::Physics))->Mass, 1.f) * engine->Get_Fixed_DT());
 						((Transform*)leftObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x - (((Rectangular*)b1)->width / 2.f) - (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->width / 2.f) + 0.1f;
 						((Physics*)leftObj->GetComponent(ComponentType::Physics))->IsBeingPushed = true;
 					}
@@ -168,8 +167,7 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 				// Pulling the object
 				if (input::IsPressedRepeatedly(KEY::k) && input::IsPressedRepeatedly(KEY::d)) {
 					if (((Rectangular*)b1)->left_collision == nullptr) {
-						p1->Velocity.x = 500.f * std::min(p1->Mass / ((Physics*)rightObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
-						t1->Position.x = t1->PrevPosition.x - (p1->Velocity.x * engine->Get_Fixed_DT());
+						t1->Position.x = t1->PrevPosition.x - (500.f * std::min(p1->Mass / ((Physics*)rightObj->GetComponent(ComponentType::Physics))->Mass, 1.f) * engine->Get_Fixed_DT());
 						((Transform*)rightObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x + (((Rectangular*)b1)->width / 2.f) + (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->width / 2.f) - 0.1f;
 						((Physics*)rightObj->GetComponent(ComponentType::Physics))->IsBeingPushed = true;
 					}
