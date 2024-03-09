@@ -265,21 +265,7 @@ void GLApp::Update()
 					//get text
 					Text* text = static_cast<Text*>(object->GetComponent(ComponentType::Text));
 
-					// skip to next object if there is no texture, then check for animation
-					/*
-					if (!tex_pt)
-					{
-						texture_bool = false;
-						ani_pt = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
-						
-						if (!ani_pt)
-							continue;
-						else
-							tex_test = ani_pt->animation_tex_obj;
-					}
-					else
-						tex_test = AssetManager::textureval(tex_pt->textureName);
-						*/
+					
 
 					//get animation
 					ani_pt = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
@@ -332,6 +318,7 @@ void GLApp::Update()
 						// copy object's model-to-NDC matrix to vertex shader's
 						// uniform variable uModelToNDC
 						AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+						AssetManager::shaderval("image").SetUniform("uOpacity", tex_pt->opacity);
 
 						// tell fragment shader sampler uTex2d will use texture image unit 6
 						GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
@@ -364,6 +351,7 @@ void GLApp::Update()
 							ani_pt->Update_objects();
 
 						}
+						//ani_pt->opacity = 0.5f;
 						// render animation
 						glBindTextureUnit(6, tex_test);
 						glBindTexture(GL_TEXTURE_2D, tex_test);
@@ -375,7 +363,7 @@ void GLApp::Update()
 						// copy object's model-to-NDC matrix to vertex shader's
 						// uniform variable uModelToNDC
 						AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-
+						AssetManager::shaderval("image").SetUniform("uOpacity", ani_pt->opacity);
 						// tell fragment shader sampler uTex2d will use texture image unit 6
 						GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
 						glUniform1i(tex_loc, 6);

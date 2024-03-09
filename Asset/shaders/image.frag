@@ -15,16 +15,16 @@ layout (location=0) out vec4 fFragColor;
 
 
 uniform sampler2D uTex2d;
-uniform float utransparency=2.0;
+uniform float uOpacity;
 void main () 
 {
 
         fFragColor = texture(uTex2d, vTexCoord);
 
-        // if utransparency has been set, then use it
-        if(utransparency<=1.0)
+        // if uopacity has been set, then use it
+        if(uOpacity<1.0)
         {
-            fFragColor.a = utransparency;
+            fFragColor.a = uOpacity * fFragColor.a;
         }
        
 }
