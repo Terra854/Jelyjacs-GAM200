@@ -15,6 +15,11 @@ This file contains the declaration for the Particle game component class
 #include "../../src/Assets Manager/asset_manager.h"
 #define PARTICLE_NUM 100
 
+enum class PrticleType {
+	Finn,
+
+};
+
 class ParticleSystem : public Component
 {
 public:
@@ -60,20 +65,20 @@ public:
 		GLuint particle_texture{};
 
 		// position
-		float pos_x_min = 1.6f;
-		float pos_x_max = 1.6f;
-		float pos_y_min = -0.5f;
-		float pos_y_max = 0.5f;
+		float pos_x_min{};
+		float pos_x_max{};
+		float pos_y_min{};
+		float pos_y_max{};
 
 		// velocity
-		float vel_x_min = -1.0f;
-		float vel_x_max = -2.0f;
-		float vel_y_min = 0.0f;
-		float vel_y_max = 0.0f;
+		float vel_x_min{};
+		float vel_x_max{};
+		float vel_y_min{};
+		float vel_y_max{};
 
 		// life time
-		float life_min = 0.7f;
-		float life_max = 2.0f;
+		float life_min{};
+		float life_max{};
 
 	
 
