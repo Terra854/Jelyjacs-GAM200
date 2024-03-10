@@ -84,7 +84,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 			jsonloop.readString(objprefabs, "Prefabs");
 			Object* obj;
 			// Create the prefab if it doesn't exist
-			if (AssetManager::prefabsval(objprefabs) == nullptr)
+			if (!objprefabs.empty() && AssetManager::prefabsval(objprefabs) == nullptr)
 			{
 				// Create new prefab
 				std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
@@ -93,12 +93,17 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 				AssetManager::updateprefab(newPrefab->GetName(), newPrefab);
 			}
 
-			// Create object via cloning the prefab
-			obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
-			obj->SetPrefab(AssetManager::prefabsval(objprefabs)); // Update the clone object to have usingPrefab value
-
-			// Assign an ID. It will be added to the objectMap
-			objectFactory->assignIdToObject(obj);
+			if (AssetManager::prefabsval(objprefabs)) {
+				// Create object via cloning the prefab
+				obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
+				obj->SetPrefab(AssetManager::prefabsval(objprefabs)); // Update the clone object to have usingPrefab value
+				// Assign an ID. It will be added to the objectMap
+				objectFactory->assignIdToObject(obj);
+			}
+			else {
+				// Create object via creating a new object
+				obj = objectFactory->createEmptyObject();
+			}
 
 			// Read extra data to update object
 			std::string type;
@@ -269,7 +274,8 @@ void SaveScene(std::string filename)
 			// Save object prefabs data
 			std::string name = obj->GetName();
 			Object* prefab = obj->GetPrefab();
-			std::string prefabname = "MISSINGNAME";
+			//std::string prefabname = "MISSINGNAME";
+			std::string prefabname;
 
 			if (prefab == nullptr)
 				std::cout << "OBJECT: " << name << " is missing usingPrefab!" << std::endl;

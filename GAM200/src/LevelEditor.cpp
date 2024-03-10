@@ -1164,6 +1164,25 @@ void LevelEditor::ListOfObjects() {
 		sprintf_s(buffer, "Layer %d", static_cast<int>(sceneManager->layers.size()));
 		objectFactory->CreateLayer(std::string(buffer), true, true);
 	}
+	if (ImGui::Button("Create empty object")) {
+		ImGui::OpenPopup("CreateEmptyObject");
+
+	}
+
+	if (ImGui::BeginPopup("CreateEmptyObject"))
+	{
+		ImGui::Text("Select layer to insert the new object to:");
+		for (auto& l : SceneManager::layers) {
+			if (ImGui::Selectable(l.first.c_str())) {
+				Object* o = objectFactory->createEmptyObject();
+				selectedNum = o->GetId();
+				cloneSuccessful = selectedNum;
+				l.second.second.push_back(o);
+			}
+		}
+
+		ImGui::EndPopup();
+	}
 	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
@@ -1782,6 +1801,10 @@ void LevelEditor::NewPrefabDialog() {
 					same name (including prefabs) will be updated
 *******************************************************************************/
 void LevelEditor::UpdateAllObjectInstances(Object* object) {
+
+	// Make sure the object is from a prefab
+	if (object->GetPrefab() == nullptr)
+		return;
 
 	// Do not copy Transform
 	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
