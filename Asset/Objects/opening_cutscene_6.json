@@ -1,0 +1,25 @@
+{
+  "Name": "opening_cutscene_6",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 1920.0,
+          "y": 1080.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "opening_cutscene_6.png"
+      }
+    }
+  ]
+}
