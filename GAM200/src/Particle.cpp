@@ -26,6 +26,7 @@ void ParticleSystem::Init()
         // x =-1 y = -0.5 to 0.5
         translations[index] = random_value(pos_x_min,pos_x_max,pos_y_min,pos_y_max); 
         auto particle = std::make_unique<Particle>(&translations[index]); 
+        particle->acceleration = random_velocity(acc_x_min,acc_x_max,acc_y_min,acc_y_max);
         particle->velocity = random_velocity(vel_x_min,vel_x_max,vel_y_min,vel_y_max);
         particle->life_time = random_life_time(life_min,life_max); 
         particles.push_back(std::move(particle)); 
@@ -95,8 +96,6 @@ void ParticleSystem::Init()
 */
 void ParticleSystem::Update(Object* player)
 {
-    if (prticle_state == ParticleState::Prticle_End) return;
-
     static float accum_time = 0.0f;
     static int frame_dt_count = 0;
 
@@ -116,7 +115,7 @@ void ParticleSystem::Update(Object* player)
     while (frame_dt_count) {
         frame_dt_count--;
 
-        
+
 
         switch (prticle_type) {
         case::PrticleType::Prticle_Finn:
@@ -131,7 +130,7 @@ void ParticleSystem::Update(Object* player)
                         ptc->position->y = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).y;
                         ptc->velocity = random_velocity(vel_x_min, vel_x_max, vel_y_min, vel_y_max);
                         ptc->life_time = random_life_time(life_min, life_max);
-                        shown[&ptc - &particles[0]] = 2.0f;
+                        //shown[&ptc - &particles[0]] = 2.0f;
                     }
 
                 }
@@ -165,10 +164,62 @@ void ParticleSystem::Update(Object* player)
                     Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
                     world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
                     world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
-                }				
-        }
-		break;
+                }
+            }
+            break;
         case::PrticleType::Prticle_Explosion:
+            if (prticle_state == ParticleState::Prticle_Start) {
+                for (auto& ptc : this->particles)
+                {
+
+                    ptc->life_count = 0.0f;
+                    ptc->position->x = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).x;
+                    ptc->position->y = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).y;
+                    ptc->acceleration = random_velocity(acc_x_min, acc_x_max, acc_y_min, acc_y_max);
+                    ptc->velocity = random_velocity(vel_x_min, vel_x_max, vel_y_min, vel_y_max);
+                    ptc->life_time = random_life_time(life_min, life_max);
+                    shown[&ptc - &particles[0]] = 1.0f;
+
+                }
+                prticle_state = ParticleState::Prticle_Running;
+            }
+
+            if (prticle_state == ParticleState::Prticle_End) return;
+
+            // if shown is all 2.0f, then change the state to end
+            int count = 0;
+
+            for (auto& ptc : this->particles)
+            {
+
+                ptc->Update();
+                if (ptc->life_count > ptc->life_time) {
+                    shown[&ptc - &particles[0]] = 2.0f;
+                    count++;
+                }
+            }
+            if (count == PARTICLE_NUM) {
+                prticle_state = ParticleState::Prticle_End;
+            }
+
+            Transform* tran_pt = static_cast<Transform*>(player->GetComponent(ComponentType::Transform));
+            Physics* phy_pt = static_cast<Physics*>(player->GetComponent(ComponentType::Physics));
+
+            float Vx = phy_pt->Velocity.x;
+            float Vy = phy_pt->Velocity.y;
+
+            Vec2 pos = tran_pt->Position;
+
+            pos.x = pos.x * 2.0f / window->width_init;
+            pos.y = pos.y * 2.0f / window->height_init;
+            Vec2 scale{ 0.f,0.f };
+            scale.x = tran_pt->Scale.x / window->width_init;
+            scale.y = tran_pt->Scale.y / window->height_init;
+
+            world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale);
+            Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+            world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
+            world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
 
             break;
         }
@@ -183,6 +234,7 @@ void ParticleSystem::Update(Object* player)
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * PARTICLE_NUM, &shown[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+        Draw();
     }
     
 }
@@ -194,7 +246,7 @@ void ParticleSystem::Update(Object* player)
 */
 void ParticleSystem::Draw()
 {
-    if (!draw_particle) return;
+    //if (!draw_particle) return;
     glBindTextureUnit(6, particle_texture);
     glBindTexture(GL_TEXTURE_2D, particle_texture);
     
@@ -278,8 +330,8 @@ float random_life_time(float min, float max)
 
 void ParticleSystem::Particle::Update()
 {
-    
-    Vec2 replacement = velocity * engine->Get_Fixed_DT();
+        velocity = velocity + acceleration * engine->Get_Fixed_DT();
+        Vec2 replacement = velocity * engine->Get_Fixed_DT();
         *position += replacement;
         life_count += engine->Get_Fixed_DT();
   

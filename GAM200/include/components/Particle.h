@@ -48,6 +48,7 @@ public:
 
 		Vec2* position{};
 		Vec2 velocity{};
+		Vec2 acceleration{};
 		float life_time{};
 		//float size{};
 		float life_count{};
@@ -56,7 +57,7 @@ public:
 
 	
 		ParticleState prticle_state = ParticleState::Prticle_Start;
-		PrticleType prticle_type = PrticleType::Prticle_Finn;
+		PrticleType prticle_type = PrticleType::Prticle_Explosion;
 
 		void Init();
 		void Update(Object* player);
