@@ -60,5 +60,5 @@ namespace Collision {
 
 	void Check_Rect_Rect(Rectangular* rect1, Rectangular* rect2);
 
-	bool IsObjectInsideAnotherObject(Transform* obj_t, Rectangular* anotherObj_b);
+	bool IsObjectInsideLaser(Rectangular* obj_b, Object* anotherObj);
 }
