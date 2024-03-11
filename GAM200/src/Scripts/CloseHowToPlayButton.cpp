@@ -50,7 +50,6 @@ void CloseHowToPlayMenuButton::Update(Object* obj) {
         audio->playSfx("button_click");
         objectFactory->GetLayer("PauseMenu")->second.first.isVisible = true;
         objectFactory->GetLayer("HowToPlayMenu")->second.first.isVisible = false;
-
     }
 }
 /*********************************************************************/

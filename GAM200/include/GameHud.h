@@ -48,7 +48,7 @@ struct Menu
 };
 
 //change to winning screen
-//void set_win();
+void set_win();
 
 class GameHud
 {
