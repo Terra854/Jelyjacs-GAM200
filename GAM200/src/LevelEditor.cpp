@@ -1124,6 +1124,12 @@ void LevelEditor::ObjectProperties() {
 		if (ImGui::CollapsingHeader("Behaviour")) {
 			ImGui::Text("Script Name : %s", be->GetBehaviourName().c_str());
 			ImGui::Text("Script Index : %d", be->GetBehaviourIndex());
+			if(be->GetBehaviourCounter() > 0)
+				ImGui::Text("Script Counter : %d", be->GetBehaviourCounter());
+			if(be->GetBehaviourDistance() > 0)
+				ImGui::Text("Script Distance : %d", be->GetBehaviourDistance());
+			if(be->GetBehaviourSpeed() > 0)
+				ImGui::Text("Script Speed : %d", be->GetBehaviourSpeed());
 			if (ImGui::CollapsingHeader("Change Scripts")) {
 				ImGui::OpenPopup("Select Scripts");
 				for (auto& it : Logic->behaviours)

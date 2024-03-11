@@ -46,27 +46,6 @@
           "index" : 0.0,
           "scripts" : "PauseButton",
           "speed" : 0.0
-        },
-        {
-          "Name" : "restart_button",
-          "Position" : 
-          {
-            "x" : 888.0,
-            "y" : 209.0
-          },
-          "Prefabs" : "restart_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 100.0,
-            "y" : 100.0
-          },
-          "Type" : "Transform",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "RestartButton",
-          "speed" : 0.0
         }
       ],
       "Settings" : 
