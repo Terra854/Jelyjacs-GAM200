@@ -21,6 +21,7 @@ ID aand is stored as part of a private map
 #include <set>
 #include <string>
 #include "ComponentCreator.h"
+#include "LayerSettings.h"
 
 enum LayerName
 {
@@ -39,6 +40,8 @@ public:
 	// This creates a game object using the variables from the json file
 	Object* createObject(const std::string& filename);
 
+	void saveObject(std::string filename, Object* obj);
+
 	//This doesn't destroy the game object instantly but will set it to be destroyed in the update loop
 	void destroyObject(Object* object);
 
@@ -52,6 +55,9 @@ public:
 
 	//Creates a game object with no components
 	Object* createEmptyObject();
+
+	//Creates an empty prefab with no components
+	Object* createEmptyPrefab();
 
 	//This gives a game object an ID tag which can be used to find that same game object
 	void assignIdToObject(Object* object);
@@ -81,13 +87,20 @@ public:
 
 	void DeleteComponent(Object* o, ComponentType c);
 
-	int CreateLayer(std::string layerName, bool isVisible);
+	int CreateLayer(std::string layerName, bool isVisible, bool static_layer);
+
+	int CreateLayer(std::string layerName, LayerSettings settings);
 
 	void AddToLayer(int layerNum, Object* obj);
 
+	void AddToLayer(std::string layerName, Object* obj);
+
 	int GetLayerNum(std::string layerName);
 
-	std::pair<std::string, std::pair<bool, std::vector<Object*>>>* FindLayerThatHasThisObject(Object* obj);
+	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* GetLayer(std::string layerName);
+	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* GetLayer(int layerNum);
+
+	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* FindLayerThatHasThisObject(Object* obj);
 
 	int GetNextId() { return nextObjectId; };
 

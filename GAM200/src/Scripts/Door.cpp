@@ -1,6 +1,6 @@
 /* !
 @file	Door.cpp
-@author Tan Yee Ann
+@author Tan Yee Ann (t.yeeann@digipen.edu)
 @date	8/2/2023
 
 This file contains the script for the doors
@@ -52,13 +52,13 @@ void Door::Update(Object* obj) {
         return;
 
     // SFX for when the door activates
-    if (!door_a->reverse && door_a->frame_num == 1 && !DoorActivatedSfxCooldown) {
-        audio->playSfx("door_activated");
+    if (!door_a->reverse && (door_a->frame_num == 5 || door_a->frame_num == 10)) {
+        audio->playSfx("door_activated", 0.1f);
         DoorActivatedSfxCooldown = 1.5f;
     }
 
     // SFX for when the door opens/closes
-    if (((!door_a->reverse && door_a->frame_num == 22) || (door_a->reverse && door_a->frame_num == 27)) && !DoorOpenSfxCooldown) {
+    if (((!door_a->reverse && door_a->frame_num == 20) || (door_a->reverse && door_a->frame_num == 27)) && !DoorOpenSfxCooldown) {
         audio->playSfx("sliding_door_open");
         DoorOpenSfxCooldown = 1.5f; // Make sure the audio only plays once
     }

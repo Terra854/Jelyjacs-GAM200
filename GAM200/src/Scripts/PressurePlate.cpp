@@ -82,10 +82,30 @@ namespace PressurePlate {
 							Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
 							if (plate_event->linked_event == door_event->linked_event) {
 								//audio->playSfx("sliding_door_open");
-								Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
-								door_animation->reverse = false;
-								door_animation->fixed = true;
-								door_animation->current_type = AnimationType::Jump;
+
+								Behaviour* door_behv = static_cast<Behaviour*>(obj2->GetComponent(ComponentType::Behaviour));
+								int index{};
+								if (door_behv != nullptr)
+									index = door_behv->GetBehaviourIndex();
+
+								if (door_behv->GetBehaviourName() == "Timed Laser" || door_behv->GetBehaviourName() == "Hori_Elevator") {
+									door_behv->SetBehaviourIndex(-1);
+									std::cout << "Getting switched off\n";
+									return;
+								}
+
+								if (index != 0) // Default Open, close door
+								{
+									Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
+									door_animation->reverse = true;
+								}
+								else // Default close, open door
+								{
+									Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
+									door_animation->reverse = false;
+									door_animation->fixed = true;
+									door_animation->current_type = AnimationType::Jump;
+								}
 								//Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));
 								//door_body->active = false;
 							}
@@ -95,6 +115,7 @@ namespace PressurePlate {
 				
 			}
 			else {
+				// This is the initial state of the door
 				// Change the animation of door and disable the body of door
 				//std::cout << obj->GetName() << " PP Closed" << std::endl;
 				plate_animation->fixed = false;
@@ -107,8 +128,30 @@ namespace PressurePlate {
 							Event* door_event = static_cast<Event*>(obj2->GetComponent(ComponentType::Event));
 							if (plate_event->linked_event == door_event->linked_event) {
 								//audio->playSfx("sliding_door_open"); // Should be Closing sound
-								Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
-								door_animation->reverse = true;
+
+								Behaviour* door_behv = static_cast<Behaviour*>(obj2->GetComponent(ComponentType::Behaviour));
+								int index{};
+								if (door_behv != nullptr)
+									index = door_behv->GetBehaviourIndex();
+
+								if (door_behv->GetBehaviourName() == "Timed Laser" || door_behv->GetBehaviourName() == "Hori_Elevator"){
+									door_behv->SetBehaviourIndex(0);
+									std::cout << "Laser is getting switched on\n";
+									return;
+								}
+								// 0 means the door should be closed
+								if (index != 0) // Door is opened by default
+								{
+									Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
+									door_animation->reverse = false;
+									door_animation->fixed = true;
+									door_animation->current_type = AnimationType::Jump;
+								}
+								else // Door is closed by default
+								{
+									Animation* door_animation = static_cast<Animation*>(obj2->GetComponent(ComponentType::Animation));
+									door_animation->reverse = true;
+								}
 								//door_animation->fixed = false;
 								//door_animation->current_type = AnimationType::Idle;
 								//Body* door_body = static_cast<Body*>(obj2->GetComponent(ComponentType::Body));

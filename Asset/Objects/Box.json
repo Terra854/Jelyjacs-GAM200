@@ -8,8 +8,10 @@
           "x": -80.0,
           "y": 30.0
         },
-        "Scale_x": 64.0,
-        "Scale_y": 64.0,
+        "Scale": {
+          "x": 64.0,
+          "y": 64.0
+        },
         "Rotation": 0.0
       }
     },
@@ -19,7 +21,8 @@
       "Properties": {
         "width": 64,
         "height": 32,
-        "pushable": true
+        "pushable": true,
+        "material": 1
       }
     },
     {
@@ -34,7 +37,20 @@
         "X_Velocity": 0.0,
         "Y_Velocity": 0.0,
         "AffectedByGravity": true,
-        "Mass": 1.0
+        "Mass": 5.0
+      }
+    },
+    {
+      "Type": "Event",
+      "Properties": {
+        "linkedevent": 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "Box",
+        "Index": 0
       }
     }
   ]

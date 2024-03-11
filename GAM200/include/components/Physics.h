@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Physics.h
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains the declaration for the Physics component class
@@ -21,6 +21,8 @@ public:
 	bool AbleToPushObjects = false;
 
 	virtual void Initialize() override {}
+
+	bool IsBeingPushed = false;
 
 	// Returns name of the component
 	virtual ComponentType TypeId() const override { return ComponentType::Physics; }

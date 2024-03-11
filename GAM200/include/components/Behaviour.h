@@ -23,7 +23,7 @@ public:
     // Parameterized constructor for the Behaviour class.
     // @param index: An integer representing the index of the behavior.
     // @param name: A string representing the name of the behavior.
-    Behaviour(int index, std::string name) : Component(), behaviour_index{ index }, behaviour_name{ name } {}
+    Behaviour(float index, std::string name) : Component(), behaviour_index{ index }, behaviour_name{ name } {}
 
     // Default destructor for the Behaviour class.
     // It is marked as default to use the compiler-generated destructor.
@@ -35,13 +35,13 @@ public:
 
     // Setter for the behaviour index.
     // @param index: The new index to set for this behavior.
-    void SetBehaviourIndex(int index) {
+    void SetBehaviourIndex(float index) {
         behaviour_index = index;
     }
 
     // Getter for the behaviour index.
     // @return: Returns the index of this behavior.
-    int GetBehaviourIndex() noexcept { return behaviour_index; }
+    float GetBehaviourIndex() noexcept { return behaviour_index; }
 
     // Setter for the behaviour name.
     // @param name: The new name to set for this behavior.
@@ -58,7 +58,42 @@ public:
     // @return: Returns the type ID of this component.
     virtual ComponentType TypeId() const override { return ComponentType::Behaviour; }
 
+    // Setter for the behaviour counter.
+    // @param counter: The new counter to set for this behavior.
+    void SetBehaviourCounter(float counter) {
+        behaviour_counter = counter;
+    }
+
+    // Getter for the behaviour counter.
+    // @return: Returns the counter of this behavior.
+    float GetBehaviourCounter() noexcept { return behaviour_counter; }
+
+    // Setter for the behaviour speed.
+// @param index: The new index to set for this behavior.
+    void SetBehaviourSpeed(float speed) {
+        behaviour_speed = speed;
+    }
+
+    // Getter for the behaviour speed.
+    // @return: Returns the speed of this behavior.
+    float GetBehaviourSpeed() noexcept { return behaviour_speed; }
+
+    // Setter for the behaviour distance.
+// @param index: The new index to set for this distance.
+    void SetBehaviourDistance(float distance) {
+        behaviour_distance = distance;
+    }
+
+    // Getter for the behaviour distance.
+    // @return: Returns the distance of this behavior.
+    float GetBehaviourDistance() noexcept { return behaviour_distance; }
+
 private:
-    int behaviour_index;        // An integer to store the index of the behavior.
+    float behaviour_index;        // An integer to store the index of the behavior.
     std::string behaviour_name; // A string to store the name of the behavior.
+
+    // Useful variables used during behaviour
+    float behaviour_counter{};
+    float behaviour_speed{};
+    float behaviour_distance{};
 };

@@ -22,6 +22,7 @@ enum PAGE
 	settings_menu,
 	main_menu,
 	menu_level_select,
+	win,
 	total_page
 } current_page;
 
@@ -31,6 +32,9 @@ std::map<std::string,std::vector<Menu>> menu_background;
 
 Button* button_tracker;
 std::string menu_tracker;
+
+bool win_condition = false;
+float counter = 0.f;
 
 void create_buttons_from_config(std::string file);
 void create_menus_from_config(std::string file);
@@ -49,6 +53,7 @@ void Buttons_update_resolution();
 void GameHud::Initialize()
 {
 	current_page = PAGE::main_menu;
+	//create_buttons_from_config("Asset/UI/win.json");
 	create_buttons_from_config("Asset/UI/Pause.json");
 	create_menus_from_config("Asset/UI/MainMenu.json");
 }
@@ -110,6 +115,24 @@ void GameHud::Draw()
 	{
 		draw_outline(button_tracker->get_pos1(), button_tracker->get_pos2());
 	}
+	/*
+	if (counter > 3.f) {
+		win_condition = false;
+		counter = 0.f;
+		sceneManager->LoadScene("Asset/Levels/level_1.json");
+		current_page = PAGE::main_menu;
+	}
+
+	if (win_condition) {
+		//current_page = PAGE::win;
+		//SetFont(FONT::AldrichRegular);
+		//DrawText("You Win", 0, 0, 1.0f);
+		counter += engine->GetDt();
+		std::cout << counter << std::endl;
+	}
+	*/
+	
+	
 	
 }
 
@@ -137,7 +160,9 @@ GameHud::~GameHud()
 
 void set_win()
 {
-	
+	win_condition = true;
+	current_page = PAGE::win;
+	engine->setPause();
 }
 
 void create_buttons_from_config(std::string file)
@@ -146,8 +171,8 @@ void create_buttons_from_config(std::string file)
 	JsonSerialization jsonobj;
 	jsonobj.openFileRead(file);
 
-	std::array<std::string, 5> category
-	{ "play" , "pause" , "settings" , "main_menu" , "menu_level_select"};
+	std::array<std::string, 6> category
+	{ "play" , "pause" , "settings" , "main_menu" , "menu_level_select","win" };
 
 	for (size_t i=0 ; i<category.size() ; ++i)
 	{
@@ -204,8 +229,8 @@ void create_menus_from_config(std::string file)
 		std::cout << "can't open file" << std::endl;
 	}
 
-	std::array< std::string, 2> categories
-	{"Menu" , "Pause_menu"};
+	std::array< std::string, 3> categories
+	{"Menu" , "Pause_menu", "Win_menu"};
 	for (size_t i = 0; i < categories.size(); ++i)
 	{
 		std::vector<Menu> tmp;
@@ -455,6 +480,9 @@ void set_background()
 	else if (current_page == PAGE::main_menu || current_page == PAGE::menu_level_select)
 	{
 		menu_tracker = "Menu";
+	}
+	else if (current_page == PAGE::win) {
+		menu_tracker = "Win_menu";
 	}
 	else
 	{

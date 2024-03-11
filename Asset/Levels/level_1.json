@@ -9,6 +9,10 @@
   "Layers": [
     {
       "Name": "Background",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
       "Objects": [
         {
           "Prefabs": "level1_background_1.json"
@@ -50,6 +54,10 @@
     },
     {
       "Name": "Level",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
       "Objects": [
         {
           "Prefabs": "MainDoor.json",
@@ -83,7 +91,8 @@
           "Position": {
             "x": -80.0,
             "y": 10.0
-          }
+          },
+          "linkedevent": 9
         },
         {
           "Prefabs": "Box.json",
@@ -91,7 +100,8 @@
           "Position": {
             "x": 164.0,
             "y": 700.0
-          }
+          },
+          "linkedevent": 10
         },
         {
           "Prefabs": "platform_1.json",
@@ -1440,17 +1450,17 @@
             "x": 664.0,
             "y": -96.0
           },
-          "linkedevent": 2
+          "linkedevent": 2,
+          "index": 1
         },
         {
           "Prefabs": "PistonOrange.json",
           "Type": "Transform",
           "Position": {
-            "x": 1216.0,
-            "y": -230.0
+            "x": 896.0,
+            "y": 155.0
           },
           "linkedevent": 3
-          //"scripts": "Piston"
         },
         {
           "Prefabs": "DoorOrange.json",
@@ -1469,7 +1479,6 @@
             "y": 602.0
           },
           "linkedevent": 4
-          //"scripts": "Piston"
         },
         {
           "Prefabs": "DoorDarkBlue.json",
@@ -1503,8 +1512,8 @@
           "Prefabs": "CatTeleport.json",
           "Type": "Transform",
           "Position": {
-            "x": 896.0,
-            "y": 192.0
+            "x": 1216.0,
+            "y": -200.0
           },
           "linkedevent": 5
         },
@@ -1525,10 +1534,10 @@
             "y": 282.0
           },
           "linkedevent": 6
-          //"scripts": "Piston"
         },
         {
-          "Prefabs": "LaserPink.json",
+          "Name": "LaserPink_Timed",
+          "Prefabs": "LaserPink_Timed.json",
           "Type": "Transform",
           "Position": {
             "x": 338.0,
@@ -1572,7 +1581,6 @@
             "y": 282.0
           },
           "linkedevent": 8
-          //"scripts": "Piston"
         },
         {
           "Prefabs": "GreenHorizontalDoor.json",
@@ -1602,5 +1610,9 @@
         }
       ]
     }
+  ],
+  "AdditionalScenesToLoad": [
+    "game_hud.json",
+    "pause_menu.json"
   ]
 }

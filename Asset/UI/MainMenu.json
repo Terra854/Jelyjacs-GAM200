@@ -27,5 +27,16 @@
       "scale_y": 1175,
       "texture": "MENU_back.png"
     }
+  ],
+  "Win_menu":
+  [
+    {
+      "text": "Complete",
+      "position_x": -5,
+      "position_y": 0,
+      "scale_x": 1044,
+      "scale_y": 1175,
+      "texture": "MENU_back.png"
+    }
   ]
 }

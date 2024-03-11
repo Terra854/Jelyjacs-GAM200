@@ -1,0 +1,32 @@
+{
+  "Name": "zoom_button",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 140.0,
+          "y": 140.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "Zoom.PNG"
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "ButtonBase",
+        "Index": 0
+      }
+    }
+  ]
+}

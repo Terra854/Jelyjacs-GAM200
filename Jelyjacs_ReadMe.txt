@@ -9,6 +9,7 @@ Input key:
 
 Player movement: W, A, S, D
 Switch between Finn or Spark: E
+Cat teleport: T
 Camera zoom: C
 Debug drawing: L
 Pause: Esc
@@ -19,6 +20,7 @@ Editor key (Only available in Debug mode):
 
 Switch play/edit mode: P
 Delete selected object: Del
+Graphic debug display: L
 
 
 TEAM ROSTER

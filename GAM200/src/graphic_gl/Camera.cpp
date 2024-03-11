@@ -110,4 +110,7 @@ void Camera::SetToPlayer() {
 		if (position.y > y_max) position.y = y_max;*/
 
 	}
+	else {
+		position = { 0.0f, 0.0f };
+	}
 }

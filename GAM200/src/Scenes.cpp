@@ -21,9 +21,8 @@ LoadSceneFromJson
 
 @param filename - the name of the json file
 *******************************************************************************/
-void LoadSceneFromJson(std::string filename)
+void LoadSceneFromJson(std::string filename, bool isParentScene)
 {
-	
 	// Check if the given file exists
 	JsonSerialization jsonobj;
 	jsonobj.openFileRead(filename);
@@ -47,15 +46,20 @@ void LoadSceneFromJson(std::string filename)
 
 	audio->setupSound();
 	*/
-	Vec2 start_coord;
-	jsonobj.readFloat(start_coord.x, "Size", "startX");
-	jsonobj.readFloat(start_coord.y, "Size", "startY");
-	engine->Set_Start_Coords(start_coord);
 
-	Vec2 level_size;
-	jsonobj.readFloat(level_size.x, "Size", "width");
-	jsonobj.readFloat(level_size.y, "Size", "height");
-	engine->Set_Level_Size(level_size);
+	if (isParentScene) {
+		SceneManager::AdditionalScenesLoadedConcurrently.clear();
+
+		Vec2 start_coord;
+		jsonobj.readFloat(start_coord.x, "Size", "startX");
+		jsonobj.readFloat(start_coord.y, "Size", "startY");
+		engine->Set_Start_Coords(start_coord);
+
+		Vec2 level_size;
+		jsonobj.readFloat(level_size.x, "Size", "width");
+		jsonobj.readFloat(level_size.y, "Size", "height");
+		engine->Set_Level_Size(level_size);
+	}
 
 	int layerNum = 0;
 
@@ -63,7 +67,12 @@ void LoadSceneFromJson(std::string filename)
 		std::string layername = layer["Name"].asCString();
 
 		//jsonobj.readString(layername, "Name");
-		objectFactory->CreateLayer(layername, true);
+		LayerSettings ls = { layer["Settings"]["isVisible"].asBool(), layer["Settings"]["static_layer"].asBool(), !isParentScene };
+
+		if (!isParentScene)
+			ls.inheritedJsonName = levelname;
+
+		objectFactory->CreateLayer(layername, ls);
 
 		//for (auto& component : jsonobj.read("Objects"))
 		for (auto& component : layer["Objects"])
@@ -75,7 +84,7 @@ void LoadSceneFromJson(std::string filename)
 			jsonloop.readString(objprefabs, "Prefabs");
 			Object* obj;
 			// Create the prefab if it doesn't exist
-			if (AssetManager::prefabsval(objprefabs) == nullptr)
+			if (!objprefabs.empty() && AssetManager::prefabsval(objprefabs) == nullptr)
 			{
 				// Create new prefab
 				std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
@@ -84,12 +93,17 @@ void LoadSceneFromJson(std::string filename)
 				AssetManager::updateprefab(newPrefab->GetName(), newPrefab);
 			}
 
-			// Create object via cloning the prefab
-			obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
-			obj->SetPrefab(AssetManager::prefabsval(objprefabs)); // Update the clone object to have usingPrefab value
-
-			// Assign an ID. It will be added to the objectMap
-			objectFactory->assignIdToObject(obj);
+			if (AssetManager::prefabsval(objprefabs)) {
+				// Create object via cloning the prefab
+				obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
+				obj->SetPrefab(AssetManager::prefabsval(objprefabs)); // Update the clone object to have usingPrefab value
+				// Assign an ID. It will be added to the objectMap
+				objectFactory->assignIdToObject(obj);
+			}
+			else {
+				// Create object via creating a new object
+				obj = objectFactory->createEmptyObject();
+			}
 
 			// Read extra data to update object
 			std::string type;
@@ -134,15 +148,56 @@ void LoadSceneFromJson(std::string filename)
 
 			if (jsonloop.isMember("scripts"))
 			{
-				// THIS DOESN'T REALLY WORK FOR CHANGING THE SCRIPTS OF INDIVIDUAL OBJECTS
-				std::string behvstr;
-				jsonloop.readString(behvstr, "scripts");
+				//// THIS DOESN'T REALLY WORK FOR CHANGING THE SCRIPTS OF INDIVIDUAL OBJECTS
+				//std::string behvstr;
+				//jsonloop.readString(behvstr, "scripts");
 
-				objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
-				obj->AddComponent(new Behaviour(0, behvstr));
+				////Behaviour* b = (Behaviour*)(obj->GetComponent(ComponentType::Behaviour));
+				////Logic->RemoveBehaviourComponent(b);
+				//objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
+
+				//obj->AddComponent(new Behaviour(0, behvstr));
+				////Logic->AddBehaviourComponent((Behaviour*)obj->GetComponent(ComponentType::Behaviour));
+
+				//Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+
+				//behv->SetBehaviourName(behvstr);
+			}
+
+			if (jsonloop.isMember("index"))
+			{
+				int index{};
+				jsonloop.readInt(index, "index");
+
 				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				behv->SetBehaviourIndex(index);
+			}
 
-				behv->SetBehaviourName(behvstr);
+			if (jsonloop.isMember("counter"))
+			{
+				float counter{};
+				jsonloop.readFloat(counter, "counter");
+
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				behv->SetBehaviourCounter(counter);
+			}
+
+			if (jsonloop.isMember("speed"))
+			{
+				float speed{};
+				jsonloop.readFloat(speed, "speed");
+
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				behv->SetBehaviourSpeed(speed);
+			}
+
+			if (jsonloop.isMember("distance"))
+			{
+				float distance{};
+				jsonloop.readFloat(distance, "distance");
+
+				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+				behv->SetBehaviourDistance(distance);
 			}
 
 			// Add here to read oher types of data if necessary WIP
@@ -150,15 +205,24 @@ void LoadSceneFromJson(std::string filename)
 
 			obj->Initialize();
 
-			objectFactory->AddToLayer(layerNum, obj);
+			objectFactory->AddToLayer(layername, obj);
 		}
 
 		layerNum++;
 	}
 
-	// Save the name of the level to engine to track
-	engine->loaded_level = levelname;
-	engine->loaded_filename = filename;
+	if (isParentScene) {
+		// Save the name of the level to engine to track
+		engine->loaded_level = levelname;
+		engine->loaded_filename = filename;
+	}
+
+	for (auto& additionalScenes : jsonobj.read("AdditionalScenesToLoad"))
+	{
+		std::string sceneFile = additionalScenes.asCString();
+		SceneManager::AdditionalScenesLoadedConcurrently.push_back(sceneFile);
+		::LoadSceneFromJson("Asset/Levels/" + sceneFile, false);
+	}
 
 	jsonobj.closeFile();
 
@@ -191,9 +255,16 @@ void SaveScene(std::string filename)
 	auto& layers = jsonobj["Layers"];
 
 	for (auto& l : SceneManager::layers) {
+
+		// Do not save the inherited layers
+		if (l.second.first.isInherited)
+			continue;
+
 		Json::Value layer;
 
 		layer["Name"] = l.first;
+		layer["Settings"]["isVisible"] = l.second.first.isVisible;
+		layer["Settings"]["static_layer"] = l.second.first.static_layer;
 
 		for (Object* obj : l.second.second) {
 
@@ -203,7 +274,8 @@ void SaveScene(std::string filename)
 			// Save object prefabs data
 			std::string name = obj->GetName();
 			Object* prefab = obj->GetPrefab();
-			std::string prefabname = "MISSINGNAME";
+			//std::string prefabname = "MISSINGNAME";
+			std::string prefabname;
 
 			if (prefab == nullptr)
 				std::cout << "OBJECT: " << name << " is missing usingPrefab!" << std::endl;
@@ -259,6 +331,10 @@ void SaveScene(std::string filename)
 			{
 				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
 				innerobj["scripts"] = behv->GetBehaviourName();
+				innerobj["index"] = behv->GetBehaviourIndex();
+				innerobj["counter"] = behv->GetBehaviourCounter();
+				innerobj["speed"] = behv->GetBehaviourSpeed();
+				innerobj["distance"] = behv->GetBehaviourDistance();
 			}
 
 			layer["Objects"].append(innerobj);
@@ -266,6 +342,12 @@ void SaveScene(std::string filename)
 
 		layers.append(layer);
 	}
+
+	for (std::string& a : SceneManager::AdditionalScenesLoadedConcurrently)
+	{
+		jsonobj["AdditionalScenesToLoad"].append(a);
+	}
+
 	/*
 	for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 	{

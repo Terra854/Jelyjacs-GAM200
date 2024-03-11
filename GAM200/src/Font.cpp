@@ -7,7 +7,7 @@ This file contains the definition of the functions of font system
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include "Font.h"
-
+#include "../../src/Assets Manager/asset_manager.h"
 Font* FontSystem = NULL;
 Font::Font() {
 }
@@ -30,7 +30,7 @@ namespace
         std::map<char, Character> Characters;
 
         //metrics for the font
-        FT_Face face;
+        FT_Face face{};
 
         //member function to set a mormalised size in pixels
         void set_pixel_size(int size);
@@ -41,7 +41,7 @@ namespace
    
     //for opengl api
     unsigned int VAO, VBO;
-    GLSLShader shdr_pgm;
+    //GLSLShader AssetManager::shaderval("font");
 
     //array of the font data
     outline fontOutlines[total];
@@ -54,7 +54,7 @@ namespace
 }
 
 //helper function to compile and link shaders
-void init_shaders();
+//void init_shaders();
 
 //helper function to normailise coordinates
 void normalise_coord(float& x, float& y);
@@ -74,14 +74,15 @@ void SetFont(FONT f)
 *******************************************************************************/
 void Font::Initialize()
 {
-    init_shaders();
+    //init_shaders();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(window->width), 0.0f, static_cast<float>(window->height));
-    shdr_pgm.Use();
-    glUniformMatrix4fv(glGetUniformLocation(shdr_pgm.GetHandle(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+  
+    AssetManager::shaderval("font").Use();
+    glUniformMatrix4fv(glGetUniformLocation(AssetManager::shaderval("font").GetHandle(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         // FreeType
         // --------
@@ -120,7 +121,7 @@ void Font::Initialize()
         glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-        shdr_pgm.UnUse();
+        AssetManager::shaderval("font").UnUse();
 }
 
 /******************************************************************************
@@ -158,9 +159,9 @@ void normalise_coord(float& x, float& y)
 void RenderText(std::string text, float x, float y, float scale, glm::ivec3 color)
 {
     normalise_coord(x, y);
-    shdr_pgm.Use();
+    AssetManager::shaderval("font").Use();
     // activate corresponding render 
-    glUniform3f(glGetUniformLocation(shdr_pgm.GetHandle(), "textColor"), (float)color.x, (float)color.y, (float)color.z);
+    glUniform3f(glGetUniformLocation(AssetManager::shaderval("font").GetHandle(), "textColor"), (float)color.x, (float)color.y, (float)color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
@@ -197,7 +198,7 @@ void RenderText(std::string text, float x, float y, float scale, glm::ivec3 colo
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
-    shdr_pgm.UnUse();
+    AssetManager::shaderval("font").UnUse();
 }
 
 void Font::Update()
@@ -215,22 +216,22 @@ Font::~Font()
 
 
 //initialise shaders
-void init_shaders()
-{
-    std::vector<std::pair<GLenum, std::string>> shdr_files
-    {
-        std::make_pair(GL_VERTEX_SHADER, "shaders/Font.vert"),
-        std::make_pair(GL_FRAGMENT_SHADER, "shaders/Font.frag")
-    };
-
-    shdr_pgm.CompileLinkValidate(shdr_files);
-    if (GL_FALSE == shdr_pgm.IsLinked())
-    {
-        std::cout << "Unable to compile/link/validate shader programs!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-        std::cout << shdr_pgm.GetLog() << "\n";
-        std::exit(EXIT_FAILURE);
-    }
-}
+//void init_shaders()
+//{
+//    std::vector<std::pair<GLenum, std::string>> shdr_files
+//    {
+//        std::make_pair(GL_VERTEX_SHADER, "shaders/Font.vert"),
+//        std::make_pair(GL_FRAGMENT_SHADER, "shaders/Font.frag")
+//    };
+//
+//    AssetManager::shaderval("font").CompileLinkValidate(shdr_files);
+//    if (GL_FALSE == AssetManager::shaderval("font").IsLinked())
+//    {
+//        std::cout << "Unable to compile/link/validate shader programs!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+//        std::cout << AssetManager::shaderval("font").GetLog() << "\n";
+//        std::exit(EXIT_FAILURE);
+//    }
+//}
 
 //load the ascii characters into the container of characters
 void outline::load_ascii_chars()

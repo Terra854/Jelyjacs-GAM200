@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	AABB.h
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains the AABB class that represents an axis-aligned bounding box

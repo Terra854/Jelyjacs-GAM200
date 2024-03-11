@@ -43,6 +43,7 @@ public:
 	bool jump_fixed = false;
 	bool reverse = false;
 
+	float opacity = 1.f;
 
 	int jump_fixed_frame = 0;
 
@@ -51,7 +52,7 @@ public:
 	float frame_rate{};
 	float frame_count{};
 	int frame_num{};
-
+	
 	GLuint animation_tex_obj;
 	GLApp::GLModel setup_texobj_animation(float x, float y, float z, float w, bool right);
 

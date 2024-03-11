@@ -25,7 +25,8 @@ enum class ComponentType
 	Animation,
 	Event,
 	Behaviour,
-	ParticleSystem
+	ParticleSystem,
+	Text
 };
 
 class Component

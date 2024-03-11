@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Audio.h
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains the declaration for the Audio system class
@@ -22,8 +22,11 @@ public:
 	void setupSound();
 	void createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound);
 
-	void playSfx(std::string audioName);
+	void playSfx(std::string audioName, float volume_multiplier = 1.0f);
+	void playSfx(std::string audioName, FMOD::ChannelGroup *&sfxChannelGroup, float volume_multiplier = 1.0f);
 	void restartBackgroundAudio();
+	void stopSfx(FMOD::ChannelGroup*& c);
+	void createChannelGroup(std::string name, FMOD::ChannelGroup*& c);
 private:
 	FMOD::System* system;
 	FMOD::Channel *background, *channel, *sfx;

@@ -79,6 +79,15 @@
     <Filter Include="Source Files\Systems\LevelEditor">
       <UniqueIdentifier>{0e95b224-8fa6-46e2-bf0b-e82889b65950}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scripts\Buttons">
+      <UniqueIdentifier>{3ffbcaed-4797-4390-8ae1-8416fa7bfc92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts\Buttons">
+      <UniqueIdentifier>{7ed0ad6a-2509-473b-afc7-697a76b360e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems\SceneManager">
+      <UniqueIdentifier>{8732e116-ee22-4434-82f5-4cdd86d975fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mat3.cpp">
@@ -243,14 +252,29 @@
     <ClCompile Include="src\Scripts\HorizontalDoor.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Piston_H_Elev.cpp">
+    <ClCompile Include="src\Scripts\Pplate_H_Elev.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Laser.cpp">
+    <ClCompile Include="src\Scripts\Timed_Laser.cpp">
       <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\ButtonBase.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\PauseButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\ResumeButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\RestartButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripts\Box.cpp">
       <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\QuitButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -392,9 +416,6 @@
     <ClInclude Include="include\components\Behaviour.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\SceneManager.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="include\Scripts\Vert_Elevator.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
@@ -431,10 +452,10 @@
     <ClInclude Include="include\Scripts\PowerLiquid.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\Piston_H_Elev.h">
+    <ClInclude Include="include\Scripts\Pplate_H_Elev.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\Laser.h">
+    <ClInclude Include="include\Scripts\Timed_Laser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\components\Particle.h">
@@ -448,6 +469,30 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\HorizontalDoor.h">
       <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Text.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\ButtonBase.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\PauseButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneManager.h">
+      <Filter>Header Files\Systems\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LayerSettings.h">
+      <Filter>Header Files\Systems\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\ResumeButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\RestartButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\QuitButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

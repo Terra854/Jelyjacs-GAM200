@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	Collision.h
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains the declarations of functions that are defined in Collision.cpp
@@ -13,6 +13,7 @@ This file contains the declarations of functions that are defined in Collision.c
 #include "Vec2.h"
 #include "AABB.h"
 #include "components/Body.h"
+#include "components/Transform.h"
 
 
 const int COLLISION_NONE = 0; //0000
@@ -58,4 +59,6 @@ namespace Collision {
 		float dt);
 
 	void Check_Rect_Rect(Rectangular* rect1, Rectangular* rect2);
+
+	bool IsObjectInsideAnotherObject(Transform* obj_t, Rectangular* anotherObj_b);
 }

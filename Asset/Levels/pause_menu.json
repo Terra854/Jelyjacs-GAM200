@@ -1,0 +1,94 @@
+{
+  "Layers" : 
+  [
+    {
+      "Name" : "PauseMenu",
+      "Objects" : 
+      [
+        {
+          "Name" : "Pause_Bg",
+          "Position" : 
+          {
+            "x" : 0.0,
+            "y" : 0.0
+          },
+          "Prefabs" : "Pause_Bg.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 1044.0,
+            "y" : 1175.0
+          },
+          "Type" : "Transform"
+        },
+        {
+          "Name" : "resume_button",
+          "Position" : 
+          {
+            "x" : 21.0,
+            "y" : 271.0
+          },
+          "Prefabs" : "resume_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 128.0,
+            "y" : 64.0
+          },
+          "Type" : "Transform",
+          "index" : 0.0,
+          "scripts" : "ResumeButton"
+        },
+        {
+          "Name" : "restart_button",
+          "Position" : 
+          {
+            "x" : 21.0,
+            "y" : 151.0
+          },
+          "Prefabs" : "restart_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 128.0,
+            "y" : 64.0
+          },
+          "Type" : "Transform",
+          "index" : 0.0,
+          "scripts" : "RestartButton"
+        },
+        {
+          "Name" : "quit_button",
+          "Position" : 
+          {
+            "x" : 8.0,
+            "y" : -248.0
+          },
+          "Prefabs" : "quit_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 128.0,
+            "y" : 64.0
+          },
+          "Type" : "Transform",
+          "index" : 0.0,
+          "scripts" : "QuitButton"
+        }
+      ],
+      "Settings" : 
+      {
+        "isVisible" : true,
+        "static_layer" : true
+      }
+    }
+  ],
+  "SceneName" : "Asset/Levels/pause_menu.json",
+  "Size" : 
+  {
+    "height" : 1080.0,
+    "startX" : -960.0,
+    "startY" : -540.0,
+    "width" : 1920.0
+  }
+}

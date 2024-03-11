@@ -1,15 +1,21 @@
 {
   "background": "Game_Background.wav",
+  "box_landing_from_drop": "Metal_Crate_Landing.wav",
+  "box_moving": "Metal_Crate_Push.wav",
   "button_click": "Button_Click.ogg",
   "cat_teleport": "Cat_Teleport.wav",
   "collect_power_liquid": "Collect_Power_Liquid.wav",
-  "door_activated": "Door_Activated.ogg",
+  "collect_power_liquid_notification": "Collect_Power_Liquid_Notification.wav",
+  "door_activated": "Door_Activated.wav",
   "laser_off": "Laser_Off.ogg",
   "level_complete": "Level_Complete.wav",
   "finn_jumping": [ "Finn_Jump_1.wav", "Finn_Jump_2.wav", "Finn_Jump_3.wav", "Finn_Jump_4.wav", "Finn_Jump_5.wav" ],
+  "finn_landing_from_drop_concrete": [ "Footsteps_Jump-Land_Cocrete_Far-Small_1.wav", "Footsteps_Jump-Land_Cocrete_Far-Small_2.wav", "Footsteps_Jump-Land_Cocrete_Far-Small_3.wav", "Footsteps_Jump-Land_Cocrete_Far-Small_4.wav" ],
+  "finn_landing_from_drop_metal": [ "Footsteps_Metal_Jump-Land_Far-Small_1.wav", "Footsteps_Metal_Jump-Land_Far-Small_2.wav", "Footsteps_Metal_Jump-Land_Far-Small_3.wav", "Footsteps_Metal_Jump-Land_Far-Small_4.wav", "Footsteps_Metal_Jump-Land_Far-Small_5.wav" ],
   "spark_jumping": [ "Spark_Jump_1.wav", "Spark_Jump_2.wav", "Spark_Jump_3.wav", "Spark_Jump_4.wav", "Spark_Jump_5.wav" ],
   "sliding_door_open": "Sliding_Door_Open.wav",
-  "finn_walking": [ "Footsteps_Concrete_far-smal_1.wav", "Footsteps_Concrete_far-smal_2.wav", "Footsteps_Concrete_far-smal_3.wav", "Footsteps_Concrete_far-smal_4.wav", "Footsteps_Concrete_far-smal_5.wav", "Footsteps_Concrete_far-smal_6.wav", "Footsteps_Concrete_far-smal_7.wav", "Footsteps_Concrete_far-smal_8.wav" ],
+  "finn_concrete_walking": [ "Footsteps_Concrete_far-smal_1.wav", "Footsteps_Concrete_far-smal_2.wav", "Footsteps_Concrete_far-smal_3.wav", "Footsteps_Concrete_far-smal_4.wav", "Footsteps_Concrete_far-smal_5.wav", "Footsteps_Concrete_far-smal_6.wav", "Footsteps_Concrete_far-smal_7.wav", "Footsteps_Concrete_far-smal_8.wav" ],
+  "finn_metal_walking": [ "Footsteps_Metal_Far-Small_1.wav", "Footsteps_Metal_Far-Small_2.wav", "Footsteps_Metal_Far-Small_3.wav", "Footsteps_Metal_Far-Small_4.wav", "Footsteps_Metal_Far-Small_5.wav", "Footsteps_Metal_Far-Small_6.wav", "Footsteps_Metal_Far-Small_7.wav", "Footsteps_Metal_Far-Small_8.wav" ],
   "spark_walking": [ "Cat-Footsteps-Concrete_1.wav", "Cat-Footsteps-Concrete_2.wav", "Cat-Footsteps-Concrete_3.wav", "Cat-Footsteps-Concrete_4.wav", "Cat-Footsteps-Concrete_5.wav", "Cat-Footsteps-Concrete_6.wav" ],
   "piston_plate_press": "Piston_Plate_Press.wav"
 }

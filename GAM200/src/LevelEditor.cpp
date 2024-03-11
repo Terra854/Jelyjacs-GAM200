@@ -1,6 +1,6 @@
 /* !
 @file	LevelEditor.cpp
-@author Tan Yee Ann
+@author Tan Yee Ann (t.yeeann@digipen.edu)
 @date	2/11/2023
 
 This file contains the definitions of the functions that are part of the level editor
@@ -20,6 +20,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <components/Event.h>
 #include <SceneManager.h>
 #include "../../src/Assets Manager/asset_manager.h"
+#include <components/Text.h>
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
@@ -30,6 +31,9 @@ ImGuiStyle* style;
 ImFont* font;
 
 char buffer[256];
+
+bool save_as_dialog = false;
+bool new_prefab_dialog = false;
 
 /******************************************************************************
 	Default Constructor for LevelEditor
@@ -134,11 +138,16 @@ static Vec2 edited_position;
 static float edited_rotation;
 static Vec2 edited_scale;
 
+static bool Text_EditMode = false;
+static char edited_text[1024] = "";
+static float edited_font_size;
+
 static bool Body_EditMode = false;
 
 static bool edited_active;
 static bool edited_collision_response;
 static bool edited_pushable;
+static Material edited_material;
 
 static bool AABB_EditMode = false;
 
@@ -196,6 +205,7 @@ void LevelEditor::ObjectProperties() {
 	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
 	Event* e = (Event*)object->GetComponent(ComponentType::Event);
 	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
+	Text* t = (Text*)object->GetComponent(ComponentType::Text);
 
 	ImGui::BeginChild("Texture", ImVec2(128.f, 128.f));
 
@@ -237,17 +247,7 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
 		}
 
-		//Accept drag and drop for game texture
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
-			{
-				const std::pair<std::string, GLuint>* dropped_object = (const std::pair<std::string, GLuint>*)payload->Data;
-				te->textureName = dropped_object->first;
-				UpdateAllObjectInstances(object);
-				ImGui::EndDragDropTarget();
-			}
-		}
+		
 	}
 	else {
 		ImGui::Text("This object has");
@@ -255,6 +255,27 @@ void LevelEditor::ObjectProperties() {
 		ImGui::Text("animations");
 	}
 	ImGui::EndChild();
+
+	//Accept drag and drop for game texture
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
+		{
+			const std::pair<std::string, GLuint>* dropped_object = (const std::pair<std::string, GLuint>*)payload->Data;
+
+			if (te == nullptr) {
+				object->AddComponent(new Texture(dropped_object->first));
+				tr->Scale = { 64.f, 64.f };
+			}
+			else
+				te->textureName = dropped_object->first;
+			
+
+
+			UpdateAllObjectInstances(object);
+			ImGui::EndDragDropTarget();
+		}
+	}
 
 	ImGui::SameLine();
 
@@ -404,6 +425,8 @@ void LevelEditor::ObjectProperties() {
 				}
 			}
 
+			LE_InputFloat("Opacity", &te->opacity);
+
 			if (ImGui::Button("Change Texture"))
 				ImGui::OpenPopup("ChangeTexture");
 
@@ -411,9 +434,9 @@ void LevelEditor::ObjectProperties() {
 			{
 				ImGui::Text("Changes will apply to all instances of %s", object->GetName().c_str());
 				int i = 0;
-				for (const auto& t : AssetManager::textures) {
-					if (ImGui::ImageButton(t.first.c_str(), (void*)(intptr_t)t.second, ImVec2(64, 64))) {
-						te->textureName = t.first;
+				for (const auto& tex : AssetManager::textures) {
+					if (ImGui::ImageButton(tex.first.c_str(), (void*)(intptr_t)tex.second, ImVec2(64, 64))) {
+						te->textureName = tex.first;
 						UpdateAllObjectInstances(object);
 					}
 
@@ -474,7 +497,53 @@ void LevelEditor::ObjectProperties() {
 
 			ImGui::Text("Current Type: %d", a->current_type);
 			ImGui::Text("Frame Number: %d", a->frame_num);
+			LE_InputFloat("Opacity", &a->opacity);
 
+		}
+	}
+
+	// Text
+	if (t != nullptr) {
+		if (ImGui::CollapsingHeader("Text")) {
+			if (Text_EditMode)
+			{
+				// Display input fields
+				LE_InputText("Text#TextInText", edited_text, 1000);
+				LE_InputFloat("Font Size", &edited_font_size);
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done##Text"))
+				{
+					Text_EditMode = false;
+					t->text = edited_text;
+					t->fontSize = edited_font_size;
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel##Text"))
+				{
+					Text_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
+			}
+			else
+			{
+				// Display the values as text
+				ImGui::Text("Text: %s", t->text.c_str());
+				ImGui::Text("Font Size: %.5f", t->fontSize);
+
+				// Button to enter edit mode
+				if (ImGui::Button("Edit##Text"))
+				{
+					Text_EditMode = true;
+					strcpy_s(edited_text, sizeof(edited_text), t->text.c_str());
+					edited_font_size = t->fontSize;
+				}
+			}
 		}
 	}
 
@@ -608,6 +677,9 @@ void LevelEditor::ObjectProperties() {
 					LE_InputFloat("AABB Height", &edited_aabb_height);
 					ImGui::Checkbox("Pushable", &edited_pushable);
 
+					const char* materials[] = { "Concrete", "Metal" };
+					ImGui::Combo("Material", (int*)&edited_material, materials, IM_ARRAYSIZE(materials));
+
 					// Button to exit edit mode
 					if (ImGui::Button("Done##AABB"))
 					{
@@ -615,6 +687,7 @@ void LevelEditor::ObjectProperties() {
 						r->width = edited_aabb_width;
 						r->height = edited_aabb_height;
 						r->pushable = edited_pushable;
+						r->material = edited_material;
 
 						UpdateAllObjectInstances(object);
 					}
@@ -675,6 +748,17 @@ void LevelEditor::ObjectProperties() {
 					ImGui::SameLine();
 					r->pushable ? ImGui::Text("true") : ImGui::Text("false");
 
+					ImGui::Text("Material: ");
+					ImGui::SameLine();
+					switch (r->material) {
+						case Material::Concrete:
+							ImGui::Text("Concrete");
+							break;
+						case Material::Metal:
+							ImGui::Text("Metal");
+							break;
+					}
+
 					// Button to enter edit mode
 					if (ImGui::Button("Edit##AABB"))
 					{
@@ -682,6 +766,7 @@ void LevelEditor::ObjectProperties() {
 						edited_aabb_width = r->width;
 						edited_aabb_height = r->height;
 						edited_pushable = r->pushable;
+						edited_material = r->material;
 					}
 				}
 
@@ -989,6 +1074,11 @@ void LevelEditor::ObjectProperties() {
 				ImGui::Text("Able to push objects: ");
 				ImGui::SameLine();
 				ph->AbleToPushObjects ? ImGui::Text("true") : ImGui::Text("false");
+
+				ImGui::Text("IsBeingPushed: ");
+				ImGui::SameLine();
+				ph->IsBeingPushed ? ImGui::Text("true") : ImGui::Text("false");
+
 				// Button to enter edit mode
 				if (ImGui::Button("Edit##Physics"))
 				{
@@ -1071,8 +1161,27 @@ void LevelEditor::ListOfObjects() {
 	if (ImGui::Button("Create new layer")) {
 		std::string layerName = std::string("Layer " + static_cast<char>(sceneManager->layers.size()));
 		//buffer
-		sprintf_s(buffer, "Layer %d", sceneManager->layers.size());
-		objectFactory->CreateLayer(std::string(buffer), true);
+		sprintf_s(buffer, "Layer %d", static_cast<int>(sceneManager->layers.size()));
+		objectFactory->CreateLayer(std::string(buffer), true, true);
+	}
+	if (ImGui::Button("Create empty object")) {
+		ImGui::OpenPopup("CreateEmptyObject");
+
+	}
+
+	if (ImGui::BeginPopup("CreateEmptyObject"))
+	{
+		ImGui::Text("Select layer to insert the new object to:");
+		for (auto& l : SceneManager::layers) {
+			if (ImGui::Selectable(l.first.c_str())) {
+				Object* o = objectFactory->createEmptyObject();
+				selectedNum = o->GetId();
+				cloneSuccessful = selectedNum;
+				l.second.second.push_back(o);
+			}
+		}
+
+		ImGui::EndPopup();
 	}
 	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());
 	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
@@ -1082,9 +1191,14 @@ void LevelEditor::ListOfObjects() {
 			ImGui::TableNextColumn();
 			char buf[512];
 			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());
-			ImGui::Checkbox(buf, &l.second.first);
+			ImGui::Checkbox(buf, &l.second.first.isVisible);
 			ImGui::SameLine();
-			sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
+
+			if (l.second.first.isInherited)
+				sprintf_s(buf, "%s (inherited from %s)##%s_%s", l.first.c_str(), l.second.first.inheritedJsonName.c_str(), engine->loaded_level.c_str(), l.first.c_str());
+			else
+				sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
+			
 			if (ImGui::TreeNode(buf)) {
 				// For all objects in the layer
 				for (auto& object : l.second.second) {
@@ -1254,9 +1368,20 @@ void LevelEditor::AssetList()
 	}
 	if (ImGui::BeginTabItem("Prefabs"))
 	{
+		if (ImGui::Button("Create Prefab")) {
+			new_prefab_dialog = true;
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Save Prefabs")) {
+			for (auto& prefab : AssetManager::prefabs)
+				objectFactory->saveObject(prefab.first, prefab.second);
+		}
+
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-		//int i = 0;
+		
 		for (const std::pair<std::string, Object*>& p : AssetManager::prefabs)
 		{
 			//i--;
@@ -1384,7 +1509,7 @@ void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
 	// Make the buttons unclickable if Finn or Spark are not inside 
-	ImGui::BeginDisabled(objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr);
+	//ImGui::BeginDisabled(objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr);
 
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
@@ -1401,7 +1526,7 @@ void LevelEditor::PlayPauseGame() {
 			SceneManager::PauseScene();
 	}
 
-	ImGui::EndDisabled();
+	//ImGui::EndDisabled();
 
 	ImGui::SameLine();
 
@@ -1578,8 +1703,6 @@ void ObjectClonedSuccessfully(int i) {
 	}
 }
 
-bool save_as_dialog = false;
-
 /******************************************************************************
 	SaveAsDialog
 	- This pop up a dialog box to ask where to save the level to
@@ -1634,6 +1757,43 @@ void LevelEditor::SaveAsDialog() {
 }
 
 /******************************************************************************
+	NewPrefabDialog
+	- This pop up a dialog box to ask the name of the new prefab
+*******************************************************************************/
+void LevelEditor::NewPrefabDialog() {
+	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f - 150, (float)window->height / 2.f));
+	ImGui::SetNextWindowSize(ImVec2(300, 0));
+	static char text[100];
+
+	if (new_prefab_dialog)
+		ImGui::OpenPopup("New Prefab");
+
+	if (ImGui::BeginPopupModal("New Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		ImGui::Text("Name of this new prefab:");
+		LE_InputText("##NewPrefabName", text, 100);
+
+		if (ImGui::Button("OK"))
+		{
+			Object* prefab = objectFactory->createEmptyPrefab();
+			prefab->SetName(text);
+			AssetManager::prefabs.emplace(text + std::string(".json"), prefab);
+			new_prefab_dialog = false;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel"))
+		{
+			new_prefab_dialog = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+}
+
+/******************************************************************************
 	UpdateAllObjectInstances
 	- This function will update all instances of the given object
 
@@ -1641,6 +1801,10 @@ void LevelEditor::SaveAsDialog() {
 					same name (including prefabs) will be updated
 *******************************************************************************/
 void LevelEditor::UpdateAllObjectInstances(Object* object) {
+
+	// Make sure the object is from a prefab
+	if (object->GetPrefab() == nullptr)
+		return;
 
 	// Do not copy Transform
 	Texture* te = (Texture*)object->GetComponent(ComponentType::Texture);
@@ -1738,6 +1902,20 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 			}
 		}
 	}
+}
+
+void LevelEditor::PhysicsDebugControl() {
+	ImGui::Begin("Physics System Control");
+
+	if (ImGui::Button("Next DT")) {
+		if (initialObjectMap.empty()) {
+			SceneManager::PlayScene();
+			SceneManager::PauseScene();
+		}
+		physics->num_of_steps++;
+	}
+
+	ImGui::End();
 }
 
 /******************************************************************************
@@ -1866,6 +2044,8 @@ void LevelEditor::Initialize() {
 	font = io.Fonts->AddFontFromFileTTF("Asset/Fonts/Roboto-Regular.ttf", 15);
 
 	io.Fonts->Build();
+
+	objectFactory->CreateLayer("Layer 0", true, true);
 }
 
 /******************************************************************************
@@ -1965,6 +2145,8 @@ void LevelEditor::Update() {
 
 	CameraControl();
 
+	PhysicsDebugControl();
+
 	LoadLevelPanel();
 
 	if (cloneSuccessful > -1) {
@@ -1972,6 +2154,7 @@ void LevelEditor::Update() {
 	}
 
 	save_as_dialog ? SaveAsDialog() : DoNothing();
+	new_prefab_dialog ? NewPrefabDialog() : DoNothing();
 
 	ImGui::PopFont();
 

@@ -29,6 +29,7 @@ ImVec2 convertMouseToGameViewportPos(ImVec2 displaySize);
 
 //Used to check if a game object has been clicked on in the game scene
 bool isObjectClicked(Transform* trans, ImVec2 mousePos);
+bool isObjectClicked(Transform* trans, Vec2 mousePos);
 
 //Calculates and return the angle between 2 Vec2 in degrees
-double calculateAngle(const Vec2& a, const Vec2& b);
+float calculateAngle(const Vec2& a, const Vec2& b);

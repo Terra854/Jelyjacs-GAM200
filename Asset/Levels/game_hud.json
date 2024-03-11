@@ -1,0 +1,36 @@
+{
+  "SceneName": "menu_test",
+  "Size": {
+    "startX": -960.0,
+    "startY": -540.0,
+    "width": 1920.0,
+    "height": 1080.0
+  },
+  "Layers": [
+    {
+      "Name": "GameMenu",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": true
+      },
+      "Objects": [
+        {
+          "Prefabs": "zoom_button.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 800.0,
+            "y": 400.0
+          }
+        },
+        {
+          "Prefabs": "pause_button.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 800.0,
+            "y": 250.0
+          }
+        }
+      ]
+    }
+  ]
+}

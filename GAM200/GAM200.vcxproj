@@ -92,9 +92,8 @@ copy "$(SolutionDir)lib\fmod\lib\fmodL.dll" "$(TargetDir)fmodL.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
 
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
-xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
 xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
-xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,9 +123,8 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
 
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
-xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
 xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
-xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Installer|x64'">
@@ -156,15 +154,17 @@ copy "$(SolutionDir)lib\fmod\lib\fmod.dll" "$(TargetDir)fmod.dll" /Y
 copy "$(SolutionDir)\lib\freetype\freetype.dll" "$(TargetDir)freetype.dll" /Y
 
 xcopy "$(SolutionDir)Asset" "$(TargetDir)Asset" /E/H/C/I/Y
-xcopy "$(SolutionDir)meshes" "$(TargetDir)meshes" /E/H/C/I/Y
 xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
-xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
     <ClInclude Include="include\components\Particle.h" />
+    <ClInclude Include="include\components\Text.h" />
+    <ClInclude Include="include\LayerSettings.h" />
     <ClInclude Include="include\Scripts\Box.h" />
+    <ClInclude Include="include\Scripts\ButtonBase.h" />
     <ClInclude Include="include\Scripts\Door.h" />
     <ClInclude Include="include\Scripts\HorizontalDoor.h" />
     <ClInclude Include="include\Scripts\Hori_Elevator.h" />
@@ -237,23 +237,29 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Scenes.cpp" />
     <ClCompile Include="src\Scripts\Box.cpp" />
+    <ClCompile Include="src\Scripts\ButtonBase.cpp" />
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
     <ClCompile Include="src\Scripts\Door.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
     <ClCompile Include="src\Scripts\Finn.cpp" />
     <ClCompile Include="src\Scripts\HorizontalDoor.cpp" />
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
-    <ClCompile Include="src\Scripts\Laser.cpp" />
+    <ClCompile Include="src\Scripts\QuitButton.cpp" />
+    <ClCompile Include="src\Scripts\RestartButton.cpp" />
+    <ClCompile Include="src\Scripts\ResumeButton.cpp" />
+    <ClCompile Include="src\Scripts\Timed_Laser.cpp" />
     <ClCompile Include="src\Scripts\LaserDoor.cpp" />
+    <ClCompile Include="src\Scripts\PauseButton.cpp" />
     <ClCompile Include="src\Scripts\Piston.cpp" />
-    <ClCompile Include="src\Scripts\Piston_H_Elev.cpp" />
+    <ClCompile Include="src\Scripts\Pplate_H_Elev.cpp" />
     <ClCompile Include="src\Scripts\PowerLiquid.cpp" />
     <ClCompile Include="src\Scripts\PressurePlate.cpp" />
     <ClCompile Include="src\Scripts\Spark.cpp" />
     <ClCompile Include="src\Scripts\Vert_Elevator.cpp" />
     <ClCompile Include="src\ThreadPool.cpp" />
     <ClCompile Include="src\Utils.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Installer|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Vec2.cpp" />
@@ -303,10 +309,14 @@ xcopy "$(SolutionDir)shaders" "$(TargetDir)shaders" /E/H/C/I/Y</Command>
     <ClInclude Include="include\Scripts\CatPortal.h" />
     <ClInclude Include="include\Scripts\Endpoint.h" />
     <ClInclude Include="include\Scripts\Finn.h" />
-    <ClInclude Include="include\Scripts\Laser.h" />
+    <ClInclude Include="include\Scripts\QuitButton.h" />
+    <ClInclude Include="include\Scripts\RestartButton.h" />
+    <ClInclude Include="include\Scripts\ResumeButton.h" />
+    <ClInclude Include="include\Scripts\Timed_Laser.h" />
     <ClInclude Include="include\Scripts\LaserDoor.h" />
+    <ClInclude Include="include\Scripts\PauseButton.h" />
     <ClInclude Include="include\Scripts\Piston.h" />
-    <ClInclude Include="include\Scripts\Piston_H_Elev.h" />
+    <ClInclude Include="include\Scripts\Pplate_H_Elev.h" />
     <ClInclude Include="include\Scripts\PowerLiquid.h" />
     <ClInclude Include="include\Scripts\PressurePlate.h" />
     <ClInclude Include="include\Scripts\Spark.h" />

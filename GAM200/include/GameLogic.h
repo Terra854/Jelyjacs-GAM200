@@ -72,6 +72,9 @@ public:
 	// Static pointer to the player object, accessible globally.
 	static Object* playerObj;
 
+	// static bool to check if the game is restarting
+	static bool restarting;
+
 	// Map of behaviors to be added to objects on creation.
 	std::unordered_map<std::string, LogicScript*> behaviours; 
 
@@ -103,6 +106,9 @@ public:
 	virtual void Start(Object* obj) = 0;
 	virtual void Update(Object* obj) = 0;
 	virtual void Shutdown(Object* obj) = 0;
+
+	//Marks the script to be executed on pause
+	bool executeOnPause = false;
 private:
 	// Static map to hold temporary script mappings.
 	static std::map<std::string, LogicScript*> temp_scriptmap;

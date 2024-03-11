@@ -14,6 +14,7 @@ This file contains the script for Finn, the player character (Human)
 #include <Audio.h>
 
 float finn_move_time = 0.f;
+bool InTheAir = true;
 
 Finn::Finn(std::string name) : LogicScript(name)
 {
@@ -60,14 +61,25 @@ void Finn::Update(Object* obj) {
 		if (input::IsPressed(KEY::w)) {
 			MovementKey msg(up);
 			engine->Broadcast(&msg);
-			//if (static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 			if (player_physics->Velocity.y == 0.0f) {
-				//player_physics->Velocity.y = 1000.0f;
-				player_physics->Force = 75000.f;
-				//audio->playJump();
+				player_physics->Force = 85000.f;
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 				audio->playSfx("finn_jumping");
 
+			}
+		}
+		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
+			if (player_body->bottom_collision) {
+				Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
+
+				switch (collided_material) {
+				case Material::Concrete:
+					audio->playSfx("finn_concrete_walking", 0.5f);
+					break;
+				case Material::Metal:
+					audio->playSfx("finn_metal_walking", 0.5f);
+					break;
+				}
 			}
 		}
 		if (input::IsPressedRepeatedly(KEY::a)) {
@@ -109,11 +121,35 @@ void Finn::Update(Object* obj) {
 			finn_move_time += engine->GetDt();
 
 			if ((player_animation->current_type == AnimationType::Push_left || player_animation->current_type == AnimationType::Push) && finn_move_time > 1.f) {
-				audio->playSfx("finn_walking");
+
+				//Material collided_material = static_cast<Rectangular*>(player_animation->face_right ? player_body->right_collision->GetComponent(ComponentType::Body) : player_body->left_collision->GetComponent(ComponentType::Body))->material;
+				Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
+
+				switch (collided_material) {
+					case Material::Concrete:
+						audio->playSfx("finn_concrete_walking", 0.5f);
+						break;
+					case Material::Metal:
+						audio->playSfx("finn_metal_walking", 0.5f);
+						break;
+				}
+				//audio->playSfx("finn_concrete_walking");
 				finn_move_time -= 1.f;
 			}
 			else if (!(player_animation->current_type == AnimationType::Push_left || player_animation->current_type == AnimationType::Push) && finn_move_time > 0.4f) {
-				audio->playSfx("finn_walking");
+				Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
+
+				switch (collided_material) {
+					case Material::Concrete:
+						audio->playSfx("finn_concrete_walking", 0.5f);
+						break;
+					case Material::Metal:
+						audio->playSfx("finn_metal_walking", 0.5f);
+						break;
+					default:
+						//audio->playSfx("finn_concrete_walking");
+						break;
+				}
 				finn_move_time -= 0.4f;
 			}
 		}
@@ -121,6 +157,26 @@ void Finn::Update(Object* obj) {
 			//audio->stopWalking();
 			finn_move_time = 0.f;
 			moving = false;
+		}
+
+		if (player_body->bottom_collision && InTheAir) {
+			Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
+
+			switch (collided_material) {
+			case Material::Concrete:
+				audio->playSfx("finn_landing_from_drop_concrete");
+				break;
+			case Material::Metal:
+				audio->playSfx("finn_landing_from_drop_metal");
+				break;
+			}
+			InTheAir = false;
+		}
+		else if (player_body->bottom_collision) {
+			InTheAir = false;
+		}
+		else {
+			InTheAir = true;
 		}
 	}
 

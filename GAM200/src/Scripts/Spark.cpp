@@ -108,14 +108,14 @@ void Spark::Update(Object* obj) {
 		if (input::IsPressed(KEY::w)) {
 			MovementKey msg(up);
 			engine->Broadcast(&msg);
-			//if (static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body))->collision_flag & COLLISION_BOTTOM) {
 			if (player_physics->Velocity.y == 0.0f) {
-				//player_physics->Velocity.y = 1000.0f;
-				player_physics->Force = 75000.f;
-				//audio->playJump();
+				player_physics->Force = 85000.f;
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 				audio->playSfx("spark_jumping");
 			}
+		}
+		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
+			audio->playSfx("spark_walking");
 		}
 		if (input::IsPressedRepeatedly(KEY::a)) {
 			MovementKey msg(left);

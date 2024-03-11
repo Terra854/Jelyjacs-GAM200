@@ -9,6 +9,10 @@
   "Layers": [
     {
       "Name": "Background",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
       "Objects": [
         {
           "Prefabs": "tutorial_background.json"
@@ -17,6 +21,10 @@
     },
     {
       "Name": "Level",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
       "Objects": [
         {
           "Prefabs": "MainDoor.json",
@@ -787,7 +795,7 @@
           }
         },
         {
-          "Prefabs": "piston.json",
+          "Prefabs": "PistonCyan.json",
           "Type": "Transform",
           "Position": {
             "x": -298.0,
@@ -796,7 +804,7 @@
           "linkedevent": 1
         },
         {
-          "Prefabs": "piston.json",
+          "Prefabs": "PressurePlateDarkBlue.json",
           "Type": "Transform",
           "Position": {
             "x": -20.0,
@@ -805,22 +813,30 @@
           "linkedevent": 2
         },
         {
-          "Prefabs": "door.json",
+          "Prefabs": "DoorCyan.json",
           "Type": "Transform",
           "Position": {
             "x": -232.0,
-            "y": -101.0
+            "y": -87.0
           },
           "linkedevent": 1
         },
         {
-          "Prefabs": "door.json",
+          "Prefabs": "DoorDarkBlue.json",
           "Type": "Transform",
           "Position": {
-            "x": -325.0,
-            "y": 218.0
+            "x": -327.0,
+            "y": 231.0
           },
           "linkedevent": 2
+        },
+        {
+          "Prefabs": "CatPowerLiquid.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 493.0,
+            "y": 180.0
+          }
         }
       ]
     }

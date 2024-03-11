@@ -63,7 +63,7 @@ void Application::Init() {
 	engine = new CoreEngine();
 	window = new GLWindow();
 	Factory* factory = new Factory();
-	PhysicsSystem* physics = new PhysicsSystem();
+	physics = new PhysicsSystem();
 	AssetManager* assetmanager = new AssetManager();
 	sceneManager = new SceneManager();
 	audio = new Audio(); // declared in Audio.h

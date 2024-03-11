@@ -1,6 +1,6 @@
 /* !
 @file	SceneManager.cpp
-@author Tan Yee Ann
+@author Tan Yee Ann (t.yeeann@digipen.edu)
 @date	26/11/2023
 
 This file contains the definitions of the functions that manages the game scene
@@ -16,8 +16,10 @@ This file contains the definitions of the functions that manages the game scene
 
 SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
-std::vector<std::pair<std::string, std::pair<bool, std::vector<Object*>>>> SceneManager::layers;
-std::multimap<std::string, int> SceneManager::initialLayer;
+std::vector<std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>> SceneManager::layers;
+std::vector<std::pair<std::string, std::vector<int>>> SceneManager::initialLayer;
+std::map<std::string, LayerSettings> SceneManager::initialLayerSettings;
+std::vector<std::string> SceneManager::AdditionalScenesLoadedConcurrently;
 
 /******************************************************************************
 	Destructor for SceneManager
@@ -45,8 +47,8 @@ void SceneManager::LoadScene(const std::string filepath) {
 *******************************************************************************/
 void SceneManager::PlayScene() {
 	// Do not play scene if Finn or Spark isn't inside the level
-	if (objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr)
-		return;
+	//if (objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr)
+	//	return;
 
 	if (engine->isPaused()) {
 		if (initialObjectMap.empty()) {
@@ -55,9 +57,15 @@ void SceneManager::PlayScene() {
 			}
 
 			for (auto& l : SceneManager::layers) {
+				initialLayerSettings[l.first] = l.second.first;
+
+				auto la = std::make_pair(l.first, std::vector<int>());
+
 				for (auto& object : l.second.second) {
-					initialLayer.insert(std::make_pair(l.first, object->GetId()));
+					la.second.push_back(object->GetId());
 				}
+
+				initialLayer.push_back(la);
 			}
 		}
 		engine->setPause();
@@ -97,19 +105,31 @@ void SceneManager::RestartScene() {
 	// Clear the layers, all the object pointers are invalid
 	layers.clear();
 
-	// Loop through the initialLayer multimap to refill the layers
+	// Loop through the initialLayer vector to refill the layers
 	for (auto& p : initialLayer) {
+		/*
 		int layerNum = objectFactory->GetLayerNum(p.first);
 
 		if (layerNum == -1) {
-			layerNum = objectFactory->CreateLayer(p.first, true);
+			layerNum = objectFactory->CreateLayer(p.first, initialLayerSettings.front());
+			initialLayerSettings.pop();
 		}
 
-		objectFactory->AddToLayer(layerNum, objectFactory->getObjectWithID(p.second));
+		for (auto& objID : p.second)
+			objectFactory->AddToLayer(layerNum, objectFactory->getObjectWithID(objID));
+			*/
+
+		layers.push_back(std::make_pair(p.first, std::pair<LayerSettings, std::vector<Object*>>(initialLayerSettings[p.first], std::vector<Object*>())));
+
+		for (auto& objID : p.second) {
+			layers.back().second.second.push_back(objectFactory->getObjectWithID(objID));
+		}
+
 	}
 
 	// The data inside initialLayer is not needed anymore now that the reset is complete
 	initialLayer.clear();
+	initialLayerSettings.clear();
 }
 
 /******************************************************************************
@@ -133,6 +153,11 @@ void SceneManager::ClearInitialObjectMap(bool deleteObjects) {
 	initialObjectMap.clear();
 }
 
+void SceneManager::UnloadScene() {
+	objectFactory->destroyAllObjects();
+	SceneManager::ClearInitialObjectMap(true);
+	SceneManager::layers.clear();
+}
 
 void SceneManager::PlayCutScene(std::string str)
 {
@@ -161,9 +186,10 @@ void SceneManager::PlayCutScene(std::string str)
 		SetFont(FONT::AldrichRegular);
 
 		float textscale{};
-		textscale = (3 / 4.0 * window->width) / window->width;
+		textscale = static_cast<float>((3 / 4.0 * window->width) / window->width);
 
 		DrawText(frametext, -static_cast<float>(find_width(frametext, FONT::AldrichRegular)) / 2 * textscale, -static_cast<float>(window->height / 8) * 3, textscale);
+		DrawText("click anywhere to continue", -250, -500, 0.7f);
 		glfwSwapBuffers(window->ptr_window);
 
 		while (timer < 5.0) {

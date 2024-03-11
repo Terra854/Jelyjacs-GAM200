@@ -195,7 +195,7 @@ void CoreEngine::GameLoop()
 		auto m_BeginFrame = std::chrono::system_clock::now();
 
 #if defined(DEBUG) | defined(_DEBUG)	
-		hud.NewGuiFrame(0);
+		hud.NewGuiFrame(1);
 
 		// Toggle Button to Display Debug Information in IMGui
 		//if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
@@ -277,12 +277,12 @@ void CoreEngine::GameLoop()
 			// Calculate the mouse position relative to the game world
 			ImVec2 clickPos = ImGui::GetMousePos();
 			ImVec2 relativePos(clickPos.x - viewport_min.x, clickPos.y - viewport_min.y);
-			ImVec2 displayPos(relativePos.x / viewportDisplaySize.x * 1920, 1080 - (relativePos.y / viewportDisplaySize.y * 1080)); // Hardcoded to 1920x1080 as other resolutions bugged for now
-			ImVec2 openGlDisplayCoord((displayPos.x - (1920 / 2)) / camera2D->scale.x, (displayPos.y - (1080 / 2)) / camera2D->scale.y);
+			ImVec2 displayPos(relativePos.x / viewportDisplaySize.x * (float)window->width, (float)window->height - (relativePos.y / viewportDisplaySize.y * (float)window->height));
+			ImVec2 openGlDisplayCoord((displayPos.x - ((float)window->width / 2.f)) / camera2D->scale.x, (displayPos.y - ((float)window->height / 2.f)) / camera2D->scale.y);
 
 			// Camera is stationary, it's the scene that is moving, so inverse pos
 			// Also, need to divide camera coord by 2 
-			ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * 1920.f / 2.f)), (openGlDisplayCoord.y - (camera2D->position.y * 1080.f / 2.f)));
+			ImVec2 gameWorldPos((openGlDisplayCoord.x - (camera2D->position.x * (float)window->width / 2.f)), (openGlDisplayCoord.y - (camera2D->position.y * (float)window->height / 2.f)));
 
 			//Accept drag and drop of game prefabs into the game scene
 			if (ImGui::BeginDragDropTarget())
@@ -294,7 +294,10 @@ void CoreEngine::GameLoop()
 					const std::pair<std::string, Object*>* object = (const std::pair<std::string, Object*>*)payload->Data;
 
 					Object* createdObj = objectFactory->cloneObject(object->second);
+					createdObj->SetPrefab(object->second);
+
 					objectFactory->assignIdToObject(createdObj);
+					objectFactory->AddToLayer(static_cast<int>(sceneManager->layers.size() - 1), createdObj);
 					Transform* objTransform = (Transform*)createdObj->GetComponent(ComponentType::Transform);
 					Body* objBody = (Body*)createdObj->GetComponent(ComponentType::Body);
 
@@ -312,9 +315,11 @@ void CoreEngine::GameLoop()
 					level_editor->selected = true;
 					level_editor->selectedNum = (int)createdObj->GetId();
 					selectedObjectID = static_cast<long>(createdObj->GetId());
-					DraggingPrefabIntoViewport = false;
 				}
 				ImGui::EndDragDropTarget();
+			}
+			else {
+				DraggingPrefabIntoViewport = false;
 			}
 
 			static Transform XGizmo, YGizmo;
@@ -417,7 +422,7 @@ void CoreEngine::GameLoop()
 				std::cout << "Translated ClickPos (in terms of opengl display) " << displayPos.x << ", " << displayPos.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of opengl display coord) " << openGlDisplayCoord.x << ", " << openGlDisplayCoord.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of game world) " << gameWorldPos.x << ", " << gameWorldPos.y << std::endl;
-
+				/*
 				for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
 				{
 					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
@@ -428,6 +433,21 @@ void CoreEngine::GameLoop()
 						level_editor->selected = true;
 						level_editor->selectedNum = (int)i;
 						selectedObjectID = static_cast<long>(i);
+					}
+				}*/
+
+				for (auto& l : SceneManager::layers) {
+					if (l.second.first.isVisible) {
+						for (auto& object : l.second.second) {
+							Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+
+							if (isObjectClicked(objTransform, gameWorldPos))
+							{
+								level_editor->selected = true;
+								level_editor->selectedNum = (int)object->GetId();
+								selectedObjectID = object->GetId();
+							}
+						}
 					}
 				}
 			}
@@ -472,17 +492,17 @@ void CoreEngine::GameLoop()
 
 				// Calculate location of the window
 				Vec2 vecnum1(
-					(selectObjTransform->Position.x + (camera2D->position.x * 1920.f / 2.f)),
-					(selectObjTransform->Position.y - (selectObjTransform->Scale.y / 2.f) + (camera2D->position.y * 1080.f / 2.f))
+					(selectObjTransform->Position.x + (camera2D->position.x * (float)window->width / 2.f)),
+					(selectObjTransform->Position.y - (selectObjTransform->Scale.y / 2.f) + (camera2D->position.y * (float)window->height / 2.f))
 				);
 				Vec2 vecnum2(
-					(vecnum1.x* camera2D->scale.x) + (1920 / 2),
-					(vecnum1.y* camera2D->scale.y) + (1080 / 2)
+					(vecnum1.x* camera2D->scale.x) + ((float)window->width / 2),
+					(vecnum1.y* camera2D->scale.y) + ((float)window->height / 2)
 				);
 
 				Vec2 vecnum3(
-					vecnum2.x / 1920 * viewportDisplaySize.x,
-					(1080 - vecnum2.y) / 1080 * viewportDisplaySize.y
+					vecnum2.x / (float)window->width * viewportDisplaySize.x,
+					((float)window->height - vecnum2.y) / (float)window->height * viewportDisplaySize.y
 				);
 
 				Vec2 vecnum4(
@@ -608,8 +628,8 @@ void CoreEngine::GameLoop()
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
 
 			Update(Systems["Graphics"]);
-			gamehud.Update();
-			gamehud.Draw();
+			//gamehud.Update();
+			//gamehud.Draw();
 			Update(Systems["Window"]);
 			hud.GuiRender();
 		}

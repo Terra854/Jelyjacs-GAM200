@@ -1,6 +1,6 @@
 /* !
 @file	Audio.cpp
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains the definitions of the functions that are part of the Audio system
@@ -48,7 +48,7 @@ void Audio::Initialize(){
 
 /******************************************************************************
 setupSound
--	This function loads the sound mappings and sets the background and walking sounds
+-	This function loads the sound mappings and sets the background sound
 *******************************************************************************/
 void Audio::setupSound()
 {
@@ -112,23 +112,37 @@ void Audio::Update(){
 
 /******************************************************************************
 playSfx
--	This function tells Fmod to play the given sfx type
+-	This function tells Fmod to play the given sfx name
 
-@param a - The sfx type to play
+@param a - The sfx name to play
+@param sfxChannel - The sfx channel group to play the sfx on. Will use the default sfx channel if left empty
 *******************************************************************************/
-void Audio::playSfx(std::string audioType) {
-    system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
-    sfx->setVolume(0.2f);
+void Audio::playSfx(std::string audioType, float volume_multiplier) {
+	system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
+	sfx->setVolume(0.2f * volume_multiplier);
+}
+
+void Audio::playSfx(std::string audioType, FMOD::ChannelGroup *&sfxChannelGroup, float volume_multiplier) {
+	system->playSound(AssetManager::getsoundbyaudiotype(audioType), sfxChannelGroup, false, &channel);
+	channel->setVolume(0.2f * volume_multiplier);
 }
 
 /******************************************************************************
 restartBackgroundAudio
 -	This function restarts the background the audio from the beginning
 -	To be called if you are changing or restarting a scene or if the sound
-	linked to AudioType::Background changes
+	linked to background changes
 *******************************************************************************/
 void Audio::restartBackgroundAudio() {
 	background->stop();
 	system->playSound(AssetManager::getsoundbyaudiotype("background"), 0, true, &background);
 	background->setVolume(0.2f);
+}
+
+void Audio::stopSfx(FMOD::ChannelGroup* &c) {
+	c->stop();
+}
+
+void Audio::createChannelGroup(std::string name, FMOD::ChannelGroup* &c) {
+	system->createChannelGroup(name.c_str(), &c);
 }

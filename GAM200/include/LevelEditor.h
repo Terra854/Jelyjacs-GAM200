@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	LevelEditor.h
-@author Tan Yee Ann
+@author Tan Yee Ann (t.yeeann@digipen.edu)
 @date	2/11/2023
 
 This file contains the declarations for the LevelEditor system class
@@ -36,7 +36,11 @@ public:
 
 	void SaveAsDialog();
 
+	void NewPrefabDialog();
+
 	void UpdateAllObjectInstances(Object* object);
+
+	void PhysicsDebugControl();
 
 	virtual void Initialize();
 	void Update();

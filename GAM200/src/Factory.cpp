@@ -26,11 +26,13 @@ ID aand is stored as part of a private map
 #include "components/Animation.h"
 #include "components/Event.h"
 #include "components/Particle.h"
+#include "components/Text.h"
 #include "Assets Manager/asset_manager.h"
 #include "Object.h"
 #include <components/Behaviour.h>
 #include "GameLogic.h"
 #include <SceneManager.h>
+#include <LevelEditor.h>
 
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
@@ -58,6 +60,8 @@ Factory::Factory()
 	AddComponentCreator("Event", new ComponentCreator<Event>());
 	AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
 	AddComponentCreator("Particles", new ComponentCreator<ParticleSystem>());
+	AddComponentCreator("Animation", new ComponentCreator<Animation>());
+	AddComponentCreator("Text", new ComponentCreator<Text>());
 
 	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
 	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
@@ -102,8 +106,8 @@ Object* Factory::createObject(const std::string& filename)
 			jsonloop.readFloat(trans->Position.x, "Properties", "Position", "x");
 			jsonloop.readFloat(trans->Position.y, "Properties", "Position", "y");
 
-			jsonloop.readFloat(trans->Scale.x, "Properties", "Scale_x");
-			jsonloop.readFloat(trans->Scale.y, "Properties", "Scale_y");
+			jsonloop.readFloat(trans->Scale.x, "Properties", "Scale", "x");
+			jsonloop.readFloat(trans->Scale.y, "Properties", "Scale", "y");
 			jsonloop.readFloat(trans->Rotation, "Properties", "Rotation");
 
 			obj->AddComponent(trans);
@@ -119,8 +123,11 @@ Object* Factory::createObject(const std::string& filename)
 				// Attempt to add the texture
 				AssetManager::addtextures(path);
 			}
-				Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(path);
-				obj->AddComponent(tex);
+			
+			Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(path);
+			
+			jsonloop.readFloat(tex->opacity, "Properties", "opacity");
+			obj->AddComponent(tex);
 						
 		}
 		else if (type == "Body") {
@@ -138,6 +145,10 @@ Object* Factory::createObject(const std::string& filename)
 				jsonloop.readFloat(r->width, "Properties", "width");
 				jsonloop.readFloat(r->height, "Properties", "height");
 				jsonloop.readBool(r->pushable, "Properties", "pushable");
+
+				int material = 0;
+				jsonloop.readInt(material, "Properties", "material");
+				r->material = static_cast<Material>(material);
 
 				obj->AddComponent(r);
 			}
@@ -215,6 +226,8 @@ Object* Factory::createObject(const std::string& filename)
 
 			if (jsonloop.isMember("jumpfixframe", "Properties"))
 				jsonloop.readInt(a->jump_fixed_frame, "Properties", "jumpfixframe");
+
+			jsonloop.readFloat(a->opacity, "Properties", "opacity");
 
 			float col;
 			float row;
@@ -344,6 +357,16 @@ Object* Factory::createObject(const std::string& filename)
 
 			obj->AddComponent(p);
 		}
+		else if (type == "Text")
+		{
+			Text* t = (Text*)((ComponentCreator<Text>*) componentMap["Text"])->Create();
+			jsonloop.readString(t->text, "Properties", "text");
+
+			if (jsonloop.isMember("fontSize", "Properties"))
+				jsonloop.readFloat(t->fontSize, "Properties", "fontSize");
+
+			obj->AddComponent(t);
+		}
 	}
 
 	// Run the initialization routines for each component (if there is any)
@@ -352,6 +375,168 @@ Object* Factory::createObject(const std::string& filename)
 	// Clean up
 	jsonobj.closeFile();
 	return obj;
+}
+
+void Factory::saveObject(std::string filename, Object* obj) {
+
+	Json::Value jsonobj;
+
+	Transform* tr = (Transform*)obj->GetComponent(ComponentType::Transform);
+	Texture* te = (Texture*)obj->GetComponent(ComponentType::Texture);
+	Body* bo = (Body*)obj->GetComponent(ComponentType::Body);
+	Physics* ph = (Physics*)obj->GetComponent(ComponentType::Physics);
+	PlayerControllable* pc = (PlayerControllable*)obj->GetComponent(ComponentType::PlayerControllable);
+	Animation* a = (Animation*)obj->GetComponent(ComponentType::Animation);
+	Event* e = (Event*)obj->GetComponent(ComponentType::Event);
+	Behaviour* be = (Behaviour*)obj->GetComponent(ComponentType::Behaviour);
+	Text* t = (Text*)obj->GetComponent(ComponentType::Text);
+
+	jsonobj["Name"] = obj->name;
+
+	// Transform
+	if (tr != nullptr) {
+		Json::Value transform;
+		transform["Type"] = "Transform";
+		transform["Properties"]["Position"]["x"] = tr->Position.x;
+		transform["Properties"]["Position"]["y"] = tr->Position.y;
+		transform["Properties"]["Scale"]["x"] = tr->Scale.x;
+		transform["Properties"]["Scale"]["y"] = tr->Scale.y;
+		transform["Properties"]["Rotation"] = tr->Rotation;
+		jsonobj["Components"].append(transform);
+	}
+
+	// Texture
+	if (te != nullptr){
+		Json::Value texture;
+		texture["Type"] = "Texture";
+		texture["Properties"]["texturepath"] = te->textureName;
+		texture["Properties"]["opacity"] = te->opacity;
+		jsonobj["Components"].append(texture);
+	
+	}
+
+	// Animation 
+	if (a != nullptr) {
+		Json::Value animation;
+		animation["Type"] = "Animation";
+		
+		// TODO: It's incomplete
+
+		for (const auto& pair : AssetManager::animations) {
+			if (pair.second == a->animation_tex_obj) {
+				animation["Properties"]["texturepath"] = pair.first;
+				break; // Stop searching after the first match is found
+			}
+		}
+
+		animation["Properties"]["jumpfixframe"] = a->jump_fixed_frame;
+		animation["Properties"]["framerate"] = a->frame_rate;
+		//animation["Properties"]["frame"] =
+		//animation["Properties"]["idle"] =
+		//animation["Properties"]["push"] =
+		//animation["Properties"]["jump"] =
+		//animation["Properties"]["run"] =
+		animation["Properties"]["opacity"] = a->opacity;
+
+		jsonobj["Components"].append(animation);
+	
+	}
+
+	// Text
+	if (t != nullptr) {
+		Json::Value text;
+		text["Type"] = "Text";
+		text["Properties"]["text"] = t->text;
+		text["Properties"]["fontSize"] = t->fontSize;
+		jsonobj["Components"].append(text);
+	}
+
+	
+	// Body
+	if (bo != nullptr) {
+		Json::Value body;
+		body["Type"] = "Body";
+		if (bo->GetShape() == Shape::Rectangle) {
+			Rectangular* r = (Rectangular*)bo;
+			body["Shape"] = "Rectangle";
+			body["Properties"]["width"] = r->width;
+			body["Properties"]["height"] = r->height;
+			body["Properties"]["pushable"] = r->pushable;
+			body["Properties"]["material"] = static_cast<int>(r->material);
+			body["Properties"]["active"] = r->active;
+			body["Properties"]["collision_response"] = r->collision_response;
+		}
+		else if (bo->GetShape() == Shape::Circle) {
+			Circular* c = (Circular*)bo;
+			body["Shape"] = "Circle";
+			body["Properties"]["radius"] = c->circle.radius;
+			body["Properties"]["center"]["x"] = c->circle.center.x;
+			body["Properties"]["center"]["y"] = c->circle.center.y;
+			body["Properties"]["collision_response"] = c->collision_response;
+		}
+		else if (bo->GetShape() == Shape::Line) {
+			Lines* l = (Lines*)bo;
+			body["Shape"] = "Line";
+			body["Properties"]["start"]["x"] = l->line.Pt0().x;
+			body["Properties"]["start"]["y"] = l->line.Pt0().y;
+			body["Properties"]["end"]["x"] = l->line.Pt1().x;
+			body["Properties"]["end"]["y"] = l->line.Pt1().y;
+			body["Properties"]["collision_response"] = l->collision_response;
+		}
+		jsonobj["Components"].append(body);
+	
+	}
+
+	// Physics
+	if (ph != nullptr) {
+		Json::Value physics;
+		physics["Type"] = "Physics";
+		physics["Properties"]["X_Velocity"] = ph->Velocity.x;
+		physics["Properties"]["Y_Velocity"] = ph->Velocity.y;
+		physics["Properties"]["Mass"] = ph->Mass;
+		physics["Properties"]["AffectedByGravity"] = ph->AffectedByGravity;
+		physics["Properties"]["AbleToPushObjects"] = ph->AbleToPushObjects;
+		jsonobj["Components"].append(physics);
+	}
+
+	// PlayerControllable
+	if (pc != nullptr) {
+		Json::Value player;
+		player["Type"] = "Player";
+		jsonobj["Components"].append(player);
+	}
+
+	// Event
+	if (e != nullptr) {
+		Json::Value event;
+		event["Type"] = "Event";
+		event["Properties"]["linkedevent"] = e->linked_event;
+		jsonobj["Components"].append(event);
+	}
+
+	// Behaviour
+	if (be != nullptr) {
+		Json::Value behaviour;
+		behaviour["Type"] = "Behaviour";
+		behaviour["Properties"]["Script"] = be->GetBehaviourName();
+		behaviour["Properties"]["Index"] = be->GetBehaviourIndex();
+		jsonobj["Components"].append(behaviour);
+	}
+
+	// Save the object to a file
+	
+	std::ofstream outputFile("Asset/Objects/" + filename);
+	if (outputFile.is_open()) {
+		Json::StreamWriterBuilder writer;
+		writer["indentation"] = "  ";
+
+		outputFile << Json::writeString(writer, jsonobj);
+		outputFile.close();
+		std::cout << filename << " has been successfully saved." << std::endl;
+		return;
+	}
+	else
+		std::cerr << "Failed to open file for writing." << std::endl;
 }
 
 //This doesn't destroy the game object instantly but will set it to be destroyed in the update loop
@@ -376,9 +561,9 @@ void Factory::Update() {
 			// Delete the reference to the object in the layer
 			for (auto& l : SceneManager::layers) {
 				std::vector<Object*>& v = l.second.second;
-				auto it = std::find(v.begin(), v.end(), obj);
-				if (it != v.end()) {
-					v.erase(it);
+				auto it2 = std::find(v.begin(), v.end(), obj);
+				if (it2 != v.end()) {
+					v.erase(it2);
 					break; // The reference is deleted. Stop the loop
 				}
 			}
@@ -395,6 +580,11 @@ void Factory::Update() {
 				objectMap[i + 1]->ObjectId--;
 				objectMap.erase((size_t)(i + 1));
 			}
+
+#if defined(DEBUG) | defined(_DEBUG)
+			if (level_editor->selectedNum > temp_id)
+				level_editor->selectedNum--;
+#endif
 		}
 	}
 	
@@ -419,7 +609,18 @@ void Factory::destroyAllObjects()
 Object* Factory::createEmptyObject()
 {
 	Object* obj = new Object();
+	obj->AddComponent(new Transform());
 	assignIdToObject(obj);
+	return obj;
+}
+
+//Creates an empty prefab with no components
+Object* Factory::createEmptyPrefab()
+{
+	Object* obj = new Object();
+	obj->ObjectId = -1;
+	obj->AddComponent(new Transform());
+
 	return obj;
 }
 
@@ -497,6 +698,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
 
 			tex->textureName = tex_pt->textureName;
+			tex->opacity = tex_pt->opacity;
 			obj->AddComponent(tex);
 		}
 		// Clone body data
@@ -514,6 +716,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 				r->collision_flag = ((Rectangular*)body_pt)->collision_flag;
 				r->active = ((Rectangular*)body_pt)->active;
 				r->pushable = ((Rectangular*)body_pt)->pushable;
+				r->material = ((Rectangular*)body_pt)->material;
 
 				obj->AddComponent(r);
 			}
@@ -563,6 +766,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			ani->animation_Map = ani_tmp->animation_Map;
 			ani->frame_rate = ani_tmp->frame_rate;
 			ani->jump_fixed_frame = ani_tmp->jump_fixed_frame;
+			ani->opacity = ani_tmp->opacity;
 			
 			obj->AddComponent(ani);
 		}
@@ -603,6 +807,16 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			p->particle_texture = p_tmp->particle_texture;
 
 			obj->AddComponent(p);
+		}
+		else if (component.first == ComponentType::Text)
+		{
+			Text* t = (Text*)((ComponentCreator<Text>*) componentMap["Text"])->Create();
+			Text* t_tmp = static_cast<Text*>(object->GetComponent(ComponentType::Text));
+
+			t->text = t_tmp->text;
+			t->fontSize = t_tmp->fontSize;
+
+			obj->AddComponent(t);
 		}
 	}
 
@@ -670,18 +884,21 @@ void Factory::DeleteComponent(Object* o, ComponentType c) {
 	o->Components.erase(c);
 }
 
-int Factory::CreateLayer(std::string layerName, bool isVisible) {
+int Factory::CreateLayer(std::string layerName, bool isVisible, bool static_layer) {
+	return CreateLayer(layerName, { isVisible, static_layer });
+}
 
-	// Create the inner pair with layer visibility and empty vector of object pointers
-	std::pair<bool, std::vector<Object*>> innerPair = std::make_pair(isVisible, std::vector<Object*>());
+int Factory::CreateLayer(std::string layerName, LayerSettings settings) {
+
+	std::pair<LayerSettings, std::vector<Object*>> innerPair = std::make_pair(settings, std::vector<Object*>());
 
 	// Create the outer pair with the layer name and the inner pair
-	std::pair<std::string, std::pair<bool, std::vector<Object*>>> layer = std::make_pair(layerName, innerPair);
+	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>> layer = std::make_pair(layerName, innerPair);
 
 	// Add the newly created pair to the layers vector
 	SceneManager::layers.push_back(layer);
 
-	return SceneManager::layers.size() - 1;
+	return static_cast<int>(SceneManager::layers.size() - 1);
 }
 
 void Factory::AddToLayer(int layerNum, Object* obj) {
@@ -693,20 +910,44 @@ void Factory::AddToLayer(int layerNum, Object* obj) {
 	}
 }
 
+void Factory::AddToLayer(std::string layerName, Object* obj) {
+	for (auto& layer : SceneManager::layers) {
+		if (layer.first == layerName) {
+			layer.second.second.push_back(obj);
+			return;
+		}
+	}
+}
+
 int Factory::GetLayerNum(std::string layerName) {
 	auto it = std::find_if(SceneManager::layers.begin(), SceneManager::layers.end(), [&layerName](const auto& layer) {
 		return layer.first == layerName;
 	});
 
 	if (it != SceneManager::layers.end()) {
-		return it - SceneManager::layers.begin();
+		return static_cast<int>(it - SceneManager::layers.begin());
 	}
 	else {
 		return -1;
 	}
 }
 
-std::pair<std::string, std::pair<bool, std::vector<Object*>>>* Factory::FindLayerThatHasThisObject(Object* obj) {
+std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::GetLayer(std::string layerName)
+{
+	for (auto& l : SceneManager::layers) {
+		if (l.first == layerName)
+			return &l;
+	}
+	
+	return nullptr;
+}
+
+std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::GetLayer(int layerNum)
+{
+	return &SceneManager::layers[layerNum];
+}
+
+std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory::FindLayerThatHasThisObject(Object* obj) {
 	for (auto& l : SceneManager::layers) {
 		std::vector<Object*>& v = l.second.second;
 		auto it = std::find(v.begin(), v.end(), obj);

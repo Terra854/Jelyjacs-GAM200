@@ -1,0 +1,56 @@
+{
+  "Name": "elevator_hori",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 128.0,
+          "y": 64.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Body",
+      "Shape": "Rectangle",
+      "Collision Response":  false,
+      "Properties": {
+        "width": 110.0,
+        "height": 28.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "elevator.png"
+      }
+    },
+    {
+      "Type": "Physics",
+      "Properties": {
+        "X_Velocity": 0.0,
+        "Y_Velocity": 0.0,
+        "AffectedByGravity":  false,
+        "Mass": 0.0
+      }
+    },
+    {
+      "Type": "Event",
+      "Properties": {
+        "linkedevent" : 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "Hori_Elevator",
+        "Index" : 0
+      }
+    }
+  ]
+}

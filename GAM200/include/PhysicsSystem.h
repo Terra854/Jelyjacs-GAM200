@@ -1,7 +1,7 @@
 #pragma once
 /* !
 @file	PhysicsSystem.h
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains the declaration for the Physics system class
@@ -22,6 +22,10 @@ public:
 
 	// Returns name of the component
 	virtual std::string SystemName() { return "Physics"; }
+
+	int num_of_steps = 0;
 };
 
 void RecalculateBody(Transform* t, Body* b);
+
+extern PhysicsSystem* physics;

@@ -1,6 +1,6 @@
 /* !
 @file	Collision.cpp
-@author	Tan Yee Ann
+@author	Tan Yee Ann (t.yeeann@digipen.edu)
 @date	28/9/2023
 
 This file contains functions to calculate collisions between the different game objects
@@ -194,5 +194,15 @@ namespace Collision {
 		}
 
 		rect1->collision_flag |= flag;
+	}
+
+	bool IsObjectInsideAnotherObject(Transform* obj_t, Rectangular* anotherObj_b)
+	{
+
+		if (obj_t == nullptr || anotherObj_b == nullptr) {
+			return false;
+		}
+
+		return (obj_t->Position.x >= anotherObj_b->aabb.min.x && obj_t->Position.x <= anotherObj_b->aabb.max.x && obj_t->Position.y >= anotherObj_b->aabb.min.y && obj_t->Position.y <= anotherObj_b->aabb.max.y);
 	}
 }

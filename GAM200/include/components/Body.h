@@ -35,6 +35,11 @@ public:
 	std::vector<std::pair<int, int>> inGrid;
 };
 
+enum class Material {
+	Concrete,
+	Metal
+};
+
 // Rectangle Object
 class Rectangular : public Body
 {
@@ -44,11 +49,13 @@ public:
 		Initialize();
 	}
 	AABB aabb;
-	float width, height;
+	float width{}, height{};
 
 	int collision_flag = 0;
 	
 	bool pushable = false;
+
+	Material material = Material::Concrete;
 
 	// Get link to the object that is colliding with this object
 	Object* top_collision = nullptr;    // get from the other object's bottom y

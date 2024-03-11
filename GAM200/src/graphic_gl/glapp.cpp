@@ -28,6 +28,8 @@ includes all the functions to draw objects
 #include "components/Particle.h"
 #include <Gizmo.h>
 #include <SceneManager.h>
+#include <Font.h>
+#include <components/Text.h>
 
 /* Objects with file scope
 ----------------------------------------------------------------------------- */
@@ -80,7 +82,7 @@ void GLApp::insert_models(std::string model_name) {
 		//check if model already exists
 		if (AssetManager::modelexist(model_name)) {
 			GLModel Model;
-			std::ifstream ifs_msh{ "meshes/" + model_name + ".msh", std::ios::in };
+			std::ifstream ifs_msh{ "Asset/meshes/" + model_name + ".msh", std::ios::in };
 			if (!ifs_msh)
 			{
 				std::cout << "ERROR: Unable to open mesh file: "
@@ -247,7 +249,7 @@ void GLApp::Update()
 		//draw objects
 
 		for (auto& l : SceneManager::layers) {
-			if (l.second.first) {
+			if (l.second.first.isVisible) {
 				for (auto& object : l.second.second) {
 					GLuint tex_test;
 					Animation* ani_pt = nullptr;
@@ -260,18 +262,21 @@ void GLApp::Update()
 					//get texture		
 					Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
 
-					// skip to next object if there is no texture, then check for animation
-					if (!tex_pt)
-					{
-						texture_bool = false;
-						ani_pt = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
-						if (!ani_pt)
-							continue;
-						else
-							tex_test = ani_pt->animation_tex_obj;
-					}
-					else
+					//get text
+					Text* text = static_cast<Text*>(object->GetComponent(ComponentType::Text));
+
+					
+
+					//get animation
+					ani_pt = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
+
+					if (!tex_pt && !ani_pt && !text)
+						continue; // There is nothing to render, so skip to the next object
+
+					if (tex_pt)
 						tex_test = AssetManager::textureval(tex_pt->textureName);
+					else if (ani_pt)
+						tex_test = ani_pt->animation_tex_obj;
 
 					//get orientation
 					Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
@@ -296,11 +301,13 @@ void GLApp::Update()
 
 					mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
 					// matrix after camrea
-					mat_test = camera2D->world_to_ndc * mat_test;
+
+					if (!l.second.first.static_layer)
+						mat_test = camera2D->world_to_ndc * mat_test;
 
 
 					// draw image with texture
-					if (texture_bool) {
+					if (tex_pt) {
 						// draw object with textuer
 						glBindTextureUnit(6, tex_test);
 						glBindTexture(GL_TEXTURE_2D, tex_test);
@@ -311,6 +318,7 @@ void GLApp::Update()
 						// copy object's model-to-NDC matrix to vertex shader's
 						// uniform variable uModelToNDC
 						AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+						AssetManager::shaderval("image").SetUniform("uOpacity", tex_pt->opacity);
 
 						// tell fragment shader sampler uTex2d will use texture image unit 6
 						GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
@@ -323,7 +331,7 @@ void GLApp::Update()
 						glBindVertexArray(0);
 						AssetManager::shaderval("image").UnUse();
 					}
-					else {
+					else if (ani_pt) {
 						// if is player
 						if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 							ParticleSystem* particleSystem = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
@@ -331,7 +339,7 @@ void GLApp::Update()
 
 							{
 								particleSystem->Update(object);
-								particleSystem->Draw();
+								//particleSystem->Draw();
 							}
 							// draw object with animation
 
@@ -343,6 +351,7 @@ void GLApp::Update()
 							ani_pt->Update_objects();
 
 						}
+						//ani_pt->opacity = 0.5f;
 						// render animation
 						glBindTextureUnit(6, tex_test);
 						glBindTexture(GL_TEXTURE_2D, tex_test);
@@ -354,7 +363,7 @@ void GLApp::Update()
 						// copy object's model-to-NDC matrix to vertex shader's
 						// uniform variable uModelToNDC
 						AssetManager::shaderval("image").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-
+						AssetManager::shaderval("image").SetUniform("uOpacity", ani_pt->opacity);
 						// tell fragment shader sampler uTex2d will use texture image unit 6
 						GLuint tex_loc = glGetUniformLocation(AssetManager::shaderval("image").GetHandle(), "uTex2d");
 						glUniform1i(tex_loc, 6);
@@ -368,6 +377,13 @@ void GLApp::Update()
 
 						ani_pt->Update_time();
 
+					}
+
+					if (text != nullptr) {
+						// draw text
+						SetFont(FONT::GeoRegular);
+						float text_width{ static_cast<float>(find_width(text->text,FONT::GeoRegular))};
+						DrawText(text->text, pos.x * window->width / 2.f - text_width/2 , pos.y * window->height / 2.f, text->fontSize);
 					}
 #if defined(DEBUG) | defined(_DEBUG)
 					if (graphics_debug && object->GetComponent(ComponentType::Body) != nullptr) {
@@ -439,13 +455,21 @@ void GLApp::Update()
 #if defined(DEBUG) | defined(_DEBUG)
 		// Draw the bove around the selected object
 		if (level_editor->selected && level_editor->selectedNum >= 0) {
-			Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Animation));
-			Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Texture));
+			//Animation* a = static_cast<Animation*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Animation));
+			//Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Texture));
 			Transform* tr = static_cast<Transform*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Transform));
 
 			GLint width, height;
 			Vec2 botleft, topright;
 
+			botleft = tr->Position + -tr->Scale / 2.f;
+			topright = tr->Position + tr->Scale / 2.f;
+
+			drawline(Vec2(topright.x, botleft.y), botleft, white_box_color);
+			drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
+			drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
+			drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
+			/*
 			if (te != nullptr) {
 				// Bind the texture
 				glBindTexture(GL_TEXTURE_2D, AssetManager::textureval(te->textureName));
@@ -479,7 +503,7 @@ void GLApp::Update()
 				drawline(topright, Vec2(topright.x, botleft.y), white_box_color);
 				drawline(topright, Vec2(botleft.x, topright.y), white_box_color);
 				drawline(Vec2(botleft.x, topright.y), botleft, white_box_color);
-			}
+			}*/
 
 			gizmo.SetObject(tr);
 
@@ -587,14 +611,14 @@ void GLApp::drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	float scaling_y;
 	orientation = atan2(end.y - start.y, end.x - start.x);
 
-	scaling_x = abs(end.x - start.x) * 2 / window->width_init;
-	scaling_y = abs(end.y - start.y) * 2 / window->height_init;
-	pos_x = start.x * 2.0f / window->width_init;
-	pos_y = start.y * 2.0f / window->height_init;
+	scaling_x = abs(end.x - start.x) * 2 / window->width;
+	scaling_y = abs(end.y - start.y) * 2 / window->height;
+	pos_x = start.x * 2.0f / window->width;
+	pos_y = start.y * 2.0f / window->height;
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
-	Vec2 window_sacling = {(float) window->width / window->width_init, (float)window->height / window->height_init };
+	Vec2 window_sacling = {(float) window->width / window->width, (float)window->height / window->height };
 	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
 	mat_test = camera2D->world_to_ndc * mat_test;
 	//draw line
