@@ -117,6 +117,7 @@ namespace PHE_Script
 						// Moving right
 						if (moving_platform_t->Position.x - moving_platform_b->GetBehaviourCounter() >= moving_platform_b->GetBehaviourDistance() && moving_platform_direction == false)
 						{
+							// Direction should be stored by the object itself as well (Use index)
 							moving_platform_direction = true;
 							moving_platform_b->SetBehaviourCounter(moving_platform_t->Position.x);
 							std::cout << "change dir to left\n";
