@@ -76,7 +76,8 @@ namespace Endpoint_Script {
 						endpoint_animation->current_type = AnimationType::Jump;
 						counter += engine->GetDt();
 						//Check if the animation is done
-						if (endpoint_animation->current_type == AnimationType::Jump && (counter > 3)) {
+						//if (endpoint_animation->current_type == AnimationType::Jump && (counter > 3)) {
+						if (counter > 2) {
 							//std::cout << "Animation is done" << std::endl;
 							//Set the win state
 							win = true;
@@ -92,8 +93,15 @@ namespace Endpoint_Script {
 		}
 		if (win) {
 			audio->playSfx("level_complete");
-			set_win();
+			//set_win();
 			std::cout << "ongoing" << std::endl;
+
+			if (!engine->isPaused())
+				engine->setPause();
+
+			objectFactory->GetLayer("WinMenu")->second.first.isVisible = true;
+			objectFactory->GetLayer("GameMenu")->second.first.isVisible = false;
+			win = false;
 		}
 	}
 
