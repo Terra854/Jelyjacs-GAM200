@@ -77,7 +77,7 @@
       ],
       "Settings" : 
       {
-        "isVisible" : true,
+        "isVisible" : false,
         "static_layer" : true
       }
     }
