@@ -16,10 +16,9 @@
       }
     },
     {
-      "Type": "Text",
+      "Type": "Texture",
       "Properties": {
-        "text": "restart",
-        "fontSize": 1.0
+        "texturepath": "RedoButton.png"
       }
     },
     {

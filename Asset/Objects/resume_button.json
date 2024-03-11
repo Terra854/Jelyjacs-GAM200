@@ -16,10 +16,9 @@
       }
     },
     {
-      "Type": "Text",
+      "Type": "Texture",
       "Properties": {
-        "text": "resume",
-        "fontSize": 1.0
+        "texturepath": "Resume.png"
       }
     },
     {

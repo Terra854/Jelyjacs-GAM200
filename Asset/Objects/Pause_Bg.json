@@ -18,7 +18,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "MENU_back.png"
+        "texturepath": "Base.png"
       }
     }
   ]
