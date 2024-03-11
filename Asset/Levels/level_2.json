@@ -3930,7 +3930,7 @@
     "game_hud.json",
     "pause_menu.json"
   ],
-  "SceneName": "Asset/Levels/testsavelvl2.json",
+  "SceneName": "level_2",
   "Size": {
     "height": 2403.0,
     "startX": -672.0,

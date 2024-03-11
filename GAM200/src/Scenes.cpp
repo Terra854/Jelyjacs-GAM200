@@ -25,7 +25,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 {
 	// Check if the given file exists
 	JsonSerialization jsonobj;
-	jsonobj.openFileRead(filename);
+	jsonobj.openFileRead("Asset/Levels/" + filename);
 
 	std::string levelname;
 	jsonobj.readString(levelname, "SceneName");
@@ -221,7 +221,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 	{
 		std::string sceneFile = additionalScenes.asCString();
 		SceneManager::AdditionalScenesLoadedConcurrently.push_back(sceneFile);
-		::LoadSceneFromJson("Asset/Levels/" + sceneFile, false);
+		::LoadSceneFromJson(sceneFile, false);
 	}
 
 	jsonobj.closeFile();
@@ -239,7 +239,7 @@ void SaveScene(std::string filename)
 {
 	// Save Scene Name
 	Json::Value jsonobj;
-	jsonobj["SceneName"] = filename;
+	jsonobj["SceneName"] = engine->loaded_level;
 
 	//jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
 
@@ -422,7 +422,7 @@ void SaveScene(std::string filename)
 	*/
 
 	// Write file
-	std::ofstream outputFile(filename);
+	std::ofstream outputFile("Asset/Levels/" + filename);
 	if (outputFile.is_open()) {
 		Json::StreamWriterBuilder writer;
 		writer["indentation"] = "  ";

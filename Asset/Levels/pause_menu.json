@@ -83,7 +83,7 @@
       }
     }
   ],
-  "SceneName" : "Asset/Levels/pause_menu.json",
+  "SceneName" : "pause_menu",
   "Size" : 
   {
     "height" : 1080.0,
