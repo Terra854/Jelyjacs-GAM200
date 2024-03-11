@@ -157,13 +157,14 @@ Vec2 Button::get_pos2() const
 GameHud::~GameHud()
 {
 }
-
+/*
 void set_win()
 {
 	win_condition = true;
 	current_page = PAGE::win;
 	engine->setPause();
 }
+*/
 
 void create_buttons_from_config(std::string file)
 {

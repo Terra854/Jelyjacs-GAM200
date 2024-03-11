@@ -80,6 +80,7 @@ namespace Endpoint_Script {
 							//std::cout << "Animation is done" << std::endl;
 							//Set the win state
 							win = true;
+							objectFactory->GetLayer("WinMenu")->second.first.isVisible = true;
 						}
 
 					}
@@ -92,7 +93,7 @@ namespace Endpoint_Script {
 		}
 		if (win) {
 			audio->playSfx("level_complete");
-			set_win();
+			//set_win();
 			std::cout << "ongoing" << std::endl;
 		}
 	}
