@@ -1,0 +1,32 @@
+{
+  "Name": "fullscreen_button",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 128.0,
+          "y": 64.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "Fullscreen.png"
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "FullscreenButton",
+        "Index": 0
+      }
+    }
+  ]
+}

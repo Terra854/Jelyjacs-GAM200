@@ -166,6 +166,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\Box.h" />
     <ClInclude Include="include\Scripts\ButtonBase.h" />
     <ClInclude Include="include\Scripts\Door.h" />
+    <ClInclude Include="include\Scripts\FullscreenButton.h" />
     <ClInclude Include="include\Scripts\HorizontalDoor.h" />
     <ClInclude Include="include\Scripts\Hori_Elevator.h" />
     <ClCompile Include="src\Animation.cpp" />
@@ -242,6 +243,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\Door.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
     <ClCompile Include="src\Scripts\Finn.cpp" />
+    <ClCompile Include="src\Scripts\FullscreenButton.cpp" />
     <ClCompile Include="src\Scripts\HorizontalDoor.cpp" />
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
     <ClCompile Include="src\Scripts\QuitButton.cpp" />

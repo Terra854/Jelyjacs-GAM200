@@ -32,8 +32,8 @@
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 560.0,
-            "y" : 640.0
+            "x" : 224.0,
+            "y" : 44.0
           },
           "Type" : "Transform",
           "counter" : 0.0,
@@ -61,6 +61,27 @@
           "distance" : 0.0,
           "index" : 0.0,
           "scripts" : "RestartButton",
+          "speed" : 0.0
+        },
+        {
+          "Name" : "fullscreen_button",
+          "Position" : 
+          {
+            "x" : 44.0,
+            "y" : 0.0
+          },
+          "Prefabs" : "fullscreen_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 322.0,
+            "y" : 51.0
+          },
+          "Type" : "Transform",
+          "counter" : 0.0,
+          "distance" : 0.0,
+          "index" : 0.0,
+          "scripts" : "FullscreenButton",
           "speed" : 0.0
         },
         {
