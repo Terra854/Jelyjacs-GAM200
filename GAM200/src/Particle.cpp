@@ -24,7 +24,7 @@ void ParticleSystem::Init()
    
     for(int i=0; i< PARTICLE_NUM; i++){
         // x =-1 y = -0.5 to 0.5
-        translations[index] = random_position(pos_x_min,pos_x_max,pos_y_min,pos_y_max); 
+        translations[index] = random_value(pos_x_min,pos_x_max,pos_y_min,pos_y_max); 
         auto particle = std::make_unique<Particle>(&translations[index]); 
         particle->velocity = random_velocity(vel_x_min,vel_x_max,vel_y_min,vel_y_max);
         particle->life_time = random_life_time(life_min,life_max); 
@@ -79,6 +79,8 @@ void ParticleSystem::Init()
 */
 void ParticleSystem::Update(Object* player)
 {
+    if (prticle_state == ParticleState::Prticle_End) return;
+
     static float accum_time = 0.0f;
     static int frame_dt_count = 0;
 
@@ -105,8 +107,8 @@ void ParticleSystem::Update(Object* player)
             ptc->Update();
             if (ptc->life_count > ptc->life_time) {
                 ptc->life_count = 0.0f;
-                ptc->position->x = random_position(pos_x_min, pos_x_max, pos_y_min, pos_y_max).x;
-                ptc->position->y = random_position(pos_x_min, pos_x_max, pos_y_min, pos_y_max).y;
+                ptc->position->x = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).x;
+                ptc->position->y = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).y;
                 ptc->velocity = random_velocity(vel_x_min, vel_x_max, vel_y_min, vel_y_max);
                 ptc->life_time = random_life_time(life_min, life_max);
             }
@@ -117,39 +119,45 @@ void ParticleSystem::Update(Object* player)
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
+        switch (prticle_type) {
+        case::PrticleType::Prticle_Finn:
+            if (player != nullptr) {
+                // get the player's position
+                Transform* tran_pt = static_cast<Transform*>(player->GetComponent(ComponentType::Transform));
+                Physics* phy_pt = static_cast<Physics*>(player->GetComponent(ComponentType::Physics));
+                if (phy_pt != nullptr) {
 
-        if (player != nullptr) {
-            // get the player's position
-            Transform* tran_pt = static_cast<Transform*>(player->GetComponent(ComponentType::Transform));
-            Physics* phy_pt = static_cast<Physics*>(player->GetComponent(ComponentType::Physics));
-            if (phy_pt != nullptr) {
+                    float Vx = phy_pt->Velocity.x;
+                    float Vy = phy_pt->Velocity.y;
+                    if (Vx == 0 && Vy == 0) {
+                        draw_particle = false;
+                        return;
+                    }
 
-                float Vx = phy_pt->Velocity.x;
-                float Vy = phy_pt->Velocity.y;
-                if (Vx == 0 && Vy == 0) {
-                    draw_particle = false;
-                    return;
-                }
-
-                draw_particle = true;
-                float orientation = atan2(Vy, Vx);
-
-
-                Vec2 pos = tran_pt->Position;
-                pos.x -= tran_pt->Scale.x * cos(orientation);
-                pos.y -= tran_pt->Scale.y * sin(orientation);
-                pos.x = pos.x * 2.0f / window->width_init;
-                pos.y = pos.y * 2.0f / window->height_init;
-                Vec2 scale{ 0.f,0.f };
-                scale.x = tran_pt->Scale.x / window->width_init;
-                scale.y = tran_pt->Scale.y / window->height_init;
+                    draw_particle = true;
+                    float orientation = atan2(Vy, Vx);
 
 
-                world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
-                Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
-                world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
-                world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
-            }
+                    Vec2 pos = tran_pt->Position;
+                    pos.x -= tran_pt->Scale.x * cos(orientation);
+                    pos.y -= tran_pt->Scale.y * sin(orientation);
+                    pos.x = pos.x * 2.0f / window->width_init;
+                    pos.y = pos.y * 2.0f / window->height_init;
+                    Vec2 scale{ 0.f,0.f };
+                    scale.x = tran_pt->Scale.x / window->width_init;
+                    scale.y = tran_pt->Scale.y / window->height_init;
+
+
+                    world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
+                    Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+                    world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
+                    world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
+                }				
+        }
+		break;
+        case::PrticleType::Prticle_Explosion:
+
+        
         }
     }
     
@@ -201,7 +209,7 @@ void ParticleSystem::Free()
 * @param x_min, x_max, y_min, y_max: the range of the position
 * 
 */
-Vec2 random_position(float x_min, float x_max, float y_min, float y_max)
+Vec2 random_value(float x_min, float x_max, float y_min, float y_max)
 {
     Vec2 pos_return;
    if(x_min == x_max) pos_return.x = x_min;
