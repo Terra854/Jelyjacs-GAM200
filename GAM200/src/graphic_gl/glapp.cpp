@@ -342,6 +342,13 @@ void GLApp::Update()
 							{
 								if (input::IsPressed(KEY::w)) {
 									particleSystem->prticle_state = ParticleState::Prticle_Start;
+
+									// print out all the accelerations limits for the particles
+									std::cout << "acceleration x min: " << particleSystem->acc_x_min << std::endl;
+									std::cout << "acceleration x max: " << particleSystem->acc_x_max << std::endl;
+									std::cout << "acceleration y min: " << particleSystem->acc_y_min << std::endl;
+									std::cout << "acceleration y max: " << particleSystem->acc_y_max << std::endl;
+									
 								}
 								particleSystem->Update(object);
 								//particleSystem->Draw();

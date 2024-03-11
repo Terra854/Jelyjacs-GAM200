@@ -23,10 +23,10 @@ void ParticleSystem::Init()
     if(particles.size()>= PARTICLE_NUM) return;
    
     for(int i=0; i< PARTICLE_NUM; i++){
-        // x =-1 y = -0.5 to 0.5
+        
         translations[index] = random_value(pos_x_min,pos_x_max,pos_y_min,pos_y_max); 
         auto particle = std::make_unique<Particle>(&translations[index]); 
-        particle->acceleration = random_velocity(acc_x_min,acc_x_max,acc_y_min,acc_y_max);
+        particle->acceleration = random_value(acc_x_min,acc_x_max,acc_y_min,acc_y_max);
         particle->velocity = random_velocity(vel_x_min,vel_x_max,vel_y_min,vel_y_max);
         particle->life_time = random_life_time(life_min,life_max); 
         particles.push_back(std::move(particle)); 
@@ -175,7 +175,7 @@ void ParticleSystem::Update(Object* player)
                     ptc->life_count = 0.0f;
                     ptc->position->x = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).x;
                     ptc->position->y = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).y;
-                    ptc->acceleration = random_velocity(acc_x_min, acc_x_max, acc_y_min, acc_y_max);
+                    ptc->acceleration = random_value(acc_x_min, acc_x_max, acc_y_min, acc_y_max);
                     ptc->velocity = random_velocity(vel_x_min, vel_x_max, vel_y_min, vel_y_max);
                     ptc->life_time = random_life_time(life_min, life_max);
                     shown[&ptc - &particles[0]] = 1.0f;
