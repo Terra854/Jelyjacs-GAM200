@@ -343,7 +343,7 @@ void GLApp::Update()
 
 							{
 								particleSystem->Update(object);
-								//particleSystem->Draw();
+								particleSystem->Draw();
 							}
 							// draw object with animation
 

@@ -66,7 +66,8 @@ public:
 		std::vector<std::unique_ptr<Particle>> particles{};
 		bool draw_particle = false;
 		Vec2 translations[PARTICLE_NUM]{};
-		GLuint		instanceVBO{}, quadVAO{}, quadVBO{};
+		float shown[PARTICLE_NUM]{};
+		GLuint		instance_pos{}, quadVAO{}, quadVBO{}, instance_shown{};
 		Mat3 world_to_ndc{};
 
 
