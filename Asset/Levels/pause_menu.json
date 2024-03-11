@@ -6,104 +6,196 @@
       "Objects" : 
       [
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 0.0,
+                  "y" : 0.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 801.0,
+                  "y" : 1000.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "Base.png"
+              },
+              "Type" : "Texture"
+            }
+          ],
           "Name" : "Pause_Bg",
-          "Position" : 
-          {
-            "x" : 0.0,
-            "y" : 0.0
-          },
-          "Prefabs" : "Pause_Bg.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 801.0,
-            "y" : 1000.0
-          },
-          "Type" : "Transform"
+          "Prefabs" : "Pause_Bg.json"
         },
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 65.0,
+                  "y" : -233.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 224.0,
+                  "y" : 44.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "Resume.png"
+              },
+              "Type" : "Texture"
+            },
+            {
+              "Properties" : 
+              {
+                "Index" : 0.0,
+                "Script" : "ResumeButton"
+              },
+              "Type" : "Behaviour"
+            }
+          ],
           "Name" : "resume_button",
-          "Position" : 
-          {
-            "x" : 65.0,
-            "y" : -233.0
-          },
-          "Prefabs" : "resume_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 224.0,
-            "y" : 44.0
-          },
-          "Type" : "Transform",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "ResumeButton",
-          "speed" : 0.0
+          "Prefabs" : "resume_button.json"
         },
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 65.0,
+                  "y" : -152.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 322.0,
+                  "y" : 51.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "Fullscreen.png"
+              },
+              "Type" : "Texture"
+            },
+            {
+              "Properties" : 
+              {
+                "Index" : 0.0,
+                "Script" : "FullscreenButton"
+              },
+              "Type" : "Behaviour"
+            }
+          ],
           "Name" : "fullscreen_button",
-          "Position" : 
-          {
-            "x" : 65.0,
-            "y" : -152.0
-          },
-          "Prefabs" : "fullscreen_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 322.0,
-            "y" : 51.0
-          },
-          "Type" : "Transform",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "FullscreenButton",
-          "speed" : 0.0
+          "Prefabs" : "fullscreen_button.json"
         },
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 64.0,
+                  "y" : -315.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 119.0,
+                  "y" : 43.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "Exit.png"
+              },
+              "Type" : "Texture"
+            },
+            {
+              "Properties" : 
+              {
+                "Index" : 0.0,
+                "Script" : "QuitButton"
+              },
+              "Type" : "Behaviour"
+            }
+          ],
           "Name" : "quit_button",
-          "Position" : 
-          {
-            "x" : 64.0,
-            "y" : -315.0
-          },
-          "Prefabs" : "quit_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 119.0,
-            "y" : 43.0
-          },
-          "Type" : "Transform",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "QuitButton",
-          "speed" : 0.0
+          "Prefabs" : "quit_button.json"
         },
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 65.0,
+                  "y" : -64.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 339.0,
+                  "y" : 53.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "How to play.png"
+              },
+              "Type" : "Texture"
+            },
+            {
+              "Properties" : 
+              {
+                "Index" : 0.0,
+                "Script" : "HowToPlayButton"
+              },
+              "Type" : "Behaviour"
+            }
+          ],
           "Name" : "how_to_play_button",
-          "Position" : 
-          {
-            "x" : 65.0,
-            "y" : -64.0
-          },
-          "Prefabs" : "how_to_play_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 339.0,
-            "y" : 53.0
-          },
-          "Type" : "Transform",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "HowToPlayButton",
-          "speed" : 0.0
+          "Prefabs" : "how_to_play_button.json"
         }
       ],
       "Settings" : 

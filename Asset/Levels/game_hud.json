@@ -6,67 +6,124 @@
       "Objects" : 
       [
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 894.0,
+                  "y" : 433.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 70.0,
+                  "y" : 70.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "Zoom.PNG"
+              },
+              "Type" : "Texture"
+            },
+            {
+              "Properties" : 
+              {
+                "Index" : 0.0,
+                "Script" : "ButtonBase"
+              },
+              "Type" : "Behaviour"
+            }
+          ],
           "Name" : "zoom_button",
-          "Position" : 
-          {
-            "x" : 894.0,
-            "y" : 433.0
-          },
-          "Prefabs" : "zoom_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 70.0,
-            "y" : 70.0
-          },
-          "Type" : "Transform",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "ButtonBase",
-          "speed" : 0.0
+          "Prefabs" : "zoom_button.json"
         },
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 888.0,
+                  "y" : 323.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 70.0,
+                  "y" : 70.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "Pause.PNG"
+              },
+              "Type" : "Texture"
+            },
+            {
+              "Properties" : 
+              {
+                "Index" : 0.0,
+                "Script" : "PauseButton"
+              },
+              "Type" : "Behaviour"
+            }
+          ],
           "Name" : "pause_button",
-          "Position" : 
-          {
-            "x" : 888.0,
-            "y" : 323.0
-          },
-          "Prefabs" : "pause_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 70.0,
-            "y" : 70.0
-          },
-          "Type" : "Transform",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "PauseButton",
-          "speed" : 0.0
+          "Prefabs" : "pause_button.json"
         },
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 888.0,
+                  "y" : 209.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 100.0,
+                  "y" : 100.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "RedoButton.png"
+              },
+              "Type" : "Texture"
+            },
+            {
+              "Properties" : 
+              {
+                "Index" : 0.0,
+                "Script" : "RestartButton"
+              },
+              "Type" : "Behaviour"
+            }
+          ],
           "Name" : "restart_button",
-          "Position" : 
-          {
-            "x" : 888.0,
-            "y" : 209.0
-          },
-          "Prefabs" : "restart_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 100.0,
-            "y" : 100.0
-          },
-          "Type" : "Transform",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "RestartButton",
-          "speed" : 0.0
+          "Prefabs" : "restart_button.json"
         }
       ],
       "Settings" : 

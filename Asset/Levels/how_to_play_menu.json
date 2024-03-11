@@ -6,36 +6,76 @@
       "Objects" : 
       [
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 0.0,
+                  "y" : 0.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 801.0,
+                  "y" : 1000.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "How to play screen.png"
+              },
+              "Type" : "Texture"
+            }
+          ],
           "Name" : "How_To_Play_Bg",
-          "Position" : 
-          {
-            "x" : 0.0,
-            "y" : 0.0
-          },
-          "Prefabs" : "How_To_Play_Bg.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 801.0,
-            "y" : 1000.0
-          },
-          "Type" : "Transform"
+          "Prefabs" : "How_To_Play_Bg.json"
         },
         {
+          "Components" : 
+          [
+            {
+              "Properties" : 
+              {
+                "Position" : 
+                {
+                  "x" : 270.0,
+                  "y" : 367.0
+                },
+                "Rotation" : 0.0,
+                "Scale" : 
+                {
+                  "x" : 64.0,
+                  "y" : 64.0
+                }
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "fontSize" : 1.0,
+                "text" : "X"
+              },
+              "Type" : "Text"
+            },
+            {
+              "Properties" : 
+              {
+                "Index" : 0.0,
+                "Script" : "CloseHowToPlayMenuButton"
+              },
+              "Type" : "Behaviour"
+            }
+          ],
           "Name" : "close_how_to_play_menu_button",
-          "Position" : 
-          {
-            "x" : 270.0,
-            "y" : 367.0
-          },
-          "Prefabs" : "close_how_to_play_menu_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 64.0,
-            "y" : 64.0
-          },
-          "Type" : "Transform"
+          "Prefabs" : "close_how_to_play_menu_button.json"
         }
       ],
       "Settings" : 
