@@ -15,6 +15,7 @@ This file contains the script for Finn, the player character (Human)
 
 float finn_move_time = 0.f;
 bool InTheAir = true;
+float finn_air_time = 0.f;
 
 Finn::Finn(std::string name) : LogicScript(name)
 {
@@ -159,7 +160,7 @@ void Finn::Update(Object* obj) {
 			moving = false;
 		}
 
-		if (player_body->bottom_collision && InTheAir) {
+		if (player_body->bottom_collision && InTheAir && finn_air_time > 0.1f) {
 			Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
 
 			switch (collided_material) {
@@ -171,12 +172,15 @@ void Finn::Update(Object* obj) {
 				break;
 			}
 			InTheAir = false;
+			finn_air_time = 0.f;
 		}
 		else if (player_body->bottom_collision) {
 			InTheAir = false;
+			finn_air_time = 0.f;
 		}
 		else {
 			InTheAir = true;
+			finn_air_time += engine->GetDt();
 		}
 	}
 
