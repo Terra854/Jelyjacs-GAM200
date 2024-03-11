@@ -24,7 +24,7 @@ namespace LaserDoor_Script {
 
         if (obj1_t == nullptr || obj2_t == nullptr || obj1_b == nullptr || obj2_b == nullptr)
             return false;
-
+        
         float obj1_x = obj1_t->Position.x;
         float obj1_y = obj1_t->Position.y;
         float obj1_w = obj1_b->width / 2;
@@ -41,10 +41,24 @@ namespace LaserDoor_Script {
 
         Point obj1_bl = { obj1_x - obj1_w, obj1_y - obj1_h };
         Point obj1_tr = { obj1_x + obj1_w, obj1_y + obj1_h };
+        Point obj2_bl, obj2_tr;
 
-        Point obj2_bl = { obj2_x - obj2_w, obj2_y - obj2_h };
-        Point obj2_tr = { obj2_x + obj2_w, obj2_y + obj2_h };
+        if (obj2_t->Rotation != 0) {
+            obj2_bl = { obj2_x - obj2_h, obj2_y - obj2_w };
+            obj2_tr = { obj2_x + obj2_h, obj2_y + obj2_w };
+        }
+        else {
+            obj2_bl = { obj2_x - obj2_w, obj2_y - obj2_h };
+            obj2_tr = { obj2_x + obj2_w, obj2_y + obj2_h };
+        }
+        
+        /*
+        Vec2 obj1_bl = obj1_t->Position - (obj1_t->Scale / 2);
+        Vec2 obj1_tr = obj1_t->Position + (obj1_t->Scale / 2);
 
+        Vec2 obj2_bl = obj2_t->Position - (obj2_t->Scale / 2);
+        Vec2 obj2_tr = obj2_t->Position + (obj2_t->Scale / 2);
+        */
         if (obj1_bl.x >= obj2_tr.x || obj1_tr.x <= obj2_bl.x)
             return false;
 
