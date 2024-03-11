@@ -17,6 +17,9 @@ This file contains the script for the Laser
 namespace L_Script {
 	float count, deltaT;
 	bool active;
+	bool intersecting; // For checking if the player is intersecting with the laser door
+	bool doorswitch; // For checking if the door just closed;
+
 	Laser::Laser(std::string name) : LogicScript(name)
 	{
 		std::cout << name << " Created" << std::endl;
@@ -72,6 +75,21 @@ namespace L_Script {
 			else {
 				door_behaviour->SetBehaviourSpeed(door_behaviour->GetBehaviourSpeed() + deltaT);
 			}
+			Object* Finn = objectFactory->FindObject("Finn");
+			Object* Spark = objectFactory->FindObject("Spark");
+			if (Finn != nullptr && Spark != nullptr) {
+				if (Collision::IsObjectInsideLaser(static_cast<Rectangular*>(Finn->GetComponent(ComponentType::Body)), obj)) {
+					intersecting = true;
+				}
+				if (Collision::IsObjectInsideLaser(static_cast<Rectangular*>(Spark->GetComponent(ComponentType::Body)), obj)) {
+					intersecting = true;
+				}
+			}
+			for (auto& temp : objectFactory->FindAllObjectsByName("Box")) {
+				if (Collision::IsObjectInsideLaser(static_cast<Rectangular*>(temp->GetComponent(ComponentType::Body)), obj)) {
+					intersecting = true;
+				}
+			}
 		}
 		else {
 			if (door_behaviour->GetBehaviourIndex() == 0) {
@@ -84,6 +102,12 @@ namespace L_Script {
 			std::cout << obj->GetId() << "Laser is off\n";
 		}
 
+		if (intersecting) {
+			std::cout << "(Intersecting with " << obj->GetName() << " of obj ID " << obj->GetId() << " )" << std::endl;
+			GameLogic::restarting = true;
+			intersecting = false;
+			return;
+		}
 			
 			
 	}
