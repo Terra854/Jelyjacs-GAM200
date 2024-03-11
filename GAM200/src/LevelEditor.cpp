@@ -261,16 +261,16 @@ void LevelEditor::ObjectProperties() {
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
 		{
-			const std::pair<std::string, GLuint>* dropped_object = (const std::pair<std::string, GLuint>*)payload->Data;
+			char dropped_object[1024];
+
+			memcpy_s(dropped_object, payload->DataSize, payload->Data, payload->DataSize);
 
 			if (te == nullptr) {
-				object->AddComponent(new Texture(dropped_object->first));
+				object->AddComponent(new Texture(dropped_object));
 				tr->Scale = { 64.f, 64.f };
 			}
 			else
-				te->textureName = dropped_object->first;
-			
-
+				te->textureName = dropped_object;
 
 			UpdateAllObjectInstances(object);
 			ImGui::EndDragDropTarget();
@@ -1342,10 +1342,10 @@ void LevelEditor::AssetList()
 
 				}
 
-				size_t size = sizeof(t);
 				if (ImGui::BeginDragDropSource())
 				{
-					ImGui::SetDragDropPayload("Game texture", &t, size);
+					size_t size = sizeof(t.first.c_str());
+					ImGui::SetDragDropPayload("Game texture", t.first.c_str(), 1024);
 					ImGui::EndDragDropSource();
 				}
 

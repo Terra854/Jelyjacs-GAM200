@@ -144,7 +144,7 @@ void GameLogic::Update() {
 			}
 			if (!engine->isPaused() || behaviours[iter->GetBehaviourName()]->executeOnPause)
 			{
-				std::cout << "Running behaviour: " << iter->GetBehaviourName() << std::endl;
+				//std::cout << "Running behaviour: " << iter->GetBehaviourName() << std::endl;
 				behaviours[iter->GetBehaviourName()]->Update(it);
 			}
 			counter++;
@@ -154,6 +154,7 @@ void GameLogic::Update() {
 		SceneManager::RestartScene();
 		SceneManager::PlayScene();
 		GameLogic::restarting = false;
+		return;
 	}
 	/********************************************************************************
 	*

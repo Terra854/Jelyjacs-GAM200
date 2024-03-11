@@ -26,6 +26,8 @@ public:
 	static bool IsInitialObjectMapEmpty() { return initialObjectMap.empty(); };
 	static void PlayCutScene(std::string);
 
+	static void BackupInitialState();
+
 	// Returns name of the component
 	virtual std::string SystemName() { return "SceneManager"; }
 

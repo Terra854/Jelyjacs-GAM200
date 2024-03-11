@@ -206,7 +206,7 @@ Object* Factory::createObject(const std::string& filename)
 			PlayerControllable* p = (PlayerControllable*)((ComponentCreator<PlayerControllable>*) componentMap["Player"])->Create();
 			obj->AddComponent(p);
 		}
-		else if (type == "Animation")
+		else if (type == "Animation") // @guochen
 		{
 			Animation* a = (Animation*)((ComponentCreator<Animation>*) componentMap["Animation"])->Create();
 
@@ -325,7 +325,7 @@ Object* Factory::createObject(const std::string& filename)
 			b->SetBehaviourIndex(temp_index);
 			b->SetBehaviourName(temp_name);
 		}
-		else if (type == "Particle")
+		else if (type == "Particle") // @guochen
 		{
 			ParticleSystem* p = (ParticleSystem*)((ComponentCreator<ParticleSystem>*) componentMap["Particle"])->Create();
 			jsonloop.readFloat(p->pos_x_min, "Properties", "posx", 0);
@@ -757,7 +757,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			obj->AddComponent(p);
 		}
 		// Clone Animations data
-		else if (component.first == ComponentType::Animation)
+		else if (component.first == ComponentType::Animation) // @guochen
 		{
 			Animation* ani = (Animation*)((ComponentCreator<Animation>*) componentMap["Animation"])->Create();
 			Animation* ani_tmp = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
@@ -789,7 +789,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			b->SetBehaviourName(b_tmp->GetBehaviourName());
 			
 		}
-		else if (component.first == ComponentType::ParticleSystem)
+		else if (component.first == ComponentType::ParticleSystem) // @guochen
 		{
 			ParticleSystem* p = (ParticleSystem*)((ComponentCreator<ParticleSystem>*) componentMap["Particles"])->Create();
 			ParticleSystem* p_tmp = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
