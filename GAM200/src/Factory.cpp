@@ -806,6 +806,10 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			p->vel_x_max = p_tmp->vel_x_max;
 			p->vel_y_min = p_tmp->vel_y_min;
 			p->vel_y_max = p_tmp->vel_y_max;
+			p->acc_x_min = p_tmp->acc_x_min;
+			p->acc_x_max = p_tmp->acc_x_max;
+			p->acc_y_min = p_tmp->acc_y_min;
+			p->acc_y_max = p_tmp->acc_y_max;
 			p->life_min = p_tmp->life_min;
 			p->life_max = p_tmp->life_max;
 			p->particle_texture = p_tmp->particle_texture;
