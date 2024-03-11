@@ -100,28 +100,24 @@ void ParticleSystem::Update(Object* player)
     while (frame_dt_count) {
         frame_dt_count--;
 
-        // undate the vbo
-        for (auto& ptc : this->particles)
-        {
-
-            ptc->Update();
-            if (ptc->life_count > ptc->life_time) {
-                ptc->life_count = 0.0f;
-                ptc->position->x = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).x;
-                ptc->position->y = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).y;
-                ptc->velocity = random_velocity(vel_x_min, vel_x_max, vel_y_min, vel_y_max);
-                ptc->life_time = random_life_time(life_min, life_max);
-            }
-
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * PARTICLE_NUM, &translations[0], GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+        
 
         switch (prticle_type) {
         case::PrticleType::Prticle_Finn:
             if (player != nullptr) {
+                for (auto& ptc : this->particles)
+                {
+
+                    ptc->Update();
+                    if (ptc->life_count > ptc->life_time) {
+                        ptc->life_count = 0.0f;
+                        ptc->position->x = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).x;
+                        ptc->position->y = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).y;
+                        ptc->velocity = random_velocity(vel_x_min, vel_x_max, vel_y_min, vel_y_max);
+                        ptc->life_time = random_life_time(life_min, life_max);
+                    }
+
+                }
                 // get the player's position
                 Transform* tran_pt = static_cast<Transform*>(player->GetComponent(ComponentType::Transform));
                 Physics* phy_pt = static_cast<Physics*>(player->GetComponent(ComponentType::Physics));
@@ -159,6 +155,13 @@ void ParticleSystem::Update(Object* player)
 
         
         }
+
+        // undate the vbo
+
+        glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * PARTICLE_NUM, &translations[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     }
     
 }

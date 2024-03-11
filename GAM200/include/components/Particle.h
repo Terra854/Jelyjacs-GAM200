@@ -85,6 +85,12 @@ public:
 		float vel_y_min{};
 		float vel_y_max{};
 
+		// acceleration
+		float acc_x_min{};
+		float acc_x_max{};
+		float acc_y_min{};
+		float acc_y_max{};
+
 		// life time
 		float life_min{};
 		float life_max{};
