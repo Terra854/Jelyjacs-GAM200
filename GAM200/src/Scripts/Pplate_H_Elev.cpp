@@ -115,17 +115,16 @@ namespace PHE_Script
 						Behaviour* moving_platform_b = static_cast<Behaviour*>(H_Elev->GetComponent(ComponentType::Behaviour));
 
 						// Moving right
-						if (moving_platform_t->Position.x - moving_platform_b->GetBehaviourCounter() >= moving_platform_b->GetBehaviourDistance() && moving_platform_direction == false)
+						if (moving_platform_t->Position.x - moving_platform_b->GetBehaviourCounter() >= moving_platform_b->GetBehaviourDistance() && moving_platform_b->GetBehaviourIndex() == 0)
 						{
-							// Direction should be stored by the object itself as well (Use index)
-							moving_platform_direction = true;
+							moving_platform_b->SetBehaviourIndex(1);
 							moving_platform_b->SetBehaviourCounter(moving_platform_t->Position.x);
 							std::cout << "change dir to left\n";
 						}
 						// Moving left
-						else if (moving_platform_b->GetBehaviourCounter() - moving_platform_t->Position.x >= moving_platform_b->GetBehaviourDistance() && moving_platform_direction == true)
+						else if (moving_platform_b->GetBehaviourCounter() - moving_platform_t->Position.x >= moving_platform_b->GetBehaviourDistance() && moving_platform_b->GetBehaviourIndex() == 1)
 						{
-							moving_platform_direction = false;
+							moving_platform_b->SetBehaviourIndex(0);
 							moving_platform_b->SetBehaviourCounter(moving_platform_t->Position.x);
 							std::cout << "change dir to right\n";
 						}
@@ -136,7 +135,13 @@ namespace PHE_Script
 							std::cout << "ONLY SEE THIS ONCE PER OBJECT OF THIS SCRIPT\n";
 						}
 
-						moving_platform_speed = moving_platform_direction ? -moving_platform_b->GetBehaviourSpeed() : moving_platform_b->GetBehaviourSpeed();
+						if (moving_platform_b->GetBehaviourIndex() == 1)
+							moving_platform_speed = -moving_platform_b->GetBehaviourSpeed();
+						else
+							moving_platform_speed = moving_platform_b->GetBehaviourSpeed();
+
+
+						//moving_platform_speed = moving_platform_b->GetBehaviourIndex() ? -moving_platform_b->GetBehaviourSpeed() : moving_platform_b->GetBehaviourSpeed();
 						moving_platform_physics->Velocity.x = moving_platform_speed;
 					}
 					else
