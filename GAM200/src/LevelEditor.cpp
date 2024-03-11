@@ -1740,7 +1740,10 @@ void LevelEditor::SaveAsDialog() {
 
 			//sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
 
-			SaveScene(text);
+			std::string filename(text);
+			filename += ".json";
+
+			SaveScene(filename);
 			save_as_dialog = false;
 			ImGui::CloseCurrentPopup();
 		}
