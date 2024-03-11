@@ -25,15 +25,15 @@
           "Name" : "resume_button",
           "Position" : 
           {
-            "x" : 65.0,
-            "y" : -233.0
+            "x" : 46.0,
+            "y" : 339.0
           },
           "Prefabs" : "resume_button.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 224.0,
-            "y" : 44.0
+            "x" : 171.0,
+            "y" : 33.0
           },
           "Type" : "Transform",
           "counter" : 0.0,
@@ -43,18 +43,39 @@
           "speed" : 0.0
         },
         {
+          "Name" : "restart_button",
+          "Position" : 
+          {
+            "x" : 46.0,
+            "y" : 248.0
+          },
+          "Prefabs" : "restart_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 172.60000610351562,
+            "y" : 40.599998474121094
+          },
+          "Type" : "Transform",
+          "counter" : 0.0,
+          "distance" : 0.0,
+          "index" : 0.0,
+          "scripts" : "RestartButton",
+          "speed" : 0.0
+        },
+        {
           "Name" : "fullscreen_button",
           "Position" : 
           {
             "x" : 65.0,
-            "y" : -152.0
+            "y" : -62.0
           },
           "Prefabs" : "fullscreen_button.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 322.0,
-            "y" : 51.0
+            "x" : 247.10000610351562,
+            "y" : 39.099998474121094
           },
           "Type" : "Transform",
           "counter" : 0.0,
@@ -67,15 +88,15 @@
           "Name" : "quit_button",
           "Position" : 
           {
-            "x" : 64.0,
-            "y" : -315.0
+            "x" : 54.0,
+            "y" : -225.0
           },
           "Prefabs" : "quit_button.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 119.0,
-            "y" : 43.0
+            "x" : 91.300003051757812,
+            "y" : 33.0
           },
           "Type" : "Transform",
           "counter" : 0.0,
@@ -89,14 +110,14 @@
           "Position" : 
           {
             "x" : 65.0,
-            "y" : -64.0
+            "y" : -148.0
           },
           "Prefabs" : "how_to_play_button.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 339.0,
-            "y" : 53.0
+            "x" : 260.0,
+            "y" : 40.0
           },
           "Type" : "Transform",
           "counter" : 0.0,

@@ -63,7 +63,7 @@ void FullscreenButton::Update(Object* obj) {
     }
     */
 
-    tex->textureName = "Fullscreen glow.png";
+    //tex->textureName = "Fullscreen glow.png";
     
 
     if (input::IsPressed(KEY::mouseL))
