@@ -37,6 +37,8 @@ void SceneManager::LoadScene(const std::string filepath) {
 	objectFactory->destroyAllObjects();
 	SceneManager::ClearInitialObjectMap(true);
 	SceneManager::layers.clear();
+	SceneManager::initialLayer.clear();
+	SceneManager::initialLayerSettings.clear();
 	LoadSceneFromJson(filepath.c_str());
 }
 
