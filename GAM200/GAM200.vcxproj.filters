@@ -285,6 +285,9 @@
     <ClCompile Include="src\Scripts\CloseHowToPlayButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\WinBackButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -510,6 +513,9 @@
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\CloseHowToPlayButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\WinBackButton.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,0 +1,93 @@
+{
+  "Layers" : 
+  [
+    {
+      "Name" : "WinMenu",
+      "Objects" : 
+      [
+        {
+          "Name" : "Win_Bg",
+          "Position" : 
+          {
+            "x" : 0.0,
+            "y" : 0.0
+          },
+          "Prefabs" : "Win_Bg.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 1920.0,
+            "y" : 1080.0
+          },
+          "Type" : "Transform"
+        },
+        {
+          "Name" : "Win_Bg2",
+          "Position" : 
+          {
+            "x" : 0.0,
+            "y" : 0.0
+          },
+          "Prefabs" : "Win_Bg2.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 1920.0,
+            "y" : 1080.0
+          },
+          "Type" : "Transform"
+        },
+        {
+          "Name" : "Win_Bg3",
+          "Position" : 
+          {
+            "x" : 0.0,
+            "y" : 203.0
+          },
+          "Prefabs" : "Win_Bg3.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 1083.0,
+            "y" : 239.0
+          },
+          "Type" : "Transform"
+        },
+        {
+          "Name" : "win_back_button",
+          "Position" : 
+          {
+            "x" : -409.0,
+            "y" : -203.0
+          },
+          "Prefabs" : "win_back_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 220.0,
+            "y" : 63.0
+          },
+          "Type" : "Transform",
+          "counter" : 0.0,
+          "distance" : 0.0,
+          "index" : 0.0,
+          "scripts" : "WinBackButton",
+          "speed" : 0.0
+        }
+      ],
+      "Settings" : 
+      {
+        "isVisible" : false,
+        "static_layer" : true
+      }
+    }
+  ],
+  "SceneName" : "win_menu",
+  "Size" : 
+  {
+    "height" : 1080.0,
+    "startX" : -960.0,
+    "startY" : -540.0,
+    "width" : 1920.0
+  }
+}
