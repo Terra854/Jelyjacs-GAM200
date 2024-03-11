@@ -95,14 +95,35 @@
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 128.0,
-            "y" : 64.0
+            "x" : 119.0,
+            "y" : 43.0
           },
           "Type" : "Transform",
           "counter" : 0.0,
           "distance" : 0.0,
           "index" : 0.0,
           "scripts" : "QuitButton",
+          "speed" : 0.0
+        },
+        {
+          "Name" : "how_to_play_button",
+          "Position" : 
+          {
+            "x" : 60.0,
+            "y" : -200.0
+          },
+          "Prefabs" : "how_to_play_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 339.0,
+            "y" : 53.0
+          },
+          "Type" : "Transform",
+          "counter" : 0.0,
+          "distance" : 0.0,
+          "index" : 0.0,
+          "scripts" : "HowToPlayButton",
           "speed" : 0.0
         }
       ],

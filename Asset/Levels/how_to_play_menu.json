@@ -1,0 +1,40 @@
+{
+  "Layers" : 
+  [
+    {
+      "Name" : "HowToPlayMenu",
+      "Objects" : 
+      [
+        {
+          "Name" : "How_To_Play_Bg",
+          "Position" : 
+          {
+            "x" : 0.0,
+            "y" : 0.0
+          },
+          "Prefabs" : "How_To_Play_Bg.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 801.0,
+            "y" : 1000.0
+          },
+          "Type" : "Transform"
+        }
+      ],
+      "Settings" : 
+      {
+        "isVisible" : true,
+        "static_layer" : true
+      }
+    }
+  ],
+  "SceneName" : "Asset/Levels/how_to_play_menu.json",
+  "Size" : 
+  {
+    "height" : 1080.0,
+    "startX" : -960.0,
+    "startY" : -540.0,
+    "width" : 1920.0
+  }
+}

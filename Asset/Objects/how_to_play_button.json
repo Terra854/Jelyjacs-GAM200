@@ -1,5 +1,5 @@
 {
-  "Name": "quit_button",
+  "Name": "how_to_play_button",
   "Components": [
     {
       "Type": "Transform",
@@ -18,13 +18,13 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "Exit.png"
+        "texturepath": "How to play.png"
       }
     },
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "QuitButton",
+        "Script": "HowToPlayButton",
         "Index": 0
       }
     }
