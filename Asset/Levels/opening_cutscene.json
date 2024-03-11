@@ -1,0 +1,39 @@
+{
+  "SceneName": "opening_cutscene",
+  "Size": {
+    "startX": 0,
+    "startY": 0,
+    "width": 0,
+    "height": 0
+  },
+  "Layers": [
+    {
+      "Name": "Cutscene",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
+      "Objects": [
+        {
+          "Prefabs": "opening_cutscene_1.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_2.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_3.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_4.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_5.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_6.json"
+        }
+      ]
+    }
+  ],
+  "AdditionalScenesToLoad": []
+}
