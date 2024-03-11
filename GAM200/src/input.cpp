@@ -24,8 +24,8 @@ namespace
 	double scaleY{ 1.0f };
 	int new_width;
 	int new_height;
-	float old_width;
-	float old_height;
+	int old_width;
+	int old_height;
 
 	struct BUTTON
 	{
@@ -102,8 +102,9 @@ void input::Init(GLFWwindow* pWin)
 {
 	Pwindow = pWin;
 	glfwSetCursorPosCallback(pWin, MousePosCallBack);
-	old_width = static_cast<float>(window->width);
-	old_height = static_cast<float>(window->height);
+	glfwGetWindowSize(GLWindow::ptr_window, &old_width, &old_height);
+	new_width = old_width;
+	new_height = old_height;
 }
 
 
@@ -126,11 +127,11 @@ bool input::IsPressedRepeatedly(KEY key)
 
 double input::GetMouseX()
 {
-		return ((mouse.x) - static_cast<double>(old_width*scaleX / 2.0f));
+		return ((mouse.x) - static_cast<float>(new_width)/2.0f)* scaleX;
 }
 double input::GetMouseY()
 {
-		return (-mouse.y) + (old_height*scaleY/ 2.0f);
+		return ((-mouse.y) + static_cast<float>(new_height)/ 2.0f) * scaleY;
 }
 
 //checks if mouse was moved
@@ -224,8 +225,8 @@ bool input::MouseMoved()
 //updates scaling of inputs based on resolution change
 void input::update_resolution()
 {
-	glfwGetFramebufferSize(GLWindow::ptr_window, &new_width, &new_height);
-	scaleX = new_width / old_width;
-	scaleY = new_height / old_height;
+	glfwGetWindowSize(GLWindow::ptr_window, &new_width, &new_height);
+	scaleX =  static_cast<float>(old_width) / static_cast<float>(new_width);
+	scaleY = static_cast<float>(old_height) / static_cast<float>(new_height);
 
 }
