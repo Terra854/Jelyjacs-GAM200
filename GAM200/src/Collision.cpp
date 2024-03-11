@@ -196,13 +196,13 @@ namespace Collision {
 		rect1->collision_flag |= flag;
 	}
 
-	bool IsObjectInsideAnotherObject(Transform* obj_t, Rectangular* anotherObj_b)
+	bool IsObjectInsideLaser(Rectangular* obj_b, Object* anotherObj)
 	{
 
-		if (obj_t == nullptr || anotherObj_b == nullptr) {
+		if (obj_b == nullptr || anotherObj == nullptr) {
 			return false;
 		}
 
-		return (obj_t->Position.x >= anotherObj_b->aabb.min.x && obj_t->Position.x <= anotherObj_b->aabb.max.x && obj_t->Position.y >= anotherObj_b->aabb.min.y && obj_t->Position.y <= anotherObj_b->aabb.max.y);
+		return (obj_b->left_collision == anotherObj && obj_b->right_collision == anotherObj) || obj_b->top_collision == anotherObj || obj_b->bottom_collision == anotherObj;
 	}
 }

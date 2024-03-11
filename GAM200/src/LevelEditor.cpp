@@ -347,7 +347,7 @@ void LevelEditor::ObjectProperties() {
 				Object* o = objectFactory->cloneObject(object, 0, 64);
 				objectFactory->assignIdToObject(o);
 				selectedNum = o->GetId();
-				o->SetPrefab(object); // testing this line
+				o->SetPrefab(object->GetPrefab()); // testing this line
 				cloneSuccessful = selectedNum;
 				l.second.second.push_back(o);
 			}

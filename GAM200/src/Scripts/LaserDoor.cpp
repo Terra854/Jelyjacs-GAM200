@@ -100,7 +100,7 @@ namespace LaserDoor_Script {
 
         //std::cout << obj->GetName() << "'s : " << LaserDoor_a->frame_num << std::endl;
         // Disable collision only when the laser is off
-        if (LaserDoor_b->active && doorswitch) {
+        if (LaserDoor_b->active) {
             Object* Finn = objectFactory->FindObject("Finn");
             Object* Spark = objectFactory->FindObject("Spark");
             if (Finn != nullptr && Spark != nullptr) {
@@ -112,10 +112,10 @@ namespace LaserDoor_Script {
                 if (Intersects(Spark, obj)) {
                     intersecting = true;
                 }*/
-                if (Collision::IsObjectInsideAnotherObject(static_cast<Transform*>(Finn->GetComponent(ComponentType::Transform)), static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body)))) {
+                if (Collision::IsObjectInsideLaser(static_cast<Rectangular*>(Finn->GetComponent(ComponentType::Body)), obj)) {
 					intersecting = true;
 				}
-                if (Collision::IsObjectInsideAnotherObject(static_cast<Transform*>(Spark->GetComponent(ComponentType::Transform)), static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body)))) {
+                if (Collision::IsObjectInsideLaser(static_cast<Rectangular*>(Spark->GetComponent(ComponentType::Body)), obj)) {
                     intersecting = true;
                 }
             }
@@ -125,7 +125,7 @@ namespace LaserDoor_Script {
                     intersecting = true;
                 }
                 */
-                if (Collision::IsObjectInsideAnotherObject(static_cast<Transform*>(temp->GetComponent(ComponentType::Transform)), static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body)))) {
+                if (Collision::IsObjectInsideLaser(static_cast<Rectangular*>(temp->GetComponent(ComponentType::Body)), obj)) {
 					intersecting = true;
 				}
             }
