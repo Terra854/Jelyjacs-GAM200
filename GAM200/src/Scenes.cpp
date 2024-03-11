@@ -14,6 +14,10 @@ This file contains the definitions for loading and saving scenes
 #include <iostream>
 #include "LevelEditor.h"
 #include <SceneManager.h>
+#include <components/Animation.h>
+#include <components/Text.h>
+#include <Factory.h>
+#include <components/Particle.h>
 
 /******************************************************************************
 LoadSceneFromJson
@@ -39,7 +43,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 		jsonobj.readString(soundmap, "SoundMap");
 		linkSoundMap(soundmap);
 	}*/
-	
+
 	/*
 	std::string soundmap = "Asset/Sounds/sounds.json";
 	linkSoundMap(soundmap);
@@ -75,6 +79,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 		objectFactory->CreateLayer(layername, ls);
 
 		//for (auto& component : jsonobj.read("Objects"))
+		/*
 		for (auto& component : layer["Objects"])
 		{
 			JsonSerialization jsonloop;
@@ -206,6 +211,316 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 			obj->Initialize();
 
 			objectFactory->AddToLayer(layername, obj);
+		}*/
+		for (auto& objects : layer["Objects"])
+		{
+			JsonSerialization jsonloop;
+			jsonloop.jsonObject = &objects;
+
+			std::string objprefabs;
+			jsonloop.readString(objprefabs, "Prefabs");
+			Object* obj;
+			// Create the prefab if it doesn't exist
+			if (!objprefabs.empty() && AssetManager::prefabsval(objprefabs) == nullptr)
+			{
+				// Create new prefab
+				std::string tempobjprefabs = AssetManager::objectprefabsval() + "/" + objprefabs;
+				Object* newPrefab = objectFactory->createObject(tempobjprefabs);
+
+				AssetManager::updateprefab(newPrefab->GetName(), newPrefab);
+			}
+
+			if (AssetManager::prefabsval(objprefabs)) {
+				// Create object via cloning the prefab
+				obj = objectFactory->cloneObject(AssetManager::prefabsval(objprefabs));
+				obj->SetPrefab(AssetManager::prefabsval(objprefabs)); // Update the clone object to have usingPrefab value
+				// Assign an ID. It will be added to the objectMap
+				objectFactory->assignIdToObject(obj);
+			}
+			else {
+				// Create object via creating a new object
+				obj = objectFactory->createEmptyObject();
+			}
+			for (auto& component : jsonloop.read("Components")) {
+
+				JsonSerialization jsonComponent;
+				jsonComponent.jsonObject = &component;
+
+				std::string type;
+				jsonComponent.readString(type, "Type");
+
+				if (type == "Transform") {
+
+					Transform* trans = (Transform*)((ComponentCreator<Transform>*) objectFactory->componentMap["Transform"])->Create();
+
+					jsonComponent.readFloat(trans->Position.x, "Properties", "Position", "x");
+					jsonComponent.readFloat(trans->Position.y, "Properties", "Position", "y");
+
+					jsonComponent.readFloat(trans->Scale.x, "Properties", "Scale", "x");
+					jsonComponent.readFloat(trans->Scale.y, "Properties", "Scale", "y");
+					jsonComponent.readFloat(trans->Rotation, "Properties", "Rotation");
+
+					obj->AddComponent(trans);
+				}
+				else if (type == "Texture") {
+
+					std::string path;
+					jsonComponent.readString(path, "Properties", "texturepath");
+					bool exist = AssetManager::texturecheckexist(path);
+
+					if (!exist) {
+						std::cout << "Missing Texture!" << std::endl;
+						// Attempt to add the texture
+						AssetManager::addtextures(path);
+					}
+
+					Texture* tex = (Texture*)((ComponentCreator<Texture>*) objectFactory->componentMap["Texture"])->Create(path);
+
+					jsonComponent.readFloat(tex->opacity, "Properties", "opacity");
+					obj->AddComponent(tex);
+
+				}
+				else if (type == "Body") {
+					std::string shape;
+					jsonComponent.readString(shape, "Shape");
+					if (shape == "Rectangle") {
+						Rectangular* r = (Rectangular*)((ComponentCreator<Rectangular>*) objectFactory->componentMap["Rectangle"])->Create();
+
+						if (jsonComponent.isMember("Collision Response"))
+							jsonComponent.readBool(r->collision_response, "Collision Response");
+
+						if (jsonComponent.isMember("Active"))
+							jsonComponent.readBool(r->active, "Active");
+
+						jsonComponent.readFloat(r->width, "Properties", "width");
+						jsonComponent.readFloat(r->height, "Properties", "height");
+						jsonComponent.readBool(r->pushable, "Properties", "pushable");
+
+						int material = 0;
+						jsonComponent.readInt(material, "Properties", "material");
+						r->material = static_cast<Material>(material);
+
+						obj->AddComponent(r);
+					}
+					else if (shape == "Circle") {
+						Circular* c = (Circular*)((ComponentCreator<Circular>*) objectFactory->componentMap["Circular"])->Create();
+
+						if (jsonComponent.isMember("Collision Response"))
+							jsonComponent.readBool(c->collision_response, "Collision Response");
+
+						jsonComponent.readFloat(c->circle.radius, "Properties", "radius");
+						jsonComponent.readFloat(c->circle.center.x, "Properties", "radius", "x");
+						jsonComponent.readFloat(c->circle.center.y, "Properties", "radius", "y");
+
+						obj->AddComponent(c);
+					}
+					else if (shape == "Line") {
+						Lines* l = (Lines*)((ComponentCreator<Lines>*) objectFactory->componentMap["Line"])->Create();
+
+						if (jsonComponent.isMember("Collision Response"))
+							jsonComponent.readBool(l->collision_response, "Collision Response");
+
+						float x;
+						float y;
+
+						jsonComponent.readFloat(x, "Properties", "start", "x");
+						jsonComponent.readFloat(y, "Properties", "start", "y");
+						l->line.SetPt0({ x, y });
+
+						jsonComponent.readFloat(x, "Properties", "end", "x");
+						jsonComponent.readFloat(y, "Properties", "end", "y");
+						l->line.SetPt1({ x, y });
+
+						obj->AddComponent(l);
+					}
+				}
+				else if (type == "Physics") {
+					Physics* p = (Physics*)((ComponentCreator<Physics>*) objectFactory->componentMap["Physics"])->Create();
+
+					float x;
+					float y;
+
+					jsonComponent.readFloat(x, "Properties", "X_Velocity");
+					jsonComponent.readFloat(y, "Properties", "Y_Velocity");
+					p->Velocity = Vec2(x, y);
+
+					jsonComponent.readFloat(p->Mass, "Properties", "Mass");
+
+					jsonComponent.readBool(p->AffectedByGravity, "Properties", "AffectedByGravity");
+
+					jsonComponent.readBool(p->AbleToPushObjects, "Properties", "AbleToPushObjects");
+
+					obj->AddComponent(p);
+				}
+				else if (type == "Player") {
+					PlayerControllable* p = (PlayerControllable*)((ComponentCreator<PlayerControllable>*) objectFactory->componentMap["Player"])->Create();
+					obj->AddComponent(p);
+				}
+				else if (type == "Animation") // @guochen
+				{
+					Animation* a = (Animation*)((ComponentCreator<Animation>*) objectFactory->componentMap["Animation"])->Create();
+
+					std::string path;
+					jsonComponent.readString(path, "Properties", "texturepath");
+					bool exist = AssetManager::animationcheckexist(path);
+					if (!exist)
+					{
+						std::cout << "Missing Animation Texture!" << std::endl;
+					}
+					else
+					{
+						a->animation_tex_obj = AssetManager::animationval(path);
+					}
+
+					jsonComponent.readFloat(a->frame_rate, "Properties", "framerate");
+
+					if (jsonComponent.isMember("jumpfixframe", "Properties"))
+						jsonComponent.readInt(a->jump_fixed_frame, "Properties", "jumpfixframe");
+
+					jsonComponent.readFloat(a->opacity, "Properties", "opacity");
+
+					float col;
+					float row;
+					jsonComponent.readFloat(col, "Properties", "frame", 0);
+					jsonComponent.readFloat(row, "Properties", "frame", 1);
+
+					bool faceright = true;
+
+					// Create frame_map
+					for (int j = 0; j < AnimationType::End; j++)
+					{
+						std::string animationtype;
+						switch (j)
+						{
+						case AnimationType::Idle:
+							animationtype = "idle";
+							faceright = true;
+							break;
+						case AnimationType::Push:
+							animationtype = "push";
+							faceright = true;
+							break;
+						case AnimationType::Jump:
+							animationtype = "jump";
+							faceright = true;
+							break;
+						case AnimationType::Run:
+							animationtype = "run";
+							faceright = true;
+							break;
+						case AnimationType::Idle_left:
+							animationtype = "idle";
+							faceright = false;
+							break;
+						case AnimationType::Push_left:
+							animationtype = "push";
+							faceright = false;
+							break;
+						case AnimationType::Jump_left:
+							animationtype = "jump";
+							faceright = false;
+							break;
+						case AnimationType::Run_left:
+							animationtype = "run";
+							faceright = false;
+							break;
+						default:
+							animationtype = "error";
+							faceright = true;
+							break;
+						}
+
+						AnimationType frametype = static_cast<AnimationType>(j);
+						std::vector<GLApp::GLModel> animationmodel;
+
+						// Ensure AnimationType exist before gathering data into animation_map
+
+						if (jsonComponent.isMember(animationtype, "Properties"))
+						{
+							float framecol;
+							float framerow;
+							jsonComponent.readFloat(framecol, "Properties", animationtype, 0);
+							jsonComponent.readFloat(framerow, "Properties", animationtype, 1);
+
+							for (int i = 0; i < framecol; i++)
+							{
+								GLApp::GLModel model = a->setup_texobj_animation(i / col, (framerow - 1) / row, (i + 1) / col, framerow / row, faceright);
+								animationmodel.push_back(model);
+							}
+						}
+
+						a->animation_Map.emplace(frametype, animationmodel);
+					}
+
+					obj->AddComponent(a);
+				}
+				else if (type == "Event")
+				{
+					Event* e = (Event*)((ComponentCreator<Event>*) objectFactory->componentMap["Event"])->Create();
+
+					jsonComponent.readInt(e->linked_event, "Properties", "linkedevent");
+
+					obj->AddComponent(e);
+				}
+				else if (type == "Behaviour")
+				{
+					Behaviour* b = (Behaviour*)((ComponentCreator<Behaviour>*) objectFactory->componentMap["Behaviour"])->Create();
+					std::string temp_name;
+					int temp_index;
+					jsonComponent.readString(temp_name, "Properties", "Script");
+					jsonComponent.readInt(temp_index, "Properties", "Index");
+					obj->AddComponent(b);
+					Logic->AddBehaviourComponent(b);
+					std::cout << "Behaviour Script & Index: " << temp_name << ", " << temp_index << std::endl;
+					b->SetBehaviourIndex(temp_index);
+					b->SetBehaviourName(temp_name);
+				}
+				else if (type == "Particle") // @guochen
+				{
+					ParticleSystem* p = (ParticleSystem*)((ComponentCreator<ParticleSystem>*) objectFactory->componentMap["Particle"])->Create();
+					jsonComponent.readFloat(p->pos_x_min, "Properties", "posx", 0);
+					jsonComponent.readFloat(p->pos_x_max, "Properties", "posx", 1);
+					jsonComponent.readFloat(p->pos_y_min, "Properties", "posy", 0);
+					jsonComponent.readFloat(p->pos_y_max, "Properties", "posy", 1);
+					jsonComponent.readFloat(p->vel_x_min, "Properties", "velx", 0);
+					jsonComponent.readFloat(p->vel_x_max, "Properties", "velx", 1);
+					jsonComponent.readFloat(p->vel_y_min, "Properties", "vely", 0);
+					jsonComponent.readFloat(p->vel_y_max, "Properties", "vely", 1);
+					jsonComponent.readFloat(p->life_min, "Properties", "lifetime", 0);
+					jsonComponent.readFloat(p->life_max, "Properties", "lifetime", 1);
+
+					std::string path;
+					jsonComponent.readString(path, "Properties", "texture");
+					bool exist = AssetManager::texturecheckexist(path);
+
+					if (!exist) {
+						std::cout << "Missing Texture!" << std::endl;
+						// Attempt to add the texture
+						AssetManager::addtextures(path);
+					}
+					else
+					{
+						p->particle_texture = AssetManager::textureval(path);
+					}
+
+					std::cout << "PARTICLE TEXTURE SET: " << p->particle_texture << std::endl;
+
+					obj->AddComponent(p);
+				}
+				else if (type == "Text")
+				{
+					Text* t = (Text*)((ComponentCreator<Text>*) objectFactory->componentMap["Text"])->Create();
+					jsonComponent.readString(t->text, "Properties", "text");
+
+					if (jsonComponent.isMember("fontSize", "Properties"))
+						jsonComponent.readFloat(t->fontSize, "Properties", "fontSize");
+
+					obj->AddComponent(t);
+				}
+			}
+			obj->Initialize();
+
+			objectFactory->AddToLayer(layername, obj);
 		}
 
 		layerNum++;
@@ -288,6 +603,7 @@ void SaveScene(std::string filename)
 			innerobj["Name"] = name;
 			innerobj["Prefabs"] = prefabname;
 
+			/*
 			// Save object transform data
 			if (obj->GetComponent(ComponentType::Transform) != nullptr)
 			{
@@ -338,6 +654,149 @@ void SaveScene(std::string filename)
 			}
 
 			layer["Objects"].append(innerobj);
+			(*/
+
+			Transform* tr = (Transform*)obj->GetComponent(ComponentType::Transform);
+			Texture* te = (Texture*)obj->GetComponent(ComponentType::Texture);
+			Body* bo = (Body*)obj->GetComponent(ComponentType::Body);
+			Physics* ph = (Physics*)obj->GetComponent(ComponentType::Physics);
+			PlayerControllable* pc = (PlayerControllable*)obj->GetComponent(ComponentType::PlayerControllable);
+			Animation* a = (Animation*)obj->GetComponent(ComponentType::Animation);
+			Event* e = (Event*)obj->GetComponent(ComponentType::Event);
+			Behaviour* be = (Behaviour*)obj->GetComponent(ComponentType::Behaviour);
+			Text* t = (Text*)obj->GetComponent(ComponentType::Text);
+
+			// Transform
+			if (tr != nullptr) {
+				Json::Value transform;
+				transform["Type"] = "Transform";
+				transform["Properties"]["Position"]["x"] = tr->Position.x;
+				transform["Properties"]["Position"]["y"] = tr->Position.y;
+				transform["Properties"]["Scale"]["x"] = tr->Scale.x;
+				transform["Properties"]["Scale"]["y"] = tr->Scale.y;
+				transform["Properties"]["Rotation"] = tr->Rotation;
+				innerobj["Components"].append(transform);
+			}
+
+			// Texture
+			if (te != nullptr) {
+				Json::Value texture;
+				texture["Type"] = "Texture";
+				texture["Properties"]["texturepath"] = te->textureName;
+				texture["Properties"]["opacity"] = te->opacity;
+				innerobj["Components"].append(texture);
+
+			}
+
+			// Animation 
+			if (a != nullptr) {
+				Json::Value animation;
+				animation["Type"] = "Animation";
+
+				// TODO: It's incomplete
+
+				for (const auto& pair : AssetManager::animations) {
+					if (pair.second == a->animation_tex_obj) {
+						animation["Properties"]["texturepath"] = pair.first;
+						break; // Stop searching after the first match is found
+					}
+				}
+
+				animation["Properties"]["jumpfixframe"] = a->jump_fixed_frame;
+				animation["Properties"]["framerate"] = a->frame_rate;
+				//animation["Properties"]["frame"] =
+				//animation["Properties"]["idle"] =
+				//animation["Properties"]["push"] =
+				//animation["Properties"]["jump"] =
+				//animation["Properties"]["run"] =
+				animation["Properties"]["opacity"] = a->opacity;
+
+				innerobj["Components"].append(animation);
+
+			}
+
+			// Text
+			if (t != nullptr) {
+				Json::Value text;
+				text["Type"] = "Text";
+				text["Properties"]["text"] = t->text;
+				text["Properties"]["fontSize"] = t->fontSize;
+				innerobj["Components"].append(text);
+			}
+
+
+			// Body
+			if (bo != nullptr) {
+				Json::Value body;
+				body["Type"] = "Body";
+				if (bo->GetShape() == Shape::Rectangle) {
+					Rectangular* r = (Rectangular*)bo;
+					body["Shape"] = "Rectangle";
+					body["Properties"]["width"] = r->width;
+					body["Properties"]["height"] = r->height;
+					body["Properties"]["pushable"] = r->pushable;
+					body["Properties"]["material"] = static_cast<int>(r->material);
+					body["Properties"]["active"] = r->active;
+					body["Properties"]["collision_response"] = r->collision_response;
+				}
+				else if (bo->GetShape() == Shape::Circle) {
+					Circular* c = (Circular*)bo;
+					body["Shape"] = "Circle";
+					body["Properties"]["radius"] = c->circle.radius;
+					body["Properties"]["center"]["x"] = c->circle.center.x;
+					body["Properties"]["center"]["y"] = c->circle.center.y;
+					body["Properties"]["collision_response"] = c->collision_response;
+				}
+				else if (bo->GetShape() == Shape::Line) {
+					Lines* l = (Lines*)bo;
+					body["Shape"] = "Line";
+					body["Properties"]["start"]["x"] = l->line.Pt0().x;
+					body["Properties"]["start"]["y"] = l->line.Pt0().y;
+					body["Properties"]["end"]["x"] = l->line.Pt1().x;
+					body["Properties"]["end"]["y"] = l->line.Pt1().y;
+					body["Properties"]["collision_response"] = l->collision_response;
+				}
+				innerobj["Components"].append(body);
+
+			}
+
+			// Physics
+			if (ph != nullptr) {
+				Json::Value physics;
+				physics["Type"] = "Physics";
+				physics["Properties"]["X_Velocity"] = ph->Velocity.x;
+				physics["Properties"]["Y_Velocity"] = ph->Velocity.y;
+				physics["Properties"]["Mass"] = ph->Mass;
+				physics["Properties"]["AffectedByGravity"] = ph->AffectedByGravity;
+				physics["Properties"]["AbleToPushObjects"] = ph->AbleToPushObjects;
+				innerobj["Components"].append(physics);
+			}
+
+			// PlayerControllable
+			if (pc != nullptr) {
+				Json::Value player;
+				player["Type"] = "Player";
+				innerobj["Components"].append(player);
+			}
+
+			// Event
+			if (e != nullptr) {
+				Json::Value event;
+				event["Type"] = "Event";
+				event["Properties"]["linkedevent"] = e->linked_event;
+				innerobj["Components"].append(event);
+			}
+
+			// Behaviour
+			if (be != nullptr) {
+				Json::Value behaviour;
+				behaviour["Type"] = "Behaviour";
+				behaviour["Properties"]["Script"] = be->GetBehaviourName();
+				behaviour["Properties"]["Index"] = be->GetBehaviourIndex();
+				innerobj["Components"].append(behaviour);
+			}
+
+			layer["Objects"].append(innerobj);
 		}
 
 		layers.append(layer);
@@ -360,7 +819,7 @@ void SaveScene(std::string filename)
 		std::string name = obj->GetName();
 		Object* prefab = obj->GetPrefab();
 		std::string prefabname = "MISSINGNAME";
-		
+
 		if (prefab == nullptr)
 			std::cout << "OBJECT: " << name << " is missing usingPrefab!" <<std::endl;
 		else
@@ -368,7 +827,7 @@ void SaveScene(std::string filename)
 
 		Json::Value innerobj;
 
-		
+
 		innerobj["Name"] = name;
 		innerobj["Prefabs"] = prefabname;
 
@@ -434,7 +893,7 @@ void SaveScene(std::string filename)
 	}
 	else
 		std::cerr << "Failed to open file for writing." << std::endl;
-	
+
 	// GETTING ERROR, TEMPORARY NOT USING JSONSERILIZATION.H
 	// 
 	//JsonSerialization jsonobj;

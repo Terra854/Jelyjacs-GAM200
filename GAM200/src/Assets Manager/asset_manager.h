@@ -16,6 +16,7 @@ This file contains the declaration of class AssetManager.
 #include "../../include/Interface_System.h"
 #include "../../include/Graphic_gl/glapp.h"
 #include <variant>
+#include <Scenes.h>
 
 class AssetManager : public ISystems
 {
@@ -84,6 +85,7 @@ public:
 	// Level Editor will need to access the private data
 	friend class LevelEditor;
 	friend class Factory;
+	friend void ::SaveScene(std::string filename);
 
 	// These data shouldn't be modified unless file location is changed
 private:
