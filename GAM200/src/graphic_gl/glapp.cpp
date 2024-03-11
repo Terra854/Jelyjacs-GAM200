@@ -251,6 +251,10 @@ void GLApp::Update()
 		for (auto& l : SceneManager::layers) {
 			if (l.second.first.isVisible) {
 				for (auto& object : l.second.second) {
+
+					if (!object)
+						continue; // Skip to the next object if the current one is a nullptr
+
 					GLuint tex_test;
 					Animation* ani_pt = nullptr;
 					Mat3 mat_test;

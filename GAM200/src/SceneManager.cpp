@@ -52,21 +52,7 @@ void SceneManager::PlayScene() {
 
 	if (engine->isPaused()) {
 		if (initialObjectMap.empty()) {
-			for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
-				initialObjectMap[p.first] = objectFactory->cloneObject(p.second);
-			}
-
-			for (auto& l : SceneManager::layers) {
-				initialLayerSettings[l.first] = l.second.first;
-
-				auto la = std::make_pair(l.first, std::vector<int>());
-
-				for (auto& object : l.second.second) {
-					la.second.push_back(object->GetId());
-				}
-
-				initialLayer.push_back(la);
-			}
+			SceneManager::BackupInitialState();
 		}
 		engine->setPause();
 	}
@@ -130,7 +116,10 @@ void SceneManager::RestartScene() {
 	// The data inside initialLayer is not needed anymore now that the reset is complete
 	initialLayer.clear();
 	initialLayerSettings.clear();
-}
+
+	if (!engine->isPaused())
+		SceneManager::BackupInitialState();
+	}
 
 /******************************************************************************
 	ClearInitialObjectMap
@@ -240,7 +229,23 @@ void SceneManager::PlayCutScene(std::string str)
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
+void SceneManager::BackupInitialState() {
+	for (const std::pair<int, Object*>& p : objectFactory->objectMap) {
+		initialObjectMap[p.first] = objectFactory->cloneObject(p.second);
+	}
 
+	for (auto& l : SceneManager::layers) {
+		initialLayerSettings[l.first] = l.second.first;
+
+		auto la = std::make_pair(l.first, std::vector<int>());
+
+		for (auto& object : l.second.second) {
+			la.second.push_back(object->GetId());
+		}
+
+		initialLayer.push_back(la);
+	}
+}
 
 
 
