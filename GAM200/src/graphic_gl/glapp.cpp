@@ -258,7 +258,7 @@ void GLApp::Update()
 					float orientation;
 					Vec2 scaling;
 					Vec2 window_scaling;
-					bool texture_bool = true;
+					//bool texture_bool = true;
 					//get texture		
 					Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
 
@@ -335,11 +335,16 @@ void GLApp::Update()
 						// if is player
 						if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 							ParticleSystem* particleSystem = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
+							//if w is pressed
+							
 							if (particleSystem != nullptr)
 
 							{
+								if (input::IsPressed(KEY::w)) {
+									particleSystem->prticle_state = ParticleState::Prticle_Start;
+								}
 								particleSystem->Update(object);
-								particleSystem->Draw();
+								//particleSystem->Draw();
 							}
 							// draw object with animation
 
@@ -459,7 +464,7 @@ void GLApp::Update()
 			//Texture* te = static_cast<Texture*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Texture));
 			Transform* tr = static_cast<Transform*>(objectFactory->getObjectWithID(level_editor->selectedNum)->GetComponent(ComponentType::Transform));
 
-			GLint width, height;
+			//GLint width, height;
 			Vec2 botleft, topright;
 
 			botleft = tr->Position + -tr->Scale / 2.f;
