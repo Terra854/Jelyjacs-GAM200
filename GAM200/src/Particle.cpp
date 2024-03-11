@@ -32,10 +32,20 @@ void ParticleSystem::Init()
         index++;
      }
     
-    glGenBuffers(1, &instanceVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+    glGenBuffers(1, &instance_pos);
+    glBindBuffer(GL_ARRAY_BUFFER, instance_pos);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * PARTICLE_NUM, &translations[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    //init the shown buffer
+    for (int i = 0; i < PARTICLE_NUM; i++) {
+		shown[i] = 1.0f;
+	}
+    glGenBuffers(1, &instance_shown);
+    glBindBuffer(GL_ARRAY_BUFFER, instance_shown);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * PARTICLE_NUM, &shown[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     // set up vertex data (and buffer(s)) and configure vertex attributes
    // ------------------------------------------------------------------
     float quadVertices[] = {
@@ -62,10 +72,16 @@ void ParticleSystem::Init()
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(5 * sizeof(float)));
     // also set instance data
     glEnableVertexAttribArray(2);
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO); // this attribute comes from a different vertex buffer
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, instance_pos); // this attribute comes from a different vertex buffer
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
+
+    glEnableVertexAttribArray(4);
+    glBindBuffer(GL_ARRAY_BUFFER, instance_shown); // this attribute comes from a different vertex buffer
+    glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribDivisor(4, 1); // tell OpenGL this is an instanced vertex attribute.
 
     //particle_texture = GLApp::setup_texobj("Asset/Picture/p2.png");
     std::cout << "PARTICLE BEING USED == " << particle_texture << std::endl;
@@ -115,6 +131,7 @@ void ParticleSystem::Update(Object* player)
                         ptc->position->y = random_value(pos_x_min, pos_x_max, pos_y_min, pos_y_max).y;
                         ptc->velocity = random_velocity(vel_x_min, vel_x_max, vel_y_min, vel_y_max);
                         ptc->life_time = random_life_time(life_min, life_max);
+                        shown[&ptc - &particles[0]] = 2.0f;
                     }
 
                 }
@@ -153,13 +170,17 @@ void ParticleSystem::Update(Object* player)
 		break;
         case::PrticleType::Prticle_Explosion:
 
-        
+            break;
         }
 
-        // undate the vbo
+        // update the vbo
 
-        glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * PARTICLE_NUM, &translations[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, instance_pos);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * PARTICLE_NUM, &translations[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, instance_shown);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * PARTICLE_NUM, &shown[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     }
@@ -201,7 +222,7 @@ void ParticleSystem::Free()
     glDeleteTextures(1, &particle_texture);
     glDeleteVertexArrays(1, &quadVAO);
 	glDeleteBuffers(1, &quadVBO);
-	glDeleteBuffers(1, &instanceVBO);
+	glDeleteBuffers(1, &instance_pos);
 	particles.clear();
 
 }
