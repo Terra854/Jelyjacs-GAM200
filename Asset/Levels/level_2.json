@@ -3512,7 +3512,8 @@
             "y": 352.0
           },
           "Type": "Transform",
-          "linkedevent": 2
+          "linkedevent": 2,
+          "speed": 1
         },
         {
           "Name": "LaserPink_Timed",
@@ -3531,7 +3532,8 @@
             "y": 352.0
           },
           "Type": "Transform",
-          "linkedevent": 2
+          "linkedevent": 2,
+          "speed": 2
         },
         {
           "Name": "LaserPink_Timed",
@@ -3550,7 +3552,8 @@
             "y": 352.0
           },
           "Type": "Transform",
-          "linkedevent": 2
+          "linkedevent": 2,
+          "speed": 1
         },
         {
           "Name": "LaserPink_Timed",
@@ -3569,7 +3572,8 @@
             "y": 352.0
           },
           "Type": "Transform",
-          "linkedevent": 2
+          "linkedevent": 2,
+          "speed": 2
         },
         {
           "Name": "Box",

@@ -61,16 +61,16 @@ namespace L_Script {
 			if (door_behaviour->GetBehaviourIndex() == -1) {
 				active = false;
 			}
-			if (door_behaviour->GetBehaviourIndex() >= 3.f) {
+			if (door_behaviour->GetBehaviourSpeed() >= 3.f) {
 				std::cout << obj->GetId() <<": change dir\n";
 				door_animation->fixed = !door_animation->fixed;
 				if (door_animation->current_type == AnimationType::Jump) { door_animation->current_type = AnimationType::Idle; }
 				else { door_animation->current_type = AnimationType::Jump; }
 				door_body->active = !door_body->active;
-				door_behaviour->SetBehaviourIndex(0);
+				door_behaviour->SetBehaviourSpeed(0);
 			}
 			else {
-				door_behaviour->SetBehaviourIndex(door_behaviour->GetBehaviourIndex() + deltaT);
+				door_behaviour->SetBehaviourSpeed(door_behaviour->GetBehaviourSpeed() + deltaT);
 			}
 		}
 		else {
