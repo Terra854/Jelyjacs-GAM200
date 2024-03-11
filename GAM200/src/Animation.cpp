@@ -129,6 +129,17 @@ void Animation::Update_time()
 	}
 }
 
+int Animation::get_ani_type_count()
+{
+	int counter{};
+	// check through animation_Map
+	for (auto& it : this->animation_Map)
+	{
+		counter++;
+	}
+	return counter;
+}
+
 
 
 /******************************************************************************

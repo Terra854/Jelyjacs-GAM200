@@ -37,6 +37,9 @@ public:
 
 	void draw();
 
+	int get_ani_type_count();
+	
+
 	AnimationType current_type=AnimationType::Idle;
 	AnimationType previous_type=AnimationType::Idle;
 	bool face_right = true;
@@ -57,6 +60,7 @@ public:
 	GLApp::GLModel setup_texobj_animation(float x, float y, float z, float w, bool right);
 
 	std::map<AnimationType, std::vector<GLApp::GLModel>> animation_Map;
+
 
 	virtual ComponentType TypeId() const override { return ComponentType::Animation; }
 };

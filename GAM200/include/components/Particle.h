@@ -16,8 +16,15 @@ This file contains the declaration for the Particle game component class
 #define PARTICLE_NUM 100
 
 enum class PrticleType {
-	Finn,
+	Prticle_Finn,
+	Prticle_Explosion,
 
+};
+
+enum class ParticleState {
+	Prticle_Start,
+	Prticle_Running,
+	Prticle_End,
 };
 
 class ParticleSystem : public Component
@@ -48,6 +55,8 @@ public:
 	};
 
 	
+		ParticleState prticle_state = ParticleState::Prticle_Start;
+		PrticleType prticle_type = PrticleType::Prticle_Finn;
 
 		void Init();
 		void Update(Object* player);
@@ -85,7 +94,7 @@ public:
 	virtual ComponentType TypeId() const override { return ComponentType::ParticleSystem; }
 };
 
-Vec2 random_position(float x_min, float x_max, float y_min, float y_max);
+Vec2 random_value(float x_min, float x_max, float y_min, float y_max);
 Vec2 random_velocity(float x_min, float x_max, float y_min, float y_max);
 float random_life_time(float min, float max);
 
