@@ -342,16 +342,10 @@ void GLApp::Update()
 							{
 								if (input::IsPressed(KEY::w)) {
 									particleSystem->prticle_state = ParticleState::Prticle_Start;
-
-									// print out all the accelerations limits for the particles
-									std::cout << "acceleration x min: " << particleSystem->acc_x_min << std::endl;
-									std::cout << "acceleration x max: " << particleSystem->acc_x_max << std::endl;
-									std::cout << "acceleration y min: " << particleSystem->acc_y_min << std::endl;
-									std::cout << "acceleration y max: " << particleSystem->acc_y_max << std::endl;
 									
 								}
 								particleSystem->Update(object);
-								//particleSystem->Draw();
+								
 							}
 							// draw object with animation
 
@@ -461,7 +455,94 @@ void GLApp::Update()
 #endif
 				}
 			}
+
+
 		}
+		for (auto& l : SceneManager::layers) {
+			if (l.second.first.isVisible) {
+				for (auto& object : l.second.second) {
+					GLuint tex_test;
+					Animation* ani_pt = nullptr;
+					Mat3 mat_test;
+					Vec2 pos;
+					float orientation;
+					Vec2 scaling;
+					Vec2 window_scaling;
+					//bool texture_bool = true;
+					//get texture		
+					Texture* tex_pt = static_cast<Texture*>(object->GetComponent(ComponentType::Texture));
+
+					//get text
+					Text* text = static_cast<Text*>(object->GetComponent(ComponentType::Text));
+
+
+
+					//get animation
+					ani_pt = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
+
+					if (!tex_pt && !ani_pt && !text)
+						continue; // There is nothing to render, so skip to the next object
+
+					if (tex_pt)
+						tex_test = AssetManager::textureval(tex_pt->textureName);
+					else if (ani_pt)
+						tex_test = ani_pt->animation_tex_obj;
+
+					//get orientation
+					Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
+
+					// skip to next object if there is no transformation
+					if (!tran_pt)
+						continue;
+					else
+						orientation = tran_pt->Rotation;
+
+					// get pos and scale from transform component
+					pos.x = tran_pt->Position.x * 2.0f / window->width_init;
+					pos.y = tran_pt->Position.y * 2.0f / window->height_init;
+					scaling.x = tran_pt->Scale.x / window->width_init;
+					scaling.y = tran_pt->Scale.y / window->height_init;
+
+
+					//get matrix
+					mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotDeg(orientation);
+
+					window_scaling = { (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+
+					mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
+					// matrix after camrea
+
+					if (!l.second.first.static_layer)
+						mat_test = camera2D->world_to_ndc * mat_test;
+
+
+					// draw image with texture
+					if (ani_pt) {
+						// if is player
+						if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
+							ParticleSystem* particleSystem = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
+							//if w is pressed
+
+							if (particleSystem != nullptr)
+
+							{
+								if (input::IsPressed(KEY::w)) {
+									particleSystem->prticle_state = ParticleState::Prticle_Start;
+
+								}
+								particleSystem->Update(object);
+
+							}
+						}
+					}
+				}
+			}
+
+
+
+
+		}
+
 
 
 #if defined(DEBUG) | defined(_DEBUG)
