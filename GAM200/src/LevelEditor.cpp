@@ -1660,7 +1660,7 @@ void LevelEditor::LoadLevelPanel() {
 					//engine->setPause();
 					SceneManager::PauseScene();
 				selected = false;
-				sceneManager->LoadScene(path + filename);
+				sceneManager->LoadScene(filename);
 			}
 		}
 
@@ -1736,11 +1736,11 @@ void LevelEditor::SaveAsDialog() {
 				SceneManager::ClearInitialObjectMap(false);
 			}
 
-			char saveLocation[110];
+			//char saveLocation[110];
 
-			sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
+			//sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
 
-			SaveScene(saveLocation);
+			SaveScene(text);
 			save_as_dialog = false;
 			ImGui::CloseCurrentPopup();
 		}
