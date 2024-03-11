@@ -66,7 +66,7 @@ namespace HE_Script {
 			}
 			// if the count >= 5, change direction
 			if (count >= 5.f) {
-				std::cout << "change dir\n";
+				//std::cout << "change dir\n";
 				moving_platform_direction = !moving_platform_direction;
 				count = 0;
 			}

@@ -152,8 +152,9 @@ void GameLogic::Update() {
 	}
 	if (restarting) {
 		SceneManager::RestartScene();
-		//SceneManager::PlayScene();
+		SceneManager::PlayScene();
 		GameLogic::restarting = false;
+		return;
 	}
 	/********************************************************************************
 	*
