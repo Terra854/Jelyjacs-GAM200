@@ -119,14 +119,14 @@ namespace PHE_Script
 						{
 							moving_platform_b->SetBehaviourIndex(1);
 							moving_platform_b->SetBehaviourCounter(moving_platform_t->Position.x);
-							std::cout << "change dir to left\n";
+							//std::cout << "change dir to left\n";
 						}
 						// Moving left
 						else if (moving_platform_b->GetBehaviourCounter() - moving_platform_t->Position.x >= moving_platform_b->GetBehaviourDistance() && moving_platform_b->GetBehaviourIndex() == 1)
 						{
 							moving_platform_b->SetBehaviourIndex(0);
 							moving_platform_b->SetBehaviourCounter(moving_platform_t->Position.x);
-							std::cout << "change dir to right\n";
+							//std::cout << "change dir to right\n";
 						}
 						// First move
 						else if (moving_platform_b->GetBehaviourCounter() == 0)
