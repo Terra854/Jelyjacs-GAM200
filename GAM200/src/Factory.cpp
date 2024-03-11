@@ -336,6 +336,10 @@ Object* Factory::createObject(const std::string& filename)
 			jsonloop.readFloat(p->vel_x_max, "Properties", "velx", 1);
 			jsonloop.readFloat(p->vel_y_min, "Properties", "vely", 0);
 			jsonloop.readFloat(p->vel_y_max, "Properties", "vely", 1);
+			jsonloop.readFloat(p->acc_x_min, "Properties", "accx", 0);
+			jsonloop.readFloat(p->acc_x_max, "Properties", "accx", 1);
+			jsonloop.readFloat(p->acc_y_min, "Properties", "accy", 0);
+			jsonloop.readFloat(p->acc_y_max, "Properties", "accy", 1);
 			jsonloop.readFloat(p->life_min, "Properties", "lifetime", 0);
 			jsonloop.readFloat(p->life_max, "Properties", "lifetime", 1);
 
