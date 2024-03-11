@@ -1,0 +1,32 @@
+{
+  "Name": "win_back_button",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 100.0,
+          "y": 100.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "win_back_button.png"
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "WinBackButton",
+        "Index": 0
+      }
+    }
+  ]
+}
