@@ -25,8 +25,8 @@
           "Name" : "resume_button",
           "Position" : 
           {
-            "x" : 42.0,
-            "y" : 325.0
+            "x" : 65.0,
+            "y" : -233.0
           },
           "Prefabs" : "resume_button.json",
           "Rotation" : 0.0,
@@ -43,32 +43,11 @@
           "speed" : 0.0
         },
         {
-          "Name" : "restart_button",
-          "Position" : 
-          {
-            "x" : 44.0,
-            "y" : 241.0
-          },
-          "Prefabs" : "restart_button.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 64.0,
-            "y" : 64.0
-          },
-          "Type" : "Transform",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "RestartButton",
-          "speed" : 0.0
-        },
-        {
           "Name" : "fullscreen_button",
           "Position" : 
           {
-            "x" : 44.0,
-            "y" : 0.0
+            "x" : 65.0,
+            "y" : -152.0
           },
           "Prefabs" : "fullscreen_button.json",
           "Rotation" : 0.0,
@@ -88,8 +67,8 @@
           "Name" : "quit_button",
           "Position" : 
           {
-            "x" : 60.0,
-            "y" : -248.0
+            "x" : 64.0,
+            "y" : -315.0
           },
           "Prefabs" : "quit_button.json",
           "Rotation" : 0.0,
@@ -109,8 +88,8 @@
           "Name" : "how_to_play_button",
           "Position" : 
           {
-            "x" : 60.0,
-            "y" : -200.0
+            "x" : 65.0,
+            "y" : -64.0
           },
           "Prefabs" : "how_to_play_button.json",
           "Rotation" : 0.0,

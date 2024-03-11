@@ -1,36 +1,87 @@
 {
-  "SceneName": "menu_test",
-  "Size": {
-    "startX": -960.0,
-    "startY": -540.0,
-    "width": 1920.0,
-    "height": 1080.0
-  },
-  "Layers": [
+  "Layers" : 
+  [
     {
-      "Name": "GameMenu",
-      "Settings": {
-        "isVisible": true,
-        "static_layer": true
-      },
-      "Objects": [
+      "Name" : "GameMenu",
+      "Objects" : 
+      [
         {
-          "Prefabs": "zoom_button.json",
-          "Type": "Transform",
-          "Position": {
-            "x": 800.0,
-            "y": 400.0
-          }
+          "Name" : "zoom_button",
+          "Position" : 
+          {
+            "x" : 894.0,
+            "y" : 433.0
+          },
+          "Prefabs" : "zoom_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 70.0,
+            "y" : 70.0
+          },
+          "Type" : "Transform",
+          "counter" : 0.0,
+          "distance" : 0.0,
+          "index" : 0.0,
+          "scripts" : "ButtonBase",
+          "speed" : 0.0
         },
         {
-          "Prefabs": "pause_button.json",
-          "Type": "Transform",
-          "Position": {
-            "x": 800.0,
-            "y": 250.0
-          }
+          "Name" : "pause_button",
+          "Position" : 
+          {
+            "x" : 888.0,
+            "y" : 323.0
+          },
+          "Prefabs" : "pause_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 70.0,
+            "y" : 70.0
+          },
+          "Type" : "Transform",
+          "counter" : 0.0,
+          "distance" : 0.0,
+          "index" : 0.0,
+          "scripts" : "PauseButton",
+          "speed" : 0.0
+        },
+        {
+          "Name" : "restart_button",
+          "Position" : 
+          {
+            "x" : 888.0,
+            "y" : 209.0
+          },
+          "Prefabs" : "restart_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 100.0,
+            "y" : 100.0
+          },
+          "Type" : "Transform",
+          "counter" : 0.0,
+          "distance" : 0.0,
+          "index" : 0.0,
+          "scripts" : "RestartButton",
+          "speed" : 0.0
         }
-      ]
+      ],
+      "Settings" : 
+      {
+        "isVisible" : true,
+        "static_layer" : true
+      }
     }
-  ]
+  ],
+  "SceneName" : "Asset/Levels/game_hud.json",
+  "Size" : 
+  {
+    "height" : 1080.0,
+    "startX" : -960.0,
+    "startY" : -540.0,
+    "width" : 1920.0
+  }
 }
