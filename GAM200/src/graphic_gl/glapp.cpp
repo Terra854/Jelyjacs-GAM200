@@ -344,12 +344,12 @@ void GLApp::Update()
 							if (particleSystem != nullptr)
 
 							{
-								/*if (input::IsPressed(KEY::w)) {
+								/*if (input::IsPressed(KEY::s)) {
 									particleSystem->prticle_state = ParticleState::Prticle_Start;
 									
 								}
-								particleSystem->Update(object);*/
-								
+								particleSystem->Update(object);
+								*/
 							}
 							// draw object with animation
 
@@ -361,7 +361,6 @@ void GLApp::Update()
 							ani_pt->Update_objects();
 
 						}
-						//ani_pt->opacity = 0.5f;
 						// render animation
 						glBindTextureUnit(6, tex_test);
 						glBindTexture(GL_TEXTURE_2D, tex_test);
