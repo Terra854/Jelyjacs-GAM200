@@ -1,11 +1,11 @@
 /* !
-@file	OpeningCutsceneScript.cpp
+@file	OpeningCutscene.cpp
 @author Tan Yee Ann
 @date	13/3/2024
 
-This file contains the script for OpeningCutsceneScript, the player character (Human)
+This file contains the script for OpeningCutscene
 *//*__________________________________________________________________________*/
-#include "Scripts/OpeningCutsceneScript.h"
+#include "Scripts/OpeningCutscene.h"
 #include <iostream>
 #include <components/Transform.h>
 #include <components/Animation.h>
@@ -19,16 +19,16 @@ float OpeningCutsceneTime;
 Texture *opening_cutscene_1, *opening_cutscene_2, *opening_cutscene_3, *opening_cutscene_4, *opening_cutscene_5, *opening_cutscene_6;
 Text *opening_cutscene_text;
 
-OpeningCutsceneScript::OpeningCutsceneScript(std::string name) : LogicScript(name)
+OpeningCutscene::OpeningCutscene(std::string name) : LogicScript(name)
 {
 	std::cout << name << " Created" << std::endl;
 }
 /***************************************************************************/
-// Start method, called when the OpeningCutsceneScript script is first activated.
+// Start method, called when the OpeningCutscene script is first activated.
 // @param obj: A pointer to the Object that this script is attached to.
-// Performs initial setup and configuration for OpeningCutsceneScript.
+// Performs initial setup and configuration for OpeningCutscene.
 /***************************************************************************/
-void OpeningCutsceneScript::Start(Object* obj) {
+void OpeningCutscene::Start(Object* obj) {
 	if (obj == nullptr || engine->loaded_level != "opening_cutscene") {
 		//std::cout << "NIL OBJ : Player" << std::endl;
 		return;
@@ -45,15 +45,15 @@ void OpeningCutsceneScript::Start(Object* obj) {
 
 	OpeningCutsceneTime = 0.f;
 
-	std::cout << "OpeningCutsceneScript Script Ready : " << obj->GetName() << std::endl;
+	std::cout << "OpeningCutscene Script Ready : " << obj->GetName() << std::endl;
 }
 
 /***************************************************************************/
-// Update method, called on every frame to update OpeningCutsceneScript's state.
+// Update method, called on every frame to update OpeningCutscene's state.
 // @param obj: A pointer to the Object that this script is attached to.
-// Contains logic for OpeningCutsceneScript's movement and animations.
+// Contains logic for OpeningCutscene's movement and animations.
 /***************************************************************************/
-void OpeningCutsceneScript::Update(Object* obj) {
+void OpeningCutscene::Update(Object* obj) {
 	if (obj == nullptr || engine->loaded_level != "opening_cutscene") {
 		//std::cout << "NIL OBJ : Player" << std::endl;
 		return;
@@ -98,13 +98,13 @@ void OpeningCutsceneScript::Update(Object* obj) {
 }
 
 /***************************************************************************/
-// Shutdown method, called when the OpeningCutsceneScript script is stopped.
+// Shutdown method, called when the OpeningCutscene script is stopped.
 // @param obj: A pointer to the Object that this script is attached to.
-// Performs cleanup tasks for OpeningCutsceneScript.
+// Performs cleanup tasks for OpeningCutscene.
 /***************************************************************************/
-void OpeningCutsceneScript::Shutdown(Object* obj) {
-	std::cout << "OpeningCutsceneScript Script Shutdown : " << obj->GetName() << std::endl;
+void OpeningCutscene::Shutdown(Object* obj) {
+	std::cout << "OpeningCutscene Script Shutdown : " << obj->GetName() << std::endl;
 }
 
-// Creating an instance of the OpeningCutsceneScript class.
-OpeningCutsceneScript OpeningCutsceneScript("OpeningCutsceneScript");
+// Creating an instance of the OpeningCutscene class.
+OpeningCutscene OpeningCutscene("OpeningCutscene");

@@ -288,8 +288,11 @@
     <ClCompile Include="src\Scripts\WinBackButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\OpeningCutsceneScript.cpp">
+    <ClCompile Include="src\Scripts\OpeningCutscene.cpp">
       <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\SkipCutscene.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -521,8 +524,11 @@
     <ClInclude Include="include\Scripts\WinBackButton.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\OpeningCutsceneScript.h">
+    <ClInclude Include="include\Scripts\OpeningCutscene.h">
       <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\SkipCutscene.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

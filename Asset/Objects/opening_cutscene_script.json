@@ -25,7 +25,7 @@
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "OpeningCutsceneScript",
+        "Script": "OpeningCutscene",
         "Index": 0
       }
     }

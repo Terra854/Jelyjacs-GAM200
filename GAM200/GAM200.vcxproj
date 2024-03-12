@@ -249,10 +249,11 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\HorizontalDoor.cpp" />
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
     <ClCompile Include="src\Scripts\HowToPlayButton.cpp" />
-    <ClCompile Include="src\Scripts\OpeningCutsceneScript.cpp" />
+    <ClCompile Include="src\Scripts\OpeningCutscene.cpp" />
     <ClCompile Include="src\Scripts\QuitButton.cpp" />
     <ClCompile Include="src\Scripts\RestartButton.cpp" />
     <ClCompile Include="src\Scripts\ResumeButton.cpp" />
+    <ClCompile Include="src\Scripts\SkipCutscene.cpp" />
     <ClCompile Include="src\Scripts\Timed_Laser.cpp" />
     <ClCompile Include="src\Scripts\LaserDoor.cpp" />
     <ClCompile Include="src\Scripts\PauseButton.cpp" />
@@ -317,10 +318,11 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\Endpoint.h" />
     <ClInclude Include="include\Scripts\Finn.h" />
     <ClInclude Include="include\Scripts\HowToPlayButton.h" />
-    <ClInclude Include="include\Scripts\OpeningCutsceneScript.h" />
+    <ClInclude Include="include\Scripts\OpeningCutscene.h" />
     <ClInclude Include="include\Scripts\QuitButton.h" />
     <ClInclude Include="include\Scripts\RestartButton.h" />
     <ClInclude Include="include\Scripts\ResumeButton.h" />
+    <ClInclude Include="include\Scripts\SkipCutscene.h" />
     <ClInclude Include="include\Scripts\Timed_Laser.h" />
     <ClInclude Include="include\Scripts\LaserDoor.h" />
     <ClInclude Include="include\Scripts\PauseButton.h" />
