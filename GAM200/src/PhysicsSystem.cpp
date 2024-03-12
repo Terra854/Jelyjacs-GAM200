@@ -92,6 +92,14 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 		// Make sure the top and bottom collision objects are not the same, otherwise the response will exhibit undefined behaviour
 		if (!(((Rectangular*)b1)->top_collision == ((Rectangular*)b1)->bottom_collision)) {
 			if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
+
+				// Just in case the left or right collision object is the same as the top collision object
+				// which can happen if the velocity is too fast
+				if (((Rectangular*)b1)->top_collision == ((Rectangular*)b1)->left_collision)
+					((Rectangular*)b1)->collision_flag &= ~COLLISION_LEFT;
+				if (((Rectangular*)b1)->top_collision == ((Rectangular*)b1)->right_collision)
+					((Rectangular*)b1)->collision_flag &= ~COLLISION_RIGHT;
+
 				top_collision_cooldown = 0.1f;
 				p1->Velocity.y = 0.0f;
 				t1->Position.y = ((Rectangular*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Body))->aabb.min.y - (((Rectangular*)b1)->height / 2);
