@@ -59,12 +59,15 @@ public:
 	
 	// animation data
 	std::map<AnimationType, std::vector<GLApp::GLModel>> animation_Map;
+
+
 	float frame_rate{};
-	float opacity = 1.f;
 	Vec2 animation_scale{}; // scale of the animation 
 							//col and row
-	std::map< AnimationType, Vec2> animation_frame; // no of frame  and rom
 
+	std::map< int, std::pair<int, AnimationType> > animation_frame; // [row] -> (frame, type)
+
+	float opacity = 1.f;
 
 	virtual ComponentType TypeId() const override { return ComponentType::Animation; }
 };
