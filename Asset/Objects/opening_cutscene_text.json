@@ -18,15 +18,8 @@
     {
       "Type": "Text",
       "Properties": {
-        "text": "skip",
+        "text": "",
         "fontSize": 1.0
-      }
-    },
-    {
-      "Type": "Behaviour",
-      "Properties": {
-        "Script": "ButtonBase",
-        "Index": 0
       }
     }
   ]
