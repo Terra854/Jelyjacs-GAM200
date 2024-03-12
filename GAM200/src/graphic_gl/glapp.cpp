@@ -344,11 +344,11 @@ void GLApp::Update()
 							if (particleSystem != nullptr)
 
 							{
-								if (input::IsPressed(KEY::w)) {
+								/*if (input::IsPressed(KEY::w)) {
 									particleSystem->prticle_state = ParticleState::Prticle_Start;
 									
 								}
-								particleSystem->Update(object);
+								particleSystem->Update(object);*/
 								
 							}
 							// draw object with animation
@@ -462,7 +462,7 @@ void GLApp::Update()
 
 
 		}
-		for (auto& l : SceneManager::layers) {
+		/*for (auto& l : SceneManager::layers) {
 			if (l.second.first.isVisible) {
 				for (auto& object : l.second.second) {
 					GLuint tex_test;
@@ -545,7 +545,7 @@ void GLApp::Update()
 
 
 
-		}
+		}*/
 
 
 
