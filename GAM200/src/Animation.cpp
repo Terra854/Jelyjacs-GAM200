@@ -140,6 +140,15 @@ int Animation::get_ani_type_count()
 	return counter;
 }
 
+void Animation::set_up_map()
+{
+	//loop through the animation_frame map
+	for (auto& it : this->animation_frame)
+	{
+	
+	}
+}
+
 
 
 /******************************************************************************

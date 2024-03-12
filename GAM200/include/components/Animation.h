@@ -38,6 +38,7 @@ public:
 	void draw();
 
 	int get_ani_type_count();
+	void set_up_map();
 	
 
 	AnimationType current_type=AnimationType::Idle;
