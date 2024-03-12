@@ -288,6 +288,9 @@
     <ClCompile Include="src\Scripts\WinBackButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\OpeningCutsceneScript.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -517,6 +520,9 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\WinBackButton.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\OpeningCutsceneScript.h">
+      <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

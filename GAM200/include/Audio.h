@@ -24,6 +24,8 @@ public:
 
 	void playSfx(std::string audioName, float volume_multiplier = 1.0f);
 	void playSfx(std::string audioName, FMOD::ChannelGroup *&sfxChannelGroup, float volume_multiplier = 1.0f);
+	void setBackgroundAudio(std::string bg);
+	void setBackgroundVolume(float volume);
 	void restartBackgroundAudio();
 	void stopSfx(FMOD::ChannelGroup*& c);
 	void createChannelGroup(std::string name, FMOD::ChannelGroup*& c);
@@ -31,6 +33,8 @@ private:
 	FMOD::System* system;
 	FMOD::Channel *background, *channel, *sfx;
 	FMOD_RESULT result;
+
+	std::string current_background_audio;
 };
 
 extern Audio* audio;

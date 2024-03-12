@@ -87,7 +87,8 @@ void Audio::setupSound()
 	jsonobj.closeFile();
 
     // Set the background music
-	system->playSound(AssetManager::getsoundbyaudiotype("background"), 0, true, &background);
+	current_background_audio = "background";
+	system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
     background->setVolume(0.2f);
 }
 
@@ -127,6 +128,15 @@ void Audio::playSfx(std::string audioType, FMOD::ChannelGroup *&sfxChannelGroup,
 	channel->setVolume(0.2f * volume_multiplier);
 }
 
+void Audio::setBackgroundAudio(std::string bg) {
+	current_background_audio = bg;
+	restartBackgroundAudio();
+}
+
+void Audio::setBackgroundVolume(float volume) {
+	background->setVolume(0.2f * volume);
+}
+
 /******************************************************************************
 restartBackgroundAudio
 -	This function restarts the background the audio from the beginning
@@ -135,7 +145,7 @@ restartBackgroundAudio
 *******************************************************************************/
 void Audio::restartBackgroundAudio() {
 	background->stop();
-	system->playSound(AssetManager::getsoundbyaudiotype("background"), 0, true, &background);
+	system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
 	background->setVolume(0.2f);
 }
 

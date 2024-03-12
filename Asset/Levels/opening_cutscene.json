@@ -15,22 +15,40 @@
       },
       "Objects": [
         {
-          "Prefabs": "opening_cutscene_1.json"
-        },
-        {
-          "Prefabs": "opening_cutscene_2.json"
-        },
-        {
-          "Prefabs": "opening_cutscene_3.json"
-        },
-        {
-          "Prefabs": "opening_cutscene_4.json"
+          "Prefabs": "opening_cutscene_6.json"
         },
         {
           "Prefabs": "opening_cutscene_5.json"
         },
         {
-          "Prefabs": "opening_cutscene_6.json"
+          "Prefabs": "opening_cutscene_4.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_3.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_2.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_1.json"
+        }
+      ]
+    },
+    {
+      "Name": "Hud",
+      "Settings": {
+        "isVisible": true,
+        "static_layer": false
+      },
+      "Objects": [
+        {
+          "Prefabs": "skip_cutscene.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_text.json"
+        },
+        {
+          "Prefabs": "opening_cutscene_script.json"
         }
       ]
     }
