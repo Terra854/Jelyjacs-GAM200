@@ -46,20 +46,24 @@ public:
 	bool jump_fixed = false;
 	bool reverse = false;
 
-	float opacity = 1.f;
-
 	int jump_fixed_frame = 0;
 
 	bool fixed = false;
 	bool invert = false;
-	float frame_rate{};
+	
 	float frame_count{};
 	int frame_num{};
 	
 	GLuint animation_tex_obj;
 	GLApp::GLModel setup_texobj_animation(float x, float y, float z, float w, bool right);
-
+	
+	// animation data
 	std::map<AnimationType, std::vector<GLApp::GLModel>> animation_Map;
+	float frame_rate{};
+	float opacity = 1.f;
+	Vec2 animation_scale{}; // scale of the animation 
+							//col and row
+	std::map< AnimationType, Vec2> animation_frame; // no of frame  and rom
 
 
 	virtual ComponentType TypeId() const override { return ComponentType::Animation; }
