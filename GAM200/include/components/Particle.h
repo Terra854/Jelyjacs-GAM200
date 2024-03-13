@@ -56,7 +56,7 @@ public:
 	};
 
 	
-		ParticleState prticle_state = ParticleState::Prticle_Start;
+		ParticleState prticle_state = ParticleState::Prticle_End;
 		PrticleType prticle_type = PrticleType::Prticle_Explosion;
 
 		void Init();

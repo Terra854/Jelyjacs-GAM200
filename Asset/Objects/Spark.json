@@ -54,6 +54,19 @@
     },
     {
       "Type": "Player"
+    },
+    {
+      "Type": "Particle",
+      "Properties": {
+        "posx": [0, 0],
+        "posy": [0, 0],
+        "velx": [-2.5, 2.5],
+        "vely": [4, 6],
+        "accx": [0, 0],
+        "accy": [-5.0, -10.0],
+        "lifetime": [0.5, 0.8],
+        "texture": "p2.png"
+      }
     }
   ]
 }

@@ -44,8 +44,14 @@ void Camera::Update() {
 			}
 		}
 		//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
-
-		SetToPlayer();
+		if (camera_follow) SetToPlayer();
+		else {
+			position -= camera_speed * engine->GetDt();
+			time_count += engine->GetDt();
+			if (time_count >= time_shift) {
+				camera_follow = true;
+			}
+		}
 
 	}
 
@@ -113,4 +119,13 @@ void Camera::SetToPlayer() {
 	else {
 		position = { 0.0f, 0.0f };
 	}
+}
+
+void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
+{
+	camera_speed = (end - start) / time;
+	position = start;
+	time_count = 0.0f;
+	time_shift = time;
+	camera_follow = false;
 }
