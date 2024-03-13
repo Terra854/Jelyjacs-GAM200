@@ -73,6 +73,27 @@
           "index" : 0.0,
           "scripts" : "WinBackButton",
           "speed" : 0.0
+        },
+        {
+          "Name" : "win_next_button",
+          "Position" : 
+          {
+            "x" : 0.0,
+            "y" : 0.0
+          },
+          "Prefabs" : "win_next_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 220.0,
+            "y" : 63.0
+          },
+          "Type" : "Transform",
+          "counter" : 0.0,
+          "distance" : 0.0,
+          "index" : 0.0,
+          "scripts" : "WinNextButton",
+          "speed" : 0.0
         }
       ],
       "Settings" : 

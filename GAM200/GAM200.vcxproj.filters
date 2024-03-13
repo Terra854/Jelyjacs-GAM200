@@ -294,6 +294,9 @@
     <ClCompile Include="src\Scripts\SkipCutscene.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\WinNextButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -528,6 +531,9 @@
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\SkipCutscene.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\WinNextButton.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>
