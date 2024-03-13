@@ -188,8 +188,8 @@ void GLWindow::Update()
             glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
             break;*/
         case Window_size::high:
-            width = 1920;
-            height = 1080;
+            width = 1600;
+            height = 900;
             glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
             pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
             pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
@@ -207,7 +207,7 @@ void GLWindow::Update()
             break;
         case Window_size::low:
             width = 800;
-            height = 600;
+            height = 450;
             glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
             pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
             pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
@@ -424,8 +424,8 @@ void GLWindow::change_window_size(Window_size size) {
             glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
             break;*/
     case Window_size::high:
-        width = 1920;
-        height = 1080;
+        width = 1600;
+        height = 900;
         glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
         pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
         pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
@@ -442,7 +442,7 @@ void GLWindow::change_window_size(Window_size size) {
         break;
     case Window_size::low:
         width = 800;
-        height = 600;
+        height = 450;
         glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
         pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
         pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
