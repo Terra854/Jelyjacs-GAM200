@@ -263,20 +263,22 @@ void LevelEditor::ObjectProperties() {
 	}
 	else if (te != nullptr)
 	{
-		if (tr->Scale.x > tr->Scale.y)
+		Vec2 size_preview = tr ? tr->Scale : Vec2(64.f, 64.f);
+
+		if (size_preview.x > size_preview.y)
 		{
-			float padding = ImGui::GetContentRegionAvail().y * (tr->Scale.y / tr->Scale.x) * 0.5f;
+			float padding = ImGui::GetContentRegionAvail().y * (size_preview.y / size_preview.x) * 0.5f;
 			ImGui::Dummy(ImVec2(0, padding));
-			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(ImGui::GetContentRegionAvail().x, tr->Scale.y / tr->Scale.x * ImGui::GetContentRegionAvail().y));
+			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(ImGui::GetContentRegionAvail().x, size_preview.y / size_preview.x * ImGui::GetContentRegionAvail().y));
 		}
-		else if (tr->Scale.x == tr->Scale.y)
+		else if (size_preview.x == size_preview.y)
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImGui::GetContentRegionAvail());
 		else
 		{
-			float padding = ImGui::GetContentRegionAvail().x * (tr->Scale.x / tr->Scale.y) * 0.5f;
+			float padding = ImGui::GetContentRegionAvail().x * (size_preview.x / size_preview.y) * 0.5f;
 			ImGui::Dummy(ImVec2(padding, 0));
 			ImGui::SameLine();
-			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(tr->Scale.x / tr->Scale.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(size_preview.x / size_preview.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
 		}
 
 		
@@ -399,17 +401,39 @@ void LevelEditor::ObjectProperties() {
 
 	if (ImGui::BeginPopup("AddComponent"))
 	{
+		if (tr == nullptr)
+			if (ImGui::Selectable("Transform")) {
+				object->AddComponent(new Transform());
+			}
+		if (te == nullptr && a == nullptr) {
+			if (ImGui::Selectable("Texture")) {
+				object->AddComponent(new Texture(""));
+				UpdateAllObjectInstances(object);
+			}
+			/*
+			if (ImGui::Selectable("Animation")) {
+				object->AddComponent(new Animation());
+				UpdateAllObjectInstances(object);
+			}
+			*/
+		}
 		if (bo == nullptr)
 			if (ImGui::Selectable("Body")) {
 				object->AddComponent(new Rectangular());
 				UpdateAllObjectInstances(object);
 			}
-
 		if (ph == nullptr)
 			if (ImGui::Selectable("Physics")) {
 				object->AddComponent(new Physics());
 				UpdateAllObjectInstances(object);
 			}
+		/*
+		if (e == nullptr)
+			if (ImGui::Selectable("Event")) {
+				object->AddComponent(new Event());
+				UpdateAllObjectInstances(object);
+			}
+			*/
 		if (be == nullptr)
 			if (ImGui::Selectable("Behaviour")) {
 				object->AddComponent(new Behaviour());
@@ -627,6 +651,18 @@ void LevelEditor::ObjectProperties() {
 					edited_rotation = tr->Rotation;
 					edited_scale = tr->Scale;
 				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete##Transform"))
+				{
+					objectFactory->DeleteComponent(object, ComponentType::Transform);
+					tr = nullptr;
+				}
+				ImGui::PopStyleColor(3);
 			}
 		}
 	}

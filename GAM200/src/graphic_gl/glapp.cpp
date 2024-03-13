@@ -462,12 +462,8 @@ void GLApp::Update()
 #endif
 				}
 			}
-
-
 		}
 	
-
-
 #if defined(DEBUG) | defined(_DEBUG)
 		// Draw the bove around the selected object
 		if (level_editor->selected && level_editor->selectedNum >= 0) {
