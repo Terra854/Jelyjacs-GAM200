@@ -95,6 +95,9 @@ namespace CatPortal_Script {
                     //Find the other cat portal
                         // Teleport the player to the other CatPortal's position.
                     audio->playSfx("cat_teleport");
+
+                    camera2D->TranslateCamera(player_t->Position, otherCatPortal_t->Position, 1.0f);
+
                     player_t->Position.x = otherCatPortal_t->Position.x;
                     player_t->Position.y = otherCatPortal_t->Position.y;
                     justTeleported = true;

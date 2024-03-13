@@ -123,8 +123,20 @@ void Camera::SetToPlayer() {
 
 void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 {
-	camera_speed = (end - start) / time;
-	position = start;
+	Vec2 pos1, pos2;
+	pos1.x = start.x;
+	pos1.y = start.y;
+	pos2.x = end.x;
+	pos2.y = end.y;
+
+	// convert to NDC
+	pos1.x = -pos1.x * 2.0f / window->width_init;
+	pos1.y = -pos1.y * 2.0f / window->height_init;
+	pos2.x = -pos2.x * 2.0f / window->width_init;
+	pos2.y = -pos2.y * 2.0f / window->height_init;
+
+	camera_speed = (pos1 - pos2) / time;
+	position = pos1;
 	time_count = 0.0f;
 	time_shift = time;
 	camera_follow = false;
