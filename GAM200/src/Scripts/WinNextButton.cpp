@@ -52,7 +52,11 @@ void WinNextButton::Update(Object* obj) {
     {
         audio->playSfx("button_click");
         objectFactory->GetLayer("WinMenu")->second.first.isVisible = false;
-        sceneManager->LoadScene("Asset/Levels/level_2.json");
+        sceneManager->LoadScene("level_2.json");
+        if (engine->isPaused())
+		{
+			engine->setPause();
+		}
     }
 }
 /*********************************************************************/

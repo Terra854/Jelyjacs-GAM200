@@ -90,7 +90,7 @@ void OpeningCutscene::Update(Object* obj) {
 		}
 		if (31.f < OpeningCutsceneTime) {
 			audio->setBackgroundAudio("background");
-			SceneManager::LoadScene("level_1.json");
+			SceneManager::LoadScene("tutorial_level.json");
 		}
 
 	}
