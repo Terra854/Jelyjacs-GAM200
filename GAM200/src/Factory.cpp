@@ -613,7 +613,7 @@ void Factory::destroyAllObjects()
 Object* Factory::createEmptyObject()
 {
 	Object* obj = new Object();
-	obj->AddComponent(new Transform());
+	//obj->AddComponent(new Transform());
 	assignIdToObject(obj);
 	return obj;
 }

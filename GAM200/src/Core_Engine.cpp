@@ -336,78 +336,81 @@ void CoreEngine::GameLoop()
 				Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
 				Body* objBody = (Body*)object->GetComponent(ComponentType::Body);
 
-				if (gizmo.GetType() == GizmoType::Translate || gizmo.GetType() == GizmoType::Scale) {
-					/* Gizmo check for Scale and Translate*/
-					if (!object_being_moved_x && !object_being_moved_y)
-					{
+				if (objTransform) {
 
-						if (isObjectClicked(gizmo.getX(), gameWorldPos))
-							object_being_moved_x = true;
-						else if (isObjectClicked(gizmo.getY(), gameWorldPos))
-							object_being_moved_y = true;
+					if (gizmo.GetType() == GizmoType::Translate || gizmo.GetType() == GizmoType::Scale) {
+						/* Gizmo check for Scale and Translate*/
+						if (!object_being_moved_x && !object_being_moved_y)
+						{
 
-						// Offset to account for mouse not being in the center of the selected object
-						if (isnan(offset.x))
-							offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+							if (isObjectClicked(gizmo.getX(), gameWorldPos))
+								object_being_moved_x = true;
+							else if (isObjectClicked(gizmo.getY(), gameWorldPos))
+								object_being_moved_y = true;
 
-						initialScale = objTransform->Scale;
-						initialScaleFactor = gameWorldPos;
+							// Offset to account for mouse not being in the center of the selected object
+							if (isnan(offset.x))
+								offset = Vec2(gameWorldPos.x - objTransform->Position.x, gameWorldPos.y - objTransform->Position.y);
+
+							initialScale = objTransform->Scale;
+							initialScaleFactor = gameWorldPos;
+						}
+
+						/* X Gizmo */
+						if (object_being_moved_x) {
+							if (gizmo.GetType() == GizmoType::Translate)
+								objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
+							else if (gizmo.GetType() == GizmoType::Scale) {
+								objTransform->Scale.x = (float)std::round((Vec2(gameWorldPos).x - initialScaleFactor.x + 100.f) / 100.f * initialScale.x);
+							}
+						}
+
+						/* Y Gizmo */
+						if (object_being_moved_y) {
+							if (gizmo.GetType() == GizmoType::Translate)
+								objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
+							else if (gizmo.GetType() == GizmoType::Scale)
+								objTransform->Scale.y = (float)std::round((Vec2(gameWorldPos).y - initialScaleFactor.y + 100.f) / 100.f * initialScale.y);
+						}
+
+						if (object_being_moved_x || object_being_moved_y) {
+							if (gizmo.GetType() == GizmoType::Translate)
+								ImGui::SetTooltip("x: %.6f\ny: %.6f", objTransform->Position.x, objTransform->Position.y);
+							else if (gizmo.GetType() == GizmoType::Scale)
+								ImGui::SetTooltip("Width: %.6f\nHeight: %.6f", objTransform->Scale.x, objTransform->Scale.y);
+						}
 					}
+					/* R Gizmo */
+					else if (gizmo.GetType() == GizmoType::Rotate) {
+						if (gizmo.IsRGizmoClicked(gameWorldPos) && !gizmo.IsRGizmoActive()) {
+							gizmo.SetRGizmoActive(true);
+							RGizmo_Angle = calculateAngle(objTransform->Position, Vec2(gameWorldPos));
+							Initial_Rotation = objTransform->Rotation;
+						}
 
-					/* X Gizmo */
-					if (object_being_moved_x) {
-						if (gizmo.GetType() == GizmoType::Translate)
-							objTransform->Position.x = (float)std::round(gameWorldPos.x - offset.x);
-						else if (gizmo.GetType() == GizmoType::Scale) {
-							objTransform->Scale.x = (float)std::round((Vec2(gameWorldPos).x - initialScaleFactor.x + 100.f) / 100.f * initialScale.x);
+						if (gizmo.IsRGizmoActive()) {
+							objTransform->Rotation = (float)((int)(Initial_Rotation + (calculateAngle(objTransform->Position, Vec2(gameWorldPos)) - RGizmo_Angle)));
+
+							if (objTransform->Rotation > 360.0f)
+								objTransform->Rotation -= 360.f;
+							else if (objTransform->Rotation < 0.0f)
+								objTransform->Rotation += 360.f;
+
+							ImGui::SetTooltip("Rotation: %.6f", objTransform->Rotation);
+
+							std::cout << "Initial_Rotation: " << Initial_Rotation << std::endl;
+							std::cout << "RGizmo_Angle: " << RGizmo_Angle << std::endl;
+							std::cout << "calculateAngle: " << calculateAngle(objTransform->Position, Vec2(gameWorldPos)) << std::endl;
+							std::cout << "Angle result: " << calculateAngle(objTransform->Position, Vec2(gameWorldPos)) - RGizmo_Angle << std::endl;
+							std::cout << "Angle: " << objTransform->Rotation << std::endl;
 						}
 					}
 
-					/* Y Gizmo */
-					if (object_being_moved_y) {
-						if (gizmo.GetType() == GizmoType::Translate)
-							objTransform->Position.y = (float)std::round(gameWorldPos.y - offset.y);
-						else if (gizmo.GetType() == GizmoType::Scale)
-							objTransform->Scale.y = (float)std::round((Vec2(gameWorldPos).y - initialScaleFactor.y + 100.f) / 100.f * initialScale.y);
+					// Recalculate body if it exists
+					if (objBody != nullptr)
+					{
+						RecalculateBody(objTransform, objBody);
 					}
-
-					if (object_being_moved_x || object_being_moved_y) {
-						if (gizmo.GetType() == GizmoType::Translate)
-							ImGui::SetTooltip("x: %.6f\ny: %.6f", objTransform->Position.x, objTransform->Position.y);
-						else if (gizmo.GetType() == GizmoType::Scale)
-							ImGui::SetTooltip("Width: %.6f\nHeight: %.6f", objTransform->Scale.x, objTransform->Scale.y);
-					}
-				}
-				/* R Gizmo */
-				else if (gizmo.GetType() == GizmoType::Rotate) {
-					if (gizmo.IsRGizmoClicked(gameWorldPos) && !gizmo.IsRGizmoActive()) {
-						gizmo.SetRGizmoActive(true);
-						RGizmo_Angle = calculateAngle(objTransform->Position, Vec2(gameWorldPos));
-						Initial_Rotation = objTransform->Rotation;
-					}
-
-					if (gizmo.IsRGizmoActive()) {
-						objTransform->Rotation = (float)((int) (Initial_Rotation + (calculateAngle(objTransform->Position, Vec2(gameWorldPos)) - RGizmo_Angle)));
-
-						if (objTransform->Rotation > 360.0f)
-							objTransform->Rotation -= 360.f;
-						else if (objTransform->Rotation < 0.0f)
-							objTransform->Rotation += 360.f;
-
-						ImGui::SetTooltip("Rotation: %.6f", objTransform->Rotation);
-
-						std::cout << "Initial_Rotation: " << Initial_Rotation << std::endl;
-						std::cout << "RGizmo_Angle: " << RGizmo_Angle << std::endl;
-						std::cout << "calculateAngle: " << calculateAngle(objTransform->Position, Vec2(gameWorldPos)) << std::endl;
-						std::cout << "Angle result: " << calculateAngle(objTransform->Position, Vec2(gameWorldPos)) - RGizmo_Angle << std::endl;
-						std::cout << "Angle: " << objTransform->Rotation << std::endl;
-					}
-				}
-
-				// Recalculate body if it exists
-				if (objBody != nullptr)
-				{
-					RecalculateBody(objTransform, objBody);
 				}
 			}
 			// Select object in the viewport
@@ -489,45 +492,48 @@ void CoreEngine::GameLoop()
 				Object* selectObj = objectFactory->getObjectWithID(static_cast<long>(level_editor->selectedNum));
 				Transform* selectObjTransform = static_cast<Transform*>(selectObj->GetComponent(ComponentType::Transform));
 
-				// Calculate location of the window
-				Vec2 vecnum1(
-					(selectObjTransform->Position.x + (camera2D->position.x * (float)window->width / 2.f)),
-					(selectObjTransform->Position.y - (selectObjTransform->Scale.y / 2.f) + (camera2D->position.y * (float)window->height / 2.f))
-				);
-				Vec2 vecnum2(
-					(vecnum1.x* camera2D->scale.x) + ((float)window->width / 2),
-					(vecnum1.y* camera2D->scale.y) + ((float)window->height / 2)
-				);
+				if (selectObjTransform) {
 
-				Vec2 vecnum3(
-					vecnum2.x / (float)window->width * viewportDisplaySize.x,
-					((float)window->height - vecnum2.y) / (float)window->height * viewportDisplaySize.y
-				);
+					// Calculate location of the window
+					Vec2 vecnum1(
+						(selectObjTransform->Position.x + (camera2D->position.x * (float)window->width / 2.f)),
+						(selectObjTransform->Position.y - (selectObjTransform->Scale.y / 2.f) + (camera2D->position.y * (float)window->height / 2.f))
+					);
+					Vec2 vecnum2(
+						(vecnum1.x * camera2D->scale.x) + ((float)window->width / 2),
+						(vecnum1.y * camera2D->scale.y) + ((float)window->height / 2)
+					);
 
-				Vec2 vecnum4(
-					vecnum3.x + viewport_min.x,
-					vecnum3.y + viewport_min.y
-				);
+					Vec2 vecnum3(
+						vecnum2.x / (float)window->width * viewportDisplaySize.x,
+						((float)window->height - vecnum2.y) / (float)window->height * viewportDisplaySize.y
+					);
 
-				Vec2 gizmoControlButtonPos = vecnum4 + Vec2(-90.f, 10.f);
+					Vec2 vecnum4(
+						vecnum3.x + viewport_min.x,
+						vecnum3.y + viewport_min.y
+					);
 
-				ImGui::SetNextWindowPos(gizmoControlButtonPos.ToImVec2());
-				ImGui::SetNextWindowSize(ImVec2(180.f, 60.f));
-				ImGui::Begin("Gizmo Controls", nullptr, ImGuiWindowFlags_NoResize);
+					Vec2 gizmoControlButtonPos = vecnum4 + Vec2(-90.f, 10.f);
 
-				if (ImGui::Button("Scale")) {
-					gizmo.SetType(GizmoType::Scale);
+					ImGui::SetNextWindowPos(gizmoControlButtonPos.ToImVec2());
+					ImGui::SetNextWindowSize(ImVec2(180.f, 60.f));
+					ImGui::Begin("Gizmo Controls", nullptr, ImGuiWindowFlags_NoResize);
+
+					if (ImGui::Button("Scale")) {
+						gizmo.SetType(GizmoType::Scale);
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Rotate")) {
+						gizmo.SetType(GizmoType::Rotate);
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Translate")) {
+						gizmo.SetType(GizmoType::Translate);
+					}
+
+					ImGui::End();
 				}
-				ImGui::SameLine();
-				if (ImGui::Button("Rotate")) {
-					gizmo.SetType(GizmoType::Rotate);
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Translate")) {
-					gizmo.SetType(GizmoType::Translate);
-				}
-
-				ImGui::End();
 			}
 
 			if (show_tileset) {

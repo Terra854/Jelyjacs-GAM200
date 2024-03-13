@@ -15,6 +15,9 @@ the engine itself or the game objects within it
 
 bool isObjectClicked(Transform* trans, Vec2 mousePos)
 {
+	if (!trans)
+		return false;
+
 	Vec2 botLeft = trans->Position - (trans->Scale / 2);
 	Vec2 topRight = trans->Position + (trans->Scale / 2);
 	/*

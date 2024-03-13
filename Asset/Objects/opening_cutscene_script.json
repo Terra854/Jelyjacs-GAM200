@@ -2,27 +2,6 @@
   "Name": "opening_cutscene_script",
   "Components": [
     {
-      "Type": "Transform",
-      "Properties": {
-        "Position": {
-          "x": 0.0,
-          "y": 0.0
-        },
-        "Scale": {
-          "x": 128.0,
-          "y": 64.0
-        },
-        "Rotation": 0.0
-      }
-    },
-    {
-      "Type": "Text",
-      "Properties": {
-        "text": "",
-        "fontSize": 1.0
-      }
-    },
-    {
       "Type": "Behaviour",
       "Properties": {
         "Script": "OpeningCutscene",
