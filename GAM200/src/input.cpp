@@ -125,13 +125,13 @@ bool input::IsPressedRepeatedly(KEY key)
 	return buttons[at(key)].IsPressedRepeatedly();
 }
 
-double input::GetMouseX()
+float input::GetMouseX()
 {
-		return ((mouse.x) - static_cast<float>(new_width)/2.0f)* scaleX;
+		return  static_cast<float>(((mouse.x) -new_width)/2.0f* scaleX);
 }
-double input::GetMouseY()
+float input::GetMouseY()
 {
-		return ((-mouse.y) + static_cast<float>(new_height)/ 2.0f) * scaleY;
+		return static_cast<float>(((-mouse.y) + new_height)/ 2.0f * scaleY);
 }
 
 //checks if mouse was moved

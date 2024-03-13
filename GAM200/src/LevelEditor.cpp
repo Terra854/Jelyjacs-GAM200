@@ -1385,7 +1385,6 @@ void LevelEditor::AssetList()
 
 				if (ImGui::BeginDragDropSource())
 				{
-					size_t size = sizeof(t.first.c_str());
 					ImGui::SetDragDropPayload("Game texture", t.first.c_str(), 1024);
 					ImGui::EndDragDropSource();
 				}

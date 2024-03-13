@@ -8,7 +8,10 @@ This file contains the declaration for the Audio system class
 *//*__________________________________________________________________________*/
 #include <Interface_System.h>
 #include <fmod.hpp>
-#include <fmod_errors.h>
+#pragma warning(disable : 4505)
+#include <fmod_errors.h> // Supress the "unreferenced function with internal linkage has been removed" warnings in Fmod
+#pragma warning(default : 4505)
+
 
 class Audio : public ISystems {
 public:

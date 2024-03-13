@@ -15,34 +15,34 @@ Audio* audio = nullptr;
 /******************************************************************************
 Descructor for the Audio system
 *******************************************************************************/
-Audio::~Audio(){
-    AssetManager::clearsounds();
-    system->release();
+Audio::~Audio() {
+	AssetManager::clearsounds();
+	system->release();
 }
 
 /******************************************************************************
 Initialize
 -	This function initalizes the Audio system by setting up Fmod
 *******************************************************************************/
-void Audio::Initialize(){
-    // Create the main system object.
-    result = FMOD::System_Create(&system);      
-    if (result != FMOD_OK)
-    {
-        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
-        exit(-1);
-    }
+void Audio::Initialize() {
+	// Create the main system object.
+	result = FMOD::System_Create(&system);
+	if (result != FMOD_OK)
+	{
+		printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+		exit(-1);
+	}
 
-    // Initialize FMOD.
-    result = system->init(512, FMOD_INIT_NORMAL, 0);    
-    if (result != FMOD_OK)
-    {
-        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
-        exit(-1);
-    }
+	// Initialize FMOD.
+	result = system->init(512, FMOD_INIT_NORMAL, 0);
+	if (result != FMOD_OK)
+	{
+		printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+		exit(-1);
+	}
 
-    // Let other systems have access to this system
-    audio = this;
+	// Let other systems have access to this system
+	audio = this;
 
 }
 
@@ -52,44 +52,44 @@ setupSound
 *******************************************************************************/
 void Audio::setupSound()
 {
-    // Load sounds
-    std::string soundmap = "Asset/Sounds/sounds.json";
-    
+	// Load sounds
+	std::string soundmap = "Asset/Sounds/sounds.json";
+
 	// Check if the given file exists
 	JsonSerialization jsonobj;
 	jsonobj.openFileRead(soundmap);
 
 	// Loop through audio types
 	for (const auto& key : jsonobj.jsonObject->getMemberNames()) {
-		
-			if (jsonobj.isArray(key))
-			{
-				size_t pos = jsonobj.size(key);
-				std::vector<std::string> audioarr;
-				for (size_t j = 0; j < pos; j++)
-				{
-					std::string audioval;
-					jsonobj.readString(audioval, key, (int)j);
-					audioarr.push_back(audioval);
-					std::cout << "AudioMap arrvalue: " << audioval << std::endl;
-				}
-				AssetManager::updateSoundMap(key, audioarr);
-			}
-			else
+
+		if (jsonobj.isArray(key))
+		{
+			size_t pos = jsonobj.size(key);
+			std::vector<std::string> audioarr;
+			for (size_t j = 0; j < pos; j++)
 			{
 				std::string audioval;
-				jsonobj.readString(audioval, key);
-				AssetManager::updateSoundMap(key, audioval);
-				std::cout << "AudioMap value: " << audioval << std::endl;
+				jsonobj.readString(audioval, key, (int)j);
+				audioarr.push_back(audioval);
+				std::cout << "AudioMap arrvalue: " << audioval << std::endl;
 			}
+			AssetManager::updateSoundMap(key, audioarr);
+		}
+		else
+		{
+			std::string audioval;
+			jsonobj.readString(audioval, key);
+			AssetManager::updateSoundMap(key, audioval);
+			std::cout << "AudioMap value: " << audioval << std::endl;
+		}
 	}
 
 	jsonobj.closeFile();
 
-    // Set the background music
+	// Set the background music
 	current_background_audio = "background";
 	system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
-    background->setVolume(0.2f);
+	background->setVolume(0.2f);
 }
 
 /******************************************************************************
@@ -98,7 +98,7 @@ createSound
 *******************************************************************************/
 void Audio::createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound)
 {
-    system->createSound(str.c_str(), mode, 0, sound);
+	system->createSound(str.c_str(), mode, 0, sound);
 }
 
 void Audio::deleteSound(FMOD::Sound* sound)
@@ -110,14 +110,14 @@ void Audio::deleteSound(FMOD::Sound* sound)
 Update
 -	The update loop for the Audio system
 *******************************************************************************/
-void Audio::Update(){
-    system->update();
+void Audio::Update() {
+	system->update();
 
-    background->setPaused(engine->isPaused());
+	background->setPaused(engine->isPaused());
 }
 
 void Audio::playBackground() {
-	if (!current_background_audio.empty()){
+	if (!current_background_audio.empty()) {
 		system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
 		sfx->setVolume(0.2f);
 	}
@@ -139,7 +139,7 @@ void Audio::playSfx(std::string audioType, float volume_multiplier) {
 	sfx->setVolume(0.2f * volume_multiplier);
 }
 
-void Audio::playSfx(std::string audioType, FMOD::ChannelGroup *&sfxChannelGroup, float volume_multiplier) {
+void Audio::playSfx(std::string audioType, FMOD::ChannelGroup*& sfxChannelGroup, float volume_multiplier) {
 	system->playSound(AssetManager::getsoundbyaudiotype(audioType), sfxChannelGroup, false, &channel);
 	channel->setVolume(0.2f * volume_multiplier);
 }
@@ -165,10 +165,10 @@ void Audio::restartBackgroundAudio() {
 	background->setVolume(0.2f);
 }
 
-void Audio::stopSfx(FMOD::ChannelGroup* &c) {
+void Audio::stopSfx(FMOD::ChannelGroup*& c) {
 	c->stop();
 }
 
-void Audio::createChannelGroup(std::string name, FMOD::ChannelGroup* &c) {
+void Audio::createChannelGroup(std::string name, FMOD::ChannelGroup*& c) {
 	system->createChannelGroup(name.c_str(), &c);
 }

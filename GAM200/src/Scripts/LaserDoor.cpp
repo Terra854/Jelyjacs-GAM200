@@ -29,8 +29,8 @@ namespace LaserDoor_Script {
     /*********************************************************************/
     void LaserDoor::Start(Object* obj) {
         std::cout << "LaserDoor Script Ready : " << obj->GetName() << std::endl;
-        bool intersecting = false;
-        bool doorswitch = false;
+        intersecting = false;
+        doorswitch = false;
     }
 
     /*********************************************************************/

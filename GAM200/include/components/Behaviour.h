@@ -23,7 +23,7 @@ public:
     // Parameterized constructor for the Behaviour class.
     // @param index: An integer representing the index of the behavior.
     // @param name: A string representing the name of the behavior.
-    Behaviour(float index, std::string name) : Component(), behaviour_index{ index }, behaviour_name{ name } {}
+    Behaviour(int index, std::string name) : Component(), behaviour_index{ index }, behaviour_name{ name } {}
 
     // Default destructor for the Behaviour class.
     // It is marked as default to use the compiler-generated destructor.
@@ -35,13 +35,13 @@ public:
 
     // Setter for the behaviour index.
     // @param index: The new index to set for this behavior.
-    void SetBehaviourIndex(float index) {
+    void SetBehaviourIndex(int index) {
         behaviour_index = index;
     }
 
     // Getter for the behaviour index.
     // @return: Returns the index of this behavior.
-    float GetBehaviourIndex() noexcept { return behaviour_index; }
+    int GetBehaviourIndex() noexcept { return behaviour_index; }
 
     // Setter for the behaviour name.
     // @param name: The new name to set for this behavior.
@@ -89,7 +89,7 @@ public:
     float GetBehaviourDistance() noexcept { return behaviour_distance; }
 
 private:
-    float behaviour_index;        // An integer to store the index of the behavior.
+    int behaviour_index;        // An integer to store the index of the behavior.
     std::string behaviour_name; // A string to store the name of the behavior.
 
     // Useful variables used during behaviour

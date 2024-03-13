@@ -9,6 +9,7 @@ includes all the functions to draw objects
 *//*__________________________________________________________________________*/
 #include <Debug.h>
 #include <cmath>
+#define GLM_FORCE_SILENT_WARNINGS
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h> // for access to OpenGL API declarations 
