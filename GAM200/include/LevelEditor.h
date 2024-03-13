@@ -32,6 +32,8 @@ public:
 	LevelEditor();
 	~LevelEditor();
 
+	void RefreshLevelList();
+
 	void LoadLevelPanel();
 
 	void SaveAsDialog();
@@ -67,6 +69,9 @@ private:
 	void LE_InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0);
 	void LE_InputFloat(const char* label, float* v);
 	void LE_InputFloat2(const char* label, float* v);
+	void DeleteSound(std::string audioType, int audio_num);
+	void AddAudio();
+	static std::string OpenFileDialog(int type);
 };
 
 class LevelEditorGrid {

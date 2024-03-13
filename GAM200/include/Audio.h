@@ -16,11 +16,16 @@ public:
 	virtual void Initialize();
 	virtual void Update() override;
 
+	void playBackground();
+	void stopBackground();
+
 	// Returns name of the component
 	virtual std::string SystemName() { return "Audio"; }
 
 	void setupSound();
 	void createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound);
+
+	void deleteSound(FMOD::Sound* sound);
 
 	void playSfx(std::string audioName, float volume_multiplier = 1.0f);
 	void playSfx(std::string audioName, FMOD::ChannelGroup *&sfxChannelGroup, float volume_multiplier = 1.0f);
@@ -29,6 +34,8 @@ public:
 	void restartBackgroundAudio();
 	void stopSfx(FMOD::ChannelGroup*& c);
 	void createChannelGroup(std::string name, FMOD::ChannelGroup*& c);
+
+	friend class LevelEditor;
 private:
 	FMOD::System* system;
 	FMOD::Channel *background, *channel, *sfx;

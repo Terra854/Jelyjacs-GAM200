@@ -101,6 +101,11 @@ void Audio::createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound)
     system->createSound(str.c_str(), mode, 0, sound);
 }
 
+void Audio::deleteSound(FMOD::Sound* sound)
+{
+	sound->release();
+}
+
 /******************************************************************************
 Update
 -	The update loop for the Audio system
@@ -109,6 +114,17 @@ void Audio::Update(){
     system->update();
 
     background->setPaused(engine->isPaused());
+}
+
+void Audio::playBackground() {
+	if (!current_background_audio.empty()){
+		system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
+		sfx->setVolume(0.2f);
+	}
+}
+
+void Audio::stopBackground() {
+	background->stop();
 }
 
 /******************************************************************************

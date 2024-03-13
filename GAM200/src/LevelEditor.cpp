@@ -21,6 +21,10 @@ This file contains the definitions of the functions that are part of the level e
 #include <SceneManager.h>
 #include "../../src/Assets Manager/asset_manager.h"
 #include <components/Text.h>
+#include <json/json.h>
+#include <windows.h>
+#include <commdlg.h>
+#include <ThreadPool.h>
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
@@ -34,6 +38,9 @@ char buffer[256];
 
 bool save_as_dialog = false;
 bool new_prefab_dialog = false;
+
+template<class... Ts> struct overload : Ts... { using Ts::operator()...; };
+template<class... Ts> overload(Ts...) -> overload<Ts...>;
 
 /******************************************************************************
 	Default Constructor for LevelEditor
@@ -49,6 +56,33 @@ LevelEditor::~LevelEditor() {
 	delete editor_grid;
 
 	SceneManager::ClearInitialObjectMap(true);
+
+	Json::Value soundsJson;
+	for (const auto& [key, value] : AssetManager::soundMapping) {
+		std::visit(overload{
+			[&](const std::string& s) { soundsJson[key] = s; },
+			[&](const std::vector<std::string>& v) {
+				for (const auto& item : v) {
+					soundsJson[key].append(item);
+				}
+			}
+			}, value);
+	}
+	Json::StreamWriterBuilder builder;
+	builder["commentStyle"] = "None";
+	builder["indentation"] = "  ";
+
+	std::ofstream outputFile("Asset/Sounds/sounds.json");
+	if (outputFile.is_open()) {
+		Json::StreamWriterBuilder writer;
+		writer["indentation"] = "  ";
+
+		outputFile << Json::writeString(builder, soundsJson);
+		outputFile.close();
+		std::cout << "Successfully saved sounds.json" << std::endl;
+	}
+	else
+		std::cerr << "Failed to open file for writing." << std::endl;
 }
 
 /******************************************************************************
@@ -160,8 +194,6 @@ static Vec2 edited_velocity;
 static float edited_mass;
 static bool edited_gravity;
 static bool edited_able_to_push_objects;
-
-
 
 void LevelEditor::ObjectProperties() {
 
@@ -1313,6 +1345,9 @@ void LevelEditor::DisplaySelectedTexture() {
 	}
 }
 
+static bool selectingAudio = false;
+static std::string SelectedAudioType;
+
 /******************************************************************************
 	AssetList
 	- This window displays the lists of assets that are loaded by the engine
@@ -1481,25 +1516,71 @@ void LevelEditor::AssetList()
 	}
 	if (ImGui::BeginTabItem("Audio"))
 	{
+
+		if (ImGui::Button("Add Audio")) {
+			ImGui::OpenPopup("AddToWhichSound");
+		}
+
+		if (ImGui::BeginPopup("AddToWhichSound")) {
+			ImGui::Text("Add to:");
+			ImGui::Separator();
+			ImGui::EndPopup();
+		}
+		
+
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		for (const auto& audioPair : AssetManager::soundMapping)
 		{
 			std::string AudioTypeString = audioPair.first;
 
+			if (ImGui::BeginPopup("AddToWhichSound")) {
+				if (ImGui::Selectable(AudioTypeString.c_str())) {
+					SelectedAudioType = AudioTypeString;
+					selectingAudio = true;
+				}
+				ImGui::EndPopup();
+			}
+
 			if (ImGui::TreeNode(AudioTypeString.c_str())) {
 				if (std::holds_alternative<std::string>(audioPair.second)) {
-					ImGui::Text(std::get<std::string>(audioPair.second).c_str());
+					if (!std::get<std::string>(audioPair.second).empty()) {
+						if (ImGui::Selectable(std::get<std::string>(audioPair.second).c_str())) {
+							ImGui::OpenPopup("SoundOption");
+						}
+
+						if (ImGui::BeginPopup("SoundOption")) {
+							if (ImGui::MenuItem("Delete Audio")) {
+								DeleteSound(AudioTypeString, 0);
+							}
+							ImGui::EndPopup();
+						}
+					}
 				}
 				else {
 					std::vector<std::string> v = std::get<std::vector<std::string>>(audioPair.second);
-					for (const std::string& s : v)
-						ImGui::Text(s.c_str());
+					int audioIndex = 0;
+					static int audioIndexSelected = -1;
+					for (const std::string& s : v) {
+						if (ImGui::Selectable(s.c_str())) {
+							audioIndexSelected = audioIndex;
+							ImGui::OpenPopup("SoundOption");
+						}
+						audioIndex++;
+					}
+					if (ImGui::BeginPopup("SoundOption")) {
+						if (ImGui::MenuItem("Delete Audio")) {
+							DeleteSound(AudioTypeString, audioIndexSelected);
+						}
+						ImGui::EndPopup();
+					}
 				}
 				ImGui::TreePop();
 			}
 		}
+
 		ImGui::PopStyleColor();
 		ImGui::EndTabItem();
+
 	}
 	ImGui::EndTabBar();
 	ImGui::End();
@@ -1639,7 +1720,7 @@ void CameraControl() {
 *******************************************************************************/
 void LevelEditor::LoadLevelPanel() {
 
-	std::vector<std::string> level_files;
+std::vector<std::string> level_files;
 	const std::string path = "Asset/Levels/";
 
 	try {
@@ -2164,6 +2245,7 @@ void LevelEditor::Update() {
 
 	save_as_dialog ? SaveAsDialog() : DoNothing();
 	new_prefab_dialog ? NewPrefabDialog() : DoNothing();
+	selectingAudio ? AddAudio() : DoNothing();
 
 	ImGui::PopFont();
 
@@ -2201,6 +2283,172 @@ void LevelEditor::LE_InputFloat2(const char* label, float* v) {
 
 	if (!input::LevelEditorTextActive)
 		input::LevelEditorTextActive = ImGui::IsItemActive();
+}
+
+void LevelEditor::DeleteSound(std::string audioType, int audio_num) {
+	try {
+		auto& sound = AssetManager::soundMapping.at(audioType);
+
+		std::string audioName;
+
+		if (std::holds_alternative<std::string>(sound)) {
+
+			audioName = std::get<std::string>(sound);
+
+			if (std::get<std::string>(sound) == audio->current_background_audio) {
+				audio->stopBackground();
+				audio->current_background_audio.clear();
+			}
+
+			audio->deleteSound(AssetManager::soundsval(std::get<std::string>(sound)));
+			AssetManager::sounds.erase(std::get<std::string>(sound));
+			std::get<std::string>(sound).clear();
+		}
+		else {
+			std::vector<std::string>& v = std::get<std::vector<std::string>>(sound);
+
+			audioName = v[audio_num];
+
+			if (v[audio_num] == audio->current_background_audio) {
+				audio->stopBackground();
+				audio->current_background_audio.clear();
+			}
+
+			AssetManager::sounds.erase(v[audio_num]);
+			v.erase(v.begin() + audio_num);
+
+			if (v.size() <= 1) {
+				AssetManager::soundMapping[audioType] = v[0];
+			}
+		}
+
+		bool result = std::filesystem::remove("Asset/Sounds/looping/" + audioName) || std::filesystem::remove("Asset/Sounds/non looping/" + audioName);
+
+		if (result) {
+			std::cout << "Audio deleted successfully." << std::endl;
+		}
+		else {
+			std::cout << "Audio deleted failed." << std::endl;
+		}
+	}
+	catch (std::out_of_range) {
+		return;
+	}
+}
+
+static bool SelectAudioRunning = false;
+
+void LevelEditor::AddAudio() {
+
+	if (SelectAudioRunning){
+		ImGui::OpenPopup("Selecting audio");
+	}
+
+	if (ImGui::BeginPopupModal("Selecting audio", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		ImGui::Text("Selecting audio");
+
+		if (!SelectAudioRunning)
+			ImGui::CloseCurrentPopup();
+
+		ImGui::EndPopup();
+	}
+
+	static std::future<std::string> futurePath;
+	
+	if (!SelectAudioRunning) {
+		futurePath = thread_pool->enqueue(&OpenFileDialog, 1);
+		SelectAudioRunning = true;
+	}
+	else if (futurePath.valid()) {
+		if (futurePath.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+			// The future is ready
+			try {
+				std::string audiopath = futurePath.get();; // Retrieve the result
+				std::cout << "Audio path: " << audiopath << std::endl;
+
+				if (audiopath.empty()) {
+					selectingAudio = false;
+					SelectAudioRunning = false;
+					return;
+				}
+
+				unsigned int sound_ms = 0;
+
+				FMOD::Sound* selectedAudio;
+
+				audio->createSound(audiopath, FMOD_DEFAULT, &selectedAudio);
+				selectedAudio->getLength(&sound_ms, FMOD_TIMEUNIT_MS);
+
+				if (sound_ms / 1000 < 10)
+					std::filesystem::copy_file(audiopath, "Asset/Sounds/non looping/" + std::filesystem::path(audiopath).filename().string(), std::filesystem::copy_options::overwrite_existing);
+				else {
+					std::filesystem::copy_file(audiopath, "Asset/Sounds/looping/" + std::filesystem::path(audiopath).filename().string(), std::filesystem::copy_options::overwrite_existing);
+					selectedAudio->setMode(FMOD_LOOP_NORMAL);
+				}
+				AssetManager::sounds.emplace(std::filesystem::path(audiopath).filename().string(), selectedAudio);
+
+				auto& a = AssetManager::soundMapping.at(SelectedAudioType);
+
+				if (std::holds_alternative<std::string>(a)) {
+					if (std::get<std::string>(a).empty()) {
+						std::get<std::string>(a) = std::filesystem::path(audiopath).filename().string();
+					}
+					else {
+						a = std::vector<std::string>({ std::get<std::string>(a) });
+					}
+				}
+				if (std::holds_alternative<std::vector<std::string>>(a)) {
+					std::get<std::vector<std::string>>(a).push_back(std::filesystem::path(audiopath).filename().string());
+				}
+
+				selectingAudio = false;
+				SelectAudioRunning = false;
+			}
+			catch (const std::exception& e) { 
+				std::cout << "Exception: " << e.what() << std::endl;
+				selectingAudio = false;
+				SelectAudioRunning = false;
+			}
+		}
+	}
+}
+
+std::string LevelEditor::OpenFileDialog(int type) {
+	OPENFILENAME ofn;       // Common dialog box structure
+	char szFile[260] = { 0 }; // Buffer for file name
+
+	// Initialize OPENFILENAME structure
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = GetConsoleWindow();
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = "All\0*.*\0Text\0*.TXT\0";
+
+	switch(type) {
+		case 0:
+			ofn.lpstrFilter = "Image Files\0*.PNG;*.JPG;*.JPEG;*.BMP\0";
+			break;
+		case 1:
+			ofn.lpstrFilter = "Audio Files\0*.MP3;*.WAV;*.AAC;*.FLAC;*.OGG;*.WMA;*.M4A\0";
+			break;
+		default:
+			break;
+	}
+
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+	// Display the Open dialog box 
+	if (GetOpenFileName(&ofn) == TRUE) {
+		return std::string(ofn.lpstrFile);
+	}
+
+	return std::string(); // No file selected or dialog cancelled
 }
 
 /************************************LEVEL EDITOR GRID************************************/
