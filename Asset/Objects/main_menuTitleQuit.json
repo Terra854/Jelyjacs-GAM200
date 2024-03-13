@@ -1,16 +1,16 @@
 {
-  "Name": "main_menuTitle",
+  "Name": "main_menuTitleQuit",
   "Components": [
     {
       "Type": "Transform",
       "Properties": {
         "Position": {
           "x": 0.0,
-          "y": 100.0
+          "y": -400.0
         },
         "Scale": {
-          "x": 1363.0,
-          "y": 484.0
+          "x": 200,
+          "y": 33
         },
         "Rotation": 0.0
       }
@@ -18,7 +18,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "Titlex4.png"
+        "texturepath": "TitleQuitGamex4.png"
       }
     }
   ]
