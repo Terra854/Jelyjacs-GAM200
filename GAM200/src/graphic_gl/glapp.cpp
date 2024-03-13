@@ -394,9 +394,9 @@ void GLApp::Update()
 
 					if (text != nullptr) {
 						// draw text
-						SetFont(FONT::GeoRegular);
-						float text_width{ static_cast<float>(find_width(text->text,FONT::GeoRegular))};
-						DrawText(text->text, pos.x * window->width / 2.f - text_width/2 , pos.y * window->height / 2.f, text->fontSize);
+					SetFont((FONT)text->fontType);
+					float text_width{ static_cast<float>(find_width(text->text,(FONT)text->fontType)) };
+					DrawText(text->text, pos.x * window->width / 2.f - text_width / 2, pos.y * window->height / 2.f, text->fontSize);
 					}
 #if defined(DEBUG) | defined(_DEBUG)
 					if (graphics_debug && object->GetComponent(ComponentType::Body) != nullptr) {
