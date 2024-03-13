@@ -24,7 +24,6 @@ This file contains the definitions of the functions that are part of the Core En
 #include "Font.h"
 #include <PhysicsSystem.h>
 #include <glapp.h>
-#include "GameHud.h"
 #include "Utils.h"
 #include "Assets Manager/asset_manager.h"
 #include <Scenes.h>
@@ -38,7 +37,6 @@ CoreEngine* CORE = NULL;
 #if defined(DEBUG) | defined(_DEBUG)
 EngineHud hud;
 #endif
-GameHud gamehud;
 ImVec4 clear_color;
 
 /******************************************************************************
@@ -56,11 +54,11 @@ CoreEngine::CoreEngine()
 	level_size = Vec2(1920.f, 1080.f);
 	start_coord = Vec2(-960.0f, -540.0f);
 
-//#if defined(DEBUG) | defined(_DEBUG)
+#if defined(DEBUG) | defined(_DEBUG)
 	paused = true;
-//#else
-//	paused = false;
-//#endif
+#else
+	paused = false;
+#endif
 }
 /******************************************************************************
 * Destructor
@@ -138,6 +136,9 @@ void CoreEngine::GameLoop()
 	int numofsteps = 0;
 	double accumulator = 0.0;
 
+	//gamehud.Initialize();
+
+	audio->setupSound();
 #if defined(DEBUG) | defined(_DEBUG)
 	int numOfBoxes = (int)(editor_grid->num.x * editor_grid->num.y);
 	std::cout << "Number of boxes " << numOfBoxes << std::endl;
@@ -177,19 +178,17 @@ void CoreEngine::GameLoop()
 	/* For dragging objects into the viewport */
 	bool DraggingPrefabIntoViewport = false;
 
-#endif
-	// Game Loop
-	gamehud.Initialize();
-
 	// For dragging objects in level editor
 	static Vec2 offset(NAN, NAN);
 	static bool object_being_moved = false;
 
 	static bool object_being_moved_x = false;
 	static bool object_being_moved_y = false;
+#else
+	SceneManager::LoadScene("opening_cutscene.json");
+#endif
 
-	audio->setupSound();
-
+	// Game Loop
 	while (game_active)
 	{
 		auto m_BeginFrame = std::chrono::system_clock::now();
@@ -638,8 +637,8 @@ void CoreEngine::GameLoop()
 		level_editor->ClearAll();
 #else
 		Systems["Graphics"]->Update();
-		gamehud.Update();
-		gamehud.Draw();
+		//gamehud.Update();
+		//gamehud.Draw();
 		Systems["Window"]->Update();
 		glfwSwapBuffers(window->ptr_window);
 #endif
