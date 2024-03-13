@@ -1,0 +1,14 @@
+{
+  "Layers": [
+    {
+
+    }
+  ],
+  "SceneName": "main_menu",
+  "Size": {
+    "height": 1080.0,
+    "startX": -960.0,
+    "startY": -540.0,
+    "width":  1920.0
+  }
+}
