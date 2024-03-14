@@ -14,10 +14,18 @@ This file contains the script for Spark, the player character (Cat)
 #include <input.h>
 #include <message.h>
 
+enum TeleportingState {
+	None = 0,
+	Disappearing,
+	Appearing
+};
 // Static variable to track if Spark has just detached from Finn.
 bool Spark::Just_detached;
 bool Spark::Connected_to_Finn;
+bool teleporting;
+TeleportingState teleporting_state;
 
+int counter;
 float spark_move_time = 0.f;
 // Constructor for the Spark class.
 // @param name: A string representing the name of the Spark instance.
@@ -36,6 +44,9 @@ void Spark::Start(Object* obj) {
 	std::cout << "Spark Script Ready : " << obj->GetName() << std::endl;
 	Connected_to_Finn = true;
 	Just_detached = false;
+	teleporting = false;
+	counter = 0;
+	teleporting_state = None;
 }
 /*******************************************************************************/
 // Update method, called on every frame to update Spark's state.
@@ -72,6 +83,7 @@ void Spark::Update(Object* obj) {
 		*					Connecting to Finn if Finn is close enough to Spark
 		*
 		**********************************************************************************************************/
+		/*
 		if (Just_detached) {
 			if ((Finn_t->Position.x < (spark_t->Position.x - 50) && Finn_t->Position.x > (spark_t->Position.x + 50)) &&
 				(Finn_t->Position.y < (spark_t->Position.y - 50) && Finn_t->Position.y > (spark_t->Position.y + 50))) {
@@ -90,7 +102,7 @@ void Spark::Update(Object* obj) {
 		}
 
 		if (Connected_to_Finn) return;
-
+		*/
 		if (player_physics == nullptr || player_animation == nullptr) {
 			//std::cout << "NIL COMPONENT : Player" << std::endl;
 			return;
@@ -147,8 +159,8 @@ void Spark::Update(Object* obj) {
 		/*****************************************************************************************/
 		if (input::IsPressed(KEY::t)) {
 			if (CatPower) {
-				spark_t->Position.x = Finn_t->Position.x;
-				spark_t->Position.y = Finn_t->Position.y;
+				teleporting = true;
+				teleporting_state = Disappearing;
 				CatPower--;
 			}
 			else {
@@ -156,6 +168,49 @@ void Spark::Update(Object* obj) {
 			}
 		}
 
+		if (teleporting) {
+			switch (teleporting_state) {
+				case Disappearing:
+					player_animation->current_type = AnimationType::Push;
+					if (counter < 68) {
+						counter++;
+					}
+					else {
+						teleporting_state = Appearing;
+						counter = 0;
+					}
+					break;
+				case Appearing:
+					player_animation->current_type = AnimationType::Push;		// nid change to appearing animation
+					spark_t->Position.x = Finn_t->Position.x;
+					spark_t->Position.y = Finn_t->Position.y;
+					if (counter < 60) {
+						counter++;
+					}
+					else {
+						teleporting = false;
+						teleporting_state = None;
+						counter = 0;
+					}
+					break;
+				case None:
+					player_animation->current_type = AnimationType::Idle;
+					break;
+			}
+			/*
+			if (counter < 60) {
+				player_animation->current_type = AnimationType::Push;
+				counter++;
+			}
+			else {
+				spark_t->Position.x = Finn_t->Position.x;
+				spark_t->Position.y = Finn_t->Position.y;
+				teleporting = false;
+				player_animation->current_type = AnimationType::Idle;
+				counter = 0;
+			}
+			*/
+		}
 
 
 		// Audio for Character Movement

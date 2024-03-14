@@ -19,10 +19,12 @@ enum AnimationType
 	Push,
 	Jump,
 	Run,
+	Teleport,
 	Idle_left,
 	Push_left,
 	Jump_left,
 	Run_left,
+	Teleport_left,
 	Error // This should always be the last type
 };
 

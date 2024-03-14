@@ -292,7 +292,8 @@ AnimationType stringToAnimationType(const std::string& str) {
 		{"idle", AnimationType::Idle},
 		{"push", AnimationType::Push},
 		{"run", AnimationType::Run},
-		{"jump", AnimationType::Jump}
+		{"jump", AnimationType::Jump},
+		{"teleport", AnimationType::Teleport}
 	};
 	auto it = stringToType.find(str);
 	if (it != stringToType.end())
@@ -315,6 +316,9 @@ bool animationIsLeft(AnimationType type)
 		return true;
 		break;
 	case AnimationType::Run_left:
+		return true;
+		break;
+	case AnimationType::Teleport_left:
 		return true;
 		break;
 	default:
