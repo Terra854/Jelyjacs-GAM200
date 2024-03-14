@@ -194,7 +194,7 @@ void Animation::set_up_map()
 	// Info dump
 	for (auto& it : animation_Map)
 	{
-		std::cout << "Animation Type Setup: " << it.first << std::endl;
+		std::cout << "Animation Type Setup: " << it.first << " Size is: " << it.second.size() << std::endl;
 	}
 }
 

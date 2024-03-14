@@ -284,8 +284,9 @@ Object* Factory::createObject(const std::string& filename)
 							break;
 						}
 
-						std::cout << "Creating left variant\n";
-						//j needs to be different from non left version (j+scale)
+						//std::cout << "Creating left variant\n";
+						
+						// j needs to be different from non left version (j+scale)
 						a->animation_frame.emplace(j+a->animation_scale.second, animationframesecond);
 					}
 
