@@ -12,7 +12,7 @@ Font* FontSystem = NULL;
 Font::Font() {
 }
 
-FT_Library ft;
+//FT_Library ft;
 namespace
 {
 
@@ -141,7 +141,7 @@ Font::~Font()
        // FT_Done_Face(fontOutlines[i].face);
     }
     */
-    FT_Done_FreeType(ft);
+   // FT_Done_FreeType(ft);
 }
 
 //load the ascii characters into the container of characters

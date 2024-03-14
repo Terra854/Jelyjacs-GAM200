@@ -35,6 +35,7 @@ std::map<std::string, GLSLShader> AssetManager::shaders;
 std::map<std::string, GLApp::GLModel> AssetManager::models;
 std::map<std::string, std::vector<std::pair<GLuint, std::string>>> AssetManager::cutscenes;
 std::map<std::string, outline> AssetManager::font_outlines;
+static FT_Library ft;
 
 
 GLuint AssetManager::missing_texture;
@@ -810,7 +811,7 @@ void AssetManager::loadfonts()
 	AssetManager::shaderval("font").Use();
 	glUniformMatrix4fv(glGetUniformLocation(AssetManager::shaderval("font").GetHandle(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-	FT_Library ft;
+	
 	FT_Error error;
 	error = FT_Init_FreeType(&ft);
 	if (error)
@@ -862,4 +863,5 @@ void AssetManager::unloadfonts()
 	{
 		FT_Done_Face(it->second.face);
 	}
+	FT_Done_FreeType(ft);
 }
