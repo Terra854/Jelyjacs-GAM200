@@ -39,7 +39,7 @@ void MainMenuStartGameButton::Update(Object* obj) {
     if (isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
         std::cout << "Button Clicked" << std::endl;
         audio->playSfx("button_click");
-        SceneManager::LoadScene("level_1.json");
+        SceneManager::LoadScene("opening_cutscene.json");
     }
 }
 /*********************************************************************/
