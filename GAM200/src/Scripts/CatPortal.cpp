@@ -56,6 +56,7 @@ namespace CatPortal_Script {
             Transform* catPortal_t = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
 
             Physics* player_p = static_cast<Physics*>(GameLogic::playerObj->GetComponent(ComponentType::Physics));
+            Animation* player_a = static_cast<Animation*>(GameLogic::playerObj->GetComponent(ComponentType::Animation));
 
             // Initialize variables to hold the other CatPortal and its Transform.
             Object* otherCatPortal = nullptr;
@@ -96,6 +97,10 @@ namespace CatPortal_Script {
                         // Teleport the player to the other CatPortal's position.
                     audio->playSfx("cat_teleport");
 
+                    if (player_a != nullptr) {
+						player_a->current_type = AnimationType::Push;
+                        player_a->fixed = true;
+					}
                     camera2D->TranslateCamera(player_t->Position, otherCatPortal_t->Position, 1.0f);
 
                     player_t->Position.x = otherCatPortal_t->Position.x;
@@ -111,9 +116,7 @@ namespace CatPortal_Script {
             }
             else if ((player_t->Position.x > otherCatPortal_t->Position.x - 50 && player_t->Position.x < otherCatPortal_t->Position.x + 50)
                 && (player_t->Position.y > otherCatPortal_t->Position.y - 50 && player_t->Position.y < otherCatPortal_t->Position.y + 50))
-            {
-
-            }
+            {}
             else {
                 // Reset teleportation status and animation when the player is not near the portal.
                 if (catPortal_animation != nullptr) {
