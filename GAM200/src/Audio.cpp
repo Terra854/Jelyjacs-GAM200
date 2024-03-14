@@ -87,7 +87,11 @@ void Audio::setupSound()
 	jsonobj.closeFile();
 
 	// Set the background music
+#if defined(_DEBUG) | defined(DEBUG)
 	current_background_audio = "background";
+#else
+	current_background_audio = "main_menu_bg";
+#endif
 	system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
 	background->setVolume(0.2f * master_volume);
 }
