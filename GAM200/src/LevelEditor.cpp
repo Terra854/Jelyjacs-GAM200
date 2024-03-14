@@ -1368,7 +1368,7 @@ void LevelEditor::DisplaySelectedTexture() {
 		}
 
 
-		ImGui::SetNextWindowSize(ImVec2(image_size.x + 20, image_size.y + 40), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(image_size.x + 20, image_size.y + 70), ImGuiCond_Always);
 
 		ImGui::Begin(selectedTexture.first.c_str(), &display_selected_texture);
 
@@ -1377,11 +1377,32 @@ void LevelEditor::DisplaySelectedTexture() {
 
 		ImGui::Image((void*)(intptr_t)selectedTexture.second, image_size);
 
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+
+		if (ImGui::Button("Delete Texture"))
+		{
+			display_selected_texture = false;
+			AssetManager::unloadtexture(selectedTexture.first);
+
+			bool result = std::filesystem::remove("Asset/Picture/" + selectedTexture.first);
+
+			if (result) {
+				std::cout << "Texture deleted successfully." << std::endl;
+			}
+			else {
+				std::cout << "Texture delete failed." << std::endl;
+			}
+		}
+		ImGui::PopStyleColor(3);
+
 		ImGui::End();
 	}
 }
 
 static bool selectingAudio = false;
+static bool selectingTexture = false;
 static std::string SelectedAudioType;
 
 /******************************************************************************
@@ -1396,6 +1417,11 @@ void LevelEditor::AssetList()
 	{
 		if (ImGui::BeginTabItem("Textures"))
 		{
+			if (ImGui::Button("Add Texture")) {
+				selectingTexture = true;
+			}
+
+			ImGui::SameLine();
 
 			if (ImGui::Button("Refresh Textures"))
 			{
@@ -2280,6 +2306,7 @@ void LevelEditor::Update() {
 
 	save_as_dialog ? SaveAsDialog() : DoNothing();
 	new_prefab_dialog ? NewPrefabDialog() : DoNothing();
+	selectingTexture ? AddTexture() : DoNothing();
 	selectingAudio ? AddAudio() : DoNothing();
 
 	ImGui::PopFont();
@@ -2371,7 +2398,58 @@ void LevelEditor::DeleteSound(std::string audioType, int audio_num) {
 	}
 }
 
+static bool SelectTextureRunning = false;
 static bool SelectAudioRunning = false;
+static std::future<std::string> futurePath;
+
+void LevelEditor::AddTexture() {
+	if (SelectTextureRunning) {
+		ImGui::OpenPopup("Selecting texture");
+	}
+
+	if (ImGui::BeginPopupModal("Selecting texture", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		ImGui::Text("Selecting texture");
+
+		if (!SelectTextureRunning)
+			ImGui::CloseCurrentPopup();
+
+		ImGui::EndPopup();
+	}
+
+	if (!SelectTextureRunning) {
+		futurePath = thread_pool->enqueue(&OpenFileDialog, 0);
+		SelectTextureRunning = true;
+	}
+	else if (futurePath.valid()) {
+		if (futurePath.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+			// The future is ready
+			try {
+				std::string texturepath = futurePath.get();; // Retrieve the result
+				std::cout << "Texture path: " << texturepath << std::endl;
+
+				if (texturepath.empty()) {
+					selectingTexture = false;
+					SelectTextureRunning = false;
+					return;
+				}
+
+				std::filesystem::copy_file(texturepath, "Asset/Picture/" + std::filesystem::path(texturepath).filename().string(), std::filesystem::copy_options::overwrite_existing);
+
+				AssetManager::loadtexture(std::filesystem::path(texturepath).filename().string());
+
+				selectingTexture = false;
+				SelectTextureRunning = false;
+			}
+			catch (const std::exception& e) {
+				std::cout << "Exception: " << e.what() << std::endl;
+				selectingTexture = false;
+				SelectTextureRunning = false;
+			}
+		}
+	}
+
+}
 
 void LevelEditor::AddAudio() {
 
@@ -2388,8 +2466,6 @@ void LevelEditor::AddAudio() {
 
 		ImGui::EndPopup();
 	}
-
-	static std::future<std::string> futurePath;
 	
 	if (!SelectAudioRunning) {
 		futurePath = thread_pool->enqueue(&OpenFileDialog, 1);

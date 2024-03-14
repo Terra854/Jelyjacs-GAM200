@@ -165,6 +165,28 @@ void AssetManager::Update()
 }
 
 /******************************************************************************
+loadtexture
+-	The function looks in the directory for a specific texture to load and stores
+	it in the assetmanager if found.
+*******************************************************************************/
+void AssetManager::loadtexture(const std::string& textureName)
+{
+	std::filesystem::path texturePath = pathtexture / textureName; // Construct the full path
+
+	// Check if the specified texture exists in the directory
+	if (std::filesystem::exists(texturePath))
+	{
+		GLuint textureuint = GLApp::setup_texobj(texturePath.string().c_str()); // Load the texture
+		textures.emplace(texturePath.filename().string(), textureuint); // Store the texture in the asset manager
+		std::cout << "Added to list: " << texturePath.string() << std::endl;
+	}
+	else
+	{
+		std::cerr << "Texture not found: " << textureName << std::endl; // Error message if the texture is not found
+	}
+}
+
+/******************************************************************************
 loadalltextures
 -	The function looks through the directory for textures to load and store
 them in the assetmanager
@@ -179,6 +201,17 @@ void AssetManager::loadalltextures()
 		textures.emplace(filename.string(), textureuint);
 		std::cout << "Added to list: " << filename.string() << std::endl;
 	}
+}
+
+/******************************************************************************
+unloadtexture
+-	Unloads a given texture
+*******************************************************************************/
+void AssetManager::unloadtexture(const std::string& textureName)
+{
+	auto& t = textures.at(textureName);
+	glDeleteTextures(1, &t);
+	textures.erase(textureName);
 }
 
 /******************************************************************************

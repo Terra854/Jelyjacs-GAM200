@@ -30,7 +30,9 @@ public:
 	virtual std::string SystemName();
 
 	// Setup of the assets
+	static void loadtexture(const std::string& textureName);
 	static void loadalltextures();
+	static void unloadtexture(const std::string& textureName);
 	static void unloadalltextures();
 	
 	void loadanimations();
