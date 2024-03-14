@@ -40,7 +40,7 @@ void ParticleSystem::Init()
 
     //init the shown buffer
     for (int i = 0; i < PARTICLE_NUM; i++) {
-		shown[i] = 1.0f;
+		shown[i] = 2.0f;
 	}
     glGenBuffers(2, &instance_shown);
     glBindBuffer(GL_ARRAY_BUFFER, instance_shown);
@@ -102,21 +102,10 @@ void ParticleSystem::Update(Object* player)
     if (engine->isPaused())
         return;
 
-    accum_time += engine->GetDt();
-
-    if (accum_time < engine->Get_Fixed_DT()) return;
-
-    while (accum_time >= engine->Get_Fixed_DT())
-    {
-        accum_time -= engine->Get_Fixed_DT();
-        frame_dt_count++;
-    }
-
+   
+    frame_dt_count = engine->Get_NumOfSteps();
     while (frame_dt_count) {
         frame_dt_count--;
-
-
-
         switch (prticle_type) {
         case::PrticleType::Prticle_Finn:
             if (player != nullptr) {
@@ -184,7 +173,7 @@ void ParticleSystem::Update(Object* player)
                 prticle_state = ParticleState::Prticle_Running;
             }
 
-            //if (prticle_state == ParticleState::Prticle_End) return;
+            if (prticle_state == ParticleState::Prticle_End) return;
 
             // if shown is all 2.0f, then change the state to end
             int count = 0;
