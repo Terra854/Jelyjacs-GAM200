@@ -41,6 +41,7 @@ class Camera : public ISystems
 	void SetToPlayer();
 
 	void TranslateCamera(Vec2 start, Vec2 end, float time);
+	void ShakeCamera(Vec2 range, float time);
 
 	// Toggles the free camera
 	void toggleFreeCam() { free_cam = !free_cam; }
@@ -64,11 +65,19 @@ class Camera : public ISystems
 
 
 private:
-	bool free_cam = false;
 	bool camera_follow = true;
+
+	// transfer
+	bool free_cam = false;
 	Vec2 camera_speed = {0.0f,0.0f};
 	float time_count = 0.0f;
 	float time_shift = 0.0f;
+
+	// shake
+	bool camera_shake = false;
+	Vec2 random_shift = { 0.0f,0.0f };
+
+
 	float x_min = game_to_camera(-672.0f);
 	float y_min = game_to_camera(-352.0f);
 	float x_max = game_to_camera(-672.0f + 2176.0f);
