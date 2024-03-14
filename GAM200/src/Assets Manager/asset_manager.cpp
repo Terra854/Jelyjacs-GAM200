@@ -852,6 +852,11 @@ void AssetManager::loadfonts()
 	glBindVertexArray(0);
 	AssetManager::shaderval("font").UnUse();
 	setup_font_vao(VAO, VBO);
+	for (std::map<std::string, outline>::iterator it = AssetManager::font_outlines.begin(); it != font_outlines.end(); ++it)
+	{
+		FT_Done_Face(it->second.face);
+	}
+	FT_Done_FreeType(ft);
 }
 
 
