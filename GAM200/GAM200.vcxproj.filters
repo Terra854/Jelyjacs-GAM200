@@ -297,6 +297,9 @@
     <ClCompile Include="src\Scripts\WinNextButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\ZoomButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -534,6 +537,9 @@
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\WinNextButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\ZoomButton.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>

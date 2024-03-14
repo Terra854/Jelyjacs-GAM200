@@ -24,7 +24,7 @@
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "ButtonBase",
+        "Script": "ZoomButton",
         "Index": 0
       }
     }
