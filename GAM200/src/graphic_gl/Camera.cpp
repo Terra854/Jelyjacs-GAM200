@@ -58,11 +58,9 @@ void Camera::Update() {
 			//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
 			if (camera_shake) {
 				// get a random number between -range and range
-				float x = (rand() % 1000) / 1000.0f;
-				float y = (rand() % 1000) / 1000.0f;
-				random_shift = { x * 2.0f - 1.0f, y * 2.0f - 1.0f };
-				random_shift.x *= 0.1f;
-				random_shift.y *= 0.1f;
+				float x = (rand() % (int)(random_shift.x * 1000)) / 1000.0f - random_shift.x / 2.0f;
+				float y = (rand() % (int)(random_shift.y * 1000)) / 1000.0f - random_shift.y / 2.0f;
+				random_shift = { x, y };
 				position += random_shift;
 				time_count += engine->Get_Fixed_DT();
 				if (time_count >= time_shift) {
@@ -175,6 +173,7 @@ void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 
 void Camera::ShakeCamera(Vec2 range, float time)
 {
+	random_shift = range;
 	camera_shake = true;
 	time_count = 0.0f;
 	time_shift = time;

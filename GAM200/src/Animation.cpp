@@ -147,6 +147,7 @@ int Animation::get_ani_type_count()
 	// check through animation_Map
 	for (auto& it : this->animation_Map)
 	{
+		(void)it;
 		counter++;
 	}
 	return counter;
