@@ -55,6 +55,7 @@ public:
 	static std::vector<std::pair<GLuint, std::string>> cutsceneval(std::string);
 
 	void loadfonts();
+	void unloadfonts();
 
 
 
