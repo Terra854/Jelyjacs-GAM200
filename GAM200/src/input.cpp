@@ -127,11 +127,11 @@ bool input::IsPressedRepeatedly(KEY key)
 
 float input::GetMouseX()
 {
-		return  static_cast<float>(((mouse.x) -new_width)/2.0f* scaleX);
+	return (static_cast<float>(mouse.x) - static_cast<float>(new_width) / 2.0f) * scaleX;
 }
 float input::GetMouseY()
 {
-		return static_cast<float>(((-mouse.y) + new_height)/ 2.0f * scaleY);
+	return (static_cast<float>(-mouse.y) + static_cast<float>(new_height) / 2.0f) * scaleY;
 }
 
 //checks if mouse was moved

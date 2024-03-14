@@ -45,8 +45,8 @@ void RestartButton::Update(Object* obj) {
         sceneManager->RestartScene();
         sceneManager->PlayScene();
 
-        objectFactory->GetLayer("PauseMenu")->second.first.isVisible = false;
-        objectFactory->GetLayer("GameMenu")->second.first.isVisible = true;
+        //objectFactory->GetLayer("PauseMenu")->second.first.isVisible = false;
+        //objectFactory->GetLayer("GameMenu")->second.first.isVisible = true;
 
 	}
 }
