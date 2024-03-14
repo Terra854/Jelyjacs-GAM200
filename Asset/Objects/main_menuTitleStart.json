@@ -20,6 +20,13 @@
       "Properties": {
         "texturepath": "TitleStartGamex4.png"
       }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "MainMenuStartGameButton",
+        "Index": 0
+      }
     }
   ]
 }

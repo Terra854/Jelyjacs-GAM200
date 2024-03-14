@@ -20,6 +20,13 @@
       "Properties": {
         "texturepath": "TitleLoadGamex4.png"
       }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "",
+        "Index": 0
+      }
     }
   ]
 }

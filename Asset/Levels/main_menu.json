@@ -40,67 +40,14 @@
           "Prefabs": "main_menuTitleStart.json",
           "Rotation": 0.0,
           "Scale": {
-            "x": 240.0,
-            "y": 54.0
+            "x": 222.5,
+            "y": 34.75
           },
           "Type": "Transform",
           "counter": 0.0,
           "distance": 0.0,
           "index": 0.0,
-          "speed": 0.0
-        },
-        {
-          "Name": "main_menuTitleLoadButton",
-          "Position": {
-            "x": 30.0,
-            "y": -330.0
-          },
-          "Prefabs": "main_menuTitleLoad.json",
-          "Rotation": 0.0,
-          "Scale": {
-            "x": 220.0,
-            "y": 54.0
-          },
-          "Type": "Transform",
-          "counter": 0.0,
-          "distance": 0.0,
-          "index": 0.0,
-          "speed": 0.0
-        },
-        {
-          "Name": "main_menuTitleOptionsButton",
-          "Position": {
-            "x": 30.0,
-            "y": -360.0
-          },
-          "Prefabs": "main_menuTitleOptions.json",
-          "Rotation": 0.0,
-          "Scale": {
-            "x": 190.0,
-            "y": 54.0
-          },
-          "Type": "Transform",
-          "counter": 0.0,
-          "distance": 0.0,
-          "index": 0.0,
-          "speed": 0.0
-        },
-        {
-          "Name": "main_menuTitleQuitButton",
-          "Position": {
-            "x": 30.0,
-            "y": -390.0
-          },
-          "Prefabs": "main_menuTitleQuit.json",
-          "Rotation": 0.0,
-          "Scale": {
-            "x": 170.0,
-            "y": 54.0
-          },
-          "Type": "Transform",
-          "counter": 0.0,
-          "distance": 0.0,
-          "index": 0.0,
+          "scripts": "MainMenuStartGameButton",
           "speed": 0.0
         }
       ],
