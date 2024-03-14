@@ -279,6 +279,9 @@ Object* Factory::createObject(const std::string& filename)
 						case AnimationType::Run:
 							animationframesecond.second = AnimationType::Run_left;
 							break;
+						case AnimationType::Teleport:
+							animationframesecond.second = AnimationType::Teleport_left;
+							break;
 						default:
 							animationframesecond.second = AnimationType::Error;
 							break;
