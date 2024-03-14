@@ -71,7 +71,7 @@ public:
 	void Set_Start_Coords(Vec2& coords) { start_coord = coords; }
 	Vec2 Get_Start_Coords() { return start_coord; }
 
-
+	int Get_NumOfSteps() { return numofsteps; }
 #if defined(DEBUG) | defined(_DEBUG)
 	friend class LevelEditor; // For displaying performance info
 	bool debug_gui_active = true;
@@ -96,6 +96,9 @@ private:
 	bool game_active;
 
 	bool paused;
+
+	// FPS Variables
+	int numofsteps = 0;
 
 	Vec2 level_size, start_coord;
 };

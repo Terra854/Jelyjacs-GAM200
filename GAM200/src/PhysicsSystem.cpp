@@ -254,6 +254,7 @@ void PhysicsSystem::Initialize() {
 void PhysicsSystem::Update() {
 
 	// Do not update if the game is paused
+	/*
 	if (!engine->isPaused()) {
 
 		accumulator += engine->GetDt();
@@ -276,10 +277,16 @@ void PhysicsSystem::Update() {
 			accumulator -= engine->Get_Fixed_DT();
 		}
 
+	}*/
+
+	if (engine->isPaused()) {
+		return;
 	}
 
 	// Loop the physics code
-	for (; num_of_steps; num_of_steps--) {
+	//for (; num_of_steps; num_of_steps--) {
+	// Also make sure to handle getting out of breakpoints
+	for (int i = 0; i < (engine->Get_NumOfSteps() > 10 ? 10 : engine->Get_NumOfSteps()); i++) {
 
 		Collision::uniform_grid.clear();
 
