@@ -89,7 +89,7 @@ void Audio::setupSound()
 	// Set the background music
 	current_background_audio = "background";
 	system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
-	background->setVolume(0.2f);
+	background->setVolume(0.2f * master_volume);
 }
 
 /******************************************************************************
@@ -119,7 +119,7 @@ void Audio::Update() {
 void Audio::playBackground() {
 	if (!current_background_audio.empty()) {
 		system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
-		sfx->setVolume(0.2f);
+		background->setVolume(0.2f * master_volume);
 	}
 }
 
@@ -134,14 +134,14 @@ playSfx
 @param a - The sfx name to play
 @param sfxChannel - The sfx channel group to play the sfx on. Will use the default sfx channel if left empty
 *******************************************************************************/
-void Audio::playSfx(std::string audioType, float volume_multiplier) {
+void Audio::playSfx(std::string audioType, float sfx_volume_multiplier) {
 	system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
-	sfx->setVolume(0.2f * volume_multiplier);
+	sfx->setVolume(0.2f * master_volume * sfx_volume_multiplier);
 }
 
-void Audio::playSfx(std::string audioType, FMOD::ChannelGroup*& sfxChannelGroup, float volume_multiplier) {
+void Audio::playSfx(std::string audioType, FMOD::ChannelGroup*& sfxChannelGroup, float sfx_volume_multiplier) {
 	system->playSound(AssetManager::getsoundbyaudiotype(audioType), sfxChannelGroup, false, &channel);
-	channel->setVolume(0.2f * volume_multiplier);
+	channel->setVolume(0.2f * master_volume * sfx_volume_multiplier);
 }
 
 void Audio::setBackgroundAudio(std::string bg) {
@@ -149,8 +149,14 @@ void Audio::setBackgroundAudio(std::string bg) {
 	restartBackgroundAudio();
 }
 
-void Audio::setBackgroundVolume(float volume) {
-	background->setVolume(0.2f * volume);
+void Audio::setBackgroundVolume(float _bg_volume_multiplier) {
+	bg_volume_multiplier = _bg_volume_multiplier;
+	background->setVolume(0.2f * master_volume * bg_volume_multiplier);
+}
+
+void Audio::setMasterVolume(float volume) {
+	master_volume = volume;
+	background->setVolume(0.2f * master_volume * bg_volume_multiplier);
 }
 
 /******************************************************************************
