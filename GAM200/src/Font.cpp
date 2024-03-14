@@ -15,13 +15,41 @@ Font::Font() {
 FT_Library ft;
 namespace
 {
+    //alignment of a character 
+    struct Character {
+        unsigned int TextureID;  // ID handle of the glyph texture
+        glm::ivec2   Size;       // Size of glyph
+        glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
+        unsigned int Advance;    // Offset to advance to next glyph
+    };
 
+    //the entire set of data needed to draw a string of text in a particular font
+    struct outline
+    {
+        //container of ascii chars map to character alignments
+        std::map<char, Character> Characters;
+
+        //metrics for the font
+        FT_Face face{};
+
+        //member function to set a mormalised size in pixels
+        void set_pixel_size(int size);
+
+        //to initialise the map of chars 
+        void load_ascii_chars();
+    };
+   
     //for opengl api
-    GLuint VAO, VBO;
+    unsigned int VAO, VBO;
+    //GLSLShader AssetManager::shaderval("font");
+
+    //array of the font data
+    outline fontOutlines[total];
 
     //to keep track of the current font being used
     outline* fontTracker = nullptr;
 
+    //for error handling to cout
     FT_Error error;
 }
 
@@ -34,11 +62,10 @@ void normalise_coord(float& x, float& y);
 //helper function to draw text
 void RenderText(std::string text, float x, float y, float scale, glm::ivec3 color);
 
-//fonts:
-//Aldrich-Regular
-void SetFont(std::string font)
+//to change to a different font
+void SetFont(FONT f)
 {
-    fontTracker = AssetManager::getoutline(font);
+    fontTracker = &fontOutlines[f];
 }
 
 /******************************************************************************
@@ -47,7 +74,54 @@ void SetFont(std::string font)
 *******************************************************************************/
 void Font::Initialize()
 {
+    //init_shaders();
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(window->width), 0.0f, static_cast<float>(window->height));
+  
+    AssetManager::shaderval("font").Use();
+    glUniformMatrix4fv(glGetUniformLocation(AssetManager::shaderval("font").GetHandle(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+        // FreeType
+        // --------
+        // All functions return a value different than 0 whenever an error occurred
     
+    error = FT_Init_FreeType(&ft);
+    if(error)
+        {
+            std::cout << "ERROR::FREETYPE: Could not init FreeType Library!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        }
+
+    error = (FT_New_Face(ft, "Asset/Fonts/Aldrich-Regular.ttf", 0, &fontOutlines[AldrichRegular].face));
+        if(error)
+        {
+            std::cout << "ERROR::FREETYPE: Failed to load font!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        }
+        error = (FT_New_Face(ft, "Asset/Fonts/Geo-Regular.ttf", 0, &fontOutlines[GeoRegular].face));
+        if (error)
+        {
+            std::cout << "ERROR::FREETYPE: Failed to load font!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        }
+
+        for (int i = 0; i < total; ++i)
+        {
+            fontOutlines[i].set_pixel_size(48);
+            fontOutlines[i].load_ascii_chars();
+        }
+          
+        // configure VAO/VBO for texture
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+        AssetManager::shaderval("font").UnUse();
 }
 
 /******************************************************************************
@@ -63,17 +137,15 @@ bool DrawText(std::string const& text, float posX, float posY, float scale , flo
     to calculate the total width of the text string to be drawn, in pixels,
     depending on what the text string is, in the default font size
 *******************************************************************************/
-int find_width(std::string const& str, std::string font)
+int find_width(std::string const& str , FONT f)
 {
     int width{};
     for (size_t i = 0; i < str.size(); ++i)
     {
-        
-        FT_Load_Char(AssetManager::getoutline(font)->face, str.at(i), FT_LOAD_RENDER);
-        width += AssetManager::getoutline(font)->face->glyph->advance.x;
+        FT_Load_Char(fontOutlines[f].face, str.at(i), FT_LOAD_RENDER);
+        width += fontOutlines[f].face->glyph->advance.x;
     }
     return width>>6;
-
 }
 
 //normoalise coordinates where centre is 0 , 0
@@ -135,14 +207,31 @@ void Font::Update()
 
 Font::~Font()
 {
-    /*
     for (int i = 0; i < total; ++i)
     {
-       // FT_Done_Face(fontOutlines[i].face);
+        FT_Done_Face(fontOutlines[i].face);
     }
-    */
     FT_Done_FreeType(ft);
 }
+
+
+//initialise shaders
+//void init_shaders()
+//{
+//    std::vector<std::pair<GLenum, std::string>> shdr_files
+//    {
+//        std::make_pair(GL_VERTEX_SHADER, "shaders/Font.vert"),
+//        std::make_pair(GL_FRAGMENT_SHADER, "shaders/Font.frag")
+//    };
+//
+//    AssetManager::shaderval("font").CompileLinkValidate(shdr_files);
+//    if (GL_FALSE == AssetManager::shaderval("font").IsLinked())
+//    {
+//        std::cout << "Unable to compile/link/validate shader programs!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+//        std::cout << AssetManager::shaderval("font").GetLog() << "\n";
+//        std::exit(EXIT_FAILURE);
+//    }
+//}
 
 //load the ascii characters into the container of characters
 void outline::load_ascii_chars()
@@ -193,10 +282,4 @@ void outline::load_ascii_chars()
 void outline::set_pixel_size(int size)
 {
     FT_Set_Pixel_Sizes(face, 0, size);
-}
-
-void setup_font_vao(GLuint vaoid , GLuint vboid)
-{
-    ::VAO = vaoid;
-    ::VBO = vboid;
 }

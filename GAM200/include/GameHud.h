@@ -1,4 +1,3 @@
-#if 0
 #pragma once
 /* !
 @file	GameHud.h
@@ -65,5 +64,5 @@ private:
 };
 
 
-#endif
+
 

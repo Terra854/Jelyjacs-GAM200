@@ -1,4 +1,3 @@
-#if 0
 /* !
 @file GameHud.cpp
 @author Yeo Jia Ming, Tay Sen Chuan , Guo chen
@@ -532,4 +531,3 @@ void Buttons_update_resolution()
 			}
 		}
 }
-#endif

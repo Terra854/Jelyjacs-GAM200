@@ -394,8 +394,8 @@ void GLApp::Update()
 
 				if (text != nullptr) {
 					// draw text
-					SetFont(text->fontType);
-					float text_width{ static_cast<float>(find_width(text->text,text->fontType)) };
+					SetFont((FONT)text->fontType);
+					float text_width{ static_cast<float>(find_width(text->text,(FONT)text->fontType)) };
 					DrawText(text->text, pos.x * window->width / 2.f - text_width / 2, pos.y * window->height / 2.f, text->fontSize);
 				}
 #if defined(DEBUG) | defined(_DEBUG)
@@ -527,7 +527,7 @@ void GLApp::Update()
 #endif
 
 	// TODO: Need a key to toggle it on and off
-	SetFont("Aldrich-Regular");
+	SetFont(FONT::AldrichRegular);
 	std::string fpsText = "FPS: " + std::to_string((int) engine->Get_FPS());
 	DrawText(fpsText, -(window->width / 2.f) + 50.f, window->height / 2.f - 100.f, 1.f);
 

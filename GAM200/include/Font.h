@@ -16,45 +16,22 @@ This file contains the declarations of the functions for font system
 #include FT_FREETYPE_H
 
 
+enum FONT
+{
+	AldrichRegular,
+	GeoRegular,
+	total
+};
+
+
 //rgb values range: 0 to 1
 bool DrawText(std::string const& text, float posX, float posY, float scale, float red = 1, float green = 1, float blue = 1);
 
 //calculate the width of text string in pixels, default scale, 1
-int find_width(std::string const& str ,std::string font);
+int find_width(std::string const& str , FONT font);
 
-//fonts:
-//AldrichRegular
-void SetFont(std::string font = "Aldrich-Regular");
-
-
-
-
-void setup_font_vao(GLuint vaoid,GLuint vboid);
-
-
-struct Character {
-    unsigned int TextureID;  // ID handle of the glyph texture
-    glm::ivec2   Size;       // Size of glyph
-    glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
-    unsigned int Advance;    // Offset to advance to next glyph
-};
-
-//the entire set of data needed to draw a string of text in a particular font
-struct outline
-{
-    //container of ascii chars map to character alignments
-    std::map<char, Character> Characters;
-
-    //metrics for the font
-    FT_Face face{};
-
-    //member function to set a mormalised size in pixels
-    void set_pixel_size(int size);
-
-    //to initialise the map of chars 
-    void load_ascii_chars();
-};
-
+//to change font
+void SetFont(FONT);
 
 //font system
 class Font : public ISystems
