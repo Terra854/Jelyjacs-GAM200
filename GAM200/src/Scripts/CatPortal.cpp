@@ -10,6 +10,7 @@ This file contains the script for the portal for the cat character to teleport
 #include <components/Animation.h>
 #include <components/Event.h>
 #include <Audio.h>
+#include <Scripts/Spark.h>
 
 namespace CatPortal_Script {
     /*********************************************************************/
@@ -101,10 +102,9 @@ namespace CatPortal_Script {
 						player_a->current_type = AnimationType::Push;
                         player_a->fixed = true;
 					}
-                    camera2D->TranslateCamera(player_t->Position, otherCatPortal_t->Position, 1.0f);
-
-                    player_t->Position.x = otherCatPortal_t->Position.x;
-                    player_t->Position.y = otherCatPortal_t->Position.y;
+                    Spark::teleporting = true;
+                    Spark::teleporting_state = Disappearing;
+                    Spark::next_position = otherCatPortal_t->Position;
                     justTeleported = true;
                     
                     if (player_p != nullptr) {

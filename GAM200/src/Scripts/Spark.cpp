@@ -14,16 +14,15 @@ This file contains the script for Spark, the player character (Cat)
 #include <input.h>
 #include <message.h>
 
-enum TeleportingState {
-	None = 0,
-	Disappearing,
-	Appearing
-};
+
 // Static variable to track if Spark has just detached from Finn.
 bool Spark::Just_detached;
 bool Spark::Connected_to_Finn;
-bool teleporting;
-TeleportingState teleporting_state;
+
+bool Spark::teleporting;
+bool Spark::UsedPower;
+TeleportingState Spark::teleporting_state;
+Vec2 Spark::next_position;
 
 int counter;
 float spark_move_time = 0.f;
@@ -47,6 +46,8 @@ void Spark::Start(Object* obj) {
 	teleporting = false;
 	counter = 0;
 	teleporting_state = None;
+	UsedPower = false;
+	next_position = Vec2(0, 0);
 }
 /*******************************************************************************/
 // Update method, called on every frame to update Spark's state.
@@ -161,6 +162,9 @@ void Spark::Update(Object* obj) {
 			if (CatPower) {
 				teleporting = true;
 				teleporting_state = Disappearing;
+				next_position.x = Finn_t->Position.x;
+				next_position.y = Finn_t->Position.y;
+				UsedPower = true;
 				CatPower--;
 			}
 			else {
@@ -177,14 +181,17 @@ void Spark::Update(Object* obj) {
 					}
 					else {
 						teleporting_state = Appearing;
+						camera2D->TranslateCamera(spark_t->Position, next_position, 1.0f);
 						counter = 0;
 					}
 					break;
+
 				case Appearing:
-					player_animation->current_type = AnimationType::Push;		// nid change to appearing animation
-					spark_t->Position.x = Finn_t->Position.x;
-					spark_t->Position.y = Finn_t->Position.y;
-					if (counter < 60) {
+					player_animation->current_type = AnimationType::Teleport;
+					if (UsedPower) {
+						spark_t->Position = next_position;
+					}
+					if (counter < 68) {
 						counter++;
 					}
 					else {
@@ -193,6 +200,7 @@ void Spark::Update(Object* obj) {
 						counter = 0;
 					}
 					break;
+
 				case None:
 					player_animation->current_type = AnimationType::Idle;
 					break;

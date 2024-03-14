@@ -8,6 +8,13 @@ This file contains the script for Spark
 #pragma once
 #include <Object.h>
 #include <GameLogic.h>
+#include <Vec2.h>
+
+enum TeleportingState {
+    None = 0,
+    Disappearing,
+    Appearing
+};
 
 // Class Spark, derived from LogicScript.
 // This class is designed to manage the behavior and state of a character or entity named Spark in a game.
@@ -46,4 +53,10 @@ public:
     // A static boolean member variable to track if Spark has just detached from Finn.
     // This could be used to manage the transition or effects of detachment in the game logic.
     static bool Just_detached;
+
+    static bool teleporting;
+    static bool UsedPower;
+    static TeleportingState teleporting_state;
+
+    static Vec2 next_position;
 };

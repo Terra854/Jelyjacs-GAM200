@@ -68,6 +68,14 @@
           }
         },
         {
+          "Prefabs": "MainDoorStart.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -150.0,
+            "y": 30.0
+          }
+        },
+        {
           "Name": "Finn",
           "Prefabs": "Finn.json",
           "Type": "Transform",

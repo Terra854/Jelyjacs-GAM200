@@ -40,7 +40,7 @@ void ParticleSystem::Init()
 
     //init the shown buffer
     for (int i = 0; i < PARTICLE_NUM; i++) {
-		shown[i] = 1.0f;
+		shown[i] = 2.0f;
 	}
     glGenBuffers(2, &instance_shown);
     glBindBuffer(GL_ARRAY_BUFFER, instance_shown);
@@ -102,21 +102,10 @@ void ParticleSystem::Update(Object* player)
     if (engine->isPaused())
         return;
 
-    accum_time += engine->GetDt();
-
-    if (accum_time < engine->Get_Fixed_DT()) return;
-
-    while (accum_time >= engine->Get_Fixed_DT())
-    {
-        accum_time -= engine->Get_Fixed_DT();
-        frame_dt_count++;
-    }
-
+   
+    frame_dt_count = engine->Get_NumOfSteps();
     while (frame_dt_count) {
         frame_dt_count--;
-
-
-
         switch (prticle_type) {
         case::PrticleType::Prticle_Finn:
             if (player != nullptr) {
@@ -161,8 +150,8 @@ void ParticleSystem::Update(Object* player)
 
 
                     world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
-                    Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
-                    world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
+                    /*Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+                    world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;*/
                     world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
                 }
             }
@@ -184,7 +173,7 @@ void ParticleSystem::Update(Object* player)
                 prticle_state = ParticleState::Prticle_Running;
             }
 
-            //if (prticle_state == ParticleState::Prticle_End) return;
+            if (prticle_state == ParticleState::Prticle_End) return;
 
             // if shown is all 2.0f, then change the state to end
             int count = 0;
@@ -215,8 +204,8 @@ void ParticleSystem::Update(Object* player)
             scale.y = tran_pt->Scale.y / window->height_init;
 
             world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(0.0f);
-            Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
-            world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
+           /* Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+            world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;*/
             world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
 
             break;

@@ -20,19 +20,18 @@
       },
       "Objects": [
         {
-          "Name": "MainDoor",
+          "Name": "MainDoorStart",
           "Position": {
             "x": -206.0,
             "y": 33.0
           },
-          "Prefabs": "MainDoor.json",
+          "Prefabs": "MainDoorStart.json",
           "Rotation": 0.0,
           "Scale": {
             "x": 128.0,
             "y": 128.0
           },
-          "Type": "Transform",
-          "scripts": "Endpoint"
+          "Type": "Transform"
         },
         {
           "Name": "MainDoor",
