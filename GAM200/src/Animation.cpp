@@ -183,6 +183,8 @@ void Animation::set_up_map()
 			// The special cases
 			if (g > animation_scale.second && faceright == false)
 				g -= animation_scale.second;
+			else if (g > animation_scale.second && frame.second.second == AnimationType::Idle)
+				g = 1;
 			else if (g > animation_scale.second)
 				g = animation_scale.second;
 
