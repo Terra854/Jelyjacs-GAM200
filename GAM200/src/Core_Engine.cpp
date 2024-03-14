@@ -648,10 +648,11 @@ void CoreEngine::GameLoop()
 		glfwSwapBuffers(window->ptr_window);
 #endif
 
+		// Update the time
+		//auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
+		//auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
+		
 		// FPS Calculation
-		auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
-		auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
-
 		auto m_EndFrame = std::chrono::system_clock::now();
 		dt = std::chrono::duration<float>(m_EndFrame - m_BeginFrame).count();			// Delta Time
 		core_fps = 1.f / dt;															// FPS
@@ -666,12 +667,13 @@ void CoreEngine::GameLoop()
 		}
 
 		// Update delta_time every second
+		/*
 		if (time_in_seconds > prev_time_in_seconds)
 		{
 			//std::cout << "FPS: " << core_fps << std::endl;
 			//std::cout << "DT: " << dt << std::endl;
 			prev_time_in_seconds = time_in_seconds;
-		}
+		}*/
 
 
 		// Updating Frame Times
