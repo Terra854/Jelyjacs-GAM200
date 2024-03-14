@@ -42,7 +42,7 @@ void SkipCutscene::Update(Object* obj) {
 
         // Skip the cutscene
         audio->setBackgroundAudio("background");
-        SceneManager::LoadScene("level_1.json");
+        SceneManager::LoadScene("tutorial_level.json");
 	}
 }
 /*********************************************************************/
