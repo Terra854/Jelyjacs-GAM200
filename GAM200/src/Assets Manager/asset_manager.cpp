@@ -148,6 +148,8 @@ void AssetManager::Free()
 	freeshader();
 	freemodel();
 	// Freeing of sound is called in audio.cpp when audio system is destroyed
+
+	unloadfonts();
 }
 
 /******************************************************************************
@@ -852,11 +854,12 @@ void AssetManager::loadfonts()
 	glBindVertexArray(0);
 	AssetManager::shaderval("font").UnUse();
 	setup_font_vao(VAO, VBO);
+}
+
+void AssetManager::unloadfonts()
+{
 	for (std::map<std::string, outline>::iterator it = AssetManager::font_outlines.begin(); it != font_outlines.end(); ++it)
 	{
 		FT_Done_Face(it->second.face);
 	}
-	FT_Done_FreeType(ft);
 }
-
-
