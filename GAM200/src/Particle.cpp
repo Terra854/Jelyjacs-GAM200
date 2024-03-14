@@ -192,7 +192,7 @@ void ParticleSystem::Update(Object* player)
             }
 
             Transform* tran_pt = static_cast<Transform*>(player->GetComponent(ComponentType::Transform));
-            Physics* phy_pt = static_cast<Physics*>(player->GetComponent(ComponentType::Physics));
+            //Physics* phy_pt = static_cast<Physics*>(player->GetComponent(ComponentType::Physics));
 
            
             Vec2 pos = tran_pt->Position;
