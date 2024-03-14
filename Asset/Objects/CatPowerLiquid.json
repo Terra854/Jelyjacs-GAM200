@@ -31,7 +31,7 @@
         "texturepath": "CatPowerLiquid.png",
         "framerate": 0.1,
         "frame": [16, 1],
-        "idle": [16, 1]
+        "1": [16, "idle"]
       }
     },
     {

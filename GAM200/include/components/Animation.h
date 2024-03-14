@@ -23,8 +23,9 @@ enum AnimationType
 	Push_left,
 	Jump_left,
 	Run_left,
-	End // This should always be the last type
+	Error // This should always be the last type
 };
+
 class Animation : public Component
 {
 public:
@@ -63,13 +64,16 @@ public:
 
 
 	float frame_rate{};
-	Vec2 animation_scale{}; // scale of the animation 
-							//col and row
+	std::pair<float, float> animation_scale; // scale of the animation (col, row)
 
-	std::map< int, std::pair<int, AnimationType> > animation_frame; // [row] -> (frame, type)
+	std::map< float, std::pair<float, AnimationType> > animation_frame; // [row] -> (frame, type)
 
 	float opacity = 1.f;
 
 	virtual ComponentType TypeId() const override { return ComponentType::Animation; }
 };
+
+AnimationType stringToAnimationType(const std::string& str);
+
+bool animationIsLeft(AnimationType type);
 

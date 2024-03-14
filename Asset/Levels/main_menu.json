@@ -1,7 +1,113 @@
 {
   "Layers": [
     {
-
+      "Name": "MainMenu",
+      "Objects": [
+        {
+          "Name": "Main_MenuBG",
+          "Position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "Prefabs": "main_menuBG.json",
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 1920.0,
+            "y": 1080.0
+          },
+          "Type": "Transform"
+        },
+        {
+          "Name": "Main_MenuTitle",
+          "Position": {
+            "x": 0.0,
+            "y": 100.0
+          },
+          "Prefabs": "main_menuTitle.json",
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 1000.0,
+            "y": 500.0
+          },
+          "Type": "Transform"
+        },
+        {
+          "Name": "main_menuTitleStartButton",
+          "Position": {
+            "x": 30.0,
+            "y": -300.0
+          },
+          "Prefabs": "main_menuTitleStart.json",
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 240.0,
+            "y": 54.0
+          },
+          "Type": "Transform",
+          "counter": 0.0,
+          "distance": 0.0,
+          "index": 0.0,
+          "speed": 0.0
+        },
+        {
+          "Name": "main_menuTitleLoadButton",
+          "Position": {
+            "x": 30.0,
+            "y": -330.0
+          },
+          "Prefabs": "main_menuTitleLoad.json",
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 220.0,
+            "y": 54.0
+          },
+          "Type": "Transform",
+          "counter": 0.0,
+          "distance": 0.0,
+          "index": 0.0,
+          "speed": 0.0
+        },
+        {
+          "Name": "main_menuTitleOptionsButton",
+          "Position": {
+            "x": 30.0,
+            "y": -360.0
+          },
+          "Prefabs": "main_menuTitleOptions.json",
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 190.0,
+            "y": 54.0
+          },
+          "Type": "Transform",
+          "counter": 0.0,
+          "distance": 0.0,
+          "index": 0.0,
+          "speed": 0.0
+        },
+        {
+          "Name": "main_menuTitleQuitButton",
+          "Position": {
+            "x": 30.0,
+            "y": -390.0
+          },
+          "Prefabs": "main_menuTitleQuit.json",
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 170.0,
+            "y": 54.0
+          },
+          "Type": "Transform",
+          "counter": 0.0,
+          "distance": 0.0,
+          "index": 0.0,
+          "speed": 0.0
+        }
+      ],
+      "Settings": {
+        "isVisible": true,
+        "static_layer":  true
+      }
     }
   ],
   "SceneName": "main_menu",
