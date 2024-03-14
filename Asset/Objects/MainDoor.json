@@ -21,8 +21,8 @@
         "texturepath": "MainDoor.png",
         "framerate": 0.1,
         "frame": [14, 1],
-        "1": [1, "idle"],
-        "2": [14, "jump"]
+        "idle": [1, 1],
+        "jump": [14, 1]
       }
     },
     {

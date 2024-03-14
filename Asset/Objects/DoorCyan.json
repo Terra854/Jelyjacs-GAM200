@@ -28,9 +28,9 @@
       "Properties": {
         "texturepath": "DoorCyan.png",
         "framerate": 0.1,
-        "frame": [33, 1],
-        "1": [1, "idle"],
-        "2": [33, "jump"]
+        "frame": [ 33, 1 ],
+        "idle": [ 1, 1 ],
+        "jump": [ 33, 1 ]
       }
     },
     {

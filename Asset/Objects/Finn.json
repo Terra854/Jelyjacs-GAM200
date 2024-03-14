@@ -26,17 +26,14 @@
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "Finn3.png",
+        "texturepath": "Finn.png",
         "jumpfixframe": 17,
         "framerate": 0.03,
-        "faceright": false,
-        "frame": [22, 6],
-        "1": [17, "jump"],
-        "2": [16, "jump"],
-        "3": [22, "idle"],
-        "4": [16, "run"],
-        "5": [16, "push"],
-        "6": [16, "push"]
+        "frame": [33, 4],
+        "idle": [22, 2],
+        "push": [32, 4],
+        "jump": [33, 1],
+        "run": [16, 3]
       }
     },
     {
