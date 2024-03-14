@@ -9,6 +9,7 @@ This file contains the script for the in-game clickable buttons
 #include <Utils.h>
 #include <Audio.h>
 #include <Factory.h>
+#include <SceneManager.h>
 
 // Constructor for the ButtonBase class.
 // @param name: The name of the portal.
@@ -38,6 +39,7 @@ void MainMenuStartGameButton::Update(Object* obj) {
     if (isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
         std::cout << "Button Clicked" << std::endl;
         audio->playSfx("button_click");
+        SceneManager::LoadScene("opening_cutscene.json");
     }
 }
 /*********************************************************************/
