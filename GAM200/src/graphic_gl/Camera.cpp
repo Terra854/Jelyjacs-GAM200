@@ -30,32 +30,60 @@ void Camera::Initialize() {
 * Press C to zoom in/out
 */
 void Camera::Update() {
+	static float accum_time = 0.0f;
+	static int frame_dt_count = 0;
 
-	if (!isFreeCamEnabled()) {
+	if (engine->isPaused())
+		return;
 
-		// Set scale for camera
+	
+	frame_dt_count = engine->Get_NumOfSteps();
 
-		if (input::IsPressed(KEY::c)) {
-			if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
-				camera2D->scale = { 2.0f, 2.0f };
+
+	while (frame_dt_count) {
+		frame_dt_count--;
+
+		if (!isFreeCamEnabled()) {
+
+			// Set scale for camera
+
+			if (input::IsPressed(KEY::c)) {
+				if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
+					camera2D->scale = { 2.0f, 2.0f };
+				}
+				else {
+					scale = { 1.0f, 1.0f };
+				}
 			}
-			else {
-				scale = { 1.0f, 1.0f };
+			//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
+			if (camera_shake) {
+				// get a random number between -range and range
+				float x = (rand() % 1000) / 1000.0f;
+				float y = (rand() % 1000) / 1000.0f;
+				random_shift = { x * 2.0f - 1.0f, y * 2.0f - 1.0f };
+				random_shift.x *= 0.1f;
+				random_shift.y *= 0.1f;
+				position += random_shift;
+				time_count += engine->Get_Fixed_DT();
+				if (time_count >= time_shift) {
+					camera_shake = false;
+					random_shift = { 0.0f, 0.0f };
+					camera_follow = true;
+				}
+
 			}
-		}
-		//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
-		if (camera_follow) SetToPlayer();
-		else {
-			position -= camera_speed * engine->GetDt();
-			time_count += engine->GetDt();
-			if (time_count >= time_shift) {
-				camera_follow = true;
-			}
+			else if(free_cam){
+				position -= camera_speed * engine->Get_Fixed_DT();
+				time_count += engine->Get_Fixed_DT();
+				if (time_count >= time_shift) {
+					camera_follow = true;
+					free_cam = false;
+				}
+			}else  SetToPlayer();
+
 		}
 
 	}
-
-
 	world_to_ndc = Mat3Scale(scale.x, scale.y) * Mat3Translate(position.x, position.y);
 	//Vec2 window_scaling = {(float)window->width_init/(float)window->width,(float)window->height_init/(float)window->height};
 	//world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
@@ -123,6 +151,7 @@ void Camera::SetToPlayer() {
 
 void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 {
+	free_cam = true;
 	Vec2 pos1, pos2;
 	pos1.x = start.x;
 	pos1.y = start.y;
@@ -137,6 +166,14 @@ void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 
 	camera_speed = (pos1 - pos2) / time;
 	position = pos1;
+	time_count = 0.0f;
+	time_shift = time;
+	camera_follow = false;
+}
+
+void Camera::ShakeCamera(Vec2 range, float time)
+{
+	camera_shake = true;
 	time_count = 0.0f;
 	time_shift = time;
 	camera_follow = false;

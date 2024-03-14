@@ -230,7 +230,7 @@ void GLApp::insert_models(std::string model_name) {
 */
 void GLApp::Update()
 {
-
+	
 	//check debug
 	if (input::IsPressed(KEY::l))
 	{
