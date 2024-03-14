@@ -3929,7 +3929,8 @@
   "AdditionalScenesToLoad": [
     "game_hud.json",
     "pause_menu.json",
-    "win_menu.json"
+    "win_menu.json",
+    "main_menu.json"
   ],
   "SceneName": "level_2",
   "Size": {
