@@ -14,6 +14,7 @@ to be referenced from when needed.
 #include <iostream>
 #include <random>
 #include "json_serialization.h"
+#include <Font.h>
 
 // Creating of static data members
 std::filesystem::path AssetManager::pathtexture = "Asset/Picture";
@@ -33,6 +34,7 @@ std::map<std::string, std::variant<std::string, std::vector<std::string>>> Asset
 std::map<std::string, GLSLShader> AssetManager::shaders;
 std::map<std::string, GLApp::GLModel> AssetManager::models;
 std::map<std::string, std::vector<std::pair<GLuint, std::string>>> AssetManager::cutscenes;
+std::map<std::string, outline> AssetManager::font_outlines;
 
 
 GLuint AssetManager::missing_texture;
@@ -123,6 +125,67 @@ void AssetManager::Initialize()
 	else
 		std::cout << pathcutscene << " does not exsit!" << std::endl;
 
+	if (std::filesystem::exists(pathfonts))
+	{
+		
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(window->width), 0.0f, static_cast<float>(window->height));
+
+		AssetManager::shaderval("font").Use();
+		glUniformMatrix4fv(glGetUniformLocation(AssetManager::shaderval("font").GetHandle(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+		FT_Library ft;
+		FT_Error error;
+		error = FT_Init_FreeType(&ft);
+		if (error)
+		{
+			std::cout << "ERROR::FREETYPE: Could not init FreeType Library!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+			return;
+		}
+		for (const auto& list : std::filesystem::directory_iterator(pathfonts))
+		{
+			std::cout << "Folders: " << list.path().filename() << std::endl;
+
+			font_outlines[list.path().filename().string().substr(0, list.path().filename().string().size()-4)] = outline();
+		}
+
+		for (std::map<std::string, outline>::iterator it = font_outlines.begin(); it != font_outlines.end(); ++it)
+		{
+			error = (FT_New_Face(ft, std::string(pathfonts.string()+'/'+ it->first + ".ttf").c_str(), 0, &it->second.face));
+			if (error)
+			{
+				std::cout << "ERROR::FREETYPE: Failed to load " << it->first.c_str()<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+				return;
+			}
+		}
+		
+		for (std::map<std::string, outline>::iterator it = font_outlines.begin(); it != font_outlines.end(); ++it)
+		{
+			it->second.set_pixel_size(48);
+			it->second.load_ascii_chars();
+		}
+
+		// configure VAO/VBO for texture
+		GLuint VAO, VBO;
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+		AssetManager::shaderval("font").UnUse();
+		setup_font_vao(VAO , VBO);
+	}
+	else
+	{
+		std::cout << pathfonts << " does not exsit!" << std::endl;
+	}
 }
 
 /******************************************************************************
@@ -740,6 +803,9 @@ std::vector<std::pair<GLuint, std::string>> AssetManager::cutsceneval(std::strin
 	}
 }
 
-
+outline* AssetManager::getoutline(std::string str)
+{
+	return &font_outlines.at(str);
+}
 
 

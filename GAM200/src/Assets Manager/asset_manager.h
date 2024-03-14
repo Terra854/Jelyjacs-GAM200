@@ -17,6 +17,8 @@ This file contains the declaration of class AssetManager.
 #include "../../include/Graphic_gl/glapp.h"
 #include <variant>
 
+#include <Font.h>
+
 class AssetManager : public ISystems
 {
 public:
@@ -81,6 +83,9 @@ public:
 	// Add textures while the game is running (defaults to missing texture if no textures are provided)
 	static void addtextures(std::string str, GLuint tex = missing_texture);
 
+	//Get the font outline/face
+	static outline* getoutline(std::string);
+
 	// Level Editor will need to access the private data
 	friend class LevelEditor;
 	friend class Factory;
@@ -105,6 +110,7 @@ private:
 	static std::map<std::string, GLSLShader> shaders;
 	static std::map<std::string, GLApp::GLModel> models;
 	static std::map<std::string, std::vector<std::pair<GLuint, std::string>>> cutscenes;
+	static std::map<std::string, outline> font_outlines;
 
 	// std::string if there is only 1 audio mapped to a sound type.
 	// vector of strings otherwise if there is more then 1
