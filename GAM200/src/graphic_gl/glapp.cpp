@@ -465,9 +465,8 @@ void GLApp::Update()
 							}
 						}
 					}
-
-				}
 #endif
+				}
 			}
 		}
 	}
