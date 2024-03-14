@@ -13,6 +13,7 @@ This file contains the script for Spark, the player character (Cat)
 #include <Audio.h>
 #include <input.h>
 #include <message.h>
+#include <components/Text.h>
 
 
 // Static variable to track if Spark has just detached from Finn.
@@ -259,6 +260,14 @@ void Spark::Update(Object* obj) {
 		}
 		*/
 
+	}
+
+	Object* CatPowerLiquidHud = objectFactory->FindObject("NumOfCatPowerLiquidText");
+	if (CatPowerLiquidHud) {
+		Text* CatPowerLiquidText = static_cast<Text*>(CatPowerLiquidHud->GetComponent(ComponentType::Text));
+		if (CatPowerLiquidText) {
+			CatPowerLiquidText->text = "x " + std::to_string(CatPower);
+		}
 	}
 
 	
