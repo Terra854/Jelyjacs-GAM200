@@ -132,8 +132,7 @@ void Update(ISystems* sys)
 ********************************************************************************/
 void CoreEngine::GameLoop()
 {
-	// FPS Variables
-	int numofsteps = 0;
+	// For fixed dt
 	double accumulator = 0.0;
 
 	//gamehud.Initialize();
@@ -658,9 +657,11 @@ void CoreEngine::GameLoop()
 		core_fps = 1.f / dt;															// FPS
 		window->fps = core_fps;
 		accumulator += dt;																// Accumulator
-		while (accumulator >= fixed_dt)													// Fixed Time Step - for physics
+
+		numofsteps = 0;
+		while (accumulator >= Get_Fixed_DT())											// Fixed Time Step
 		{
-			accumulator -= fixed_dt;
+			accumulator -= Get_Fixed_DT();
 			numofsteps++;
 		}
 

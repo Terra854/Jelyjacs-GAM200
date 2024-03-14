@@ -26,6 +26,7 @@ void Animation::Update_player()
 	if (engine->isPaused())
 		return;
 
+	/*
 	accum_time += engine->GetDt();
 
 	if (accum_time < engine->Get_Fixed_DT()) return;
@@ -35,6 +36,9 @@ void Animation::Update_player()
 		accum_time -= engine->Get_Fixed_DT();
 		frame_dt_count++;
 	}
+	*/
+
+	frame_dt_count = engine->Get_NumOfSteps();
 	
 
 	while (frame_dt_count) {
@@ -67,8 +71,9 @@ void Animation::Update_objects()
 	if (engine->isPaused())
 		return;
 
+	/*
 	accum_time += engine->GetDt();
-
+	
 	if (accum_time < engine->Get_Fixed_DT()) return;
 
 	while (accum_time >= engine->Get_Fixed_DT())
@@ -76,6 +81,9 @@ void Animation::Update_objects()
 		accum_time -= engine->Get_Fixed_DT();
 		frame_dt_count++;
 	}
+	*/
+
+	frame_dt_count = engine->Get_NumOfSteps();
 	
 
 	while (frame_dt_count) {
@@ -112,8 +120,9 @@ void Animation::Update_time()
 	if (engine->isPaused())
 		return;
 
+	/*
 	accum_time += engine->GetDt();
-
+	
 	if (accum_time < engine->Get_Fixed_DT()) return;
 
 	while (accum_time >= engine->Get_Fixed_DT())
@@ -121,6 +130,9 @@ void Animation::Update_time()
 		accum_time -= engine->Get_Fixed_DT();
 		frame_dt_count++;
 	}
+	*/
+
+	frame_dt_count = engine->Get_NumOfSteps();
 
 	while (frame_dt_count) {
 		frame_dt_count--;
