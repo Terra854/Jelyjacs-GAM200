@@ -194,7 +194,7 @@ void CoreEngine::GameLoop()
 		auto m_BeginFrame = std::chrono::system_clock::now();
 
 #if defined(DEBUG) | defined(_DEBUG)	
-		hud.NewGuiFrame(1);
+		hud.NewGuiFrame(0);
 
 		// Toggle Button to Display Debug Information in IMGui
 		//if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
