@@ -140,12 +140,61 @@ int Animation::get_ani_type_count()
 	return counter;
 }
 
+// Get all the models and properly store them into the map to be rendered
 void Animation::set_up_map()
 {
-	//loop through the animation_frame map
-	for (auto& it : this->animation_frame)
+	animation_Map.clear(); // Clear any existing map before setting up
+
+	//loop through the animation_frame map; frame.second.first = framecol = i, frame.first = framerow
+	for (auto& frame : this->animation_frame)
 	{
-	
+		// Check if there is any error with animations
+		auto it = animation_Map.find(frame.second.second);
+
+		if (frame.second.second == AnimationType::Error)
+		{
+			std::cout << "Something went wrong while setting up animations!\n";
+			return;
+		}
+
+		bool faceright = true;
+		if (animationIsLeft(frame.second.second))
+		{
+			faceright = false;
+		}
+
+		std::vector<GLApp::GLModel> animationmodel;
+
+		for (float i = 0; i < frame.second.first; i++)
+		{
+			float g = frame.first;
+			// The special cases
+			if (g > animation_scale.second && faceright == false)
+				g -= animation_scale.second;
+			else if (g > animation_scale.second)
+				g = animation_scale.second;
+
+			GLApp::GLModel model = setup_texobj_animation((i / animation_scale.first), ((g - 1) / animation_scale.second), ((i + 1) / animation_scale.first), (g / animation_scale.second), faceright);
+
+			animationmodel.push_back(model);
+		}
+
+		// Check if animation type already exist
+		if (it != animation_Map.end()) 
+		{
+			// Same type exist, append the vectors
+			animation_Map[frame.second.second].insert(animation_Map[frame.second.second].end(), animationmodel.begin(), animationmodel.end());
+		}
+		else // Add to animation_Map
+		{
+			animation_Map.emplace(frame.second.second, animationmodel);
+		}
+	}
+
+	// Info dump
+	for (auto& it : animation_Map)
+	{
+		std::cout << "Animation Type Setup: " << it.first << std::endl;
 	}
 }
 
@@ -235,3 +284,43 @@ GLApp::GLModel Animation::setup_texobj_animation(float x, float y, float z, floa
 	//std::cout << "frame created" << std::endl;
 	return Model;
 }
+
+// Converts string to animationType
+AnimationType stringToAnimationType(const std::string& str) {
+	static const std::map<std::string, AnimationType> stringToType =
+	{
+		{"idle", AnimationType::Idle},
+		{"push", AnimationType::Push},
+		{"run", AnimationType::Run},
+		{"jump", AnimationType::Jump}
+	};
+	auto it = stringToType.find(str);
+	if (it != stringToType.end())
+		return it->second;
+	else
+		return AnimationType::Error; // Default value
+}
+
+bool animationIsLeft(AnimationType type)
+{
+	switch (type)
+	{
+	case AnimationType::Idle_left:
+		return true;
+		break;
+	case AnimationType::Push_left:
+		return true;
+		break;
+	case AnimationType::Jump_left:
+		return true;
+		break;
+	case AnimationType::Run_left:
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+
+

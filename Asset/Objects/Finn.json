@@ -29,11 +29,12 @@
         "texturepath": "Finn.png",
         "jumpfixframe": 17,
         "framerate": 0.03,
+        "faceright": false,
         "frame": [33, 4],
-        "idle": [22, 2],
-        "push": [32, 4],
-        "jump": [33, 1],
-        "run": [16, 3]
+        "1": [33, "jump"],
+        "2": [22, "idle"],
+        "3": [16, "run"],
+        "4": [32, "push"]
       }
     },
     {

@@ -211,11 +211,13 @@ Object* Factory::createObject(const std::string& filename)
 			Animation* a = (Animation*)((ComponentCreator<Animation>*) componentMap["Animation"])->Create();
 
 			std::string path;
+
 			jsonloop.readString(path, "Properties", "texturepath");
 			bool exist = AssetManager::animationcheckexist(path);
 			if (!exist)
 			{
 				std::cout << "Missing Animation Texture!" << std::endl;
+				continue; // No animations, skipped adding component
 			}
 			else
 			{
@@ -227,81 +229,99 @@ Object* Factory::createObject(const std::string& filename)
 			if (jsonloop.isMember("jumpfixframe", "Properties"))
 				jsonloop.readInt(a->jump_fixed_frame, "Properties", "jumpfixframe");
 
-			jsonloop.readFloat(a->opacity, "Properties", "opacity");
+			if (jsonloop.isMember("opacity", "Properties"))
+				jsonloop.readFloat(a->opacity, "Properties", "opacity");
 
-			float col;
-			float row;
-			jsonloop.readFloat(col, "Properties", "frame", 0);
-			jsonloop.readFloat(row, "Properties", "frame", 1);
+			if (jsonloop.isMember("faceright", "Properties"))
+				jsonloop.readBool(a->face_right, "Properties", "faceright");
 
-			bool faceright = true;
+			jsonloop.readFloat(a->animation_scale.first, "Properties", "frame", 0);
+			jsonloop.readFloat(a->animation_scale.second, "Properties", "frame", 1);
 
 			// Create frame_map
-			for (int j = 0; j < AnimationType::End; j++)
+			for (int j = 1; j <= a->animation_scale.second; j++)
 			{
-				std::string animationtype;
-				switch (j)
-				{
-					case AnimationType::Idle:
-						animationtype = "idle";
-						faceright = true;
-						break;
-					case AnimationType::Push:
-						animationtype = "push";
-						faceright = true;
-						break;
-					case AnimationType::Jump:
-						animationtype = "jump";
-						faceright = true;
-						break;
-					case AnimationType::Run:
-						animationtype = "run";
-						faceright = true;
-						break;
-					case AnimationType::Idle_left:
-						animationtype = "idle";
-						faceright = false;
-						break;
-					case AnimationType::Push_left:
-						animationtype = "push";
-						faceright = false;
-						break;
-					case AnimationType::Jump_left:
-						animationtype = "jump";
-						faceright = false;
-						break;
-					case AnimationType::Run_left:
-						animationtype = "run";
-						faceright = false;
-						break;
-					default:
-						animationtype = "error";
-						faceright = true;
-						break;
-				}
-
-				AnimationType frametype = static_cast<AnimationType>(j);
+				std::pair<float, AnimationType> animationframesecond;
+				
 				std::vector<GLApp::GLModel> animationmodel;
 
 				// Ensure AnimationType exist before gathering data into animation_map
 				
-				if (jsonloop.isMember(animationtype, "Properties"))
+				if (jsonloop.isMember(std::to_string(j), "Properties"))
 				{
 					float framecol;
-					float framerow;
-					jsonloop.readFloat(framecol, "Properties", animationtype, 0);
-					jsonloop.readFloat(framerow, "Properties", animationtype, 1);
+					std::string animationtype;
 
-					for (int i = 0; i < framecol; i++)
+					jsonloop.readFloat(framecol, "Properties", std::to_string(j), 0);
+					jsonloop.readString(animationtype, "Properties", std::to_string(j), 1);
+
+					AnimationType type = stringToAnimationType(animationtype);
+
+					animationframesecond.first = framecol;
+					animationframesecond.second = type;
+
+					a->animation_frame.emplace(j, animationframesecond);
+
+					// Create left facing version of the animations if necessary
+					if (a->face_right == false)
 					{
-						GLApp::GLModel model = a->setup_texobj_animation(i/col, (framerow-1)/row, (i+1)/col, framerow/row ,faceright);
-						animationmodel.push_back(model);
+						switch (type)
+						{
+						case AnimationType::Idle:
+							animationframesecond.second = AnimationType::Idle_left;
+							break;
+						case AnimationType::Push:
+							animationframesecond.second = AnimationType::Push_left;
+							break;
+						case AnimationType::Jump:
+							animationframesecond.second = AnimationType::Jump_left;
+							break;
+						case AnimationType::Run:
+							animationframesecond.second = AnimationType::Run_left;
+							break;
+						default:
+							animationframesecond.second = AnimationType::Error;
+							break;
+						}
+
+						std::cout << "Creating left variant\n";
+						//j needs to be different from non left version (j+scale)
+						a->animation_frame.emplace(j+a->animation_scale.second, animationframesecond);
+					}
+
+					// Special case, number of rows indicated is more than initial declared but still exist in json data
+					// Normally only used in cases where there is only a row but you want different frames for the same row
+					int g = j+1;
+					while (g > a->animation_scale.second && jsonloop.isMember(std::to_string(g), "Properties"))
+					{
+						jsonloop.readFloat(framecol, "Properties", std::to_string(g), 0);
+						jsonloop.readString(animationtype, "Properties", std::to_string(g), 1);
+
+						type = stringToAnimationType(animationtype);
+
+						animationframesecond.first = framecol;
+						animationframesecond.second = type;
+
+						// Still creating animation frame with different framecol, will properly calculate in set_up_map
+						a->animation_frame.emplace(g, animationframesecond);
+						g++;
 					}
 				}
-
-				a->animation_Map.emplace(frametype, animationmodel);
 			}
 
+			// Dump data for testing
+			//std::cout << "AnimationRow: " << a->animation_scale.second << ", AnimationCol: " << a->animation_scale.first << std::endl;
+			//for (auto& frame : a->animation_frame)
+			//{
+			//	std::cout << "Row: " << frame.first;
+			//	std::cout << ", Col: " << frame.second.first;
+			//	std::cout << ", Type: " << frame.second.second << std::endl;
+			//}
+
+			a->set_up_map();
+
+			// Set it back to facing right by default after the creations of animation map
+			a->face_right = true;
 			obj->AddComponent(a);
 		}
 		else if (type == "Event")
@@ -771,6 +791,11 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			ani->frame_rate = ani_tmp->frame_rate;
 			ani->jump_fixed_frame = ani_tmp->jump_fixed_frame;
 			ani->opacity = ani_tmp->opacity;
+			ani->face_right = ani_tmp->face_right;
+			ani->animation_scale = ani_tmp->animation_scale;
+			ani->animation_frame = ani_tmp->animation_frame;
+
+
 			
 			obj->AddComponent(ani);
 		}
