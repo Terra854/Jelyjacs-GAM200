@@ -398,63 +398,71 @@ void GLApp::Update()
 					float text_width{ static_cast<float>(find_width(text->text,text->fontType)) };
 					DrawText(text->text, pos.x * window->width / 2.f - text_width / 2, pos.y * window->height / 2.f, text->fontSize);
 				}
+				if (graphics_debug) {
+
+					SetFont("Aldrich-Regular");
+					std::string fpsText = "FPS: " + std::to_string((int)engine->Get_FPS());
+					DrawText(fpsText, -(window->width / 2.f) + 50.f, window->height / 2.f - 100.f, 1.f);
+
 #if defined(DEBUG) | defined(_DEBUG)
-				if (graphics_debug && object->GetComponent(ComponentType::Body) != nullptr) {
 
-					Rectangular* rec_pt = static_cast<Rectangular*>(object->GetComponent(ComponentType::Body));
+					if (object->GetComponent(ComponentType::Body) != nullptr) {
 
-					if (rec_pt == nullptr)
-						break; // Don't continue if there is no body component
+						Rectangular* rec_pt = static_cast<Rectangular*>(object->GetComponent(ComponentType::Body));
 
-					Vec2 botleft = rec_pt->aabb.min;
-					Vec2 topright = rec_pt->aabb.max;
+						if (rec_pt == nullptr)
+							break; // Don't continue if there is no body component
 
-					if (rec_pt->active) {
-						drawline(Vec2(topright.x, botleft.y), botleft, box_color);
-						drawline(topright, Vec2(topright.x, botleft.y), box_color);
-						drawline(topright, Vec2(botleft.x, topright.y), box_color);
-						drawline(Vec2(botleft.x, topright.y), botleft, box_color);
-					}
-					else {
-						drawline(Vec2(topright.x, botleft.y), botleft, red_box_color);
-						drawline(topright, Vec2(topright.x, botleft.y), red_box_color);
-						drawline(topright, Vec2(botleft.x, topright.y), red_box_color);
-						drawline(Vec2(botleft.x, topright.y), botleft, red_box_color);
-					}
-					// draw movement line for player
-					if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
-						//get velocity
-						Physics* phy_pt = static_cast<Physics*>(object->GetComponent(ComponentType::Physics));
+						Vec2 botleft = rec_pt->aabb.min;
+						Vec2 topright = rec_pt->aabb.max;
 
-						// Make sure it's not null pointer before continuing
-						if (phy_pt != nullptr) {
+						if (rec_pt->active) {
+							drawline(Vec2(topright.x, botleft.y), botleft, box_color);
+							drawline(topright, Vec2(topright.x, botleft.y), box_color);
+							drawline(topright, Vec2(botleft.x, topright.y), box_color);
+							drawline(Vec2(botleft.x, topright.y), botleft, box_color);
+						}
+						else {
+							drawline(Vec2(topright.x, botleft.y), botleft, red_box_color);
+							drawline(topright, Vec2(topright.x, botleft.y), red_box_color);
+							drawline(topright, Vec2(botleft.x, topright.y), red_box_color);
+							drawline(Vec2(botleft.x, topright.y), botleft, red_box_color);
+						}
+						// draw movement line for player
+						if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
+							//get velocity
+							Physics* phy_pt = static_cast<Physics*>(object->GetComponent(ComponentType::Physics));
 
-							float Vx = phy_pt->Velocity.x;
-							float Vy = phy_pt->Velocity.y;
+							// Make sure it's not null pointer before continuing
+							if (phy_pt != nullptr) {
 
-							//calculate rotation
-							orientation = atan2(Vy, Vx);
+								float Vx = phy_pt->Velocity.x;
+								float Vy = phy_pt->Velocity.y;
 
-							//get slcae of line based on length of line
-							Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width_init / 2, sqrt(Vx * Vx + Vy * Vy) / window->height_init / 2 };
+								//calculate rotation
+								orientation = atan2(Vy, Vx);
 
-							mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
-							mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
-							mat_test = camera2D->world_to_ndc * mat_test;
-							//draw line
-							AssetManager::shaderval("shape").Use();
-							// bind VAO of this object's model
-							glBindVertexArray(AssetManager::modelval("line").vaoid);
-							// copy object's model-to-NDC matrix to vertex shader's
-							// uniform variable uModelToNDC
-							AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-							AssetManager::shaderval("shape").SetUniform("uColor", line_color);
-							// call glDrawElements with appropriate arguments
-							glDrawElements(AssetManager::modelval("line").primitive_type, AssetManager::modelval("line").draw_cnt, GL_UNSIGNED_SHORT, 0);
+								//get slcae of line based on length of line
+								Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width_init / 2, sqrt(Vx * Vx + Vy * Vy) / window->height_init / 2 };
 
-							// unbind VAO and unload shader program
-							glBindVertexArray(0);
-							AssetManager::shaderval("shape").UnUse();
+								mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
+								mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
+								mat_test = camera2D->world_to_ndc * mat_test;
+								//draw line
+								AssetManager::shaderval("shape").Use();
+								// bind VAO of this object's model
+								glBindVertexArray(AssetManager::modelval("line").vaoid);
+								// copy object's model-to-NDC matrix to vertex shader's
+								// uniform variable uModelToNDC
+								AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+								AssetManager::shaderval("shape").SetUniform("uColor", line_color);
+								// call glDrawElements with appropriate arguments
+								glDrawElements(AssetManager::modelval("line").primitive_type, AssetManager::modelval("line").draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+								// unbind VAO and unload shader program
+								glBindVertexArray(0);
+								AssetManager::shaderval("shape").UnUse();
+							}
 						}
 					}
 
@@ -525,11 +533,6 @@ void GLApp::Update()
 		}
 	}
 #endif
-
-	// TODO: Need a key to toggle it on and off
-	SetFont("Aldrich-Regular");
-	std::string fpsText = "FPS: " + std::to_string((int) engine->Get_FPS());
-	DrawText(fpsText, -(window->width / 2.f) + 50.f, window->height / 2.f - 100.f, 1.f);
 
 }
 
