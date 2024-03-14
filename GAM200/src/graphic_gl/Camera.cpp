@@ -66,18 +66,20 @@ void Camera::Update() {
 				position += random_shift;
 				time_count += engine->Get_Fixed_DT();
 				if (time_count >= time_shift) {
+					time_count = 0.0f;
 					camera_shake = false;
 					random_shift = { 0.0f, 0.0f };
 					camera_follow = true;
 				}
 
 			}
-			else if(free_cam){
+			else if(camera_shift){
 				position -= camera_speed * engine->Get_Fixed_DT();
 				time_count += engine->Get_Fixed_DT();
 				if (time_count >= time_shift) {
+					time_count = 0.0f;
 					camera_follow = true;
-					free_cam = false;
+					camera_shift = false;
 				}
 			}else  SetToPlayer();
 
@@ -151,7 +153,7 @@ void Camera::SetToPlayer() {
 
 void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 {
-	free_cam = true;
+	camera_shift = true;
 	Vec2 pos1, pos2;
 	pos1.x = start.x;
 	pos1.y = start.y;

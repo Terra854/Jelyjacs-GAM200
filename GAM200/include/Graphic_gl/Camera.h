@@ -66,9 +66,9 @@ class Camera : public ISystems
 
 private:
 	bool camera_follow = true;
-
-	// transfer
 	bool free_cam = false;
+	// transfer
+	bool camera_shift=false;
 	Vec2 camera_speed = {0.0f,0.0f};
 	float time_count = 0.0f;
 	float time_shift = 0.0f;
@@ -78,10 +78,10 @@ private:
 	Vec2 random_shift = { 0.0f,0.0f };
 
 
-	float x_min = game_to_camera(-672.0f);
-	float y_min = game_to_camera(-352.0f);
-	float x_max = game_to_camera(-672.0f + 2176.0f);
-	float y_max = game_to_camera(-352.0f + 1344.0f);
+	float x_min = {}; //game_to_camera(-672.0f);
+	float y_min = {}; //game_to_camera(-352.0f);
+	float x_max = {}; //game_to_camera(-672.0f + 2176.0f);
+	float y_max = {};// game_to_camera(-352.0f + 1344.0f);
 
 
 };
