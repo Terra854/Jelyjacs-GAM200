@@ -1,3 +1,4 @@
 Game
 1920
 1080
+../../Asset/Picture/GameIcon32.png

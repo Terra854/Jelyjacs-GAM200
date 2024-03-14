@@ -64,6 +64,7 @@ public:
   static std::string title;
   static GLFWwindow *ptr_window;
   static Window_size window_size;
+  std::string icon_path;
  
 
 };

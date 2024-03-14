@@ -18,7 +18,7 @@ includes all the functions to create and update the window
 #include <thread>
 #include <fstream>
 #include <sstream>
-
+#include "stb_image.h"
 #include "Core_Engine.h"
 #include <SceneManager.h>
 /*                                                   objects with file scope
@@ -66,10 +66,15 @@ GLWindow::GLWindow() {
     getline(ifs, line);
     std::istringstream line_height{ line };
     line_height >> GLWindow::height_init;
+    getline(ifs, line);
+    std::istringstream line_icon{ line };
+    line_icon >> GLWindow::icon_path;
 
     ifs.close();
     width = width_init;
     height = height_init;
+
+   
 }
 
 /*  _________________________________________________________________________ */
@@ -132,6 +137,10 @@ void GLWindow::Initialize() {
     originalMode = glfwGetVideoMode(monitor);
     glfwGetWindowPos(ptr_window, &originalX, &originalY);
     glfwGetWindowSize(ptr_window, &originalWidth, &originalHeight);
+
+    GLFWimage images[1];
+    images[0].pixels = stbi_load(icon_path.c_str(), &images[0].width, &images[0].height, 0, 4); //rgba channels 
+    glfwSetWindowIcon(ptr_window, 1, images);
 }
 
 /*  _________________________________________________________________________ */
