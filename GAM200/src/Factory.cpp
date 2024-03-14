@@ -820,7 +820,9 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			obj->AddComponent(b);
 			b->SetBehaviourIndex(b_tmp->GetBehaviourIndex());
 			b->SetBehaviourName(b_tmp->GetBehaviourName());
-
+			b->SetBehaviourCounter(b_tmp->GetBehaviourCounter());
+			b->SetBehaviourDistance(b_tmp->GetBehaviourDistance());
+			b->SetBehaviourSpeed(b_tmp->GetBehaviourSpeed());
 		}
 		else if (component.first == ComponentType::ParticleSystem) // @guochen
 		{
