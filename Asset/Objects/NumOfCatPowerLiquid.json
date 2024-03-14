@@ -1,0 +1,25 @@
+{
+  "Name": "NumOfCatPowerLiquid",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": -891.0,
+          "y": 429.0
+        },
+        "Scale": {
+          "x": 128.0,
+          "y": 128.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "CatPowerLiquidHud.png"
+      }
+    }
+  ]
+}
