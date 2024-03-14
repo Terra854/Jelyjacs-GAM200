@@ -34,7 +34,7 @@ void WinNextButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void WinNextButton::Update(Object* obj) {
-    if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+    if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         //std::cout << "NIL OBJ : WinBackButton" << std::endl;
         return;
     }

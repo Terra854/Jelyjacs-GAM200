@@ -10,7 +10,6 @@ This file contains the script for the laser "doors"
 #include <components/Animation.h>
 #include <components/Event.h>
 #include <Audio.h>
-#include <SceneManager.h>
 
 namespace LaserDoor_Script {
     static float LaserOffSfxCooldown = 0.f;
