@@ -35,7 +35,7 @@
           }
         },
         {
-          "Prefabs": "MainDoor.json",
+          "Prefabs": "MainDoorStart.json",
           "Type": "Transform",
           "Position": {
             "x": -420.0,
