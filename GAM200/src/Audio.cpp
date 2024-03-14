@@ -101,6 +101,12 @@ void Audio::createSound(std::string str, FMOD_MODE mode, FMOD::Sound** sound)
 	system->createSound(str.c_str(), mode, 0, sound);
 }
 
+/******************************************************************************
+deleteSound
+-	This function calls Fmod to delete a given sound
+
+@param sound - The sound to be deleted
+*******************************************************************************/
 void Audio::deleteSound(FMOD::Sound* sound)
 {
 	sound->release();
@@ -116,6 +122,10 @@ void Audio::Update() {
 	background->setPaused(engine->isPaused());
 }
 
+/******************************************************************************
+playBackground
+-	This function tells Fmod to play the background audio
+*******************************************************************************/
 void Audio::playBackground() {
 	if (!current_background_audio.empty()) {
 		system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
@@ -123,6 +133,11 @@ void Audio::playBackground() {
 	}
 }
 
+/******************************************************************************
+stopBackground
+-	This function tells Fmod to stop the background audio
+-	To be called if you are changing or restarting a scene
+*******************************************************************************/
 void Audio::stopBackground() {
 	background->stop();
 }
@@ -132,7 +147,8 @@ playSfx
 -	This function tells Fmod to play the given sfx name
 
 @param a - The sfx name to play
-@param sfxChannel - The sfx channel group to play the sfx on. Will use the default sfx channel if left empty
+@param sfxChannelGroup - The sfx channel group to play the sfx on. Will use the default sfx channel if left empty
+@param sfx_volume_multiplier - The volume multiplier for the sfx (default is 1.0f if not specified)
 *******************************************************************************/
 void Audio::playSfx(std::string audioType, float sfx_volume_multiplier) {
 	system->playSound(AssetManager::getsoundbyaudiotype(audioType), 0, false, &sfx);
@@ -144,16 +160,26 @@ void Audio::playSfx(std::string audioType, FMOD::ChannelGroup*& sfxChannelGroup,
 	channel->setVolume(0.2f * master_volume * sfx_volume_multiplier);
 }
 
+/******************************************************************************
+setBackgroundAudio
+-	This function sets the background audio to the given audio name
+*******************************************************************************/
 void Audio::setBackgroundAudio(std::string bg) {
 	current_background_audio = bg;
 	restartBackgroundAudio();
 }
-
+/******************************************************************************
+setBackgroundVolume
+-	This function sets the background audio volume to the given volume multiplier
+*******************************************************************************/
 void Audio::setBackgroundVolume(float _bg_volume_multiplier) {
 	bg_volume_multiplier = _bg_volume_multiplier;
 	background->setVolume(0.2f * master_volume * bg_volume_multiplier);
 }
-
+/******************************************************************************
+setMasterVolume
+-	This function sets the master volume to the given volume
+*******************************************************************************/
 void Audio::setMasterVolume(float volume) {
 	master_volume = volume;
 	background->setVolume(0.2f * master_volume * bg_volume_multiplier);
@@ -171,10 +197,18 @@ void Audio::restartBackgroundAudio() {
 	background->setVolume(0.2f);
 }
 
+/******************************************************************************
+stopSfx
+-	This function stops the given sfx channel group
+*******************************************************************************/
 void Audio::stopSfx(FMOD::ChannelGroup*& c) {
 	c->stop();
 }
 
+/******************************************************************************
+createChannelGroup
+-	This function creates a channel group with the given name
+*******************************************************************************/
 void Audio::createChannelGroup(std::string name, FMOD::ChannelGroup*& c) {
 	system->createChannelGroup(name.c_str(), &c);
 }
