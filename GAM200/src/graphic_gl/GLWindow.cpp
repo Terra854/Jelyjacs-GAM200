@@ -188,8 +188,8 @@ void GLWindow::Update()
             glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
             break;*/
         case Window_size::high:
-            width = 1600;
-            height = 900;
+            width = 1920;
+            height = 1080;
             glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
             pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
             pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
