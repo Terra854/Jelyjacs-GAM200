@@ -1,5 +1,5 @@
 {
-  "Name": "MainDoorStart",
+  "Name": "Smoke",
   "Components": [
     {
       "Type": "Transform",
@@ -9,8 +9,8 @@
           "y": 0.0
         },
         "Scale": {
-          "x": 128.0,
-          "y": 128.0
+          "x": 64.0,
+          "y": 64.0
         },
         "Rotation": 0.0
       }
@@ -18,13 +18,12 @@
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "MainDoor.png",
+        "texturepath": "Smoke.png",
         "framerate": 0.1,
         "frame": [7, 3],
-        "1": [7, "jump"],
-        "2": [7, "jump"],
-        "3": [1, "jump"],
-        "4": [1, "idle"]
+        "1":[7,"idle"],
+        "2":[7,"idle"],
+        "3":[6,"idle"]
       }
     }
   ]
