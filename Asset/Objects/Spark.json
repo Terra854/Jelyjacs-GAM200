@@ -26,7 +26,7 @@
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "Spark2.png",
+        "texturepath": "Spark3.png",
         "jumpfixframe": 7,
         "framerate": 0.025,
         "faceright": false,
