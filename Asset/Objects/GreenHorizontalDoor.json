@@ -29,8 +29,8 @@
         "texturepath": "Green_Horizontal_door.png",
         "framerate": 0.1,
         "frame": [ 5, 1 ],
-        "idle": [ 1, 1 ],
-        "jump": [ 5, 1 ]
+        "1": [1, "idle"],
+        "2": [5, "jump"]
       }
     },
     {

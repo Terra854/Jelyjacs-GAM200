@@ -5,7 +5,7 @@
 
 This file contains the script for the in-game clickable buttons
 *//*__________________________________________________________________________*/
-#include "Scripts/WinNextButton.h"
+#include "Scripts/ZoomButton.h"
 #include <Utils.h>
 #include <Audio.h>
 #include <Factory.h>
@@ -16,7 +16,7 @@ This file contains the script for the in-game clickable buttons
 
 // Constructor for the PauseButton class.
 // @param name: The name of the portal.
-WinNextButton::WinNextButton(std::string name) : LogicScript(name)
+ZoomButton::ZoomButton(std::string name) : LogicScript(name)
 {
     std::cout << name << " Created" << std::endl;
 }
@@ -24,47 +24,45 @@ WinNextButton::WinNextButton(std::string name) : LogicScript(name)
 // Start method called when the PauseButton script is ready.
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
-void WinNextButton::Start(Object* obj) {
+void ZoomButton::Start(Object* obj) {
     executeOnPause = true;
-    std::cout << "WinBackButton Script Ready : " << obj->GetName() << std::endl;
+    std::cout << " Script Ready : " << obj->GetName() << std::endl;
 }
 
 /*********************************************************************/
 // Update method called every frame to update the PauseButton's logic.
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
-void WinNextButton::Update(Object* obj) {
+void ZoomButton::Update(Object* obj) {
     if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
-        //std::cout << "NIL OBJ : WinBackButton" << std::endl;
+        //std::cout << "NIL OBJ : " << std::endl;
         return;
     }
 
-    
     if(!isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY())))
     {
         return;
     }
     
 
-    
-
     if (input::IsPressed(KEY::mouseL))
     {
         audio->playSfx("button_click");
-        objectFactory->GetLayer("WinMenu")->second.first.isVisible = false;
-        sceneManager->LoadScene("level_2.json");
-        sceneManager->PlayScene();
+        if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
+            camera2D->scale = { 2.0f, 2.0f };
+        }
+        else camera2D->scale = { 1.0f, 1.0f };
     }
 }
 /*********************************************************************/
 // Shutdown method called when the PauseButton script is being shut down.
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
-void WinNextButton::Shutdown(Object* obj) {
-    std::cout << "WinNextButton Script Shutdown : " << obj->GetName() << std::endl;
+void ZoomButton::Shutdown(Object* obj) {
+    std::cout << " Script Shutdown : " << obj->GetName() << std::endl;
 }
 
 // Creating an instance of PauseButton.
-WinNextButton winnextButton ("WinNextButton");
+ZoomButton zoomButton ("ZoomButton");
 
 

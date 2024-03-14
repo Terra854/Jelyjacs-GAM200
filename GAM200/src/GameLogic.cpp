@@ -127,6 +127,7 @@ void GameLogic::Update() {
 		return;
 
 	// Update all behaviours
+	/*
 	int counter = 0;
 	for (auto& iter : behaviourComponents) {
 		//Check if the object is the player
@@ -151,6 +152,24 @@ void GameLogic::Update() {
 			counter++;
 		}
 	}
+	*/
+
+	// Need to refactor cause previous code is very inefficient
+	for (int i = 0; i < objectFactory->GetNextId(); i++) {
+		
+		Object* o = objectFactory->getObjectWithID(i);
+		Behaviour* b = static_cast<Behaviour*>(o->GetComponent(ComponentType::Behaviour));
+
+		if (!b) {
+			continue;
+		}
+		if (!engine->isPaused() || behaviours[b->GetBehaviourName()]->executeOnPause)
+		{
+			//std::cout << "Running behaviour: " << iter->GetBehaviourName() << std::endl;
+			behaviours[b->GetBehaviourName()]->Update(o);
+		}
+	}
+
 	if (restarting) {
 		SceneManager::RestartScene();
 		SceneManager::PlayScene();
