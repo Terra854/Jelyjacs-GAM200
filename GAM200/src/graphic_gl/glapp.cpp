@@ -337,7 +337,6 @@ void GLApp::Update()
 					AssetManager::shaderval("image").UnUse();
 				}
 				else if (ani_pt) {
-					std::cout<<"object name: "<<object->GetName()<<std::endl;
 					// if is player
 					if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 						ParticleSystem* particleSystem = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
