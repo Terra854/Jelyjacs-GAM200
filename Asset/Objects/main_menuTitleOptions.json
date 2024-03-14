@@ -20,6 +20,13 @@
       "Properties": {
         "texturepath": "TitleOptionsx4.png"
       }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "",
+        "Index": 0
+      }
     }
   ]
 }
