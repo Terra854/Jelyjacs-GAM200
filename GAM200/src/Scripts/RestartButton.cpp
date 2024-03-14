@@ -42,11 +42,7 @@ void RestartButton::Update(Object* obj) {
 		audio->playSfx("button_click");
 
         // Restart the level.
-        sceneManager->RestartScene();
-        sceneManager->PlayScene();
-
-        //objectFactory->GetLayer("PauseMenu")->second.first.isVisible = false;
-        //objectFactory->GetLayer("GameMenu")->second.first.isVisible = true;
+        GameLogic::restarting = true;
 
 	}
 }
