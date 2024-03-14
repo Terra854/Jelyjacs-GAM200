@@ -92,7 +92,7 @@ Object* Factory::createObject(const std::string& filename)
 	jsonobj.readString(obj->name, "Name");
 
 	for (auto& component : jsonobj.read("Components")) {
-		
+
 		JsonSerialization jsonloop;
 		jsonloop.jsonObject = &component;
 
@@ -123,12 +123,12 @@ Object* Factory::createObject(const std::string& filename)
 				// Attempt to add the texture
 				AssetManager::addtextures(path);
 			}
-			
+
 			Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(path);
-			
+
 			jsonloop.readFloat(tex->opacity, "Properties", "opacity");
 			obj->AddComponent(tex);
-						
+
 		}
 		else if (type == "Body") {
 			std::string shape;
@@ -166,7 +166,7 @@ Object* Factory::createObject(const std::string& filename)
 			}
 			else if (shape == "Line") {
 				Lines* l = (Lines*)((ComponentCreator<Lines>*) componentMap["Line"])->Create();
-				
+
 				if (jsonloop.isMember("Collision Response"))
 					jsonloop.readBool(l->collision_response, "Collision Response");
 
@@ -242,11 +242,11 @@ Object* Factory::createObject(const std::string& filename)
 			for (int j = 1; j <= a->animation_scale.second; j++)
 			{
 				std::pair<float, AnimationType> animationframesecond;
-				
+
 				std::vector<GLApp::GLModel> animationmodel;
 
 				// Ensure AnimationType exist before gathering data into animation_map
-				
+
 				if (jsonloop.isMember(std::to_string(j), "Properties"))
 				{
 					float framecol;
@@ -255,17 +255,17 @@ Object* Factory::createObject(const std::string& filename)
 					jsonloop.readFloat(framecol, "Properties", std::to_string(j), 0);
 					jsonloop.readString(animationtype, "Properties", std::to_string(j), 1);
 
-					AnimationType a_type = stringToAnimationType(animationtype);
+					AnimationType type = stringToAnimationType(animationtype);
 
 					animationframesecond.first = framecol;
-					animationframesecond.second = a_type;
+					animationframesecond.second = type;
 
 					a->animation_frame.emplace(j, animationframesecond);
 
 					// Create left facing version of the animations if necessary
 					if (a->face_right == false)
 					{
-						switch (a_type)
+						switch (type)
 						{
 						case AnimationType::Idle:
 							animationframesecond.second = AnimationType::Idle_left;
@@ -288,14 +288,14 @@ Object* Factory::createObject(const std::string& filename)
 						}
 
 						//std::cout << "Creating left variant\n";
-						
+
 						// j needs to be different from non left version (j+scale)
-						a->animation_frame.emplace(j+a->animation_scale.second, animationframesecond);
+						a->animation_frame.emplace(j + a->animation_scale.second, animationframesecond);
 					}
 
 					// Special case, number of rows indicated is more than initial declared but still exist in json data
 					// Normally only used in cases where there is only a row but you want different frames for the same row
-					int g = j+1;
+					int g = j + 1;
 					while (g > a->animation_scale.second && jsonloop.isMember(std::to_string(g), "Properties"))
 					{
 						jsonloop.readFloat(framecol, "Properties", std::to_string(g), 0);
@@ -304,7 +304,7 @@ Object* Factory::createObject(const std::string& filename)
 						type = stringToAnimationType(animationtype);
 
 						animationframesecond.first = framecol;
-						animationframesecond.second = a_type;
+						animationframesecond.second = type;
 
 						// Still creating animation frame with different framecol, will properly calculate in set_up_map
 						a->animation_frame.emplace(g, animationframesecond);
@@ -336,9 +336,9 @@ Object* Factory::createObject(const std::string& filename)
 
 			obj->AddComponent(e);
 		}
-		else if (type == "Behaviour") 
+		else if (type == "Behaviour")
 		{
-			Behaviour *b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
+			Behaviour* b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
 			std::string temp_name;
 			int temp_index;
 			jsonloop.readString(temp_name, "Properties", "Script");
@@ -399,7 +399,7 @@ Object* Factory::createObject(const std::string& filename)
 
 	// Run the initialization routines for each component (if there is any)
 	obj->Initialize();
-	
+
 	// Clean up
 	jsonobj.closeFile();
 	return obj;
@@ -434,20 +434,20 @@ void Factory::saveObject(std::string filename, Object* obj) {
 	}
 
 	// Texture
-	if (te != nullptr){
+	if (te != nullptr) {
 		Json::Value texture;
 		texture["Type"] = "Texture";
 		texture["Properties"]["texturepath"] = te->textureName;
 		texture["Properties"]["opacity"] = te->opacity;
 		jsonobj["Components"].append(texture);
-	
+
 	}
 
 	// Animation 
 	if (a != nullptr) {
 		Json::Value animation;
 		animation["Type"] = "Animation";
-		
+
 		// TODO: It's incomplete
 
 		for (const auto& pair : AssetManager::animations) {
@@ -467,7 +467,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 		animation["Properties"]["opacity"] = a->opacity;
 
 		jsonobj["Components"].append(animation);
-	
+
 	}
 
 	// Text
@@ -479,7 +479,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 		jsonobj["Components"].append(text);
 	}
 
-	
+
 	// Body
 	if (bo != nullptr) {
 		Json::Value body;
@@ -512,7 +512,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 			body["Properties"]["collision_response"] = l->collision_response;
 		}
 		jsonobj["Components"].append(body);
-	
+
 	}
 
 	// Physics
@@ -552,7 +552,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 	}
 
 	// Save the object to a file
-	
+
 	std::ofstream outputFile("Asset/Objects/" + filename);
 	if (outputFile.is_open()) {
 		Json::StreamWriterBuilder writer;
@@ -599,7 +599,7 @@ void Factory::Update() {
 			//Delete it and remove its entry in the Id map
 			delete obj;
 			objectMap.erase(gameObjectInMap);
-			
+
 			nextObjectId--;
 
 			// Move all the next objects id down by one
@@ -615,9 +615,9 @@ void Factory::Update() {
 #endif
 		}
 	}
-	
+
 	//All objects to be delete have been deleted
-	gameObjsToBeDeleted.clear();	
+	gameObjsToBeDeleted.clear();
 
 }
 //This destroys all game objects
@@ -693,7 +693,7 @@ Object* Factory::getPlayerObject()
 Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 {
 	//Object* obj = createEmptyObject();
-	Object* obj = new Object(); 
+	Object* obj = new Object();
 
 	// Clone the object name and the prefab it is using
 	obj->name = object->GetName();
@@ -733,7 +733,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 		else if (component.first == ComponentType::Body)
 		{
 			Body* body_pt = static_cast<Body*>(object->GetComponent(ComponentType::Body));
-			
+
 			if (body_pt->GetShape() == Shape::Rectangle) {
 				Rectangular* r = (Rectangular*)((ComponentCreator<Rectangular>*) componentMap["Rectangle"])->Create();
 
@@ -800,7 +800,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			ani->animation_frame = ani_tmp->animation_frame;
 
 
-			
+
 			obj->AddComponent(ani);
 		}
 		else if (component.first == ComponentType::Event)
@@ -820,7 +820,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			obj->AddComponent(b);
 			b->SetBehaviourIndex(b_tmp->GetBehaviourIndex());
 			b->SetBehaviourName(b_tmp->GetBehaviourName());
-			
+
 		}
 		else if (component.first == ComponentType::ParticleSystem) // @guochen
 		{
@@ -874,7 +874,7 @@ Object* Factory::FindObject(std::string name)
 	{
 		return nullptr;
 	}
-	
+
 	for (auto it = objectMap.begin(); it != objectMap.end(); it++)
 	{
 		Object* testObject = it->second;
@@ -939,7 +939,7 @@ int Factory::CreateLayer(std::string layerName, LayerSettings settings) {
 }
 
 void Factory::AddToLayer(int layerNum, Object* obj) {
-	
+
 	// Check if out of bounds
 	if (layerNum < SceneManager::layers.size()) {
 		// If not out of bounds, push the object pointer
@@ -959,7 +959,7 @@ void Factory::AddToLayer(std::string layerName, Object* obj) {
 int Factory::GetLayerNum(std::string layerName) {
 	auto it = std::find_if(SceneManager::layers.begin(), SceneManager::layers.end(), [&layerName](const auto& layer) {
 		return layer.first == layerName;
-	});
+		});
 
 	if (it != SceneManager::layers.end()) {
 		return static_cast<int>(it - SceneManager::layers.begin());
@@ -975,7 +975,7 @@ std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory:
 		if (l.first == layerName)
 			return &l;
 	}
-	
+
 	return nullptr;
 }
 
