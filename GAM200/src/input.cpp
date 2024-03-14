@@ -131,7 +131,7 @@ float input::GetMouseX()
 }
 float input::GetMouseY()
 {
-	return (static_cast<float>(-mouse.y) + static_cast<float>(new_height) / 2.0f) * scaleY;
+	return (static_cast<float>(-mouse.y) + static_cast<float>(new_height) / 2.0f) * static_cast<float>(scaleY);
 }
 
 //checks if mouse was moved

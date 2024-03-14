@@ -8,6 +8,7 @@ This file contains the declarations of the functions for font system
 #pragma once
 #include "interface_System.h"
 #include "glslshader.h"
+#define GLM_FORCE_SILENT_WARNINGS
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>

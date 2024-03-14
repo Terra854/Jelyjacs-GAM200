@@ -27,6 +27,7 @@ program object.
 #include <Debug.h>
 
 #include <GL/glew.h> // for access to OpenGL API declarations 
+#define GLM_FORCE_SILENT_WARNINGS
 #include <glm/glm.hpp>
 #include <iostream>
 #include <fstream>
