@@ -156,6 +156,7 @@ bool input::LevelEditorTextActive = false;
 
 void input::Update()
 {
+	input::update_resolution();
 	//If any text box in the level editor is active
 	//Do not register any inputs. ImGui uses it's own input system seperate from this
 	if (LevelEditorTextActive)
