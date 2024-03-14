@@ -119,6 +119,8 @@ void SceneManager::RestartScene() {
 	initialLayer.clear();
 	initialLayerSettings.clear();
 
+	Logic->Initialize();
+
 	if (!engine->isPaused())
 		SceneManager::BackupInitialState();
 	}
