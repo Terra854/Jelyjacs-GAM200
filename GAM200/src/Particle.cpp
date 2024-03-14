@@ -161,8 +161,8 @@ void ParticleSystem::Update(Object* player)
 
 
                     world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(orientation);
-                    Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
-                    world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
+                    /*Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+                    world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;*/
                     world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
                 }
             }
@@ -215,8 +215,8 @@ void ParticleSystem::Update(Object* player)
             scale.y = tran_pt->Scale.y / window->height_init;
 
             world_to_ndc = Mat3Translate(pos) * Mat3Scale(scale) * Mat3RotRad(0.0f);
-            Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
-            world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
+           /* Vec2 window_scaling{ (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+            world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;*/
             world_to_ndc = camera2D->world_to_ndc * world_to_ndc;
 
             break;

@@ -301,14 +301,14 @@ void GLApp::Update()
 
 				//get matrix
 				mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotDeg(orientation);
-
-				window_scaling = { (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
-
-				mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
+				//window_scaling = { (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+				//mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
+				
 				// matrix after camrea
 
 				if (!l.second.first.static_layer)
 					mat_test = camera2D->world_to_ndc * mat_test;
+				
 
 
 				// draw image with texture
@@ -353,9 +353,7 @@ void GLApp::Update()
 
 						}*/
 						// draw object with animation
-						if (input::IsPressed(KEY::s)) {
-							camera2D->TranslateCamera(pos, pos + Vec2(0.5f, 0.5f), 2.f);
-						}
+						
 						particleSystem->Update(object);
 						ani_pt->Update_player();
 					}
@@ -632,15 +630,15 @@ void GLApp::drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	float scaling_y;
 	orientation = atan2(end.y - start.y, end.x - start.x);
 
-	scaling_x = abs(end.x - start.x) * 2 / window->width;
-	scaling_y = abs(end.y - start.y) * 2 / window->height;
-	pos_x = start.x * 2.0f / window->width;
-	pos_y = start.y * 2.0f / window->height;
+	scaling_x = abs(end.x - start.x) * 2 / window->width_init;
+	scaling_y = abs(end.y - start.y) * 2 / window->height_init;
+	pos_x = start.x * 2.0f / window->width_init;
+	pos_y = start.y * 2.0f / window->height_init;
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
-	Vec2 window_sacling = { (float)window->width / window->width, (float)window->height / window->height };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width, (float)window->height / window->height };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	mat_test = camera2D->world_to_ndc * mat_test;
 	//draw line
 	AssetManager::shaderval("shape").Use();
@@ -680,8 +678,8 @@ void GLApp::drawtriangle(Vec2 tri_pos, Vec2 tri_scale, float tri_r, glm::vec3 tr
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotDeg(tri_r);
-	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	mat_test = camera2D->world_to_ndc * mat_test;
 
 	//draw triangle
@@ -724,8 +722,8 @@ void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, float l_c_width, glm::
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y);
-	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	mat_test = camera2D->world_to_ndc * mat_test;
 
 	glLineWidth(l_c_width);
@@ -768,8 +766,8 @@ void GLApp::draw_rect(Vec2 rec_pos, Vec2 rec_scale, float rec_r, glm::vec3 rec_c
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotDeg(rec_r);
-	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	mat_test = camera2D->world_to_ndc * mat_test;
 
 	//draw square
@@ -813,8 +811,8 @@ void GLApp::draw_texture(Vec2 tex_t, Vec2 tex_s, float tex_r, GLuint tex_in, boo
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotDeg(tex_r);
-	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	if (tex_camera)
 		mat_test = camera2D->world_to_ndc * mat_test;
 
