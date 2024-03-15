@@ -1,7 +1,7 @@
 /* !
 @file	MainMenuStartGameButton.cpp
-@author Tan Yee Ann (t.yeeann@digipen.edu)
-@date	26/2/2023
+@author Jonathan Woo(w.jiahowjonathan@digipen.edu)
+@date	15/3/2023
 
 This file contains the script for the in-game clickable buttons
 *//*__________________________________________________________________________*/
