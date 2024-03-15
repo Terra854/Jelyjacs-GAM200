@@ -247,6 +247,7 @@ void GLApp::Update()
 				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
 				Animation* ani_pt = static_cast<Animation*>(video->GetComponent(ComponentType::Animation));
 				ani_pt->fixed=true;
+				// @ yee ann can help me addjust the position?
 				tran_pt->Position = Vec2(0, 0);
 				video_timer += engine->Get_Fixed_DT();
 				if (video_timer >= 0.4f) {
@@ -266,7 +267,7 @@ void GLApp::Update()
 				}
 			}
 			if (video_count == 8) {
-				SceneManager::LoadScene("opening_cutscene.json");
+				SceneManager::LoadScene("tutorial_level.json");
 				video_start = false;
 			}
 		}
