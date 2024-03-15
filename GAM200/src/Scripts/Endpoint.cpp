@@ -30,6 +30,7 @@ namespace Endpoint_Script {
 	void Endpoint::Start(Object* obj) {
 		std::cout << "Endpoint Script Ready : " << obj->GetName() << std::endl;
 		win = false;
+		counter = 0.f;
 	}
 
 	/***************************************************************************/
@@ -77,7 +78,7 @@ namespace Endpoint_Script {
 						counter += engine->GetDt();
 						//Check if the animation is done
 						//if (endpoint_animation->current_type == AnimationType::Jump && (counter > 3)) {
-						if (counter > 2) {
+						if (counter > 2.f) {
 							//std::cout << "Animation is done" << std::endl;
 							//Set the win state
 							win = true;
@@ -90,6 +91,7 @@ namespace Endpoint_Script {
 		else {
 			endpoint_animation->fixed = false;
 			endpoint_animation->current_type = AnimationType::Idle;
+			counter = 0.f;
 		}
 		if (win) {
 			audio->playSfx("level_complete");
