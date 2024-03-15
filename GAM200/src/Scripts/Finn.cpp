@@ -118,6 +118,9 @@ void Finn::Update(Object* obj) {
 		if (cheat) {
 			return;
 		}
+		if (player_body->bottom_collision == nullptr) {
+			return;
+		}
 		// Audio for Character Movement
 		if ((player_physics->Velocity.y == 0.f) && moving) {
 			//audio->startWalking();
