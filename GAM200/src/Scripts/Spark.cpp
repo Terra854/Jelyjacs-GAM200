@@ -105,6 +105,11 @@ void Spark::Update(Object* obj) {
 
 		if (Connected_to_Finn) return;
 		*/
+		if (player_physics == nullptr || player_animation == nullptr) {
+			//std::cout << "NIL COMPONENT : Player" << std::endl;
+			return;
+		};
+
 		if (teleporting) {
 			player_animation->jump_fixed = false;
 			switch (teleporting_state) {
@@ -141,10 +146,6 @@ void Spark::Update(Object* obj) {
 			}
 		}
 		else {
-			if (player_physics == nullptr || player_animation == nullptr) {
-				//std::cout << "NIL COMPONENT : Player" << std::endl;
-				return;
-			};
 			player_physics->Velocity.x = 0.0f;
 
 			if (player_animation->face_right) {
