@@ -9,6 +9,7 @@ This file contains the script for the in-game clickable buttons
 #include <Utils.h>
 #include <Audio.h>
 #include <Factory.h>
+#include <Core_Engine.h>
 
 // Constructor for the ButtonBase class.
 // @param name: The name of the portal.
@@ -38,6 +39,8 @@ void MainMenuQuitButton::Update(Object* obj) {
     if (isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
         std::cout << "Button Clicked" << std::endl;
         audio->playSfx("button_click");
+        Message_Handler msg(MessageID::Event_Type::Quit);
+        engine->Broadcast(&msg);
     }
 }
 /*********************************************************************/
