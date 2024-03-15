@@ -247,8 +247,7 @@ void GLApp::Update()
 				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
 				Animation* ani_pt = static_cast<Animation*>(video->GetComponent(ComponentType::Animation));
 				ani_pt->fixed=true;
-				// @ yee ann can help me addjust the position?
-				tran_pt->Position = Vec2(0, 0);
+				tran_pt->Position = Vec2(-330.f, 30.f);
 				video_timer += engine->Get_Fixed_DT();
 				if (video_timer >= 0.4f) {
 					video_timer = 0.0f;
@@ -259,7 +258,7 @@ void GLApp::Update()
 			if (video_count == 7) {
 				Object* video = objectFactory->FindObject("Video" + std::to_string(video_count));
 				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
-				tran_pt->Position = Vec2(0, 0);
+				tran_pt->Position = Vec2(-330.f, 30.f);
 				video_timer += engine->Get_Fixed_DT();
 				if (video_timer >= 0.2f) {
 					video_timer = 0.0f;
