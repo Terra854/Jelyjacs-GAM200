@@ -99,7 +99,8 @@ void ParticleSystem::Update(Object* player)
     static float accum_time = 0.0f;
     static int frame_dt_count = 0;
 
-    
+   if (engine->isPaused())
+        return;
    
     frame_dt_count = engine->Get_NumOfSteps();
     while (frame_dt_count) {
