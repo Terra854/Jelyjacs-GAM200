@@ -49,6 +49,14 @@
             "x": 128.0,
             "y": 128.0
           }
+        },
+        {
+          "Prefabs": "Smoke.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 875.0,
+            "y": 580.0
+          }
         }
       ]
     },
