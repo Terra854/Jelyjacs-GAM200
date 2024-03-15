@@ -9,6 +9,14 @@
       "Objects": [
         {
           "Prefabs": "level2_background.json"
+        },
+        {
+          "Prefabs": "Light.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 512.0,
+            "y": 416.0
+          }
         }
       ]
     },

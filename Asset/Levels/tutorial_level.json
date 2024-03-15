@@ -16,6 +16,14 @@
       "Objects": [
         {
           "Prefabs": "tutorial_background.json"
+        },
+        {
+          "Prefabs": "Light.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -420.0,
+            "y": -10.0
+          }
         }
       ]
     },
