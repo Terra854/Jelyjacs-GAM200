@@ -284,7 +284,6 @@ void PhysicsSystem::Update() {
 	}
 
 	// Loop the physics code
-	//for (; num_of_steps; num_of_steps--) {
 	// Also make sure to handle getting out of breakpoints
 	for (int i = 0; i < (engine->Get_NumOfSteps() > 10 ? 10 : engine->Get_NumOfSteps()); i++) {
 

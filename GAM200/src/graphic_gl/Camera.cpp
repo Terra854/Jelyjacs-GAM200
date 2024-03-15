@@ -33,55 +33,46 @@ void Camera::Update() {
 	static float accum_time = 0.0f;
 	static int frame_dt_count = 0;
 
-	if (engine->isPaused())
-		return;
 
-	
-	frame_dt_count = engine->Get_NumOfSteps();
+	if (!isFreeCamEnabled()) {
 
+		// Set scale for camera
 
-	while (frame_dt_count) {
-		frame_dt_count--;
-
-		if (!isFreeCamEnabled()) {
-
-			// Set scale for camera
-
-			if (input::IsPressed(KEY::c)) {
-				if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
-					camera2D->scale = { 2.0f, 2.0f };
-				}
-				else {
-					scale = { 1.0f, 1.0f };
-				}
+		if (input::IsPressed(KEY::c)) {
+			if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
+				camera2D->scale = { 2.0f, 2.0f };
 			}
-			//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
-			if (camera_shake) {
-				// get a random number between -range and range
-				float x = (rand() % (int)(random_shift.x * 1000)) / 1000.0f - random_shift.x / 2.0f;
-				float y = (rand() % (int)(random_shift.y * 1000)) / 1000.0f - random_shift.y / 2.0f;
-				random_shift = { x, y };
-				position += random_shift;
-				time_count += engine->Get_Fixed_DT();
-				if (time_count >= time_shift) {
-					time_count = 0.0f;
-					camera_shake = false;
-					random_shift = { 0.0f, 0.0f };
-					camera_follow = true;
-				}
-
+			else {
+				scale = { 1.0f, 1.0f };
 			}
-			else if(camera_shift){
-				position -= camera_speed * engine->Get_Fixed_DT();
-				time_count += engine->Get_Fixed_DT();
-				if (time_count >= time_shift) {
-					time_count = 0.0f;
-					camera_follow = true;
-					camera_shift = false;
-				}
-			}else  SetToPlayer();
+		}
+		//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
+		if (camera_shake) {
+			// get a random number between -range and range
+			float x = (rand() % (int)(random_shift.x * 1000)) / 1000.0f - random_shift.x / 2.0f;
+			float y = (rand() % (int)(random_shift.y * 1000)) / 1000.0f - random_shift.y / 2.0f;
+			random_shift = { x, y };
+			position += random_shift;
+			time_count += engine->Get_Fixed_DT();
+			if (time_count >= time_shift) {
+				time_count = 0.0f;
+				camera_shake = false;
+				random_shift = { 0.0f, 0.0f };
+				camera_follow = true;
+			}
 
 		}
+		else if (camera_shift) {
+			position -= camera_speed * engine->Get_Fixed_DT();
+			time_count += engine->Get_Fixed_DT();
+			if (time_count >= time_shift) {
+				time_count = 0.0f;
+				camera_follow = true;
+				camera_shift = false;
+			}
+		}
+		else  SetToPlayer();
+
 
 	}
 	world_to_ndc = Mat3Scale(scale.x, scale.y) * Mat3Translate(position.x, position.y);
@@ -94,19 +85,19 @@ void Camera::Update() {
 /*
 * Set the camera scale
 * @param scale_input The scale of the camera
-* 
+*
 */
 void Camera::SetCameraScale(Vec2 scale_input)
 {
-	scale.x= scale_input.x/window->width_init;
-	scale.y = scale_input.y/window->height_init;
+	scale.x = scale_input.x / window->width_init;
+	scale.y = scale_input.y / window->height_init;
 }
 
 /*  _________________________________________________________________________ */
 /*
 * Set the camera position
 * @param position_input The position of the camera
-* 
+*
 */
 void Camera::SetCameraPosition(Vec2 position_input)
 {
@@ -129,10 +120,10 @@ void Camera::SetToPlayer() {
 		// get the player's position
 		Transform* trans = static_cast<Transform*>(player->GetComponent(ComponentType::Transform));
 
-		position.x = trans->Position.x ;
+		position.x = trans->Position.x;
 
-		position.y = trans->Position.y ;
-		
+		position.y = trans->Position.y;
+
 
 		position.x = -position.x * 2.0f / window->width_init;
 

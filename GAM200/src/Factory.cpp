@@ -255,17 +255,17 @@ Object* Factory::createObject(const std::string& filename)
 					jsonloop.readFloat(framecol, "Properties", std::to_string(j), 0);
 					jsonloop.readString(animationtype, "Properties", std::to_string(j), 1);
 
-					AnimationType type = stringToAnimationType(animationtype);
+					AnimationType anitype = stringToAnimationType(animationtype);
 
 					animationframesecond.first = framecol;
-					animationframesecond.second = type;
+					animationframesecond.second = anitype;
 
 					a->animation_frame.emplace(j, animationframesecond);
 
 					// Create left facing version of the animations if necessary
 					if (a->face_right == false)
 					{
-						switch (type)
+						switch (anitype)
 						{
 						case AnimationType::Idle:
 							animationframesecond.second = AnimationType::Idle_left;
@@ -301,10 +301,10 @@ Object* Factory::createObject(const std::string& filename)
 						jsonloop.readFloat(framecol, "Properties", std::to_string(g), 0);
 						jsonloop.readString(animationtype, "Properties", std::to_string(g), 1);
 
-						type = stringToAnimationType(animationtype);
+						anitype = stringToAnimationType(animationtype);
 
 						animationframesecond.first = framecol;
-						animationframesecond.second = type;
+						animationframesecond.second = anitype;
 
 						// Still creating animation frame with different framecol, will properly calculate in set_up_map
 						a->animation_frame.emplace(g, animationframesecond);

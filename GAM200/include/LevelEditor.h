@@ -32,8 +32,6 @@ public:
 	LevelEditor();
 	~LevelEditor();
 
-	void RefreshLevelList();
-
 	void LoadLevelPanel();
 
 	void SaveAsDialog();
@@ -41,8 +39,6 @@ public:
 	void NewPrefabDialog();
 
 	void UpdateAllObjectInstances(Object* object);
-
-	void PhysicsDebugControl();
 
 	virtual void Initialize();
 	void Update();
