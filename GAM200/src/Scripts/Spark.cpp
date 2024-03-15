@@ -109,103 +109,107 @@ void Spark::Update(Object* obj) {
 			//std::cout << "NIL COMPONENT : Player" << std::endl;
 			return;
 		};
-		player_physics->Velocity.x = 0.0f;
-
-		if (player_animation->face_right) {
-			player_animation->current_type = AnimationType::Idle;
-		}
-		else {
-			player_animation->current_type = AnimationType::Idle_left;
-		}
-
-		bool moving = false;
-		if (input::IsPressed(KEY::w)) {
-			MovementKey msg(up);
-			engine->Broadcast(&msg);
-			if (player_physics->Velocity.y == 0.0f) {
-				player_physics->Force = 85000.f;
-				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
-				audio->playSfx("spark_jumping");
-			}
-		}
-		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
-			audio->playSfx("spark_walking");
-		}
-		if (input::IsPressedRepeatedly(KEY::a)) {
-			MovementKey msg(left);
-			engine->Broadcast(&msg);
-			player_physics->Velocity.x -= 500.0f;
-			moving = true;
-			player_animation->face_right = false;
-			player_animation->current_type = AnimationType::Run_left;
-		}
-		if (input::IsPressedRepeatedly(KEY::d)) {
-			MovementKey msg(right);
-			engine->Broadcast(&msg);
-			player_physics->Velocity.x += 500.0f;
-			moving = true;
-			player_animation->face_right = true;
-			player_animation->current_type = AnimationType::Run;
-		}
-
-		if (player_physics->Velocity.y != 0.0f) {
-			player_animation->jump_fixed = true;
-
-			if (player_animation->face_right)player_animation->current_type = AnimationType::Jump;
-			else player_animation->current_type = AnimationType::Jump_left;
-		}
-		else player_animation->jump_fixed = false;
-
-		/****************************************************************************************/
-		//			 Teleport the cat to Finn if the cat has the enough energy
-		/*****************************************************************************************/
-		if (input::IsPressed(KEY::t)) {
-			if (CatPower) {
-				teleporting = true;
-				teleporting_state = Disappearing;
-				next_position.x = Finn_t->Position.x;
-				next_position.y = Finn_t->Position.y;
-				UsedPower = true;
-				CatPower--;
-			}
-			else {
-				std::cout << "Not Enough Energy\n";
-			}
-		}
 
 		if (teleporting) {
+			player_animation->jump_fixed = false;
 			switch (teleporting_state) {
-				case Disappearing:
-					player_animation->current_type = AnimationType::Push;
-					if (counter < 68) {
-						counter++;
-					}
-					else {
-						teleporting_state = Appearing;
-						camera2D->TranslateCamera(spark_t->Position, next_position, 1.0f);
-						counter = 0;
-					}
-					break;
+			case Disappearing:
+				player_animation->current_type = AnimationType::Push;
+				if (counter < 68) {
+					counter++;
+				}
+				else {
+					teleporting_state = Appearing;
+					camera2D->TranslateCamera(spark_t->Position, next_position, 1.0f);
+					counter = 0;
+				}
+				break;
 
-				case Appearing:
-					player_animation->current_type = AnimationType::Teleport;
-					if (UsedPower) {
-						spark_t->Position = next_position;
-					}
-					if (counter < 68) {
-						counter++;
-					}
-					else {
-						teleporting = false;
-						teleporting_state = None;
-						counter = 0;
-					}
-					break;
+			case Appearing:
+				player_animation->current_type = AnimationType::Teleport;
+				if (UsedPower) {
+					spark_t->Position = next_position;
+				}
+				if (counter < 68) {
+					counter++;
+				}
+				else {
+					teleporting = false;
+					teleporting_state = None;
+					counter = 0;
+				}
+				break;
 
-				case None:
-					player_animation->current_type = AnimationType::Idle;
-					break;
+			case None:
+				player_animation->current_type = AnimationType::Idle;
+				break;
 			}
+		}
+		else {
+			player_physics->Velocity.x = 0.0f;
+
+			if (player_animation->face_right) {
+				player_animation->current_type = AnimationType::Idle;
+			}
+			else {
+				player_animation->current_type = AnimationType::Idle_left;
+			}
+
+			bool moving = false;
+			if (input::IsPressed(KEY::w)) {
+				MovementKey msg(up);
+				engine->Broadcast(&msg);
+				if (player_physics->Velocity.y == 0.0f) {
+					player_physics->Force = 85000.f;
+					std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
+					audio->playSfx("spark_jumping");
+				}
+			}
+			if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
+				audio->playSfx("spark_walking");
+			}
+			if (input::IsPressedRepeatedly(KEY::a)) {
+				MovementKey msg(left);
+				engine->Broadcast(&msg);
+				player_physics->Velocity.x -= 500.0f;
+				moving = true;
+				player_animation->face_right = false;
+				player_animation->current_type = AnimationType::Run_left;
+			}
+			if (input::IsPressedRepeatedly(KEY::d)) {
+				MovementKey msg(right);
+				engine->Broadcast(&msg);
+				player_physics->Velocity.x += 500.0f;
+				moving = true;
+				player_animation->face_right = true;
+				player_animation->current_type = AnimationType::Run;
+			}
+
+			if (player_physics->Velocity.y != 0.0f) {
+				player_animation->jump_fixed = true;
+
+				if (player_animation->face_right)player_animation->current_type = AnimationType::Jump;
+				else player_animation->current_type = AnimationType::Jump_left;
+			}
+			else player_animation->jump_fixed = false;
+
+			/****************************************************************************************/
+			//			 Teleport the cat to Finn if the cat has the enough energy
+			/*****************************************************************************************/
+			if (input::IsPressed(KEY::t)) {
+				if (CatPower) {
+					teleporting = true;
+					teleporting_state = Disappearing;
+					next_position.x = Finn_t->Position.x;
+					next_position.y = Finn_t->Position.y;
+					UsedPower = true;
+					CatPower--;
+				}
+				else {
+					std::cout << "Not Enough Energy\n";
+				}
+			}
+
 			/*
 			if (counter < 60) {
 				player_animation->current_type = AnimationType::Push;
@@ -219,23 +223,23 @@ void Spark::Update(Object* obj) {
 				counter = 0;
 			}
 			*/
-		}
 
 
-		// Audio for Character Movement
-		if ((player_physics->Velocity.y == 0.f) && moving) {
-			//audio->startWalking();
-			spark_move_time += engine->GetDt();
+			// Audio for Character Movement
+			if ((player_physics->Velocity.y == 0.f) && moving) {
+				//audio->startWalking();
+				spark_move_time += engine->GetDt();
 
-			if (spark_move_time > 0.4f) {
-				audio->playSfx("spark_walking");
-				spark_move_time -= 0.4f;
+				if (spark_move_time > 0.4f) {
+					audio->playSfx("spark_walking");
+					spark_move_time -= 0.4f;
+				}
 			}
-		}
-		else {
-			//audio->stopWalking();
-			spark_move_time = 0.f;
-			moving = false;
+			else {
+				//audio->stopWalking();
+				spark_move_time = 0.f;
+				moving = false;
+			}
 		}
 	}
 	else {

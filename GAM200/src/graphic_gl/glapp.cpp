@@ -269,6 +269,7 @@ void GLApp::Update()
 				audio->setBackgroundAudio("background");
 				SceneManager::LoadScene("tutorial_level.json");
 				video_start = false;
+				video_count = 1;
 			}
 		}
 

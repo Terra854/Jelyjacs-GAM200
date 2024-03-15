@@ -2331,6 +2331,10 @@ void LevelEditor::LE_InputFloat2(const char* label, float* v) {
 		input::LevelEditorTextActive = ImGui::IsItemActive();
 }
 
+/******************************************************************************
+DeleteSound
+- This function deletes the sound from the AssetManager and the file system
+*******************************************************************************/
 void LevelEditor::DeleteSound(std::string audioType, int audio_num) {
 	try {
 		auto& sound = AssetManager::soundMapping.at(audioType);
@@ -2386,6 +2390,10 @@ static bool SelectTextureRunning = false;
 static bool SelectAudioRunning = false;
 static std::future<std::string> futurePath;
 
+/******************************************************************************
+AddTexture
+- This function adds a texture to the AssetManager and the file system
+*******************************************************************************/
 void LevelEditor::AddTexture() {
 	if (SelectTextureRunning) {
 		ImGui::OpenPopup("Selecting texture");
@@ -2435,6 +2443,10 @@ void LevelEditor::AddTexture() {
 
 }
 
+/******************************************************************************
+AddAudio
+- This function adds an audio to the AssetManager and the file system
+*******************************************************************************/
 void LevelEditor::AddAudio() {
 
 	if (SelectAudioRunning){
@@ -2509,6 +2521,10 @@ void LevelEditor::AddAudio() {
 	}
 }
 
+/******************************************************************************
+OpenFileDialog
+- This function opens a dialog box to select a file
+*******************************************************************************/
 std::string LevelEditor::OpenFileDialog(int type) {
 	OPENFILENAME ofn;       // Common dialog box structure
 	char szFile[260] = { 0 }; // Buffer for file name
