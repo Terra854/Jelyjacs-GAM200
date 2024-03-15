@@ -1,5 +1,5 @@
 {
-  "Name": "PressurePlatePink",
+  "Name": "PressureDoorDarkBlue",
   "Components": [
     {
       "Type": "Transform",
@@ -10,7 +10,7 @@
         },
         "Scale": {
           "x": 64.0,
-          "y": 64.0
+          "y": 203.0
         },
         "Rotation": 0.0
       }
@@ -19,31 +19,33 @@
       "Type": "Body",
       "Shape": "Rectangle",
       "Properties": {
-        "width": 64.0,
-        "height": 32.1
+        "width": 32.0,
+        "height": 160.0
       }
     },
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "PressurePlate_Pink.png",
+        "texturepath": "PressureDoor_DarkBlue.png",
         "framerate": 0.1,
-        "frame": [3, 1],
-        "1": [1, "idle"],
-        "2": [3, "jump"]
+        "frame": [15, 3],
+        "1": [15, "jump"],
+        "2": [15, "jump"],
+        "3": [1, "jump"],
+        "4": [1, "idle"]
       }
     },
     {
       "Type": "Event",
       "Properties": {
-        "linkedevent" : 0
+        "linkedevent": 0
       }
     },
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "PPlate",
-        "Index" : 0
+        "Script": "Door",
+        "Index": 0
       }
     }
   ]

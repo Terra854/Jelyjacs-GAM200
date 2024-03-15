@@ -3678,12 +3678,12 @@
           "Type": "Transform"
         },
         {
-          "Name": "door",
+          "Name": "PressureDoorDarkBlue",
           "Position": {
             "x": 1705.0,
             "y": 965.0
           },
-          "Prefabs": "DoorDarkBlue.json",
+          "Prefabs": "PressureDoorDarkBlue.json",
           "Properties": {
             "height": 196.0,
             "width": 32.0
@@ -3691,7 +3691,7 @@
           "Rotation": 0.0,
           "Scale": {
             "x": 64.0,
-            "y": 360.0
+            "y": 228.0
           },
           "Type": "Transform",
           "linkedevent": 6
@@ -3754,11 +3754,11 @@
           "Name": "PressurePlatePink",
           "Position": {
             "x": 64.0,
-            "y": 506.0
+            "y": 496.0
           },
           "Prefabs": "PressurePlatePink.json",
           "Properties": {
-            "height": 16.0,
+            "height": 32.1,
             "width": 64.0
           },
           "Rotation": 0.0,
@@ -3774,11 +3774,11 @@
           "Name": "PressurePlatePurple",
           "Position": {
             "x": 840.0,
-            "y": -38.0
+            "y": -48.0
           },
           "Prefabs": "PressurePlatePurple.json",
           "Properties": {
-            "height": 16.0,
+            "height": 32.1,
             "width": 64.0
           },
           "Rotation": 0.0,
@@ -3794,11 +3794,11 @@
           "Name": "PressurePlatePink_Elevator",
           "Position": {
             "x": 1276.0,
-            "y": -38.0
+            "y": -48.0
           },
           "Prefabs": "PressurePlatePink_Elevator.json",
           "Properties": {
-            "height": 16.0,
+            "height": 32.1,
             "width": 64.0
           },
           "Rotation": 0.0,
@@ -3814,11 +3814,11 @@
           "Name": "PressurePlateDarkBlue",
           "Position": {
             "x": 1367.0,
-            "y": 186.0
+            "y": 176.0
           },
           "Prefabs": "PressurePlateDarkBlue.json",
           "Properties": {
-            "height": 16.0,
+            "height": 32.1,
             "width": 64.0
           },
           "Rotation": 0.0,

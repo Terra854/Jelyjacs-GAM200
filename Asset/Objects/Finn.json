@@ -26,7 +26,7 @@
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "Finn3.png",
+        "texturepath": "Finn.png",
         "jumpfixframe": 17,
         "framerate": 0.03,
         "faceright": false,

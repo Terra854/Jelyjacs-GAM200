@@ -20,13 +20,13 @@
       "Shape": "Rectangle",
       "Properties": {
         "width": 64.0,
-        "height": 16.0
+        "height": 32.1
       }
     },
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "Props_PressurePlatePurple.png",
+        "texturepath": "PressurePlate_Purple.png",
         "framerate": 0.1,
         "frame": [3, 1],
         "1": [1, "idle"],

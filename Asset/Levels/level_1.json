@@ -1416,7 +1416,7 @@
           }
         },
         {
-          "Prefabs": "DoorCyan.json",
+          "Prefabs": "PressureDoorCyan.json",
           "Type": "Transform",
           "Position": {
             "x": 192.0,
@@ -1429,16 +1429,16 @@
           "Type": "Transform",
           "Position": {
             "x": 128.0,
-            "y": -38.0
+            "y": -48.0
           },
           "linkedevent": 1
         },
         {
-          "Prefabs": "PistonPurple.json",
+          "Prefabs": "PressurePlatePurple.json",
           "Type": "Transform",
           "Position": {
             "x": 448.0,
-            "y": -166.0
+            "y": -176.0
           },
           "linkedevent": 2
         },
@@ -1568,12 +1568,12 @@
           "Type": "Transform",
           "Position": {
             "x": 224.0,
-            "y": 282.0
+            "y": 272.0
           },
           "linkedevent": 7
         },
         {
-          "Prefabs": "DoorOrange.json",
+          "Prefabs": "PressureDoorOrange.json",
           "Type": "Transform",
           "Position": {
             "x": -32.0,

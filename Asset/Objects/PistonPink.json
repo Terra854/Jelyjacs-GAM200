@@ -26,7 +26,7 @@
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "Props_PressurePlatePink.png",
+        "texturepath": "PistonPink.png",
         "framerate": 0.1,
         "frame": [ 3, 1 ],
         "1": [1, "idle"],

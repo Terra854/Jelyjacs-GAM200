@@ -808,7 +808,7 @@
           "Type": "Transform",
           "Position": {
             "x": -20.0,
-            "y": 144.0
+            "y": 134.0
           },
           "linkedevent": 2
         },
@@ -822,11 +822,15 @@
           "linkedevent": 1
         },
         {
-          "Prefabs": "DoorDarkBlue.json",
+          "Prefabs": "PressureDoorDarkBlue.json",
           "Type": "Transform",
           "Position": {
-            "x": -327.0,
-            "y": 231.0
+            "x": -323.0,
+            "y": 230.0
+          },
+          "Scale": {
+            "x": 64.0,
+            "y": 203.0
           },
           "linkedevent": 2
         },
