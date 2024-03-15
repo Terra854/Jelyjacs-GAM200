@@ -50,7 +50,7 @@ void HowToPlayButton::Update(Object* obj) {
     }
     
 
-    //tex->textureName = "How to play glow.png";
+    tex->textureName = "How to play_ glow.png";
     
 
     if (input::IsPressed(KEY::mouseL))

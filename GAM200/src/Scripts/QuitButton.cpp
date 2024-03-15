@@ -11,6 +11,7 @@ This file contains the script for the in-game clickable buttons
 #include <Factory.h>
 #include <Core_Engine.h>
 #include <SceneManager.h>
+#include <../components/Texture.h>
 
 // @param name: The name of the portal.
 QuitButton::QuitButton(std::string name) : LogicScript(name)
@@ -31,27 +32,25 @@ void QuitButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void QuitButton::Update(Object* obj) {
-    if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+    if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         //std::cout << "NIL OBJ : QuitButton" << std::endl;
         return;
     }
+    Texture* tex = static_cast<Texture*>(obj->GetComponent(ComponentType::Texture));
+    if (!isObjectClicked((Transform*) obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
+        tex->textureName = "Exit.png";
+        return;
+	}
 
-    if (isObjectClicked((Transform*) obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
-		std::cout << "Button Clicked" << std::endl;
-		audio->playSfx("button_click");
+    tex->textureName = "Exit_glow.png";
 
-        //quit the game
-        /*
-        Message_Handler msg(MessageID::Event_Type::Quit);
-        engine->Broadcast(&msg);
-
-        objectFactory->GetLayer("PauseMenu")->second.first.isVisible = false;
-        objectFactory->GetLayer("GameMenu")->second.first.isVisible = true;
-        */
-
+    if (input::IsPressed(KEY::mouseL))
+    {
+        std::cout << "Button Clicked" << std::endl;
+        audio->playSfx("button_click");
         sceneManager->LoadScene("main_menu.json");
         sceneManager->PlayScene();
-	}
+    }
 }
 /*********************************************************************/
 // Shutdown method called when the QuitButton script is being shut down.
