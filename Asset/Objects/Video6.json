@@ -1,0 +1,29 @@
+{
+  "Name": "Video6",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 256.0,
+          "y": 111.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Animation",
+      "Properties": {
+        "texturepath": "video6.png",
+        "framerate": 0.025,
+        "frame": [4, 2],
+        "1":[4,"idle"],
+        "2":[4,"idle"]
+      }
+    }
+  ]
+}
