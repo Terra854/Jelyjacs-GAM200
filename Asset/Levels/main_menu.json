@@ -49,6 +49,25 @@
           "index": 0.0,
           "scripts": "MainMenuStartGameButton",
           "speed": 0.0
+        },
+        {
+          "Name": "main_menuTitleQuitButton",
+          "Position": {
+            "x": 30.0,
+            "y": -400.0
+          },
+          "Prefabs": "main_menuTitleQuit.json",
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 79.5,
+            "y": 34.75
+          },
+          "Type": "Transform",
+          "counter": 0.0,
+          "distance": 0.0,
+          "index": 0.0,
+          "scripts": "MainMenuQuitButton",
+          "speed": 0.0
         }
       ],
       "Settings": {

@@ -24,7 +24,7 @@
     {
       "Type": "Behaviour",
       "Properties": {
-        "Script": "",
+        "Script": "MainMenuQuitButton",
         "Index": 0
       }
     }
