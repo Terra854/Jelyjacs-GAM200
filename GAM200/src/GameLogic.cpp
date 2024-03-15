@@ -186,7 +186,13 @@ void GameLogic::Update() {
 	if (input::IsPressed(KEY::esc)) {
 		//Message_Handler msg(MessageID::Event_Type::Quit);
 		//engine->Broadcast(&msg);
-		engine->setPause();
+
+		if (objectFactory->GetLayer("PauseMenu") && objectFactory->GetLayer("GameMenu")) {
+			engine->setPause();
+
+			objectFactory->GetLayer("PauseMenu")->second.first.isVisible = engine->isPaused();
+			objectFactory->GetLayer("GameMenu")->second.first.isVisible = !engine->isPaused();
+		}
 	}
 	
 	// Only proceed if Finn and Spark are inside
