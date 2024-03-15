@@ -266,7 +266,8 @@ void GLApp::Update()
 				}
 			}
 			if (video_count == 8) {
-				SceneManager::LoadScene("tutorial_level.json");
+				//@ yee ann change to tutorial
+				SceneManager::LoadScene("opening_cutscene.json");
 				video_start = false;
 			}
 		}
