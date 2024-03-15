@@ -66,7 +66,7 @@ void Finn::Update(Object* obj) {
 				player_physics->Force = 85000.f;
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 				audio->playSfx("finn_jumping");
-
+				InTheAir = true;
 			}
 		}
 		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
@@ -179,12 +179,10 @@ void Finn::Update(Object* obj) {
 			InTheAir = false;
 			finn_air_time = 0.f;
 		}
-		else if (player_body->bottom_collision) {
-			InTheAir = false;
+		else if (!InTheAir) {
 			finn_air_time = 0.f;
 		}
 		else {
-			InTheAir = true;
 			finn_air_time += engine->GetDt();
 		}
 	}
