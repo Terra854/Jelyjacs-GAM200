@@ -233,20 +233,16 @@ void GLApp::Update()
 	static float accum_time = 0.0f;
 	static int frame_dt_count = 0;
 
-	if (engine->isPaused())
-		return;
-
-
 	frame_dt_count = engine->Get_NumOfSteps();
 	while (frame_dt_count) {
 		frame_dt_count--;
-		if(video_start){
+		if (video_start) {
 			if (video_count < 7) {
 				std::cout << "video_count: " << video_count << std::endl;
 				Object* video = objectFactory->FindObject("Video" + std::to_string(video_count));
 				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
 				Animation* ani_pt = static_cast<Animation*>(video->GetComponent(ComponentType::Animation));
-				ani_pt->fixed=true;
+				ani_pt->fixed = true;
 				tran_pt->Position = Vec2(-330.f, 30.f);
 				video_timer += engine->Get_Fixed_DT();
 				if (video_timer >= 0.4f) {
@@ -266,8 +262,8 @@ void GLApp::Update()
 				}
 			}
 			if (video_count == 8) {
-				//@ yee ann change to tutorial
-				SceneManager::LoadScene("opening_cutscene.json");
+				audio->setBackgroundAudio("background");
+				SceneManager::LoadScene("tutorial_level.json");
 				video_start = false;
 			}
 		}
@@ -322,7 +318,7 @@ void GLApp::Update()
 
 				if (tex_pt)
 					tex_test = AssetManager::textureval(tex_pt->textureName);
-				else if(ani_pt) tex_test = ani_pt->animation_tex_obj;
+				else if (ani_pt) tex_test = ani_pt->animation_tex_obj;
 
 				//get orientation
 				Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
@@ -344,12 +340,12 @@ void GLApp::Update()
 				mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotDeg(orientation);
 				//window_scaling = { (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
 				//mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
-				
+
 				// matrix after camrea
 
 				if (!l.second.first.static_layer)
 					mat_test = camera2D->world_to_ndc * mat_test;
-				
+
 
 
 				// draw image with texture
@@ -394,7 +390,7 @@ void GLApp::Update()
 
 						}*/
 						// draw object with animation
-						
+
 						particleSystem->Update(object);
 						ani_pt->Update_player();
 					}
