@@ -241,12 +241,15 @@ void GLApp::Update()
 	while (frame_dt_count) {
 		frame_dt_count--;
 		if(video_start){
-			while (video_count < 7) {
+			if (video_count < 7) {
+				std::cout << "video_count: " << video_count << std::endl;
 				Object* video = objectFactory->FindObject("Video" + std::to_string(video_count));
 				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
+				Animation* ani_pt = static_cast<Animation*>(video->GetComponent(ComponentType::Animation));
+				ani_pt->fixed=true;
 				tran_pt->Position = Vec2(0, 0);
 				video_timer += engine->Get_Fixed_DT();
-				if (video_timer > 0.4f) {
+				if (video_timer >= 0.4f) {
 					video_timer = 0.0f;
 					tran_pt->Position = Vec2(2000, 0);
 					video_count++;
@@ -257,10 +260,9 @@ void GLApp::Update()
 				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
 				tran_pt->Position = Vec2(0, 0);
 				video_timer += engine->Get_Fixed_DT();
-				if (video_timer > 0.2f) {
+				if (video_timer >= 0.2f) {
 					video_timer = 0.0f;
 					video_count++;
-
 				}
 			}
 			if (video_count == 8) {
