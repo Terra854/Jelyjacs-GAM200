@@ -49,11 +49,15 @@ void Camera::Update() {
 		//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
 		if (camera_shake) {
 			// get a random number between -1 to 1
-			float x = (float)(rand() % 100) / 100.0f;
-			float y = (float)(rand() % 100) / 100.0f;
-			random_shift = { x * random_shift.x, y * random_shift.y };
+			float x = (rand() % 1000) / 1000.0f;
+			float y = (rand() % 1000) / 1000.0f;
+			random_shift = { x * 2.0f - 1.0f, y * 2.0f - 1.0f };
+			random_shift.x *= 0.1f;
+			random_shift.y *= 0.1f;
 			position += random_shift;
 			time_count += engine->Get_Fixed_DT();
+			std::cout << "time_count" << std::endl;
+			std::cout<< time_count << std::endl;
 			if (time_count >= time_shift) {
 				time_count = 0.0f;
 				camera_shake = false;
