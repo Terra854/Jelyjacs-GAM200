@@ -48,10 +48,10 @@ void Camera::Update() {
 		}
 		//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
 		if (camera_shake) {
-			// get a random number between -range and range
-			float x = (rand() % (int)(random_shift.x * 1000)) / 1000.0f - random_shift.x / 2.0f;
-			float y = (rand() % (int)(random_shift.y * 1000)) / 1000.0f - random_shift.y / 2.0f;
-			random_shift = { x, y };
+			// get a random number between -1 to 1
+			float x = (float)(rand() % 100) / 100.0f;
+			float y = (float)(rand() % 100) / 100.0f;
+			random_shift = { x * random_shift.x, y * random_shift.y };
 			position += random_shift;
 			time_count += engine->Get_Fixed_DT();
 			if (time_count >= time_shift) {
@@ -140,6 +140,10 @@ void Camera::SetToPlayer() {
 	}
 }
 
+/*
+* Translate the camera from start to end in time
+* NDC standers for start and end
+*/
 void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 {
 	camera_shift = true;
@@ -162,6 +166,10 @@ void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 	camera_follow = false;
 }
 
+/*
+* Shake the camera with a range for a time
+* NDC standers for range
+*/
 void Camera::ShakeCamera(Vec2 range, float time)
 {
 	random_shift = range;
