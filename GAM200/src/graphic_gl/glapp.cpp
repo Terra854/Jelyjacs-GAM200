@@ -280,7 +280,7 @@ void GLApp::Update()
 
 				if (tex_pt)
 					tex_test = AssetManager::textureval(tex_pt->textureName);
-				else tex_test = ani_pt->animation_tex_obj;
+				else if(ani_pt) tex_test = ani_pt->animation_tex_obj;
 
 				//get orientation
 				Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
