@@ -51,8 +51,10 @@ void WinBackButton::Update(Object* obj) {
     if (input::IsPressed(KEY::mouseL))
     {
         audio->playSfx("button_click");
-        objectFactory->GetLayer("WinMenu")->second.first.isVisible = false;
-        sceneManager->RestartScene();
+        //objectFactory->GetLayer("WinMenu")->second.first.isVisible = false;
+        //sceneManager->RestartScene();
+        sceneManager->LoadScene("main_menu.json");
+        sceneManager->PlayScene();
     }
 }
 /*********************************************************************/

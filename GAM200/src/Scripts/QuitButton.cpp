@@ -41,12 +41,16 @@ void QuitButton::Update(Object* obj) {
 		audio->playSfx("button_click");
 
         //quit the game
+        /*
         Message_Handler msg(MessageID::Event_Type::Quit);
         engine->Broadcast(&msg);
 
         objectFactory->GetLayer("PauseMenu")->second.first.isVisible = false;
         objectFactory->GetLayer("GameMenu")->second.first.isVisible = true;
+        */
 
+        sceneManager->LoadScene("main_menu.json");
+        sceneManager->PlayScene();
 	}
 }
 /*********************************************************************/
