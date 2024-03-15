@@ -220,9 +220,9 @@ void ParticleSystem::Update(Object* player)
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * PARTICLE_NUM, &shown[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        Draw();
+        
     }
-    
+    Draw();
 }
 
 /*  _________________________________________________________________________ */
