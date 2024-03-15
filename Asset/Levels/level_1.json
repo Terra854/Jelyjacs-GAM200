@@ -1600,16 +1600,6 @@
           "linkedevent": 6
         },
         {
-          "Name": "LaserPink_Timed",
-          "Prefabs": "LaserPink_Timed.json",
-          "Type": "Transform",
-          "Position": {
-            "x": 338.0,
-            "y": 416.0
-          },
-          "linkedevent": 6
-        },
-        {
           "Prefabs": "PinkHorizontalDoor.json",
           "Type": "Transform",
           "Position": {
