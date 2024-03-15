@@ -20,8 +20,8 @@
         {
           "Name": "Main_MenuTitle",
           "Position": {
-            "x": 0.0,
-            "y": 100.0
+            "x": 50.0,
+            "y": 0.0
           },
           "Prefabs": "main_menuTitle.json",
           "Rotation": 0.0,
