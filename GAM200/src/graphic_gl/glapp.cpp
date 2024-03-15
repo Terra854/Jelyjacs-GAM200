@@ -230,7 +230,46 @@ void GLApp::insert_models(std::string model_name) {
 */
 void GLApp::Update()
 {
-	
+	static float accum_time = 0.0f;
+	static int frame_dt_count = 0;
+
+	if (engine->isPaused())
+		return;
+
+
+	frame_dt_count = engine->Get_NumOfSteps();
+	while (frame_dt_count) {
+		frame_dt_count--;
+		if(video_start){
+			while (video_count < 7) {
+				Object* video = objectFactory->FindObject("Video" + std::to_string(video_count));
+				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
+				tran_pt->Position = Vec2(0, 0);
+				video_timer += engine->Get_Fixed_DT();
+				if (video_timer > 0.4f) {
+					video_timer = 0.0f;
+					tran_pt->Position = Vec2(2000, 0);
+					video_count++;
+				}
+			}
+			if (video_count == 7) {
+				Object* video = objectFactory->FindObject("Video" + std::to_string(video_count));
+				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
+				tran_pt->Position = Vec2(0, 0);
+				video_timer += engine->Get_Fixed_DT();
+				if (video_timer > 0.2f) {
+					video_timer = 0.0f;
+					video_count++;
+
+				}
+			}
+			if (video_count == 8) {
+				SceneManager::LoadScene("opening_cutscene.json");
+				video_start = false;
+			}
+		}
+
+	}
 	//check debug
 	if (input::IsPressed(KEY::l))
 	{

@@ -6,9 +6,11 @@
 This file contains the script for the in-game clickable buttons
 *//*__________________________________________________________________________*/
 #include "Scripts/MainMenuStartGameButton.h"
+#include "glapp.h"
 #include <Utils.h>
 #include <Audio.h>
 #include <Factory.h>
+#include <string>
 #include <SceneManager.h>
 
 // Constructor for the ButtonBase class.
@@ -31,15 +33,30 @@ void MainMenuStartGameButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void MainMenuStartGameButton::Update(Object* obj) {
-    if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
-        //std::cout << "NIL OBJ : ButtonBase" << std::endl;
-        return;
-    }
+	static float accum_time = 0.0f;
+	static int frame_dt_count = 0;
 
-    if (isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
-        std::cout << "Button Clicked" << std::endl;
-        audio->playSfx("button_click");
-        SceneManager::LoadScene("opening_cutscene.json");
+	if (engine->isPaused())
+		return;
+
+	frame_dt_count = engine->Get_NumOfSteps();
+
+
+    while (frame_dt_count) {
+        frame_dt_count--;
+        if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+            //std::cout << "NIL OBJ : ButtonBase" << std::endl;
+            return;
+        }
+
+        if (isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
+            std::cout << "Button Clicked" << std::endl;
+            audio->playSfx("button_click");
+            
+            // shift to center of screen
+            app->video_start = true;
+           
+        }
     }
 }
 /*********************************************************************/

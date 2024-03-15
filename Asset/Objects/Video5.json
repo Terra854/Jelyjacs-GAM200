@@ -9,8 +9,8 @@
           "y": 0.0
         },
         "Scale": {
-          "x": 256.0,
-          "y": 111.0
+          "x": 1028.0,
+          "y": 444.0
         },
         "Rotation": 0.0
       }
@@ -19,7 +19,7 @@
       "Type": "Animation",
       "Properties": {
         "texturepath": "video5.png",
-        "framerate": 0.025,
+        "framerate": 0.05,
         "frame": [4, 2],
         "1":[4,"idle"],
         "2":[4,"idle"]

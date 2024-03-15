@@ -68,7 +68,62 @@
           "index": 0.0,
           "scripts": "MainMenuQuitButton",
           "speed": 0.0
+        },
+      {"Prefabs": "Video1.json",
+        "Type": "Transform",
+        "Position": {
+          "x": 2000.0,
+          "y": 0.0
         }
+      },
+      {
+        "Prefabs": "Video2.json",
+        "Type": "Transform",
+        "Position": {
+          "x": 2000.0,
+          "y": 0.0
+        }
+      },
+      {
+        "Prefabs": "Video3.json",
+        "Type": "Transform",
+        "Position": {
+          "x": 2000.0,
+          "y": 0.0
+        }
+      },
+      {
+        "Prefabs": "Video4.json",
+        "Type": "Transform",
+        "Position": {
+          "x": 2000.0,
+          "y": 0.0
+        }
+      },
+      {
+        "Prefabs": "Video5.json",
+        "Type": "Transform",
+        "Position": {
+          "x": 2000.0,
+          "y": 0.0
+        }
+      },
+      {
+        "Prefabs": "Video6.json",
+        "Type": "Transform",
+        "Position": {
+          "x": 2000.0,
+          "y": 0.0
+        }
+      },
+      {
+        "Prefabs": "Video7.json",
+        "Type": "Transform",
+        "Position": {
+          "x": 2000.0,
+          "y": 0.0
+        }
+      }
       ],
       "Settings": {
         "isVisible": true,
