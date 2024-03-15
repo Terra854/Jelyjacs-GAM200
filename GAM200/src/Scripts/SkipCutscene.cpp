@@ -41,8 +41,8 @@ void SkipCutscene::Update(Object* obj) {
 		audio->playSfx("button_click");
 
         // Skip the cutscene
-        audio->setBackgroundAudio("background");
-        SceneManager::LoadScene("tutorial_level.json");
+        audio->setBackgroundAudio("main_menu_bg");
+        SceneManager::LoadScene("main_menu.json");
 	}
 }
 /*********************************************************************/

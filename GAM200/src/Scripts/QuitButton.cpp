@@ -48,6 +48,7 @@ void QuitButton::Update(Object* obj) {
     {
         std::cout << "Button Clicked" << std::endl;
         audio->playSfx("button_click");
+        audio->setBackgroundAudio("main_menu_bg");
         sceneManager->LoadScene("main_menu.json");
         sceneManager->PlayScene();
     }

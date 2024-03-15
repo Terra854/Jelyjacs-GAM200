@@ -184,7 +184,7 @@ void CoreEngine::GameLoop()
 	static bool object_being_moved_x = false;
 	static bool object_being_moved_y = false;
 #else
-	SceneManager::LoadScene("main_menu.json");
+	SceneManager::LoadScene("opening_cutscene.json");
 #endif
 
 	// Game Loop

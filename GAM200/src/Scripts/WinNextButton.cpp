@@ -53,13 +53,16 @@ void WinNextButton::Update(Object* obj) {
         audio->playSfx("button_click");
         objectFactory->GetLayer("WinMenu")->second.first.isVisible = false;
 
+        audio->restartBackgroundAudio();
+
         if (engine->loaded_level == "tutorial_level")
             sceneManager->LoadScene("level_1.json");
         else if (engine->loaded_level == "level_1")
             sceneManager->LoadScene("level_2.json");
-        else if (engine->loaded_level == "level_2")
+        else if (engine->loaded_level == "level_2") {
+            audio->setBackgroundAudio("main_menu_bg");
             sceneManager->LoadScene("main_menu.json");
-
+        }
         sceneManager->PlayScene();
     }
 }
