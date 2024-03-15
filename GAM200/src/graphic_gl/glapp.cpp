@@ -297,7 +297,7 @@ void GLApp::Update()
 				if (!object)
 					continue; // Skip to the next object if the current one is a nullptr
 
-				GLuint tex_test;
+				GLuint tex_test{};
 				Animation* ani_pt = nullptr;
 				Mat3 mat_test;
 				Vec2 pos;
