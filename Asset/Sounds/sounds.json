@@ -19,5 +19,7 @@
   "finn_metal_walking": [ "Footsteps_Metal_Far-Small_1.wav", "Footsteps_Metal_Far-Small_2.wav", "Footsteps_Metal_Far-Small_3.wav", "Footsteps_Metal_Far-Small_4.wav", "Footsteps_Metal_Far-Small_5.wav", "Footsteps_Metal_Far-Small_6.wav", "Footsteps_Metal_Far-Small_7.wav", "Footsteps_Metal_Far-Small_8.wav" ],
   "spark_walking": [ "Cat-Footsteps-Concrete_1.wav", "Cat-Footsteps-Concrete_2.wav", "Cat-Footsteps-Concrete_3.wav", "Cat-Footsteps-Concrete_4.wav", "Cat-Footsteps-Concrete_5.wav", "Cat-Footsteps-Concrete_6.wav" ],
   "piston_plate_press": "Piston_Plate_Press.wav",
-  "main_menu_bg": "Main_Menu_Bg.ogg"
+  "main_menu_bg": "Main_Menu_Bg.ogg",
+  "start_game_finn_crashing": "Start_Game_Finn_Crashing.wav",
+  "title_losing_power": "Title_Losing_Power.wav"
 }

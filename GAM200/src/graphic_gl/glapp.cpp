@@ -237,6 +237,7 @@ void GLApp::Update()
 	/*if (input::IsPressed(KEY::s)) {
 		camera2D->ShakeCamera({0.1f,0.1f}, 1.0f);
 	}*/
+	/*
 	frame_dt_count = engine->Get_NumOfSteps();
 	while (frame_dt_count) {
 		frame_dt_count--;
@@ -274,6 +275,7 @@ void GLApp::Update()
 		}
 
 	}
+	*/
 	//check debug
 	if (input::IsPressed(KEY::l))
 	{

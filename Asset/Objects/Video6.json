@@ -19,7 +19,7 @@
       "Type": "Animation",
       "Properties": {
         "texturepath": "video6.png",
-        "framerate": 0.05,
+        "framerate": 1,
         "frame": [4, 2],
         "1":[4,"idle"],
         "2":[4,"idle"]

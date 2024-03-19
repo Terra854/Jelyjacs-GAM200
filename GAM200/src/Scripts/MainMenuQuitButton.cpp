@@ -10,6 +10,7 @@ This file contains the script for the in-game clickable buttons
 #include <Audio.h>
 #include <Factory.h>
 #include <Core_Engine.h>
+#include <components/Texture.h>
 
 // Constructor for the ButtonBase class.
 // @param name: The name of the portal.
@@ -31,7 +32,7 @@ void MainMenuQuitButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void MainMenuQuitButton::Update(Object* obj) {
-    if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+    if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible || static_cast<Texture*>(obj->GetComponent(ComponentType::Texture))->opacity < 1.f) {
         //std::cout << "NIL OBJ : ButtonBase" << std::endl;
         return;
     }

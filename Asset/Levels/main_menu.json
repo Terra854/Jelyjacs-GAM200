@@ -1,7 +1,7 @@
 {
   "Layers": [
     {
-      "Name": "MainMenu",
+      "Name": "MainMenuBG",
       "Objects": [
         {
           "Name": "Main_MenuBG",
@@ -16,7 +16,16 @@
             "y": 1080.0
           },
           "Type": "Transform"
-        },
+        }
+      ],
+      "Settings": {
+        "isVisible": true,
+        "static_layer": true
+      }
+    },
+    {
+      "Name": "MainMenu",
+      "Objects": [
         {
           "Name": "Main_MenuTitle",
           "Position": {
@@ -68,66 +77,76 @@
           "index": 0.0,
           "scripts": "MainMenuQuitButton",
           "speed": 0.0
-        },
-      {"Prefabs": "Video1.json",
-        "Type": "Transform",
-        "Position": {
-          "x": 2000.0,
-          "y": 0.0
         }
-      },
-      {
-        "Prefabs": "Video2.json",
-        "Type": "Transform",
-        "Position": {
-          "x": 2000.0,
-          "y": 0.0
-        }
-      },
-      {
-        "Prefabs": "Video3.json",
-        "Type": "Transform",
-        "Position": {
-          "x": 2000.0,
-          "y": 0.0
-        }
-      },
-      {
-        "Prefabs": "Video4.json",
-        "Type": "Transform",
-        "Position": {
-          "x": 2000.0,
-          "y": 0.0
-        }
-      },
-      {
-        "Prefabs": "Video5.json",
-        "Type": "Transform",
-        "Position": {
-          "x": 2000.0,
-          "y": 0.0
-        }
-      },
-      {
-        "Prefabs": "Video6.json",
-        "Type": "Transform",
-        "Position": {
-          "x": 2000.0,
-          "y": 0.0
-        }
-      },
-      {
-        "Prefabs": "Video7.json",
-        "Type": "Transform",
-        "Position": {
-          "x": 2000.0,
-          "y": 0.0
-        }
-      }
       ],
       "Settings": {
         "isVisible": true,
-        "static_layer":  true
+        "static_layer": true
+      }
+    },
+    {
+      "Name": "MainMenuVideo",
+      "Objects": [
+        {
+          "Prefabs": "Video1.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -325.0,
+            "y": 44.0
+          }
+        },
+        {
+          "Prefabs": "Video2.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -325.0,
+            "y": 44.0
+          }
+        },
+        {
+          "Prefabs": "Video3.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -325.0,
+            "y": 44.0
+          }
+        },
+        {
+          "Prefabs": "Video4.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -325.0,
+            "y": 44.0
+          }
+        },
+        {
+          "Prefabs": "Video5.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -325.0,
+            "y": 44.0
+          }
+        },
+        {
+          "Prefabs": "Video6.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -325.0,
+            "y": 44.0
+          }
+        },
+        {
+          "Prefabs": "Video7.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -325.0,
+            "y": 44.0
+          }
+        }
+      ],
+      "Settings": {
+        "isVisible": true,
+        "static_layer": true
       }
     }
   ],
