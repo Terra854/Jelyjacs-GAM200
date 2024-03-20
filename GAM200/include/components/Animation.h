@@ -50,7 +50,7 @@ public:
 	bool jump_fixed = false;
 	bool reverse = false;
 
-	int jump_fixed_frame = 0;
+	
 
 	bool fixed = false;
 	bool invert = false;
@@ -58,17 +58,32 @@ public:
 	float frame_count{};
 	int frame_num{};
 	
-	GLuint animation_tex_obj;
+	
 	GLApp::GLModel setup_texobj_animation(float x, float y, float z, float w, bool right);
 	
-	// animation data
+	// animation data for level editor
+	// all the animation data is stored in the map
+	
+	//  tpye -> model
 	std::map<AnimationType, std::vector<GLApp::GLModel>> animation_Map;
 
-
+	// @ yee ann these thing should can be edited in the level editor
+	// the frame rate of the animation
 	float frame_rate{};
+	// the animation tile sheet
+	GLuint animation_tex_obj;
+
+	// base the tile sheet we get the number of row and col
 	std::pair<float, float> animation_scale; // scale of the animation (col, row)
 
+	// for each row we need to know the animation type and number of frame
 	std::map< float, std::pair<float, AnimationType> > animation_frame; // [row] -> (frame, type)
+
+	// if we have jump animation type we need to know the fixed frame
+	int jump_fixed_frame = 0;
+	
+
+	
 
 	float opacity = 1.f;
 
