@@ -112,38 +112,40 @@ void MainMenuStartGameButton::Update(Object* obj) {
 
 		for (Object* o : MainMenu->second.second) {
 			static_cast<Texture*>(o->GetComponent(ComponentType::Texture))->opacity = EaseOutBounce(1.f, 0.f, videoTimer);
+			audio->setBackgroundVolume((1.f - videoTimer) < 0.f ? 0.f : (1.f - videoTimer));
 		}
 
-		if (videoFrame < 51) {
-			FinnCrashingVideo[videoFrame / 8]->opacity = 1.f;
-			FinnCrashingVideo[videoFrame / 8]->frame_num = videoFrame % 8;
-		}
-		else {
-			HaveFinnCrash = false;
-			audio->setBackgroundAudio("background");
-			SceneManager::LoadScene("tutorial_level.json");
-		}
+		if (videoTimer > 1.f) {
+			if (videoFrame < 51) {
+				FinnCrashingVideo[videoFrame / 8]->opacity = 1.f;
+				FinnCrashingVideo[videoFrame / 8]->frame_num = videoFrame % 8;
+			}
+			else {
+				HaveFinnCrash = false;
+				audio->setBackgroundAudio("background");
+				SceneManager::LoadScene("tutorial_level.json");
+			}
 
-		sfxCooldown -= engine->GetDt();
-		sfxCooldown = sfxCooldown < 0.f ? 0.f : sfxCooldown;
+			sfxCooldown -= engine->GetDt();
+			sfxCooldown = sfxCooldown < 0.f ? 0.f : sfxCooldown;
 
-		if (!sfxCooldown) {
-			switch (videoFrame) {
-			case 4:
-				audio->playSfx("start_game_finn_crashing");
-				sfxCooldown = videoFPS;
-				break;
-			case 32:
-				audio->playSfx("spark_jumping");
-				sfxCooldown = videoFPS;
-				break;
-			case 39:
-				audio->playSfx("spark_walking");
-				sfxCooldown = videoFPS;
-				break;
+			if (!sfxCooldown) {
+				switch (videoFrame) {
+				case 4:
+					audio->playSfx("start_game_finn_crashing");
+					sfxCooldown = videoFPS;
+					break;
+				case 32:
+					audio->playSfx("spark_jumping");
+					sfxCooldown = videoFPS;
+					break;
+				case 39:
+					audio->playSfx("spark_walking");
+					sfxCooldown = videoFPS;
+					break;
+				}
 			}
 		}
-
 	}
 
 	if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible || static_cast<Texture*>(obj->GetComponent(ComponentType::Texture))->opacity < 1.f) {
