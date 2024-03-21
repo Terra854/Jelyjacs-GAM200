@@ -156,7 +156,7 @@ void Spark::Update(Object* obj) {
 			}
 
 			bool moving = false;
-			if (input::IsPressed(KEY::w)) {
+			if (input::IsPressed(KEY::w) || input::IsPressed(KEY::up) || input::IsPressed(KEY::spacebar)) {
 				MovementKey msg(up);
 				engine->Broadcast(&msg);
 				if (player_physics->Velocity.y == 0.0f) {
@@ -165,10 +165,10 @@ void Spark::Update(Object* obj) {
 					audio->playSfx("spark_jumping");
 				}
 			}
-			if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
+			if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d) || input::IsPressed(KEY::left) || input::IsPressed(KEY::right)) {
 				audio->playSfx("spark_walking");
 			}
-			if (input::IsPressedRepeatedly(KEY::a)) {
+			if (input::IsPressedRepeatedly(KEY::a) || input::IsPressedRepeatedly(KEY::left)) {
 				MovementKey msg(left);
 				engine->Broadcast(&msg);
 				player_physics->Velocity.x -= 500.0f;
@@ -176,7 +176,7 @@ void Spark::Update(Object* obj) {
 				player_animation->face_right = false;
 				player_animation->current_type = AnimationType::Run_left;
 			}
-			if (input::IsPressedRepeatedly(KEY::d)) {
+			if (input::IsPressedRepeatedly(KEY::d) || input::IsPressedRepeatedly(KEY::right)) {
 				MovementKey msg(right);
 				engine->Broadcast(&msg);
 				player_physics->Velocity.x += 500.0f;
