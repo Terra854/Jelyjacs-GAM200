@@ -180,7 +180,7 @@ void Animation::set_up_map()
 
 		for (float i = 0; i < frame.second.first; i++)
 		{
-			float g = frame.first;
+			float g = static_cast<float>(frame.first);
 			// The special cases
 			if (g > animation_scale.second && faceright == false)
 				g -= animation_scale.second;

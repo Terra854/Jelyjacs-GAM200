@@ -77,7 +77,7 @@ public:
 	std::pair<float, float> animation_scale; // scale of the animation (col, row)
 
 	// for each row we need to know the animation type and number of frame
-	std::map< float, std::pair<float, AnimationType> > animation_frame; // [row] -> (frame, type)
+	std::map<int, std::pair<int, AnimationType> > animation_frame; // [row] -> (frame, type)
 	// @Guo Chen @Sen Chuan Need you to refactor animation_frame to this
 	// std::map< AnimationType, std::pair<float, float> > animation_frame; // [type] -> (row, frame)
 

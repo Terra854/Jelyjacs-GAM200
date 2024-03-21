@@ -241,7 +241,7 @@ Object* Factory::createObject(const std::string& filename)
 			// Create frame_map
 			for (int j = 1; j <= a->animation_scale.second; j++)
 			{
-				std::pair<float, AnimationType> animationframesecond;
+				std::pair<int, AnimationType> animationframesecond;
 
 				std::vector<GLApp::GLModel> animationmodel;
 
@@ -249,10 +249,10 @@ Object* Factory::createObject(const std::string& filename)
 
 				if (jsonloop.isMember(std::to_string(j), "Properties"))
 				{
-					float framecol;
+					int framecol;
 					std::string animationtype;
 
-					jsonloop.readFloat(framecol, "Properties", std::to_string(j), 0);
+					jsonloop.readInt(framecol, "Properties", std::to_string(j), 0);
 					jsonloop.readString(animationtype, "Properties", std::to_string(j), 1);
 
 					AnimationType anitype = stringToAnimationType(animationtype);
@@ -290,7 +290,7 @@ Object* Factory::createObject(const std::string& filename)
 						//std::cout << "Creating left variant\n";
 
 						// j needs to be different from non left version (j+scale)
-						a->animation_frame.emplace(j + a->animation_scale.second, animationframesecond);
+						a->animation_frame.emplace(j + static_cast<int>(a->animation_scale.second), animationframesecond);
 					}
 
 					// Special case, number of rows indicated is more than initial declared but still exist in json data
@@ -298,7 +298,7 @@ Object* Factory::createObject(const std::string& filename)
 					int g = j + 1;
 					while (g > a->animation_scale.second && jsonloop.isMember(std::to_string(g), "Properties"))
 					{
-						jsonloop.readFloat(framecol, "Properties", std::to_string(g), 0);
+						jsonloop.readInt(framecol, "Properties", std::to_string(g), 0);
 						jsonloop.readString(animationtype, "Properties", std::to_string(g), 1);
 
 						anitype = stringToAnimationType(animationtype);
