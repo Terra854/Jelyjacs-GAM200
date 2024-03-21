@@ -113,39 +113,37 @@ void Spark::Update(Object* obj) {
 		if (teleporting) {
 			player_animation->jump_fixed = false;
 			switch (teleporting_state) {
-			case Disappearing:
-				player_animation->current_type = AnimationType::Push;
-				if (counter < 68) {
-					counter++;
-				}
-				else {
-					teleporting_state = Appearing;
-					camera2D->TranslateCamera(spark_t->Position, next_position, 1.0f);
-					counter = 0;
-				}
-				break;
+				case Disappearing:
+					player_animation->current_type = AnimationType::Push;
+					if (counter < 68) {
+						counter++;
+					}
+					else {
+						teleporting_state = Appearing;
+						camera2D->TranslateCamera(spark_t->Position, next_position, 1.0f);
+						counter = 0;
+					}
+					break;
 
-			case Appearing:
-				player_animation->current_type = AnimationType::Teleport;
-				if (UsedPower) {
+				case Appearing:
+					player_animation->current_type = AnimationType::Teleport;
 					spark_t->Position = next_position;
-				}
-				if (counter < 68) {
-					counter++;
-				}
-				else {
-					teleporting = false;
-					teleporting_state = None;
-					counter = 0;
-				}
-				break;
+					if (counter < 68) {
+						counter++;
+					}
+					else {
+						teleporting = false;
+						teleporting_state = None;
+						counter = 0;
+					}
+					break;
 
-			case None:
-				player_animation->current_type = AnimationType::Idle;
-				break;
+				case None:
+					player_animation->current_type = AnimationType::Idle;
+					break;
 			}
 		}
-		else {
+		else{
 			player_physics->Velocity.x = 0.0f;
 
 			if (player_animation->face_right) {
