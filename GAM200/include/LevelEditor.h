@@ -63,6 +63,7 @@ private:
 	Factory::objectIDMap initialObjectMap;
 
 	void LE_InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0);
+	void LE_InputInt(const char* label, int* v);
 	void LE_InputFloat(const char* label, float* v);
 	void LE_InputFloat2(const char* label, float* v);
 	void DeleteSound(std::string audioType, int audio_num);

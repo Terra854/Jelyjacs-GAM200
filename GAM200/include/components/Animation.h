@@ -78,6 +78,8 @@ public:
 
 	// for each row we need to know the animation type and number of frame
 	std::map< float, std::pair<float, AnimationType> > animation_frame; // [row] -> (frame, type)
+	// @Guo Chen @Sen Chuan Need you to refactor animation_frame to this
+	// std::map< AnimationType, std::pair<float, float> > animation_frame; // [type] -> (row, frame)
 
 	// if we have jump animation type we need to know the fixed frame
 	int jump_fixed_frame = 0;

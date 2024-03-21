@@ -281,7 +281,7 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(size_preview.x / size_preview.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
 		}
 
-		
+
 	}
 	else {
 		ImGui::Text("This object has");
@@ -554,7 +554,107 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Text("Current Type: %d", a->current_type);
 			ImGui::Text("Frame Number: %d", a->frame_num);
 			LE_InputFloat("Opacity", &a->opacity);
+			LE_InputFloat("Frame Rate", &a->frame_rate);
+			LE_InputFloat2("Animation Scale", &a->animation_scale.first);
 
+			/*
+			for (auto& pair : a->animation_frame) {
+				ImGui::BeginChild("AnimationType", ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, 40.f));
+
+				// Get the child window's size
+				ImVec2 childSize = ImGui::GetWindowSize();
+
+				// Calculate the text's size
+
+				switch (pair.first) {
+				case AnimationType::Idle:
+					ImGui::Text("Idle");
+					break;
+				case AnimationType::Push:
+					ImGui::Text("Push");
+					break;
+				case AnimationType::Jump:
+					ImGui::Text("Jump");
+					break;
+				case AnimationType::Run:
+					ImGui::Text("Run");
+					break;
+				case AnimationType::Teleport:
+					ImGui::Text("Teleport");
+					break;
+				case AnimationType::Idle_left:
+					ImGui::Text("Idle_left");
+					break;
+				case AnimationType::Push_left:
+					ImGui::Text("Push_left");
+					break;
+				case AnimationType::Jump_left:
+					ImGui::Text("Jump_left");
+					break;
+				case AnimationType::Run_left:
+					ImGui::Text("Run_left");
+					break;
+				case AnimationType::Teleport_left:
+					ImGui::Text("Teleport_left");
+					break;
+				}
+
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+				ImGui::BeginChild("AnimationRow", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 40.f));
+
+				// Calculate the text's size
+				sprintf_s(buffer, "Top");
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2((childSize.x - textSizeX.x) * 0.5f, textSizeX.y);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				if (r->top_collision != nullptr)
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+				ImGui::Text("%s", text.c_str());
+
+				LE_InputFloat("", &pair.first);
+
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+
+				ImGui::BeginChild("P2", ImVec2(0.f, 40.f));
+
+				// Calculate the text's size
+				sprintf_s(buffer, "P2: x: %.5f", r->aabb.P2().x);
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2(0, 0);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				// Calculate the text's size
+				sprintf_s(buffer, "    y: %.5f", r->aabb.P2().y);
+				text = buffer;
+				textSizeY = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position to bottom right minus the text size
+				textPosY = ImVec2(0, textSizeX.y);
+				ImGui::SetCursorPos(textPosY);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+				ImGui::EndChild();
+			}*/
+			LE_InputInt("Jump Fixed Frame", &a->jump_fixed_frame);
 		}
 	}
 
@@ -819,12 +919,12 @@ void LevelEditor::ObjectProperties() {
 					ImGui::Text("Material: ");
 					ImGui::SameLine();
 					switch (r->material) {
-						case Material::Concrete:
-							ImGui::Text("Concrete");
-							break;
-						case Material::Metal:
-							ImGui::Text("Metal");
-							break;
+					case Material::Concrete:
+						ImGui::Text("Concrete");
+						break;
+					case Material::Metal:
+						ImGui::Text("Metal");
+						break;
 					}
 
 					// Button to enter edit mode
@@ -1192,11 +1292,11 @@ void LevelEditor::ObjectProperties() {
 		if (ImGui::CollapsingHeader("Behaviour")) {
 			ImGui::Text("Script Name : %s", be->GetBehaviourName().c_str());
 			ImGui::Text("Script Index : %d", be->GetBehaviourIndex());
-			if(be->GetBehaviourCounter() > 0)
+			if (be->GetBehaviourCounter() > 0)
 				ImGui::Text("Script Counter : %d", be->GetBehaviourCounter());
-			if(be->GetBehaviourDistance() > 0)
+			if (be->GetBehaviourDistance() > 0)
 				ImGui::Text("Script Distance : %d", be->GetBehaviourDistance());
-			if(be->GetBehaviourSpeed() > 0)
+			if (be->GetBehaviourSpeed() > 0)
 				ImGui::Text("Script Speed : %d", be->GetBehaviourSpeed());
 			if (ImGui::CollapsingHeader("Change Scripts")) {
 				ImGui::OpenPopup("Select Scripts");
@@ -1272,7 +1372,7 @@ void LevelEditor::ListOfObjects() {
 				sprintf_s(buf, "%s (inherited from %s)##%s_%s", l.first.c_str(), l.second.first.inheritedJsonName.c_str(), engine->loaded_level.c_str(), l.first.c_str());
 			else
 				sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
-			
+
 			if (ImGui::TreeNode(buf)) {
 				// For all objects in the layer
 				for (auto& object : l.second.second) {
@@ -1483,7 +1583,7 @@ void LevelEditor::AssetList()
 
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-		
+
 		for (const std::pair<std::string, Object*>& p : AssetManager::prefabs)
 		{
 			//i--;
@@ -1587,7 +1687,7 @@ void LevelEditor::AssetList()
 			ImGui::Separator();
 			ImGui::EndPopup();
 		}
-		
+
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		for (const auto& audioPair : AssetManager::soundMapping)
@@ -1781,7 +1881,7 @@ void CameraControl() {
 *******************************************************************************/
 void LevelEditor::LoadLevelPanel() {
 
-std::vector<std::string> level_files;
+	std::vector<std::string> level_files;
 	const std::string path = "Asset/Levels/";
 
 	try {
@@ -2317,6 +2417,13 @@ void LevelEditor::LE_InputText(const char* label, char* buf, size_t buf_size, Im
 		input::LevelEditorTextActive = ImGui::IsItemActive();
 }
 
+void LevelEditor::LE_InputInt(const char* label, int* v) {
+	ImGui::InputInt(label, v);
+
+	if (!input::LevelEditorTextActive)
+		input::LevelEditorTextActive = ImGui::IsItemActive();
+}
+
 void LevelEditor::LE_InputFloat(const char* label, float* v) {
 	ImGui::InputFloat(label, v);
 
@@ -2449,7 +2556,7 @@ AddAudio
 *******************************************************************************/
 void LevelEditor::AddAudio() {
 
-	if (SelectAudioRunning){
+	if (SelectAudioRunning) {
 		ImGui::OpenPopup("Selecting audio");
 	}
 
@@ -2462,7 +2569,7 @@ void LevelEditor::AddAudio() {
 
 		ImGui::EndPopup();
 	}
-	
+
 	if (!SelectAudioRunning) {
 		futurePath = thread_pool->enqueue(&OpenFileDialog, 1);
 		SelectAudioRunning = true;
@@ -2512,7 +2619,7 @@ void LevelEditor::AddAudio() {
 				selectingAudio = false;
 				SelectAudioRunning = false;
 			}
-			catch (const std::exception& e) { 
+			catch (const std::exception& e) {
 				std::cout << "Exception: " << e.what() << std::endl;
 				selectingAudio = false;
 				SelectAudioRunning = false;
@@ -2537,15 +2644,15 @@ std::string LevelEditor::OpenFileDialog(int type) {
 	ofn.nMaxFile = sizeof(szFile);
 	ofn.lpstrFilter = "All\0*.*\0Text\0*.TXT\0";
 
-	switch(type) {
-		case 0:
-			ofn.lpstrFilter = "Image Files\0*.PNG;*.JPG;*.JPEG;*.BMP\0";
-			break;
-		case 1:
-			ofn.lpstrFilter = "Audio Files\0*.MP3;*.WAV;*.AAC;*.FLAC;*.OGG;*.WMA;*.M4A\0";
-			break;
-		default:
-			break;
+	switch (type) {
+	case 0:
+		ofn.lpstrFilter = "Image Files\0*.PNG;*.JPG;*.JPEG;*.BMP\0";
+		break;
+	case 1:
+		ofn.lpstrFilter = "Audio Files\0*.MP3;*.WAV;*.AAC;*.FLAC;*.OGG;*.WMA;*.M4A\0";
+		break;
+	default:
+		break;
 	}
 
 	ofn.nFilterIndex = 1;
@@ -2596,10 +2703,10 @@ void LevelEditorGrid::drawleveleditor()
 			Vec2 pos = pos_botleft + Vec2(i * box_size * 2 / window->width, j * box_size * 2 / window->height);
 			Mat3 mat_test = Mat3Translate(pos.x, pos.y) * Mat3Scale(scaling.x, scaling.y);
 			mat_test = camera2D->world_to_ndc * mat_test;
-			
+
 			AssetManager::shaderval("shape").Use();
 			// bind VAO of this object's model
-			
+
 			glBindVertexArray(AssetManager::modelval("square").vaoid);
 			// copy object's model-to-NDC matrix to vertex shader's
 			// uniform variable uModelToNDC
