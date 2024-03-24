@@ -557,16 +557,23 @@ void LevelEditor::ObjectProperties() {
 			LE_InputFloat("Frame Rate", &a->frame_rate);
 			LE_InputFloat2("Animation Scale", &a->animation_scale.first);
 
-			/*
-			for (auto& pair : a->animation_frame) {
-				ImGui::BeginChild("AnimationType", ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, 40.f));
+			ImGui::SeparatorText("Animation Settings");
 
-				// Get the child window's size
-				ImVec2 childSize = ImGui::GetWindowSize();
+			if (ImGui::BeginTable("AnimationSettings", 3, NULL)) {
+				ImGui::TableSetupColumn("Row", ImGuiTableColumnFlags_WidthFixed, 50.f);
+				ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 50.f);
+				ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthStretch);
 
-				// Calculate the text's size
+				ImGui::TableHeadersRow();
 
-				switch (pair.first) {
+				for (auto& pair : a->animation_frame) {
+					ImGui::TableNextRow();
+					ImGui::TableNextColumn();
+					ImGui::Text("%d", pair.first);
+					ImGui::TableNextColumn();
+					ImGui::Text("%d", pair.second.first);
+					ImGui::TableNextColumn();
+					switch (pair.second.second) {
 				case AnimationType::Idle:
 					ImGui::Text("Idle");
 					break;
@@ -597,63 +604,13 @@ void LevelEditor::ObjectProperties() {
 				case AnimationType::Teleport_left:
 					ImGui::Text("Teleport_left");
 					break;
+					case AnimationType::No_Animation_Type:
+						ImGui::Text("No Animation Type");
+						break;
 				}
-
-				ImGui::EndChild();
-
-				ImGui::SameLine();
-
-				ImGui::BeginChild("AnimationRow", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 40.f));
-
-				// Calculate the text's size
-				sprintf_s(buffer, "Top");
-				text = buffer;
-				textSizeX = ImGui::CalcTextSize(text.c_str());
-
-				// Set the cursor position
-				textPosX = ImVec2((childSize.x - textSizeX.x) * 0.5f, textSizeX.y);
-				ImGui::SetCursorPos(textPosX);
-
-				// Render the text
-				if (r->top_collision != nullptr)
-					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
-
-				ImGui::Text("%s", text.c_str());
-
-				LE_InputFloat("", &pair.first);
-
-				ImGui::EndChild();
-
-				ImGui::SameLine();
-
-
-				ImGui::BeginChild("P2", ImVec2(0.f, 40.f));
-
-				// Calculate the text's size
-				sprintf_s(buffer, "P2: x: %.5f", r->aabb.P2().x);
-				text = buffer;
-				textSizeX = ImGui::CalcTextSize(text.c_str());
-
-				// Set the cursor position
-				textPosX = ImVec2(0, 0);
-				ImGui::SetCursorPos(textPosX);
-
-				// Render the text
-				ImGui::Text("%s", text.c_str());
-
-				// Calculate the text's size
-				sprintf_s(buffer, "    y: %.5f", r->aabb.P2().y);
-				text = buffer;
-				textSizeY = ImGui::CalcTextSize(text.c_str());
-
-				// Set the cursor position to bottom right minus the text size
-				textPosY = ImVec2(0, textSizeX.y);
-				ImGui::SetCursorPos(textPosY);
-
-				// Render the text
-				ImGui::Text("%s", text.c_str());
-				ImGui::EndChild();
-			}*/
+				}
+				ImGui::EndTable();
+			}
 			LE_InputInt("Jump Fixed Frame", &a->jump_fixed_frame);
 		}
 	}

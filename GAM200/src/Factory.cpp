@@ -283,7 +283,7 @@ Object* Factory::createObject(const std::string& filename)
 							animationframesecond.second = AnimationType::Teleport_left;
 							break;
 						default:
-							animationframesecond.second = AnimationType::Error;
+							animationframesecond.second = AnimationType::No_Animation_Type;
 							break;
 						}
 

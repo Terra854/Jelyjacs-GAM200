@@ -164,7 +164,7 @@ void Animation::set_up_map()
 		// Check if there is any error with animations
 		auto it = animation_Map.find(frame.second.second);
 
-		if (frame.second.second == AnimationType::Error)
+		if (frame.second.second == AnimationType::No_Animation_Type)
 		{
 			std::cout << "Something went wrong while setting up animations!\n";
 			return;
@@ -314,7 +314,7 @@ AnimationType stringToAnimationType(const std::string& str) {
 	if (it != stringToType.end())
 		return it->second;
 	else
-		return AnimationType::Error; // Default value
+		return AnimationType::No_Animation_Type; // Default value
 }
 
 bool animationIsLeft(AnimationType type)
