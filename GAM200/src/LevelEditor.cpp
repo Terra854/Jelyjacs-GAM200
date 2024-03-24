@@ -558,7 +558,7 @@ void LevelEditor::ObjectProperties() {
 			LE_InputFloat2("Animation Scale", &a->animation_scale.first);
 
 			ImGui::SeparatorText("Animation Settings");
-
+			
 			if (ImGui::BeginTable("AnimationSettings", 3, NULL)) {
 				ImGui::TableSetupColumn("Row", ImGuiTableColumnFlags_WidthFixed, 50.f);
 				ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 50.f);
@@ -574,40 +574,40 @@ void LevelEditor::ObjectProperties() {
 					ImGui::Text("%d", pair.second.first);
 					ImGui::TableNextColumn();
 					switch (pair.second.second) {
-				case AnimationType::Idle:
-					ImGui::Text("Idle");
-					break;
-				case AnimationType::Push:
-					ImGui::Text("Push");
-					break;
-				case AnimationType::Jump:
-					ImGui::Text("Jump");
-					break;
-				case AnimationType::Run:
-					ImGui::Text("Run");
-					break;
-				case AnimationType::Teleport:
-					ImGui::Text("Teleport");
-					break;
-				case AnimationType::Idle_left:
-					ImGui::Text("Idle_left");
-					break;
-				case AnimationType::Push_left:
-					ImGui::Text("Push_left");
-					break;
-				case AnimationType::Jump_left:
-					ImGui::Text("Jump_left");
-					break;
-				case AnimationType::Run_left:
-					ImGui::Text("Run_left");
-					break;
-				case AnimationType::Teleport_left:
-					ImGui::Text("Teleport_left");
-					break;
+					case AnimationType::Idle:
+						ImGui::Text("Idle");
+						break;
+					case AnimationType::Push:
+						ImGui::Text("Push");
+						break;
+					case AnimationType::Jump:
+						ImGui::Text("Jump");
+						break;
+					case AnimationType::Run:
+						ImGui::Text("Run");
+						break;
+					case AnimationType::Teleport:
+						ImGui::Text("Teleport");
+						break;
+					case AnimationType::Idle_left:
+						ImGui::Text("Idle_left");
+						break;
+					case AnimationType::Push_left:
+						ImGui::Text("Push_left");
+						break;
+					case AnimationType::Jump_left:
+						ImGui::Text("Jump_left");
+						break;
+					case AnimationType::Run_left:
+						ImGui::Text("Run_left");
+						break;
+					case AnimationType::Teleport_left:
+						ImGui::Text("Teleport_left");
+						break;
 					case AnimationType::No_Animation_Type:
 						ImGui::Text("No Animation Type");
 						break;
-				}
+					}
 				}
 				ImGui::EndTable();
 			}
@@ -1486,7 +1486,7 @@ void LevelEditor::AssetList()
 				AssetManager::loadalltextures();
 
 			}
-			ImGui::BeginChild("AssetListScroll", ImGui::GetContentRegionAvail());
+			ImGui::BeginChild("AssetListScrollTexture", ImGui::GetContentRegionAvail());
 			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 			for (const std::pair<std::string, GLuint>& t : AssetManager::textures)
@@ -1524,6 +1524,46 @@ void LevelEditor::AssetList()
 			ImGui::EndChild();
 			ImGui::EndTabItem();
 		}
+	}
+	if (ImGui::BeginTabItem("Animations")) {
+		ImGui::Text("wip");
+
+		ImGui::BeginChild("AssetListScrollAnimation", ImGui::GetContentRegionAvail());
+		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+
+		for (const std::pair<std::string, GLuint>& a : AssetManager::animations)
+		{
+			sprintf_s(buffer, "##%s", a.first.c_str());
+
+			// Start the invisible button
+
+			if (ImGui::Button(buffer, button_size))
+			{
+				
+			}
+
+			if (ImGui::BeginDragDropSource())
+			{
+				ImGui::SetDragDropPayload("Game animations", a.first.c_str(), 1024);
+				ImGui::EndDragDropSource();
+			}
+
+			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
+
+			// Image
+			ImGui::Image((void*)(intptr_t)a.second, ImVec2(64, 64));
+
+			// Move to the right of the image without moving to a new line
+			ImGui::SameLine();
+
+			// Text
+			ImGui::Text(a.first.c_str());
+		}
+
+		ImGui::PopStyleColor();
+		ImGui::EndChild();
+		ImGui::EndTabItem();
 	}
 	if (ImGui::BeginTabItem("Prefabs"))
 	{
