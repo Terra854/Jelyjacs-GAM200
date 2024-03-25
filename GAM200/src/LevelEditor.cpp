@@ -379,9 +379,14 @@ void LevelEditor::ObjectProperties() {
 		for (auto& l : SceneManager::layers) {
 			if (ImGui::Selectable(l.first.c_str())) {
 				Object* o = objectFactory->cloneObject(object, 0, 64);
+
+				// For inserting prefab
+				if (!o->GetPrefab())
+					o->SetPrefab(object);
+
 				objectFactory->assignIdToObject(o);
 				selectedNum = o->GetId();
-				o->SetPrefab(object->GetPrefab()); // testing this line
+				//o->SetPrefab(object->GetPrefab()); // testing this line
 				cloneSuccessful = selectedNum;
 				l.second.second.push_back(o);
 			}
