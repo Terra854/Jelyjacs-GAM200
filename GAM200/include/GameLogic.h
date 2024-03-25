@@ -72,6 +72,9 @@ public:
 	// Static pointer to the player object, accessible globally.
 	static Object* playerObj;
 
+	
+	static bool death;
+	
 	// static bool to check if the game is restarting
 	static bool restarting;
 

@@ -36,7 +36,10 @@ GameLogic* Logic = NULL;
 Object* scale_and_rotate;
 Object* GameLogic::playerObj;
 Object* dynamic_collision;
+Vec2 start_position;
 int CatPower = 0;
+int death_timer = 0;
+bool GameLogic::death;
 bool GameLogic::restarting;
 
 bool one_time = false;
@@ -47,6 +50,7 @@ GameLogic::GameLogic() {
 	GameLogic::playerObj = nullptr;
 	dynamic_collision = nullptr;
 	GameLogic::restarting = false;
+	GameLogic::death = false;
 }
 
 GameLogic::~GameLogic() {
@@ -113,6 +117,13 @@ void GameLogic::Initialize()
 	std::cout << "Number of Behaviour Scripts: " << behaviours.size() << std::endl;
 
 	GameLogic::playerObj = objectFactory->getPlayerObject();
+	if (playerObj != NULL) {
+		start_position = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform))->Position;
+		if (start_position == Vec2(0.f, 0.f)) {
+			std::cout << "Not Working" << std::endl;
+			return;
+		}
+	}
 	//std::cout << "Player's behaviour is " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourName() << " || " << static_cast<Behaviour*>(GameLogic::playerObj->GetComponent(ComponentType::Behaviour))->GetBehaviourIndex() << std::endl;
 }
 
@@ -168,6 +179,19 @@ void GameLogic::Update() {
 			//std::cout << "Running behaviour: " << iter->GetBehaviourName() << std::endl;
 			behaviours[b->GetBehaviourName()]->Update(o);
 		}
+	}
+	if (death) {
+		if(death_timer == 0)
+			camera2D->ShakeCamera(Vec2(0.1f, 0.1f), 0.25f);
+		death_timer++;
+		if (death_timer > 30) {
+			Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
+			camera2D->TranslateCamera(player_t->Position, start_position, 1.0f);
+			restarting = true;
+			death = false;
+			death_timer = 0;
+		}
+	
 	}
 
 	if (restarting) {
