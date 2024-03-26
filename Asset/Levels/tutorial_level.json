@@ -849,6 +849,22 @@
             "x": 493.0,
             "y": 180.0
           }
+        },
+        {
+          "Name" : "DialogueSequence1",
+          "Position" : 
+          {
+            "x" : -350.0,
+            "y" : -120.0
+          },
+          "Prefabs" : "Dialogue_Sequence_1.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 200.0,
+            "y" : 200.0
+          },
+          "Type" : "Transform"
         }
       ]
     }
@@ -856,6 +872,7 @@
   "AdditionalScenesToLoad": [
     "game_hud.json",
     "pause_menu.json",
-    "win_menu.json"
+    "win_menu.json",
+    "dialogue_hud.json"
   ]
 }
