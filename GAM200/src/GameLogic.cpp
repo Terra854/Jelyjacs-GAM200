@@ -214,11 +214,12 @@ void GameLogic::Update() {
 		//Message_Handler msg(MessageID::Event_Type::Quit);
 		//engine->Broadcast(&msg);
 
-		if (objectFactory->GetLayer("PauseMenu") && objectFactory->GetLayer("GameMenu")) {
+		if (objectFactory->GetLayer("PauseMenu") && objectFactory->GetLayer("GameMenu") && objectFactory->GetLayer("HowToPlayMenu")) {
 			engine->setPause();
 
 			objectFactory->GetLayer("PauseMenu")->second.first.isVisible = engine->isPaused();
 			objectFactory->GetLayer("GameMenu")->second.first.isVisible = !engine->isPaused();
+			objectFactory->GetLayer("HowToPlayMenu")->second.first.isVisible = false;
 		}
 	}
 	
