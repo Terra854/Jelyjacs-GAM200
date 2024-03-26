@@ -438,13 +438,13 @@ void GLApp::Update()
 					// draw text
 					SetFont(text->fontType);
 					float text_width{ static_cast<float>(find_width(text->text,text->fontType)) };
-					DrawText(text->text, pos.x * window->width / 2.f - text_width / 2, pos.y * window->height / 2.f, text->fontSize);
+					DrawText(text->text, pos.x * window->width_init / 2.f - text_width / 2, pos.y * window->height_init / 2.f, text->fontSize);
 				}
 				if (graphics_debug) {
 
 					SetFont("Aldrich-Regular");
 					std::string fpsText = "FPS: " + std::to_string((int)engine->Get_FPS());
-					DrawText(fpsText, -(window->width / 2.f) + 50.f, window->height / 2.f - 100.f, 1.f);
+					DrawText(fpsText, -(window->width_init / 2.f) + 50.f, window->height_init / 2.f - 100.f, 1.f);
 
 #if defined(DEBUG) | defined(_DEBUG)
 

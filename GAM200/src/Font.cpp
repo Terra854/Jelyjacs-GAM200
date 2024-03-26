@@ -79,8 +79,8 @@ int find_width(std::string const& str, std::string font)
 //normoalise coordinates where centre is 0 , 0
 void normalise_coord(float& x, float& y)
 {
-    x += window->width / 2.0f;
-    y += window->height / 2.0f;
+    x += window->width_init / 2.0f;
+    y += window->height_init / 2.0f;
 }
 
 //draw the text with opengl api
