@@ -76,7 +76,7 @@ private:
 	// shake
 	bool camera_shake = false;
 	Vec2 random_shift = { 0.0f,0.0f };
-
+	Vec2 random_num = { 0.0f,0.0f };
 
 	float x_min = {}; //game_to_camera(-672.0f);
 	float y_min = {}; //game_to_camera(-352.0f);

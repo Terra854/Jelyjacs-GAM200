@@ -51,10 +51,14 @@ void Camera::Update() {
 			// get a random number between -1 to 1
 			float x = (rand() % 1000) / 1000.0f;
 			float y = (rand() % 1000) / 1000.0f;
-			Vec2 shift = { x * 2.0f - 1.0f, y * 2.0f - 1.0f };
+			random_num = { x * 2.0f - 1.0f, y * 2.0f - 1.0f };
+			random_num.x *= random_shift.x;
+			random_num.y *= random_shift.y;
+			
+			/*Vec2 shift = { x * 2.0f - 1.0f, y * 2.0f - 1.0f };
 			random_shift.x *= shift.x;
-			random_shift.y *= shift.y;
-			position += random_shift;
+			random_shift.y *= shift.y;*/
+			position += random_num;
 			time_count += engine->Get_Fixed_DT();
 			std::cout << "time_count" << std::endl;
 			std::cout<< time_count << std::endl;

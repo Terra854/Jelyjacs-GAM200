@@ -231,8 +231,8 @@ void GameLogic::Update() {
 				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Spark");
 				Spark::Just_detached = true;
 				Spark::Connected_to_Finn = false;
-				ParticleSystem* particleSystem = static_cast<ParticleSystem*>(temp->GetComponent(ComponentType::ParticleSystem));
-				particleSystem->prticle_state = ParticleState::Prticle_Start;
+				/*ParticleSystem* particleSystem = static_cast<ParticleSystem*>(temp->GetComponent(ComponentType::ParticleSystem));
+				particleSystem->prticle_state = ParticleState::Prticle_Start;*/
 				static_cast<Body*>(temp->GetComponent(ComponentType::Body))->active = true;
 				std::cout << "Switched to Spark" << std::endl;
 			}
