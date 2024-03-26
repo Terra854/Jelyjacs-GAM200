@@ -160,12 +160,15 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
+    <ClInclude Include="include\components\Dialogue.h" />
     <ClInclude Include="include\components\Particle.h" />
     <ClInclude Include="include\components\Text.h" />
     <ClInclude Include="include\LayerSettings.h" />
     <ClInclude Include="include\Scripts\Box.h" />
     <ClInclude Include="include\Scripts\ButtonBase.h" />
+    <ClInclude Include="include\Scripts\ChatBoxNextButton.h" />
     <ClInclude Include="include\Scripts\CloseHowToPlayButton.h" />
+    <ClInclude Include="include\Scripts\DialogueSequence.h" />
     <ClInclude Include="include\Scripts\Door.h" />
     <ClInclude Include="include\Scripts\FullscreenButton.h" />
     <ClInclude Include="include\Scripts\HorizontalDoor.h" />
@@ -176,6 +179,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Assets Manager\json_serialization.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Body.cpp" />
+    <ClCompile Include="src\Dialogue.cpp" />
     <ClCompile Include="src\GameHud.cpp" />
     <ClCompile Include="src\Gizmo.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -241,7 +245,9 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\Box.cpp" />
     <ClCompile Include="src\Scripts\ButtonBase.cpp" />
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
+    <ClCompile Include="src\Scripts\ChatBoxNextButton.cpp" />
     <ClCompile Include="src\Scripts\CloseHowToPlayButton.cpp" />
+    <ClCompile Include="src\Scripts\DialogueSequence.cpp" />
     <ClCompile Include="src\Scripts\Door.cpp" />
     <ClCompile Include="src\Scripts\Endpoint.cpp" />
     <ClCompile Include="src\Scripts\Finn.cpp" />
