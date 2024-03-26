@@ -228,7 +228,8 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 
 	jsonobj.closeFile();
 
-	Logic->Initialize();
+	if (isParentScene)
+		Logic->Initialize();
 }
 
 /******************************************************************************

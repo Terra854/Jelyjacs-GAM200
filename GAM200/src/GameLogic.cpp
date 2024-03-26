@@ -100,13 +100,16 @@ void GameLogic::Initialize()
 	// Load all behaviours into the container
 	LoadScripts();
 	for (auto iter : behaviourComponents ) {
-		
-		if (behaviours[iter->GetBehaviourName()] == nullptr) {
+		if (iter->GetBehaviourName().empty())
+			continue;
+
+
+		if (behaviours.at(iter->GetBehaviourName()) == nullptr) {
 			std::cout << "Behaviour " << iter->GetBehaviourName() << " is null" << std::endl;
 			continue;
 		}
 		else {
-			behaviours[iter->GetBehaviourName()]->Start(iter->GetOwner());
+			behaviours.at(iter->GetBehaviourName())->Start(iter->GetOwner());
 			std::cout << "Owner ID: " << iter->GetOwner()->GetId() << std::endl;
 		}
 	}
