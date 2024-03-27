@@ -17,7 +17,7 @@ Partical system using instancing rendering.
 */
 void ParticleSystem::Init()
 {
-    
+    return;
     int index = 0;
     
     if(particles.size()>= PARTICLE_NUM) return;
@@ -96,6 +96,7 @@ void ParticleSystem::Init()
 */
 void ParticleSystem::Update(Object* player)
 {
+    return;
     static float accum_time = 0.0f;
     static int frame_dt_count = 0;
 
@@ -232,6 +233,7 @@ void ParticleSystem::Update(Object* player)
 */
 void ParticleSystem::Draw()
 {
+    return;
     //if (!draw_particle) return;
     glBindTextureUnit(6, particle_texture);
     glBindTexture(GL_TEXTURE_2D, particle_texture);

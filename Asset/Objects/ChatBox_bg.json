@@ -1,0 +1,25 @@
+{
+  "Name": "ChatBox_bg",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 1,
+          "y": 1
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "Empty_Box.png"
+      }
+    }
+  ]
+}

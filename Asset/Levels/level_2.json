@@ -163,14 +163,14 @@
           "Prefabs" : "Spark.json",
           "Properties" : 
           {
-            "height" : 40.0,
+            "height" : 26.0,
             "width" : 32.0
           },
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 64.0,
-            "y" : 64.0
+            "x" : 40.0,
+            "y" : 40.0
           },
           "Type" : "Transform",
           "counter" : 0.0,
