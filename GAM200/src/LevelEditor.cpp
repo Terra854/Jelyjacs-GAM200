@@ -566,7 +566,7 @@ void LevelEditor::ObjectProperties() {
 			
 			if (ImGui::BeginTable("AnimationSettings", 4, NULL)) {
 				ImGui::TableSetupColumn("Row", ImGuiTableColumnFlags_WidthFixed, 50.f);
-				ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 50.f);
+				ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 150.f);
 				ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed, 150.f);
 				ImGui::TableSetupColumn("Options", ImGuiTableColumnFlags_WidthStretch);
 
@@ -590,44 +590,26 @@ void LevelEditor::ObjectProperties() {
 					
 					ImGui::TableNextRow();
 					ImGui::TableNextColumn();
-					ImGui::Text("%d", i+1);
+					ImGui::Text("%d", i + 1);
 					ImGui::TableNextColumn();
-					ImGui::Text("%d", pair.first);
+
+					LE_InputInt("##FrameNum", &a->animation_frame.at(i + 1).first);
+
 					ImGui::TableNextColumn();
-					switch (pair.second) {
-					case AnimationType::Idle:
-						ImGui::Text("Idle");
-						break;
-					case AnimationType::Push:
-						ImGui::Text("Push");
-						break;
-					case AnimationType::Jump:
-						ImGui::Text("Jump");
-						break;
-					case AnimationType::Run:
-						ImGui::Text("Run");
-						break;
-					case AnimationType::Teleport:
-						ImGui::Text("Teleport");
-						break;
-					case AnimationType::Idle_left:
-						ImGui::Text("Idle_left");
-						break;
-					case AnimationType::Push_left:
-						ImGui::Text("Push_left");
-						break;
-					case AnimationType::Jump_left:
-						ImGui::Text("Jump_left");
-						break;
-					case AnimationType::Run_left:
-						ImGui::Text("Run_left");
-						break;
-					case AnimationType::Teleport_left:
-						ImGui::Text("Teleport_left");
-						break;
-					case AnimationType::No_Animation_Type:
-						ImGui::Text("No Animation Type");
-						break;
+
+					int currentType = static_cast<int>(pair.second);
+
+					std::vector<std::string> itemStrings(No_Animation_Type + 1);
+					const char* items[No_Animation_Type + 1];
+					for (int i = 0; i < No_Animation_Type + 1; ++i) {
+						itemStrings[i] = AnimationTypeToString(static_cast<AnimationType>(i));
+						items[i] = itemStrings[i].c_str();
+					}
+
+					sprintf_s(buffer, "##AnimationTypeBox%d", i + 1);
+
+					if (ImGui::Combo(buffer, &currentType, items, No_Animation_Type + 1)) {
+						a->animation_frame.at(i + 1).second = static_cast<AnimationType>(currentType);
 					}
 
 					ImGui::TableNextColumn();

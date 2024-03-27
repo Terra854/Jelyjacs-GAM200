@@ -28,6 +28,8 @@ enum AnimationType
 	No_Animation_Type // This should always be the last type
 };
 
+std::string AnimationTypeToString(AnimationType type);
+
 class Animation : public Component
 {
 public:

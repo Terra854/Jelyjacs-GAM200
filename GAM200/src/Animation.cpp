@@ -7,6 +7,44 @@ This file contains the definition of the animation game component class
 *//*__________________________________________________________________________*/
 #include "../include/components/Animation.h"
 
+std::string AnimationTypeToString(AnimationType type) {
+	switch (type) {
+		case AnimationType::Idle:
+			return "Idle";
+			break;
+		case AnimationType::Push:
+			return "Push";
+			break;
+		case AnimationType::Jump:
+			return "Jump";
+			break;
+		case AnimationType::Run:
+			return "Run";
+			break;
+		case AnimationType::Teleport:
+			return "Teleport";
+			break;
+		case AnimationType::Idle_left:
+			return "Idle_left";
+			break;
+		case AnimationType::Push_left:
+			return "Push_left";
+			break;
+		case AnimationType::Jump_left:
+			return "Jump_left";
+			break;
+		case AnimationType::Run_left:
+			return "Run_left";
+			break;
+		case AnimationType::Teleport_left:
+			return "Teleport_left";
+			break;
+		case AnimationType::No_Animation_Type:
+			return "No_Animation_Type";
+			break;		
+	}
+}
+
 Animation::Animation()
 	: Component(), animation_tex_obj{}
 {}
