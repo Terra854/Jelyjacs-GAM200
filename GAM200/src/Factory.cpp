@@ -33,6 +33,7 @@ ID aand is stored as part of a private map
 #include "GameLogic.h"
 #include <SceneManager.h>
 #include <LevelEditor.h>
+#include <components/Dialogue.h>
 
 /*
 * Object is what the game object is represented by. It's definition is found in Object.h.
@@ -62,6 +63,7 @@ Factory::Factory()
 	AddComponentCreator("Particles", new ComponentCreator<ParticleSystem>());
 	AddComponentCreator("Animation", new ComponentCreator<Animation>());
 	AddComponentCreator("Text", new ComponentCreator<Text>());
+	AddComponentCreator("Dialogue", new ComponentCreator<Dialogue>());
 
 	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
 	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
@@ -395,6 +397,14 @@ Object* Factory::createObject(const std::string& filename)
 
 			obj->AddComponent(t);
 		}
+
+		else if (type == "Dialogue")
+		{
+			Dialogue* d = (Dialogue*)((ComponentCreator<Dialogue>*) componentMap["Dialogue"])->Create();
+			jsonloop.readString(d->entire_dialogue, "Properties", "dialogue");
+
+			obj->AddComponent(d);
+		}
 	}
 
 	// Run the initialization routines for each component (if there is any)
@@ -418,6 +428,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 	Event* e = (Event*)obj->GetComponent(ComponentType::Event);
 	Behaviour* be = (Behaviour*)obj->GetComponent(ComponentType::Behaviour);
 	Text* t = (Text*)obj->GetComponent(ComponentType::Text);
+	Dialogue* d = (Dialogue*)obj->GetComponent(ComponentType::Dialogue);
 
 	jsonobj["Name"] = obj->name;
 
@@ -550,6 +561,15 @@ void Factory::saveObject(std::string filename, Object* obj) {
 		behaviour["Properties"]["Index"] = be->GetBehaviourIndex();
 		jsonobj["Components"].append(behaviour);
 	}
+	
+	//dialogue
+	if (d != nullptr) {
+		Json::Value dialogue;
+		dialogue["Type"] = "Dialogue";
+		dialogue["Properties"]["dialogue"] = d->entire_dialogue;
+		jsonobj["Components"].append(dialogue);
+	}
+	
 
 	// Save the object to a file
 
@@ -856,6 +876,14 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			t->fontSize = t_tmp->fontSize;
 
 			obj->AddComponent(t);
+		}
+		else if (component.first == ComponentType::Dialogue)
+		{
+			Dialogue* d = (Dialogue*)((ComponentCreator<Dialogue>*) componentMap["Dialogue"])->Create();
+			Dialogue* d_tmp = static_cast<Dialogue*>(object->GetComponent(ComponentType::Dialogue));
+			d->entire_dialogue = d_tmp->entire_dialogue;
+			obj->AddComponent(d);
+
 		}
 	}
 

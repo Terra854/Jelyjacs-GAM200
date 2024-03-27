@@ -22,6 +22,7 @@ This file contains the class definitions that is used to run the game
 #include <Font.h>
 #include <Camera.h>
 #include <../src/Assets Manager/asset_manager.h>
+#include <DialogueSystem.h>
 
 CoreEngine* engine; // Needed for Window System to tell the engine when to exit cause messaging system is not ready yet
 ThreadPool* thread_pool;
@@ -72,6 +73,7 @@ void Application::Init() {
 	Camera* camera = new Camera();
 	GLApp* graphics = new GLApp();
 	thread_pool = new ThreadPool();
+	dialoguesystem = new DialogueSystem();
 
 
 	// Add System to the engine 
@@ -85,6 +87,7 @@ void Application::Init() {
 	engine->AddSystem(physics);
 	engine->AddSystem(FontSystem);
 	engine->AddSystem(camera);
+	engine->AddSystem(dialoguesystem);
 
 #if defined(DEBUG) | defined(_DEBUG)
 	// Level Editor

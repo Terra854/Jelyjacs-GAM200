@@ -5,12 +5,12 @@
       "Type": "Transform",
       "Properties": {
         "Position": {
-          "x": 0.0,
-          "y": 0.0
+          "x": 50.0,
+          "y": -363.0
         },
         "Scale": {
-          "x": 1,
-          "y": 1
+          "x": 1321,
+          "y": 261
         },
         "Rotation": 0.0
       }

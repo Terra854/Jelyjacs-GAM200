@@ -1,5 +1,5 @@
 {
-  "Name": "Dialogue_Sequence_1",
+  "Name": "Dialogue_Sequence_2",
   "Components": [
     {
       "Type": "Transform",
@@ -18,7 +18,7 @@
     {
       "Type": "Dialogue",
       "Properties": {
-        "dialogue": "We're in!\nAlright SPARK,\rLet's find you\nsome new parts"
+        "dialogue": "I think we're\ron the right track"
       }
     }
   ]

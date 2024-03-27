@@ -3096,7 +3096,7 @@
               "Position" : 
               {
                 "x" : -350.0,
-                "y" : -120.0
+                "y" : -130.0
               },
               "Rotation" : 0.0,
               "Scale" : 
@@ -3105,17 +3105,9 @@
                 "y" : 200.0
               },
               "Type" : "Transform"
-            },
-            {
-              "Type" : "Behaviour",
-              "counter" : 0.0,
-              "distance" : 0.0,
-              "index" : 0,
-              "scripts" : "DialogueSequence",
-              "speed" : 0.0
             }
           ],
-          "Name" : "DialogueSequence1",
+          "Name" : "Dialogue_Sequence_1",
           "Prefabs" : "Dialogue_Sequence_1.json"
         }
       ],

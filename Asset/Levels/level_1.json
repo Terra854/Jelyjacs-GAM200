@@ -4,7 +4,8 @@
     "game_hud.json",
     "pause_menu.json",
     "how_to_play_menu.json",
-    "win_menu.json"
+    "win_menu.json",
+    "dialogue_hud.json"
   ],
   "Layers" : 
   [
@@ -6280,6 +6281,27 @@
           ],
           "Name" : "CatPowerLiquid",
           "Prefabs" : "CatPowerLiquid.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
+                "x" : 0.0,
+                "y" : 0.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 100.0,
+                "y" : 100.0
+              },
+              "Type" : "Transform"
+            }
+          ],
+          "Name" : "Dialogue_Sequence_2",
+          "Prefabs" : "Dialogue_Sequence_2.json"
         }
       ],
       "Settings" : 
