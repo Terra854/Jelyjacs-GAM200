@@ -89,8 +89,8 @@ void OpeningCutscene::Update(Object* obj) {
 			audio->setBackgroundVolume(31.f - OpeningCutsceneTime);
 		}
 		if (31.f < OpeningCutsceneTime) {
-			audio->setBackgroundAudio("background");
-			SceneManager::LoadScene("tutorial_level.json");
+			audio->setBackgroundAudio("main_menu_bg");
+			SceneManager::LoadScene("main_menu.json");
 		}
 
 	}

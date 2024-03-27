@@ -74,7 +74,9 @@ public:
 
 	static void draw_texture( Vec2 tex_t, Vec2 tex_s, float tex_r, GLuint tex_in, bool tex_camera);
 	
-
+	bool video_start = false;
+	float video_timer = 0.0f;
+	int video_count = 1;
 
 	static Vec2 game_to_ndc(Vec2 position);
 	static float game_to_ndc(float position);

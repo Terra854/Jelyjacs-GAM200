@@ -18,7 +18,7 @@ includes all the functions to create and update the window
 #include <thread>
 #include <fstream>
 #include <sstream>
-
+#include "stb_image.h"
 #include "Core_Engine.h"
 #include <SceneManager.h>
 /*                                                   objects with file scope
@@ -66,10 +66,15 @@ GLWindow::GLWindow() {
     getline(ifs, line);
     std::istringstream line_height{ line };
     line_height >> GLWindow::height_init;
+    getline(ifs, line);
+    std::istringstream line_icon{ line };
+    line_icon >> GLWindow::icon_path;
 
     ifs.close();
     width = width_init;
     height = height_init;
+
+   
 }
 
 /*  _________________________________________________________________________ */
@@ -132,6 +137,11 @@ void GLWindow::Initialize() {
     originalMode = glfwGetVideoMode(monitor);
     glfwGetWindowPos(ptr_window, &originalX, &originalY);
     glfwGetWindowSize(ptr_window, &originalWidth, &originalHeight);
+
+    GLFWimage images[1];
+    images[0].pixels = stbi_load(icon_path.c_str(), &images[0].width, &images[0].height, 0, 4); //rgba channels 
+    glfwSetWindowIcon(ptr_window, 1, images);
+    stbi_image_free(images[0].pixels);
 }
 
 /*  _________________________________________________________________________ */
@@ -194,7 +204,7 @@ void GLWindow::Update()
             pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
             pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
             pos_y += 100;
-            std::cout << glfwGetVideoMode(glfwGetPrimaryMonitor())->width << std::endl;
+            //std::cout << glfwGetVideoMode(glfwGetPrimaryMonitor())->width << std::endl;
             glfwSetWindowPos(ptr_window, pos_x, pos_y);
             break;
         case Window_size::medium:
@@ -219,8 +229,8 @@ void GLWindow::Update()
     //change to fullscreen mode
     if (input::IsPressed(KEY::f)) {
         window_size = Window_size::fullscreen;
-        width = 1920;
-        height = 1080;
+        width = 1600;
+        height = 900;
         glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
 		glfwSetWindowMonitor(ptr_window, monitor, 0, 0, originalMode->width, originalMode->height, originalMode->refreshRate);
 	}
@@ -424,9 +434,9 @@ void GLWindow::change_window_size(Window_size size) {
             glfwSetWindowMonitor(ptr_window, glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
             break;*/
     case Window_size::high:
-        width = 1600;
-        height = 900;
-        glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width, height, 0);
+        width = 1920;
+        height = 1080;
+        glfwSetWindowMonitor(ptr_window, NULL, 0, 0, width-192, height-108, 0);
         pos_x = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - width) / 2;
         pos_y = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height - height) / 2;
         pos_y += 100;

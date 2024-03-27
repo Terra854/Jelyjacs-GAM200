@@ -1,0 +1,52 @@
+{
+  "Name": "PressureDoorGreen",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 64.0,
+          "y": 203.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Body",
+      "Shape": "Rectangle",
+      "Properties": {
+        "width": 32.0,
+        "height": 160.0
+      }
+    },
+    {
+      "Type": "Animation",
+      "Properties": {
+        "texturepath": "PressureDoor_Green.png",
+        "framerate": 0.1,
+        "frame": [15, 3],
+        "1": [15, "jump"],
+        "2": [15, "jump"],
+        "3": [1, "jump"],
+        "4": [1, "idle"]
+      }
+    },
+    {
+      "Type": "Event",
+      "Properties": {
+        "linkedevent": 0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "Door",
+        "Index": 0
+      }
+    }
+  ]
+}

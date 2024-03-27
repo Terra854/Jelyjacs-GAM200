@@ -59,17 +59,17 @@ void Finn::Update(Object* obj) {
 		}
 
 		bool moving = false;
-		if (input::IsPressed(KEY::w)) {
+		if (input::IsPressed(KEY::w) || input::IsPressed(KEY::up) || input::IsPressed(KEY::spacebar)) {
 			MovementKey msg(up);
 			engine->Broadcast(&msg);
 			if (player_physics->Velocity.y == 0.0f) {
 				player_physics->Force = 85000.f;
 				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 				audio->playSfx("finn_jumping");
-
+				InTheAir = true;
 			}
 		}
-		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d)) {
+		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d) || input::IsPressed(KEY::left) || input::IsPressed(KEY::right)) {
 			if (player_body->bottom_collision) {
 				Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
 
@@ -83,7 +83,7 @@ void Finn::Update(Object* obj) {
 				}
 			}
 		}
-		if (input::IsPressedRepeatedly(KEY::a)) {
+		if (input::IsPressedRepeatedly(KEY::a) || input::IsPressedRepeatedly(KEY::left)) {
 			MovementKey msg(left);
 			engine->Broadcast(&msg);
 			player_physics->Velocity.x -= 500.0f;
@@ -94,7 +94,7 @@ void Finn::Update(Object* obj) {
 			else
 				player_animation->current_type = AnimationType::Run_left;
 		}
-		if (input::IsPressedRepeatedly(KEY::d)) {
+		if (input::IsPressedRepeatedly(KEY::d) || input::IsPressedRepeatedly(KEY::right)) {
 			MovementKey msg(right);
 			engine->Broadcast(&msg);
 			player_physics->Velocity.x += 500.0f;
@@ -115,7 +115,12 @@ void Finn::Update(Object* obj) {
 		else player_animation->jump_fixed = false;
 
 
-
+		if (cheat) {
+			return;
+		}
+		if (player_body->bottom_collision == nullptr) {
+			return;
+		}
 		// Audio for Character Movement
 		if ((player_physics->Velocity.y == 0.f) && moving) {
 			//audio->startWalking();
@@ -174,12 +179,10 @@ void Finn::Update(Object* obj) {
 			InTheAir = false;
 			finn_air_time = 0.f;
 		}
-		else if (player_body->bottom_collision) {
-			InTheAir = false;
+		else if (!InTheAir) {
 			finn_air_time = 0.f;
 		}
 		else {
-			InTheAir = true;
 			finn_air_time += engine->GetDt();
 		}
 	}

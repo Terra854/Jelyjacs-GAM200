@@ -281,7 +281,7 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Image((void*)(intptr_t)AssetManager::textureval(te->textureName), ImVec2(size_preview.x / size_preview.y * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
 		}
 
-		
+
 	}
 	else {
 		ImGui::Text("This object has");
@@ -379,9 +379,14 @@ void LevelEditor::ObjectProperties() {
 		for (auto& l : SceneManager::layers) {
 			if (ImGui::Selectable(l.first.c_str())) {
 				Object* o = objectFactory->cloneObject(object, 0, 64);
+
+				// For inserting prefab
+				if (!o->GetPrefab())
+					o->SetPrefab(object);
+
 				objectFactory->assignIdToObject(o);
 				selectedNum = o->GetId();
-				o->SetPrefab(object->GetPrefab()); // testing this line
+				//o->SetPrefab(object->GetPrefab()); // testing this line
 				cloneSuccessful = selectedNum;
 				l.second.second.push_back(o);
 			}
@@ -554,7 +559,64 @@ void LevelEditor::ObjectProperties() {
 			ImGui::Text("Current Type: %d", a->current_type);
 			ImGui::Text("Frame Number: %d", a->frame_num);
 			LE_InputFloat("Opacity", &a->opacity);
+			LE_InputFloat("Frame Rate", &a->frame_rate);
+			LE_InputFloat2("Animation Scale", &a->animation_scale.first);
 
+			ImGui::SeparatorText("Animation Settings");
+			
+			if (ImGui::BeginTable("AnimationSettings", 3, NULL)) {
+				ImGui::TableSetupColumn("Row", ImGuiTableColumnFlags_WidthFixed, 50.f);
+				ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 50.f);
+				ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthStretch);
+
+				ImGui::TableHeadersRow();
+
+				for (auto& pair : a->animation_frame) {
+					ImGui::TableNextRow();
+					ImGui::TableNextColumn();
+					ImGui::Text("%d", pair.first);
+					ImGui::TableNextColumn();
+					ImGui::Text("%d", pair.second.first);
+					ImGui::TableNextColumn();
+					switch (pair.second.second) {
+					case AnimationType::Idle:
+						ImGui::Text("Idle");
+						break;
+					case AnimationType::Push:
+						ImGui::Text("Push");
+						break;
+					case AnimationType::Jump:
+						ImGui::Text("Jump");
+						break;
+					case AnimationType::Run:
+						ImGui::Text("Run");
+						break;
+					case AnimationType::Teleport:
+						ImGui::Text("Teleport");
+						break;
+					case AnimationType::Idle_left:
+						ImGui::Text("Idle_left");
+						break;
+					case AnimationType::Push_left:
+						ImGui::Text("Push_left");
+						break;
+					case AnimationType::Jump_left:
+						ImGui::Text("Jump_left");
+						break;
+					case AnimationType::Run_left:
+						ImGui::Text("Run_left");
+						break;
+					case AnimationType::Teleport_left:
+						ImGui::Text("Teleport_left");
+						break;
+					case AnimationType::No_Animation_Type:
+						ImGui::Text("No Animation Type");
+						break;
+					}
+				}
+				ImGui::EndTable();
+			}
+			LE_InputInt("Jump Fixed Frame", &a->jump_fixed_frame);
 		}
 	}
 
@@ -819,12 +881,12 @@ void LevelEditor::ObjectProperties() {
 					ImGui::Text("Material: ");
 					ImGui::SameLine();
 					switch (r->material) {
-						case Material::Concrete:
-							ImGui::Text("Concrete");
-							break;
-						case Material::Metal:
-							ImGui::Text("Metal");
-							break;
+					case Material::Concrete:
+						ImGui::Text("Concrete");
+						break;
+					case Material::Metal:
+						ImGui::Text("Metal");
+						break;
 					}
 
 					// Button to enter edit mode
@@ -1192,11 +1254,11 @@ void LevelEditor::ObjectProperties() {
 		if (ImGui::CollapsingHeader("Behaviour")) {
 			ImGui::Text("Script Name : %s", be->GetBehaviourName().c_str());
 			ImGui::Text("Script Index : %d", be->GetBehaviourIndex());
-			if(be->GetBehaviourCounter() > 0)
+			if (be->GetBehaviourCounter() > 0)
 				ImGui::Text("Script Counter : %d", be->GetBehaviourCounter());
-			if(be->GetBehaviourDistance() > 0)
+			if (be->GetBehaviourDistance() > 0)
 				ImGui::Text("Script Distance : %d", be->GetBehaviourDistance());
-			if(be->GetBehaviourSpeed() > 0)
+			if (be->GetBehaviourSpeed() > 0)
 				ImGui::Text("Script Speed : %d", be->GetBehaviourSpeed());
 			if (ImGui::CollapsingHeader("Change Scripts")) {
 				ImGui::OpenPopup("Select Scripts");
@@ -1272,7 +1334,7 @@ void LevelEditor::ListOfObjects() {
 				sprintf_s(buf, "%s (inherited from %s)##%s_%s", l.first.c_str(), l.second.first.inheritedJsonName.c_str(), engine->loaded_level.c_str(), l.first.c_str());
 			else
 				sprintf_s(buf, "%s##%s_%s", l.first.c_str(), engine->loaded_level.c_str(), l.first.c_str());
-			
+
 			if (ImGui::TreeNode(buf)) {
 				// For all objects in the layer
 				for (auto& object : l.second.second) {
@@ -1368,7 +1430,7 @@ void LevelEditor::DisplaySelectedTexture() {
 		}
 
 
-		ImGui::SetNextWindowSize(ImVec2(image_size.x + 20, image_size.y + 40), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(image_size.x + 20, image_size.y + 70), ImGuiCond_Always);
 
 		ImGui::Begin(selectedTexture.first.c_str(), &display_selected_texture);
 
@@ -1377,11 +1439,32 @@ void LevelEditor::DisplaySelectedTexture() {
 
 		ImGui::Image((void*)(intptr_t)selectedTexture.second, image_size);
 
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+
+		if (ImGui::Button("Delete Texture"))
+		{
+			display_selected_texture = false;
+			AssetManager::unloadtexture(selectedTexture.first);
+
+			bool result = std::filesystem::remove("Asset/Picture/" + selectedTexture.first);
+
+			if (result) {
+				std::cout << "Texture deleted successfully." << std::endl;
+			}
+			else {
+				std::cout << "Texture delete failed." << std::endl;
+			}
+		}
+		ImGui::PopStyleColor(3);
+
 		ImGui::End();
 	}
 }
 
 static bool selectingAudio = false;
+static bool selectingTexture = false;
 static std::string SelectedAudioType;
 
 /******************************************************************************
@@ -1396,6 +1479,11 @@ void LevelEditor::AssetList()
 	{
 		if (ImGui::BeginTabItem("Textures"))
 		{
+			if (ImGui::Button("Add Texture")) {
+				selectingTexture = true;
+			}
+
+			ImGui::SameLine();
 
 			if (ImGui::Button("Refresh Textures"))
 			{
@@ -1403,7 +1491,7 @@ void LevelEditor::AssetList()
 				AssetManager::loadalltextures();
 
 			}
-			ImGui::BeginChild("AssetListScroll", ImGui::GetContentRegionAvail());
+			ImGui::BeginChild("AssetListScrollTexture", ImGui::GetContentRegionAvail());
 			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 			for (const std::pair<std::string, GLuint>& t : AssetManager::textures)
@@ -1442,6 +1530,46 @@ void LevelEditor::AssetList()
 			ImGui::EndTabItem();
 		}
 	}
+	if (ImGui::BeginTabItem("Animations")) {
+		ImGui::Text("wip");
+
+		ImGui::BeginChild("AssetListScrollAnimation", ImGui::GetContentRegionAvail());
+		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+
+		for (const std::pair<std::string, GLuint>& a : AssetManager::animations)
+		{
+			sprintf_s(buffer, "##%s", a.first.c_str());
+
+			// Start the invisible button
+
+			if (ImGui::Button(buffer, button_size))
+			{
+				
+			}
+
+			if (ImGui::BeginDragDropSource())
+			{
+				ImGui::SetDragDropPayload("Game animations", a.first.c_str(), 1024);
+				ImGui::EndDragDropSource();
+			}
+
+			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
+
+			// Image
+			ImGui::Image((void*)(intptr_t)a.second, ImVec2(64, 64));
+
+			// Move to the right of the image without moving to a new line
+			ImGui::SameLine();
+
+			// Text
+			ImGui::Text(a.first.c_str());
+		}
+
+		ImGui::PopStyleColor();
+		ImGui::EndChild();
+		ImGui::EndTabItem();
+	}
 	if (ImGui::BeginTabItem("Prefabs"))
 	{
 		if (ImGui::Button("Create Prefab")) {
@@ -1457,7 +1585,7 @@ void LevelEditor::AssetList()
 
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-		
+
 		for (const std::pair<std::string, Object*>& p : AssetManager::prefabs)
 		{
 			//i--;
@@ -1561,7 +1689,7 @@ void LevelEditor::AssetList()
 			ImGui::Separator();
 			ImGui::EndPopup();
 		}
-		
+
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		for (const auto& audioPair : AssetManager::soundMapping)
@@ -1755,7 +1883,7 @@ void CameraControl() {
 *******************************************************************************/
 void LevelEditor::LoadLevelPanel() {
 
-std::vector<std::string> level_files;
+	std::vector<std::string> level_files;
 	const std::string path = "Asset/Levels/";
 
 	try {
@@ -2029,20 +2157,6 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 	}
 }
 
-void LevelEditor::PhysicsDebugControl() {
-	ImGui::Begin("Physics System Control");
-
-	if (ImGui::Button("Next DT")) {
-		if (initialObjectMap.empty()) {
-			SceneManager::PlayScene();
-			SceneManager::PauseScene();
-		}
-		physics->num_of_steps++;
-	}
-
-	ImGui::End();
-}
-
 /******************************************************************************
 	DoNothing
 	- Just a stub function. It does nothing
@@ -2270,8 +2384,6 @@ void LevelEditor::Update() {
 
 	CameraControl();
 
-	PhysicsDebugControl();
-
 	LoadLevelPanel();
 
 	if (cloneSuccessful > -1) {
@@ -2280,6 +2392,7 @@ void LevelEditor::Update() {
 
 	save_as_dialog ? SaveAsDialog() : DoNothing();
 	new_prefab_dialog ? NewPrefabDialog() : DoNothing();
+	selectingTexture ? AddTexture() : DoNothing();
 	selectingAudio ? AddAudio() : DoNothing();
 
 	ImGui::PopFont();
@@ -2306,6 +2419,13 @@ void LevelEditor::LE_InputText(const char* label, char* buf, size_t buf_size, Im
 		input::LevelEditorTextActive = ImGui::IsItemActive();
 }
 
+void LevelEditor::LE_InputInt(const char* label, int* v) {
+	ImGui::InputInt(label, v);
+
+	if (!input::LevelEditorTextActive)
+		input::LevelEditorTextActive = ImGui::IsItemActive();
+}
+
 void LevelEditor::LE_InputFloat(const char* label, float* v) {
 	ImGui::InputFloat(label, v);
 
@@ -2320,6 +2440,10 @@ void LevelEditor::LE_InputFloat2(const char* label, float* v) {
 		input::LevelEditorTextActive = ImGui::IsItemActive();
 }
 
+/******************************************************************************
+DeleteSound
+- This function deletes the sound from the AssetManager and the file system
+*******************************************************************************/
 void LevelEditor::DeleteSound(std::string audioType, int audio_num) {
 	try {
 		auto& sound = AssetManager::soundMapping.at(audioType);
@@ -2371,11 +2495,70 @@ void LevelEditor::DeleteSound(std::string audioType, int audio_num) {
 	}
 }
 
+static bool SelectTextureRunning = false;
 static bool SelectAudioRunning = false;
+static std::future<std::string> futurePath;
 
+/******************************************************************************
+AddTexture
+- This function adds a texture to the AssetManager and the file system
+*******************************************************************************/
+void LevelEditor::AddTexture() {
+	if (SelectTextureRunning) {
+		ImGui::OpenPopup("Selecting texture");
+	}
+
+	if (ImGui::BeginPopupModal("Selecting texture", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		ImGui::Text("Selecting texture");
+
+		if (!SelectTextureRunning)
+			ImGui::CloseCurrentPopup();
+
+		ImGui::EndPopup();
+	}
+
+	if (!SelectTextureRunning) {
+		futurePath = thread_pool->enqueue(&OpenFileDialog, 0);
+		SelectTextureRunning = true;
+	}
+	else if (futurePath.valid()) {
+		if (futurePath.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+			// The future is ready
+			try {
+				std::string texturepath = futurePath.get();; // Retrieve the result
+				std::cout << "Texture path: " << texturepath << std::endl;
+
+				if (texturepath.empty()) {
+					selectingTexture = false;
+					SelectTextureRunning = false;
+					return;
+				}
+
+				std::filesystem::copy_file(texturepath, "Asset/Picture/" + std::filesystem::path(texturepath).filename().string(), std::filesystem::copy_options::overwrite_existing);
+
+				AssetManager::loadtexture(std::filesystem::path(texturepath).filename().string());
+
+				selectingTexture = false;
+				SelectTextureRunning = false;
+			}
+			catch (const std::exception& e) {
+				std::cout << "Exception: " << e.what() << std::endl;
+				selectingTexture = false;
+				SelectTextureRunning = false;
+			}
+		}
+	}
+
+}
+
+/******************************************************************************
+AddAudio
+- This function adds an audio to the AssetManager and the file system
+*******************************************************************************/
 void LevelEditor::AddAudio() {
 
-	if (SelectAudioRunning){
+	if (SelectAudioRunning) {
 		ImGui::OpenPopup("Selecting audio");
 	}
 
@@ -2389,8 +2572,6 @@ void LevelEditor::AddAudio() {
 		ImGui::EndPopup();
 	}
 
-	static std::future<std::string> futurePath;
-	
 	if (!SelectAudioRunning) {
 		futurePath = thread_pool->enqueue(&OpenFileDialog, 1);
 		SelectAudioRunning = true;
@@ -2440,7 +2621,7 @@ void LevelEditor::AddAudio() {
 				selectingAudio = false;
 				SelectAudioRunning = false;
 			}
-			catch (const std::exception& e) { 
+			catch (const std::exception& e) {
 				std::cout << "Exception: " << e.what() << std::endl;
 				selectingAudio = false;
 				SelectAudioRunning = false;
@@ -2449,6 +2630,10 @@ void LevelEditor::AddAudio() {
 	}
 }
 
+/******************************************************************************
+OpenFileDialog
+- This function opens a dialog box to select a file
+*******************************************************************************/
 std::string LevelEditor::OpenFileDialog(int type) {
 	OPENFILENAME ofn;       // Common dialog box structure
 	char szFile[260] = { 0 }; // Buffer for file name
@@ -2461,15 +2646,15 @@ std::string LevelEditor::OpenFileDialog(int type) {
 	ofn.nMaxFile = sizeof(szFile);
 	ofn.lpstrFilter = "All\0*.*\0Text\0*.TXT\0";
 
-	switch(type) {
-		case 0:
-			ofn.lpstrFilter = "Image Files\0*.PNG;*.JPG;*.JPEG;*.BMP\0";
-			break;
-		case 1:
-			ofn.lpstrFilter = "Audio Files\0*.MP3;*.WAV;*.AAC;*.FLAC;*.OGG;*.WMA;*.M4A\0";
-			break;
-		default:
-			break;
+	switch (type) {
+	case 0:
+		ofn.lpstrFilter = "Image Files\0*.PNG;*.JPG;*.JPEG;*.BMP\0";
+		break;
+	case 1:
+		ofn.lpstrFilter = "Audio Files\0*.MP3;*.WAV;*.AAC;*.FLAC;*.OGG;*.WMA;*.M4A\0";
+		break;
+	default:
+		break;
 	}
 
 	ofn.nFilterIndex = 1;
@@ -2520,10 +2705,10 @@ void LevelEditorGrid::drawleveleditor()
 			Vec2 pos = pos_botleft + Vec2(i * box_size * 2 / window->width, j * box_size * 2 / window->height);
 			Mat3 mat_test = Mat3Translate(pos.x, pos.y) * Mat3Scale(scaling.x, scaling.y);
 			mat_test = camera2D->world_to_ndc * mat_test;
-			
+
 			AssetManager::shaderval("shape").Use();
 			// bind VAO of this object's model
-			
+
 			glBindVertexArray(AssetManager::modelval("square").vaoid);
 			// copy object's model-to-NDC matrix to vertex shader's
 			// uniform variable uModelToNDC

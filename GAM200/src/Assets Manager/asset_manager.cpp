@@ -14,6 +14,7 @@ to be referenced from when needed.
 #include <iostream>
 #include <random>
 #include "json_serialization.h"
+#include <Font.h>
 
 // Creating of static data members
 std::filesystem::path AssetManager::pathtexture = "Asset/Picture";
@@ -33,6 +34,8 @@ std::map<std::string, std::variant<std::string, std::vector<std::string>>> Asset
 std::map<std::string, GLSLShader> AssetManager::shaders;
 std::map<std::string, GLApp::GLModel> AssetManager::models;
 std::map<std::string, std::vector<std::pair<GLuint, std::string>>> AssetManager::cutscenes;
+std::map<std::string, outline> AssetManager::font_outlines;
+static FT_Library ft;
 
 
 GLuint AssetManager::missing_texture;
@@ -123,6 +126,15 @@ void AssetManager::Initialize()
 	else
 		std::cout << pathcutscene << " does not exsit!" << std::endl;
 
+	//added by jia ming
+	if (std::filesystem::exists(pathfonts))
+	{
+		loadfonts();
+	}
+	else
+	{
+		std::cout << pathfonts << " does not exsit!" << std::endl;
+	}
 }
 
 /******************************************************************************
@@ -137,6 +149,8 @@ void AssetManager::Free()
 	freeshader();
 	freemodel();
 	// Freeing of sound is called in audio.cpp when audio system is destroyed
+
+	unloadfonts();
 }
 
 /******************************************************************************
@@ -154,6 +168,28 @@ void AssetManager::Update()
 }
 
 /******************************************************************************
+loadtexture
+-	The function looks in the directory for a specific texture to load and stores
+	it in the assetmanager if found.
+*******************************************************************************/
+void AssetManager::loadtexture(const std::string& textureName)
+{
+	std::filesystem::path texturePath = pathtexture / textureName; // Construct the full path
+
+	// Check if the specified texture exists in the directory
+	if (std::filesystem::exists(texturePath))
+	{
+		GLuint textureuint = GLApp::setup_texobj(texturePath.string().c_str()); // Load the texture
+		textures.emplace(texturePath.filename().string(), textureuint); // Store the texture in the asset manager
+		std::cout << "Added to list: " << texturePath.string() << std::endl;
+	}
+	else
+	{
+		std::cerr << "Texture not found: " << textureName << std::endl; // Error message if the texture is not found
+	}
+}
+
+/******************************************************************************
 loadalltextures
 -	The function looks through the directory for textures to load and store
 them in the assetmanager
@@ -168,6 +204,17 @@ void AssetManager::loadalltextures()
 		textures.emplace(filename.string(), textureuint);
 		std::cout << "Added to list: " << filename.string() << std::endl;
 	}
+}
+
+/******************************************************************************
+unloadtexture
+-	Unloads a given texture
+*******************************************************************************/
+void AssetManager::unloadtexture(const std::string& textureName)
+{
+	auto& t = textures.at(textureName);
+	glDeleteTextures(1, &t);
+	textures.erase(textureName);
 }
 
 /******************************************************************************
@@ -740,6 +787,81 @@ std::vector<std::pair<GLuint, std::string>> AssetManager::cutsceneval(std::strin
 	}
 }
 
+/******************************************************************************
+getoutline
+-	returns pointer to a font outline in the font_outlines map
+*******************************************************************************/
+outline* AssetManager::getoutline(std::string str)
+{
+	return &font_outlines.at(str);
+}
 
+/******************************************************************************
+loadfonts
+-	looks through the directory for font ttf files to load and store
+them in the assetmanager, and also configure opengl context for the vao and vbo passed to font system
+*******************************************************************************/
+void AssetManager::loadfonts()
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(window->width), 0.0f, static_cast<float>(window->height));
 
+	AssetManager::shaderval("font").Use();
+	glUniformMatrix4fv(glGetUniformLocation(AssetManager::shaderval("font").GetHandle(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+	
+	FT_Error error;
+	error = FT_Init_FreeType(&ft);
+	if (error)
+	{
+		std::cout << "ERROR::FREETYPE: Could not init FreeType Library!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+		return;
+	}
+	for (const auto& list : std::filesystem::directory_iterator(pathfonts))
+	{
+		std::cout << "Folders: " << list.path().filename() << std::endl;
+
+		font_outlines[list.path().filename().string().substr(0, list.path().filename().string().size() - 4)] = outline();
+	}
+
+	for (std::map<std::string, outline>::iterator it = font_outlines.begin(); it != font_outlines.end(); ++it)
+	{
+		error = (FT_New_Face(ft, std::string(pathfonts.string() + '/' + it->first + ".ttf").c_str(), 0, &it->second.face));
+		if (error)
+		{
+			std::cout << "ERROR::FREETYPE: Failed to load " << it->first.c_str() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+			return;
+		}
+	}
+
+	for (std::map<std::string, outline>::iterator it = font_outlines.begin(); it != font_outlines.end(); ++it)
+	{
+		it->second.set_pixel_size(48);
+		it->second.load_ascii_chars();
+	}
+
+	// configure VAO/VBO for texture
+	GLuint VAO, VBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	AssetManager::shaderval("font").UnUse();
+	setup_font_vao(VAO, VBO);
+}
+
+void AssetManager::unloadfonts()
+{
+	for (std::map<std::string, outline>::iterator it = AssetManager::font_outlines.begin(); it != font_outlines.end(); ++it)
+	{
+		FT_Done_Face(it->second.face);
+	}
+	FT_Done_FreeType(ft);
+}

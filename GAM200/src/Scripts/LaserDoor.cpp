@@ -78,7 +78,7 @@ namespace LaserDoor_Script {
 
         if (intersecting) {
             std::cout << "(Intersecting with " << obj->GetName() << " of obj ID " << obj->GetId() << " )" << std::endl;
-            GameLogic::restarting = true;
+            GameLogic::death = true;
             intersecting = false;
             return;
         }

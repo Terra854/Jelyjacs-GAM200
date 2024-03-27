@@ -30,6 +30,9 @@ void Camera::Initialize() {
 * Press C to zoom in/out
 */
 void Camera::Update() {
+	static float accum_time = 0.0f;
+	static int frame_dt_count = 0;
+
 
 	if (!isFreeCamEnabled()) {
 
@@ -44,18 +47,38 @@ void Camera::Update() {
 			}
 		}
 		//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
-		if (camera_follow) SetToPlayer();
-		else {
-			position -= camera_speed * engine->GetDt();
-			time_count += engine->GetDt();
+		if (camera_shake) {
+			// get a random number between -1 to 1
+			float x = (rand() % 1000) / 1000.0f;
+			float y = (rand() % 1000) / 1000.0f;
+			random_shift = { x * 2.0f - 1.0f, y * 2.0f - 1.0f };
+			random_shift.x *= 0.1f;
+			random_shift.y *= 0.1f;
+			position += random_shift;
+			time_count += engine->Get_Fixed_DT();
+			std::cout << "time_count" << std::endl;
+			std::cout<< time_count << std::endl;
 			if (time_count >= time_shift) {
+				time_count = 0.0f;
+				camera_shake = false;
+				random_shift = { 0.0f, 0.0f };
 				camera_follow = true;
 			}
+
 		}
+		else if (camera_shift) {
+			position -= camera_speed * engine->Get_Fixed_DT();
+			time_count += engine->Get_Fixed_DT();
+			if (time_count >= time_shift) {
+				time_count = 0.0f;
+				camera_follow = true;
+				camera_shift = false;
+			}
+		}
+		else  SetToPlayer();
+
 
 	}
-
-
 	world_to_ndc = Mat3Scale(scale.x, scale.y) * Mat3Translate(position.x, position.y);
 	//Vec2 window_scaling = {(float)window->width_init/(float)window->width,(float)window->height_init/(float)window->height};
 	//world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
@@ -66,19 +89,19 @@ void Camera::Update() {
 /*
 * Set the camera scale
 * @param scale_input The scale of the camera
-* 
+*
 */
 void Camera::SetCameraScale(Vec2 scale_input)
 {
-	scale.x= scale_input.x/window->width_init;
-	scale.y = scale_input.y/window->height_init;
+	scale.x = scale_input.x / window->width_init;
+	scale.y = scale_input.y / window->height_init;
 }
 
 /*  _________________________________________________________________________ */
 /*
 * Set the camera position
 * @param position_input The position of the camera
-* 
+*
 */
 void Camera::SetCameraPosition(Vec2 position_input)
 {
@@ -101,10 +124,10 @@ void Camera::SetToPlayer() {
 		// get the player's position
 		Transform* trans = static_cast<Transform*>(player->GetComponent(ComponentType::Transform));
 
-		position.x = trans->Position.x ;
+		position.x = trans->Position.x;
 
-		position.y = trans->Position.y ;
-		
+		position.y = trans->Position.y;
+
 
 		position.x = -position.x * 2.0f / window->width_init;
 
@@ -121,8 +144,13 @@ void Camera::SetToPlayer() {
 	}
 }
 
+/*
+* Translate the camera from start to end in time
+* NDC standers for start and end
+*/
 void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 {
+	camera_shift = true;
 	Vec2 pos1, pos2;
 	pos1.x = start.x;
 	pos1.y = start.y;
@@ -137,6 +165,19 @@ void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 
 	camera_speed = (pos1 - pos2) / time;
 	position = pos1;
+	time_count = 0.0f;
+	time_shift = time;
+	camera_follow = false;
+}
+
+/*
+* Shake the camera with a range for a time
+* NDC standers for range
+*/
+void Camera::ShakeCamera(Vec2 range, float time)
+{
+	random_shift = range;
+	camera_shake = true;
 	time_count = 0.0f;
 	time_shift = time;
 	camera_follow = false;

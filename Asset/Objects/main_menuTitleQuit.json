@@ -20,6 +20,13 @@
       "Properties": {
         "texturepath": "TitleQuitGamex4.png"
       }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "MainMenuQuitButton",
+        "Index": 0
+      }
     }
   ]
 }

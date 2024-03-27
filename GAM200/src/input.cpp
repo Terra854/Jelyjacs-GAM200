@@ -131,7 +131,7 @@ float input::GetMouseX()
 }
 float input::GetMouseY()
 {
-	return (static_cast<float>(-mouse.y) + static_cast<float>(new_height) / 2.0f) * scaleY;
+	return (static_cast<float>(-mouse.y) + static_cast<float>(new_height) / 2.0f) * static_cast<float>(scaleY);
 }
 
 //checks if mouse was moved
@@ -156,6 +156,7 @@ bool input::LevelEditorTextActive = false;
 
 void input::Update()
 {
+	input::update_resolution();
 	//If any text box in the level editor is active
 	//Do not register any inputs. ImGui uses it's own input system seperate from this
 	if (LevelEditorTextActive)

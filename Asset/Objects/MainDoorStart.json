@@ -1,0 +1,31 @@
+{
+  "Name": "MainDoorStart",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 128.0,
+          "y": 128.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Animation",
+      "Properties": {
+        "texturepath": "MainDoor.png",
+        "framerate": 0.1,
+        "frame": [7, 3],
+        "1": [7, "jump"],
+        "2": [7, "jump"],
+        "3": [1, "jump"],
+        "4": [1, "idle"]
+      }
+    }
+  ]
+}

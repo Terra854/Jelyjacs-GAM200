@@ -1,0 +1,88 @@
+{
+  "Layers" : 
+  [
+    {
+      "Name" : "ChatBoxMenu",
+      "Objects" : 
+      [
+        {
+          "Name" : "ChatBox_bg",
+          "Position" : 
+          {
+            "x" : 50.0,
+            "y" : -363.0
+          },
+          "Prefabs" : "ChatBox_bg.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 1321,
+            "y" : 261.0
+          },
+          "Type" : "Transform"
+        },
+        {
+          "Name" : "ChatBoxNextButton",
+          "Position" : 
+          {
+            "x" : 600.0,
+            "y" : -363.0
+          },
+          "Prefabs" : "chatbox_next_button.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 100.0,
+            "y" : 100.0
+          },
+          "Type" : "Transform"
+        },
+        {
+          "Name" : "ChatBoxline1",
+          "Position" : 
+          {
+            "x" : 50.0,
+            "y" : -363.0
+          },
+          "Prefabs" : "chatbox_line1.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 300.0,
+            "y" : 100.0
+          },
+          "Type" : "Transform"
+        },
+        {
+          "Name" : "CharacterBox_bg",
+          "Position" : 
+          {
+            "x" : -619.0,
+            "y" : -350.0
+          },
+          "Prefabs" : "CharacterBox_bg.json",
+          "Rotation" : 0.0,
+          "Scale" : 
+          {
+            "x" : 200,
+            "y" : 188.4
+          },
+          "Type" : "Transform"
+        }
+      ],
+      "Settings" : 
+      {
+        "isVisible" : false,
+        "static_layer" : true
+      }
+    }
+  ],
+  "SceneName" : "Asset/Levels/dialogue_hud.json",
+  "Size" : 
+  {
+    "height" : 1080.0,
+    "startX" : -960.0,
+    "startY" : -540.0,
+    "width" : 1920.0
+  }
+}

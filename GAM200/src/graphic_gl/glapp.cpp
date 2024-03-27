@@ -230,7 +230,52 @@ void GLApp::insert_models(std::string model_name) {
 */
 void GLApp::Update()
 {
+	static float accum_time = 0.0f;
+	static int frame_dt_count = 0;
 
+	// if press s
+	/*if (input::IsPressed(KEY::s)) {
+		camera2D->ShakeCamera({0.1f,0.1f}, 1.0f);
+	}*/
+	/*
+	frame_dt_count = engine->Get_NumOfSteps();
+	while (frame_dt_count) {
+		frame_dt_count--;
+		if (video_start) {
+			if (video_count < 7) {
+				std::cout << "video_count: " << video_count << std::endl;
+				Object* video = objectFactory->FindObject("Video" + std::to_string(video_count));
+				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
+				Animation* ani_pt = static_cast<Animation*>(video->GetComponent(ComponentType::Animation));
+				ani_pt->fixed = true;
+				tran_pt->Position = Vec2(-330.f, 30.f);
+				video_timer += engine->Get_Fixed_DT();
+				if (video_timer >= 0.4f) {
+					video_timer = 0.0f;
+					tran_pt->Position = Vec2(2000, 0);
+					video_count++;
+				}
+			}
+			if (video_count == 7) {
+				Object* video = objectFactory->FindObject("Video" + std::to_string(video_count));
+				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
+				tran_pt->Position = Vec2(-330.f, 30.f);
+				video_timer += engine->Get_Fixed_DT();
+				if (video_timer >= 0.2f) {
+					video_timer = 0.0f;
+					video_count++;
+				}
+			}
+			if (video_count == 8) {
+				audio->setBackgroundAudio("background");
+				SceneManager::LoadScene("tutorial_level.json");
+				video_start = false;
+				video_count = 1;
+			}
+		}
+
+	}
+	*/
 	//check debug
 	if (input::IsPressed(KEY::l))
 	{
@@ -256,7 +301,7 @@ void GLApp::Update()
 				if (!object)
 					continue; // Skip to the next object if the current one is a nullptr
 
-				GLuint tex_test;
+				GLuint tex_test{};
 				Animation* ani_pt = nullptr;
 				Mat3 mat_test;
 				Vec2 pos;
@@ -280,8 +325,7 @@ void GLApp::Update()
 
 				if (tex_pt)
 					tex_test = AssetManager::textureval(tex_pt->textureName);
-				else if (ani_pt)
-					tex_test = ani_pt->animation_tex_obj;
+				else if (ani_pt) tex_test = ani_pt->animation_tex_obj;
 
 				//get orientation
 				Transform* tran_pt = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
@@ -301,14 +345,14 @@ void GLApp::Update()
 
 				//get matrix
 				mat_test = Mat3Translate(pos) * Mat3Scale(scaling) * Mat3RotDeg(orientation);
+				//window_scaling = { (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
+				//mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
 
-				window_scaling = { (float)window->width / (float)window->width_init, (float)window->height / (float)window->height_init };
-
-				mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
 				// matrix after camrea
 
 				if (!l.second.first.static_layer)
 					mat_test = camera2D->world_to_ndc * mat_test;
+
 
 
 				// draw image with texture
@@ -353,9 +397,7 @@ void GLApp::Update()
 
 						}*/
 						// draw object with animation
-						if (input::IsPressed(KEY::s)) {
-							camera2D->TranslateCamera(pos, pos + Vec2(0.5f, 0.5f), 2.f);
-						}
+
 						particleSystem->Update(object);
 						ani_pt->Update_player();
 					}
@@ -394,72 +436,79 @@ void GLApp::Update()
 
 				if (text != nullptr) {
 					// draw text
-					SetFont((FONT)text->fontType);
-					float text_width{ static_cast<float>(find_width(text->text,(FONT)text->fontType)) };
+					SetFont(text->fontType);
+					float text_width{ static_cast<float>(find_width(text->text,text->fontType)) };
 					DrawText(text->text, pos.x * window->width / 2.f - text_width / 2, pos.y * window->height / 2.f, text->fontSize);
 				}
+				if (graphics_debug) {
+
+					SetFont("Aldrich-Regular");
+					std::string fpsText = "FPS: " + std::to_string((int)engine->Get_FPS());
+					DrawText(fpsText, -(window->width / 2.f) + 50.f, window->height / 2.f - 100.f, 1.f);
+
 #if defined(DEBUG) | defined(_DEBUG)
-				if (graphics_debug && object->GetComponent(ComponentType::Body) != nullptr) {
 
-					Rectangular* rec_pt = static_cast<Rectangular*>(object->GetComponent(ComponentType::Body));
+					if (object->GetComponent(ComponentType::Body) != nullptr) {
 
-					if (rec_pt == nullptr)
-						break; // Don't continue if there is no body component
+						Rectangular* rec_pt = static_cast<Rectangular*>(object->GetComponent(ComponentType::Body));
 
-					Vec2 botleft = rec_pt->aabb.min;
-					Vec2 topright = rec_pt->aabb.max;
+						if (rec_pt == nullptr)
+							break; // Don't continue if there is no body component
 
-					if (rec_pt->active) {
-						drawline(Vec2(topright.x, botleft.y), botleft, box_color);
-						drawline(topright, Vec2(topright.x, botleft.y), box_color);
-						drawline(topright, Vec2(botleft.x, topright.y), box_color);
-						drawline(Vec2(botleft.x, topright.y), botleft, box_color);
-					}
-					else {
-						drawline(Vec2(topright.x, botleft.y), botleft, red_box_color);
-						drawline(topright, Vec2(topright.x, botleft.y), red_box_color);
-						drawline(topright, Vec2(botleft.x, topright.y), red_box_color);
-						drawline(Vec2(botleft.x, topright.y), botleft, red_box_color);
-					}
-					// draw movement line for player
-					if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
-						//get velocity
-						Physics* phy_pt = static_cast<Physics*>(object->GetComponent(ComponentType::Physics));
+						Vec2 botleft = rec_pt->aabb.min;
+						Vec2 topright = rec_pt->aabb.max;
 
-						// Make sure it's not null pointer before continuing
-						if (phy_pt != nullptr) {
+						if (rec_pt->active) {
+							drawline(Vec2(topright.x, botleft.y), botleft, box_color);
+							drawline(topright, Vec2(topright.x, botleft.y), box_color);
+							drawline(topright, Vec2(botleft.x, topright.y), box_color);
+							drawline(Vec2(botleft.x, topright.y), botleft, box_color);
+						}
+						else {
+							drawline(Vec2(topright.x, botleft.y), botleft, red_box_color);
+							drawline(topright, Vec2(topright.x, botleft.y), red_box_color);
+							drawline(topright, Vec2(botleft.x, topright.y), red_box_color);
+							drawline(Vec2(botleft.x, topright.y), botleft, red_box_color);
+						}
+						// draw movement line for player
+						if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
+							//get velocity
+							Physics* phy_pt = static_cast<Physics*>(object->GetComponent(ComponentType::Physics));
 
-							float Vx = phy_pt->Velocity.x;
-							float Vy = phy_pt->Velocity.y;
+							// Make sure it's not null pointer before continuing
+							if (phy_pt != nullptr) {
 
-							//calculate rotation
-							orientation = atan2(Vy, Vx);
+								float Vx = phy_pt->Velocity.x;
+								float Vy = phy_pt->Velocity.y;
 
-							//get slcae of line based on length of line
-							Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width_init / 2, sqrt(Vx * Vx + Vy * Vy) / window->height_init / 2 };
+								//calculate rotation
+								orientation = atan2(Vy, Vx);
 
-							mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
-							mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
-							mat_test = camera2D->world_to_ndc * mat_test;
-							//draw line
-							AssetManager::shaderval("shape").Use();
-							// bind VAO of this object's model
-							glBindVertexArray(AssetManager::modelval("line").vaoid);
-							// copy object's model-to-NDC matrix to vertex shader's
-							// uniform variable uModelToNDC
-							AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-							AssetManager::shaderval("shape").SetUniform("uColor", line_color);
-							// call glDrawElements with appropriate arguments
-							glDrawElements(AssetManager::modelval("line").primitive_type, AssetManager::modelval("line").draw_cnt, GL_UNSIGNED_SHORT, 0);
+								//get slcae of line based on length of line
+								Vec2 scale_line = { sqrt(Vx * Vx + Vy * Vy) / window->width_init / 2, sqrt(Vx * Vx + Vy * Vy) / window->height_init / 2 };
 
-							// unbind VAO and unload shader program
-							glBindVertexArray(0);
-							AssetManager::shaderval("shape").UnUse();
+								mat_test = Mat3Translate(pos) * Mat3Scale(scale_line) * Mat3RotRad(orientation);
+								mat_test = Mat3Scale(window_scaling.x, window_scaling.y) * mat_test;
+								mat_test = camera2D->world_to_ndc * mat_test;
+								//draw line
+								AssetManager::shaderval("shape").Use();
+								// bind VAO of this object's model
+								glBindVertexArray(AssetManager::modelval("line").vaoid);
+								// copy object's model-to-NDC matrix to vertex shader's
+								// uniform variable uModelToNDC
+								AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
+								AssetManager::shaderval("shape").SetUniform("uColor", line_color);
+								// call glDrawElements with appropriate arguments
+								glDrawElements(AssetManager::modelval("line").primitive_type, AssetManager::modelval("line").draw_cnt, GL_UNSIGNED_SHORT, 0);
+
+								// unbind VAO and unload shader program
+								glBindVertexArray(0);
+								AssetManager::shaderval("shape").UnUse();
+							}
 						}
 					}
-
-				}
 #endif
+				}
 			}
 		}
 	}
@@ -525,11 +574,6 @@ void GLApp::Update()
 		}
 	}
 #endif
-
-	// TODO: Need a key to toggle it on and off
-	SetFont(FONT::AldrichRegular);
-	std::string fpsText = "FPS: " + std::to_string((int) engine->Get_FPS());
-	DrawText(fpsText, -(window->width / 2.f) + 50.f, window->height / 2.f - 100.f, 1.f);
 
 }
 
@@ -629,15 +673,15 @@ void GLApp::drawline(Vec2 start, Vec2 end, glm::vec3 color) {
 	float scaling_y;
 	orientation = atan2(end.y - start.y, end.x - start.x);
 
-	scaling_x = abs(end.x - start.x) * 2 / window->width;
-	scaling_y = abs(end.y - start.y) * 2 / window->height;
-	pos_x = start.x * 2.0f / window->width;
-	pos_y = start.y * 2.0f / window->height;
+	scaling_x = abs(end.x - start.x) * 2 / window->width_init;
+	scaling_y = abs(end.y - start.y) * 2 / window->height_init;
+	pos_x = start.x * 2.0f / window->width_init;
+	pos_y = start.y * 2.0f / window->height_init;
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotRad(orientation);
-	Vec2 window_sacling = { (float)window->width / window->width, (float)window->height / window->height };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width, (float)window->height / window->height };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	mat_test = camera2D->world_to_ndc * mat_test;
 	//draw line
 	AssetManager::shaderval("shape").Use();
@@ -677,8 +721,8 @@ void GLApp::drawtriangle(Vec2 tri_pos, Vec2 tri_scale, float tri_r, glm::vec3 tr
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotDeg(tri_r);
-	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	mat_test = camera2D->world_to_ndc * mat_test;
 
 	//draw triangle
@@ -721,8 +765,8 @@ void GLApp::drawline_circle(Vec2 l_c_pos, Vec2 l_c_scale, float l_c_width, glm::
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y);
-	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	mat_test = camera2D->world_to_ndc * mat_test;
 
 	glLineWidth(l_c_width);
@@ -765,8 +809,8 @@ void GLApp::draw_rect(Vec2 rec_pos, Vec2 rec_scale, float rec_r, glm::vec3 rec_c
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotDeg(rec_r);
-	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	mat_test = camera2D->world_to_ndc * mat_test;
 
 	//draw square
@@ -810,8 +854,8 @@ void GLApp::draw_texture(Vec2 tex_t, Vec2 tex_s, float tex_r, GLuint tex_in, boo
 
 	Mat3 mat_test;
 	mat_test = Mat3Translate(pos_x, pos_y) * Mat3Scale(scaling_x, scaling_y) * Mat3RotDeg(tex_r);
-	Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
-	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;
+	/*Vec2 window_sacling = { (float)window->width / window->width_init, (float)window->height / window->height_init };
+	mat_test = Mat3Scale(window_sacling.x, window_sacling.y) * mat_test;*/
 	if (tex_camera)
 		mat_test = camera2D->world_to_ndc * mat_test;
 

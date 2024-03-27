@@ -92,7 +92,7 @@ Object* Factory::createObject(const std::string& filename)
 	jsonobj.readString(obj->name, "Name");
 
 	for (auto& component : jsonobj.read("Components")) {
-		
+
 		JsonSerialization jsonloop;
 		jsonloop.jsonObject = &component;
 
@@ -123,12 +123,12 @@ Object* Factory::createObject(const std::string& filename)
 				// Attempt to add the texture
 				AssetManager::addtextures(path);
 			}
-			
+
 			Texture* tex = (Texture*)((ComponentCreator<Texture>*) componentMap["Texture"])->Create(path);
-			
+
 			jsonloop.readFloat(tex->opacity, "Properties", "opacity");
 			obj->AddComponent(tex);
-						
+
 		}
 		else if (type == "Body") {
 			std::string shape;
@@ -166,7 +166,7 @@ Object* Factory::createObject(const std::string& filename)
 			}
 			else if (shape == "Line") {
 				Lines* l = (Lines*)((ComponentCreator<Lines>*) componentMap["Line"])->Create();
-				
+
 				if (jsonloop.isMember("Collision Response"))
 					jsonloop.readBool(l->collision_response, "Collision Response");
 
@@ -211,11 +211,13 @@ Object* Factory::createObject(const std::string& filename)
 			Animation* a = (Animation*)((ComponentCreator<Animation>*) componentMap["Animation"])->Create();
 
 			std::string path;
+
 			jsonloop.readString(path, "Properties", "texturepath");
 			bool exist = AssetManager::animationcheckexist(path);
 			if (!exist)
 			{
 				std::cout << "Missing Animation Texture!" << std::endl;
+				continue; // No animations, skipped adding component
 			}
 			else
 			{
@@ -227,81 +229,103 @@ Object* Factory::createObject(const std::string& filename)
 			if (jsonloop.isMember("jumpfixframe", "Properties"))
 				jsonloop.readInt(a->jump_fixed_frame, "Properties", "jumpfixframe");
 
-			jsonloop.readFloat(a->opacity, "Properties", "opacity");
+			if (jsonloop.isMember("opacity", "Properties"))
+				jsonloop.readFloat(a->opacity, "Properties", "opacity");
 
-			float col;
-			float row;
-			jsonloop.readFloat(col, "Properties", "frame", 0);
-			jsonloop.readFloat(row, "Properties", "frame", 1);
+			if (jsonloop.isMember("faceright", "Properties"))
+				jsonloop.readBool(a->face_right, "Properties", "faceright");
 
-			bool faceright = true;
+			jsonloop.readFloat(a->animation_scale.first, "Properties", "frame", 0);
+			jsonloop.readFloat(a->animation_scale.second, "Properties", "frame", 1);
 
 			// Create frame_map
-			for (int j = 0; j < AnimationType::End; j++)
+			for (int j = 1; j <= a->animation_scale.second; j++)
 			{
-				std::string animationtype;
-				switch (j)
-				{
-					case AnimationType::Idle:
-						animationtype = "idle";
-						faceright = true;
-						break;
-					case AnimationType::Push:
-						animationtype = "push";
-						faceright = true;
-						break;
-					case AnimationType::Jump:
-						animationtype = "jump";
-						faceright = true;
-						break;
-					case AnimationType::Run:
-						animationtype = "run";
-						faceright = true;
-						break;
-					case AnimationType::Idle_left:
-						animationtype = "idle";
-						faceright = false;
-						break;
-					case AnimationType::Push_left:
-						animationtype = "push";
-						faceright = false;
-						break;
-					case AnimationType::Jump_left:
-						animationtype = "jump";
-						faceright = false;
-						break;
-					case AnimationType::Run_left:
-						animationtype = "run";
-						faceright = false;
-						break;
-					default:
-						animationtype = "error";
-						faceright = true;
-						break;
-				}
+				std::pair<int, AnimationType> animationframesecond;
 
-				AnimationType frametype = static_cast<AnimationType>(j);
 				std::vector<GLApp::GLModel> animationmodel;
 
 				// Ensure AnimationType exist before gathering data into animation_map
-				
-				if (jsonloop.isMember(animationtype, "Properties"))
-				{
-					float framecol;
-					float framerow;
-					jsonloop.readFloat(framecol, "Properties", animationtype, 0);
-					jsonloop.readFloat(framerow, "Properties", animationtype, 1);
 
-					for (int i = 0; i < framecol; i++)
+				if (jsonloop.isMember(std::to_string(j), "Properties"))
+				{
+					int framecol;
+					std::string animationtype;
+
+					jsonloop.readInt(framecol, "Properties", std::to_string(j), 0);
+					jsonloop.readString(animationtype, "Properties", std::to_string(j), 1);
+
+					AnimationType anitype = stringToAnimationType(animationtype);
+
+					animationframesecond.first = framecol;
+					animationframesecond.second = anitype;
+
+					a->animation_frame.emplace(j, animationframesecond);
+
+					// Create left facing version of the animations if necessary
+					if (a->face_right == false)
 					{
-						GLApp::GLModel model = a->setup_texobj_animation(i/col, (framerow-1)/row, (i+1)/col, framerow/row ,faceright);
-						animationmodel.push_back(model);
+						switch (anitype)
+						{
+						case AnimationType::Idle:
+							animationframesecond.second = AnimationType::Idle_left;
+							break;
+						case AnimationType::Push:
+							animationframesecond.second = AnimationType::Push_left;
+							break;
+						case AnimationType::Jump:
+							animationframesecond.second = AnimationType::Jump_left;
+							break;
+						case AnimationType::Run:
+							animationframesecond.second = AnimationType::Run_left;
+							break;
+						case AnimationType::Teleport:
+							animationframesecond.second = AnimationType::Teleport_left;
+							break;
+						default:
+							animationframesecond.second = AnimationType::No_Animation_Type;
+							break;
+						}
+
+						//std::cout << "Creating left variant\n";
+
+						// j needs to be different from non left version (j+scale)
+						a->animation_frame.emplace(j + static_cast<int>(a->animation_scale.second), animationframesecond);
+					}
+
+					// Special case, number of rows indicated is more than initial declared but still exist in json data
+					// Normally only used in cases where there is only a row but you want different frames for the same row
+					int g = j + 1;
+					while (g > a->animation_scale.second && jsonloop.isMember(std::to_string(g), "Properties"))
+					{
+						jsonloop.readInt(framecol, "Properties", std::to_string(g), 0);
+						jsonloop.readString(animationtype, "Properties", std::to_string(g), 1);
+
+						anitype = stringToAnimationType(animationtype);
+
+						animationframesecond.first = framecol;
+						animationframesecond.second = anitype;
+
+						// Still creating animation frame with different framecol, will properly calculate in set_up_map
+						a->animation_frame.emplace(g, animationframesecond);
+						g++;
 					}
 				}
-
-				a->animation_Map.emplace(frametype, animationmodel);
 			}
 
+			// Dump data for testing
+			//std::cout << "AnimationRow: " << a->animation_scale.second << ", AnimationCol: " << a->animation_scale.first << std::endl;
+			//for (auto& frame : a->animation_frame)
+			//{
+			//	std::cout << "Row: " << frame.first;
+			//	std::cout << ", Col: " << frame.second.first;
+			//	std::cout << ", Type: " << frame.second.second << std::endl;
+			//}
+
+			a->set_up_map();
+
+			// Set it back to facing right by default after the creations of animation map
+			a->face_right = true;
 			obj->AddComponent(a);
 		}
 		else if (type == "Event")
@@ -312,9 +336,9 @@ Object* Factory::createObject(const std::string& filename)
 
 			obj->AddComponent(e);
 		}
-		else if (type == "Behaviour") 
+		else if (type == "Behaviour")
 		{
-			Behaviour *b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
+			Behaviour* b = (Behaviour*)((ComponentCreator<Behaviour>*) componentMap["Behaviour"])->Create();
 			std::string temp_name;
 			int temp_index;
 			jsonloop.readString(temp_name, "Properties", "Script");
@@ -375,7 +399,7 @@ Object* Factory::createObject(const std::string& filename)
 
 	// Run the initialization routines for each component (if there is any)
 	obj->Initialize();
-	
+
 	// Clean up
 	jsonobj.closeFile();
 	return obj;
@@ -410,20 +434,20 @@ void Factory::saveObject(std::string filename, Object* obj) {
 	}
 
 	// Texture
-	if (te != nullptr){
+	if (te != nullptr) {
 		Json::Value texture;
 		texture["Type"] = "Texture";
 		texture["Properties"]["texturepath"] = te->textureName;
 		texture["Properties"]["opacity"] = te->opacity;
 		jsonobj["Components"].append(texture);
-	
+
 	}
 
 	// Animation 
 	if (a != nullptr) {
 		Json::Value animation;
 		animation["Type"] = "Animation";
-		
+
 		// TODO: It's incomplete
 
 		for (const auto& pair : AssetManager::animations) {
@@ -443,7 +467,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 		animation["Properties"]["opacity"] = a->opacity;
 
 		jsonobj["Components"].append(animation);
-	
+
 	}
 
 	// Text
@@ -455,7 +479,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 		jsonobj["Components"].append(text);
 	}
 
-	
+
 	// Body
 	if (bo != nullptr) {
 		Json::Value body;
@@ -488,7 +512,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 			body["Properties"]["collision_response"] = l->collision_response;
 		}
 		jsonobj["Components"].append(body);
-	
+
 	}
 
 	// Physics
@@ -528,7 +552,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 	}
 
 	// Save the object to a file
-	
+
 	std::ofstream outputFile("Asset/Objects/" + filename);
 	if (outputFile.is_open()) {
 		Json::StreamWriterBuilder writer;
@@ -575,7 +599,7 @@ void Factory::Update() {
 			//Delete it and remove its entry in the Id map
 			delete obj;
 			objectMap.erase(gameObjectInMap);
-			
+
 			nextObjectId--;
 
 			// Move all the next objects id down by one
@@ -591,9 +615,9 @@ void Factory::Update() {
 #endif
 		}
 	}
-	
+
 	//All objects to be delete have been deleted
-	gameObjsToBeDeleted.clear();	
+	gameObjsToBeDeleted.clear();
 
 }
 //This destroys all game objects
@@ -669,7 +693,7 @@ Object* Factory::getPlayerObject()
 Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 {
 	//Object* obj = createEmptyObject();
-	Object* obj = new Object(); 
+	Object* obj = new Object();
 
 	// Clone the object name and the prefab it is using
 	obj->name = object->GetName();
@@ -709,7 +733,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 		else if (component.first == ComponentType::Body)
 		{
 			Body* body_pt = static_cast<Body*>(object->GetComponent(ComponentType::Body));
-			
+
 			if (body_pt->GetShape() == Shape::Rectangle) {
 				Rectangular* r = (Rectangular*)((ComponentCreator<Rectangular>*) componentMap["Rectangle"])->Create();
 
@@ -771,7 +795,12 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			ani->frame_rate = ani_tmp->frame_rate;
 			ani->jump_fixed_frame = ani_tmp->jump_fixed_frame;
 			ani->opacity = ani_tmp->opacity;
-			
+			ani->face_right = ani_tmp->face_right;
+			ani->animation_scale = ani_tmp->animation_scale;
+			ani->animation_frame = ani_tmp->animation_frame;
+
+
+
 			obj->AddComponent(ani);
 		}
 		else if (component.first == ComponentType::Event)
@@ -791,7 +820,9 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			obj->AddComponent(b);
 			b->SetBehaviourIndex(b_tmp->GetBehaviourIndex());
 			b->SetBehaviourName(b_tmp->GetBehaviourName());
-			
+			b->SetBehaviourCounter(b_tmp->GetBehaviourCounter());
+			b->SetBehaviourDistance(b_tmp->GetBehaviourDistance());
+			b->SetBehaviourSpeed(b_tmp->GetBehaviourSpeed());
 		}
 		else if (component.first == ComponentType::ParticleSystem) // @guochen
 		{
@@ -845,7 +876,7 @@ Object* Factory::FindObject(std::string name)
 	{
 		return nullptr;
 	}
-	
+
 	for (auto it = objectMap.begin(); it != objectMap.end(); it++)
 	{
 		Object* testObject = it->second;
@@ -910,7 +941,7 @@ int Factory::CreateLayer(std::string layerName, LayerSettings settings) {
 }
 
 void Factory::AddToLayer(int layerNum, Object* obj) {
-	
+
 	// Check if out of bounds
 	if (layerNum < SceneManager::layers.size()) {
 		// If not out of bounds, push the object pointer
@@ -930,7 +961,7 @@ void Factory::AddToLayer(std::string layerName, Object* obj) {
 int Factory::GetLayerNum(std::string layerName) {
 	auto it = std::find_if(SceneManager::layers.begin(), SceneManager::layers.end(), [&layerName](const auto& layer) {
 		return layer.first == layerName;
-	});
+		});
 
 	if (it != SceneManager::layers.end()) {
 		return static_cast<int>(it - SceneManager::layers.begin());
@@ -946,7 +977,7 @@ std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* Factory:
 		if (l.first == layerName)
 			return &l;
 	}
-	
+
 	return nullptr;
 }
 

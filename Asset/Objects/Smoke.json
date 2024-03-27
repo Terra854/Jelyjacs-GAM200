@@ -1,0 +1,30 @@
+{
+  "Name": "Smoke",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 384.0,
+          "y": 512.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Animation",
+      "Properties": {
+        "texturepath": "Smoke.png",
+        "framerate": 0.1,
+        "frame": [7, 3],
+        "1":[7,"idle"],
+        "2":[7,"idle"],
+        "3":[6,"idle"]
+      }
+    }
+  ]
+}

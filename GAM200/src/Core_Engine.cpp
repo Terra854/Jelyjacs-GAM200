@@ -132,8 +132,7 @@ void Update(ISystems* sys)
 ********************************************************************************/
 void CoreEngine::GameLoop()
 {
-	// FPS Variables
-	int numofsteps = 0;
+	// For fixed dt
 	double accumulator = 0.0;
 
 	//gamehud.Initialize();
@@ -194,7 +193,7 @@ void CoreEngine::GameLoop()
 		auto m_BeginFrame = std::chrono::system_clock::now();
 
 #if defined(DEBUG) | defined(_DEBUG)	
-		hud.NewGuiFrame(1);
+		hud.NewGuiFrame(0);
 
 		// Toggle Button to Display Debug Information in IMGui
 		//if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
@@ -649,28 +648,32 @@ void CoreEngine::GameLoop()
 		glfwSwapBuffers(window->ptr_window);
 #endif
 
+		// Update the time
+		//auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
+		//auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
+		
 		// FPS Calculation
-		auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
-		auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
-
 		auto m_EndFrame = std::chrono::system_clock::now();
 		dt = std::chrono::duration<float>(m_EndFrame - m_BeginFrame).count();			// Delta Time
 		core_fps = 1.f / dt;															// FPS
 		window->fps = core_fps;
 		accumulator += dt;																// Accumulator
-		while (accumulator >= fixed_dt)													// Fixed Time Step - for physics
+
+		numofsteps = 0;
+		while (accumulator >= Get_Fixed_DT())											// Fixed Time Step
 		{
-			accumulator -= fixed_dt;
+			accumulator -= Get_Fixed_DT();
 			numofsteps++;
 		}
 
 		// Update delta_time every second
+		/*
 		if (time_in_seconds > prev_time_in_seconds)
 		{
 			//std::cout << "FPS: " << core_fps << std::endl;
 			//std::cout << "DT: " << dt << std::endl;
 			prev_time_in_seconds = time_in_seconds;
-		}
+		}*/
 
 
 		// Updating Frame Times
@@ -719,66 +722,3 @@ void CoreEngine::Broadcast(Message_Handler* msg)
 		sys.second->MessageRelay(msg);
 	}
 }
-
-/*
-int CoreEngine::convertGridToWorldPos(int gridPos, Axis axis)
-{
-	if (axis == Axis::X)
-	{
-		int xPos = gridPos + static_cast<int>(window->width / 2);
-		return xPos;
-	}
-	else //axis == Axis::Y
-	{
-		int yPos = static_cast<int>(window->height / 2) - gridPos;
-		return yPos;
-	}
-}
-int CoreEngine::convertMousePosToGridPos(Axis axis)
-{
-	if (axis == Axis::X)
-	{
-		int xPos = static_cast<int>(input::GetMouseX()) - static_cast<int>(window->width / 2);
-		return xPos;
-	}
-	else //axis == Axis::Y
-	{
-		int yPos = static_cast<int>(window->height / 2) - static_cast<int>(input::GetMouseY());
-		return yPos;
-	}
-}
-
-bool CoreEngine::checkIfMouseIsWithinGrid(int leftX, int rightX, int topY, int bottomY)
-{
-	int leftXPos = convertGridToWorldPos(leftX, Axis::X);
-	int rightXPos = convertGridToWorldPos(rightX, Axis::X);
-	int topYPos = convertGridToWorldPos(topY, Axis::Y);
-	int bottomYPos = convertGridToWorldPos(bottomY, Axis::Y);
-
-	if (input::GetMouseX() < (double)leftXPos)
-	{
-		std::cout << "Mouse too far left\n";
-		return false;
-	}
-
-	if (input::GetMouseX() > (double)rightXPos)
-	{
-		std::cout << "Mouse too far right\n";
-		return false;
-	}
-
-	if (input::GetMouseY() < (double)topYPos)
-	{
-		std::cout << "Mouse too far up\n";
-		return false;
-	}
-
-	if (input::GetMouseY() > (double)bottomYPos)
-	{
-		std::cout << "Mouse too far down\n";
-		return false;
-	}
-
-	return true;
-}
-*/

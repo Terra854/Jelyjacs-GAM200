@@ -300,6 +300,24 @@
     <ClCompile Include="src\Scripts\ZoomButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\MainMenuStartGameButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\MainMenuOptionsButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\MainMenuQuitButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\MainMenuLoadGameButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\DialogueSequence.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\ChatBoxNextButton.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -540,6 +558,24 @@
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\ZoomButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\MainMenuStartGameButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\MainMenuLoadGameButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\MainMenuOptionsButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\MainMenuQuitButton.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\DialogueSequence.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\ChatBoxNextButton.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>

@@ -32,8 +32,6 @@ public:
 	LevelEditor();
 	~LevelEditor();
 
-	void RefreshLevelList();
-
 	void LoadLevelPanel();
 
 	void SaveAsDialog();
@@ -41,8 +39,6 @@ public:
 	void NewPrefabDialog();
 
 	void UpdateAllObjectInstances(Object* object);
-
-	void PhysicsDebugControl();
 
 	virtual void Initialize();
 	void Update();
@@ -67,9 +63,11 @@ private:
 	Factory::objectIDMap initialObjectMap;
 
 	void LE_InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0);
+	void LE_InputInt(const char* label, int* v);
 	void LE_InputFloat(const char* label, float* v);
 	void LE_InputFloat2(const char* label, float* v);
 	void DeleteSound(std::string audioType, int audio_num);
+	void AddTexture();
 	void AddAudio();
 	static std::string OpenFileDialog(int type);
 };

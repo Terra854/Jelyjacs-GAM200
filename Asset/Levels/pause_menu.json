@@ -67,8 +67,8 @@
           "Prefabs": "fullscreen_button.json",
           "Rotation": 0.0,
           "Scale": {
-            "x": 247.10000610351562,
-            "y": 39.099998474121094
+            "x": 251.7,
+            "y": 36.8
           },
           "Type": "Transform",
           "counter": 0.0,
@@ -105,8 +105,8 @@
           "Prefabs": "how_to_play_button.json",
           "Rotation": 0.0,
           "Scale": {
-            "x": 260.0,
-            "y": 40.0
+            "x": 273.2,
+            "y": 48.3
           },
           "Type": "Transform",
           "counter": 0.0,

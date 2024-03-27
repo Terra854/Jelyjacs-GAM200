@@ -11,6 +11,7 @@ This file contains the script for the in-game clickable buttons
 #include <Factory.h>
 #include <Core_Engine.h>
 #include <SceneManager.h>
+#include <../components/Texture.h>
 
 // Constructor for the RestartButton class.
 // @param name: The name of the portal.
@@ -32,19 +33,28 @@ void RestartButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void RestartButton::Update(Object* obj) {
-    if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+    if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         //std::cout << "NIL OBJ : RestartButton" << std::endl;
         return;
     }
+    Texture* tex = static_cast<Texture*>(obj->GetComponent(ComponentType::Texture));
+    if (!isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
+        tex->textureName = "Restart.png";
+        return;
+    }
 
-    if (isObjectClicked((Transform*) obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
-		std::cout << "Button Clicked" << std::endl;
-		audio->playSfx("button_click");
+    tex->textureName = "Restart_glow.png";
+
+    if (input::IsPressed(KEY::mouseL))
+    {
+        std::cout << "Button Clicked" << std::endl;
+        audio->playSfx("button_click");
 
         // Restart the level.
         GameLogic::restarting = true;
+    }
 
-	}
+    
 }
 /*********************************************************************/
 // Shutdown method called when the RestartButton script is being shut down.

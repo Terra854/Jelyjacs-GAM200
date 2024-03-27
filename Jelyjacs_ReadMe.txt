@@ -23,6 +23,11 @@ Delete selected object: Del
 Graphic debug display: L
 
 
+Cheat:
+Characters No Collision : 1
+Characters complete the level : 2
+
+
 TEAM ROSTER
 ===========
 

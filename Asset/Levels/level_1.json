@@ -49,6 +49,62 @@
             "x": 128.0,
             "y": 128.0
           }
+        },
+        {
+          "Prefabs": "Smoke.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 875.0,
+            "y": 580.0
+          }
+        },
+        {
+          "Prefabs": "Light.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -112.0,
+            "y": 140.0
+          },
+          "Scale": {
+            "x": 96.0,
+            "y": 48.0
+          }
+        },
+        {
+          "Prefabs": "Light.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -352.0,
+            "y": 525.0
+          },
+          "Scale": {
+            "x": 96.0,
+            "y": 48.0
+          }
+        },
+        {
+          "Prefabs": "ControlPanels2.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 250.0,
+            "y": 50.0
+          },
+          "Scale": {
+            "x": 32.0,
+            "y": 64.0
+          }
+        },
+        {
+          "Prefabs": "TestTubeSign.json",
+          "Type": "Transform",
+          "Position": {
+            "x": 120.0,
+            "y": 50.0
+          },
+          "Scale": {
+            "x": 64.0,
+            "y": 128.0
+          }
         }
       ]
     },
@@ -64,7 +120,15 @@
           "Type": "Transform",
           "Position": {
             "x": -352.0,
-            "y": 352.0
+            "y": 338.0
+          }
+        },
+        {
+          "Prefabs": "MainDoorStart.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -112.0,
+            "y": 18.0
           }
         },
         {
@@ -1408,7 +1472,7 @@
           }
         },
         {
-          "Prefabs": "DoorCyan.json",
+          "Prefabs": "PressureDoorCyan.json",
           "Type": "Transform",
           "Position": {
             "x": 192.0,
@@ -1421,16 +1485,16 @@
           "Type": "Transform",
           "Position": {
             "x": 128.0,
-            "y": -38.0
+            "y": -48.0
           },
           "linkedevent": 1
         },
         {
-          "Prefabs": "PistonPurple.json",
+          "Prefabs": "PressurePlatePurple.json",
           "Type": "Transform",
           "Position": {
             "x": 448.0,
-            "y": -166.0
+            "y": -176.0
           },
           "linkedevent": 2
         },
@@ -1536,16 +1600,6 @@
           "linkedevent": 6
         },
         {
-          "Name": "LaserPink_Timed",
-          "Prefabs": "LaserPink_Timed.json",
-          "Type": "Transform",
-          "Position": {
-            "x": 338.0,
-            "y": 416.0
-          },
-          "linkedevent": 6
-        },
-        {
           "Prefabs": "PinkHorizontalDoor.json",
           "Type": "Transform",
           "Position": {
@@ -1560,12 +1614,12 @@
           "Type": "Transform",
           "Position": {
             "x": 224.0,
-            "y": 282.0
+            "y": 272.0
           },
           "linkedevent": 7
         },
         {
-          "Prefabs": "DoorOrange.json",
+          "Prefabs": "PressureDoorOrange.json",
           "Type": "Transform",
           "Position": {
             "x": -32.0,
