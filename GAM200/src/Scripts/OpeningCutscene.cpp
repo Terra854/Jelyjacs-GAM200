@@ -105,6 +105,7 @@ void OpeningCutscene::Update(Object* obj) {
 		if (31.f < OpeningCutsceneTime) {
 			audio->setBackgroundAudio("main_menu_bg");
 			audio->stopSfx(rain_sfx);
+			audio->stopSfx(people_sfx);
 			SceneManager::LoadScene("main_menu.json");
 		}
 
