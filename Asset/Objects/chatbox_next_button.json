@@ -1,16 +1,16 @@
 {
-  "Name": "chatbox_next_button",
+  "Name": "ChatBoxNextButton",
   "Components": [
     {
       "Type": "Transform",
       "Properties": {
         "Position": {
-          "x": 0.0,
-          "y": 0.0
+          "x": 600.0,
+          "y": -363.0
         },
         "Scale": {
-          "x": 1.0,
-          "y": 1.0
+          "x": 100.0,
+          "y": 100.0
         },
         "Rotation": 0.0
       }

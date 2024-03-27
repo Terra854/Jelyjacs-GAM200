@@ -5,12 +5,12 @@
       "Type": "Transform",
       "Properties": {
         "Position": {
-          "x": 0.0,
-          "y": 0.0
+          "x": -619.0,
+          "y": -350.0
         },
         "Scale": {
-          "x": 1,
-          "y": 1
+          "x": 200,
+          "y": 188
         },
         "Rotation": 0.0
       }
@@ -19,13 +19,6 @@
       "Type": "Texture",
       "Properties": {
         "texturepath": "Updated_character_box_finn.png"
-      }
-    },
-    {
-      "Type": "Behaviour",
-      "Properties": {
-        "Script": "DialogueSequence",
-        "Index": 0
       }
     }
   ]
