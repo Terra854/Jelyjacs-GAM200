@@ -564,21 +564,37 @@ void LevelEditor::ObjectProperties() {
 
 			ImGui::SeparatorText("Animation Settings");
 			
-			if (ImGui::BeginTable("AnimationSettings", 3, NULL)) {
+			if (ImGui::BeginTable("AnimationSettings", 4, NULL)) {
 				ImGui::TableSetupColumn("Row", ImGuiTableColumnFlags_WidthFixed, 50.f);
 				ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 50.f);
-				ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthStretch);
+				ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed, 150.f);
+				ImGui::TableSetupColumn("Options", ImGuiTableColumnFlags_WidthStretch);
 
 				ImGui::TableHeadersRow();
 
-				for (auto& pair : a->animation_frame) {
+				//for (auto& pair : a->animation_frame) {
+
+				int a_size = a->animation_frame.size();
+
+				for (int i = 0; i < a_size; i++) {
+
+					std::pair<int, AnimationType> pair;
+
+					try {
+						pair = a->animation_frame.at(i + 1);
+					}
+					catch (std::out_of_range) {
+						a_size++;
+						continue;
+					}
+					
 					ImGui::TableNextRow();
+					ImGui::TableNextColumn();
+					ImGui::Text("%d", i+1);
 					ImGui::TableNextColumn();
 					ImGui::Text("%d", pair.first);
 					ImGui::TableNextColumn();
-					ImGui::Text("%d", pair.second.first);
-					ImGui::TableNextColumn();
-					switch (pair.second.second) {
+					switch (pair.second) {
 					case AnimationType::Idle:
 						ImGui::Text("Idle");
 						break;
@@ -613,8 +629,26 @@ void LevelEditor::ObjectProperties() {
 						ImGui::Text("No Animation Type");
 						break;
 					}
+
+					ImGui::TableNextColumn();
+
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+
+					sprintf_s(buffer, "Delete##AnimationSettingRow%d", i+1);
+					if (ImGui::Button(buffer))
+					{
+						a->animation_frame.erase(i+1);
+					}
+					ImGui::PopStyleColor(3);
 				}
+				
 				ImGui::EndTable();
+
+				if (ImGui::Button("Add Row")) {
+					a->animation_frame.insert(std::make_pair((a->animation_frame.empty() ? 1 : a->animation_frame.rbegin()->first + 1), std::make_pair(0, AnimationType::No_Animation_Type)));
+				}
 			}
 			LE_InputInt("Jump Fixed Frame", &a->jump_fixed_frame);
 		}
