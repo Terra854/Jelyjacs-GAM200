@@ -4205,8 +4205,8 @@
           "Name" : "PressurePlatePink_Elevator",
           "Position" : 
           {
-            "x" : 1276.0,
-            "y" : -18.0
+            "x" : 1376.0,
+            "y" : 202.0
           },
           "Prefabs" : "PressurePlatePink_Elevator.json",
           "Properties" : 
@@ -4232,8 +4232,8 @@
           "Name" : "PressurePlateDarkBlue",
           "Position" : 
           {
-            "x" : 1367.0,
-            "y" : 202.0
+            "x" : 1276.0,
+            "y" : -18.0
           },
           "Prefabs" : "PressurePlateDarkBlue.json",
           "Properties" : 
