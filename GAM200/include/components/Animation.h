@@ -25,7 +25,7 @@ enum AnimationType
 	Jump_left,
 	Run_left,
 	Teleport_left,
-	No_Animation_Type // This should always be the last type
+	Error // This should always be the last type
 };
 
 class Animation : public Component

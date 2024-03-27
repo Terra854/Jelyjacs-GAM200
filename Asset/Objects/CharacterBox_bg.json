@@ -20,13 +20,6 @@
       "Properties": {
         "texturepath": "Updated_character_box_finn.png"
       }
-    },
-    {
-      "Type": "Behaviour",
-      "Properties": {
-        "Script": "DialogueSequence",
-        "Index": 0
-      }
     }
   ]
 }

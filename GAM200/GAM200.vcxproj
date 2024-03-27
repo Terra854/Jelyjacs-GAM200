@@ -160,8 +160,10 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
+    <ClInclude Include="include\components\Dialogue.h" />
     <ClInclude Include="include\components\Particle.h" />
     <ClInclude Include="include\components\Text.h" />
+    <ClInclude Include="include\DialogueSystem.h" />
     <ClInclude Include="include\LayerSettings.h" />
     <ClInclude Include="include\Scripts\Box.h" />
     <ClInclude Include="include\Scripts\ButtonBase.h" />
@@ -178,6 +180,8 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Assets Manager\json_serialization.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Body.cpp" />
+    <ClCompile Include="src\Dialogue.cpp" />
+    <ClCompile Include="src\DialogueSystem.cpp" />
     <ClCompile Include="src\GameHud.cpp" />
     <ClCompile Include="src\Gizmo.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

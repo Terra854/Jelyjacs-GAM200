@@ -135,6 +135,8 @@ void AssetManager::Initialize()
 	{
 		std::cout << pathfonts << " does not exsit!" << std::endl;
 	}
+
+
 }
 
 /******************************************************************************

@@ -851,20 +851,12 @@
           }
         },
         {
-          "Name" : "DialogueSequence1",
-          "Position" : 
-          {
-            "x" : -350.0,
-            "y" : -120.0
-          },
-          "Prefabs" : "Dialogue_Sequence_1.json",
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 200.0,
-            "y" : 200.0
-          },
-          "Type" : "Transform"
+          "Prefabs": "Dialogue_sequence_1.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -350.0,
+            "y": -130.0
+          }
         }
       ]
     }

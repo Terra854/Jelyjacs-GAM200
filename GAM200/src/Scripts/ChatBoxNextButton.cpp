@@ -35,6 +35,7 @@ void ChatBoxNextButton::Start(Object* obj) {
 /*********************************************************************/
 void ChatBoxNextButton::Update(Object* obj) {
     if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+        //std::cout << "NIL OBJ : QuitButton" << std::endl;
         return;
     }
 
@@ -43,10 +44,14 @@ void ChatBoxNextButton::Update(Object* obj) {
     {
         return;
     }
+    
+
+
+    
+
     if (input::IsPressed(KEY::mouseL))
     {
         audio->playSfx("button_click");
-        objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = false;
     }
 }
 /*********************************************************************/

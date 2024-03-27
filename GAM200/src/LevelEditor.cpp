@@ -379,14 +379,9 @@ void LevelEditor::ObjectProperties() {
 		for (auto& l : SceneManager::layers) {
 			if (ImGui::Selectable(l.first.c_str())) {
 				Object* o = objectFactory->cloneObject(object, 0, 64);
-
-				// For inserting prefab
-				if (!o->GetPrefab())
-					o->SetPrefab(object);
-
 				objectFactory->assignIdToObject(o);
 				selectedNum = o->GetId();
-				//o->SetPrefab(object->GetPrefab()); // testing this line
+				o->SetPrefab(object->GetPrefab()); // testing this line
 				cloneSuccessful = selectedNum;
 				l.second.second.push_back(o);
 			}
@@ -562,60 +557,103 @@ void LevelEditor::ObjectProperties() {
 			LE_InputFloat("Frame Rate", &a->frame_rate);
 			LE_InputFloat2("Animation Scale", &a->animation_scale.first);
 
-			ImGui::SeparatorText("Animation Settings");
-			
-			if (ImGui::BeginTable("AnimationSettings", 3, NULL)) {
-				ImGui::TableSetupColumn("Row", ImGuiTableColumnFlags_WidthFixed, 50.f);
-				ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 50.f);
-				ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthStretch);
+			/*
+			for (auto& pair : a->animation_frame) {
+				ImGui::BeginChild("AnimationType", ImVec2(ImGui::GetContentRegionAvail().x * 0.333333f, 40.f));
 
-				ImGui::TableHeadersRow();
+				// Get the child window's size
+				ImVec2 childSize = ImGui::GetWindowSize();
 
-				for (auto& pair : a->animation_frame) {
-					ImGui::TableNextRow();
-					ImGui::TableNextColumn();
-					ImGui::Text("%d", pair.first);
-					ImGui::TableNextColumn();
-					ImGui::Text("%d", pair.second.first);
-					ImGui::TableNextColumn();
-					switch (pair.second.second) {
-					case AnimationType::Idle:
-						ImGui::Text("Idle");
-						break;
-					case AnimationType::Push:
-						ImGui::Text("Push");
-						break;
-					case AnimationType::Jump:
-						ImGui::Text("Jump");
-						break;
-					case AnimationType::Run:
-						ImGui::Text("Run");
-						break;
-					case AnimationType::Teleport:
-						ImGui::Text("Teleport");
-						break;
-					case AnimationType::Idle_left:
-						ImGui::Text("Idle_left");
-						break;
-					case AnimationType::Push_left:
-						ImGui::Text("Push_left");
-						break;
-					case AnimationType::Jump_left:
-						ImGui::Text("Jump_left");
-						break;
-					case AnimationType::Run_left:
-						ImGui::Text("Run_left");
-						break;
-					case AnimationType::Teleport_left:
-						ImGui::Text("Teleport_left");
-						break;
-					case AnimationType::No_Animation_Type:
-						ImGui::Text("No Animation Type");
-						break;
-					}
+				// Calculate the text's size
+
+				switch (pair.first) {
+				case AnimationType::Idle:
+					ImGui::Text("Idle");
+					break;
+				case AnimationType::Push:
+					ImGui::Text("Push");
+					break;
+				case AnimationType::Jump:
+					ImGui::Text("Jump");
+					break;
+				case AnimationType::Run:
+					ImGui::Text("Run");
+					break;
+				case AnimationType::Teleport:
+					ImGui::Text("Teleport");
+					break;
+				case AnimationType::Idle_left:
+					ImGui::Text("Idle_left");
+					break;
+				case AnimationType::Push_left:
+					ImGui::Text("Push_left");
+					break;
+				case AnimationType::Jump_left:
+					ImGui::Text("Jump_left");
+					break;
+				case AnimationType::Run_left:
+					ImGui::Text("Run_left");
+					break;
+				case AnimationType::Teleport_left:
+					ImGui::Text("Teleport_left");
+					break;
 				}
-				ImGui::EndTable();
-			}
+
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+				ImGui::BeginChild("AnimationRow", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 40.f));
+
+				// Calculate the text's size
+				sprintf_s(buffer, "Top");
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2((childSize.x - textSizeX.x) * 0.5f, textSizeX.y);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				if (r->top_collision != nullptr)
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+				ImGui::Text("%s", text.c_str());
+
+				LE_InputFloat("", &pair.first);
+
+				ImGui::EndChild();
+
+				ImGui::SameLine();
+
+
+				ImGui::BeginChild("P2", ImVec2(0.f, 40.f));
+
+				// Calculate the text's size
+				sprintf_s(buffer, "P2: x: %.5f", r->aabb.P2().x);
+				text = buffer;
+				textSizeX = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position
+				textPosX = ImVec2(0, 0);
+				ImGui::SetCursorPos(textPosX);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+
+				// Calculate the text's size
+				sprintf_s(buffer, "    y: %.5f", r->aabb.P2().y);
+				text = buffer;
+				textSizeY = ImGui::CalcTextSize(text.c_str());
+
+				// Set the cursor position to bottom right minus the text size
+				textPosY = ImVec2(0, textSizeX.y);
+				ImGui::SetCursorPos(textPosY);
+
+				// Render the text
+				ImGui::Text("%s", text.c_str());
+				ImGui::EndChild();
+			}*/
 			LE_InputInt("Jump Fixed Frame", &a->jump_fixed_frame);
 		}
 	}
@@ -1491,7 +1529,7 @@ void LevelEditor::AssetList()
 				AssetManager::loadalltextures();
 
 			}
-			ImGui::BeginChild("AssetListScrollTexture", ImGui::GetContentRegionAvail());
+			ImGui::BeginChild("AssetListScroll", ImGui::GetContentRegionAvail());
 			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 			for (const std::pair<std::string, GLuint>& t : AssetManager::textures)
@@ -1529,46 +1567,6 @@ void LevelEditor::AssetList()
 			ImGui::EndChild();
 			ImGui::EndTabItem();
 		}
-	}
-	if (ImGui::BeginTabItem("Animations")) {
-		ImGui::Text("wip");
-
-		ImGui::BeginChild("AssetListScrollAnimation", ImGui::GetContentRegionAvail());
-		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-
-		for (const std::pair<std::string, GLuint>& a : AssetManager::animations)
-		{
-			sprintf_s(buffer, "##%s", a.first.c_str());
-
-			// Start the invisible button
-
-			if (ImGui::Button(buffer, button_size))
-			{
-				
-			}
-
-			if (ImGui::BeginDragDropSource())
-			{
-				ImGui::SetDragDropPayload("Game animations", a.first.c_str(), 1024);
-				ImGui::EndDragDropSource();
-			}
-
-			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
-
-			// Image
-			ImGui::Image((void*)(intptr_t)a.second, ImVec2(64, 64));
-
-			// Move to the right of the image without moving to a new line
-			ImGui::SameLine();
-
-			// Text
-			ImGui::Text(a.first.c_str());
-		}
-
-		ImGui::PopStyleColor();
-		ImGui::EndChild();
-		ImGui::EndTabItem();
 	}
 	if (ImGui::BeginTabItem("Prefabs"))
 	{
