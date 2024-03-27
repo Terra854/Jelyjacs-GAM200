@@ -8,144 +8,112 @@
       "Objects": [
         {
           "Name": "Pause_Bg",
+          "Position": {
+            "x": 0.0,
+            "y": 0.0
+          },
           "Prefabs": "Pause_Bg.json",
-          "Components": 
-          [
-            {
-            "Position": {
-              "x": 0.0,
-              "y": 0.0
-            },
-            "Rotation": 0.0,
-            "Scale": {
-              "x": 801.0,
-              "y": 1000.0
-            },
-            "Type": "Transform"
-            }
-          ]
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 801.0,
+            "y": 1000.0
+          },
+          "Type": "Transform"
         },
         {
           "Name": "resume_button",
+          "Position": {
+            "x": 46.0,
+            "y": 339.0
+          },
           "Prefabs": "resume_button.json",
-          "Components": [{
-            "Position": {
-              "x": 46.0,
-              "y": 339.0
-            },
-            "Rotation": 0.0,
-            "Scale": {
-              "x": 171.0,
-              "y": 33.0
-            },
-            "Type": "Transform"
-            },
-            {
-            "Type": "Behaviour",
-            "counter": 0.0,
-            "distance": 0.0,
-            "index": 0.0,
-            "scripts": "ResumeButton",
-            "speed": 0.0
-            }
-          ]
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 171.0,
+            "y": 33.0
+          },
+          "Type": "Transform",
+          "counter": 0.0,
+          "distance": 0.0,
+          "index": 0.0,
+          "scripts": "ResumeButton",
+          "speed": 0.0
         },
         {
           "Name": "restart_button",
-          "Prefabs": "restart_button.json",
-          "Components": [{
-            "Position": {
-              "x": 46.0,
-              "y": 248.0
-            },
-            "Rotation": 0.0,
-            "Scale": {
-              "x": 172.60000610351562,
-              "y": 40.599998474121094
-            },
-            "Type": "Transform"
+          "Position": {
+            "x": 46.0,
+            "y": 248.0
           },
-          {
-            "Type":"Behaviour",
-            "counter": 0.0,
-            "distance": 0.0,
-            "index": 0.0,
-            "scripts": "RestartButton",
-            "speed": 0.0
-          }
-        ]
+          "Prefabs": "restart_button.json",
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 172.60000610351562,
+            "y": 40.599998474121094
+          },
+          "Type": "Transform",
+          "counter": 0.0,
+          "distance": 0.0,
+          "index": 0.0,
+          "scripts": "RestartButton",
+          "speed": 0.0
         },
         {
           "Name": "fullscreen_button",
-          "Prefabs": "fullscreen_button.json",
-          "Components": [{
           "Position": {
             "x": 65.0,
             "y": -62.0
           },
+          "Prefabs": "fullscreen_button.json",
           "Rotation": 0.0,
           "Scale": {
             "x": 251.7,
             "y": 36.8
           },
-          "Type": "Transform"
-        },
-        {
-          "Type":"Behaviour",
+          "Type": "Transform",
           "counter": 0.0,
           "distance": 0.0,
           "index": 0.0,
           "scripts": "FullscreenButton",
           "speed": 0.0
-        }]
         },
         {
           "Name": "quit_button",
-          "Prefabs": "quit_button.json",
-          "Components": [{
           "Position": {
             "x": 54.0,
             "y": -225.0
           },
+          "Prefabs": "quit_button.json",
           "Rotation": 0.0,
           "Scale": {
             "x": 91.300003051757812,
             "y": 33.0
           },
-          "Type": "Transform"
-        },
-        {
-          "Type":"Behaviour",
+          "Type": "Transform",
           "counter": 0.0,
           "distance": 0.0,
           "index": 0.0,
           "scripts": "QuitButton",
           "speed": 0.0
-        }]
         },
         {
           "Name": "how_to_play_button",
-          "Prefabs": "how_to_play_button.json",
-          "Components": [{
           "Position": {
             "x": 65.0,
             "y": -148.0
           },
+          "Prefabs": "how_to_play_button.json",
           "Rotation": 0.0,
           "Scale": {
             "x": 273.2,
             "y": 48.3
           },
-          "Type": "Transform"
-        },
-        {
-          "Type":"Behaviour",
+          "Type": "Transform",
           "counter": 0.0,
           "distance": 0.0,
           "index": 0.0,
           "scripts": "HowToPlayButton",
           "speed": 0.0
-        }]
         }
       ],
       "Settings": {

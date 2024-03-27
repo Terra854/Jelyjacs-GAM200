@@ -5,17 +5,19 @@
       "Objects": [
         {
           "Name": "Main_MenuBG",
+          "Prefabs": "main_menuBG.json",
+          "Components": [{
           "Position": {
             "x": 0.0,
             "y": 0.0
           },
-          "Prefabs": "main_menuBG.json",
           "Rotation": 0.0,
           "Scale": {
             "x": 1920.0,
             "y": 1080.0
           },
           "Type": "Transform"
+        }]
         }
       ],
       "Settings": {
@@ -28,55 +30,67 @@
       "Objects": [
         {
           "Name": "Main_MenuTitle",
+          "Prefabs": "main_menuTitle.json",
+          "Components": [{
           "Position": {
             "x": 50.0,
             "y": 0.0
           },
-          "Prefabs": "main_menuTitle.json",
           "Rotation": 0.0,
           "Scale": {
             "x": 1500.0,
             "y": 500.0
           },
           "Type": "Transform"
+        }]
         },
         {
           "Name": "main_menuTitleStartButton",
+          "Prefabs": "main_menuTitleStart.json",
+          "Components": [{
           "Position": {
             "x": 30.0,
             "y": -300.0
           },
-          "Prefabs": "main_menuTitleStart.json",
           "Rotation": 0.0,
           "Scale": {
             "x": 222.5,
             "y": 34.75
           },
-          "Type": "Transform",
+          "Type": "Transform"
+        },
+        {
+          "Type": "Behaviour",
           "counter": 0.0,
           "distance": 0.0,
           "index": 0.0,
           "scripts": "MainMenuStartGameButton",
           "speed": 0.0
+        }]
         },
         {
           "Name": "main_menuTitleQuitButton",
+          "Prefabs": "main_menuTitleQuit.json",
+          "Components": [{
           "Position": {
             "x": 30.0,
             "y": -400.0
           },
-          "Prefabs": "main_menuTitleQuit.json",
           "Rotation": 0.0,
           "Scale": {
             "x": 79.5,
             "y": 34.75
           },
-          "Type": "Transform",
+          "Type": "Transform"
+        },
+        {
+          "Type":"Behaviour",
           "counter": 0.0,
           "distance": 0.0,
           "index": 0.0,
           "scripts": "MainMenuQuitButton",
           "speed": 0.0
+        }]
         }
       ],
       "Settings": {
@@ -89,59 +103,73 @@
       "Objects": [
         {
           "Prefabs": "Video1.json",
+          "Components": [{
           "Type": "Transform",
           "Position": {
             "x": -325.0,
             "y": 44.0
           }
+        }]
         },
         {
           "Prefabs": "Video2.json",
+          "Components": [{
           "Type": "Transform",
           "Position": {
             "x": -325.0,
             "y": 44.0
           }
+        }]
         },
         {
           "Prefabs": "Video3.json",
+          "Components": [{
           "Type": "Transform",
           "Position": {
             "x": -325.0,
             "y": 44.0
           }
+        }]
         },
         {
           "Prefabs": "Video4.json",
+          "Components": [{
           "Type": "Transform",
           "Position": {
             "x": -325.0,
             "y": 44.0
           }
+        }]
         },
         {
           "Prefabs": "Video5.json",
+          "Components": [{
           "Type": "Transform",
           "Position": {
             "x": -325.0,
             "y": 44.0
           }
+        }]
         },
         {
           "Prefabs": "Video6.json",
+          "Components": [{
           "Type": "Transform",
           "Position": {
             "x": -325.0,
             "y": 44.0
           }
+        }]
         },
         {
           "Prefabs": "Video7.json",
+          "Components": [{
           "Type": "Transform",
           "Position": {
             "x": -325.0,
             "y": 44.0
           }
+        }]
         }
       ],
       "Settings": {

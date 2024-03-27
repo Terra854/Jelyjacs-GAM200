@@ -105,105 +105,87 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 				obj = objectFactory->createEmptyObject();
 			}
 
-			// Read extra data to update object
-			std::string type;
-			jsonloop.readString(type, "Type");
-
-			if (type == "Transform")
-			{
-				Transform* tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-				if (tran_pt) {
-					jsonloop.readFloat(tran_pt->Position.x, "Position", "x");
-					jsonloop.readFloat(tran_pt->Position.y, "Position", "y");
-					jsonloop.readFloat(tran_pt->Scale.x, "Scale", "x");
-					jsonloop.readFloat(tran_pt->Scale.y, "Scale", "y");
-					jsonloop.readFloat(tran_pt->Rotation, "Rotation");
-				}
-			}
-
 			if (jsonloop.isMember("Name"))
 			{
 				std::string tempstr;
 				jsonloop.readString(tempstr, "Name");
 				obj->SetName(tempstr);
 			}
-			//else
-			//	obj->SetName("");
-			// ^Default name for objects is the name set in prefabs object list
 
-			if (jsonloop.isMember("Properties"))
-			{
-				Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
-				if (temp->GetShape() == Shape::Rectangle)
+			// Read extra data to update object
+			if (jsonloop.isMember("Components"))
+				for (auto& objcomponent : jsonloop.read("Components"))
 				{
-					Rectangular* temp2 = static_cast<Rectangular*>(temp);
-					jsonloop.readFloat(temp2->width, "Properties", "width");
-					jsonloop.readFloat(temp2->height, "Properties", "height");
+					JsonSerialization objcomponentjson;
+					objcomponentjson.jsonObject = &objcomponent;
+
+					std::string type;
+					objcomponentjson.readString(type, "Type");
+
+					if (type == "Transform")
+					{
+						Transform* tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+						if (tran_pt) {
+							objcomponentjson.readFloat(tran_pt->Position.x, "Position", "x");
+							objcomponentjson.readFloat(tran_pt->Position.y, "Position", "y");
+							objcomponentjson.readFloat(tran_pt->Scale.x, "Scale", "x");
+							objcomponentjson.readFloat(tran_pt->Scale.y, "Scale", "y");
+							objcomponentjson.readFloat(tran_pt->Rotation, "Rotation");
+						}
+					}
+
+					if (type == "Body")
+					{
+						Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+						if (temp->GetShape() == Shape::Rectangle)
+						{
+							Rectangular* temp2 = static_cast<Rectangular*>(temp);
+							objcomponentjson.readFloat(temp2->width, "Properties", "width");
+							objcomponentjson.readFloat(temp2->height, "Properties", "height");
+						}
+					}
+
+					if (type == "Event")
+					{
+						Event* event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+						objcomponentjson.readInt(event_pt->linked_event, "linkedevent");
+					}
+
+					if (type == "Behaviour")
+					{
+						Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+
+						if (objcomponentjson.isMember("index"))
+						{
+							int index{};
+							objcomponentjson.readInt(index, "index");
+							behv->SetBehaviourIndex(index);
+						}
+
+						if (objcomponentjson.isMember("counter"))
+						{
+							float counter{};
+							objcomponentjson.readFloat(counter, "counter");
+							behv->SetBehaviourCounter(counter);
+						}
+
+						if (objcomponentjson.isMember("speed"))
+						{
+							float speed{};
+							objcomponentjson.readFloat(speed, "speed");
+							behv->SetBehaviourSpeed(speed);
+						}
+
+						if (objcomponentjson.isMember("distance"))
+						{
+							float distance{};
+							objcomponentjson.readFloat(distance, "distance");
+							behv->SetBehaviourDistance(distance);
+						}
+					}
+
+					// Add here to read oher types of data if necessary WIP
 				}
-			}
-
-			if (jsonloop.isMember("linkedevent"))
-			{
-				Event* event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-				jsonloop.readInt(event_pt->linked_event, "linkedevent");
-			}
-
-			if (jsonloop.isMember("scripts"))
-			{
-				//// THIS DOESN'T REALLY WORK FOR CHANGING THE SCRIPTS OF INDIVIDUAL OBJECTS
-				//std::string behvstr;
-				//jsonloop.readString(behvstr, "scripts");
-
-				////Behaviour* b = (Behaviour*)(obj->GetComponent(ComponentType::Behaviour));
-				////Logic->RemoveBehaviourComponent(b);
-				//objectFactory->DeleteComponent(obj, ComponentType::Behaviour);
-
-				//obj->AddComponent(new Behaviour(0, behvstr));
-				////Logic->AddBehaviourComponent((Behaviour*)obj->GetComponent(ComponentType::Behaviour));
-
-				//Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
-
-				//behv->SetBehaviourName(behvstr);
-			}
-
-			if (jsonloop.isMember("index"))
-			{
-				int index{};
-				jsonloop.readInt(index, "index");
-
-				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
-				behv->SetBehaviourIndex(index);
-			}
-
-			if (jsonloop.isMember("counter"))
-			{
-				float counter{};
-				jsonloop.readFloat(counter, "counter");
-
-				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
-				behv->SetBehaviourCounter(counter);
-			}
-
-			if (jsonloop.isMember("speed"))
-			{
-				float speed{};
-				jsonloop.readFloat(speed, "speed");
-
-				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
-				behv->SetBehaviourSpeed(speed);
-			}
-
-			if (jsonloop.isMember("distance"))
-			{
-				float distance{};
-				jsonloop.readFloat(distance, "distance");
-
-				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
-				behv->SetBehaviourDistance(distance);
-			}
-
-			// Add here to read oher types of data if necessary WIP
-
 
 			obj->Initialize();
 
@@ -287,59 +269,80 @@ void SaveScene(std::string filename)
 
 			Json::Value innerobj;
 
-
 			innerobj["Name"] = name;
 			innerobj["Prefabs"] = prefabname;
+
+			Json::Value components;
 
 			// Save object transform data
 			if (obj->GetComponent(ComponentType::Transform) != nullptr)
 			{
+				Json::Value typedata;
 				Transform* trans = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-				innerobj["Type"] = "Transform";
+				typedata["Type"] = "Transform";
 
 				Json::Value position;
 				position["x"] = trans->Position.x;
 				position["y"] = trans->Position.y;
-				innerobj["Position"] = position;
+				typedata["Position"] = position;
 
 				Json::Value scale;
 				scale["x"] = trans->Scale.x;
 				scale["y"] = trans->Scale.y;
-				innerobj["Scale"] = scale;
+				typedata["Scale"] = scale;
 
-				innerobj["Rotation"] = trans->Rotation;
+				typedata["Rotation"] = trans->Rotation;
+
+				components.append(typedata);
 			}
 
 			if (obj->GetComponent(ComponentType::Body) != nullptr)
 			{
+				Json::Value typedata;
 				Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+				typedata["Type"] = "Body";
 				if (temp->GetShape() == Shape::Rectangle)
 				{
+					typedata["Shape"] = "Rectangle";
 					Rectangular* temp2 = static_cast<Rectangular*>(temp);
 					Json::Value properties;
 					properties["width"] = temp2->width;
 					properties["height"] = temp2->height;
-					innerobj["Properties"] = properties;
+					typedata["Properties"] = properties;
 				}
+
+				components.append(typedata);
 			}
 
 			// Save objects event data
 			if (obj->GetComponent(ComponentType::Event) != nullptr)
 			{
+				Json::Value typedata;
 				Event* event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-				innerobj["linkedevent"] = event->linked_event;
+				typedata["linkedevent"] = event->linked_event;
+				typedata["Type"] = "Event";
+
+				components.append(typedata);
 			}
 
 			if (obj->GetComponent(ComponentType::Behaviour))
 			{
+				Json::Value typedata;
 				Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
-				innerobj["scripts"] = behv->GetBehaviourName();
-				innerobj["index"] = behv->GetBehaviourIndex();
-				innerobj["counter"] = behv->GetBehaviourCounter();
-				innerobj["speed"] = behv->GetBehaviourSpeed();
-				innerobj["distance"] = behv->GetBehaviourDistance();
+				typedata["scripts"] = behv->GetBehaviourName();
+				typedata["index"] = behv->GetBehaviourIndex();
+				typedata["counter"] = behv->GetBehaviourCounter();
+				typedata["speed"] = behv->GetBehaviourSpeed();
+				typedata["distance"] = behv->GetBehaviourDistance();
+				typedata["Type"] = "Behaviour";
+
+				components.append(typedata);
 			}
 
+
+
+
+			innerobj["Components"] = components;
 			layer["Objects"].append(innerobj);
 		}
 

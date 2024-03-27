@@ -7,13 +7,12 @@
       [
         {
           "Name" : "How_To_Play_Bg",
-          "Prefabs" : "How_To_Play_Bg.json",
-          "Components" : [{
           "Position" : 
           {
             "x" : 0.0,
             "y" : 0.0
           },
+          "Prefabs" : "How_To_Play_Bg.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
@@ -21,17 +20,15 @@
             "y" : 1000.0
           },
           "Type" : "Transform"
-        }]
         },
         {
           "Name" : "close_how_to_play_menu_button",
-          "Prefabs" : "close_how_to_play_menu_button.json",
-          "Components": [{
           "Position" : 
           {
             "x" : 270.0,
             "y" : 367.0
           },
+          "Prefabs" : "close_how_to_play_menu_button.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
@@ -39,7 +36,6 @@
             "y" : 64.0
           },
           "Type" : "Transform"
-        }]
         }
       ],
       "Settings" : 

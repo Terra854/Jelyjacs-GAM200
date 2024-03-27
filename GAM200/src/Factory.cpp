@@ -309,7 +309,7 @@ Object* Factory::createObject(const std::string& filename)
 						// Still creating animation frame with different framecol, will properly calculate in set_up_map
 						a->animation_frame.emplace(g, animationframesecond);
 						g++;
-					}
+					} 
 				}
 			}
 
