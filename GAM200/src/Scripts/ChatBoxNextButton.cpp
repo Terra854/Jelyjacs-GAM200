@@ -13,9 +13,6 @@ This file contains the script for the in-game clickable buttons
 #include <SceneManager.h>
 #include <../components/Texture.h>
 #include <Factory.h>
-#include <../components/Dialogue.h>
-#include <message.h>
-#include <DialogueSystem.h>
 
 // Constructor for the PauseButton class.
 // @param name: The name of the portal.
@@ -37,7 +34,6 @@ void ChatBoxNextButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void ChatBoxNextButton::Update(Object* obj) {
-   
     if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         return;
     }
@@ -47,14 +43,10 @@ void ChatBoxNextButton::Update(Object* obj) {
     {
         return;
     }
-
-    Dialogue* d = (Dialogue*)obj->GetComponent(ComponentType::Dialogue);
-
-
     if (input::IsPressed(KEY::mouseL))
     {
         audio->playSfx("button_click");
-        dialoguesystem->next_dialogue = true;
+        objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = false;
     }
 }
 /*********************************************************************/

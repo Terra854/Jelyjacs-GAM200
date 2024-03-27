@@ -9,16 +9,17 @@
           "y": 0.0
         },
         "Scale": {
-          "x": 200.0,
-          "y": 200.0
+          "x": 1.0,
+          "y": 1.0
         },
         "Rotation": 0.0
       }
     },
     {
-      "Type": "Dialogue",
+      "Type": "Behaviour",
       "Properties": {
-        "dialogue": "I think we're\ron the right track"
+        "Script": "DialogueSequence",
+        "Index": 0
       }
     }
   ]
