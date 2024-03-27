@@ -849,6 +849,14 @@
             "x": 493.0,
             "y": 180.0
           }
+        },
+        {
+          "Prefabs": "Dialogue_sequence_1.json",
+          "Type": "Transform",
+          "Position": {
+            "x": -350.0,
+            "y": -130.0
+          }
         }
       ]
     }

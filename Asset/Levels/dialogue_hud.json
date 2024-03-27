@@ -57,15 +57,15 @@
           "Name" : "CharacterBox_bg",
           "Position" : 
           {
-            "x" : -50.0,
+            "x" : -250.0,
             "y" : -333.0
           },
           "Prefabs" : "CharacterBox_bg.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 1598,
-            "y" : 322.0
+            "x" : 267,
+            "y" : 251.2
           },
           "Type" : "Transform"
         }

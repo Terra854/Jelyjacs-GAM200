@@ -18,14 +18,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "Character_Box.png"
-      }
-    },
-    {
-      "Type": "Behaviour",
-      "Properties": {
-        "Script": "DialogueSequence",
-        "Index": 0
+        "texturepath": "Updated_character_box_finn.png"
       }
     }
   ]

@@ -9,17 +9,16 @@
           "y": 0.0
         },
         "Scale": {
-          "x": 1.0,
-          "y": 1.0
+          "x": 200.0,
+          "y": 200.0
         },
         "Rotation": 0.0
       }
     },
     {
-      "Type": "Text",
+      "Type": "Dialogue",
       "Properties": {
-        "text": "next",
-        "fontSize": 1.0
+        "dialogue": "dialogue sequence 1"
       }
     }
   ]
