@@ -32,7 +32,7 @@ void PauseButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void PauseButton::Update(Object* obj) {
-    if (!input::IsPressed(KEY::mouseL) || obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+    if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         //std::cout << "NIL OBJ : PauseButton" << std::endl;
         return;
     }

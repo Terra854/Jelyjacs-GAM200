@@ -32,7 +32,7 @@ void MainMenuQuitButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void MainMenuQuitButton::Update(Object* obj) {
-    if (!input::IsPressed(KEY::mouseL) || obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+    if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible || static_cast<Texture*>(obj->GetComponent(ComponentType::Texture))->opacity < 1.f) {
         //std::cout << "NIL OBJ : ButtonBase" << std::endl;
         return;
     }

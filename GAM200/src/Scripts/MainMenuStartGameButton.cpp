@@ -123,9 +123,7 @@ void MainMenuStartGameButton::Update(Object* obj) {
 			else {
 				HaveFinnCrash = false;
 				audio->setBackgroundAudio("background");
-				SceneManager::PauseScene();
 				SceneManager::LoadScene("tutorial_level.json");
-				SceneManager::PlayScene();
 			}
 
 			sfxCooldown -= engine->GetDt();
@@ -150,7 +148,7 @@ void MainMenuStartGameButton::Update(Object* obj) {
 		}
 	}
 
-	if (!input::IsPressed(KEY::mouseL) || obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+	if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible || static_cast<Texture*>(obj->GetComponent(ComponentType::Texture))->opacity < 1.f) {
 		//std::cout << "NIL OBJ : ButtonBase" << std::endl;
 		return;
 	}
