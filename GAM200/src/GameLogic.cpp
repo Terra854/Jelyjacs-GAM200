@@ -41,6 +41,7 @@ int CatPower = 0;
 int death_timer = 0;
 bool GameLogic::death;
 bool GameLogic::restarting;
+bool GameLogic::no_movement;
 
 bool one_time = false;
 bool cheat = false;
@@ -64,6 +65,7 @@ GameLogic::~GameLogic() {
 void GameLogic::MessageRelay(Message_Handler* msg) {
 	// For Movement Key Display
 	if (msg->GetMessage() == MessageID::Movement) {
+		GameLogic::no_movement = false;
 		/*
 		MovementKey* temp = static_cast<MovementKey*>(msg);
 		switch (temp->dir) {
@@ -83,6 +85,10 @@ void GameLogic::MessageRelay(Message_Handler* msg) {
 				break;
 		}
 		*/
+	}
+	else if (msg->GetMessage() == MessageID::NoMovement)
+	{
+		GameLogic::no_movement = true;
 	}
 }
 /******************************************************************************

@@ -78,6 +78,9 @@ public:
 	// static bool to check if the game is restarting
 	static bool restarting;
 
+	//added by jia ming
+	static bool no_movement;
+
 	// Map of behaviors to be added to objects on creation.
 	std::unordered_map<std::string, LogicScript*> behaviours; 
 

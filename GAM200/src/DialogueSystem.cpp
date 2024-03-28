@@ -7,7 +7,7 @@
 #include <../components/Transform.h>
 #include "Utils.h"
 #include <Core_Engine.h>
-
+#include <message.h>
 
 
 DialogueSystem* dialoguesystem = NULL;
@@ -47,6 +47,8 @@ void DialogueSystem::Update()
 			if (d->sequence == d->dialogue_lines.size())
 			{
 				objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = false;
+				Message_Handler msg(MessageID::Event_Type::Movement);
+				engine->Broadcast(&msg);
 				continue;
 			}
 		}
@@ -70,5 +72,7 @@ void DialogueSystem::Update()
 		Text* chatbox_text = (Text*)chatboxhud_obj->GetComponent(ComponentType::Text);
 		chatbox_text->text = d->dialogue_lines.at(d->sequence);
 		objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = true;
+		Message_Handler msg(MessageID::Event_Type::NoMovement);
+		engine->Broadcast(&msg);
 	}
 }

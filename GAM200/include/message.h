@@ -20,7 +20,8 @@ namespace MessageID {
 		Collide,
 		Movement,
 		MouseMove, 
-		MouseClick
+		MouseClick,
+		NoMovement
 	};
 }
 /****************************************************************************

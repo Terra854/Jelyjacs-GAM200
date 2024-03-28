@@ -59,51 +59,54 @@ void Finn::Update(Object* obj) {
 		}
 
 		bool moving = false;
-		if (input::IsPressed(KEY::w) || input::IsPressed(KEY::up) || input::IsPressed(KEY::spacebar)) {
-			MovementKey msg(up);
-			engine->Broadcast(&msg);
-			if (player_physics->Velocity.y == 0.0f) {
-				player_physics->Force = 85000.f;
-				std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
-				audio->playSfx("finn_jumping");
-				InTheAir = true;
-			}
-		}
-		if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d) || input::IsPressed(KEY::left) || input::IsPressed(KEY::right)) {
-			if (player_body->bottom_collision) {
-				Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
-
-				switch (collided_material) {
-				case Material::Concrete:
-					audio->playSfx("finn_concrete_walking", 0.5f);
-					break;
-				case Material::Metal:
-					audio->playSfx("finn_metal_walking", 0.5f);
-					break;
+		if (!GameLogic::no_movement)
+		{
+			if (input::IsPressed(KEY::w) || input::IsPressed(KEY::up) || input::IsPressed(KEY::spacebar)) {
+				MovementKey msg(up);
+				engine->Broadcast(&msg);
+				if (player_physics->Velocity.y == 0.0f) {
+					player_physics->Force = 85000.f;
+					std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
+					audio->playSfx("finn_jumping");
+					InTheAir = true;
 				}
 			}
-		}
-		if (input::IsPressedRepeatedly(KEY::a) || input::IsPressedRepeatedly(KEY::left)) {
-			MovementKey msg(left);
-			engine->Broadcast(&msg);
-			player_physics->Velocity.x -= 500.0f;
-			moving = true;
-			player_animation->face_right = false;
-			if (player_body->left_collision != nullptr && static_cast<Rectangular*>(player_body->left_collision->GetComponent(ComponentType::Body))->pushable)
-				player_animation->current_type = AnimationType::Push_left;
-			else
-				player_animation->current_type = AnimationType::Run_left;
-		}
-		if (input::IsPressedRepeatedly(KEY::d) || input::IsPressedRepeatedly(KEY::right)) {
-			MovementKey msg(right);
-			engine->Broadcast(&msg);
-			player_physics->Velocity.x += 500.0f;
-			moving = true;
-			player_animation->face_right = true;
-			if (player_body->right_collision != nullptr && static_cast<Rectangular*>(player_body->right_collision->GetComponent(ComponentType::Body))->pushable)
-				player_animation->current_type = AnimationType::Push;
-			else
-				player_animation->current_type = AnimationType::Run;
+			if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d) || input::IsPressed(KEY::left) || input::IsPressed(KEY::right)) {
+				if (player_body->bottom_collision) {
+					Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
+
+					switch (collided_material) {
+					case Material::Concrete:
+						audio->playSfx("finn_concrete_walking", 0.5f);
+						break;
+					case Material::Metal:
+						audio->playSfx("finn_metal_walking", 0.5f);
+						break;
+					}
+				}
+			}
+			if (input::IsPressedRepeatedly(KEY::a) || input::IsPressedRepeatedly(KEY::left)) {
+				MovementKey msg(left);
+				engine->Broadcast(&msg);
+				player_physics->Velocity.x -= 500.0f;
+				moving = true;
+				player_animation->face_right = false;
+				if (player_body->left_collision != nullptr && static_cast<Rectangular*>(player_body->left_collision->GetComponent(ComponentType::Body))->pushable)
+					player_animation->current_type = AnimationType::Push_left;
+				else
+					player_animation->current_type = AnimationType::Run_left;
+			}
+			if (input::IsPressedRepeatedly(KEY::d) || input::IsPressedRepeatedly(KEY::right)) {
+				MovementKey msg(right);
+				engine->Broadcast(&msg);
+				player_physics->Velocity.x += 500.0f;
+				moving = true;
+				player_animation->face_right = true;
+				if (player_body->right_collision != nullptr && static_cast<Rectangular*>(player_body->right_collision->GetComponent(ComponentType::Body))->pushable)
+					player_animation->current_type = AnimationType::Push;
+				else
+					player_animation->current_type = AnimationType::Run;
+			}
 		}
 
 		if (player_physics->Velocity.y != 0.0f) {
