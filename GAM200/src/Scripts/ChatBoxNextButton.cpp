@@ -42,6 +42,15 @@ void ChatBoxNextButton::Update(Object* obj) {
         return;
     }
 
+    Texture* t = (Texture*)obj->GetComponent(ComponentType::Texture);
+    
+    static float opacity_inc = -0.01f;
+    t->opacity += opacity_inc;
+    if (t->opacity < 0.0f || t->opacity >1.0f)
+    {
+        opacity_inc = -opacity_inc;
+    }
+
     
     if(!isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY())))
     {

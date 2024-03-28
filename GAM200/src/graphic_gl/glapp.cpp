@@ -437,7 +437,15 @@ void GLApp::Update()
 				if (text != nullptr) {
 					// draw text
 					SetFont(text->fontType);
-					float text_width{ static_cast<float>(find_width(text->text,text->fontType)) };
+					float text_width{};
+					if (text->alignment == "centre")
+					{
+					text_width = static_cast<float>(find_width(text->text,text->fontType));
+					}
+					else if (text->alignment == "right")
+					{
+						text_width = -static_cast<float>(find_width(text->text, text->fontType));
+					}
 					DrawText(text->text, pos.x * window->width_init / 2.f - text_width / 2, pos.y * window->height_init / 2.f, text->fontSize);
 				}
 				if (graphics_debug) {

@@ -5,9 +5,10 @@
       "Type": "Transform",
       "Properties": {
         "Position": {
-          "x": 50.0,
-          "y": -363.0
+          "x": -200.0,
+          "y": -367.0
         },
+        
         "Scale": {
           "x": 300.0,
           "y": 100.0
@@ -19,7 +20,8 @@
       "Type": "Text",
       "Properties": {
         "text": "",
-        "fontSize": 1.0
+        "fontSize": 0.9,
+        "alignment": "left"
       }
     }
   ]

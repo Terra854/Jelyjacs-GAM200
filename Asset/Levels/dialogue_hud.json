@@ -25,15 +25,15 @@
           "Name" : "ChatBoxNextButton",
           "Position" : 
           {
-            "x" : 600.0,
-            "y" : -363.0
+            "x" : 610.0,
+            "y" : -351.0
           },
           "Prefabs" : "chatbox_next_button.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 100.0,
-            "y" : 100.0
+            "x" : 192.0,
+            "y" : 192.0
           },
           "Type" : "Transform"
         },
@@ -41,15 +41,15 @@
           "Name" : "ChatBoxline1",
           "Position" : 
           {
-            "x" : 50.0,
-            "y" : -363.0
+            "x" : -200.0,
+            "y" : -367.0
           },
           "Prefabs" : "chatbox_line1.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 300.0,
-            "y" : 100.0
+            "x" : -200.0,
+            "y" : -367.0
           },
           "Type" : "Transform"
         },

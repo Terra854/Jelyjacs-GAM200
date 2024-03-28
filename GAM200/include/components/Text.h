@@ -13,4 +13,5 @@ public:
 	std::string text;
 	float fontSize = 1.f;
 	std::string fontType = "Aldrich-Regular";
+	std::string alignment = "centre";
 };
