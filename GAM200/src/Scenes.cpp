@@ -212,30 +212,6 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 
 	if (isParentScene)
 		Logic->Initialize();
-
-	int layer_num = objectFactory->GetLayerNum("PauseMenu");
-	if (layer_num == -1)
-	{
-		std::cout << "wrong layer name" << std::endl;
-	}
-	else
-	{
-		std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* layer = objectFactory->GetLayer(layer_num);
-		std::vector<Object*> objs = layer->second.second;
-		std::cout << "finding objects in pause menu \n\n" << std::endl;
-		for (size_t i = 0; i < objs.size(); ++i)
-		{
-			if (objs.at(i)->GetName() == "Pause_Bg")
-			{
-				continue;
-			}
-			std::cout << objs.at(i)->GetName() << std::endl;
-			Transform* trans = (Transform*)objs.at(i)->GetComponent(ComponentType::Transform);
-			//trans->Position.y -= 86;
-		}
-
-
-	}
 }
 
 /******************************************************************************

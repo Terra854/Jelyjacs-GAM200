@@ -17,22 +17,7 @@ DialogueSystem::DialogueSystem() {
 
 void DialogueSystem::Initialize()
 {
-	/*
-	int layer_num = objectFactory->GetLayerNum("pause_menu");
-	if (layer_num == -1)
-	{
-		std::cout << "wrong layer name" << std::endl;
-		return;
-	}
-	std::pair<std::string, std::pair<LayerSettings, std::vector<Object*>>>* layer = objectFactory->GetLayer(layer_num);
-	std::vector<Object*> objs = layer->second.second;
-	std::cout << "finding objects in pause menu \n\n" << std::endl;
-	for (size_t i = 0; i < objs.size(); ++i)
-	{
-		std::cout << objs.at(i)->GetName() << std::endl;
-	}
-	*/
-
+	
 }
 
 
