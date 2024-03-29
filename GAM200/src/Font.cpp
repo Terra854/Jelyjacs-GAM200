@@ -69,7 +69,7 @@ bool DrawText(std::string const& text, float posX, float posY, float scale , flo
     to calculate the total width of the text string to be drawn, in pixels,
     depending on what the text string is, in the default font size
 *******************************************************************************/
-int find_width(std::string const& str, std::string font)
+int find_width(std::string const& str, std::string font , float scale)
 {
     int width{};
     for (size_t i = 0; i < str.size(); ++i)
@@ -78,7 +78,14 @@ int find_width(std::string const& str, std::string font)
         FT_Load_Char(AssetManager::getoutline(font)->face, str.at(i), FT_LOAD_RENDER);
         width += AssetManager::getoutline(font)->face->glyph->advance.x;
     }
-    return width>>6;
+    return (width>>6) * scale;
+
+}
+
+
+int find_height(std::string const& str, std::string font, float scale)
+{
+    return scale * FontSystem->pixel_height;
 
 }
 

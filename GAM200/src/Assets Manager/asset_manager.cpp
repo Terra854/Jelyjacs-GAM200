@@ -838,7 +838,7 @@ void AssetManager::loadfonts()
 
 	for (std::map<std::string, outline>::iterator it = font_outlines.begin(); it != font_outlines.end(); ++it)
 	{
-		it->second.set_pixel_size(48);
+		it->second.set_pixel_size(FontSystem->pixel_height);
 		it->second.load_ascii_chars();
 	}
 

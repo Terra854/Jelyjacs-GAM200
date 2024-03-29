@@ -21,7 +21,9 @@ This file contains the declarations of the functions for font system
 bool DrawText(std::string const& text, float posX, float posY, float scale, float red = 1, float green = 1, float blue = 1);
 
 //calculate the width of text string in pixels, default scale, 1
-int find_width(std::string const& str ,std::string font);
+int find_width(std::string const& str ,std::string font , float scale= 1.0f);
+
+int find_height(std::string const& str, std::string font, float scale = 1.0f);
 
 //fonts:
 //AldrichRegular
@@ -66,6 +68,8 @@ public:
 	virtual void Update();
 	virtual std::string SystemName() { return "Font"; }
 	~Font();
+    
+    int const pixel_height = 48;
 };
 extern Font* FontSystem;
 
