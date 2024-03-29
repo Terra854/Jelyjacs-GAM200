@@ -1,0 +1,25 @@
+{
+  "Name": "SoundBar_bg",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 50,
+          "y": 50
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "sound_bar.png"
+      }
+    }
+  ]
+}

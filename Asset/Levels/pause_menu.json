@@ -146,6 +146,62 @@
           "scripts": "HowToPlayButton",
           "speed": 0.0
         }]
+        },
+        {
+          "Name": "SoundBar",
+          "Prefabs": "SoundBar.json",
+          "Components": [{
+          "Position": {
+            "x": 52.0,
+            "y": 95.0
+          },
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 308,
+            "y": 13
+          },
+          "Type": "Transform"
+        },
+        {
+          "Type":"Behaviour",
+          "counter": 0.0,
+          "distance": 0.0,
+          "index": 0.0,
+          "scripts": "SoundBar",
+          "speed": 0.0
+        }]
+        },
+        {
+          "Name": "SoundBar_bg",
+          "Prefabs": "SoundBar_bg.json",
+          "Components": [{
+          "Position": {
+            "x": 52.0,
+            "y": 95.0
+          },
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 308,
+            "y": 13
+          },
+          "Type": "Transform"
+        }]
+        },
+        {
+          "Name": "Sound",
+          "Prefabs": "Sound.json",
+          "Components": [{
+          "Position": {
+            "x": 48.0,
+            "y": 171.0
+          },
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 124,
+            "y": 29
+          },
+          "Type": "Transform"
+        }]
         }
       ],
       "Settings": {

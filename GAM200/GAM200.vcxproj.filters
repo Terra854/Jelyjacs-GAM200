@@ -321,6 +321,9 @@
     <ClCompile Include="src\Dialogue.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\SoundBar.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -583,6 +586,9 @@
     </ClInclude>
     <ClInclude Include="include\components\Dialogue.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\SoundBar.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

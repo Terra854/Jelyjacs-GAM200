@@ -1,0 +1,26 @@
+{
+  "Name": "SoundBar",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 52.0,
+          "y": 95.0
+        },
+        "Scale": {
+          "x": 154,
+          "y": 13
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "SoundBar",
+        "Index": 0
+      }
+    }
+  ]
+}
