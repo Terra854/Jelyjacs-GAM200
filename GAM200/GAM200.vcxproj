@@ -167,7 +167,6 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\LayerSettings.h" />
     <ClInclude Include="include\Scripts\Box.h" />
     <ClInclude Include="include\Scripts\ButtonBase.h" />
-    <ClInclude Include="include\Scripts\ChatBoxLine1.h" />
     <ClInclude Include="include\Scripts\ChatBoxNextButton.h" />
     <ClInclude Include="include\Scripts\CloseHowToPlayButton.h" />
     <ClInclude Include="include\Scripts\Door.h" />
@@ -247,7 +246,6 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\Box.cpp" />
     <ClCompile Include="src\Scripts\ButtonBase.cpp" />
     <ClCompile Include="src\Scripts\CatPortal.cpp" />
-    <ClCompile Include="src\Scripts\ChatBoxLine1.cpp" />
     <ClCompile Include="src\Scripts\ChatBoxNextButton.cpp" />
     <ClCompile Include="src\Scripts\CloseHowToPlayButton.cpp" />
     <ClCompile Include="src\Scripts\Door.cpp" />

@@ -20,15 +20,8 @@
       "Type": "Text",
       "Properties": {
         "text": "",
-        "fontSize": 1,
+        "fontSize": 0.9,
         "alignment": "left"
-      }
-    },
-    {
-      "Type": "Behaviour",
-      "Properties": {
-        "Script": "ChatBoxLine1",
-        "Index": 0
       }
     }
   ]

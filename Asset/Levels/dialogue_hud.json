@@ -9,14 +9,14 @@
           "Name" : "ChatBox_bg",
           "Position" : 
           {
-            "x" : 108.0,
+            "x" : 50.0,
             "y" : -363.0
           },
           "Prefabs" : "ChatBox_bg.json",
           "Rotation" : 0.0,
           "Scale" : 
           {
-            "x" : 1205,
+            "x" : 1321,
             "y" : 261.0
           },
           "Type" : "Transform"
