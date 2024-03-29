@@ -436,17 +436,12 @@ void GLApp::Update()
 
 				if (text != nullptr) {
 					// draw text
+					Object* finn_obj = objectFactory->FindObject("Finn");
+					Transform* finn_trans = (Transform*)finn_obj->GetComponent(ComponentType::Transform);
+					Object* chatboxhud_obj = objectFactory->FindObject("ChatBoxline1");
+					Transform* line_trans = (Transform*)chatboxhud_obj->GetComponent(ComponentType::Transform);
 					SetFont(text->fontType);
-					float text_width{};
-					if (text->alignment == "centre")
-					{
-					text_width = static_cast<float>(find_width(text->text,text->fontType));
-					}
-					else if (text->alignment == "right")
-					{
-						text_width = -static_cast<float>(find_width(text->text, text->fontType));
-					}
-					DrawText(text->text, pos.x * window->width_init / 2.f - text_width / 2, pos.y * window->height_init / 2.f, text->fontSize);
+					DrawText(text->text, pos.x * window->width_init / 2.f - line_trans->Scale.x/2, pos.y * window->height_init / 2.f, text->fontSize);
 				}
 				if (graphics_debug) {
 
