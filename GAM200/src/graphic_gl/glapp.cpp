@@ -438,10 +438,8 @@ void GLApp::Update()
 					// draw text
 					Object* finn_obj = objectFactory->FindObject("Finn");
 					Transform* finn_trans = (Transform*)finn_obj->GetComponent(ComponentType::Transform);
-					Object* chatboxhud_obj = objectFactory->FindObject("ChatBoxline1");
-					Transform* line_trans = (Transform*)chatboxhud_obj->GetComponent(ComponentType::Transform);
 					SetFont(text->fontType);
-					DrawText(text->text, pos.x * window->width_init / 2.f - line_trans->Scale.x/2.f, pos.y * window->height_init / 2.f - line_trans->Scale.y / 2.f, text->fontSize);
+					DrawText(text->text, pos.x * window->width_init / 2.f - tran_pt->Scale.x/2.f, pos.y * window->height_init / 2.f - tran_pt->Scale.y / 2.f, text->fontSize);
 				}
 				if (graphics_debug) {
 

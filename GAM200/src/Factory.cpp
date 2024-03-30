@@ -395,8 +395,6 @@ Object* Factory::createObject(const std::string& filename)
 			if (jsonloop.isMember("fontSize", "Properties"))
 				jsonloop.readFloat(t->fontSize, "Properties", "fontSize");
 
-			//jsonloop.readString(t->alignment, "Properties", "alignment");
-
 			obj->AddComponent(t);
 		}
 

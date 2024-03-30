@@ -37,12 +37,12 @@ void ChatBoxLine1::Update(Object* obj) {
     Text* text = (Text*)obj->GetComponent(ComponentType::Text);
 
     Transform* trans = (Transform*)obj->GetComponent(ComponentType::Transform);
-    trans->Scale.x = find_width(text->text, text->fontType, 0.8);
-    trans->Scale.y = find_height(text->text, text->fontType, 0.8);
+    trans->Scale.x = find_width(text->text, text->fontType, text->fontSize);
+    trans->Scale.y = find_height(text->text, text->fontType, 1);
     Object* chatbox = objectFactory->FindObject("ChatBox_bg");
 
     Transform* chatbox_trans = (Transform*)chatbox->GetComponent(ComponentType::Transform);
-    Vec2 top_left = { chatbox_trans->Position.x - chatbox_trans->Scale.x * 0.8f / 2.0f , chatbox_trans->Position.y };
+    Vec2 top_left = { chatbox_trans->Position.x - chatbox_trans->Scale.x * 0.8f / 2.0f , chatbox_trans->Position.y + chatbox_trans->Scale.y * 0.2f / 2.f};
     trans->Position.x = top_left.x + trans->Scale.x / 2.0f;
     trans->Position.y = top_left.y;
 
