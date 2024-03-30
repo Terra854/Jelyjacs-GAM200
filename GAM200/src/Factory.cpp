@@ -401,8 +401,9 @@ Object* Factory::createObject(const std::string& filename)
 		else if (type == "Dialogue")
 		{
 			Dialogue* d = (Dialogue*)((ComponentCreator<Dialogue>*) componentMap["Dialogue"])->Create();
-			jsonloop.readString(d->entire_dialogue, "Properties", "dialogue");
-
+			std::string dialogue;
+			jsonloop.readString(dialogue, "Properties", "dialogue");
+			d->ChangeDialogue(dialogue);
 			obj->AddComponent(d);
 		}
 	}
@@ -566,7 +567,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 	if (d != nullptr) {
 		Json::Value dialogue;
 		dialogue["Type"] = "Dialogue";
-		dialogue["Properties"]["dialogue"] = d->entire_dialogue;
+		dialogue["Properties"]["dialogue"] = d->GetEntireDialogue();
 		jsonobj["Components"].append(dialogue);
 	}
 	
@@ -881,7 +882,7 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 		{
 			Dialogue* d = (Dialogue*)((ComponentCreator<Dialogue>*) componentMap["Dialogue"])->Create();
 			Dialogue* d_tmp = static_cast<Dialogue*>(object->GetComponent(ComponentType::Dialogue));
-			d->entire_dialogue = d_tmp->entire_dialogue;
+			d->ChangeDialogue(d_tmp->GetEntireDialogue());
 			obj->AddComponent(d);
 
 		}

@@ -28,6 +28,8 @@ void DialogueSystem::Update()
 	if (engine->isPaused() && engine->debug_gui_active)
 		return;
 	
+
+
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj)
 	{
 
@@ -36,15 +38,15 @@ void DialogueSystem::Update()
 		{
 			continue; // No Dialogue in this object, move to next object
 		}
-		if (d->sequence == d->dialogue_lines.size())
+		if (d->GetSequence() == d->GetDialogueLines().size())
 		{
 			continue;//dialogue has finished
 		}
 		if (next_dialogue)
 		{
 			next_dialogue = false;
-			++d->sequence;
-			if (d->sequence == d->dialogue_lines.size())
+			d->SetSequence(d->GetSequence() + 1);
+			if (d->GetSequence() == d->GetDialogueLines().size())
 			{
 				objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = false;
 				Message_Handler msg(MessageID::Event_Type::Movement);
@@ -70,7 +72,7 @@ void DialogueSystem::Update()
 		}
 		
 		Text* chatbox_text = (Text*)chatboxhud_obj->GetComponent(ComponentType::Text);
-		chatbox_text->text = d->dialogue_lines.at(d->sequence);
+		chatbox_text->text = d->GetDialogueLines().at(d->GetSequence());
 		objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = true;
 		Message_Handler msg(MessageID::Event_Type::NoMovement);
 		engine->Broadcast(&msg);

@@ -28,4 +28,12 @@ public:
     // @param obj: A pointer to the Object that this script is attached to.
     // This method typically performs cleanup tasks.
     void Shutdown(Object* obj);
+
+
+    
 };
+
+namespace CHATBOX
+{
+    bool align_text{false};
+}
