@@ -391,11 +391,9 @@ Object* Factory::createObject(const std::string& filename)
 		{
 			Text* t = (Text*)((ComponentCreator<Text>*) componentMap["Text"])->Create();
 			jsonloop.readString(t->text, "Properties", "text");
-
+			
 			if (jsonloop.isMember("fontSize", "Properties"))
 				jsonloop.readFloat(t->fontSize, "Properties", "fontSize");
-
-			jsonloop.readString(t->alignment, "Properties", "alignment");
 
 			obj->AddComponent(t);
 		}

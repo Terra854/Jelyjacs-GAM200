@@ -324,6 +324,9 @@
     <ClCompile Include="src\Scripts\SoundBar.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\ChatBoxLine1.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -589,6 +592,9 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\SoundBar.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\ChatBoxLine1.h">
+      <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

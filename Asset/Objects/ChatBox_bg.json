@@ -5,11 +5,11 @@
       "Type": "Transform",
       "Properties": {
         "Position": {
-          "x": 50.0,
+          "x": 102.5,
           "y": -363.0
         },
         "Scale": {
-          "x": 1321,
+          "x": 1216,
           "y": 261
         },
         "Rotation": 0.0
@@ -18,7 +18,7 @@
     {
       "Type": "Texture",
       "Properties": {
-        "texturepath": "Empty_Box.png"
+        "texturepath": "Empty_Box_2.png"
       }
     }
   ]
