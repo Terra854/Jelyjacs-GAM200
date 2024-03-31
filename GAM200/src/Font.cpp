@@ -55,10 +55,10 @@ void Font::Initialize()
 *******************************************************************************/
 bool DrawText(std::string const& text, float posX, float posY, float scale , float red , float green , float blue)
 {
-    for (size_t pos1{}, pos2{1}; pos2 != std::string::npos; posY -= 48)
+    for (size_t pos1{}, pos2{1}; pos2 != std::string::npos; posY -= FontSystem->pixel_height)
     {
         pos2 = text.find_first_of('\n', pos1);
-        std::string line{ text.substr(pos1 , pos2) };
+        std::string line{ text.substr(pos1 , pos2-pos1) };
         RenderText(line, posX, posY, scale, glm::vec3(red, green, blue));
         pos1 = pos2 + 1;
     }

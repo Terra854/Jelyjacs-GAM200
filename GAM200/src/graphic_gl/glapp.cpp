@@ -437,7 +437,7 @@ void GLApp::Update()
 				if (text != nullptr) {
 					// draw text
 					SetFont(text->fontType);
-					DrawText(text->text, pos.x * window->width_init / 2.f - tran_pt->Scale.x / 2.f, pos.y * window->height_init / 2.f - tran_pt->Scale.y / 2.f, text->fontSize);
+					DrawText(text->text, pos.x * window->width_init / 2.f - tran_pt->Scale.x / 2.f, pos.y * window->height_init / 2.f, text->fontSize);
 				}
 				if (graphics_debug) {
 

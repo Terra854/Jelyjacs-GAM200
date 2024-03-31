@@ -1,4 +1,4 @@
-
+#pragma once
 #include "Scripts/ChatBoxline1.h"
 #include <Utils.h>
 #include <Audio.h>
@@ -14,9 +14,18 @@
 void ChatBoxAlignment(Object* obj);
 void TextAlignment(Object* obj);
 
+
+namespace CHATBOX
+{
+    void change_text(std::string);
+    bool align_text = false;
+}
+
 namespace
 {
     bool aligned = false;
+    bool change_text = false;
+    std::string dialogue_line;
 }
 
 // @param name: The name of the portal.
@@ -42,17 +51,12 @@ void ChatBoxLine1::Update(Object* obj) {
     if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         return;
     }
-    if (!aligned)
-    {
-        ChatBoxAlignment(obj);
-        aligned = true;
-    }
-    if (CHATBOX::align_text)
-    {
-        TextAlignment(obj);
-        CHATBOX::align_text = false;
-    }
+    Text* text_obj = (Text*)obj->GetComponent(ComponentType::Text);
+    text_obj->text = ::dialogue_line;
+ 
+    ChatBoxAlignment(obj);
     TextAlignment(obj);
+    
 
 
 }
@@ -70,8 +74,8 @@ ChatBoxLine1 chatboxline1 ("ChatBoxLine1");
 
 void ChatBoxAlignment(Object* obj)
 {
-    //get chatbox_bg
     Transform* line_trans = (Transform*)obj->GetComponent(ComponentType::Transform);
+    //get chatbox_bg
     Object* chatbox = objectFactory->FindObject("ChatBox_bg");
     Transform* chatbox_trans = (Transform*)chatbox->GetComponent(ComponentType::Transform);
 
@@ -85,19 +89,42 @@ void ChatBoxAlignment(Object* obj)
 
 void TextAlignment(Object* obj)
 {
+    /*
     Text* text_obj = (Text*)obj->GetComponent(ComponentType::Text);
     Transform* trans = (Transform*)obj->GetComponent(ComponentType::Transform);
     int text_width = find_width(text_obj->text , text_obj->fontType , text_obj->fontSize);
     int text_height = find_height(text_obj->text, text_obj->fontType, text_obj->fontSize);
-   
-    std::string::size_type pos1{ text_obj->text.size() - 1 };
-    int new_text_width{ text_width };
-    for (; new_text_width > trans->Scale.x; --pos1)
+
+    std::string::size_type pos1{};
+    std::string::size_type pos2{ text_obj->text.size()};
+    std::string str_2 = text_obj->text;
+    std::string::size_type pos3{ str_2.find_first_of(' ') };
+    while (text_width > trans->Scale.x && pos3 != std::string::npos)
     {
-        new_text_width = find_width(text_obj->text.substr(0, pos1), text_obj->fontType, text_obj->fontSize);
+        int new_text_width = text_width;
+        while (new_text_width > trans->Scale.x)
+        {
+            pos2 = str_2.find_last_of(' ', pos3 - 1);
+            if (pos2 == std::string::npos)
+            {
+                break;
+            }
+            new_text_width = find_width(str_2.substr(0,pos2), text_obj->fontType, text_obj->fontSize);
+            pos3 = pos2;
+        }
+        pos1 += pos3;
+        text_obj->text.at(pos1) = '\n';
+        str_2 = text_obj->text.substr(pos1, text_obj->text.size() - pos1);
+        text_width = find_width(str_2, text_obj->fontType,text_obj->fontSize);
     }
-    text_obj->text = text_obj->text.substr(0, pos1);
+
     std::cout << text_obj->text << std::endl;
-    std::cout << new_text_width << std::endl;
-    std::cout << text_width << std::endl;
+    */
 }
+
+void CHATBOX::change_text(std::string str)
+{
+    ::dialogue_line = str;
+    ::change_text = true;
+}
+

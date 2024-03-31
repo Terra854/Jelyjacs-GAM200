@@ -35,5 +35,6 @@ public:
 
 namespace CHATBOX
 {
-    bool align_text{false};
+    extern void change_text(std::string);
+    extern bool align_text;
 }

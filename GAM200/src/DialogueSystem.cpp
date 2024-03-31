@@ -1,4 +1,4 @@
-
+#pragma once
 #include <Debug.h>
 #include "DialogueSystem.h"
 #include <Factory.h>
@@ -8,6 +8,7 @@
 #include "Utils.h"
 #include <Core_Engine.h>
 #include <message.h>
+#include <../Scripts/ChatBoxLine1.h>
 
 
 DialogueSystem* dialoguesystem = NULL;
@@ -62,17 +63,7 @@ void DialogueSystem::Update()
 		{
 			continue;
 		}
-
-		Object* chatboxhud_obj = objectFactory->FindObject("ChatBoxline1");
-
-		if (chatboxhud_obj == nullptr)
-		{
-			std::cout << "no such object!!!!!!!!!" << std::endl;
-			return;
-		}
-		
-		Text* chatbox_text = (Text*)chatboxhud_obj->GetComponent(ComponentType::Text);
-		chatbox_text->text = d->GetDialogueLines().at(d->GetSequence());
+		CHATBOX::change_text(d->GetDialogueLines().at(d->GetSequence()));
 		objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = true;
 		Message_Handler msg(MessageID::Event_Type::NoMovement);
 		engine->Broadcast(&msg);
