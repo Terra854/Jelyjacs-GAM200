@@ -42,7 +42,7 @@ void QuitButton::Update(Object* obj) {
         return;
 	}
 
-    tex->textureName = "Exit_glow.png";
+    tex->textureName = "Exit glow.png";
 
     if (input::IsPressed(KEY::mouseL))
     {

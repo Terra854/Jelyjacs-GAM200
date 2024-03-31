@@ -43,7 +43,7 @@ void RestartButton::Update(Object* obj) {
         return;
     }
 
-    tex->textureName = "Restart_glow.png";
+    tex->textureName = "Restart glow.png";
 
     if (input::IsPressed(KEY::mouseL))
     {

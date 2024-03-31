@@ -43,7 +43,7 @@ void ResumeButton::Update(Object* obj) {
         return;
 	}
 
-    tex->textureName = "Resume_glow.png";
+    tex->textureName = "Resume glow.png";
 
     if (input::IsPressed(KEY::mouseL))
     {

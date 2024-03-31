@@ -18,7 +18,7 @@
     {
       "Type": "Dialogue",
       "Properties": {
-        "dialogue": "[We're in! Alright SPARK, let's find you some new parts]"
+        "dialogue": "[We're in! Alright SPARK, \nlet's find you some new parts]"
       }
     }
   ]
