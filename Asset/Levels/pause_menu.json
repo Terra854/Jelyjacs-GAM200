@@ -202,6 +202,22 @@
           },
           "Type": "Transform"
         }]
+        },
+        {
+          "Name": "SoundToggle",
+          "Prefabs": "sound_toggle.json",
+          "Components": [{
+          "Position": {
+            "x": 56.0,
+            "y": -61
+          },
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 174,
+            "y": 40
+          },
+          "Type": "Transform"
+        }]
         }
       ],
       "Settings": {

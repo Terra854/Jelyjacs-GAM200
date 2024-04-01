@@ -267,6 +267,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\ResumeButton.cpp" />
     <ClCompile Include="src\Scripts\SkipCutscene.cpp" />
     <ClCompile Include="src\Scripts\SoundBar.cpp" />
+    <ClCompile Include="src\Scripts\SoundToggle.cpp" />
     <ClCompile Include="src\Scripts\Timed_Laser.cpp" />
     <ClCompile Include="src\Scripts\LaserDoor.cpp" />
     <ClCompile Include="src\Scripts\PauseButton.cpp" />
@@ -343,6 +344,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\ResumeButton.h" />
     <ClInclude Include="include\Scripts\SkipCutscene.h" />
     <ClInclude Include="include\Scripts\SoundBar.h" />
+    <ClInclude Include="include\Scripts\SoundToggle.h" />
     <ClInclude Include="include\Scripts\Timed_Laser.h" />
     <ClInclude Include="include\Scripts\LaserDoor.h" />
     <ClInclude Include="include\Scripts\PauseButton.h" />

@@ -3,18 +3,16 @@
 #include <Object.h>
 #include <GameLogic.h>
 
-// Class ButtonBase, derived from the LogicScript class.
-// This class defines the behavior of the clickable buttons, of which, the rest of the in-game buttons derive from.
-class SoundBar : public LogicScript
+class SoundToggle : public LogicScript
 {
 public:
     // Constructor for the ButtonBase class.
     // @param name: A string representing the name of the ButtonBase instance.
-    SoundBar(std::string name);
+    SoundToggle(std::string name);
 
     // Default destructor for the ButtonBase class.
     // It is marked as default to use the compiler-generated destructor.
-    ~SoundBar() = default;
+    ~SoundToggle() = default;
 
     // Start method, called when the ButtonBase script is first activated.
     // @param obj: A pointer to the Object that this script is attached to.
@@ -31,5 +29,4 @@ public:
     // This method typically performs cleanup tasks.
     void Shutdown(Object* obj);
 };
-
-extern float sound_volume;
+extern bool sound_on;

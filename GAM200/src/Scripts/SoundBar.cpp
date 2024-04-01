@@ -1,5 +1,6 @@
 
 #include "Scripts/SoundBar.h"
+#include <Scripts/SoundToggle.h>
 #include <Utils.h>
 #include <Audio.h>
 #include <Factory.h>
@@ -7,7 +8,7 @@
 
 Object* sound_bg_obj;
 Transform* sound_bg_trans;
-
+float sound_volume = 1.0f;
 
 // Constructor for the ButtonBase class.
 // @param name: The name of the portal.
@@ -34,6 +35,19 @@ void SoundBar::Update(Object* obj) {
     if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         return;
     }
+    sound_bg_trans = (Transform*)sound_bg_obj->GetComponent(ComponentType::Transform);
+    Transform* sound_bar_trans = (Transform*)obj->GetComponent(ComponentType::Transform);
+
+    if (!sound_on)
+    {
+        sound_bg_trans->Scale.x = 0;
+    }
+    else
+    {
+        sound_bg_trans->Scale.x = sound_volume * sound_bar_trans->Scale.x;
+    }
+
+
 
     if (!isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
         return;
@@ -45,16 +59,22 @@ void SoundBar::Update(Object* obj) {
         std::cout << "object does not exist" << std::endl;
         return;
     }
-    sound_bg_trans = (Transform*)sound_bg_obj->GetComponent(ComponentType::Transform);
+    
 
-    Transform* sound_bar_trans = (Transform*)obj->GetComponent(ComponentType::Transform);
+   
+    
+
+    
     float pos1 = sound_bar_trans->Position.x - sound_bar_trans->Scale.x / 2.0f;
     if (input::IsPressedRepeatedly(KEY::mouseL))
     {
         sound_bg_trans->Scale.x = input::GetMouseX() - pos1;
         sound_bg_trans->Position.x = pos1 + sound_bg_trans->Scale.x/2.0f;
         audio->setMasterVolume(sound_bg_trans->Scale.x / sound_bar_trans->Scale.x);
+        sound_volume = sound_bg_trans->Scale.x / sound_bar_trans->Scale.x;
+        sound_on = true;
     }
+    
     
 
 }
