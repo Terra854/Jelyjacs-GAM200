@@ -61,7 +61,7 @@ void WinNextButton::Update(Object* obj) {
             sceneManager->LoadScene("level_2.json");
         else if (engine->loaded_level == "level_2") {
             audio->setBackgroundAudio("main_menu_bg");
-            sceneManager->LoadScene("main_menu.json");
+            sceneManager->LoadScene("ending_cutscene.json");
         }
         sceneManager->PlayScene();
     }
