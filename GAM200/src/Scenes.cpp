@@ -129,6 +129,13 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 					if (type == "Transform")
 					{
 						Transform* tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+						
+						if (!tran_pt)
+						{
+							obj->AddComponent(new Transform());
+							tran_pt = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
+						}
+						
 						if (tran_pt) {
 							objcomponentjson.readFloat(tran_pt->Position.x, "Position", "x");
 							objcomponentjson.readFloat(tran_pt->Position.y, "Position", "y");
@@ -140,10 +147,17 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 
 					if (type == "Body")
 					{
-						Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
-						if (temp->GetShape() == Shape::Rectangle)
+						Body* body_pt = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+						
+						if (!body_pt)
 						{
-							Rectangular* temp2 = static_cast<Rectangular*>(temp);
+							obj->AddComponent(new Rectangular());
+							body_pt = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
+						}
+						
+						if (body_pt->GetShape() == Shape::Rectangle)
+						{
+							Rectangular* temp2 = static_cast<Rectangular*>(body_pt);
 							objcomponentjson.readFloat(temp2->width, "Properties", "width");
 							objcomponentjson.readFloat(temp2->height, "Properties", "height");
 						}
@@ -152,12 +166,25 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 					if (type == "Event")
 					{
 						Event* event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+						
+						if (!event_pt)
+						{
+							obj->AddComponent(new Event());
+							event_pt = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
+						}
+						
 						objcomponentjson.readInt(event_pt->linked_event, "linkedevent");
 					}
 
 					if (type == "Behaviour")
 					{
 						Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+
+						if (!behv)
+						{
+							obj->AddComponent(new Behaviour());
+							behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
+						}
 
 						if (objcomponentjson.isMember("index"))
 						{
@@ -190,9 +217,16 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 
 					if (type == "Texture")
 					{
-						Texture* temp = static_cast<Texture*>(obj->GetComponent(ComponentType::Texture));
-						objcomponentjson.readString(temp->textureName, "Properties", "texturepath");
-						objcomponentjson.readFloat(temp->opacity, "Properties", "opacity");
+						Texture* tex = static_cast<Texture*>(obj->GetComponent(ComponentType::Texture));
+
+						if (!tex)
+						{
+							obj->AddComponent(new Texture(""));
+							tex = static_cast<Texture*>(obj->GetComponent(ComponentType::Texture));
+						}
+
+						objcomponentjson.readString(tex->textureName, "Properties", "texturepath");
+						objcomponentjson.readFloat(tex->opacity, "Properties", "opacity");
 					}
 
 					// Add here to read oher types of data if necessary WIP
