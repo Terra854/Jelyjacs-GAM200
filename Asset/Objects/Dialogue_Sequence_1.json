@@ -18,7 +18,7 @@
     {
       "Type": "Dialogue",
       "Properties": {
-        "dialogue": "[We're in! Alright SPARK, \nlet's find you some new parts]"
+        "dialogue": "[We're in! Alright Spark, \nlet's find you some new parts][Hmmm...][Looks like it's not on this floor.\n Let's look for a door to take us\n deeper in.][(Press A and D to move)\n(Press E to swap control\n between Finn and Spark)]"
       }
     }
   ]
