@@ -945,7 +945,6 @@ void LevelEditor::ObjectProperties() {
 
 				if (AABB_EditMode)
 				{
-					ImGui::Text("All values will apply to all instances of %s", object->GetName().c_str());
 					// Display input fields
 					LE_InputFloat("AABB Width", &edited_aabb_width);
 					LE_InputFloat("AABB Height", &edited_aabb_height);
@@ -1309,7 +1308,6 @@ void LevelEditor::ObjectProperties() {
 			{
 				// Display input fields
 				LE_InputFloat2("Velocity", &(edited_velocity.x));
-				ImGui::Text("All values below will apply to all instances of %s", object->GetName().c_str());
 				LE_InputFloat("Mass", &(edited_mass));
 				ImGui::Checkbox("Affected by gravity: ", &edited_gravity);
 				ImGui::Checkbox("Able to push objects: ", &edited_able_to_push_objects);
