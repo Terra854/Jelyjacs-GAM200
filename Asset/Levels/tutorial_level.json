@@ -3090,25 +3090,40 @@
           "Prefabs" : "CatPowerLiquid.json"
         },
         {
-          "Components" : 
-          [
+          "Components": [
             {
-              "Position" : 
-              {
-                "x" : -350.0,
-                "y" : -130.0
+              "Position": {
+                "x": -350.0,
+                "y": -130.0
               },
-              "Rotation" : 0.0,
-              "Scale" : 
-              {
-                "x" : 200.0,
-                "y" : 200.0
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 200.0,
+                "y": 200.0
               },
-              "Type" : "Transform"
+              "Type": "Transform"
             }
           ],
-          "Name" : "Dialogue_Sequence_1",
-          "Prefabs" : "Dialogue_Sequence_1.json"
+          "Name": "Dialogue_Sequence_1",
+          "Prefabs": "Dialogue_Sequence_1.json"
+        }
+        {
+          "Components": [
+            {
+              "Position": {
+                "x": 497.0,
+                "y": 181.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 200.0,
+                "y": 200.0
+              },
+              "Type": "Transform"
+            }
+          ],
+          "Name": "Dialogue_Sequence_1_CatPowerLiquid",
+          "Prefabs": "Dialogue_Sequence_1_CatPowerLiquid.json"
         }
       ],
       "Settings" : 
