@@ -3,7 +3,6 @@
   [
     "game_hud.json",
     "pause_menu.json",
-    "how_to_play_menu.json",
     "win_menu.json"
   ],
   "Layers" : 

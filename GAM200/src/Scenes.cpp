@@ -192,7 +192,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 					{
 						Texture* temp = static_cast<Texture*>(obj->GetComponent(ComponentType::Texture));
 						objcomponentjson.readString(temp->textureName, "Properties", "texturepath");
-						objcomponentjson.readFloat(temp->opacity, "Properties", "texturepath");
+						objcomponentjson.readFloat(temp->opacity, "Properties", "opacity");
 					}
 
 					// Add here to read oher types of data if necessary WIP
@@ -215,7 +215,10 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 	for (auto& additionalScenes : jsonobj.read("AdditionalScenesToLoad"))
 	{
 		std::string sceneFile = additionalScenes.asCString();
-		SceneManager::AdditionalScenesLoadedConcurrently.push_back(sceneFile);
+
+		if (isParentScene)
+			SceneManager::AdditionalScenesLoadedConcurrently.push_back(sceneFile);
+		
 		::LoadSceneFromJson(sceneFile, false);
 	}
 
