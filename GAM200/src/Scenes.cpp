@@ -14,6 +14,8 @@ This file contains the definitions for loading and saving scenes
 #include <iostream>
 #include "LevelEditor.h"
 #include <SceneManager.h>
+#include <components/Animation.h>
+#include <string>
 
 /******************************************************************************
 LoadSceneFromJson
@@ -184,6 +186,13 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 						}
 					}
 
+					if (type == "Texture")
+					{
+						Texture* temp = static_cast<Texture*>(obj->GetComponent(ComponentType::Texture));
+						objcomponentjson.readString(temp->textureName, "Properties", "texturepath");
+						objcomponentjson.readFloat(temp->opacity, "Properties", "texturepath");
+					}
+
 					// Add here to read oher types of data if necessary WIP
 				}
 
@@ -339,7 +348,56 @@ void SaveScene(std::string filename)
 				components.append(typedata);
 			}
 
+			// Save textures
+			if (obj->GetComponent(ComponentType::Texture) != nullptr)
+			{
+				Json::Value typedata;
+				Texture* texture = static_cast<Texture*>(obj->GetComponent(ComponentType::Texture));
+				typedata["Type"] = "Texture";
 
+				Json::Value texture_;
+				texture_["texturepath"] = texture->textureName;
+				texture_["opacity"] = texture->opacity;
+				typedata["Properties"] = texture_;
+
+				components.append(typedata);
+			}
+
+			if (obj->GetComponent(ComponentType::Animation) != nullptr)
+			{
+				Json::Value typedata;
+				Animation* ani = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+				typedata["Type"] = "Animation";
+
+				Json::Value ani_;
+				ani_["jumpfixframe"] = ani->jump_fixed_frame;
+				ani_["framerate"] = ani->frame_rate;
+				ani_["faceright"] = ani->face_right;
+				Json::Value frame;
+				frame.append(ani->animation_scale.first);
+				frame.append(ani->animation_scale.second);
+				ani_["frame"] = frame;
+
+				for (auto& it : ani->animation_frame)
+				{
+					if (ani->animation_scale.second < it.first)
+						break;
+
+					std::string tmp = AnimationTypeToString(it.second.second);
+
+					Json::Value section;
+					section.append(it.second.first);
+					section.append(tmp); // Watch for caps when doing the load
+
+					ani_[std::to_string(it.first)] = section;
+				}
+
+				ani_["jumpfixframe"] = ani->jump_fixed_frame;
+				
+				typedata["Properties"] = ani_;
+
+				components.append(typedata);
+			}
 
 
 			innerobj["Components"] = components;
