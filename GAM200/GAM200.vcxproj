@@ -182,7 +182,6 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Body.cpp" />
     <ClCompile Include="src\Dialogue.cpp" />
     <ClCompile Include="src\DialogueSystem.cpp" />
-    <ClCompile Include="src\GameHud.cpp" />
     <ClCompile Include="src\Gizmo.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -307,7 +306,6 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Core.h" />
     <ClInclude Include="include\Core_Engine.h" />
     <ClInclude Include="include\Debug.h" />
-    <ClInclude Include="include\GameHud.h" />
     <ClInclude Include="include\Gizmo.h" />
     <ClInclude Include="include\LevelEditor.h" />
     <ClInclude Include="include\EngineHud.h" />
