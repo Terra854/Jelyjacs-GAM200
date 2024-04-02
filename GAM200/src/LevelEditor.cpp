@@ -499,7 +499,7 @@ void LevelEditor::ObjectProperties() {
 	ImGui::EndChild();
 
 	if (object->GetPrefab()) {
-		sprintf_s(buffer, "Apply all changes to all instances of %s", object->GetPrefab()->GetName().c_str());
+		sprintf_s(buffer, "Apply all changes to all instances of %s (except Transform)", object->GetPrefab()->GetName().c_str());
 
 		ImGui::Checkbox(buffer, &update_all_instances);
 	}
@@ -1466,15 +1466,26 @@ void LevelEditor::ListOfObjects() {
 		ImGui::EndPopup();
 	}
 	ImGui::BeginChild("ObjectListScroll", ImGui::GetContentRegionAvail());
-	if (ImGui::BeginTable("ObjectList", 1, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
+	if (ImGui::BeginTable("ObjectList", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
 	{
+		ImGui::TableSetupColumn("Visible", ImGuiTableColumnFlags_WidthFixed, 35.f);
+		ImGui::TableSetupColumn("Static", ImGuiTableColumnFlags_WidthFixed, 35.f);
+		ImGui::TableSetupColumn("Layer", ImGuiTableColumnFlags_WidthStretch);
+
+		ImGui::TableHeadersRow();
 
 		for (auto& l : SceneManager::layers) {
+
+			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
+			
 			char buf[512];
 			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());
 			ImGui::Checkbox(buf, &l.second.first.isVisible);
-			ImGui::SameLine();
+			//ImGui::SameLine();
+			ImGui::TableNextColumn();
+			ImGui::Checkbox(buf, &l.second.first.static_layer);
+			ImGui::TableNextColumn();
 
 			if (l.second.first.isInherited)
 				sprintf_s(buf, "%s (inherited from %s)##%s_%s", l.first.c_str(), l.second.first.inheritedJsonName.c_str(), engine->loaded_level.c_str(), l.first.c_str());
