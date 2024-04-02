@@ -172,6 +172,8 @@ static Vec2 edited_position;
 static float edited_rotation;
 static Vec2 edited_scale;
 
+static bool Animation_EditMode = false;
+
 static bool Text_EditMode = false;
 static char edited_text[1024] = "";
 static float edited_font_size;
@@ -573,87 +575,161 @@ void LevelEditor::ObjectProperties() {
 				ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImVec2((float)width / (float)height * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().x));
 			}
 
-			ImGui::SeparatorText("Values");
+			if (Animation_EditMode){
+				ImGui::SeparatorText("Values");
 
-			ImGui::Text("Current Type: %d", a->current_type);
-			ImGui::Text("Frame Number: %d", a->frame_num);
-			LE_InputFloat("Opacity", &a->opacity);
-			LE_InputFloat("Frame Rate", &a->frame_rate);
-			LE_InputFloat2("Animation Scale", &a->animation_scale.first);
+				ImGui::Text("Current Type: %d", a->current_type);
+				ImGui::Text("Frame Number: %d", a->frame_num);
+				LE_InputFloat("Opacity", &a->opacity);
+				LE_InputFloat("Frame Rate", &a->frame_rate);
+				LE_InputFloat2("Animation Scale", &a->animation_scale.first);
 
-			ImGui::SeparatorText("Animation Settings");
-			
-			if (ImGui::BeginTable("AnimationSettings", 4, NULL)) {
-				ImGui::TableSetupColumn("Row", ImGuiTableColumnFlags_WidthFixed, 50.f);
-				ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 150.f);
-				ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed, 150.f);
-				ImGui::TableSetupColumn("Options", ImGuiTableColumnFlags_WidthStretch);
+				ImGui::SeparatorText("Animation Settings");
 
-				ImGui::TableHeadersRow();
+				if (ImGui::BeginTable("AnimationSettings", 4, NULL)) {
+					ImGui::TableSetupColumn("Row", ImGuiTableColumnFlags_WidthFixed, 50.f);
+					ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 150.f);
+					ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed, 150.f);
+					ImGui::TableSetupColumn("Options", ImGuiTableColumnFlags_WidthStretch);
 
-				//for (auto& pair : a->animation_frame) {
+					ImGui::TableHeadersRow();
 
-				int a_size = a->animation_frame.size();
+					//for (auto& pair : a->animation_frame) {
 
-				for (int i = 0; i < a_size; i++) {
+					int a_size = a->animation_frame.size();
 
-					std::pair<int, AnimationType> pair;
+					for (int i = 0; i < a_size; i++) {
 
-					try {
-						pair = a->animation_frame.at(i + 1);
+						std::pair<int, AnimationType> pair;
+
+						try {
+							pair = a->animation_frame.at(i + 1);
+						}
+						catch (std::out_of_range) {
+							a_size++;
+							continue;
+						}
+
+						ImGui::TableNextRow();
+						ImGui::TableNextColumn();
+						ImGui::Text("%d", i + 1);
+						ImGui::TableNextColumn();
+
+						sprintf_s(buffer, "##FrameNum%d", i + 1);
+
+						LE_InputInt(buffer, &a->animation_frame.at(i + 1).first);
+
+						ImGui::TableNextColumn();
+
+						int currentType = static_cast<int>(pair.second);
+
+						std::vector<std::string> itemStrings(No_Animation_Type + 1);
+						const char* items[No_Animation_Type + 1];
+						for (int i = 0; i < No_Animation_Type + 1; ++i) {
+							itemStrings[i] = AnimationTypeToString(static_cast<AnimationType>(i));
+							items[i] = itemStrings[i].c_str();
+						}
+
+						sprintf_s(buffer, "##AnimationTypeBox%d", i + 1);
+
+						if (ImGui::Combo(buffer, &currentType, items, No_Animation_Type + 1)) {
+							a->animation_frame.at(i + 1).second = static_cast<AnimationType>(currentType);
+						}
+
+						ImGui::TableNextColumn();
+
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+
+						sprintf_s(buffer, "Delete##AnimationSettingRow%d", i + 1);
+						if (ImGui::Button(buffer))
+						{
+							a->animation_frame.erase(i + 1);
+						}
+						ImGui::PopStyleColor(3);
 					}
-					catch (std::out_of_range) {
-						a_size++;
-						continue;
+
+					ImGui::EndTable();
+
+					if (ImGui::Button("Add Row")) {
+						a->animation_frame.insert(std::make_pair((a->animation_frame.empty() ? 1 : a->animation_frame.rbegin()->first + 1), std::make_pair(0, AnimationType::No_Animation_Type)));
 					}
-					
-					ImGui::TableNextRow();
-					ImGui::TableNextColumn();
-					ImGui::Text("%d", i + 1);
-					ImGui::TableNextColumn();
-
-					sprintf_s(buffer, "##FrameNum%d", i + 1);
-
-					LE_InputInt(buffer, &a->animation_frame.at(i + 1).first);
-
-					ImGui::TableNextColumn();
-
-					int currentType = static_cast<int>(pair.second);
-
-					std::vector<std::string> itemStrings(No_Animation_Type + 1);
-					const char* items[No_Animation_Type + 1];
-					for (int i = 0; i < No_Animation_Type + 1; ++i) {
-						itemStrings[i] = AnimationTypeToString(static_cast<AnimationType>(i));
-						items[i] = itemStrings[i].c_str();
-					}
-
-					sprintf_s(buffer, "##AnimationTypeBox%d", i + 1);
-
-					if (ImGui::Combo(buffer, &currentType, items, No_Animation_Type + 1)) {
-						a->animation_frame.at(i + 1).second = static_cast<AnimationType>(currentType);
-					}
-
-					ImGui::TableNextColumn();
-
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
-
-					sprintf_s(buffer, "Delete##AnimationSettingRow%d", i+1);
-					if (ImGui::Button(buffer))
-					{
-						a->animation_frame.erase(i+1);
-					}
-					ImGui::PopStyleColor(3);
 				}
-				
-				ImGui::EndTable();
+				LE_InputInt("Jump Fixed Frame", &a->jump_fixed_frame);
 
-				if (ImGui::Button("Add Row")) {
-					a->animation_frame.insert(std::make_pair((a->animation_frame.empty() ? 1 : a->animation_frame.rbegin()->first + 1), std::make_pair(0, AnimationType::No_Animation_Type)));
+				if (ImGui::Button("Save")) {
+					Animation_EditMode = false;
+					a->set_up_map();
 				}
 			}
-			LE_InputInt("Jump Fixed Frame", &a->jump_fixed_frame);
+			else {
+				ImGui::SeparatorText("Values");
+
+				ImGui::Text("Current Type: %d", a->current_type);
+				ImGui::Text("Frame Number: %d", a->frame_num);
+				ImGui::Text("Opacity: %.2f", a->opacity);
+				ImGui::Text("Frame Rate: %.2f", a->frame_rate);
+				ImGui::Text("Animation Scale: %.2f, %.2f", a->animation_scale.first, a->animation_scale.second);
+
+				ImGui::SeparatorText("Animation Settings");
+
+				if (ImGui::BeginTable("AnimationSettings", 4, NULL)) {
+					ImGui::TableSetupColumn("Row", ImGuiTableColumnFlags_WidthFixed, 50.f);
+					ImGui::TableSetupColumn("Frame", ImGuiTableColumnFlags_WidthFixed, 150.f);
+					ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed, 150.f);
+
+					ImGui::TableHeadersRow();
+
+					//for (auto& pair : a->animation_frame) {
+
+					int a_size = a->animation_frame.size();
+
+					for (int i = 0; i < a_size; i++) {
+
+						std::pair<int, AnimationType> pair;
+
+						try {
+							pair = a->animation_frame.at(i + 1);
+						}
+						catch (std::out_of_range) {
+							a_size++;
+							continue;
+						}
+
+						ImGui::TableNextRow();
+						ImGui::TableNextColumn();
+						ImGui::Text("%d", i + 1);
+						ImGui::TableNextColumn();
+
+						sprintf_s(buffer, "##FrameNum%d", i + 1);
+
+						ImGui::Text("%d", a->animation_frame.at(i + 1).first);
+
+						ImGui::TableNextColumn();
+
+						int currentType = static_cast<int>(pair.second);
+
+						std::vector<std::string> itemStrings(No_Animation_Type + 1);
+						const char* items[No_Animation_Type + 1];
+						for (int i = 0; i < No_Animation_Type + 1; ++i) {
+							itemStrings[i] = AnimationTypeToString(static_cast<AnimationType>(i));
+							items[i] = itemStrings[i].c_str();
+						}
+
+						sprintf_s(buffer, "##AnimationTypeBox%d", i + 1);
+
+						ImGui::Text("%s", itemStrings[currentType].c_str());
+					}
+
+					ImGui::EndTable();
+				}
+				ImGui::Text("Jump Fixed Frame: %d", a->jump_fixed_frame);
+
+				if (ImGui::Button("Edit values")) {
+					Animation_EditMode = true;
+				}
+			}
 		}
 	}
 
