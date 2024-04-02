@@ -197,6 +197,8 @@ static float edited_mass;
 static bool edited_gravity;
 static bool edited_able_to_push_objects;
 
+static bool update_all_instances = false;
+
 void LevelEditor::ObjectProperties() {
 
 	ImGui::SetNextWindowSize(ImVec2(450, 0));
@@ -495,6 +497,18 @@ void LevelEditor::ObjectProperties() {
 		ImGui::PopStyleColor(3);
 	}
 	ImGui::EndChild();
+
+	if (object->GetPrefab()) {
+		sprintf_s(buffer, "Apply all changes to all instances of %s", object->GetPrefab()->GetName().c_str());
+
+		ImGui::Checkbox(buffer, &update_all_instances);
+	}
+	else {
+		ImGui::BeginDisabled();
+		ImGui::Checkbox("There is no prefab linked to this object", &update_all_instances);
+		ImGui::EndDisabled();
+	}
+
 	ImGui::BeginChild("ObjectPropertiesScroll", ImGui::GetContentRegionAvail());
 	// Texture
 	if (te != nullptr)
@@ -661,10 +675,24 @@ void LevelEditor::ObjectProperties() {
 				}
 				LE_InputInt("Jump Fixed Frame", &a->jump_fixed_frame);
 
-				if (ImGui::Button("Save")) {
+				if (ImGui::Button("Done##Animation")) {
 					Animation_EditMode = false;
 					a->set_up_map();
+
+					UpdateAllObjectInstances(object);
 				}
+
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel##Animation"))
+				{
+					Animation_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
 			}
 			else {
 				ImGui::SeparatorText("Values");
@@ -2174,8 +2202,8 @@ void LevelEditor::NewPrefabDialog() {
 *******************************************************************************/
 void LevelEditor::UpdateAllObjectInstances(Object* object) {
 
-	// Make sure the object is from a prefab
-	if (object->GetPrefab() == nullptr)
+	// Make sure the object is from a prefab and the update_all_instances flag is set
+	if (object->GetPrefab() == nullptr || !update_all_instances)
 		return;
 
 	// Do not copy Transform
