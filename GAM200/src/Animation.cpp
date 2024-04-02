@@ -194,6 +194,7 @@ int Animation::get_ani_type_count()
 // Get all the models and properly store them into the map to be rendered
 void Animation::set_up_map()
 {
+	frame_num = 0;
 	animation_Map.clear(); // Clear any existing map before setting up
 
 	//loop through the animation_frame map; frame.second.first = framecol = i, frame.first = framerow
