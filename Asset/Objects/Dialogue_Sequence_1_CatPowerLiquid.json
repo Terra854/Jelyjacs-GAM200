@@ -1,0 +1,25 @@
+{
+  "Name": "Dialogue_Sequence_1_CatPowerLiquid",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 497.0,
+          "y": 181.0
+        },
+        "Scale": {
+          "x": 200.0,
+          "y": 200.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Dialogue",
+      "Properties": {
+        "dialogue": "[Look Spark! Some Electrum!][Now you can teleport again][Hmmm...][Looks like it's only good for one use though][(Press T when controlling Spark to teleport\ndirectly to Finn)]"
+      }
+    }
+  ]
+}
