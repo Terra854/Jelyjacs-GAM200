@@ -100,7 +100,7 @@ private:
 	// FPS Variables
 	int numofsteps = 0;
 
-	Vec2 start_coord, end_coord, level_size;
+	Vec2 start_coord, end_coord;
 };
 
 extern CoreEngine* engine;
