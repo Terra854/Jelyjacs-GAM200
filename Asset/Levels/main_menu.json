@@ -91,6 +91,38 @@
           "scripts": "MainMenuQuitButton",
           "speed": 0.0
         }]
+        },
+        {
+          "Name": "MainMenuArrowLeft",
+          "Prefabs": "main_menu_arrow_left.json",
+          "Components": [{
+          "Position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 128,
+            "y": 128
+          },
+          "Type": "Transform"
+        }]
+        },
+        {
+          "Name": "MainMenuArrowRight",
+          "Prefabs": "main_menu_arrow_right.json",
+          "Components": [{
+          "Position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 128,
+            "y": 128
+          },
+          "Type": "Transform"
+        }]
         }
       ],
       "Settings": {

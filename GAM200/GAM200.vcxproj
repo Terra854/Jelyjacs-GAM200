@@ -257,6 +257,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\HorizontalDoor.cpp" />
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
     <ClCompile Include="src\Scripts\HowToPlayButton.cpp" />
+    <ClCompile Include="src\Scripts\MainMenuArrow.cpp" />
     <ClCompile Include="src\Scripts\MainMenuLoadGameButton.cpp" />
     <ClCompile Include="src\Scripts\MainMenuOptionsButton.cpp" />
     <ClCompile Include="src\Scripts\MainMenuQuitButton.cpp" />
@@ -334,6 +335,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\Endpoint.h" />
     <ClInclude Include="include\Scripts\Finn.h" />
     <ClInclude Include="include\Scripts\HowToPlayButton.h" />
+    <ClInclude Include="include\Scripts\MainMenuArrow.h" />
     <ClInclude Include="include\Scripts\MainMenuLoadGameButton.h" />
     <ClInclude Include="include\Scripts\MainMenuOptionsButton.h" />
     <ClInclude Include="include\Scripts\MainMenuQuitButton.h" />
