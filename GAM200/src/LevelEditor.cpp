@@ -2277,6 +2277,8 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 			if (a != nullptr && o_a != nullptr) {
 				o_a->animation_tex_obj = a->animation_tex_obj;
 				o_a->animation_Map = a->animation_Map;
+				o_a->frame_rate = a->frame_rate;
+				o_a->animation_scale = a->animation_scale;
 			}
 			if (e != nullptr && o_e != nullptr) {
 				o_e->linked_event = e->linked_event;
