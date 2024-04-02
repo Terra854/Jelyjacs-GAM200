@@ -1,0 +1,25 @@
+{
+  "Name": "level1_background_9",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 416.0,
+          "y": 320.0
+        },
+        "Scale": {
+          "x": 1960.0,
+          "y": 1344.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "level1_background_9.png"
+      }
+    }
+  ]
+}

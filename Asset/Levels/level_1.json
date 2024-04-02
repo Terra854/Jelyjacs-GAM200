@@ -124,6 +124,27 @@
             {
               "Position" : 
               {
+                "x" : 875.0,
+                "y" : 580.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 384.0,
+                "y" : 512.0
+              },
+              "Type" : "Transform"
+            }
+          ],
+          "Name" : "Smoke",
+          "Prefabs" : "Smoke.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
                 "x" : 416.0,
                 "y" : 320.0
               },
@@ -187,6 +208,27 @@
             {
               "Position" : 
               {
+                "x" : 416.0,
+                "y" : 320.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 1960.0,
+                "y" : 1344.0
+              },
+              "Type" : "Transform"
+            }
+          ],
+          "Name" : "level1_background_9",
+          "Prefabs" : "level1_background_9.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
                 "x" : 612.0,
                 "y" : 530.0
               },
@@ -201,27 +243,6 @@
           ],
           "Name" : "Fan",
           "Prefabs" : "Fan.json"
-        },
-        {
-          "Components" : 
-          [
-            {
-              "Position" : 
-              {
-                "x" : 875.0,
-                "y" : 580.0
-              },
-              "Rotation" : 0.0,
-              "Scale" : 
-              {
-                "x" : 384.0,
-                "y" : 512.0
-              },
-              "Type" : "Transform"
-            }
-          ],
-          "Name" : "Smoke",
-          "Prefabs" : "Smoke.json"
         },
         {
           "Components" : 

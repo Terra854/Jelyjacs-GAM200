@@ -1,0 +1,25 @@
+{
+  "Name": "level2_background_3",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 846.0,
+          "y": 480.0
+        },
+        "Scale": {
+          "x": 2430.0,
+          "y": 1312.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "level2_background_3.png"
+      }
+    }
+  ]
+}

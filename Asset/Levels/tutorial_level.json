@@ -54,6 +54,27 @@
           ],
           "Name" : "Light",
           "Prefabs" : "Light.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
+                "x" : -33.0,
+                "y" : 31.5
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 1282.0,
+                "y" : 720.0
+              },
+              "Type" : "Transform"
+            }
+          ],
+          "Name" : "tutorial_background1",
+          "Prefabs" : "tutorial_background1.json"
         }
       ],
       "Settings" : 
