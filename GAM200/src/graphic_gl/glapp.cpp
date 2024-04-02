@@ -380,7 +380,7 @@ void GLApp::Update()
 					glBindVertexArray(0);
 					AssetManager::shaderval("image").UnUse();
 				}
-				else if (ani_pt) {
+				else if (ani_pt && !ani_pt->animation_Map.empty()) {
 					// if is player
 					if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
 						ParticleSystem* particleSystem = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));

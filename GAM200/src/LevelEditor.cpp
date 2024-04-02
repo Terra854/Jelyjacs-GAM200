@@ -299,12 +299,31 @@ void LevelEditor::ObjectProperties() {
 
 			memcpy_s(dropped_object, payload->DataSize, payload->Data, payload->DataSize);
 
-			if (te == nullptr) {
+			if (te == nullptr && a == nullptr) {
 				object->AddComponent(new Texture(dropped_object));
 				tr->Scale = { 64.f, 64.f };
 			}
 			else
 				te->textureName = dropped_object;
+
+			UpdateAllObjectInstances(object);
+			ImGui::EndDragDropTarget();
+		}
+
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game animations"))
+		{
+			char dropped_object[1024];
+
+			memcpy_s(dropped_object, payload->DataSize, payload->Data, payload->DataSize);
+
+			if (te == nullptr && a == nullptr) {
+				Animation* dropped_a = new Animation();
+				dropped_a->animation_tex_obj = AssetManager::animationval(dropped_object);
+				object->AddComponent(dropped_a);
+				tr->Scale = { 64.f, 64.f };
+			}
+			else
+				a->animation_tex_obj = AssetManager::animationval(dropped_object);
 
 			UpdateAllObjectInstances(object);
 			ImGui::EndDragDropTarget();
@@ -593,7 +612,9 @@ void LevelEditor::ObjectProperties() {
 					ImGui::Text("%d", i + 1);
 					ImGui::TableNextColumn();
 
-					LE_InputInt("##FrameNum", &a->animation_frame.at(i + 1).first);
+					sprintf_s(buffer, "##FrameNum%d", i + 1);
+
+					LE_InputInt(buffer, &a->animation_frame.at(i + 1).first);
 
 					ImGui::TableNextColumn();
 
@@ -2114,13 +2135,26 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 			if (be == nullptr && o_be != nullptr)
 				objectFactory->DeleteComponent(o, ComponentType::Behaviour);
 
-
-			if (bo != nullptr && o_bo == nullptr)
+			if (te != nullptr && o_te == nullptr) {
+				o->AddComponent(new Texture(te->textureName));
+				o_te = (Texture*)o->GetComponent(ComponentType::Texture);
+			}
+			if (bo != nullptr && o_bo == nullptr) {
 				o->AddComponent(new Rectangular());
-			if (ph != nullptr && o_ph == nullptr)
+				o_bo = (Body*)o->GetComponent(ComponentType::Body);
+			}
+			if (ph != nullptr && o_ph == nullptr) {
 				o->AddComponent(new Physics());
-			if (be != nullptr && o_be == nullptr)
+				o_ph = (Physics*)o->GetComponent(ComponentType::Physics);
+			}
+			if (be != nullptr && o_be == nullptr) {
 				o->AddComponent(new Behaviour(be->GetBehaviourIndex(), be->GetBehaviourName()));
+				o_be = (Behaviour*)o->GetComponent(ComponentType::Behaviour);
+			}
+			if (a != nullptr && o_a == nullptr) {
+				o->AddComponent(new Animation());
+				o_a = (Animation*)o->GetComponent(ComponentType::Animation);
+			}
 
 			// Check to see if we are not copying the data to components that doesn't exist
 			if (te != nullptr && o_te != nullptr) {
