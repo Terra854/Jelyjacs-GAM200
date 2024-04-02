@@ -9,7 +9,6 @@ This file contains the script for the endpoint door
 #include <iostream>
 #include <components/Transform.h>
 #include <components/Animation.h>
-#include "gamehud.h"
 #include <Audio.h>
 
 namespace Endpoint_Script {
