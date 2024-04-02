@@ -253,3 +253,22 @@ void SceneManager::BackupInitialState() {
 
 
 
+void SceneManager::CalculateLevelSize() {
+		// Calculate the level size
+	float maxX = 0, maxY = 0;
+
+	Vec2 start_coord, end_coord;
+
+	for (const auto& p : objectFactory->objectMap) {
+		Object* obj = p.second;
+		Rectangular* r = (Rectangular*)obj->GetComponent(ComponentType::Body);
+
+		if (r) {
+			start_coord = Vec2(r->aabb.min.x < start_coord.x ? r->aabb.min.x : start_coord.x, r->aabb.min.y < start_coord.y ? r->aabb.min.y : start_coord.y);
+			end_coord = Vec2(r->aabb.max.x > end_coord.x ? r->aabb.max.x : end_coord.x, r->aabb.max.y > end_coord.y ? r->aabb.max.y : end_coord.y);
+		}
+	}
+
+	engine->Set_Start_Coords(start_coord);
+	engine->Set_End_Coords(end_coord);
+}

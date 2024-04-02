@@ -51,8 +51,8 @@ CoreEngine::CoreEngine()
 	game_active = true;
 	CORE = this;
 
-	level_size = Vec2(1920.f, 1080.f);
 	start_coord = Vec2(-960.0f, -540.0f);
+	end_coord = Vec2(960.0f, 540.0f);
 
 #if defined(DEBUG) | defined(_DEBUG)
 	paused = true;
@@ -295,6 +295,8 @@ void CoreEngine::GameLoop()
 					createdObj->SetPrefab(object->second);
 
 					objectFactory->assignIdToObject(createdObj);
+					SceneManager::CalculateLevelSize();
+
 					objectFactory->AddToLayer(static_cast<int>(sceneManager->layers.size() - 1), createdObj);
 					Transform* objTransform = (Transform*)createdObj->GetComponent(ComponentType::Transform);
 					Body* objBody = (Body*)createdObj->GetComponent(ComponentType::Body);

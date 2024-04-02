@@ -50,6 +50,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 	if (isParentScene) {
 		SceneManager::AdditionalScenesLoadedConcurrently.clear();
 
+		/*
 		Vec2 start_coord;
 		jsonobj.readFloat(start_coord.x, "Size", "startX");
 		jsonobj.readFloat(start_coord.y, "Size", "startY");
@@ -59,6 +60,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 		jsonobj.readFloat(level_size.x, "Size", "width");
 		jsonobj.readFloat(level_size.y, "Size", "height");
 		engine->Set_Level_Size(level_size);
+		*/
 	}
 
 	int layerNum = 0;
@@ -210,8 +212,10 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 
 	jsonobj.closeFile();
 
-	if (isParentScene)
+	if (isParentScene) {
 		Logic->Initialize();
+		SceneManager::CalculateLevelSize();
+	}
 }
 
 /******************************************************************************
@@ -227,7 +231,7 @@ void SaveScene(std::string filename)
 	jsonobj["SceneName"] = engine->loaded_level;
 
 	//jsonobj["SoundMap"] = "Asset/Sounds/sounds.json"; // Hard coded line, will need to do proper saving
-
+	/*
 	Vec2 start_coord = engine->Get_Start_Coords();
 
 	Vec2 level_size = engine->Get_Level_Size();
@@ -236,6 +240,7 @@ void SaveScene(std::string filename)
 	jsonobj["Size"]["startY"] = start_coord.y;
 	jsonobj["Size"]["width"] = level_size.x;
 	jsonobj["Size"]["height"] = level_size.y;
+	*/
 
 	auto& layers = jsonobj["Layers"];
 

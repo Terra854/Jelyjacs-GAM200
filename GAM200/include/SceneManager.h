@@ -28,6 +28,8 @@ public:
 
 	static void BackupInitialState();
 
+	static void CalculateLevelSize();
+
 	// Returns name of the component
 	virtual std::string SystemName() { return "SceneManager"; }
 

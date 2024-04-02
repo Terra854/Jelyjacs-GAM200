@@ -406,6 +406,9 @@ void LevelEditor::ObjectProperties() {
 					o->SetPrefab(object);
 
 				objectFactory->assignIdToObject(o);
+
+				SceneManager::CalculateLevelSize();
+
 				selectedNum = o->GetId();
 				//o->SetPrefab(object->GetPrefab()); // testing this line
 				cloneSuccessful = selectedNum;
@@ -933,6 +936,8 @@ void LevelEditor::ObjectProperties() {
 						r->material = edited_material;
 
 						UpdateAllObjectInstances(object);
+
+						SceneManager::CalculateLevelSize();
 					}
 
 					ImGui::SameLine();
@@ -2096,6 +2101,7 @@ void LevelEditor::SaveAsDialog() {
 					objectFactory->assignIdToObject(p.second);
 				}
 
+				SceneManager::CalculateLevelSize();
 				SceneManager::ClearInitialObjectMap(false);
 			}
 
@@ -2471,7 +2477,7 @@ void LevelEditor::Update() {
 					for (const std::pair<int, Object*>& p : initialObjectMap) {
 						objectFactory->assignIdToObject(p.second);
 					}
-
+					SceneManager::CalculateLevelSize();
 					SceneManager::ClearInitialObjectMap(false);
 				}
 

@@ -65,11 +65,11 @@ public:
 
 	bool show_tileset = false;
 
-	void Set_Level_Size(Vec2& size) { level_size = size; }
-	Vec2 Get_Level_Size() { return level_size; }
-
 	void Set_Start_Coords(Vec2& coords) { start_coord = coords; }
 	Vec2 Get_Start_Coords() { return start_coord; }
+
+	void Set_End_Coords(Vec2& coords) { end_coord = coords; }
+	Vec2 Get_End_Coords() { return end_coord; }
 
 	int Get_NumOfSteps() { return numofsteps; }
 #if defined(DEBUG) | defined(_DEBUG)
@@ -100,7 +100,7 @@ private:
 	// FPS Variables
 	int numofsteps = 0;
 
-	Vec2 level_size, start_coord;
+	Vec2 start_coord, end_coord, level_size;
 };
 
 extern CoreEngine* engine;

@@ -221,7 +221,7 @@ int total_grid_width, total_grid_height, num_of_grids_per_side;
 *******************************************************************************/
 void PrepareUniformGrid() {
 
-	Vec2 level_size = engine->Get_Level_Size();
+	Vec2 level_size = engine->Get_End_Coords() - engine->Get_Start_Coords();
 
 	int num_of_partitions_per_side = 6;
 
