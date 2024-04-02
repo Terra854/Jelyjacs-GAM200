@@ -99,6 +99,11 @@ void MainMenuStartGameButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void MainMenuStartGameButton::Update(Object* obj) {
+
+
+
+
+
 	for (auto a : FinnCrashingVideo) {
 		a->opacity = 0.f;
 	}
@@ -148,12 +153,21 @@ void MainMenuStartGameButton::Update(Object* obj) {
 		}
 	}
 
-	if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible || static_cast<Texture*>(obj->GetComponent(ComponentType::Texture))->opacity < 1.f) {
+	if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible || static_cast<Texture*>(obj->GetComponent(ComponentType::Texture))->opacity < 1.f) {
 		//std::cout << "NIL OBJ : ButtonBase" << std::endl;
 		return;
 	}
 
-	if (isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
+	
+
+	if (!isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
+		return;
+	}
+
+
+
+	if (input::IsPressed(KEY::mouseL))
+	{
 		std::cout << "Button Clicked" << std::endl;
 		audio->playSfx("button_click");
 		audio->playSfx("title_losing_power");
@@ -162,7 +176,6 @@ void MainMenuStartGameButton::Update(Object* obj) {
 		//app->video_start = true;
 
 		HaveFinnCrash = true;
-
 	}
 }
 /*********************************************************************/

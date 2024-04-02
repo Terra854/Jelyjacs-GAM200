@@ -1,0 +1,32 @@
+{
+  "Name": "MainMenuArrowRight",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 128,
+          "y": 128
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "YellowArrow_Right.png"
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "MainMenuArrow",
+        "Index": 0
+      }
+    }
+  ]
+}

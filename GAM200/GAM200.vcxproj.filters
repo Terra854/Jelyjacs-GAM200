@@ -330,6 +330,9 @@
     <ClCompile Include="src\Scripts\SoundToggle.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\MainMenuArrow.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -600,6 +603,9 @@
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\SoundToggle.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\MainMenuArrow.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>
