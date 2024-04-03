@@ -1,0 +1,25 @@
+{
+  "Name": "Dialogue_Sequence_1_Electrum",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 200.0,
+          "y": 200.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Dialogue",
+      "Properties": {
+        "dialogue": "[Look Spark! Some Electrum!][Now you can teleport again][Hmm...][Looks like it's only good for one use though][Press T when controlling Spark to\nteleport him directly to Finn]"
+      }
+    }
+  ]
+}
