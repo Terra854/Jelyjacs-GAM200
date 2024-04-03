@@ -18,7 +18,7 @@
     {
       "Type": "Dialogue",
       "Properties": {
-        "dialogue": "[I think we're on\nthe right track spark!][looks like it's only going \nto get more difficult \nfrom here][Well I guess for starters, \nthat box over there looks useful]"
+        "dialogue": "[I think we're on the right track Spark!][looks like it's only going to get more difficult\nfrom here][Well I guess for starters, \nthat box over there looks useful][(Finn is capable of pushing boxes)][(Walk into the boxes to begin pushing them)][(Use boxes to hold down buttons and open doors)]"
       }
     }
   ]

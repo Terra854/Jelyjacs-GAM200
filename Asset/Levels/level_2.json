@@ -49,20 +49,41 @@
             {
               "Position" : 
               {
-                "x" : 863.0,
+                "x" : 238.5,
                 "y" : 494.0
               },
               "Rotation" : 0.0,
               "Scale" : 
               {
-                "x" : 2430.0,
+                "x" : 1215.0,
                 "y" : 1312.0
               },
               "Type" : "Transform"
             }
           ],
-          "Name" : "level2_background_1",
-          "Prefabs" : "level2_background_1.json"
+          "Name" : "level2_background_1_1",
+          "Prefabs" : "level2_background_1_1.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
+                "x" : 1453.5,
+                "y" : 494.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 1215.0,
+                "y" : 1312.0
+              },
+              "Type" : "Transform"
+            }
+          ],
+          "Name" : "level2_background_1_2",
+          "Prefabs" : "level2_background_1_2.json"
         },
         {
           "Components" : 
@@ -91,20 +112,41 @@
             {
               "Position" : 
               {
-                "x" : 863.0,
+                "x" : 238.5,
                 "y" : 494.0
               },
               "Rotation" : 0.0,
               "Scale" : 
               {
-                "x" : 2430.0,
+                "x" : 1215.0,
                 "y" : 1312.0
               },
               "Type" : "Transform"
             }
           ],
-          "Name" : "level2_background_2",
-          "Prefabs" : "level2_background_2.json"
+          "Name" : "level2_background_2_1",
+          "Prefabs" : "level2_background_2_1.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
+                "x" : 1453.5,
+                "y" : 494.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 1215.0,
+                "y" : 1312.0
+              },
+              "Type" : "Transform"
+            }
+          ],
+          "Name" : "level2_background_2_2",
+          "Prefabs" : "level2_background_2_2.json"
         }
       ],
       "Settings" : 
@@ -5983,19 +6025,37 @@
           "Components": [
             {
               "Position": {
-                "x": 863.0,
+                "x": 238.5,
                 "y": 494.0
               },
               "Rotation": 0.0,
               "Scale": {
-                "x": 2430.0,
+                "x": 1215.0,
                 "y": 1312.0
               },
               "Type": "Transform"
             }
           ],
-          "Name": "level2_background_3",
-          "Prefabs": "level2_background_3.json"
+          "Name": "level2_background_3_1",
+          "Prefabs": "level2_background_3_1.json"
+        },
+        {
+          "Components": [
+            {
+              "Position": {
+                "x": 1453.5,
+                "y": 494.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 1215.0,
+                "y": 1312.0
+              },
+              "Type": "Transform"
+            }
+          ],
+          "Name": "level2_background_3_2",
+          "Prefabs": "level2_background_3_2.json"
         }
       ],
       "Settings": {
