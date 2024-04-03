@@ -27,7 +27,14 @@ void DialogueSystem::Initialize()
 void DialogueSystem::Update()
 {
 	if (engine->isPaused() && engine->debug_gui_active)
+	{
 		return;
+	}
+	if (engine->isPaused())
+	{
+		objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = false;
+		return;
+	}
 	
 
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj)
