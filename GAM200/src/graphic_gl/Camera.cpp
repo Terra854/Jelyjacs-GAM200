@@ -20,7 +20,7 @@ Camera::Camera() {
 * Initialize the camera
 */
 void Camera::Initialize() {
-	scale = { 1.f,1.f };
+	scale = { 2.f,2.f };
 	position = { 0.f,0.f };
 }
 
@@ -38,14 +38,14 @@ void Camera::Update() {
 
 		// Set scale for camera
 
-		if (input::IsPressed(KEY::c)) {
+		/*if (input::IsPressed(KEY::c)) {
 			if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
 				camera2D->scale = { 2.0f, 2.0f };
 			}
 			else {
 				scale = { 1.0f, 1.0f };
 			}
-		}
+		}*/
 		//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
 		if (camera_shake) {
 			// get a random number between -1 to 1
