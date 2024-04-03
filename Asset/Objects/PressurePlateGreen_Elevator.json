@@ -1,5 +1,5 @@
 {
-  "Name": "PressurePlatePink_Elevator",
+  "Name": "PressurePlateGreen_Elevator",
   "Components": [
     {
       "Type": "Transform",
@@ -26,11 +26,11 @@
     {
       "Type": "Animation",
       "Properties": {
-        "texturepath": "PressurePlate_Pink.png",
+        "texturepath": "PressurePlate_Green.png",
         "framerate": 0.1,
-        "frame": [3, 1],
-        "1": [1, "idle"],
-        "2": [3, "jump"]
+        "frame": [ 3, 1 ],
+        "1": [ 1, "idle" ],
+        "2": [ 3, "jump" ]
       }
     },
     {

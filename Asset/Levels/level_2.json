@@ -5355,8 +5355,8 @@
               "speed": 0.0
             }
           ],
-          "Name": "PressurePlatePink_Elevator",
-          "Prefabs": "PressurePlatePink_Elevator.json"
+          "Name": "PressurePlateGreen_Elevator",
+          "Prefabs": "PressurePlateGreen_Elevator.json"
         },
         {
           "Components": [
