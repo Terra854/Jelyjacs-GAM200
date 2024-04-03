@@ -300,6 +300,35 @@
             {
               "Position" : 
               {
+                "x" : 416.0,
+                "y" : 320.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 2173.0,
+                "y" : 1344.0
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "opacity" : 1.0,
+                "texturepath" : "level1_background_9.png"
+              },
+              "Type" : "Texture"
+            }
+          ],
+          "Name" : "level1_background_9",
+          "Prefabs" : "level1_background_9.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
                 "x" : 612.0,
                 "y" : 530.0
               },
@@ -7436,46 +7465,6 @@
           ],
           "Name": "platform_21",
           "Prefabs": "platform_21.json"
-        }
-      ],
-      "Settings" : 
-      {
-        "isVisible" : true,
-        "static_layer" : false
-      }
-    },
-    {
-      "Name" : "Background Details",
-      "Objects" : 
-      [
-        {
-          "Components" : 
-          [
-            {
-              "Position" : 
-              {
-                "x" : 416.0,
-                "y" : 320.0
-              },
-              "Rotation" : 0.0,
-              "Scale" : 
-              {
-                "x" : 2173.0,
-                "y" : 1344.0
-              },
-              "Type" : "Transform"
-            },
-            {
-              "Properties" : 
-              {
-                "opacity" : 1.0,
-                "texturepath" : "level1_background_9.png"
-              },
-              "Type" : "Texture"
-            }
-          ],
-          "Name" : "level1_background_9",
-          "Prefabs" : "level1_background_9.json"
         }
       ],
       "Settings" : 
