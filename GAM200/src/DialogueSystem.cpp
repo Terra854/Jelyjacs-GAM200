@@ -30,7 +30,6 @@ void DialogueSystem::Update()
 		return;
 	
 
-
 	for (Factory::objectIDMap::iterator obj = objectFactory->objectMap.begin(); obj != objectFactory->objectMap.end(); ++obj)
 	{
 
@@ -43,10 +42,21 @@ void DialogueSystem::Update()
 		{
 			continue;//dialogue has finished
 		}
+		Object* finn_obj = objectFactory->FindObject("Finn");
+		Transform* finn_trans = (Transform*)finn_obj->GetComponent(ComponentType::Transform);
+		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
+		if (!isObjectClicked(t, finn_trans->Position))
+		{
+			continue;
+		}
 		if (next_dialogue)
 		{
 			next_dialogue = false;
 			d->SetSequence(d->GetSequence() + 1);
+			std::cout << d->GetEntireDialogue() << std::endl;
+			std::cout << "sequence: " << d->GetSequence() << std::endl;
+			std::cout << "sequence size: " << d->GetDialogueLines().size() << std::endl;
+			std::cout << "\n\n\n\n" << std::endl;
 			if (d->GetSequence() == d->GetDialogueLines().size())
 			{
 				objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = false;
@@ -55,14 +65,9 @@ void DialogueSystem::Update()
 				continue;
 			}
 		}
-		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
 		
-		Object* finn_obj = objectFactory->FindObject("Finn");
-		Transform * finn_trans = (Transform*)finn_obj->GetComponent(ComponentType::Transform);
-		if (!isObjectClicked(t, finn_trans->Position))
-		{
-			continue;
-		}
+		
+		
 		CHATBOX::change_text(d->GetDialogueLines().at(d->GetSequence()));
 		objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = true;
 		Message_Handler msg(MessageID::Event_Type::NoMovement);
