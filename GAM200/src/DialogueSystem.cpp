@@ -53,10 +53,6 @@ void DialogueSystem::Update()
 		{
 			next_dialogue = false;
 			d->SetSequence(d->GetSequence() + 1);
-			std::cout << d->GetEntireDialogue() << std::endl;
-			std::cout << "sequence: " << d->GetSequence() << std::endl;
-			std::cout << "sequence size: " << d->GetDialogueLines().size() << std::endl;
-			std::cout << "\n\n\n\n" << std::endl;
 			if (d->GetSequence() == d->GetDialogueLines().size())
 			{
 				objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = false;
