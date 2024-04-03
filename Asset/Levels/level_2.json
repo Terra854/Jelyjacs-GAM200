@@ -1,9 +1,9 @@
 {
-  "AdditionalScenesToLoad" : 
-  [
+  "AdditionalScenesToLoad": [
     "game_hud.json",
     "pause_menu.json",
-    "win_menu.json"
+    "win_menu.json",
+    "dialogue_hud.json"
   ],
   "Layers" : 
   [
@@ -6011,6 +6011,24 @@
           ],
           "Name": "platform_21",
           "Prefabs": "platform_21.json"
+        },
+        {
+          "Components": [
+            {
+              "Position": {
+                "x": -118.0,
+                "y": 30.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 100.0,
+                "y": 100.0
+              },
+              "Type": "Transform"
+            }
+          ],
+          "Name": "Dialogue_Sequence_3",
+          "Prefabs": "Dialogue_Sequence_3.json"
         }
       ],
       "Settings": {
