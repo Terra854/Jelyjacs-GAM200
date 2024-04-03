@@ -34,6 +34,24 @@
           "Prefabs" : "tutorial_background.json"
         },
         {
+          "Components": [
+            {
+              "Position": {
+                "x": -33.0,
+                "y": 31.5
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 1282.0,
+                "y": 720.0
+              },
+              "Type": "Transform"
+            }
+          ],
+          "Name": "tutorial_background1",
+          "Prefabs": "tutorial_background1.json"
+        },
+        {
           "Components" : 
           [
             {
@@ -2747,33 +2765,6 @@
           ],
           "Name": "Dialogue_Sequence_1_Elevator",
           "Prefabs": "Dialogue_Sequence_1_Elevator.json"
-        }
-      ],
-      "Settings": {
-        "isVisible": true,
-        "static_layer": false
-      }
-    },
-    {
-      "Name": "Background Details",
-      "Objects": [
-        {
-          "Components": [
-            {
-              "Position": {
-                "x": -33.0,
-                "y": 31.5
-              },
-              "Rotation": 0.0,
-              "Scale": {
-                "x": 1282.0,
-                "y": 720.0
-              },
-              "Type": "Transform"
-            }
-          ],
-          "Name": "tutorial_background1",
-          "Prefabs": "tutorial_background1.json"
         }
       ],
       "Settings": {
