@@ -14,6 +14,7 @@ This file contains the script for OpeningCutscene
 #include <Audio.h>
 #include <components/Text.h>
 #include <SceneManager.h>
+#include "camera.h"
 
 float OpeningCutsceneTime;
 Texture *opening_cutscene_1, *opening_cutscene_2, *opening_cutscene_3, *opening_cutscene_4, *opening_cutscene_5, *opening_cutscene_6;
@@ -34,7 +35,7 @@ void OpeningCutscene::Start(Object* obj) {
 		//std::cout << "NIL OBJ : Player" << std::endl;
 		return;
 	}
-
+	camera2D->scale = { 1.f,1.f };
 	audio->setBackgroundAudio("opening_cutscene_bg");
 
 	opening_cutscene_1 = static_cast<Texture*>(objectFactory->FindObject("opening_cutscene_1")->GetComponent(ComponentType::Texture));
@@ -106,6 +107,7 @@ void OpeningCutscene::Update(Object* obj) {
 			audio->setBackgroundAudio("main_menu_bg");
 			audio->stopSfx(rain_sfx);
 			audio->stopSfx(people_sfx);
+			camera2D->scale = { 2.f,2.f };
 			SceneManager::LoadScene("main_menu.json");
 		}
 
