@@ -40,6 +40,9 @@ void SceneManager::LoadScene(const std::string filepath) {
 	SceneManager::initialLayer.clear();
 	SceneManager::initialLayerSettings.clear();
 	LoadSceneFromJson(filepath.c_str());
+
+	if (!engine->isPaused() && initialObjectMap.empty())
+		SceneManager::BackupInitialState();
 }
 
 

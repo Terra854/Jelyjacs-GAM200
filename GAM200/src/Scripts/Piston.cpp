@@ -60,6 +60,7 @@ namespace Piston_Script {
 			if (piston_animation->current_type == AnimationType::Jump) {}
 			else {
 				piston_animation->current_type = AnimationType::Jump;
+				audio->playSfx("piston_plate_press");
 				Event* piston_event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
 				std::cout << "piston event linked event:";
 				std::cout << piston_event->linked_event << std::endl;

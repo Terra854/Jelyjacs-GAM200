@@ -126,6 +126,8 @@ void MainMenuStartGameButton::Update(Object* obj) {
 				HaveFinnCrash = false;
 				audio->setBackgroundAudio("background");
 				SceneManager::LoadScene("tutorial_level.json");
+				SceneManager::PlayScene();
+				return;
 			}
 
 			sfxCooldown -= engine->GetDt();
