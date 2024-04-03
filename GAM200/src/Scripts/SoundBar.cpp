@@ -32,7 +32,7 @@ void SoundBar::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void SoundBar::Update(Object* obj) {
-    if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+    if (obj == nullptr || objectFactory->FindLayerThatHasThisObject(obj) == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         return;
     }
     sound_bg_trans = (Transform*)sound_bg_obj->GetComponent(ComponentType::Transform);
