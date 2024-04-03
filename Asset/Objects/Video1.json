@@ -20,9 +20,12 @@
       "Properties": {
         "texturepath": "video1.png",
         "framerate": 1,
-        "frame": [4, 2],
-        "1":[4,"idle"],
-        "2":[4,"idle"]
+        "frame": [3, 5],
+        "1":[3,"idle"],
+        "2":[3,"idle"],
+        "3":[3,"idle"],
+        "4":[3,"idle"],
+        "5":[3,"idle"]
       }
     }
   ]

@@ -55,9 +55,6 @@ void Camera::Update() {
 			random_num.x *= random_shift.x;
 			random_num.y *= random_shift.y;
 			
-			/*Vec2 shift = { x * 2.0f - 1.0f, y * 2.0f - 1.0f };
-			random_shift.x *= shift.x;
-			random_shift.y *= shift.y;*/
 			position += random_num;
 			time_count += engine->Get_Fixed_DT();
 			std::cout << "time_count" << std::endl;
@@ -132,16 +129,27 @@ void Camera::SetToPlayer() {
 
 		position.y = trans->Position.y;
 
+		// make sure the camera is not out of bounds
+		Vec2 botleft = engine->Get_Start_Coords();
+		Vec2 topright = engine->Get_End_Coords();
+		if (position.x < botleft.x + window->width * 0.25) {
+			position.x = botleft.x + window->width * 0.25;
+		}
+		if (position.y < botleft.y + window->height * 0.25) {
+			position.y = botleft.y + window->height * 0.25;
+		}
+		if (position.x > topright.x - window->width * 0.25) {
+			position.x = topright.x - window->width * 0.25;
+		}
+		if (position.y > topright.y - window->height * 0.25) {
+			position.y = topright.y - window->height * 0.25;
+		}
+
 
 		position.x = -position.x * 2.0f / window->width_init;
 
 		position.y = -position.y * 2.0f / window->height_init;
-		// make sure the camera is not out of bounds
-		/*if (position.x < x_min ) position.x = x_min;
-		if (position.y < y_min) position.y = y_min;
-		if (position.x > x_max ) position.x = x_max;
-		if (position.y > y_max) position.y = y_max;*/
-
+		
 	}
 	else {
 		position = { 0.0f, 0.0f };
