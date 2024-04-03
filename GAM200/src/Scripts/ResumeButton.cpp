@@ -33,7 +33,7 @@ void ResumeButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void ResumeButton::Update(Object* obj) {
-    if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+    if (obj == nullptr || objectFactory->FindLayerThatHasThisObject(obj) == nullptr ||!objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         //std::cout << "NIL OBJ : ResumeButton" << std::endl;
         return;
     }
