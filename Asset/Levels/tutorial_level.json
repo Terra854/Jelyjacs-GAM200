@@ -2729,6 +2729,24 @@
           ],
           "Name": "Dialogue_Sequence_1_Electrum",
           "Prefabs": "Dialogue_Sequence_1_Electrum.json"
+        },
+        {
+          "Components": [
+            {
+              "Position": {
+                "x": -107.0,
+                "y": -79.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 200.0,
+                "y": 200.0
+              },
+              "Type": "Transform"
+            }
+          ],
+          "Name": "Dialogue_Sequence_1_Elevator",
+          "Prefabs": "Dialogue_Sequence_1_Elevator.json"
         }
       ],
       "Settings": {

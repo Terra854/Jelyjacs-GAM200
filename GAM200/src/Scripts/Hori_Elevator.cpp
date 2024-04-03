@@ -73,7 +73,7 @@ namespace HE_Script {
 			else {
 				count += deltaT;
 			}
-			moving_platform_speed = moving_platform_direction ? -70.0f : 70.0f;
+			moving_platform_speed = moving_platform_direction ? -1000.0f : 1000.0f;
 			moving_platform_physics->Velocity.x = moving_platform_speed;
 		}
 		else {

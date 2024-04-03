@@ -1,0 +1,25 @@
+{
+  "Name": "Dialogue_Sequence_1_Elevator",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 200.0,
+          "y": 200.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Dialogue",
+      "Properties": {
+        "dialogue": "[Looks like I need to jump to reach that elevator][How do I do that again?][(Press either W or the space bar to jump)]"
+      }
+    }
+  ]
+}
