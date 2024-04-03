@@ -162,46 +162,6 @@
             "y": 44.0
           }
         }]
-        },
-        {
-          "Prefabs": "Video4.json",
-          "Components": [{
-          "Type": "Transform",
-          "Position": {
-            "x": -325.0,
-            "y": 44.0
-          }
-        }]
-        },
-        {
-          "Prefabs": "Video5.json",
-          "Components": [{
-          "Type": "Transform",
-          "Position": {
-            "x": -325.0,
-            "y": 44.0
-          }
-        }]
-        },
-        {
-          "Prefabs": "Video6.json",
-          "Components": [{
-          "Type": "Transform",
-          "Position": {
-            "x": -325.0,
-            "y": 44.0
-          }
-        }]
-        },
-        {
-          "Prefabs": "Video7.json",
-          "Components": [{
-          "Type": "Transform",
-          "Position": {
-            "x": -325.0,
-            "y": 44.0
-          }
-        }]
         }
       ],
       "Settings": {

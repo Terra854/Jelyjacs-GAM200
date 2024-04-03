@@ -62,25 +62,22 @@ void MainMenuStartGameButton::Start(Object* obj) {
 
 	FinnCrashingVideo.clear();
 
-	Object* o1, * o2, * o3, * o4, * o5, * o6, * o7;
+	Object* o1, * o2, * o3;
 
 	o1 = objectFactory->FindObject("Video1");
 	o2 = objectFactory->FindObject("Video2");
 	o3 = objectFactory->FindObject("Video3");
-	o4 = objectFactory->FindObject("Video4");
-	o5 = objectFactory->FindObject("Video5");
-	o6 = objectFactory->FindObject("Video6");
-	o7 = objectFactory->FindObject("Video7");
+	
 
-	if (o1 && o2 && o3 && o4 && o5 && o6 && o7) {
+	if (o1 && o2 && o3 ) {
 
 		FinnCrashingVideo.push_back(static_cast<Animation*>(o1->GetComponent(ComponentType::Animation)));
 		FinnCrashingVideo.push_back(static_cast<Animation*>(o2->GetComponent(ComponentType::Animation)));
 		FinnCrashingVideo.push_back(static_cast<Animation*>(o3->GetComponent(ComponentType::Animation)));
-		FinnCrashingVideo.push_back(static_cast<Animation*>(o4->GetComponent(ComponentType::Animation)));
+		/*FinnCrashingVideo.push_back(static_cast<Animation*>(o4->GetComponent(ComponentType::Animation)));
 		FinnCrashingVideo.push_back(static_cast<Animation*>(o5->GetComponent(ComponentType::Animation)));
 		FinnCrashingVideo.push_back(static_cast<Animation*>(o6->GetComponent(ComponentType::Animation)));
-		FinnCrashingVideo.push_back(static_cast<Animation*>(o7->GetComponent(ComponentType::Animation)));
+		FinnCrashingVideo.push_back(static_cast<Animation*>(o7->GetComponent(ComponentType::Animation)));*/
 
 		for (auto a : FinnCrashingVideo) {
 			a->opacity = 0.f;
@@ -121,9 +118,9 @@ void MainMenuStartGameButton::Update(Object* obj) {
 		}
 
 		if (videoTimer > 1.f) {
-			if (videoFrame < 51) {
-				FinnCrashingVideo[videoFrame / 8]->opacity = 1.f;
-				FinnCrashingVideo[videoFrame / 8]->frame_num = videoFrame % 8;
+			if (videoFrame < 42) {
+				FinnCrashingVideo[videoFrame / 15]->opacity = 1.f;
+				FinnCrashingVideo[videoFrame / 15]->frame_num = videoFrame % 15;
 			}
 			else {
 				HaveFinnCrash = false;
