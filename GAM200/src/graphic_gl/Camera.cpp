@@ -20,7 +20,7 @@ Camera::Camera() {
 * Initialize the camera
 */
 void Camera::Initialize() {
-	scale = { 2.f,2.f };
+	scale = { 1.f,1.f };
 	position = { 0.f,0.f };
 }
 
@@ -144,16 +144,21 @@ void Camera::SetToPlayer() {
 		if (position.y > topright.y - window->height * 0.5 / scale.y) {
 			position.y = topright.y - window->height * 0.5 / scale.y;
 		}
-
-
-		position.x = -position.x * 2.0f / window->width_init;
-
-		position.y = -position.y * 2.0f / window->height_init;
-		
 	}
 	else {
 		position = { 0.0f, 0.0f };
 	}
+
+	Vec2 level_size = (engine->Get_End_Coords() - engine->Get_Start_Coords()) * scale.x;
+	if (level_size.x < window->width) {
+		position.x = engine->Get_Start_Coords().x + (level_size.x / 2.0f);
+	}
+	if (level_size.y < window->height) {
+		position.y = engine->Get_Start_Coords().y + (level_size.y / 2.0f);
+	}
+
+	position.x = -position.x * 2.0f / window->width_init;
+	position.y = -position.y * 2.0f / window->height_init;
 }
 
 /*
