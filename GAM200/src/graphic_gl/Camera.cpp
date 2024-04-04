@@ -169,6 +169,22 @@ void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 	pos2.x = end.x;
 	pos2.y = end.y;
 
+	// make sure the camera is not out of bounds
+	Vec2 botleft = engine->Get_Start_Coords();
+	Vec2 topright = engine->Get_End_Coords();
+	if (pos2.x < botleft.x + window->width * 0.25) {
+		pos2.x = botleft.x + window->width * 0.25;
+	}
+	if (pos2.y < botleft.y + window->height * 0.25) {
+		pos2.y = botleft.y + window->height * 0.25;
+	}
+	if (pos2.x > topright.x - window->width * 0.25) {
+		pos2.x = topright.x - window->width * 0.25;
+	}
+	if (pos2.y > topright.y - window->height * 0.25) {
+		pos2.y = topright.y - window->height * 0.25;
+	}
+
 	// convert to NDC
 	pos1.x = -pos1.x * 2.0f / window->width_init;
 	pos1.y = -pos1.y * 2.0f / window->height_init;
