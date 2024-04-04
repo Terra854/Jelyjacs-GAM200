@@ -26,5 +26,6 @@
   "people_in_store": "People_In_Store.wav",
   "running_away": "Running_Away.wav",
   "police_chase": "Police_Chase.wav",
-  "win_in_e":  "Win_in_E.wav"
+  "win_in_e": "Win_in_E.wav",
+  "menu_hoover_over_sfx": "MenuHoverOverSFX.wav"
 }

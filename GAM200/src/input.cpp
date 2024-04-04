@@ -156,7 +156,6 @@ bool input::LevelEditorTextActive = false;
 
 void input::Update()
 {
-	input::update_resolution();
 	//If any text box in the level editor is active
 	//Do not register any inputs. ImGui uses it's own input system seperate from this
 	if (LevelEditorTextActive)
@@ -201,6 +200,9 @@ void input::Update()
 	buttons[at(KEY::shift)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_LEFT_SHIFT));
 	buttons[at(KEY::one)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_1));
 	buttons[at(KEY::two)].SetKeyState(glfwGetKey(Pwindow, GLFW_KEY_2));
+
+
+	input::update_resolution();
 }
 
 //sets a delay when press repeatedly

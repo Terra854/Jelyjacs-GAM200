@@ -80,7 +80,7 @@ void FullscreenButton::Update(Object* obj) {
             window->change_window_size_fullscreen();
             window->window_size = Window_size::fullscreen;
         }
-        input::update_resolution();
+        //input::update_resolution();
 	}
 }
 /*********************************************************************/
