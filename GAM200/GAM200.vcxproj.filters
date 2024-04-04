@@ -333,6 +333,9 @@
     <ClCompile Include="src\Scripts\EndingCutscene.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripts\TimeTaken.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h">
@@ -606,6 +609,9 @@
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\EndingCutscene.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\TimeTaken.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>

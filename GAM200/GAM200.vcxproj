@@ -278,6 +278,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\PowerLiquid.cpp" />
     <ClCompile Include="src\Scripts\PressurePlate.cpp" />
     <ClCompile Include="src\Scripts\Spark.cpp" />
+    <ClCompile Include="src\Scripts\TimeTaken.cpp" />
     <ClCompile Include="src\Scripts\Vert_Elevator.cpp" />
     <ClCompile Include="src\Scripts\WinBackButton.cpp" />
     <ClCompile Include="src\Scripts\WinNextButton.cpp" />
@@ -355,6 +356,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\PowerLiquid.h" />
     <ClInclude Include="include\Scripts\PressurePlate.h" />
     <ClInclude Include="include\Scripts\Spark.h" />
+    <ClInclude Include="include\Scripts\TimeTaken.h" />
     <ClInclude Include="include\Scripts\Vert_Elevator.h" />
     <ClInclude Include="include\Scripts\WinBackButton.h" />
     <ClInclude Include="include\Scripts\WinNextButton.h" />

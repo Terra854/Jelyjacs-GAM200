@@ -1,0 +1,33 @@
+{
+  "Name": "win_time_taken",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 321.0,
+          "y": 51.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Text",
+      "Properties": {
+        "text": "0",
+        "fontSize": 1
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "TimeTaken",
+        "Index": 0
+      }
+    }
+  ]
+}

@@ -16,6 +16,7 @@ This file contains the definitions for loading and saving scenes
 #include <SceneManager.h>
 #include <components/Animation.h>
 #include <string>
+#include <../Scripts/TimeTaken.h>
 
 /******************************************************************************
 LoadSceneFromJson
@@ -262,6 +263,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 		Logic->Initialize();
 		SceneManager::CalculateLevelSize();
 	}
+	WINMENU::StartTime();
 }
 
 /******************************************************************************

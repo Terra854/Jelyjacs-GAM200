@@ -10,6 +10,7 @@ This file contains the script for the endpoint door
 #include <components/Transform.h>
 #include <components/Animation.h>
 #include <Audio.h>
+#include <../Scripts/TimeTaken.h>
 
 namespace Endpoint_Script {
 	bool win = false;
@@ -102,6 +103,7 @@ namespace Endpoint_Script {
 				engine->setPause();
 
 			objectFactory->GetLayer("WinMenu")->second.first.isVisible = true;
+			WINMENU::StopTime();
 			objectFactory->GetLayer("GameMenu")->second.first.isVisible = false;
 			win = false;
 		}
