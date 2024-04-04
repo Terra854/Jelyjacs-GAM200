@@ -132,17 +132,17 @@ void Camera::SetToPlayer() {
 		// make sure the camera is not out of bounds
 		Vec2 botleft = engine->Get_Start_Coords();
 		Vec2 topright = engine->Get_End_Coords();
-		if (position.x < botleft.x + window->width * 0.25) {
-			position.x = botleft.x + window->width * 0.25;
+		if (position.x < botleft.x + window->width * 0.5 / scale.x) {
+			position.x = botleft.x + window->width * 0.5 / scale.x;
 		}
-		if (position.y < botleft.y + window->height * 0.25) {
-			position.y = botleft.y + window->height * 0.25;
+		if (position.y < botleft.y + window->height * 0.5 / scale.y) {
+			position.y = botleft.y + window->height * 0.5 / scale.y;
 		}
-		if (position.x > topright.x - window->width * 0.25) {
-			position.x = topright.x - window->width * 0.25;
+		if (position.x > topright.x - window->width * 0.5 / scale.x) {
+			position.x = topright.x - window->width * 0.5 / scale.x;
 		}
-		if (position.y > topright.y - window->height * 0.25) {
-			position.y = topright.y - window->height * 0.25;
+		if (position.y > topright.y - window->height * 0.5 / scale.y) {
+			position.y = topright.y - window->height * 0.5 / scale.y;
 		}
 
 
