@@ -96,7 +96,7 @@ namespace CatPortal_Script {
                     //std::cout << "Player is in the cat portal" << std::endl;
                     //Find the other cat portal
                         // Teleport the player to the other CatPortal's position.
-                    audio->playSfx("cat_teleport");
+                    audio->playSfx("cat_teleport", 2.f);
 
                     if (player_a != nullptr) {
 						player_a->current_type = AnimationType::Push;

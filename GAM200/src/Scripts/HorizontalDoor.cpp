@@ -48,7 +48,7 @@ void HorizontalDoor::Update(Object* obj) {
         return;
 
     if (HorizontalDoor_a->frame_num == 1 && !HDoorOpenSfxCooldown) {
-        audio->playSfx("sliding_door_open");
+        audio->playSfx("sliding_door_open", 0.7f);
         HDoorOpenSfxCooldown = 1.5f;
     }
 

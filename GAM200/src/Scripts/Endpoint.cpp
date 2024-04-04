@@ -94,6 +94,7 @@ namespace Endpoint_Script {
 		}
 		if (win) {
 			audio->playSfx("level_complete");
+			audio->playSfx("win_in_e", 2.f);
 			//set_win();
 			std::cout << "ongoing" << std::endl;
 

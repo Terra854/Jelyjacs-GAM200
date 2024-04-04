@@ -14,7 +14,7 @@ This file contains the script for Finn, the player character (Human)
 #include <Audio.h>
 
 float finn_move_time = 0.f;
-bool InTheAir = true;
+bool FinnInTheAir = true;
 float finn_air_time = 0.f;
 
 Finn::Finn(std::string name) : LogicScript(name)
@@ -68,7 +68,7 @@ void Finn::Update(Object* obj) {
 					player_physics->Force = 85000.f;
 					std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 					audio->playSfx("finn_jumping");
-					InTheAir = true;
+					FinnInTheAir = true;
 				}
 			}
 			if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d) || input::IsPressed(KEY::left) || input::IsPressed(KEY::right)) {
@@ -168,7 +168,7 @@ void Finn::Update(Object* obj) {
 			moving = false;
 		}
 
-		if (player_body->bottom_collision && InTheAir && finn_air_time > 0.1f) {
+		if (player_body->bottom_collision && FinnInTheAir && finn_air_time > 0.1f) {
 			Material collided_material = static_cast<Rectangular*>(player_body->bottom_collision->GetComponent(ComponentType::Body))->material;
 
 			switch (collided_material) {
@@ -179,10 +179,10 @@ void Finn::Update(Object* obj) {
 				audio->playSfx("finn_landing_from_drop_metal");
 				break;
 			}
-			InTheAir = false;
+			FinnInTheAir = false;
 			finn_air_time = 0.f;
 		}
-		else if (!InTheAir) {
+		else if (!FinnInTheAir) {
 			finn_air_time = 0.f;
 		}
 		else {

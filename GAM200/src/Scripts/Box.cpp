@@ -80,7 +80,7 @@ void Box::Update(Object* obj) {
     }
     else if (box_b->bottom_collision && BoxInTheAir[box_event->linked_event] > 0.1f && !LandingBoxSfxCooldown[box_event->linked_event]) {
 		BoxInTheAir[box_event->linked_event] = 0.f;
-		audio->playSfx("box_landing_from_drop");
+		audio->playSfx("box_landing_from_drop", 2.f);
         LandingBoxSfxCooldown[box_event->linked_event] = 3.0f;
 	}
     /*

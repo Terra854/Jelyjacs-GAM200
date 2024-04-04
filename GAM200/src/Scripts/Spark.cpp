@@ -25,6 +25,9 @@ bool Spark::UsedPower;
 TeleportingState Spark::teleporting_state;
 Vec2 Spark::next_position;
 
+bool SparkInTheAir = true;
+float spark_air_time = 0.f;
+
 int counter;
 float spark_move_time = 0.f;
 // Constructor for the Spark class.
@@ -77,6 +80,7 @@ void Spark::Update(Object* obj) {
 	********************************************************************************************************/
 	Physics* player_physics = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
 	Animation* player_animation = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+	Rectangular* player_body = static_cast<Rectangular*>(obj->GetComponent(ComponentType::Body));
 	if (GameLogic::playerObj->GetName() == "Spark")
 	{
 
@@ -105,7 +109,7 @@ void Spark::Update(Object* obj) {
 
 		if (Connected_to_Finn) return;
 		*/
-		if (player_physics == nullptr || player_animation == nullptr) {
+		if (player_physics == nullptr || player_animation == nullptr || player_body == nullptr) {
 			//std::cout << "NIL COMPONENT : Player" << std::endl;
 			return;
 		};
@@ -161,6 +165,7 @@ void Spark::Update(Object* obj) {
 					player_physics->Force = 85000.f;
 					std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 					audio->playSfx("spark_jumping");
+					SparkInTheAir = true;
 				}
 			}
 			if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d) || input::IsPressed(KEY::left) || input::IsPressed(KEY::right)) {
@@ -237,6 +242,18 @@ void Spark::Update(Object* obj) {
 				//audio->stopWalking();
 				spark_move_time = 0.f;
 				moving = false;
+			}
+
+			if (player_body->bottom_collision && SparkInTheAir && spark_air_time > 0.1f) {
+				audio->playSfx("spark_walking");
+				SparkInTheAir = false;
+				spark_air_time = 0.f;
+			}
+			else if (!SparkInTheAir) {
+				spark_air_time = 0.f;
+			}
+			else {
+				spark_air_time += engine->GetDt();
 			}
 		}
 	}

@@ -25,5 +25,6 @@
   "rain_bg": "Rain_Bg.wav",
   "people_in_store": "People_In_Store.wav",
   "running_away": "Running_Away.wav",
-  "police_chase": "Police_Chase.wav"
+  "police_chase": "Police_Chase.wav",
+  "win_in_e":  "Win_in_E.wav"
 }

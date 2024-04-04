@@ -59,7 +59,7 @@ void Door::Update(Object* obj) {
 
     // SFX for when the door opens/closes
     if (((!door_a->reverse && door_a->frame_num == 20) || (door_a->reverse && door_a->frame_num == 27)) && !DoorOpenSfxCooldown) {
-        audio->playSfx("sliding_door_open");
+        audio->playSfx("sliding_door_open", 0.7f);
         DoorOpenSfxCooldown = 1.5f; // Make sure the audio only plays once
     }
 

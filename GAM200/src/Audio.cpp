@@ -93,7 +93,7 @@ void Audio::setupSound()
 	current_background_audio = "main_menu_bg";
 #endif
 	system->playSound(AssetManager::getsoundbyaudiotype(current_background_audio), 0, true, &background);
-	background->setVolume(0.2f * master_volume);
+	background->setVolume(0.2f * master_volume * bg_volume_multiplier);
 }
 
 /******************************************************************************
