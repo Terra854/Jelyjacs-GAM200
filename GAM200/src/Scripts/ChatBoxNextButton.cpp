@@ -51,8 +51,7 @@ void ChatBoxNextButton::Update(Object* obj) {
         opacity_inc = -opacity_inc;
     }
 
-    
-    if(!isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY())))
+    if(!input::IsPressed(KEY::mouseL))
     {
         return;
     }
