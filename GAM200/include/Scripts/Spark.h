@@ -13,6 +13,7 @@ This file contains the script for Spark
 enum TeleportingState {
     None = 0,
     Disappearing,
+    Moving,
     Appearing
 };
 

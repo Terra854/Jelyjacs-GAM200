@@ -63,6 +63,7 @@ class Camera : public ISystems
 		return in * 2.0f / window->width_init;
 	}
 
+	bool isCameraShift() { return camera_shift; }
 
 private:
 	bool camera_follow = true;

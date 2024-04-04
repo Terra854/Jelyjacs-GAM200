@@ -81,20 +81,23 @@ void Animation::Update_player()
 
 	while (frame_dt_count) {
 		frame_dt_count--;
-
-		if (this->current_type != this->previous_type && !this->jump_fixed)
-			this->frame_num = 0;
-		else if (this->frame_count >= this->frame_rate) {
-			this->frame_count = 0.f;
-			this->frame_num++;
-			if (this->frame_num >= this->animation_Map[this->current_type].size())
+		if (!pause) {
+			if (this->current_type != this->previous_type && !this->jump_fixed)
 				this->frame_num = 0;
-		}
-		if (this->jump_fixed) {
-			if (this->previous_type != AnimationType::Jump && this->previous_type != AnimationType::Jump_left)
-				this->frame_num = 0;
-			if (this->frame_num >= this->jump_fixed_frame)
-				this->frame_num = this->jump_fixed_frame;
+			else if (this->frame_count >= this->frame_rate) {
+				this->frame_count = 0.f;
+				this->reverse ? this->frame_num-- : this->frame_num++;
+				if (this->frame_num >= this->animation_Map[this->current_type].size())
+					this->frame_num = 0;
+				else if (this->frame_num < 0)
+					this->frame_num = static_cast<int>(this->animation_Map[this->current_type].size()) - 1;
+			}
+			if (this->jump_fixed) {
+				if (this->previous_type != AnimationType::Jump && this->previous_type != AnimationType::Jump_left)
+					this->frame_num = 0;
+				if (this->frame_num >= this->jump_fixed_frame)
+					this->frame_num = this->jump_fixed_frame;
+			}
 		}
 	}
 }
@@ -126,25 +129,26 @@ void Animation::Update_objects()
 
 	while (frame_dt_count) {
 		frame_dt_count--;
-		
-		if (!this->fixed) {//object with animation
-			if (this->frame_count >= this->frame_rate)
-			{
-				this->frame_count = 0.f;
-				this->frame_num++;
-				if (this->frame_num >= this->animation_Map[this->current_type].size())
-					this->frame_num = 0;
+		if (!pause) {
+			if (!this->fixed) {//object with animation
+				if (this->frame_count >= this->frame_rate)
+				{
+					this->frame_count = 0.f;
+					this->frame_num++;
+					if (this->frame_num >= this->animation_Map[this->current_type].size())
+						this->frame_num = 0;
+				}
 			}
-		}
-		else if (this->frame_count >= this->frame_rate) {
-			this->frame_count = 0.f;
-			
-			this->reverse ? this->frame_num-- : this->frame_num++;
+			else if (this->frame_count >= this->frame_rate) {
+				this->frame_count = 0.f;
 
-			if (this->frame_num < 0)
-				this->frame_num = 0;
-			else if (this->frame_num >= this->animation_Map[this->current_type].size())
-				this->frame_num = static_cast<int>(this->animation_Map[this->current_type].size()) - 1;
+				this->reverse ? this->frame_num-- : this->frame_num++;
+
+				if (this->frame_num < 0)
+					this->frame_num = 0;
+				else if (this->frame_num >= this->animation_Map[this->current_type].size())
+					this->frame_num = static_cast<int>(this->animation_Map[this->current_type].size()) - 1;
+			}
 		}
 	}
 }

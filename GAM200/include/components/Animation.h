@@ -56,6 +56,8 @@ public:
 
 	bool fixed = false;
 	bool invert = false;
+
+	bool pause = false;
 	
 	float frame_count{};
 	int frame_num{};
