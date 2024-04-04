@@ -26,13 +26,16 @@ void DialogueSystem::Initialize()
 
 void DialogueSystem::Update()
 {
+
+	auto ChatBoxMenu = objectFactory->GetLayer("ChatBoxMenu");
+
 	if (engine->isPaused() && engine->debug_gui_active)
 	{
 		return;
 	}
-	if (engine->isPaused())
+	if (engine->isPaused() && ChatBoxMenu)
 	{
-		objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = false;
+		ChatBoxMenu->second.first.isVisible = false;
 		return;
 	}
 	
