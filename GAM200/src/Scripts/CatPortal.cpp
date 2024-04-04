@@ -88,8 +88,8 @@ namespace CatPortal_Script {
             }
 
             // Check if the player is within the portal's range.
-            if (player_t->Position.x > catPortal_t->Position.x - 50 && player_t->Position.x < catPortal_t->Position.x + 50
-                && player_t->Position.y > catPortal_t->Position.y - 50 && player_t->Position.y < catPortal_t->Position.y + 50) {
+            if (player_t->Position.x > catPortal_t->Position.x - 20 && player_t->Position.x < catPortal_t->Position.x + 20
+                && player_t->Position.y > catPortal_t->Position.y - 20 && player_t->Position.y < catPortal_t->Position.y + 20) {
                 if (justTeleported == true)
                     return;
                 else {

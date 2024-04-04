@@ -217,7 +217,7 @@ void Spark::Update(Object* obj) {
 					teleporting = true;
 					teleporting_state = Disappearing;
 					next_position.x = Finn_t->Position.x;
-					next_position.y = Finn_t->Position.y;
+					next_position.y = Finn_t->Position.y + 60.f;
 					UsedPower = true;
 					CatPower--;
 				}
