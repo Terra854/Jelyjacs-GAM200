@@ -60,6 +60,7 @@ void EndingCutscene::Update(Object* obj) {
 	}
 
 	if (EndingCutsceneTime == 0.f) {
+		audio->stopBackground();
 		audio->playSfx("running_away", ending_bg);
 		audio->playSfx("police_chase", ending_bg);
 	}
