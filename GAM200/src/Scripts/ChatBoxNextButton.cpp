@@ -16,6 +16,7 @@ This file contains the script for the in-game clickable buttons
 #include <../components/Dialogue.h>
 #include <message.h>
 #include <DialogueSystem.h>
+#include "Scripts/OpeningCutscene.h"
 
 // Constructor for the PauseButton class.
 // @param name: The name of the portal.

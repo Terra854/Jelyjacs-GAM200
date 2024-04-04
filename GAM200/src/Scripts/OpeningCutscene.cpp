@@ -11,7 +11,6 @@ This file contains the script for OpeningCutscene
 #include <components/Animation.h>
 #include <components/Physics.h>
 #include <components/Body.h>
-#include <Audio.h>
 #include <components/Text.h>
 #include <SceneManager.h>
 #include "camera.h"

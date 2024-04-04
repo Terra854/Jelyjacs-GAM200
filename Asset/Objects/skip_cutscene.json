@@ -1,5 +1,5 @@
 {
-  "Name": "opening_cutscene_text",
+  "Name": "skip_cutscene",
   "Components": [
     {
       "Type": "Transform",

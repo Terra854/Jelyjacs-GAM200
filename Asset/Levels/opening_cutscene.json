@@ -45,9 +45,6 @@
           "Prefabs": "skip_cutscene.json"
         },
         {
-          "Prefabs": "opening_cutscene_text.json"
-        },
-        {
           "Prefabs": "opening_cutscene_script.json"
         }
       ]

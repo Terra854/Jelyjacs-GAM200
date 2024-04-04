@@ -10,6 +10,7 @@ This file contains the script for the in-game clickable buttons
 #include <Audio.h>
 #include <Factory.h>
 #include <SceneManager.h>
+#include "Scripts/OpeningCutscene.h"
 
 // Constructor for the SkipCutscene class.
 // @param name: The name of the portal.
@@ -42,6 +43,8 @@ void SkipCutscene::Update(Object* obj) {
 
         // Skip the cutscene
         audio->setBackgroundAudio("main_menu_bg");
+        audio->stopSfx(rain_sfx);
+        audio->stopSfx(people_sfx);
         SceneManager::LoadScene("main_menu.json");
 	}
 }

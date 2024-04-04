@@ -1,0 +1,12 @@
+{
+  "Name": "ending_cutscene_script",
+  "Components": [
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "EndingCutscene",
+        "Index": 0
+      }
+    }
+  ]
+}

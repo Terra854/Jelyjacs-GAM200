@@ -16,6 +16,9 @@
       "Objects": [
         {
           "Prefabs": "ending_cutscene.json"
+        },
+        {
+          "Prefabs": "ending_cutscene_end_text.json"
         }
       ]
     },
@@ -27,7 +30,10 @@
       },
       "Objects": [
         {
-          "Prefabs": "skip_cutscene.json"
+          "Prefabs": "ending_cutscene_script.json"
+        },
+        {
+          "Prefabs": "ending_cutscene_thankyou_text.json"
         }
       ]
     }

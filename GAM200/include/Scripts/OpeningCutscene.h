@@ -8,6 +8,9 @@ This file contains the script for OpeningCutscene
 #pragma once
 #include <Object.h>
 #include <GameLogic.h>
+#include <Audio.h>
+
+extern FMOD::ChannelGroup* rain_sfx, * people_sfx;
 
 // Class OpeningCutscene, derived from LogicScript.
 // This class is designed to manage the behavior and state of a character or entity named OpeningCutscene in a game.

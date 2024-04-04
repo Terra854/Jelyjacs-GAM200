@@ -23,5 +23,7 @@
   "start_game_finn_crashing": "Start_Game_Finn_Crashing.wav",
   "title_losing_power": "Title_Losing_Power.wav",
   "rain_bg": "Rain_Bg.wav",
-  "people_in_store": "People_In_Store.wav"
+  "people_in_store": "People_In_Store.wav",
+  "running_away": "Running_Away.wav",
+  "police_chase": "Police_Chase.wav"
 }
