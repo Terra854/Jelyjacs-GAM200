@@ -47,7 +47,10 @@ void TimeTaken::Update(Object* obj) {
     else
     {
         Text* t = (Text*)obj->GetComponent(ComponentType::Text);
-        t->text = std::to_string(static_cast<int>(totaltime));
+        //t->text = std::to_string(static_cast<int>(totaltime));
+        char time_taken_cstr[100];
+        sprintf_s(time_taken_cstr, "Time Taken: %02d:%02d", static_cast<int>(totaltime) / 60, static_cast<int>(totaltime) % 60);
+        t->text = time_taken_cstr;
     }
 
 

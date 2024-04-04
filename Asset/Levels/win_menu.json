@@ -114,28 +114,28 @@
         {
           "Name" : "win_time_taken",
           "Prefabs" : "win_time_taken.json",
-          "Components": [{
-          "Position" : 
-          {
-            "x" : 0.0,
-            "y" : 0.0
-          },
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 100.0,
-            "y" : 100.0
-          },
-          "Type" : "Transform"
-        },
-        {
-          "Type":"Behaviour",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "TimeTaken",
-          "speed" : 0.0
-        }]
+          "Components": [
+            {
+              "Position": {
+                "x": -173.0,
+                "y": -34.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 321.0,
+                "y": 51.0
+              },
+              "Type": "Transform"
+            },
+            {
+              "Type": "Behaviour",
+              "counter": 0.0,
+              "distance": 0.0,
+              "index": 0.0,
+              "scripts": "TimeTaken",
+              "speed": 0.0
+            }
+          ]
         }
       ],
       "Settings" : 
