@@ -5,12 +5,19 @@
 #include <Factory.h>
 #include <Core_Engine.h>
 #include <../components/Text.h>
+#include <../components/Texture.h>
 
 
 bool start = false;
 float minutes{0};
 float seconds{0};
 float totaltime{0};
+enum
+{
+    tutorial,
+    level1,
+    level2
+} currentlvl;
 
 
 // Constructor for the ButtonBase class.
@@ -40,17 +47,38 @@ void TimeTaken::Update(Object* obj) {
     {
         return;
     }
-    if (start)
+    if (obj->GetName() == "win_time_taken")
     {
-        totaltime += engine->GetDt();
+
+        if (start)
+        {
+            totaltime += engine->GetDt();
+        }
+        else
+        {
+            Text* t = (Text*)obj->GetComponent(ComponentType::Text);
+            //t->text = std::to_string(static_cast<int>(totaltime));
+            char time_taken_cstr[100];
+            sprintf_s(time_taken_cstr, "Time Taken: %02d:%02d", static_cast<int>(totaltime) / 60, static_cast<int>(totaltime) % 60);
+            t->text = time_taken_cstr;
+        }
     }
-    else
+    else if (obj->GetName() == "win_level_number")
     {
-        Text* t = (Text*)obj->GetComponent(ComponentType::Text);
-        //t->text = std::to_string(static_cast<int>(totaltime));
-        char time_taken_cstr[100];
-        sprintf_s(time_taken_cstr, "Time Taken: %02d:%02d", static_cast<int>(totaltime) / 60, static_cast<int>(totaltime) % 60);
-        t->text = time_taken_cstr;
+        Texture* tex = (Texture*)obj->GetComponent(ComponentType::Texture);
+
+        if (engine->loaded_level == "tutorial_level")
+        {
+            tex->textureName = "0.png";
+        }
+        else if (engine->loaded_level == "level_1")
+        {
+            tex->textureName = "1.png";
+        }
+        else if (engine->loaded_level == "level_2")
+        {
+            tex->textureName = "2.png";
+        }
     }
 
 
@@ -73,6 +101,7 @@ void WINMENU::StartTime()
 void WINMENU::StopTime()
 {
     start = false;
+
 }
 
 

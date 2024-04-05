@@ -1,0 +1,32 @@
+{
+  "Name": "win_level_number",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 182.0,
+          "y": 178.0
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "TimeTaken",
+        "Index": 0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "0.png"
+      }
+    }
+  ]
+}
