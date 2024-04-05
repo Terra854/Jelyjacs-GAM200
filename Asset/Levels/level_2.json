@@ -5133,44 +5133,6 @@
             {
               "Position": {
                 "x": 1850.0,
-                "y": 526.0
-              },
-              "Rotation": 0.0,
-              "Scale": {
-                "x": 128.0,
-                "y": 64.0
-              },
-              "Type": "Transform"
-            },
-            {
-              "Properties": {
-                "height": 28.0,
-                "width": 110.0
-              },
-              "Shape": "Rectangle",
-              "Type": "Body"
-            },
-            {
-              "Type": "Event",
-              "linkedevent": 8
-            },
-            {
-              "Type": "Behaviour",
-              "counter": 0.0,
-              "distance": 420.0,
-              "index": 0,
-              "scripts": "Hori_Elevator",
-              "speed": 35.0
-            }
-          ],
-          "Name": "elevator_hori",
-          "Prefabs": "elevator_hori.json"
-        },
-        {
-          "Components": [
-            {
-              "Position": {
-                "x": 1850.0,
                 "y": 636.0
               },
               "Rotation": 0.0,
@@ -5198,45 +5160,7 @@
               "distance": 420.0,
               "index": 0,
               "scripts": "Hori_Elevator",
-              "speed": 115.0
-            }
-          ],
-          "Name": "elevator_hori",
-          "Prefabs": "elevator_hori.json"
-        },
-        {
-          "Components": [
-            {
-              "Position": {
-                "x": 1850.0,
-                "y": 757.0
-              },
-              "Rotation": 0.0,
-              "Scale": {
-                "x": 128.0,
-                "y": 64.0
-              },
-              "Type": "Transform"
-            },
-            {
-              "Properties": {
-                "height": 28.0,
-                "width": 110.0
-              },
-              "Shape": "Rectangle",
-              "Type": "Body"
-            },
-            {
-              "Type": "Event",
-              "linkedevent": 8
-            },
-            {
-              "Type": "Behaviour",
-              "counter": 0.0,
-              "distance": 420.0,
-              "index": 0,
-              "scripts": "Hori_Elevator",
-              "speed": 70.0
+              "speed": 800.0
             }
           ],
           "Name": "elevator_hori",
@@ -5498,44 +5422,6 @@
               "Position": {
                 "x": 706.0,
                 "y": 22.0
-              },
-              "Rotation": 0.0,
-              "Scale": {
-                "x": 64.0,
-                "y": 64.0
-              },
-              "Type": "Transform"
-            },
-            {
-              "Properties": {
-                "height": 60.0,
-                "width": 64.0
-              },
-              "Shape": "Rectangle",
-              "Type": "Body"
-            },
-            {
-              "Type": "Event",
-              "linkedevent": 0
-            },
-            {
-              "Type": "Behaviour",
-              "counter": 0.0,
-              "distance": 0.0,
-              "index": 0,
-              "scripts": "Power_Liquid",
-              "speed": 0.0
-            }
-          ],
-          "Name": "CatPowerLiquid",
-          "Prefabs": "CatPowerLiquid.json"
-        },
-        {
-          "Components": [
-            {
-              "Position": {
-                "x": 1098.0,
-                "y": 16.0
               },
               "Rotation": 0.0,
               "Scale": {
