@@ -45,7 +45,7 @@ private:
 	FMOD::Channel *background, *channel, *sfx;
 	FMOD_RESULT result;
 
-	float master_volume = 1.f, bg_volume_multiplier = 1.f;
+	float master_volume = 1.f, bg_volume_multiplier = 1.f, backup_master_volume = 1.f;
 	std::string current_background_audio;
 };
 

@@ -19,6 +19,7 @@ float OpeningCutsceneTime;
 Texture *opening_cutscene_1, *opening_cutscene_2, *opening_cutscene_3, *opening_cutscene_4, *opening_cutscene_5, *opening_cutscene_6;
 Text *opening_cutscene_text;
 FMOD::ChannelGroup *rain_sfx, *people_sfx;
+bool opening_cutscene_paused = false;
 
 OpeningCutscene::OpeningCutscene(std::string name) : LogicScript(name)
 {
@@ -36,6 +37,8 @@ void OpeningCutscene::Start(Object* obj) {
 	}
 	camera2D->scale = { 1.f,1.f };
 	audio->setBackgroundAudio("opening_cutscene_bg");
+	
+	executeOnPause = true;
 
 	opening_cutscene_1 = static_cast<Texture*>(objectFactory->FindObject("opening_cutscene_1")->GetComponent(ComponentType::Texture));
 	opening_cutscene_2 = static_cast<Texture*>(objectFactory->FindObject("opening_cutscene_2")->GetComponent(ComponentType::Texture));
@@ -69,7 +72,20 @@ void OpeningCutscene::Update(Object* obj) {
 		audio->playSfx("rain_bg", rain_sfx);
 		audio->playSfx("people_in_store", people_sfx);
 	}
-	OpeningCutsceneTime += engine->GetDt();
+
+	if (engine->isPaused()) {
+		audio->stopSfx(rain_sfx);
+		audio->stopSfx(people_sfx);
+		opening_cutscene_paused = true;
+	}
+	else if (opening_cutscene_paused){
+		audio->playSfx("rain_bg", rain_sfx);
+		audio->playSfx("people_in_store", people_sfx);
+		opening_cutscene_paused = false;
+	}
+	else {
+		OpeningCutsceneTime += engine->GetDt();
+	}
 
 	opening_cutscene_1->opacity = opening_cutscene_2->opacity = opening_cutscene_3->opacity = opening_cutscene_4->opacity = opening_cutscene_5->opacity = opening_cutscene_6->opacity = 1.f;
 
