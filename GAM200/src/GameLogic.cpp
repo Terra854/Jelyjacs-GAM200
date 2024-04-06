@@ -192,15 +192,28 @@ void GameLogic::Update() {
 		}
 	}
 	if (death) {
+		static Vec2 initialCoord;
 		if (death_timer == 0.f) {
-			camera2D->ShakeCamera(Vec2(0.1f, 0.1f), 0.9f);
+			//camera2D->ShakeCamera(Vec2(0.1f, 0.1f), 0.9f);
 			audio->stopBackground();
 			audio->playSfx("game_over_hit", 3.f);
 			Physics* p = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
-			if (p)
-				p->AffectedByGravity= false;
+			if (p) {
+				p->Velocity.x = p->Velocity.y = 0.f;
+				p->AffectedByGravity = false;
+			}
+			initialCoord = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform))->Position;
+
 		}
 		death_timer += engine->GetDt();
+
+		float x = (rand() % 1000) / 100.0f;
+		float y = (rand() % 1000) / 100.0f;
+		Vec2 random_num = { x, y};
+		random_num = rand() % 10 > 5 ? random_num : -random_num;
+
+		static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform))->Position = initialCoord + random_num;
+
 		std::cout << "Death Timer: " << death_timer << std::endl;
 		if (death_timer > 1.f) {
 			Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
@@ -309,7 +322,9 @@ void GameLogic::Update() {
 			}
 		}
 		else {
-			static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
+			if (!death)
+				static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics))->AffectedByGravity = true;
+			
 			static_cast<Body*>(playerObj->GetComponent(ComponentType::Body))->active = true;
 		}
 	}
