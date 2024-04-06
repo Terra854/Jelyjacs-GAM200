@@ -13,6 +13,7 @@ This file contains the definitions of the functions that manages the game scene
 #include "Assets Manager/asset_manager.h"
 #include "../include/Font.h"
 #include "../include/input.h"
+#include <LevelEditor.h>
 
 SceneManager* sceneManager;
 Factory::objectIDMap SceneManager::initialObjectMap;
@@ -34,6 +35,10 @@ SceneManager::~SceneManager() {
 	  loading the new scene
 *******************************************************************************/
 void SceneManager::LoadScene(const std::string filepath) {
+#if defined(_DEBUG) | defined(DEBUG)
+	level_editor->selected = false;
+	level_editor->selectedNum = -1;
+#endif
 	objectFactory->destroyAllObjects();
 	SceneManager::ClearInitialObjectMap(true);
 	SceneManager::layers.clear();
