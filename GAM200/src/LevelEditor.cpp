@@ -25,6 +25,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <windows.h>
 #include <commdlg.h>
 #include <ThreadPool.h>
+#include "Assets Manager/json_serialization.h"
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
@@ -37,7 +38,6 @@ ImFont* font;
 char buffer[256];
 
 bool save_as_dialog = false;
-bool new_prefab_dialog = false;
 
 template<class... Ts> struct overload : Ts... { using Ts::operator()...; };
 template<class... Ts> overload(Ts...) -> overload<Ts...>;
@@ -196,6 +196,10 @@ static Vec2 edited_velocity;
 static float edited_mass;
 static bool edited_gravity;
 static bool edited_able_to_push_objects;
+
+static bool Event_EditMode = false;
+
+static int edited_linked_event;
 
 static bool update_all_instances = false;
 
@@ -592,7 +596,7 @@ void LevelEditor::ObjectProperties() {
 				ImGui::Image((void*)(intptr_t)a->animation_tex_obj, ImVec2((float)width / (float)height * ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().x));
 			}
 
-			if (Animation_EditMode){
+			if (Animation_EditMode) {
 				ImGui::SeparatorText("Values");
 
 				ImGui::Text("Current Type: %d", a->current_type);
@@ -1389,7 +1393,43 @@ void LevelEditor::ObjectProperties() {
 	// Event
 	if (e != nullptr) {
 		if (ImGui::CollapsingHeader("Event")) {
-			ImGui::Text("Linked Event : %d", e->linked_event);
+			if (Event_EditMode) {
+				// Display input fields
+				LE_InputInt("Linked Event", &edited_linked_event);
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done##Event"))
+				{
+					Event_EditMode = false;
+					e->linked_event = edited_linked_event;
+
+					if (update_all_instances)
+						UpdateAllObjectInstances(object);
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel##Event"))
+				{
+					Event_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
+			}
+			else
+			{
+				// Display the values as text
+				ImGui::Text("Linked Event: %d", e->linked_event);
+
+				// Button to enter edit mode
+				if (ImGui::Button("Edit##Event"))
+				{
+					Event_EditMode = true;
+					edited_linked_event = e->linked_event;
+				}
+			}
 		}
 	}
 
@@ -1476,7 +1516,7 @@ void LevelEditor::ListOfObjects() {
 
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
-			
+
 			char buf[512];
 			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());
 			ImGui::Checkbox(buf, &l.second.first.isVisible);
@@ -1554,10 +1594,11 @@ void LevelEditor::ListOfObjects() {
 *******************************************************************************/
 std::pair<std::string, GLuint> selectedTexture;
 bool display_selected_texture = false;
+bool display_selected_animation = false;
 
 void LevelEditor::DisplaySelectedTexture() {
 
-	if (display_selected_texture) {
+	if (display_selected_texture || display_selected_animation) {
 
 		GLint width, height;
 
@@ -1598,7 +1639,7 @@ void LevelEditor::DisplaySelectedTexture() {
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
 
-		if (ImGui::Button("Delete Texture"))
+		if (display_selected_texture && ImGui::Button("Delete Texture"))
 		{
 			display_selected_texture = false;
 			AssetManager::unloadtexture(selectedTexture.first);
@@ -1612,14 +1653,29 @@ void LevelEditor::DisplaySelectedTexture() {
 				std::cout << "Texture delete failed." << std::endl;
 			}
 		}
+		else if (display_selected_animation && ImGui::Button("Delete Animation Sprite Sheet"))
+		{
+			display_selected_animation = false;
+			AssetManager::unloadanimation(selectedTexture.first);
+
+			bool result = std::filesystem::remove("Asset/Animation/" + selectedTexture.first);
+
+			if (result) {
+				std::cout << "Animation deleted successfully." << std::endl;
+			}
+			else {
+				std::cout << "Animation delete failed." << std::endl;
+			}
+		}
 		ImGui::PopStyleColor(3);
 
 		ImGui::End();
 	}
 }
 
-static bool selectingAudio = false;
 static bool selectingTexture = false;
+static bool selectingAnimation = false;
+static bool selectingAudio = false;
 static std::string SelectedAudioType;
 
 /******************************************************************************
@@ -1630,64 +1686,66 @@ void LevelEditor::AssetList()
 {
 	ImGui::Begin("Asset List");
 
-	if (ImGui::BeginTabBar("##AssetList"))
+	ImGui::BeginTabBar("##AssetList");
+
+	if (ImGui::BeginTabItem("Textures"))
 	{
-		if (ImGui::BeginTabItem("Textures"))
+		if (ImGui::Button("Add Texture")) {
+			selectingTexture = true;
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Refresh Textures"))
 		{
-			if (ImGui::Button("Add Texture")) {
-				selectingTexture = true;
+			AssetManager::unloadalltextures();
+			AssetManager::loadalltextures();
+
+		}
+		ImGui::BeginChild("AssetListScrollTexture", ImGui::GetContentRegionAvail());
+		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+		for (const std::pair<std::string, GLuint>& t : AssetManager::textures)
+		{
+			sprintf_s(buffer, "##%s", t.first.c_str());
+
+			// Start the invisible button
+
+			if (ImGui::Button(buffer, button_size))
+			{
+				selectedTexture = t;
+				display_selected_texture = true;
+				display_selected_animation = false;
+
 			}
 
+			if (ImGui::BeginDragDropSource())
+			{
+				ImGui::SetDragDropPayload("Game texture", t.first.c_str(), 1024);
+				ImGui::EndDragDropSource();
+			}
+
+			ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
+
+			// Image
+			ImGui::Image((void*)(intptr_t)t.second, ImVec2(64, 64));
+
+			// Move to the right of the image without moving to a new line
 			ImGui::SameLine();
 
-			if (ImGui::Button("Refresh Textures"))
-			{
-				AssetManager::unloadalltextures();
-				AssetManager::loadalltextures();
-
-			}
-			ImGui::BeginChild("AssetListScrollTexture", ImGui::GetContentRegionAvail());
-			ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
-			for (const std::pair<std::string, GLuint>& t : AssetManager::textures)
-			{
-				sprintf_s(buffer, "##%s", t.first.c_str());
-
-				// Start the invisible button
-
-				if (ImGui::Button(buffer, button_size))
-				{
-					selectedTexture = t;
-					display_selected_texture = true;
-
-				}
-
-				if (ImGui::BeginDragDropSource())
-				{
-					ImGui::SetDragDropPayload("Game texture", t.first.c_str(), 1024);
-					ImGui::EndDragDropSource();
-				}
-
-				ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y - 68));
-
-				// Image
-				ImGui::Image((void*)(intptr_t)t.second, ImVec2(64, 64));
-
-				// Move to the right of the image without moving to a new line
-				ImGui::SameLine();
-
-				// Text
-				ImGui::Text(t.first.c_str());
-			}
-
-			ImGui::PopStyleColor();
-			ImGui::EndChild();
-			ImGui::EndTabItem();
+			// Text
+			ImGui::Text(t.first.c_str());
 		}
-	}
-	if (ImGui::BeginTabItem("Animations")) {
-		ImGui::Text("wip");
 
+		ImGui::PopStyleColor();
+		ImGui::EndChild();
+		ImGui::EndTabItem();
+	}
+
+	if (ImGui::BeginTabItem("Animations")) {
+		if (ImGui::Button("Add Animation")) {
+			selectingAnimation = true;
+		}
 		ImGui::BeginChild("AssetListScrollAnimation", ImGui::GetContentRegionAvail());
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x - style->ScrollbarSize, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
@@ -1700,7 +1758,9 @@ void LevelEditor::AssetList()
 
 			if (ImGui::Button(buffer, button_size))
 			{
-				
+				selectedTexture = a;
+				display_selected_texture = false;
+				display_selected_animation = true;
 			}
 
 			if (ImGui::BeginDragDropSource())
@@ -1728,7 +1788,27 @@ void LevelEditor::AssetList()
 	if (ImGui::BeginTabItem("Prefabs"))
 	{
 		if (ImGui::Button("Create Prefab")) {
-			new_prefab_dialog = true;
+			ImGui::OpenPopup("AddNewPrefab");
+		}
+
+		static char newPrefabText[100];
+
+		if (ImGui::BeginPopup("AddNewPrefab")) {
+			ImGui::Text("Name of this new prefab:");
+			LE_InputText("##NewPrefabName", newPrefabText, 100);
+			ImGui::SameLine();
+			if (ImGui::Button("Add"))
+			{
+				Object* prefab = objectFactory->createEmptyPrefab();
+				prefab->SetName(newPrefabText);
+				AssetManager::prefabs.emplace(newPrefabText + std::string(".json"), prefab);
+				sprintf_s(newPrefabText, "");
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+		else {
+			sprintf_s(newPrefabText, "");
 		}
 
 		ImGui::SameLine();
@@ -1737,6 +1817,8 @@ void LevelEditor::AssetList()
 			for (auto& prefab : AssetManager::prefabs)
 				objectFactory->saveObject(prefab.first, prefab.second);
 		}
+
+		ImGui::BeginChild("AssetListScrollPrefabs", ImGui::GetContentRegionAvail());
 
 		ImVec2 button_size = ImVec2(ImGui::GetWindowSize().x, 64);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
@@ -1820,23 +1902,45 @@ void LevelEditor::AssetList()
 		}
 
 		ImGui::PopStyleColor();
+		ImGui::EndChild();
 		ImGui::EndTabItem();
 	}
 	if (ImGui::BeginTabItem("Scripts"))
 	{
+		ImGui::BeginChild("AssetListScrollScripts", ImGui::GetContentRegionAvail());
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		for (const auto& script : Logic->behaviours)
 		{
 			ImGui::Text(script.first.c_str());
 		}
 		ImGui::PopStyleColor();
+		ImGui::EndChild();
 		ImGui::EndTabItem();
 	}
 	if (ImGui::BeginTabItem("Audio"))
 	{
+		if (ImGui::Button("Add new audio category")) {
+			ImGui::OpenPopup("AddNewAudioCategory");
+		}
 
-		if (ImGui::Button("Add Audio")) {
+		ImGui::SameLine();
+
+		if (ImGui::Button("Add audio")) {
 			ImGui::OpenPopup("AddToWhichSound");
+		}
+		
+		if (ImGui::BeginPopup("AddNewAudioCategory")) {
+			ImGui::Text("Category Name:");
+
+			static char audioCategoryName[256];
+			LE_InputText("##AudioCategoryName", audioCategoryName, 256);
+			ImGui::SameLine();
+			if (ImGui::Button("Add")) {
+				AssetManager::soundMapping.emplace(std::string(audioCategoryName), std::string(""));
+				sprintf_s(audioCategoryName, "");
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
 		}
 
 		if (ImGui::BeginPopup("AddToWhichSound")) {
@@ -1845,6 +1949,7 @@ void LevelEditor::AssetList()
 			ImGui::EndPopup();
 		}
 
+		ImGui::BeginChild("AssetListScrollAudio", ImGui::GetContentRegionAvail());
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
 		for (const auto& audioPair : AssetManager::soundMapping)
@@ -1897,6 +2002,7 @@ void LevelEditor::AssetList()
 		}
 
 		ImGui::PopStyleColor();
+		ImGui::EndChild();
 		ImGui::EndTabItem();
 
 	}
@@ -2031,26 +2137,14 @@ void CameraControl() {
 	ImGui::End();
 }
 
+static std::vector<std::string> level_files;
+
 /******************************************************************************
 	LoadLevelPanel
 	- This window lets users select a level to load
 	- All levels are in json files and stored in Asset/Levels
 *******************************************************************************/
 void LevelEditor::LoadLevelPanel() {
-
-	std::vector<std::string> level_files;
-	const std::string path = "Asset/Levels/";
-
-	try {
-		for (const auto& entry : std::filesystem::directory_iterator(path)) {
-			if (entry.is_regular_file() && entry.path().extension() == ".json") {
-				level_files.push_back(entry.path().filename().string());
-			}
-		}
-	}
-	catch (std::filesystem::filesystem_error& e) {
-		std::cerr << e.what() << std::endl;
-	}
 
 	ImGui::Begin("Level List");
 	ImGui::Text("Number of levels detected: %d", level_files.size());
@@ -2159,43 +2253,6 @@ void LevelEditor::SaveAsDialog() {
 		if (ImGui::Button("Cancel"))
 		{
 			save_as_dialog = false;
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::EndPopup();
-	}
-}
-
-/******************************************************************************
-	NewPrefabDialog
-	- This pop up a dialog box to ask the name of the new prefab
-*******************************************************************************/
-void LevelEditor::NewPrefabDialog() {
-	ImGui::SetNextWindowPos(ImVec2((float)window->width / 2.f - 150, (float)window->height / 2.f));
-	ImGui::SetNextWindowSize(ImVec2(300, 0));
-	static char text[100];
-
-	if (new_prefab_dialog)
-		ImGui::OpenPopup("New Prefab");
-
-	if (ImGui::BeginPopupModal("New Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-
-		ImGui::Text("Name of this new prefab:");
-		LE_InputText("##NewPrefabName", text, 100);
-
-		if (ImGui::Button("OK"))
-		{
-			Object* prefab = objectFactory->createEmptyPrefab();
-			prefab->SetName(text);
-			AssetManager::prefabs.emplace(text + std::string(".json"), prefab);
-			new_prefab_dialog = false;
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel"))
-		{
-			new_prefab_dialog = false;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -2324,6 +2381,132 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 				o_be->SetBehaviourIndex(be->GetBehaviourIndex());
 				o_be->SetBehaviourName(be->GetBehaviourName());
 			}
+		}
+	}
+}
+
+/******************************************************************************
+	LoadedLevelProperties
+	- This window displays the properties of the loaded level
+*******************************************************************************/
+void LevelEditor::LoadedLevelProperties()
+{
+	ImGui::Begin("Level Properties");
+
+	ImGui::Text("Level Name: %s", engine->loaded_level.c_str());
+	ImGui::Text("Level Filename: %s", engine->loaded_filename.c_str());
+	ImGui::Text("Level Size: %.2f, %.2f", engine->end_coord.x - engine->start_coord.x, engine->end_coord.y - engine->start_coord.y);
+	ImGui::Text("Start coordinates: %.2f, %.2f", engine->start_coord.x, engine->start_coord.y);
+	ImGui::Text("End coordinates: %.2f, %.2f", engine->end_coord.x, engine->end_coord.y);
+
+	ImGui::SeparatorText("Additional Scenes");
+
+	ImGui::Text("Number of additional scenes loaded: %d", SceneManager::AdditionalScenesLoadedConcurrently.size());
+
+	if (ImGui::Button("Add Scene")) {
+		ImGui::OpenPopup("AddAditionalScene");
+	}
+
+	if (ImGui::BeginPopup("AddAditionalScene"))
+	{
+		ImGui::Text("Select scene to concurrently load with %s", engine->loaded_level.c_str());
+		for (auto& lf : level_files) {
+
+			// Don't load yourself
+			if (lf == engine->loaded_filename)
+				continue;
+
+			// Don't load scenes that are already loaded
+			if (std::find(SceneManager::AdditionalScenesLoadedConcurrently.begin(), SceneManager::AdditionalScenesLoadedConcurrently.end(), lf) != SceneManager::AdditionalScenesLoadedConcurrently.end())
+				continue;
+
+			sprintf_s(buffer, "%s##AddAditionalScene%s", lf.c_str(), lf.c_str());
+			if (ImGui::Selectable(buffer)) {
+				SceneManager::AdditionalScenesLoadedConcurrently.push_back(lf);
+				LoadSceneFromJson(lf, false);
+			}
+		}
+
+		ImGui::EndPopup();
+	}
+
+	ImGui::BeginChild("AdditionalSceneListScroll", ImGui::GetContentRegionAvail());
+	if (ImGui::BeginTable("AdditionalSceneList", 2, ImGuiTableFlags_NoSavedSettings))
+	{
+
+		ImGui::TableSetupColumn("Additional Scene", ImGuiTableColumnFlags_WidthFixed, 200.f);
+		ImGui::TableSetupColumn("Options", ImGuiTableColumnFlags_WidthStretch);
+
+		ImGui::TableHeadersRow();
+
+		// Print the filenames
+		for (const auto& filename : SceneManager::AdditionalScenesLoadedConcurrently) {
+			ImGui::TableNextRow();
+			ImGui::TableNextColumn();
+			ImGui::Text(filename.c_str());
+			ImGui::TableNextColumn();
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+			sprintf_s(buffer, "Delete##AdditionalScene%s", filename.c_str());
+			if (ImGui::Button(buffer))
+			{
+				RemoveDependentScene(filename);
+				SceneManager::AdditionalScenesLoadedConcurrently.erase(std::remove(SceneManager::AdditionalScenesLoadedConcurrently.begin(), SceneManager::AdditionalScenesLoadedConcurrently.end(), filename), SceneManager::AdditionalScenesLoadedConcurrently.end());
+			}
+			ImGui::PopStyleColor(3);
+		}
+
+		ImGui::EndTable();
+	}
+	ImGui::EndChild();
+	ImGui::End();
+}
+
+/******************************************************************************
+	RemoveDependentScene
+	- This function removes all objects that are dependent on the scene
+	  that is being removed
+
+	@param filename - The name of the scene to remove
+*******************************************************************************/
+
+void LevelEditor::RemoveDependentScene(std::string filename)
+{
+	JsonSerialization jsonobj;
+	jsonobj.openFileRead("Asset/Levels/" + filename);
+
+	std::vector<std::string> additionalScenesThatLoads;
+	std::string sceneName = jsonobj.read("SceneName").asCString();
+
+	for (auto& additionalScenes : jsonobj.read("AdditionalScenesToLoad"))
+	{
+		RemoveDependentScene(additionalScenes.asCString());
+	}
+
+	jsonobj.closeFile();
+
+	for (auto& l : SceneManager::layers) {
+
+		if (l.second.first.inheritedJsonName == sceneName) {
+			for (Object* o : l.second.second) {
+				objectFactory->destroyObject(o);
+				initialObjectMap.erase(o->GetId());
+			}
+
+			int i = 0;
+
+			for (auto& il : SceneManager::initialLayer) {
+				if (il.first == l.first) {
+					SceneManager::initialLayer.erase(SceneManager::initialLayer.begin() + i);
+					break;
+				}
+				i++;
+			}
+
+			SceneManager::initialLayerSettings.erase(l.first);
+
+			SceneManager::layers.erase(std::remove(SceneManager::layers.begin(), SceneManager::layers.end(), l), SceneManager::layers.end());
 		}
 	}
 }
@@ -2540,6 +2723,20 @@ void LevelEditor::Update() {
 
 	showUniformGrid ? DebugUniformGrid() : DoNothing();
 
+	// For getting the list of levels
+	const std::string path = "Asset/Levels/";
+
+	try {
+		for (const auto& entry : std::filesystem::directory_iterator(path)) {
+			if (entry.is_regular_file() && entry.path().extension() == ".json") {
+				level_files.push_back(entry.path().filename().string());
+			}
+		}
+	}
+	catch (std::filesystem::filesystem_error& e) {
+		std::cerr << e.what() << std::endl;
+	}
+
 	DebugPerformanceViewer();
 
 	ListOfObjects();
@@ -2556,13 +2753,15 @@ void LevelEditor::Update() {
 
 	LoadLevelPanel();
 
+	LoadedLevelProperties();
+
 	if (cloneSuccessful > -1) {
 		ObjectClonedSuccessfully(cloneSuccessful);
 	}
 
 	save_as_dialog ? SaveAsDialog() : DoNothing();
-	new_prefab_dialog ? NewPrefabDialog() : DoNothing();
 	selectingTexture ? AddTexture() : DoNothing();
+	selectingAnimation ? AddAnimation() : DoNothing();
 	selectingAudio ? AddAudio() : DoNothing();
 
 	ImGui::PopFont();
@@ -2572,6 +2771,9 @@ void LevelEditor::Update() {
 		selectedNum = -1;
 		selected = false;
 	}
+
+	// Clear to prevent duplicates
+	level_files.clear();
 }
 
 /******************************************************************************
@@ -2666,6 +2868,7 @@ void LevelEditor::DeleteSound(std::string audioType, int audio_num) {
 }
 
 static bool SelectTextureRunning = false;
+static bool SelectAnimationRunning = false;
 static bool SelectAudioRunning = false;
 static std::future<std::string> futurePath;
 
@@ -2716,6 +2919,55 @@ void LevelEditor::AddTexture() {
 				std::cout << "Exception: " << e.what() << std::endl;
 				selectingTexture = false;
 				SelectTextureRunning = false;
+			}
+		}
+	}
+
+}
+
+void LevelEditor::AddAnimation() {
+	if (SelectAnimationRunning) {
+		ImGui::OpenPopup("Selecting animtion sprite sheet");
+	}
+
+	if (ImGui::BeginPopupModal("Selecting animtion sprite sheet", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		ImGui::Text("Selecting animtion sprite sheet");
+
+		if (!SelectAnimationRunning)
+			ImGui::CloseCurrentPopup();
+
+		ImGui::EndPopup();
+	}
+
+	if (!SelectAnimationRunning) {
+		futurePath = thread_pool->enqueue(&OpenFileDialog, 0);
+		SelectAnimationRunning = true;
+	}
+	else if (futurePath.valid()) {
+		if (futurePath.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+			// The future is ready
+			try {
+				std::string animationpath = futurePath.get();; // Retrieve the result
+				std::cout << "Animation path: " << animationpath << std::endl;
+
+				if (animationpath.empty()) {
+					selectingAnimation = false;
+					SelectAnimationRunning = false;
+					return;
+				}
+
+				std::filesystem::copy_file(animationpath, "Asset/Animation/" + std::filesystem::path(animationpath).filename().string(), std::filesystem::copy_options::overwrite_existing);
+
+				AssetManager::loadanimation(std::filesystem::path(animationpath).filename().string());
+
+				selectingAnimation = false;
+				SelectAnimationRunning = false;
+			}
+			catch (const std::exception& e) {
+				std::cout << "Exception: " << e.what() << std::endl;
+				selectingAnimation = false;
+				SelectAnimationRunning = false;
 			}
 		}
 	}

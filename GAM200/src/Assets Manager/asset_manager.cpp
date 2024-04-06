@@ -65,7 +65,7 @@ void AssetManager::Initialize()
 		{
 			std::cout << list.path() << std::endl;
 		}
-		loadanimations();
+		loadallanimations();
 	}
 	else
 		std::cout << pathanimations << " does not exist!" << std::endl;
@@ -230,11 +230,39 @@ void AssetManager::unloadalltextures()
 }
 
 /******************************************************************************
-loadanimations
+loadanimation
+-	The function looks through the directory for a specific animation to load and store
+it in the assetmanager if found.
+*******************************************************************************/
+void AssetManager::loadanimation(const std::string& animationName) {
+	std::filesystem::path animPath = pathanimations / animationName; // Construct the full path
+
+	// Check if the specified texture exists in the directory
+	if (std::filesystem::exists(animPath))
+	{
+		GLuint textureuint = GLApp::setup_texobj(animPath.string().c_str()); // Load the animation
+		animations.emplace(animPath.filename().string(), textureuint); // Store the animation in the asset manager
+		std::cout << "Added to list: " << animPath.string() << std::endl;
+	}
+	else
+	{
+		std::cerr << "Texture not found: " << animationName << std::endl; // Error message if the animation is not found
+	}
+}
+
+void AssetManager::unloadanimation(const std::string& animationName)
+{
+	auto& a = animations.at(animationName);
+	glDeleteTextures(1, &a);
+	animations.erase(animationName);
+}
+
+/******************************************************************************
+loadallanimations
 -	The function looks through the directory for animations to load and store
 them in the assetmanager
 *******************************************************************************/
-void AssetManager::loadanimations()
+void AssetManager::loadallanimations()
 {
 	GLuint textureuint;
 	for (const auto& list : std::filesystem::directory_iterator(pathanimations))

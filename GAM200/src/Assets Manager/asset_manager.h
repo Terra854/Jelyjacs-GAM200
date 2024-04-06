@@ -35,7 +35,10 @@ public:
 	static void unloadtexture(const std::string& textureName);
 	static void unloadalltextures();
 	
-	void loadanimations();
+	static void loadanimation(const std::string& animationName);
+	static void unloadanimation(const std::string& animationName);
+	void loadallanimations();
+
 	void createprefablist();
 	void loadsounds();
 	static void clearsounds();

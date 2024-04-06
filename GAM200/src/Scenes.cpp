@@ -50,9 +50,6 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 	audio->setupSound();
 	*/
 
-	if (isParentScene) {
-		SceneManager::AdditionalScenesLoadedConcurrently.clear();
-
 		/*
 		Vec2 start_coord;
 		jsonobj.readFloat(start_coord.x, "Size", "startX");
@@ -64,7 +61,6 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 		jsonobj.readFloat(level_size.y, "Size", "height");
 		engine->Set_Level_Size(level_size);
 		*/
-	}
 
 	int layerNum = 0;
 

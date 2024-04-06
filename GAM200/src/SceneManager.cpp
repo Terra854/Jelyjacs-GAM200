@@ -44,6 +44,8 @@ void SceneManager::LoadScene(const std::string filepath) {
 	SceneManager::layers.clear();
 	SceneManager::initialLayer.clear();
 	SceneManager::initialLayerSettings.clear();
+	SceneManager::AdditionalScenesLoadedConcurrently.clear();
+
 	LoadSceneFromJson(filepath.c_str());
 
 	if (!engine->isPaused())
@@ -259,8 +261,6 @@ void SceneManager::BackupInitialState() {
 	}
 }
 
-
-
 void SceneManager::CalculateLevelSize() {
 		// Calculate the level size
 	float maxX = 0, maxY = 0;
@@ -279,4 +279,8 @@ void SceneManager::CalculateLevelSize() {
 
 	engine->Set_Start_Coords(start_coord);
 	engine->Set_End_Coords(end_coord);
+}
+
+bool operator==(const LayerSettings& lhs, const LayerSettings& rhs) {
+	return lhs.isVisible == rhs.isVisible && lhs.static_layer == rhs.static_layer && lhs.isInherited == rhs.isInherited && lhs.inheritedJsonName == rhs.inheritedJsonName;
 }

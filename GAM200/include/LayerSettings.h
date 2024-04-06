@@ -13,3 +13,5 @@ struct LayerSettings {
 	bool isInherited = false;
 	std::string inheritedJsonName;
 };
+
+bool operator==(const LayerSettings& lhs, const LayerSettings& rhs);

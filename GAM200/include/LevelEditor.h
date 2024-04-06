@@ -36,9 +36,11 @@ public:
 
 	void SaveAsDialog();
 
-	void NewPrefabDialog();
-
 	void UpdateAllObjectInstances(Object* object);
+
+	void LoadedLevelProperties();
+
+	void RemoveDependentScene(std::string filename);
 
 	virtual void Initialize();
 	void Update();
@@ -68,6 +70,7 @@ private:
 	void LE_InputFloat2(const char* label, float* v);
 	void DeleteSound(std::string audioType, int audio_num);
 	void AddTexture();
+	void AddAnimation();
 	void AddAudio();
 	static std::string OpenFileDialog(int type);
 };
