@@ -1,4 +1,7 @@
 {
+  "AdditionalScenesToLoad": [
+    "how_to_play_menu.json"
+  ],
   "Layers": [
     {
       "Name": "MainMenuBG",
@@ -18,16 +21,7 @@
           },
           "Type": "Transform"
         }]
-        }
-      ],
-      "Settings": {
-        "isVisible": true,
-        "static_layer": true
-      }
-    },
-    {
-      "Name": "MainMenu",
-      "Objects": [
+        },
         {
           "Name": "Main_MenuTitle",
           "Prefabs": "main_menuTitle.json",
@@ -43,7 +37,16 @@
           },
           "Type": "Transform"
         }]
-        },
+        }
+      ],
+      "Settings": {
+        "isVisible": true,
+        "static_layer": true
+      }
+    },
+    {
+      "Name": "MainMenu",
+      "Objects": [
         {
           "Name": "main_menuTitleStartButton",
           "Prefabs": "main_menuTitleStart.json",
@@ -97,8 +100,8 @@
           "Prefabs": "main_menu_arrow_left.json",
           "Components": [{
           "Position": {
-            "x": 0.0,
-            "y": 0.0
+            "x": -93.6,
+            "y": -297.0
           },
           "Rotation": 0.0,
           "Scale": {
@@ -113,13 +116,29 @@
           "Prefabs": "main_menu_arrow_right.json",
           "Components": [{
           "Position": {
-            "x": 0.0,
-            "y": 0.0
+            "x": 161.6,
+            "y": -297
           },
           "Rotation": 0.0,
           "Scale": {
             "x": 128,
             "y": 128
+          },
+          "Type": "Transform"
+        }]
+        },
+        {
+          "Name": "MainMenuHowToPlay",
+          "Prefabs": "main_menu_how_to_play.json",
+          "Components": [{
+          "Position": {
+            "x": 30.0,
+            "y": -353.0
+          },
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 224,
+            "y": 30
           },
           "Type": "Transform"
         }]

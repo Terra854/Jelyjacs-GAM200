@@ -49,8 +49,17 @@ void CloseHowToPlayMenuButton::Update(Object* obj) {
     if (input::IsPressed(KEY::mouseL))
     {
         audio->playSfx("button_click");
-        objectFactory->GetLayer("PauseMenu")->second.first.isVisible = true;
-        objectFactory->GetLayer("HowToPlayMenu")->second.first.isVisible = false;
+        if (objectFactory->GetLayer("MainMenu") != nullptr)
+        {
+            objectFactory->GetLayer("MainMenu")->second.first.isVisible = true;
+            objectFactory->GetLayer("HowToPlayMenu")->second.first.isVisible = false;
+        }
+        else 
+        {
+            objectFactory->GetLayer("PauseMenu")->second.first.isVisible = true;
+            objectFactory->GetLayer("HowToPlayMenu")->second.first.isVisible = false;
+        }
+
     }
 }
 /*********************************************************************/

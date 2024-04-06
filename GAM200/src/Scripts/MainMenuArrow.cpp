@@ -28,52 +28,33 @@ void MenuArrow::Update(Object* obj) {
         //std::cout << "NIL OBJ : ButtonBase" << std::endl;
         return;
     }
-    Object* start_button = objectFactory->FindObject("main_menuTitleStartButton");
-    Object* quit_button = objectFactory->FindObject("main_menuTitleQuitButton");
-    Transform* start_button_trans = (Transform*)start_button->GetComponent(ComponentType::Transform);
-    Transform* quit_button_trans = (Transform*)quit_button->GetComponent(ComponentType::Transform);
-    Texture* tex = (Texture*)obj->GetComponent(ComponentType::Texture);
-    Transform * trans = (Transform*)obj->GetComponent(ComponentType::Transform);
+    Transform* trans = (Transform*)obj->GetComponent(ComponentType::Transform);
 
-    if (isObjectClicked(start_button_trans, Vec2(input::GetMouseX(), input::GetMouseY())))
+    std::vector<Object*> all_objs = objectFactory->FindLayerThatHasThisObject(obj)->second.second;
+    for (Object* o : all_objs)
     {
-        tex->opacity = 1.f;
-        Logic->button_hover = true;
-        if (obj->GetName() == "MainMenuArrowRight")
+        if (o->GetName() == "MainMenuArrowLeft" || o->GetName() == "MainMenuArrowRight")
         {
-            tex->textureName = "YellowArrow_Right.png";
-            trans->Position.x = start_button_trans->Position.x + start_button_trans->Scale.x/1.8f + 8;
-            trans->Position.y = start_button_trans->Position.y + 3;
+            continue;
         }
-        else if (obj->GetName() == "MainMenuArrowLeft")
+        std::cout << o->GetName() << std::endl;
+        Transform* obj_trans = (Transform*)o->GetComponent(ComponentType::Transform);
+        
+        if (isObjectClicked(obj_trans, Vec2(input::GetMouseX(), input::GetMouseY())))
         {
-            tex->textureName = "YellowArrow_Left.png";
-            trans->Position.x = start_button_trans->Position.x - start_button_trans->Scale.x / 1.8f;
-            trans->Position.y = start_button_trans->Position.y + 3;
+            Logic->button_hover = true;
+            if (obj->GetName() == "MainMenuArrowRight")
+            {
+                trans->Position.x = obj_trans->Position.x + obj_trans->Scale.x / 1.8f + 8;
+                trans->Position.y = obj_trans->Position.y + 3;
+            }
+            else if (obj->GetName() == "MainMenuArrowLeft")
+            {
+                trans->Position.x = obj_trans->Position.x - obj_trans->Scale.x / 1.8f;
+                trans->Position.y = obj_trans->Position.y + 3;
+            }
         }
     }
-    else if (isObjectClicked(quit_button_trans, Vec2(input::GetMouseX(), input::GetMouseY())))
-    {
-        tex->opacity = 1.f;
-        Logic->button_hover = true;
-        if (obj->GetName() == "MainMenuArrowRight")
-        {
-            tex->textureName = "YellowArrow_Right.png";
-            trans->Position.x = quit_button_trans->Position.x + quit_button_trans->Scale.x/1.5f + 5;
-            trans->Position.y = quit_button_trans->Position.y + 5;
-        }
-        else if (obj->GetName() == "MainMenuArrowLeft")
-        {
-            tex->textureName = "YellowArrow_Left.png";
-            trans->Position.x = quit_button_trans->Position.x - quit_button_trans->Scale.x / 1.5f;
-            trans->Position.y = quit_button_trans->Position.y + 5;
-        }
-    }
-    else
-    {
-        tex->opacity = 0.f;
-    }
-    
 
 }
 /*********************************************************************/

@@ -300,13 +300,7 @@
     <ClCompile Include="src\Scripts\MainMenuStartGameButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\MainMenuOptionsButton.cpp">
-      <Filter>Source Files\Scripts\Buttons</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripts\MainMenuQuitButton.cpp">
-      <Filter>Source Files\Scripts\Buttons</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripts\MainMenuLoadGameButton.cpp">
       <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripts\ChatBoxNextButton.cpp">
@@ -335,6 +329,9 @@
     </ClCompile>
     <ClCompile Include="src\Scripts\TimeTaken.cpp">
       <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\MainMenuHowToPlay.cpp">
+      <Filter>Source Files\Scripts\Buttons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -578,12 +575,6 @@
     <ClInclude Include="include\Scripts\MainMenuStartGameButton.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
-    <ClInclude Include="include\Scripts\MainMenuLoadGameButton.h">
-      <Filter>Header Files\Scripts\Buttons</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Scripts\MainMenuOptionsButton.h">
-      <Filter>Header Files\Scripts\Buttons</Filter>
-    </ClInclude>
     <ClInclude Include="include\Scripts\MainMenuQuitButton.h">
       <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
@@ -613,6 +604,9 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\TimeTaken.h">
       <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripts\MainMenuHowToPlay.h">
+      <Filter>Header Files\Scripts\Buttons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

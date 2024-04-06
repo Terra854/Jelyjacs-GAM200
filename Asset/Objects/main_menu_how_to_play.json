@@ -1,0 +1,32 @@
+{
+  "Name": "MainMenuHowToPlay",
+  "Components": [
+    {
+      "Type": "Transform",
+      "Properties": {
+        "Position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "Scale": {
+          "x": 224,
+          "y": 30
+        },
+        "Rotation": 0.0
+      }
+    },
+    {
+      "Type": "Texture",
+      "Properties": {
+        "texturepath": "HowToPlay_Title.png"
+      }
+    },
+    {
+      "Type": "Behaviour",
+      "Properties": {
+        "Script": "MainMenuHowToPlay",
+        "Index": 0
+      }
+    }
+  ]
+}
