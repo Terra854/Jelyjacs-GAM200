@@ -43,7 +43,9 @@ public:
 	void draw();
 
 	int get_ani_type_count();
-	void set_up_map();
+
+	// Use false when setting up from prefabs, else use true when setting up map
+	void set_up_map(bool val);
 	
 
 	AnimationType current_type=AnimationType::Idle;

@@ -183,6 +183,13 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 							behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
 						}
 
+						if (objcomponentjson.isMember("scripts"))
+						{
+							std::string name{};
+							objcomponentjson.readString(name, "scripts");
+							behv->SetBehaviourName(name);
+						}
+
 						if (objcomponentjson.isMember("index"))
 						{
 							int index{};
@@ -224,6 +231,71 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 
 						objcomponentjson.readString(tex->textureName, "Properties", "texturepath");
 						objcomponentjson.readFloat(tex->opacity, "Properties", "opacity");
+					}
+
+					if (type == "Animation")
+					{
+						Animation* ani = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+
+						if (!ani)
+						{
+							obj->AddComponent(new Animation());
+							ani = static_cast<Animation*>(obj->GetComponent(ComponentType::Animation));
+						}
+
+						int tmp{};
+						std::string stringtmp{};
+						AnimationType anitype;
+						std::pair<int, AnimationType> animationframesecond;
+
+						objcomponentjson.readString(stringtmp, "Properties", "texturepath");
+						ani->animation_tex_obj = AssetManager::animationval(stringtmp);
+
+						objcomponentjson.readFloat(ani->opacity, "Properties", "opacity");
+
+						objcomponentjson.readInt(ani->jump_fixed_frame, "Properties", "jumpfixframe");
+						objcomponentjson.readFloat(ani->frame_rate, "Properties", "framerate");
+						objcomponentjson.readBool(ani->face_right, "Properties", "faceright");
+
+						objcomponentjson.readFloat(ani->animation_scale.first, "Properties", "frame", 0);
+						objcomponentjson.readFloat(ani->animation_scale.second, "Properties", "frame", 1);
+
+						ani->animation_frame.clear();
+
+						for (int i{1}; i <= ani->animation_scale.second; i++)
+						{
+							objcomponentjson.readInt(tmp, "Properties", std::to_string(i), 0);
+							objcomponentjson.readString(stringtmp, "Properties", std::to_string(i), 1);
+
+							for (char& c : stringtmp)
+								c = std::tolower(c);
+
+							anitype = stringToAnimationType(stringtmp);
+							
+							animationframesecond.first = tmp;
+							animationframesecond.second = anitype;
+
+							ani->animation_frame.emplace(i, animationframesecond);
+						}
+
+						ani->set_up_map(true); // Update map
+
+						// For debug 
+						//std::cout << "===============ANI DUMP==============\n";
+						//std::cout << "GLuint: " << ani->animation_tex_obj << std::endl;
+						//std::cout << "Opacity: " << ani->opacity << std::endl;
+						//std::cout << "jumpfixframe: " << ani->jump_fixed_frame << std::endl;
+						//std::cout << "framerate: " << ani->frame_rate << std::endl;
+						//std::cout << "Faceright: "; if (ani->face_right) { std::cout << "true"; }
+						//else { std::cout << "false"; } std::cout << std::endl;
+
+						//std::cout << "AnimationRow: " << ani->animation_scale.second << ", AnimationCol: " << ani->animation_scale.first << std::endl;
+						//for (auto& frame : ani->animation_frame)
+						//{
+						//	std::cout << "Row: " << frame.first;
+						//	std::cout << ", Col: " << frame.second.first;
+						//	std::cout << ", Type: " << frame.second.second << std::endl;
+						//}
 					}
 
 					// Add here to read oher types of data if necessary WIP
@@ -420,8 +492,8 @@ void SaveScene(std::string filename)
 
 				for (auto& it : ani->animation_frame)
 				{
-					if (ani->animation_scale.second < it.first)
-						break;
+					//if (ani->animation_scale.second < it.first)
+					//	break;
 
 					std::string tmp = AnimationTypeToString(it.second.second);
 
@@ -432,7 +504,7 @@ void SaveScene(std::string filename)
 					ani_[std::to_string(it.first)] = section;
 				}
 
-				ani_["jumpfixframe"] = ani->jump_fixed_frame;
+				ani_["texturepath"] = AssetManager::animationstring(ani->animation_tex_obj);
 				
 				typedata["Properties"] = ani_;
 
@@ -452,79 +524,6 @@ void SaveScene(std::string filename)
 		jsonobj["AdditionalScenesToLoad"].append(a);
 	}
 
-	/*
-	for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
-	{
-		Object* obj = objectFactory->getObjectWithID(static_cast<long>(i));
-
-		if (obj == nullptr)
-			continue;
-
-		// Save object prefabs data
-		std::string name = obj->GetName();
-		Object* prefab = obj->GetPrefab();
-		std::string prefabname = "MISSINGNAME";
-		
-		if (prefab == nullptr)
-			std::cout << "OBJECT: " << name << " is missing usingPrefab!" <<std::endl;
-		else
-			prefabname = prefab->GetName() + ".json";
-
-		Json::Value innerobj;
-
-		
-		innerobj["Name"] = name;
-		innerobj["Prefabs"] = prefabname;
-
-		// Save object transform data
-		if (obj->GetComponent(ComponentType::Transform) != nullptr)
-		{
-			Transform* trans = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-			innerobj["Type"] = "Transform";
-
-			Json::Value position;
-			position["x"] = trans->Position.x;
-			position["y"] = trans->Position.y;
-			innerobj["Position"] = position;
-
-			Json::Value scale;
-			scale["x"] = trans->Scale.x;
-			scale["y"] = trans->Scale.y;
-			innerobj["Scale"] = scale;
-
-			innerobj["Rotation"] = trans->Rotation;
-		}
-
-		if (obj->GetComponent(ComponentType::Body) != nullptr)
-		{
-			Body* temp = static_cast<Body*>(obj->GetComponent(ComponentType::Body));
-			if (temp->GetShape() == Shape::Rectangle)
-			{
-				Rectangular* temp2 = static_cast<Rectangular*>(temp);
-				Json::Value properties;
-				properties["width"] = temp2->width;
-				properties["height"] = temp2->height;
-				innerobj["Properties"] = properties;
-			}
-		}
-
-		// Save objects event data
-		if (obj->GetComponent(ComponentType::Event) != nullptr)
-		{
-			Event* event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-			innerobj["linkedevent"] = event->linked_event;
-		}
-
-		if (obj->GetComponent(ComponentType::Behaviour))
-		{
-			Behaviour* behv = static_cast<Behaviour*>(obj->GetComponent(ComponentType::Behaviour));
-			innerobj["scripts"] = behv->GetBehaviourName();
-		}
-
-		jsonobj["Objects"].append(innerobj);
-	}
-	*/
-
 	// Write file
 	std::ofstream outputFile("Asset/Levels/" + filename);
 	if (outputFile.is_open()) {
@@ -539,47 +538,6 @@ void SaveScene(std::string filename)
 	else
 		std::cerr << "Failed to open file for writing." << std::endl;
 	
-	// GETTING ERROR, TEMPORARY NOT USING JSONSERILIZATION.H
-	// 
-	//JsonSerialization jsonobj;
-	//jsonobj.writeData("SceneName", filename);	
-
-	//for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++) 
-	//{
-	//	Object* obj = objectFactory->getObjectWithID((long)i);
-
-	//	if (obj == nullptr)
-	//		continue;
-
-	//	std::string name = obj->GetName() + ".json";
-	//	jsonobj.writeArrData("Prefabs", name);
-
-	//	if (obj->GetComponent(ComponentType::Transform) != nullptr)
-	//	{
-	//		Transform* trans = static_cast<Transform*>(obj->GetComponent(ComponentType::Transform));
-	//		jsonobj.writeArrData("Type", "Transform");
-	//		Json::Value position;
-	//		position["x"] = trans->Position.x;
-	//		position["y"] = trans->Position.y;
-	//		jsonobj.writeArrData("Position", position);
-	//		Json::Value scale;
-	//		scale["x"] = trans->Scale.x;
-	//		scale["y"] = trans->Scale.y;
-	//		jsonobj.writeArrData("Scale", scale);
-	//		jsonobj.writeArrData("Rotation", trans->Rotation);
-	//	}
-
-	//	if (obj->GetComponent(ComponentType::Event) != nullptr)
-	//	{
-	//		Event* event = static_cast<Event*>(obj->GetComponent(ComponentType::Event));
-	//		jsonobj.writeArrData("linkedevent", event->linked_event);
-	//	}
-
-	//	jsonobj.appendToArr();
-	//}
-
-	//jsonobj.openFileWrite(filename);
-	//jsonobj.closeFile();
 }
 
 

@@ -681,7 +681,7 @@ void LevelEditor::ObjectProperties() {
 
 				if (ImGui::Button("Done##Animation")) {
 					Animation_EditMode = false;
-					a->set_up_map();
+					a->set_up_map(true);
 
 					UpdateAllObjectInstances(object);
 				}

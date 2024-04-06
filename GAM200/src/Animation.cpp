@@ -196,7 +196,7 @@ int Animation::get_ani_type_count()
 }
 
 // Get all the models and properly store them into the map to be rendered
-void Animation::set_up_map()
+void Animation::set_up_map(bool val)
 {
 	frame_num = 0;
 	animation_Map.clear(); // Clear any existing map before setting up
@@ -213,40 +213,73 @@ void Animation::set_up_map()
 			return;
 		}
 
-		bool faceright = true;
-		if (animationIsLeft(frame.second.second))
+		if (val == false)
 		{
-			faceright = false;
+			bool faceright = true;
+			if (animationIsLeft(frame.second.second))
+			{
+				faceright = false;
+			}
+
+			std::vector<GLApp::GLModel> animationmodel;
+
+			for (float i = 0; i < frame.second.first; i++)
+			{
+				float g = static_cast<float>(frame.first);
+				// The special cases
+				if (g > animation_scale.second && faceright == false)
+					g -= animation_scale.second;
+				else if (g > animation_scale.second && frame.second.second == AnimationType::Idle)
+					g = 1;
+				else if (g > animation_scale.second)
+					g = animation_scale.second;
+
+				GLApp::GLModel model = setup_texobj_animation((i / animation_scale.first), ((g - 1) / animation_scale.second), ((i + 1) / animation_scale.first), (g / animation_scale.second), faceright);
+
+				animationmodel.push_back(model);
+			}
+
+			// Check if animation type already exist
+			if (it != animation_Map.end())
+			{
+				// Same type exist, append the vectors
+				animation_Map[frame.second.second].insert(animation_Map[frame.second.second].end(), animationmodel.begin(), animationmodel.end());
+			}
+			else // Add to animation_Map
+			{
+				animation_Map.emplace(frame.second.second, animationmodel);
+			}
+		}
+		else // No special conditions considered, all types have been explicitly saved into animation_frame
+		{
+			std::vector<GLApp::GLModel> animationmodel;
+
+			for (float i = 0; i < frame.second.first; i++)
+			{
+				bool faceright = true;
+				if (frame.second.second > AnimationType::No_Animation_Type / 2)
+					faceright = false;
+				float g = static_cast<float>(frame.first);
+				GLApp::GLModel model = setup_texobj_animation((i / animation_scale.first), ((g - 1) / animation_scale.second), ((i + 1) / animation_scale.first), (g / animation_scale.second), faceright);
+				animationmodel.push_back(model);
+			}
+
+			// Check if animation type already exist
+			if (it != animation_Map.end())
+			{
+				// Same type exist, append the vectors
+				animation_Map[frame.second.second].insert(animation_Map[frame.second.second].end(), animationmodel.begin(), animationmodel.end());
+			}
+			else // Add to animation_Map
+			{
+				animation_Map.emplace(frame.second.second, animationmodel);
+			}
 		}
 
-		std::vector<GLApp::GLModel> animationmodel;
 
-		for (float i = 0; i < frame.second.first; i++)
-		{
-			float g = static_cast<float>(frame.first);
-			// The special cases
-			if (g > animation_scale.second && faceright == false)
-				g -= animation_scale.second;
-			else if (g > animation_scale.second && frame.second.second == AnimationType::Idle)
-				g = 1;
-			else if (g > animation_scale.second)
-				g = animation_scale.second;
 
-			GLApp::GLModel model = setup_texobj_animation((i / animation_scale.first), ((g - 1) / animation_scale.second), ((i + 1) / animation_scale.first), (g / animation_scale.second), faceright);
 
-			animationmodel.push_back(model);
-		}
 
-		// Check if animation type already exist
-		if (it != animation_Map.end()) 
-		{
-			// Same type exist, append the vectors
-			animation_Map[frame.second.second].insert(animation_Map[frame.second.second].end(), animationmodel.begin(), animationmodel.end());
-		}
-		else // Add to animation_Map
-		{
-			animation_Map.emplace(frame.second.second, animationmodel);
-		}
 	}
 
 	// Info dump
@@ -351,8 +384,15 @@ AnimationType stringToAnimationType(const std::string& str) {
 		{"push", AnimationType::Push},
 		{"run", AnimationType::Run},
 		{"jump", AnimationType::Jump},
-		{"teleport", AnimationType::Teleport}
+		{"teleport", AnimationType::Teleport},
+		{"idle_left", AnimationType::Idle_left},
+		{"push_left", AnimationType::Push_left},
+		{"run_left", AnimationType::Run_left},
+		{"jump_left", AnimationType::Jump_left},
+		{"teleport_left", AnimationType::Teleport_left},
+		{"no_animation_type", AnimationType::No_Animation_Type}
 	};
+
 	auto it = stringToType.find(str);
 	if (it != stringToType.end())
 		return it->second;

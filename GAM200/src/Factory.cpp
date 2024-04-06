@@ -324,7 +324,7 @@ Object* Factory::createObject(const std::string& filename)
 			//	std::cout << ", Type: " << frame.second.second << std::endl;
 			//}
 
-			a->set_up_map();
+			a->set_up_map(false);
 
 			// Set it back to facing right by default after the creations of animation map
 			a->face_right = true;

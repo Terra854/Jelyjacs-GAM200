@@ -68,6 +68,7 @@ public:
 
 	static bool animationcheckexist(std::string str);
 	static GLuint animationval(std::string str);
+	static std::string animationstring(GLuint uint);
 
 	// Get prefab objects and related data
 	static Object* prefabsval(std::string str);

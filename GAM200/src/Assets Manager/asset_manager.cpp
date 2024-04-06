@@ -547,6 +547,23 @@ GLuint AssetManager::animationval(std::string str)
 }
 
 /******************************************************************************
+animationstring
+-	Returns the String for an animation GLuint
+
+@param uint - the GLuint of the animation
+
+@return - the string
+*******************************************************************************/
+std::string AssetManager::animationstring(GLuint uint)
+{
+	for (const auto& pair : animations) 
+	{
+		if (pair.second == uint)
+			return pair.first;
+	}
+}
+
+/******************************************************************************
 prefabsval
 -	The function return an object* based on the name of the object
 
