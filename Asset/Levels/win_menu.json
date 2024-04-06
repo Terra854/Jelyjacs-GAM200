@@ -3,99 +3,116 @@
   [
     {
       "Name" : "WinMenu",
-      "Objects" : 
-      [
+      "Objects": [
         {
-          "Name" : "Win_Bg2",
-          "Prefabs" : "Win_Bg2.json",
-          "Components": [{
-          "Position" : 
-          {
-            "x" : 0.0,
-            "y" : 0.0
-          },
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 1920.0,
-            "y" : 1080.0
-          },
-          "Type" : "Transform"
-        }]
+          "Name": "Win_Bg",
+          "Prefabs": "Win_Bg.json",
+          "Components": [
+            {
+              "Position": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 1920.0,
+                "y": 1080.0
+              },
+              "Type": "Transform"
+            }
+          ]
         },
         {
-          "Name" : "Win_Bg3",
-          "Prefabs" : "Win_Bg3.json",
-          "Components": [{
-          "Position" : 
-          {
-            "x" : 0.0,
-            "y" : 203.0
-          },
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 1083.0,
-            "y" : 239.0
-          },
-          "Type" : "Transform"
-        }]
+          "Name": "Win_Bg2",
+          "Prefabs": "Win_Bg2.json",
+          "Components": [
+            {
+              "Position": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 1920.0,
+                "y": 1080.0
+              },
+              "Type": "Transform"
+            }
+          ]
         },
         {
-          "Name" : "win_back_button",
-          "Prefabs" : "win_back_button.json",
-          "Components": [{
-          "Position" : 
-          {
-            "x" : -409.0,
-            "y" : -203.0
-          },
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 220.0,
-            "y" : 63.0
-          },
-          "Type" : "Transform"
+          "Name": "Win_Bg3",
+          "Prefabs": "Win_Bg3.json",
+          "Components": [
+            {
+              "Position": {
+                "x": 0.0,
+                "y": 203.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 1083.0,
+                "y": 239.0
+              },
+              "Type": "Transform"
+            }
+          ]
         },
         {
-          "Type": "Behaviour",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "WinBackButton",
-          "speed" : 0.0
-        }]
+          "Name": "win_back_button",
+          "Prefabs": "win_back_button.json",
+          "Components": [
+            {
+              "Position": {
+                "x": -409.0,
+                "y": -203.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 220.0,
+                "y": 63.0
+              },
+              "Type": "Transform"
+            },
+            {
+              "Type": "Behaviour",
+              "counter": 0.0,
+              "distance": 0.0,
+              "index": 0.0,
+              "scripts": "WinBackButton",
+              "speed": 0.0
+            }
+          ]
         },
         {
-          "Name" : "win_next_button",
-          "Prefabs" : "win_next_button.json",
-          "Components": [{
-          "Position" : 
-          {
-            "x" : 446.0,
-            "y" : -205.0
-          },
-          "Rotation" : 0.0,
-          "Scale" : 
-          {
-            "x" : 220.0,
-            "y" : 63.0
-          },
-          "Type" : "Transform"
+          "Name": "win_next_button",
+          "Prefabs": "win_next_button.json",
+          "Components": [
+            {
+              "Position": {
+                "x": 446.0,
+                "y": -205.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 220.0,
+                "y": 63.0
+              },
+              "Type": "Transform"
+            },
+            {
+              "Type": "Behaviour",
+              "counter": 0.0,
+              "distance": 0.0,
+              "index": 0.0,
+              "scripts": "WinNextButton",
+              "speed": 0.0
+            }
+          ]
         },
         {
-          "Type":"Behaviour",
-          "counter" : 0.0,
-          "distance" : 0.0,
-          "index" : 0.0,
-          "scripts" : "WinNextButton",
-          "speed" : 0.0
-        }]
-        },
-        {
-          "Name" : "win_time_taken",
-          "Prefabs" : "win_time_taken.json",
+          "Name": "win_time_taken",
+          "Prefabs": "win_time_taken.json",
           "Components": [
             {
               "Position": {
@@ -120,8 +137,8 @@
           ]
         },
         {
-          "Name" : "win_level_number",
-          "Prefabs" : "win_level_number.json",
+          "Name": "win_level_number",
+          "Prefabs": "win_level_number.json",
           "Components": [
             {
               "Position": {
