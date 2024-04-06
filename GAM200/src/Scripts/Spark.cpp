@@ -137,7 +137,7 @@ void Spark::Update(Object* obj) {
 						audio->playSfx("cat_teleport_out", 2.f);
 					}
 					else {
-						player_animation->frame_num == 34;
+						player_animation->frame_num = 34;
 					}
 					break;
 				case Appearing:
