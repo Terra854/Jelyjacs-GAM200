@@ -21,16 +21,7 @@
           },
           "Type": "Transform"
         }]
-        }
-      ],
-      "Settings": {
-        "isVisible": true,
-        "static_layer": true
-      }
-    },
-    {
-      "Name": "MainMenu",
-      "Objects": [
+        },
         {
           "Name": "Main_MenuTitle",
           "Prefabs": "main_menuTitle.json",
@@ -46,7 +37,16 @@
           },
           "Type": "Transform"
         }]
-        },
+        }
+      ],
+      "Settings": {
+        "isVisible": true,
+        "static_layer": true
+      }
+    },
+    {
+      "Name": "MainMenu",
+      "Objects": [
         {
           "Name": "main_menuTitleStartButton",
           "Prefabs": "main_menuTitleStart.json",
@@ -100,8 +100,8 @@
           "Prefabs": "main_menu_arrow_left.json",
           "Components": [{
           "Position": {
-            "x": 0.0,
-            "y": 0.0
+            "x": -93.6,
+            "y": -297.0
           },
           "Rotation": 0.0,
           "Scale": {
@@ -116,8 +116,8 @@
           "Prefabs": "main_menu_arrow_right.json",
           "Components": [{
           "Position": {
-            "x": 0.0,
-            "y": 0.0
+            "x": 161.6,
+            "y": -297
           },
           "Rotation": 0.0,
           "Scale": {
