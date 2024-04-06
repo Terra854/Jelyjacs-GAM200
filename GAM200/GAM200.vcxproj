@@ -259,8 +259,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\Scripts\Hori_Elevator.cpp" />
     <ClCompile Include="src\Scripts\HowToPlayButton.cpp" />
     <ClCompile Include="src\Scripts\MainMenuArrow.cpp" />
-    <ClCompile Include="src\Scripts\MainMenuLoadGameButton.cpp" />
-    <ClCompile Include="src\Scripts\MainMenuOptionsButton.cpp" />
+    <ClCompile Include="src\Scripts\MainMenuHowToPlay.cpp" />
     <ClCompile Include="src\Scripts\MainMenuQuitButton.cpp" />
     <ClCompile Include="src\Scripts\MainMenuStartGameButton.cpp" />
     <ClCompile Include="src\Scripts\OpeningCutscene.cpp" />
@@ -337,8 +336,7 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClInclude Include="include\Scripts\Finn.h" />
     <ClInclude Include="include\Scripts\HowToPlayButton.h" />
     <ClInclude Include="include\Scripts\MainMenuArrow.h" />
-    <ClInclude Include="include\Scripts\MainMenuLoadGameButton.h" />
-    <ClInclude Include="include\Scripts\MainMenuOptionsButton.h" />
+    <ClInclude Include="include\Scripts\MainMenuHowToPlay.h" />
     <ClInclude Include="include\Scripts\MainMenuQuitButton.h" />
     <ClInclude Include="include\Scripts\MainMenuStartGameButton.h" />
     <ClInclude Include="include\Scripts\OpeningCutscene.h" />

@@ -1,4 +1,7 @@
 {
+  "AdditionalScenesToLoad": [
+    "how_to_play_menu.json"
+  ],
   "Layers": [
     {
       "Name": "MainMenuBG",
@@ -120,6 +123,22 @@
           "Scale": {
             "x": 128,
             "y": 128
+          },
+          "Type": "Transform"
+        }]
+        },
+        {
+          "Name": "MainMenuHowToPlay",
+          "Prefabs": "main_menu_how_to_play.json",
+          "Components": [{
+          "Position": {
+            "x": 30.0,
+            "y": -353.0
+          },
+          "Rotation": 0.0,
+          "Scale": {
+            "x": 224,
+            "y": 30
           },
           "Type": "Transform"
         }]
