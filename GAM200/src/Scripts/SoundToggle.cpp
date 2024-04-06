@@ -33,6 +33,7 @@ void SoundToggle::Update(Object* obj) {
         return;
     }
     Texture* t = (Texture*)obj->GetComponent(ComponentType::Texture);
+    t->textureName = (audio->getMasterVolume()>0) ? "sound_on.png" : "sound_off.png";
     if (!isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY())))
     {
         return;
@@ -40,13 +41,14 @@ void SoundToggle::Update(Object* obj) {
 
     Logic->button_hover = true;
 
-    if (input::IsPressed(KEY::mouseL))
+
+
+    if (input::MouseClickedOnce())
     {
-        sound_on = !sound_on;
-        t->textureName = sound_on ? "sound_on.png" : "sound_off.png";
-        audio->setMasterVolume(sound_on ? sound_volume : 0.0f);
+        audio->setMasterVolume((audio->getMasterVolume() == 0) ? 1.0f : 0.0f);
         audio->playSfx("button_click");
     }
+    
 
 }
 /*********************************************************************/
