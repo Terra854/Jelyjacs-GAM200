@@ -134,6 +134,7 @@ void Spark::Update(Object* obj) {
 						teleporting_state = Appearing;
 						player_animation->pause = false;
 						player_animation->reverse = true;
+						audio->playSfx("cat_teleport_out", 2.f);
 					}
 					else {
 						player_animation->frame_num == 34;
@@ -214,6 +215,7 @@ void Spark::Update(Object* obj) {
 			/*****************************************************************************************/
 			if (input::IsPressed(KEY::t)) {
 				if (CatPower) {
+					audio->playSfx("cat_teleport_in", 2.f);
 					teleporting = true;
 					teleporting_state = Disappearing;
 					next_position.x = Finn_t->Position.x;
