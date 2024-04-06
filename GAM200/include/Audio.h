@@ -39,6 +39,8 @@ public:
 	void stopSfx(FMOD::ChannelGroup*& c);
 	void createChannelGroup(std::string name, FMOD::ChannelGroup*& c);
 
+	float getMasterVolume() { return master_volume; }
+
 	friend class LevelEditor;
 private:
 	FMOD::System* system;
