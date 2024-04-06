@@ -8870,6 +8870,166 @@
           ],
           "Name" : "platform_24",
           "Prefabs" : "platform_24.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
+                "x" : 524.0,
+                "y" : 113.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 128.0,
+                "y" : 128.0
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "1" : 
+                [
+                  10,
+                  "Idle"
+                ],
+                "faceright" : true,
+                "frame" : 
+                [
+                  10.0,
+                  1.0
+                ],
+                "framerate" : 0.10000000149011612,
+                "jumpfixframe" : 0
+              },
+              "Type" : "Animation"
+            }
+          ],
+          "Name" : "Fan",
+          "Prefabs" : "Fan.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
+                "x" : 1470.0,
+                "y" : 46.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 128.0,
+                "y" : 128.0
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "1" : 
+                [
+                  10,
+                  "Idle"
+                ],
+                "faceright" : true,
+                "frame" : 
+                [
+                  10.0,
+                  1.0
+                ],
+                "framerate" : 0.10000000149011612,
+                "jumpfixframe" : 0
+              },
+              "Type" : "Animation"
+            }
+          ],
+          "Name" : "Fan",
+          "Prefabs" : "Fan.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
+                "x" : 1266.0,
+                "y" : 988.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 128.0,
+                "y" : 128.0
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "1" : 
+                [
+                  10,
+                  "Idle"
+                ],
+                "faceright" : true,
+                "frame" : 
+                [
+                  10.0,
+                  1.0
+                ],
+                "framerate" : 0.10000000149011612,
+                "jumpfixframe" : 0
+              },
+              "Type" : "Animation"
+            }
+          ],
+          "Name" : "Fan",
+          "Prefabs" : "Fan.json"
+        },
+        {
+          "Components" : 
+          [
+            {
+              "Position" : 
+              {
+                "x" : -54.0,
+                "y" : 430.0
+              },
+              "Rotation" : 0.0,
+              "Scale" : 
+              {
+                "x" : 128.0,
+                "y" : 128.0
+              },
+              "Type" : "Transform"
+            },
+            {
+              "Properties" : 
+              {
+                "1" : 
+                [
+                  10,
+                  "Idle"
+                ],
+                "faceright" : true,
+                "frame" : 
+                [
+                  10.0,
+                  1.0
+                ],
+                "framerate" : 0.10000000149011612,
+                "jumpfixframe" : 0
+              },
+              "Type" : "Animation"
+            }
+          ],
+          "Name" : "Fan",
+          "Prefabs" : "Fan.json"
         }
       ],
       "Settings" : 

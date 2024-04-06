@@ -63,8 +63,6 @@ public:
 
 	std::string loaded_level, loaded_filename;
 
-	bool show_tileset = false;
-
 	void Set_Start_Coords(Vec2& coords) { start_coord = coords; }
 	Vec2 Get_Start_Coords() { return start_coord; }
 

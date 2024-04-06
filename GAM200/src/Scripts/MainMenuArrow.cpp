@@ -37,6 +37,7 @@ void MenuArrow::Update(Object* obj) {
 
     if (isObjectClicked(start_button_trans, Vec2(input::GetMouseX(), input::GetMouseY())))
     {
+        tex->opacity = 1.f;
         Logic->button_hover = true;
         if (obj->GetName() == "MainMenuArrowRight")
         {
@@ -53,6 +54,7 @@ void MenuArrow::Update(Object* obj) {
     }
     else if (isObjectClicked(quit_button_trans, Vec2(input::GetMouseX(), input::GetMouseY())))
     {
+        tex->opacity = 1.f;
         Logic->button_hover = true;
         if (obj->GetName() == "MainMenuArrowRight")
         {
@@ -69,7 +71,7 @@ void MenuArrow::Update(Object* obj) {
     }
     else
     {
-        tex->textureName = "transparent.png";
+        tex->opacity = 0.f;
     }
     
 
