@@ -9,46 +9,6 @@
   "Layers" : 
   [
     {
-      "Name" : "Ref",
-      "Objects" : 
-      [
-        {
-          "Components" : 
-          [
-            {
-              "Position" : 
-              {
-                "x" : 863.0,
-                "y" : 494.0
-              },
-              "Rotation" : 0.0,
-              "Scale" : 
-              {
-                "x" : 2430.0,
-                "y" : 1312.0
-              },
-              "Type" : "Transform"
-            },
-            {
-              "Properties" : 
-              {
-                "opacity" : 1.0,
-                "texturepath" : "lv2_ref.png"
-              },
-              "Type" : "Texture"
-            }
-          ],
-          "Name" : "level2_ref",
-          "Prefabs" : "level2_ref.json"
-        }
-      ],
-      "Settings" : 
-      {
-        "isVisible" : false,
-        "static_layer" : false
-      }
-    },
-    {
       "Name" : "Background",
       "Objects" : 
       [
