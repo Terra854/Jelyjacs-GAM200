@@ -44,6 +44,7 @@ void CloseHowToPlayMenuButton::Update(Object* obj) {
         return;
     }
     
+    Logic->button_hover = true;
 
     if (input::IsPressed(KEY::mouseL))
     {

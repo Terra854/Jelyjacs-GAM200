@@ -78,6 +78,10 @@ public:
 	// static bool to check if the game is restarting
 	static bool restarting;
 
+	// static bool to check if the button is hovered
+	bool button_hover;
+	bool button_hover_played;
+
 	//added by jia ming
 	static bool no_movement;
 

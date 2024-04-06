@@ -37,6 +37,7 @@ void MenuArrow::Update(Object* obj) {
 
     if (isObjectClicked(start_button_trans, Vec2(input::GetMouseX(), input::GetMouseY())))
     {
+        Logic->button_hover = true;
         if (obj->GetName() == "MainMenuArrowRight")
         {
             tex->textureName = "YellowArrow_Right.png";
@@ -52,6 +53,7 @@ void MenuArrow::Update(Object* obj) {
     }
     else if (isObjectClicked(quit_button_trans, Vec2(input::GetMouseX(), input::GetMouseY())))
     {
+        Logic->button_hover = true;
         if (obj->GetName() == "MainMenuArrowRight")
         {
             tex->textureName = "YellowArrow_Right.png";

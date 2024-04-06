@@ -43,6 +43,7 @@ void QuitButton::Update(Object* obj) {
 	}
 
     tex->textureName = "Exit glow.png";
+    Logic->button_hover = true;
 
     if (input::IsPressed(KEY::mouseL))
     {

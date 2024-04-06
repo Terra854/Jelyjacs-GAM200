@@ -64,7 +64,7 @@ void FullscreenButton::Update(Object* obj) {
     */
 
     tex->textureName = "Fullscreen glow.png";
-    
+    Logic->button_hover = true;
 
     if (input::IsPressed(KEY::mouseL))
     {

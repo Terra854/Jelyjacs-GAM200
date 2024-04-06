@@ -32,20 +32,24 @@ void SkipCutscene::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void SkipCutscene::Update(Object* obj) {
-    if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
-        //std::cout << "NIL OBJ : SkipCutscene" << std::endl;
+    if (obj == nullptr || objectFactory->FindLayerThatHasThisObject(obj) == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+        //std::cout << "NIL OBJ : PauseButton" << std::endl;
         return;
     }
 
-    if (isObjectClicked((Transform*) obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
-		std::cout << "Button Clicked" << std::endl;
-		audio->playSfx("button_click");
+    if (isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
+        Logic->button_hover = true;
 
-        // Skip the cutscene
-        audio->setBackgroundAudio("main_menu_bg");
-        audio->stopSfx(rain_sfx);
-        audio->stopSfx(people_sfx);
-        SceneManager::LoadScene("main_menu.json");
+        if (input::IsPressed(KEY::mouseL)) {
+            std::cout << "Button Clicked" << std::endl;
+            audio->playSfx("button_click");
+
+            // Skip the cutscene
+            audio->setBackgroundAudio("main_menu_bg");
+            audio->stopSfx(rain_sfx);
+            audio->stopSfx(people_sfx);
+            SceneManager::LoadScene("main_menu.json");
+        }
 	}
 }
 /*********************************************************************/

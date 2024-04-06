@@ -174,6 +174,8 @@ void GameLogic::Update() {
 	}
 	*/
 
+	button_hover = false;
+
 	// Need to refactor cause previous code is very inefficient
 	for (int i = 0; i < objectFactory->GetNextId(); i++) {
 		
@@ -201,6 +203,15 @@ void GameLogic::Update() {
 			death_timer = 0;
 		}
 	
+	}
+
+	// Button hovered sfx
+	if (button_hover && !button_hover_played) {
+		audio->playSfx("menu_hoover_over_sfx");
+		button_hover_played = true;
+	}
+	else if (!button_hover){
+		button_hover_played = false;
 	}
 
 	if (restarting) {

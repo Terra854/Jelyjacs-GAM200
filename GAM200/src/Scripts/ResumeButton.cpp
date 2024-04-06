@@ -44,6 +44,7 @@ void ResumeButton::Update(Object* obj) {
 	}
 
     tex->textureName = "Resume glow.png";
+    Logic->button_hover = true;
 
     if (input::IsPressed(KEY::mouseL))
     {

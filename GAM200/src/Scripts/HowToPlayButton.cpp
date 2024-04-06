@@ -51,6 +51,7 @@ void HowToPlayButton::Update(Object* obj) {
     
 
     tex->textureName = "How to play glow.png";
+    Logic->button_hover = true;
     
 
     if (input::IsPressed(KEY::mouseL))

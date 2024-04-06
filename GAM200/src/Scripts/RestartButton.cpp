@@ -44,6 +44,7 @@ void RestartButton::Update(Object* obj) {
     }
 
     tex->textureName = "Restart glow.png";
+    Logic->button_hover = true;
 
     if (input::IsPressed(KEY::mouseL))
     {

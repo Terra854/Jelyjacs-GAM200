@@ -46,6 +46,7 @@ void WinBackButton::Update(Object* obj) {
     }
     
 
+    Logic->button_hover = true;
     
 
     if (input::IsPressed(KEY::mouseL))

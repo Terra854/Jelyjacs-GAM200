@@ -32,20 +32,25 @@ void PauseButton::Start(Object* obj) {
 // @param obj: The object to which this script is attached.
 /*********************************************************************/
 void PauseButton::Update(Object* obj) {
-    if (obj == nullptr || !input::IsPressed(KEY::mouseL) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
+    if (obj == nullptr || objectFactory->FindLayerThatHasThisObject(obj) == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         //std::cout << "NIL OBJ : PauseButton" << std::endl;
         return;
     }
 
     if (isObjectClicked((Transform*) obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
-		std::cout << "Button Clicked" << std::endl;
-		audio->playSfx("button_click");
+		Logic->button_hover = true;
 
-        // Pause the game.
-        sceneManager->PauseScene();
+        if (input::IsPressed(KEY::mouseL)) {
 
-        objectFactory->GetLayer("PauseMenu")->second.first.isVisible = true;
-        objectFactory->GetLayer("GameMenu")->second.first.isVisible = false;
+            std::cout << "Button Clicked" << std::endl;
+            audio->playSfx("button_click");
+
+            // Pause the game.
+            sceneManager->PauseScene();
+
+            objectFactory->GetLayer("PauseMenu")->second.first.isVisible = true;
+            objectFactory->GetLayer("GameMenu")->second.first.isVisible = false;
+        }
 	}
 }
 /*********************************************************************/
