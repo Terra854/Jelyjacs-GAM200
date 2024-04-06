@@ -38,7 +38,7 @@ Object* GameLogic::playerObj;
 Object* dynamic_collision;
 Vec2 start_position;
 int CatPower = 0;
-int death_timer = 0;
+float death_timer = 0.f;
 bool GameLogic::death;
 bool GameLogic::restarting;
 bool GameLogic::no_movement;
@@ -192,15 +192,22 @@ void GameLogic::Update() {
 		}
 	}
 	if (death) {
-		if(death_timer == 0)
-			camera2D->ShakeCamera(Vec2(0.1f, 0.1f), 0.25f);
-		death_timer++;
-		if (death_timer > 30) {
+		if (death_timer == 0.f) {
+			camera2D->ShakeCamera(Vec2(0.1f, 0.1f), 0.9f);
+			audio->stopBackground();
+			audio->playSfx("game_over_hit", 3.f);
+			Physics* p = static_cast<Physics*>(playerObj->GetComponent(ComponentType::Physics));
+			if (p)
+				p->AffectedByGravity= false;
+		}
+		death_timer += engine->GetDt();
+		std::cout << "Death Timer: " << death_timer << std::endl;
+		if (death_timer > 1.f) {
 			Transform* player_t = static_cast<Transform*>(playerObj->GetComponent(ComponentType::Transform));
 			camera2D->TranslateCamera(player_t->Position, start_position, 1.0f);
 			restarting = true;
 			death = false;
-			death_timer = 0;
+			death_timer = 0.f;
 		}
 	
 	}

@@ -56,9 +56,8 @@ void Camera::Update() {
 			random_num.y *= random_shift.y;
 			
 			position += random_num;
-			time_count += engine->Get_Fixed_DT();
-			std::cout << "time_count" << std::endl;
-			std::cout<< time_count << std::endl;
+			time_count += engine->GetDt();
+			std::cout << "time_count" << time_count << std::endl;
 			if (time_count >= time_shift) {
 				time_count = 0.0f;
 				camera_shake = false;
