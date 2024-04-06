@@ -21,22 +21,6 @@
           },
           "Type": "Transform"
         }]
-        },
-        {
-          "Name": "Main_MenuTitle",
-          "Prefabs": "main_menuTitle.json",
-          "Components": [{
-          "Position": {
-            "x": 50.0,
-            "y": 0.0
-          },
-          "Rotation": 0.0,
-          "Scale": {
-            "x": 1500.0,
-            "y": 500.0
-          },
-          "Type": "Transform"
-        }]
         }
       ],
       "Settings": {
@@ -48,100 +32,128 @@
       "Name": "MainMenu",
       "Objects": [
         {
-          "Name": "main_menuTitleStartButton",
-          "Prefabs": "main_menuTitleStart.json",
-          "Components": [{
-          "Position": {
-            "x": 30.0,
-            "y": -300.0
-          },
-          "Rotation": 0.0,
-          "Scale": {
-            "x": 222.5,
-            "y": 34.75
-          },
-          "Type": "Transform"
+          "Name": "Main_MenuTitle",
+          "Prefabs": "main_menuTitle.json",
+          "Components": [
+            {
+              "Position": {
+                "x": 50.0,
+                "y": 0.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 1500.0,
+                "y": 500.0
+              },
+              "Type": "Transform"
+            }
+          ]
         },
         {
-          "Type": "Behaviour",
-          "counter": 0.0,
-          "distance": 0.0,
-          "index": 0.0,
-          "scripts": "MainMenuStartGameButton",
-          "speed": 0.0
-        }]
+          "Name": "main_menuTitleStartButton",
+          "Prefabs": "main_menuTitleStart.json",
+          "Components": [
+            {
+              "Position": {
+                "x": 30.0,
+                "y": -300.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 222.5,
+                "y": 34.75
+              },
+              "Type": "Transform"
+            },
+            {
+              "Type": "Behaviour",
+              "counter": 0.0,
+              "distance": 0.0,
+              "index": 0.0,
+              "scripts": "MainMenuStartGameButton",
+              "speed": 0.0
+            }
+          ]
         },
         {
           "Name": "main_menuTitleQuitButton",
           "Prefabs": "main_menuTitleQuit.json",
-          "Components": [{
-          "Position": {
-            "x": 30.0,
-            "y": -400.0
-          },
-          "Rotation": 0.0,
-          "Scale": {
-            "x": 79.5,
-            "y": 34.75
-          },
-          "Type": "Transform"
-        },
-        {
-          "Type":"Behaviour",
-          "counter": 0.0,
-          "distance": 0.0,
-          "index": 0.0,
-          "scripts": "MainMenuQuitButton",
-          "speed": 0.0
-        }]
+          "Components": [
+            {
+              "Position": {
+                "x": 30.0,
+                "y": -400.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 79.5,
+                "y": 34.75
+              },
+              "Type": "Transform"
+            },
+            {
+              "Type": "Behaviour",
+              "counter": 0.0,
+              "distance": 0.0,
+              "index": 0.0,
+              "scripts": "MainMenuQuitButton",
+              "speed": 0.0
+            }
+          ]
         },
         {
           "Name": "MainMenuArrowLeft",
           "Prefabs": "main_menu_arrow_left.json",
-          "Components": [{
-          "Position": {
-            "x": -93.6,
-            "y": -297.0
-          },
-          "Rotation": 0.0,
-          "Scale": {
-            "x": 128,
-            "y": 128
-          },
-          "Type": "Transform"
-        }]
+          "Components": [
+            {
+              "Position": {
+                "x": -93.6,
+                "y": -297.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 128,
+                "y": 128
+              },
+              "Type": "Transform"
+            }
+          ]
         },
         {
           "Name": "MainMenuArrowRight",
           "Prefabs": "main_menu_arrow_right.json",
-          "Components": [{
-          "Position": {
-            "x": 161.6,
-            "y": -297
-          },
-          "Rotation": 0.0,
-          "Scale": {
-            "x": 128,
-            "y": 128
-          },
-          "Type": "Transform"
-        }]
+          "Components": [
+            {
+              "Position": {
+                "x": 161.6,
+                "y": -297
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 128,
+                "y": 128
+              },
+              "Type": "Transform"
+            }
+          ]
         },
         {
           "Name": "MainMenuHowToPlay",
           "Prefabs": "main_menu_how_to_play.json",
-          "Components": [{
-          "Position": {
-            "x": 30.0,
-            "y": -353.0
-          },
-          "Rotation": 0.0,
-          "Scale": {
-            "x": 224,
-            "y": 30
-          },
-          "Type": "Transform"
-        }]
+          "Components": [
+            {
+              "Position": {
+                "x": 30.0,
+                "y": -353.0
+              },
+              "Rotation": 0.0,
+              "Scale": {
+                "x": 224,
+                "y": 30
+              },
+              "Type": "Transform"
+            }
+          ]
         }
       ],
       "Settings": {
