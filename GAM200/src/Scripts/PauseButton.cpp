@@ -40,7 +40,7 @@ void PauseButton::Update(Object* obj) {
     if (isObjectClicked((Transform*) obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
 		Logic->button_hover = true;
 
-        if (input::IsPressed(KEY::mouseL)) {
+        if (input::MouseClickedOnce()) {
 
             std::cout << "Button Clicked" << std::endl;
             audio->playSfx("button_click");

@@ -103,4 +103,6 @@ namespace input
 
 	//A bool to see if any text box in the level editor is active
 	extern bool LevelEditorTextActive;
+
+	bool MouseClickedOnce();
 }

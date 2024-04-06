@@ -35,7 +35,7 @@ void MainMenuHowToPlay::Update(Object* obj) {
         return;
     }
 
-    if (input::IsPressed(KEY::mouseL))
+    if (input::MouseClickedOnce())
     {
         audio->playSfx("button_click");
         objectFactory->GetLayer("HowToPlayMenu")->second.first.isVisible = true;

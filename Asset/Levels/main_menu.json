@@ -21,16 +21,7 @@
           },
           "Type": "Transform"
         }]
-        }
-      ],
-      "Settings": {
-        "isVisible": true,
-        "static_layer": true
-      }
-    },
-    {
-      "Name": "MainMenu",
-      "Objects": [
+        },
         {
           "Name": "Main_MenuTitle",
           "Prefabs": "main_menuTitle.json",
@@ -48,7 +39,16 @@
               "Type": "Transform"
             }
           ]
-        },
+        }
+      ],
+      "Settings": {
+        "isVisible": true,
+        "static_layer": true
+      }
+    },
+    {
+      "Name": "MainMenu",
+      "Objects": [
         {
           "Name": "main_menuTitleStartButton",
           "Prefabs": "main_menuTitleStart.json",
@@ -144,7 +144,7 @@
             {
               "Position": {
                 "x": 30.0,
-                "y": -353.0
+                "y": -350.0
               },
               "Rotation": 0.0,
               "Scale": {

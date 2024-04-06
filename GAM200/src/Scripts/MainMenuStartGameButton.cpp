@@ -165,7 +165,7 @@ void MainMenuStartGameButton::Update(Object* obj) {
 
 
 
-	if (input::IsPressed(KEY::mouseL))
+	if (input::MouseClickedOnce())
 	{
 		std::cout << "Button Clicked" << std::endl;
 		audio->playSfx("button_click");
