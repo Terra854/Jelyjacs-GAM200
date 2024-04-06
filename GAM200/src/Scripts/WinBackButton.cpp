@@ -39,12 +39,15 @@ void WinBackButton::Update(Object* obj) {
         return;
     }
 
-    
+    Texture* texture = (Texture*)obj->GetComponent(ComponentType::Texture);
+
     if(!isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY())))
     {
+        texture->textureName = "win_back_button.png";
         return;
     }
     
+    texture->textureName = "win_back_button_glow.png";
 
     Logic->button_hover = true;
     
