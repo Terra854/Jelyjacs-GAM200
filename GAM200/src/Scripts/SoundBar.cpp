@@ -8,7 +8,6 @@
 
 Object* sound_bg_obj;
 Transform* sound_bg_trans;
-float sound_volume = 1.0f;
 
 // Constructor for the ButtonBase class.
 // @param name: The name of the portal.
@@ -38,18 +37,23 @@ void SoundBar::Update(Object* obj) {
     sound_bg_trans = (Transform*)sound_bg_obj->GetComponent(ComponentType::Transform);
     Transform* sound_bar_trans = (Transform*)obj->GetComponent(ComponentType::Transform);
 
-    if (!sound_on)
+    
+    if (audio->getMasterVolume() == 0)
     {
         sound_bg_trans->Scale.x = 0;
     }
-    else
+    else if (audio->getMasterVolume() > 0)
     {
-        sound_bg_trans->Scale.x = sound_volume * sound_bar_trans->Scale.x;
+        sound_bg_trans->Scale.x = audio->getMasterVolume() * sound_bar_trans->Scale.x;
+        sound_bg_trans->Position.x = sound_bar_trans->Position.x - sound_bar_trans->Scale.x / 2.0f + sound_bg_trans->Scale.x / 2.0f;
     }
 
+    Transform extended_trans = *(Transform*)obj->GetComponent(ComponentType::Transform);
+    extended_trans.Scale.x += 20;
+    extended_trans.Scale.y += 20;
 
 
-    if (!isObjectClicked((Transform*)obj->GetComponent(ComponentType::Transform), Vec2(input::GetMouseX(), input::GetMouseY()))) {
+    if (!isObjectClicked(&extended_trans, Vec2(input::GetMouseX(), input::GetMouseY()))) {
         return;
     }
 
@@ -59,22 +63,14 @@ void SoundBar::Update(Object* obj) {
         std::cout << "object does not exist" << std::endl;
         return;
     }
-    
-
-   
-    
-
-    
     float pos1 = sound_bar_trans->Position.x - sound_bar_trans->Scale.x / 2.0f;
+    
     if (input::IsPressedRepeatedly(KEY::mouseL))
     {
-        sound_bg_trans->Scale.x = input::GetMouseX() - pos1;
-        sound_bg_trans->Position.x = pos1 + sound_bg_trans->Scale.x/2.0f;
-        audio->setMasterVolume(sound_bg_trans->Scale.x / sound_bar_trans->Scale.x);
-        sound_volume = sound_bg_trans->Scale.x / sound_bar_trans->Scale.x;
-        sound_on = true;
+        float volume = (input::GetMouseX() - pos1) / sound_bar_trans->Scale.x;
+        volume = (volume <= 0) ? 0 : volume;
+        audio->setMasterVolume(volume);
     }
-    
     
 
 }

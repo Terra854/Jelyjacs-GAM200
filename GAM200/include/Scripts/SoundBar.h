@@ -31,5 +31,3 @@ public:
     // This method typically performs cleanup tasks.
     void Shutdown(Object* obj);
 };
-
-extern float sound_volume;

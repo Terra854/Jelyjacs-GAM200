@@ -25,7 +25,6 @@ void MenuArrow::Start(Object* obj) {
 /*********************************************************************/
 void MenuArrow::Update(Object* obj) {
     if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
-        //std::cout << "NIL OBJ : ButtonBase" << std::endl;
         return;
     }
     Transform* trans = (Transform*)obj->GetComponent(ComponentType::Transform);
@@ -37,7 +36,6 @@ void MenuArrow::Update(Object* obj) {
         {
             continue;
         }
-        std::cout << o->GetName() << std::endl;
         Transform* obj_trans = (Transform*)o->GetComponent(ComponentType::Transform);
         
         if (isObjectClicked(obj_trans, Vec2(input::GetMouseX(), input::GetMouseY())))
