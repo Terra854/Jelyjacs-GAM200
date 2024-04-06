@@ -27,6 +27,8 @@ namespace
 	int old_width;
 	int old_height;
 
+	bool mouse_is_clicked_once;
+
 	struct BUTTON
 	{
 	public:
@@ -98,6 +100,14 @@ void MousePosCallBack(GLFWwindow* pWin, double xpos, double ypos)
 	mouse.y = ypos;
 }
 
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE)
+	{
+		mouse_is_clicked_once = true;
+	}
+}
+
 void input::Init(GLFWwindow* pWin)
 {
 	Pwindow = pWin;
@@ -105,8 +115,19 @@ void input::Init(GLFWwindow* pWin)
 	glfwGetWindowSize(GLWindow::ptr_window, &old_width, &old_height);
 	new_width = old_width;
 	new_height = old_height;
+	glfwSetMouseButtonCallback(pWin, mouse_button_callback);
 }
 
+
+bool input::MouseClickedOnce()
+{
+	if (mouse_is_clicked_once && input::IsPressed(KEY::mouseL))
+	{
+		mouse_is_clicked_once = false;
+		return true;
+	}
+	else return false;
+}
 
 bool input::IsPressed(KEY key)
 {

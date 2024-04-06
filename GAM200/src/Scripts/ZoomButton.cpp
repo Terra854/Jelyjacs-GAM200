@@ -46,7 +46,7 @@ void ZoomButton::Update(Object* obj) {
 
     Logic->button_hover = true;
 
-    if (input::IsPressed(KEY::mouseL))
+    if (input::MouseClickedOnce())
     {
         audio->playSfx("button_click");
         if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {

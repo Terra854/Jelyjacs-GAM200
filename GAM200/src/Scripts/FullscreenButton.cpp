@@ -66,7 +66,7 @@ void FullscreenButton::Update(Object* obj) {
     tex->textureName = "Fullscreen glow.png";
     Logic->button_hover = true;
 
-    if (input::IsPressed(KEY::mouseL))
+    if (input::MouseClickedOnce())
     {
 		std::cout << "Button Clicked" << std::endl;
 		audio->playSfx("button_click");
