@@ -146,6 +146,7 @@ void Camera::SetToPlayer() {
 	position.y = -position.y * 2.0f / window->height_init;
 }
 
+/*  _________________________________________________________________________ */
 /*
 * Translate the camera from start to end in time
 * NDC standers for start and end
@@ -202,6 +203,7 @@ void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 	camera_follow = false;
 }
 
+/*  _________________________________________________________________________ */
 /*
 * Shake the camera with a range for a time
 * NDC standers for range
