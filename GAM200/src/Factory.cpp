@@ -471,12 +471,20 @@ void Factory::saveObject(std::string filename, Object* obj) {
 
 		animation["Properties"]["jumpfixframe"] = a->jump_fixed_frame;
 		animation["Properties"]["framerate"] = a->frame_rate;
-		//animation["Properties"]["frame"] =
-		//animation["Properties"]["idle"] =
-		//animation["Properties"]["push"] =
-		//animation["Properties"]["jump"] =
-		//animation["Properties"]["run"] =
 		animation["Properties"]["opacity"] = a->opacity;
+		animation["Properties"]["faceright"] = a->face_right;
+		animation["Properties"]["frame"][0] = a->animation_scale.first;
+		animation["Properties"]["frame"][1] = a->animation_scale.second;
+
+		for (auto& f : a->animation_frame) {
+			Json::Value frame;
+			frame[0] = f.second.first;
+			std::string type = AnimationTypeToString(f.second.second);
+			std::transform(type.begin(), type.end(), type.begin(),
+				[](unsigned char c) { return std::tolower(c); });
+			frame[1] = type;
+			animation["Properties"][std::to_string(f.first)] = frame;
+		}
 
 		jsonobj["Components"].append(animation);
 

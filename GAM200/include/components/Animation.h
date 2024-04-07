@@ -99,6 +99,7 @@ public:
 };
 
 AnimationType stringToAnimationType(const std::string& str);
+std::string AnimationTypeToString(AnimationType type);
 
 bool animationIsLeft(AnimationType type);
 
