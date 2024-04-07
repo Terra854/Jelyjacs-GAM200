@@ -76,18 +76,6 @@ private:
 	static std::string OpenFileDialog(int type);
 };
 
-class LevelEditorGrid {
-public:
-	LevelEditorGrid();
-	Vec2 scale_window{ 800.0f,800.0f };
-	Vec2 pos_botleft{};
-	void set_num(Vec2 num_) { num = num_; }
-	void drawleveleditor();
-	Vec2 num{ 0,0 };
-	float box_size{ 0 };
-};
-
 extern LevelEditor* level_editor; // declared in LevelEditor.cpp
-extern LevelEditorGrid* editor_grid;
 
 #endif

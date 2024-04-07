@@ -248,31 +248,6 @@ void PhysicsSystem::Initialize() {
 void PhysicsSystem::Update() {
 
 	// Do not update if the game is paused
-	/*
-	if (!engine->isPaused()) {
-
-		accumulator += engine->GetDt();
-
-		// Only run the physics code if fixed_dt has passed 
-		if (accumulator < engine->Get_Fixed_DT()) {
-			return;
-		}
-
-		// Check and see how many loops the physics needs to update
-		while (accumulator > engine->Get_Fixed_DT()) {
-
-			// To handle getting out of breakpoints
-			if (num_of_steps >= 10) {
-				accumulator = 0.0f;
-				break;
-			}
-
-			num_of_steps++;
-			accumulator -= engine->Get_Fixed_DT();
-		}
-
-	}*/
-
 	if (engine->isPaused()) {
 		return;
 	}

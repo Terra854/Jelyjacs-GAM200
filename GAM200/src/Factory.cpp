@@ -62,9 +62,6 @@ Factory::Factory()
 	AddComponentCreator("Animation", new ComponentCreator<Animation>());
 	AddComponentCreator("Text", new ComponentCreator<Text>());
 	AddComponentCreator("Dialogue", new ComponentCreator<Dialogue>());
-
-	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
-	//layers.push_back(std::make_pair(true, std::vector<Object*>()));
 }
 
 //Dtor
@@ -313,15 +310,6 @@ Object* Factory::createObject(const std::string& filename)
 				}
 			}
 
-			// Dump data for testing
-			//std::cout << "AnimationRow: " << a->animation_scale.second << ", AnimationCol: " << a->animation_scale.first << std::endl;
-			//for (auto& frame : a->animation_frame)
-			//{
-			//	std::cout << "Row: " << frame.first;
-			//	std::cout << ", Col: " << frame.second.first;
-			//	std::cout << ", Type: " << frame.second.second << std::endl;
-			//}
-
 			a->set_up_map(false);
 
 			// Set it back to facing right by default after the creations of animation map
@@ -421,8 +409,6 @@ void Factory::saveObject(std::string filename, Object* obj) {
 	if (a != nullptr) {
 		Json::Value animation;
 		animation["Type"] = "Animation";
-
-		// TODO: It's incomplete
 
 		for (const auto& pair : AssetManager::animations) {
 			if (pair.second == a->animation_tex_obj) {
@@ -567,7 +553,6 @@ void Factory::destroyObject(Object* obj)
 //This deletes all objects to be deleted
 void Factory::Update() {
 	long temp_id;
-	//bool delete_flag = false;
 	std::set<Object*>::iterator it = gameObjsToBeDeleted.begin();
 	for (; it != gameObjsToBeDeleted.end(); ++it)
 	{

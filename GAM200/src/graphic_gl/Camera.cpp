@@ -35,18 +35,6 @@ void Camera::Update() {
 
 
 	if (!isFreeCamEnabled()) {
-
-		// Set scale for camera
-
-		/*if (input::IsPressed(KEY::c)) {
-			if (camera2D->scale.x == 1.0f || camera2D->scale.y == 1.0f) {
-				camera2D->scale = { 2.0f, 2.0f };
-			}
-			else {
-				scale = { 1.0f, 1.0f };
-			}
-		}*/
-		//if(scale.x==1.0f && scale.y==1.0f)position = { 0.0f, 0.0f };
 		if (camera_shake) {
 			// get a random number between -1 to 1
 			float x = (rand() % 1000) / 1000.0f;
@@ -80,8 +68,6 @@ void Camera::Update() {
 
 	}
 	world_to_ndc = Mat3Scale(scale.x, scale.y) * Mat3Translate(position.x, position.y);
-	//Vec2 window_scaling = {(float)window->width_init/(float)window->width,(float)window->height_init/(float)window->height};
-	//world_to_ndc = Mat3Scale(window_scaling.x, window_scaling.y) * world_to_ndc;
 
 }
 

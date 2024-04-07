@@ -31,12 +31,6 @@ Component* Object::GetComponent(ComponentType typeID)
 			return c.second;
 	}
 	return nullptr;
-	/*
-	if(Components.find(typeID) != Components.end())
-		return (Components.find(typeID))->second;
-	else
-		return nullptr;
-	*/
 }
 
 /******************************************************************************

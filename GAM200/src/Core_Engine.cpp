@@ -108,8 +108,6 @@ void CoreEngine::Initialize()
 
 // Variables that will be needed by Update and GameLoop
 long long start_system_time, end_system_time;
-//std::map<std::string, double> elapsed_time;
-//double total_time = 0.0;
 
 #if defined(DEBUG) | defined(_DEBUG)
 void Update(ISystems* sys)
@@ -117,8 +115,6 @@ void Update(ISystems* sys)
 	start_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	sys->Update();
 	end_system_time = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	//elapsed_time[sys->SystemName()] = (double)(end_system_time - start_system_time) / 1000000.0;
-	//total_time += (double)(end_system_time - start_system_time) / 1000000.0;
 	level_editor->SetSystemElapsedTime(sys->SystemName(), (double)(end_system_time - start_system_time) / 1000000.0);
 	level_editor->AddTotalTime((double)(end_system_time - start_system_time) / 1000000.0);
 }
@@ -135,14 +131,8 @@ void CoreEngine::GameLoop()
 	// For fixed dt
 	double accumulator = 0.0;
 
-	//gamehud.Initialize();
-
 	audio->setupSound();
 #if defined(DEBUG) | defined(_DEBUG)
-	int numOfBoxes = (int)(editor_grid->num.x * editor_grid->num.y);
-	std::cout << "Number of boxes " << numOfBoxes << std::endl;
-	std::vector<int> boxesFilled(numOfBoxes, 0);
-	std::cout << boxesFilled.capacity();
 
 	/* Level Editor */
 
@@ -193,11 +183,6 @@ void CoreEngine::GameLoop()
 
 #if defined(DEBUG) | defined(_DEBUG)	
 		hud.NewGuiFrame(0);
-
-		// Toggle Button to Display Debug Information in IMGui
-		//if (input::IsPressed(KEY::f)) { show_performance_viewer = !show_performance_viewer; }
-
-		//show_performance_viewer ? Debug_Update() : Update();
 #endif
 		input::Update();
 
@@ -231,7 +216,6 @@ void CoreEngine::GameLoop()
 			Update(Systems["Graphics"]);
 
 			Update(Systems["Window"]);
-			//editor_grid->drawleveleditor();
 
 			// End rendering into imgui window 
 
@@ -240,7 +224,6 @@ void CoreEngine::GameLoop()
 			Update(Systems["LevelEditor"]);
 
 			// Display the game inside the ImGui window
-			//ImGui::SetNextWindowSize(ImVec2(640, 420), ImGuiCond_Always);
 			ImGui::Begin("Game Viewport", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 			ImVec2 windowSize = ImGui::GetWindowSize();
 
@@ -260,7 +243,6 @@ void CoreEngine::GameLoop()
 			ImVec2 viewportPos = ImGui::GetWindowPos();
 
 			// Estimate the height of the title bar
-			//float titleBarHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
 			float titleBarHeight = 0.f;
 
 			// Translate the ImGui-relative coordinates to application window-relative coordinates
@@ -424,19 +406,6 @@ void CoreEngine::GameLoop()
 				std::cout << "Translated ClickPos (in terms of opengl display) " << displayPos.x << ", " << displayPos.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of opengl display coord) " << openGlDisplayCoord.x << ", " << openGlDisplayCoord.y << std::endl;
 				std::cout << "Translated ClickPos (in terms of game world) " << gameWorldPos.x << ", " << gameWorldPos.y << std::endl;
-				/*
-				for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
-				{
-					Object* object = objectFactory->getObjectWithID(static_cast<long>(i));
-					Transform* objTransform = static_cast<Transform*>(object->GetComponent(ComponentType::Transform));
-
-					if (isObjectClicked(objTransform, gameWorldPos))
-					{
-						level_editor->selected = true;
-						level_editor->selectedNum = (int)i;
-						selectedObjectID = static_cast<long>(i);
-					}
-				}*/
 
 				for (auto& l : SceneManager::layers) {
 					if (l.second.first.isVisible) {
@@ -542,8 +511,6 @@ void CoreEngine::GameLoop()
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // Render direct to window
 
 			Update(Systems["Graphics"]);
-			//gamehud.Update();
-			//gamehud.Draw();
 			Update(Systems["Window"]);
 			hud.GuiRender();
 		}
@@ -552,16 +519,9 @@ void CoreEngine::GameLoop()
 		level_editor->ClearAll();
 #else
 		Systems["Graphics"]->Update();
-		//gamehud.Update();
-		//gamehud.Draw();
 		Systems["Window"]->Update();
 		glfwSwapBuffers(window->ptr_window);
 #endif
-
-		// Update the time
-		//auto prev_time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(m_BeginFrame);
-		//auto time_in_seconds = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
-		
 		// FPS Calculation
 		auto m_EndFrame = std::chrono::system_clock::now();
 		dt = std::chrono::duration<float>(m_EndFrame - m_BeginFrame).count();			// Delta Time
@@ -575,20 +535,6 @@ void CoreEngine::GameLoop()
 			accumulator -= Get_Fixed_DT();
 			numofsteps++;
 		}
-
-		// Update delta_time every second
-		/*
-		if (time_in_seconds > prev_time_in_seconds)
-		{
-			//std::cout << "FPS: " << core_fps << std::endl;
-			//std::cout << "DT: " << dt << std::endl;
-			prev_time_in_seconds = time_in_seconds;
-		}*/
-
-
-		// Updating Frame Times
-		//m_BeginFrame = m_EndFrame;
-		//m_EndFrame = m_BeginFrame + invFpsLimit;
 	}
 
 #if defined(DEBUG) | defined(_DEBUG)

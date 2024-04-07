@@ -47,14 +47,12 @@ template<class... Ts> overload(Ts...) -> overload<Ts...>;
 	Default Constructor for LevelEditor
 *******************************************************************************/
 LevelEditor::LevelEditor() {
-	editor_grid = new LevelEditorGrid();
 }
 
 /******************************************************************************
 	Default Destructor for LevelEditor
 *******************************************************************************/
 LevelEditor::~LevelEditor() {
-	delete editor_grid;
 
 	SceneManager::ClearInitialObjectMap(true);
 
@@ -304,7 +302,7 @@ void LevelEditor::ObjectProperties() {
 	}
 	ImGui::EndChild();
 
-	//Accept drag and drop for game texture
+	// Accept drag and drop for game texture
 	if (ImGui::BeginDragDropTarget())
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Game texture"))
@@ -354,12 +352,6 @@ void LevelEditor::ObjectProperties() {
 
 		if (ImGui::Button("Insert Prefab"))
 		{
-			/*
-			Object* o = objectFactory->cloneObject(object);
-			objectFactory->assignIdToObject(o);
-			selectedNum = o->GetId();
-			cloneSuccessful = selectedNum;
-			*/
 			ImGui::OpenPopup("CloneObject");
 		}
 	}
@@ -398,7 +390,6 @@ void LevelEditor::ObjectProperties() {
 				SceneManager::CalculateLevelSize();
 
 				selectedNum = o->GetId();
-				//o->SetPrefab(object->GetPrefab()); // testing this line
 				cloneSuccessful = selectedNum;
 				l.second.second.push_back(o);
 			}
@@ -426,34 +417,32 @@ void LevelEditor::ObjectProperties() {
 			if (ImGui::Selectable("Texture")) {
 				object->AddComponent(new Texture(""));
 				if (update_all_instances)
-				UpdateAllObjectInstances(object);
+					UpdateAllObjectInstances(object);
 			}
-			/*
 			if (ImGui::Selectable("Animation")) {
 				object->AddComponent(new Animation());
 				if (update_all_instances)
-				UpdateAllObjectInstances(object);
+					UpdateAllObjectInstances(object);
 			}
-			*/
 		}
 		if (bo == nullptr)
 			if (ImGui::Selectable("Body")) {
 				object->AddComponent(new Rectangular());
 				if (update_all_instances)
-				UpdateAllObjectInstances(object);
+					UpdateAllObjectInstances(object);
 			}
 		if (ph == nullptr)
 			if (ImGui::Selectable("Physics")) {
 				object->AddComponent(new Physics());
 				if (update_all_instances)
-				UpdateAllObjectInstances(object);
+					UpdateAllObjectInstances(object);
 			}
 		
 		if (e == nullptr)
 			if (ImGui::Selectable("Event")) {
 				object->AddComponent(new Event());
 				if (update_all_instances)
-				UpdateAllObjectInstances(object);
+					UpdateAllObjectInstances(object);
 			}
 			
 		if (be == nullptr)
@@ -1565,7 +1554,6 @@ void LevelEditor::ListOfObjects() {
 			char buf[512];
 			sprintf_s(buf, "##%s_%s", engine->loaded_level.c_str(), l.first.c_str());
 			ImGui::Checkbox(buf, &l.second.first.isVisible);
-			//ImGui::SameLine();
 			ImGui::TableNextColumn();
 			ImGui::Checkbox(buf, &l.second.first.static_layer);
 			ImGui::TableNextColumn();
@@ -1598,35 +1586,6 @@ void LevelEditor::ListOfObjects() {
 				ImGui::TreePop();
 			}
 		}
-		/*
-		for (size_t i = 0; i < objectFactory->NumberOfObjects(); i++)
-		{
-
-			if (objectFactory->getObjectWithID((long)i) == nullptr)
-			{
-				continue;
-			}
-			ImGui::TableNextColumn();
-			Object* object = objectFactory->getObjectWithID(static_cast<int>(i));
-			char buf[256];
-			if (object->GetName().empty())
-				sprintf_s(buf, "%d) Object", static_cast<int>(i));
-			else
-				sprintf_s(buf, "%d) %s", static_cast<int>(i), object->GetName().c_str());
-
-			// Creating button for each object
-			if (ImGui::Selectable(buf, selectedNum == static_cast<int>(i))) {
-				selected = true;
-				selectedNum = static_cast<int>(i);
-
-				// Cancel all edits inside the property editor
-				Transform_EditMode = false;
-				Body_EditMode = false;
-				AABB_EditMode = false;
-				Physics_EditMode = false;
-			}
-		}
-		*/
 		ImGui::EndTable();
 	}
 	ImGui::EndChild();
@@ -2064,9 +2023,6 @@ void LevelEditor::AssetList()
 void LevelEditor::PlayPauseGame() {
 	ImGui::Begin("Play/Pause");
 
-	// Make the buttons unclickable if Finn or Spark are not inside 
-	//ImGui::BeginDisabled(objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr);
-
 	if (engine->isPaused()) {
 		if (ImGui::Button("Play")) {
 			SceneManager::PlayScene();
@@ -2081,8 +2037,6 @@ void LevelEditor::PlayPauseGame() {
 		if (ImGui::Button("Pause"))
 			SceneManager::PauseScene();
 	}
-
-	//ImGui::EndDisabled();
 
 	ImGui::SameLine();
 
@@ -2174,9 +2128,6 @@ void CameraControl() {
 	if (!camera2D->isFreeCamEnabled()) {
 		// End the disabled section
 		ImGui::EndDisabled();
-
-		// Restore original style
-		//ImGui::PopStyleVar();
 	}
 
 	ImGui::End();
@@ -2280,10 +2231,6 @@ void LevelEditor::SaveAsDialog() {
 				SceneManager::CalculateLevelSize();
 				SceneManager::ClearInitialObjectMap(false);
 			}
-
-			//char saveLocation[110];
-
-			//sprintf_s(saveLocation, "Asset/Levels/%s.json", text);
 
 			std::string filename(text);
 			filename += ".json";
@@ -2588,17 +2535,10 @@ void LevelEditor::Initialize() {
 
 	style = &ImGui::GetStyle();
 
-	//style->WindowPadding = ImVec2(15, 15);
 	style->WindowRounding = 5.0f;
-	//style->FramePadding = ImVec2(5, 5);
 	style->FrameRounding = 4.0f;
-	//style->ItemSpacing = ImVec2(12, 8);
-	//style->ItemInnerSpacing = ImVec2(8, 6);
-	//style->IndentSpacing = 25.0f;
 	style->ScrollbarSize = 15.0f;
 	style->ScrollbarRounding = 9.0f;
-	//style->GrabMinSize = 5.0f;
-	//style->GrabRounding = 3.0f;
 
 	Vec4 NormalizeColor(255.f, 255.f, 255.f, 1.f);
 
@@ -2642,56 +2582,6 @@ void LevelEditor::Initialize() {
 
 	// Progress bar
 	style->Colors[ImGuiCol_PlotHistogram] = ProgressBarColor.ToImVec4();
-
-	/*
-	// ImGui window borders
-	style->Colors[ImGuiCol_Border] = Vec4(BackgroundColor * BorderModifier).ToImVec4();
-	//style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
-	//style->Colors[ImGuiCol_BorderShadow] = Vec4(BackgroundColor * ShadowModifier).ToImVec4();
-
-	// Checkbox, radio button, plot, slider, text input
-	style->Colors[ImGuiCol_FrameBg] = FrameColor.ToImVec4();
-	style->Colors[ImGuiCol_FrameBgHovered] = Vec4(FrameColor * HoveredModifier).ToImVec4();
-	style->Colors[ImGuiCol_FrameBgActive] = Vec4(FrameColor * ActiveModifier).ToImVec4();
-
-	//style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	//style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
-	//style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_MenuBarBg] = Vec4(BackgroundColor + Vec4(0.2f, 0.2f, 0.2f, 0.f)).ToImVec4();;
-
-	// Default buttons
-	style->Colors[ImGuiCol_Button] = ButtonColor.ToImVec4();
-	style->Colors[ImGuiCol_ButtonHovered] = Vec4(ButtonColor * HoveredModifier).ToImVec4();
-	style->Colors[ImGuiCol_ButtonActive] = Vec4(ButtonColor * ActiveModifier).ToImVec4();
-
-	// Tabs
-	style->Colors[ImGuiCol_Tab] = ButtonColor.ToImVec4();
-	style->Colors[ImGuiCol_TabHovered] = Vec4(ButtonColor * HoveredModifier).ToImVec4();
-	style->Colors[ImGuiCol_TabActive] = Vec4(ButtonColor * ActiveModifier).ToImVec4();
-
-
-
-	style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_CheckMark] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-	style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-	style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-	style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-	style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-	style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
-	style->Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
-
-	*/
 
 	ImGuiIO& io = ImGui::GetIO();
 	font = io.Fonts->AddFontFromFileTTF("Asset/Fonts/Roboto-Regular.ttf", 15);
@@ -3158,63 +3048,4 @@ std::string LevelEditor::OpenFileDialog(int type) {
 	}
 
 	return std::string(); // No file selected or dialog cancelled
-}
-
-/************************************LEVEL EDITOR GRID************************************/
-
-LevelEditorGrid* editor_grid;
-
-/******************************************************************************
-	Default Constructor for LevelEditorGrid
-*******************************************************************************/
-LevelEditorGrid::LevelEditorGrid()
-{
-	set_num({ 12, 12 });
-	editor_grid = this;
-}
-
-glm::vec3 box_color_editor{ 0.0f, 0.5f, 0.5f };
-
-/******************************************************************************
-	drawleveleditor
-	- Draws the level editor grid
-*******************************************************************************/
-void LevelEditorGrid::drawleveleditor()
-{
-	if (num.x > num.y)
-		box_size = scale_window.x / num.x;
-	else box_size = scale_window.y / num.y;
-	Vec2 scaling = { box_size / window->width, box_size / window->height };
-	pos_botleft = {
-		(-box_size * (num.x - 1)) / window->width,
-		(-box_size * (num.y - 1)) / window->height
-	};
-	for (int i = 0; i < num.x; i++) {
-		for (int j = 0; j < num.y; j++) {
-			Vec2 pos = pos_botleft + Vec2(i * box_size * 2 / window->width, j * box_size * 2 / window->height);
-			Mat3 mat_test = Mat3Translate(pos.x, pos.y) * Mat3Scale(scaling.x, scaling.y);
-			mat_test = camera2D->world_to_ndc * mat_test;
-
-			AssetManager::shaderval("shape").Use();
-			// bind VAO of this object's model
-
-			glBindVertexArray(AssetManager::modelval("square").vaoid);
-			// copy object's model-to-NDC matrix to vertex shader's
-			// uniform variable uModelToNDC
-			AssetManager::shaderval("shape").SetUniform("uModel_to_NDC", mat_test.ToGlmMat3());
-			AssetManager::shaderval("shape").SetUniform("uColor", box_color_editor);
-			// call glDrawElements with appropriate arguments
-			glDrawElements(AssetManager::modelval("square").primitive_type, AssetManager::modelval("square").draw_cnt, GL_UNSIGNED_SHORT, 0);
-
-			// unbind VAO and unload shader program
-			glBindVertexArray(0);
-			AssetManager::shaderval("shape").UnUse();
-			Vec2 botleft = { (i - num.x / 2) * box_size, (j - num.y / 2) * box_size };
-			Vec2 topright = { botleft.x + box_size,botleft.y + box_size };
-			app->drawline(Vec2(topright.x, botleft.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });
-			app->drawline(topright, Vec2(topright.x, botleft.y), glm::vec3{ 0.0f, 1.0f, 1.0f });
-			app->drawline(topright, Vec2(botleft.x, topright.y), glm::vec3{ 0.0f, 1.0f, 1.0f });
-			app->drawline(Vec2(botleft.x, topright.y), botleft, glm::vec3{ 0.0f, 1.0f, 1.0f });
-		}
-	}
 }

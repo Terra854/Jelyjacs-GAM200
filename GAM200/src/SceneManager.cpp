@@ -58,17 +58,12 @@ void SceneManager::LoadScene(const std::string filepath) {
 	- Used to start or resume the scene
 *******************************************************************************/
 void SceneManager::PlayScene() {
-	// Do not play scene if Finn or Spark isn't inside the level
-	//if (objectFactory->FindObject("Finn") == nullptr || objectFactory->FindObject("Spark") == nullptr)
-	//	return;
-
 	if (engine->isPaused()) {
 		if (initialObjectMap.empty()) {
 			SceneManager::BackupInitialState();
 		}
 		engine->setPause();
 	}
-
 }
 
 /******************************************************************************
@@ -105,18 +100,6 @@ void SceneManager::RestartScene() {
 
 	// Loop through the initialLayer vector to refill the layers
 	for (auto& p : initialLayer) {
-		/*
-		int layerNum = objectFactory->GetLayerNum(p.first);
-
-		if (layerNum == -1) {
-			layerNum = objectFactory->CreateLayer(p.first, initialLayerSettings.front());
-			initialLayerSettings.pop();
-		}
-
-		for (auto& objID : p.second)
-			objectFactory->AddToLayer(layerNum, objectFactory->getObjectWithID(objID));
-			*/
-
 		layers.push_back(std::make_pair(p.first, std::pair<LayerSettings, std::vector<Object*>>(initialLayerSettings[p.first], std::vector<Object*>())));
 
 		for (auto& objID : p.second) {
@@ -184,7 +167,6 @@ void SceneManager::PlayCutScene(std::string str)
 		glClearColor(0.11f, 0.094f, 0.161f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//GLApp::draw_texture(Vec2{ 0.f, 0.f }, Vec2{ static_cast<float>(window->width_init), static_cast<float>(window->height_init) }, 0, frametexture, false);
 		GLApp::draw_texture(Vec2{ 0.f, 0.f }, Vec2{ static_cast<float>(window->width / 2), static_cast<float>(window->height / 2) }, 0, frametexture, false);
 		SetFont("Aldrich-Regular");
 
@@ -217,27 +199,6 @@ void SceneManager::PlayCutScene(std::string str)
 		}
 		timer = 0.0;
 		window->Update();
-
-		//}
-
-		//float time{};
-		//while (time < 200)
-		//{
-		//	std::cout << frametexture << "FRAME PLAYING!\n";
-
-		//	GLApp::draw_texture(Vec2{ 0,0 }, Vec2{ static_cast<float>(window->width_init), static_cast<float>(window->height_init) }, 0, frametexture, false);
-		//	SetFont(FONT::AldrichRegular);
-		//	DrawText(frametext, 0, -(window->height_init / 4.0), window->width_init / 2.0);
-
-
-		//	if (input::IsPressed(KEY::esc)) // Skip cutscene
-		//	{
-		//		std::cout << "CUTSCENE SKIPPED!\n";
-		//		return;
-		//	}
-
-		//	time += engine->GetDt();
-		//}
 	}
 	glClearColor(0.11f, 0.094f, 0.161f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -262,7 +223,7 @@ void SceneManager::BackupInitialState() {
 }
 
 void SceneManager::CalculateLevelSize() {
-		// Calculate the level size
+	// Calculate the level size
 	float maxX = 0, maxY = 0;
 
 	Vec2 start_coord, end_coord;
