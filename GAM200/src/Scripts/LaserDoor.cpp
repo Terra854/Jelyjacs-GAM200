@@ -60,9 +60,11 @@ namespace LaserDoor_Script {
             if (Finn != nullptr && Spark != nullptr) {
                 if (Collision::IsObjectInsideLaser(static_cast<Rectangular*>(Finn->GetComponent(ComponentType::Body)), obj)) {
 					intersecting = true;
+                    GameLogic::playerObj = Finn;
 				}
                 if (Collision::IsObjectInsideLaser(static_cast<Rectangular*>(Spark->GetComponent(ComponentType::Body)), obj)) {
                     intersecting = true;
+                    GameLogic::playerObj = Spark;
                 }
             }
             for (auto& temp : objectFactory->FindAllObjectsByName("Box")) {
