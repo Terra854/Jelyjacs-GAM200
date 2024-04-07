@@ -78,14 +78,14 @@ int find_width(std::string const& str, std::string font , float scale)
         FT_Load_Char(AssetManager::getoutline(font)->face, str.at(i), FT_LOAD_RENDER);
         width += AssetManager::getoutline(font)->face->glyph->advance.x;
     }
-    return (width>>6) * scale;
+    return static_cast<int>((width>>6) * scale);
 
 }
 
 
-int find_height(std::string const& str, std::string font, float scale)
+int find_height(std::string const&, std::string font, float scale)
 {
-    return scale * FontSystem->pixel_height;
+    return static_cast<int>(scale * FontSystem->pixel_height);
 
 }
 

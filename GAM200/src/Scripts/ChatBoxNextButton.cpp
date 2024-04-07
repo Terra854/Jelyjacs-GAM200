@@ -55,7 +55,7 @@ void ChatBoxNextButton::Update(Object* obj) {
         return;
     }
 
-    Dialogue* d = (Dialogue*)obj->GetComponent(ComponentType::Dialogue);
+   
 
 
     if (input::IsPressed(KEY::mouseL))

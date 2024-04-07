@@ -16,7 +16,7 @@ MainMenuHowToPlay::MainMenuHowToPlay(std::string name) : LogicScript(name)
     std::cout << name << " Created" << std::endl;
 }
 
-void MainMenuHowToPlay::Start(Object* obj) {
+void MainMenuHowToPlay::Start(Object*) {
     executeOnPause = true;
 }
 

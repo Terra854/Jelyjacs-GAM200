@@ -16,7 +16,7 @@ MenuArrow::MenuArrow(std::string name) : LogicScript(name)
     std::cout << name << " Created" << std::endl;
 }
 
-void MenuArrow::Start(Object* obj) {
+void MenuArrow::Start(Object*) {
     executeOnPause = true;
 }
 
