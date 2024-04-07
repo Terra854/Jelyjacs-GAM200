@@ -7744,7 +7744,7 @@
               "distance" : 420.0,
               "index" : 0,
               "scripts" : "Hori_Elevator",
-              "speed" : 420.0
+              "speed" : 442.0
             },
             {
               "Properties" : 
@@ -7764,7 +7764,7 @@
             {
               "Position" : 
               {
-                "x" : 1645.0,
+                "x" : 1732.0,
                 "y" : 986.0
               },
               "Rotation" : 0.0,
