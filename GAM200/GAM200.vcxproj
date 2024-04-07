@@ -161,7 +161,6 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
   <ItemGroup>
     <ClCompile Include="..\lib\jsoncpp\jsoncpp.cpp" />
     <ClInclude Include="include\components\Dialogue.h" />
-    <ClInclude Include="include\components\Particle.h" />
     <ClInclude Include="include\components\Text.h" />
     <ClInclude Include="include\DialogueSystem.h" />
     <ClInclude Include="include\LayerSettings.h" />
@@ -241,7 +240,6 @@ xcopy "$(SolutionDir)scenes" "$(TargetDir)scenes" /E/H/C/I/Y
     <ClCompile Include="src\graphic_gl\glslshader.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\Mat3.cpp" />
-    <ClCompile Include="src\Particle.cpp" />
     <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Scenes.cpp" />

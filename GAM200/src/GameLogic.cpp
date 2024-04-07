@@ -19,7 +19,6 @@ This file contains the definitions of the functions that are part of the Game Lo
 #include "components/PlayerControllable.h"
 #include "components/Animation.h"
 #include "components/Event.h"
-#include "components/Particle.h"
 #include "Core_Engine.h"
 #include <input.h>
 #include <message.h>
@@ -252,7 +251,8 @@ void GameLogic::Update() {
 		//engine->Broadcast(&msg);
 
 		if (objectFactory->GetLayer("PauseMenu") && objectFactory->GetLayer("GameMenu") && objectFactory->GetLayer("HowToPlayMenu")) {
-			engine->setPause();
+			
+			engine->isPaused() ? SceneManager::PlayScene() : SceneManager::PauseScene();
 
 			objectFactory->GetLayer("PauseMenu")->second.first.isVisible = engine->isPaused();
 			objectFactory->GetLayer("GameMenu")->second.first.isVisible = !engine->isPaused();

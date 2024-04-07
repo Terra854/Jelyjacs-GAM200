@@ -237,9 +237,6 @@
     <ClCompile Include="src\Scripts\PressurePlate.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="src\Particle.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scripts\Door.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
@@ -514,9 +511,6 @@
     </ClInclude>
     <ClInclude Include="include\Scripts\Timed_Laser.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\components\Particle.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="include\Scripts\Door.h">
       <Filter>Header Files\Scripts</Filter>

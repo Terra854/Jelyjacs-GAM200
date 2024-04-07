@@ -26,7 +26,6 @@ includes all the functions to draw objects
 #include <components/Animation.h>
 #include <LevelEditor.h>
 #include "../Assets Manager/asset_manager.h"
-#include "components/Particle.h"
 #include <Gizmo.h>
 #include <SceneManager.h>
 #include <Font.h>
@@ -383,29 +382,10 @@ void GLApp::Update()
 				else if (ani_pt && !ani_pt->animation_Map.empty()) {
 					// if is player
 					if (static_cast<PlayerControllable*>(object->GetComponent(ComponentType::PlayerControllable)) != nullptr) {
-						ParticleSystem* particleSystem = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
-						//if w is pressed
-
-						/*if (particleSystem != nullptr)
-
-						{
-							if (input::IsPressed(KEY::s)) {
-								particleSystem->prticle_state = ParticleState::Prticle_Start;
-
-							}
-							particleSystem->Update(object);
-
-						}*/
-						// draw object with animation
-
-						particleSystem->Update(object);
 						ani_pt->Update_player();
 					}
 					else {
-						// frame number change to 0 if animation type change
-
 						ani_pt->Update_objects();
-
 					}
 					// render animation
 					glBindTextureUnit(6, tex_test);
