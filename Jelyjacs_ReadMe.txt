@@ -11,7 +11,7 @@ Player movement: W, A, S, D
 Switch between Finn or Spark: E
 Cat teleport: T
 Camera zoom: C
-Debug drawing: L
+FPS Counter: L
 Pause: Esc
 Fullscreen: F
 Windowed Mode: X
@@ -22,11 +22,15 @@ Switch play/edit mode: P
 Delete selected object: Del
 Graphic debug display: L
 
+KNOWN BUGS
+==========
+(Release Mode Only)
+When changing the audio setting, the background music will come up muted. Sfx volume is not affected.
+Restarting the lvl will return the audio.
 
-Cheat:
-Characters No Collision : 1
-Characters complete the level : 2
-
+NOTES
+==========
+The level restarts if Finn or Spark or the box gets vaporized by the laser
 
 TEAM ROSTER
 ===========
