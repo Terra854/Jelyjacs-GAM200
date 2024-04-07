@@ -176,17 +176,30 @@ void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 	// make sure the camera is not out of bounds
 	Vec2 botleft = engine->Get_Start_Coords();
 	Vec2 topright = engine->Get_End_Coords();
-	if (pos2.x < botleft.x + window->width * 0.25) {
-		pos2.x = botleft.x + window->width * 0.25;
+	if (pos1.x < botleft.x + window->width * 0.5 / scale.x) {
+		pos1.x = botleft.x + window->width * 0.5 / scale.x;
 	}
-	if (pos2.y < botleft.y + window->height * 0.25) {
-		pos2.y = botleft.y + window->height * 0.25;
+	if (pos1.y < botleft.y + window->height * 0.5 / scale.y) {
+		pos1.y = botleft.y + window->height * 0.5 / scale.y;
 	}
-	if (pos2.x > topright.x - window->width * 0.25) {
-		pos2.x = topright.x - window->width * 0.25;
+	if (pos1.x > topright.x - window->width * 0.5 / scale.x) {
+		pos1.x = topright.x - window->width * 0.5 / scale.x;
 	}
-	if (pos2.y > topright.y - window->height * 0.25) {
-		pos2.y = topright.y - window->height * 0.25;
+	if (pos1.y > topright.y - window->height * 0.5 / scale.y) {
+		pos1.y = topright.y - window->height * 0.5 / scale.y;
+	}
+
+	if (pos2.x < botleft.x + window->width * 0.5 / scale.x) {
+		pos2.x = botleft.x + window->width * 0.5 / scale.x;
+	}
+	if (pos2.y < botleft.y + window->height * 0.5 / scale.y) {
+		pos2.y = botleft.y + window->height * 0.5 / scale.y;
+	}
+	if (pos2.x > topright.x - window->width * 0.5 / scale.x) {
+		pos2.x = topright.x - window->width * 0.5 / scale.x;
+	}
+	if (pos2.y > topright.y - window->height * 0.5 / scale.y) {
+		pos2.y = topright.y - window->height * 0.5 / scale.y;
 	}
 
 	// convert to NDC
