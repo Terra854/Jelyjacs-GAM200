@@ -132,7 +132,7 @@ namespace Collision {
 		Vec2 point;
 		int flag = 0;
 
-		int num_hotspots = 2; // Number of hotspots to check, applies to all sides
+		int num_hotspots = 3; // Number of hotspots to check, applies to all sides
 
 		float height = rect1->aabb.max.y - rect1->aabb.min.y;
 		float length = rect1->aabb.max.x - rect1->aabb.min.x;

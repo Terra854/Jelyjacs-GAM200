@@ -176,7 +176,7 @@ void Spark::Update(Object* obj) {
 				MovementKey msg(up);
 				engine->Broadcast(&msg);
 				if (player_physics->Velocity.y == 0.0f) {
-					player_physics->Force = 85000.f;
+					player_physics->Force = 100000.f;
 					std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
 					audio->playSfx("spark_jumping");
 					SparkInTheAir = true;
