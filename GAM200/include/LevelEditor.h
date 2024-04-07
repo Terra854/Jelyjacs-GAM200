@@ -68,6 +68,7 @@ private:
 	void LE_InputInt(const char* label, int* v);
 	void LE_InputFloat(const char* label, float* v);
 	void LE_InputFloat2(const char* label, float* v);
+	void LE_InputTextMultiline(const char* label, char* buf, size_t buf_size);
 	void DeleteSound(std::string audioType, int audio_num);
 	void AddTexture();
 	void AddAnimation();

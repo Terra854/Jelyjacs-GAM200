@@ -202,6 +202,10 @@ static bool Event_EditMode = false;
 
 static int edited_linked_event;
 
+static bool Dialogue_EditMode = false;
+
+static char edited_dialogue[4096] = "";
+
 static bool update_all_instances = false;
 
 void LevelEditor::ObjectProperties() {
@@ -1455,12 +1459,47 @@ void LevelEditor::ObjectProperties() {
 
 	if (d != nullptr) {
 		if (ImGui::CollapsingHeader("Dialogue")) {
-			ImGui::SeparatorText("Dialogue Text");
-			for (auto& it : d->GetDialogueLines()) {
-				ImGui::Text(it.c_str());
+			
+			if (Dialogue_EditMode) {
+
+				ImGui::Text("Format: [page 1][page 2][page 3]...");
+				ImGui::Text("It will also recognise newlines");
+
+				// Display input fields
+				LE_InputTextMultiline("##Dialogue Text", edited_dialogue, 1024);
+
+				// Button to exit edit mode
+				if (ImGui::Button("Done##Dialogue"))
+				{
+					Dialogue_EditMode = false;
+					d->ChangeDialogue(edited_dialogue);
+				}
+
+				ImGui::SameLine();
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Cancel##Dialogue"))
+				{
+					Dialogue_EditMode = false;
+				}
+				ImGui::PopStyleColor(3);
 			}
+			else
+			{
+				ImGui::SeparatorText("Dialogue Text");
+				for (auto& it : d->GetDialogueLines()) {
+					ImGui::Text(it.c_str());
+				}
+				// Button to enter edit mode
+				if (ImGui::Button("Edit##Dialogue"))
+				{
+					Dialogue_EditMode = true;
+					strcpy_s(edited_dialogue, sizeof(edited_dialogue), d->GetEntireDialogue().c_str());
+				}
+			}	
 		}
-	
 	}
 
 	ImGui::EndChild();
@@ -2805,6 +2844,13 @@ void LevelEditor::LE_InputFloat(const char* label, float* v) {
 
 void LevelEditor::LE_InputFloat2(const char* label, float* v) {
 	ImGui::InputFloat2(label, v);
+
+	if (!input::LevelEditorTextActive)
+		input::LevelEditorTextActive = ImGui::IsItemActive();
+}
+
+void LevelEditor::LE_InputTextMultiline(const char* label, char* buf, size_t buf_size) {
+	ImGui::InputTextMultiline(label, buf, buf_size);
 
 	if (!input::LevelEditorTextActive)
 		input::LevelEditorTextActive = ImGui::IsItemActive();
