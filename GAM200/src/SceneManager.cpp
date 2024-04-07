@@ -224,8 +224,6 @@ void SceneManager::BackupInitialState() {
 
 void SceneManager::CalculateLevelSize() {
 	// Calculate the level size
-	float maxX = 0, maxY = 0;
-
 	Vec2 start_coord, end_coord;
 
 	for (const auto& p : objectFactory->objectMap) {

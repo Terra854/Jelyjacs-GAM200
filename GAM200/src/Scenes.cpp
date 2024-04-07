@@ -280,7 +280,7 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 							objcomponentjson.readString(stringtmp, "Properties", key, 1);
 
 							for (char& c : stringtmp)
-								c = std::tolower(c);
+								c = (char) std::tolower(c);
 
 							anitype = stringToAnimationType(stringtmp);
 

@@ -429,7 +429,7 @@ void Factory::saveObject(std::string filename, Object* obj) {
 			frame[0] = f.second.first;
 			std::string type = AnimationTypeToString(f.second.second);
 			std::transform(type.begin(), type.end(), type.begin(),
-				[](unsigned char c) { return std::tolower(c); });
+				[](unsigned char c) { return static_cast<char>(std::tolower(static_cast<int>(c))); });
 			frame[1] = type;
 			animation["Properties"][std::to_string(f.first)] = frame;
 		}

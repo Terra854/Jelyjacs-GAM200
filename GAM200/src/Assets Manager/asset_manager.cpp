@@ -561,6 +561,8 @@ std::string AssetManager::animationstring(GLuint uint)
 		if (pair.second == uint)
 			return pair.first;
 	}
+
+	return "";
 }
 
 /******************************************************************************

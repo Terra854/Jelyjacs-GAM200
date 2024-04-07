@@ -593,7 +593,7 @@ void LevelEditor::ObjectProperties() {
 
 					//for (auto& pair : a->animation_frame) {
 
-					int a_size = a->animation_frame.size();
+					int a_size = static_cast<int>(a->animation_frame.size());
 
 					for (int i = 0; i < a_size; i++) {
 
@@ -622,9 +622,9 @@ void LevelEditor::ObjectProperties() {
 
 						std::vector<std::string> itemStrings(No_Animation_Type + 1);
 						const char* items[No_Animation_Type + 1];
-						for (int i = 0; i < No_Animation_Type + 1; ++i) {
-							itemStrings[i] = AnimationTypeToString(static_cast<AnimationType>(i));
-							items[i] = itemStrings[i].c_str();
+						for (int j = 0; j < No_Animation_Type + 1; ++j) {
+							itemStrings[j] = AnimationTypeToString(static_cast<AnimationType>(j));
+							items[j] = itemStrings[j].c_str();
 						}
 
 						sprintf_s(buffer, "##AnimationTypeBox%d", i + 1);
@@ -694,7 +694,7 @@ void LevelEditor::ObjectProperties() {
 
 					//for (auto& pair : a->animation_frame) {
 
-					int a_size = a->animation_frame.size();
+					int a_size = static_cast<int>(a->animation_frame.size());
 
 					for (int i = 0; i < a_size; i++) {
 
@@ -723,9 +723,9 @@ void LevelEditor::ObjectProperties() {
 
 						std::vector<std::string> itemStrings(No_Animation_Type + 1);
 						const char* items[No_Animation_Type + 1];
-						for (int i = 0; i < No_Animation_Type + 1; ++i) {
-							itemStrings[i] = AnimationTypeToString(static_cast<AnimationType>(i));
-							items[i] = itemStrings[i].c_str();
+						for (int j = 0; j < No_Animation_Type + 1; ++j) {
+							itemStrings[j] = AnimationTypeToString(static_cast<AnimationType>(j));
+							items[j] = itemStrings[j].c_str();
 						}
 
 						sprintf_s(buffer, "##AnimationTypeBox%d", i + 1);
