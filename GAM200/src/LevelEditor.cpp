@@ -26,6 +26,7 @@ This file contains the definitions of the functions that are part of the level e
 #include <commdlg.h>
 #include <ThreadPool.h>
 #include "Assets Manager/json_serialization.h"
+#include <components/Dialogue.h>
 LevelEditor* level_editor = nullptr; // declared in LevelEditor.cpp
 bool showUniformGrid = false;
 bool showPerformanceInfo = false;
@@ -246,6 +247,7 @@ void LevelEditor::ObjectProperties() {
 	Event* e = (Event*)object->GetComponent(ComponentType::Event);
 	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
 	Text* t = (Text*)object->GetComponent(ComponentType::Text);
+	Dialogue* d = (Dialogue*)object->GetComponent(ComponentType::Dialogue);
 
 	ImGui::BeginChild("Texture", ImVec2(128.f, 128.f));
 
@@ -368,30 +370,6 @@ void LevelEditor::ObjectProperties() {
 
 		ImGui::Text("Object Name: %s", object->GetName().c_str());
 		ImGui::Text("Number of components: %d", object->GetNumComponents());
-
-		/*
-		if (ImGui::Button("Clone (To be deleted)"))
-		{
-			Object* o = objectFactory->cloneObject(object, 64);
-			objectFactory->assignIdToObject(o);
-			selectedNum = o->GetId();
-			cloneSuccessful = selectedNum;
-
-			objectFactory->FindLayerThatHasThisObject(object)->second.second.push_back(o);
-		}
-
-		// For convinence
-		if (ImGui::Button("Cloneup (To be deleted)"))
-		{
-			Object* o = objectFactory->cloneObject(object, 0, 64);
-			objectFactory->assignIdToObject(o);
-			selectedNum = o->GetId();
-			cloneSuccessful = selectedNum;
-
-			objectFactory->FindLayerThatHasThisObject(object)->second.second.push_back(o);
-		}
-
-		*/
 
 		// For convinence
 		if (ImGui::Button("Clone"))
@@ -1386,7 +1364,18 @@ void LevelEditor::ObjectProperties() {
 	// PlayerControllable
 	if (pc != nullptr) {
 		if (ImGui::CollapsingHeader("PlayerControllable")) {
-			ImGui::Text("Nothing right now");
+			ImGui::Text("This component is to flag this object as can be controlled");
+			ImGui::Text("by the player and have no values inside");
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.f, 0.f, 1.f));
+			if (ImGui::Button("Delete##PlayerControllable"))
+			{
+				objectFactory->DeleteComponent(object, ComponentType::PlayerControllable);
+				pc = nullptr;
+			}
+			ImGui::PopStyleColor(3);
 		}
 	}
 
@@ -1464,6 +1453,15 @@ void LevelEditor::ObjectProperties() {
 		}
 	}
 
+	if (d != nullptr) {
+		if (ImGui::CollapsingHeader("Dialogue")) {
+			ImGui::SeparatorText("Dialogue Text");
+			for (auto& it : d->GetDialogueLines()) {
+				ImGui::Text(it.c_str());
+			}
+		}
+	
+	}
 
 	ImGui::EndChild();
 	ImGui::End();
