@@ -33,7 +33,7 @@ float spark_move_time = 0.f;
 // Constructor for the Spark class.
 // @param name: A string representing the name of the Spark instance.
 Spark::Spark(std::string name) : LogicScript(name)
-{ 
+{
 	std::cout << name << " Created" << std::endl;
 	Connected_to_Finn = true;
 	Just_detached = false;
@@ -71,8 +71,8 @@ void Spark::Update(Object* obj) {
 		std::cout << "NIL COMPONENT : Spark" << std::endl;
 		return;
 	};
-	
-	
+
+
 	/********************************************************************************************************
 	*
 	*	If player is Spark, then control Spark
@@ -117,51 +117,51 @@ void Spark::Update(Object* obj) {
 		if (teleporting) {
 			player_animation->jump_fixed = false;
 			switch (teleporting_state) {
-				case Disappearing:
-					player_animation->current_type = AnimationType::Push;
-					//if (counter < 68) {
-					//	counter++;
-					//}
-					if (player_animation->frame_num == 34) {
-						player_animation->pause = true;
-						teleporting_state = Moving;
-						camera2D->TranslateCamera(spark_t->Position, next_position, 1.0f);
-						counter = 0;
-					}
-					break;
-				case Moving:
-					if (!camera2D->isCameraShift()) {
-						teleporting_state = Appearing;
-						player_animation->pause = false;
-						player_animation->reverse = true;
-						audio->playSfx("cat_teleport_out", 2.f);
-					}
-					else {
-						player_animation->frame_num = 34;
-					}
-					break;
-				case Appearing:
-					//player_animation->current_type = AnimationType::Teleport;
-					
-					spark_t->Position = next_position;
-					/*
-					if (counter < 68) {
-						counter++;
-					}*/
-					if (player_animation->frame_num == 0) {
-						teleporting = false;
-						player_animation->reverse = false;
-						teleporting_state = None;
-						counter = 0;
-					}
-					break;
+			case Disappearing:
+				player_animation->current_type = AnimationType::Push;
+				//if (counter < 68) {
+				//	counter++;
+				//}
+				if (player_animation->frame_num == 34) {
+					player_animation->pause = true;
+					teleporting_state = Moving;
+					camera2D->TranslateCamera(spark_t->Position, next_position, 1.0f);
+					counter = 0;
+				}
+				break;
+			case Moving:
+				if (!camera2D->isCameraShift()) {
+					teleporting_state = Appearing;
+					player_animation->pause = false;
+					player_animation->reverse = true;
+					audio->playSfx("cat_teleport_out", 2.f);
+				}
+				else {
+					player_animation->frame_num = 34;
+				}
+				break;
+			case Appearing:
+				//player_animation->current_type = AnimationType::Teleport;
 
-				case None:
-					player_animation->current_type = AnimationType::Idle;
-					break;
+				spark_t->Position = next_position;
+				/*
+				if (counter < 68) {
+					counter++;
+				}*/
+				if (player_animation->frame_num == 0) {
+					teleporting = false;
+					player_animation->reverse = false;
+					teleporting_state = None;
+					counter = 0;
+				}
+				break;
+
+			case None:
+				player_animation->current_type = AnimationType::Idle;
+				break;
 			}
 		}
-		else{
+		else {
 			player_physics->Velocity.x = 0.0f;
 
 			if (player_animation->face_right) {
@@ -172,34 +172,37 @@ void Spark::Update(Object* obj) {
 			}
 
 			bool moving = false;
-			if (input::IsPressed(KEY::w) || input::IsPressed(KEY::up) || input::IsPressed(KEY::spacebar)) {
-				MovementKey msg(up);
-				engine->Broadcast(&msg);
-				if (player_physics->Velocity.y == 0.0f) {
-					player_physics->Force = 65000.f;
-					std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
-					audio->playSfx("spark_jumping");
-					SparkInTheAir = true;
+			if (!GameLogic::no_movement)
+			{
+				if (input::IsPressed(KEY::w) || input::IsPressed(KEY::up) || input::IsPressed(KEY::spacebar)) {
+					MovementKey msg(up);
+					engine->Broadcast(&msg);
+					if (player_physics->Velocity.y == 0.0f) {
+						player_physics->Force = 65000.f;
+						std::cout << "PlayJump " << player_physics->GetOwner()->GetName() << std::endl;
+						audio->playSfx("spark_jumping");
+						SparkInTheAir = true;
+					}
 				}
-			}
-			if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d) || input::IsPressed(KEY::left) || input::IsPressed(KEY::right)) {
-				audio->playSfx("spark_walking");
-			}
-			if (input::IsPressedRepeatedly(KEY::a) || input::IsPressedRepeatedly(KEY::left)) {
-				MovementKey msg(left);
-				engine->Broadcast(&msg);
-				player_physics->Velocity.x -= 500.0f;
-				moving = true;
-				player_animation->face_right = false;
-				player_animation->current_type = AnimationType::Run_left;
-			}
-			if (input::IsPressedRepeatedly(KEY::d) || input::IsPressedRepeatedly(KEY::right)) {
-				MovementKey msg(right);
-				engine->Broadcast(&msg);
-				player_physics->Velocity.x += 500.0f;
-				moving = true;
-				player_animation->face_right = true;
-				player_animation->current_type = AnimationType::Run;
+				if (input::IsPressed(KEY::a) || input::IsPressed(KEY::d) || input::IsPressed(KEY::left) || input::IsPressed(KEY::right)) {
+					audio->playSfx("spark_walking");
+				}
+				if (input::IsPressedRepeatedly(KEY::a) || input::IsPressedRepeatedly(KEY::left)) {
+					MovementKey msg(left);
+					engine->Broadcast(&msg);
+					player_physics->Velocity.x -= 500.0f;
+					moving = true;
+					player_animation->face_right = false;
+					player_animation->current_type = AnimationType::Run_left;
+				}
+				if (input::IsPressedRepeatedly(KEY::d) || input::IsPressedRepeatedly(KEY::right)) {
+					MovementKey msg(right);
+					engine->Broadcast(&msg);
+					player_physics->Velocity.x += 500.0f;
+					moving = true;
+					player_animation->face_right = true;
+					player_animation->current_type = AnimationType::Run;
+				}
 			}
 
 			if (player_physics->Velocity.y != 0.0f) {
@@ -304,7 +307,7 @@ void Spark::Update(Object* obj) {
 		}
 	}
 
-	
+
 }
 
 /***************************************************************************/

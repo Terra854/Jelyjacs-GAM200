@@ -60,8 +60,12 @@ void DialogueSystem::Update()
 		}
 		Object* finn_obj = objectFactory->FindObject("Finn");
 		Transform* finn_trans = (Transform*)finn_obj->GetComponent(ComponentType::Transform);
+
+		Object* spark_obj = objectFactory->FindObject("Spark");
+		Transform* spark_trans = (Transform*)spark_obj->GetComponent(ComponentType::Transform);
+
 		Transform* t = (Transform*)obj->second->GetComponent(ComponentType::Transform);
-		if (!isObjectClicked(t, finn_trans->Position))
+		if (!isObjectClicked(t, finn_trans->Position) && !isObjectClicked(t, spark_trans->Position))
 		{
 			continue;
 		}
