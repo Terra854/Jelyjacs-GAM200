@@ -89,85 +89,63 @@ void Response_Collision(Transform* t1, Body* b1, Physics* p1) {
 	// 2 Rectangles
 	if (typeid(*b1) == typeid(Rectangular)) {
 
-		// Make sure the top and bottom collision objects are not the same, otherwise the response will exhibit undefined behaviour
-		if (!(((Rectangular*)b1)->top_collision == ((Rectangular*)b1)->bottom_collision)) {
-			if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT && p1->Velocity.x < 0.0f) {
+			Object* leftObj = ((Rectangular*)b1)->left_collision;
 
-				top_collision_cooldown = 0.1f;
-				p1->Velocity.y = 0.0f;
-				t1->Position.y = ((Rectangular*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Body))->aabb.min.y - (((Rectangular*)b1)->height / 2);
-
-				// For objects on moving platforms
-				if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics)) != nullptr) {
-					if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y < 0.f) { // Check to see if the platform is going down
-						p1->Velocity.y += ((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y + (gravity * engine->Get_Fixed_DT()); // Inherit the platform's velocity and add gravity
-						t1->Position.y += p1->Velocity.y * engine->Get_Fixed_DT();
-					}
-				}
+			// For objects that are pushable
+			if (p1->AbleToPushObjects && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->pushable && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->left_collision == nullptr) {
+				// Will not make any sense for the velocity multiplier to exceed 1, 
+				p1->Velocity.x *= std::min(p1->Mass / ((Physics*)leftObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
+				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
+				((Transform*)leftObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x - (((Rectangular*)b1)->width / 2.f) - (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->width / 2.f);
 			}
-			if (((Rectangular*)b1)->collision_flag & COLLISION_BOTTOM) {
-
-				p1->Velocity.y = 0.0f;
-				t1->Position.y = ((Rectangular*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Body))->aabb.max.y + (((Rectangular*)b1)->height / 2);
-
-				// For objects on moving platforms
-
-				Physics* moving_platform = (Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics);
-
-				if (moving_platform != nullptr && moving_platform->Velocity.x && !(((Rectangular*)b1)->collision_flag & COLLISION_LEFT) && !(((Rectangular*)b1)->collision_flag & COLLISION_RIGHT)) {
-					t1->Position.x += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.x * engine->Get_Fixed_DT();
-					t1->Position.y += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.y * engine->Get_Fixed_DT();
-				}
+			else {
+				p1->Velocity.x = 0.0f;
+				t1->Position.x = ((Rectangular*)((Rectangular*)b1)->left_collision->GetComponent(ComponentType::Body))->aabb.max.x + (((Rectangular*)b1)->width / 2);
 			}
 		}
-
-		// Make sure the left and right collision objects are not the same, otherwise the response will exhibit undefined behaviour
-		if (!(((Rectangular*)b1)->left_collision == ((Rectangular*)b1)->right_collision)) {
-			if (((Rectangular*)b1)->collision_flag & COLLISION_LEFT) {
-				Object* leftObj = ((Rectangular*)b1)->left_collision;
-
-				// For objects that are pushable
-				if (p1->AbleToPushObjects && ((Rectangular*)leftObj->GetComponent(ComponentType::Body))->pushable && p1->Velocity.x < 0.0f) {
-					// Pushing the object
-						// Make sure the pushed object is not colliding with another object on it's left
-					if (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->left_collision == nullptr) {
-						// Will not make any sense for the velocity multiplier to exceed 1, 
-						p1->Velocity.x *= std::min(p1->Mass / ((Physics*)leftObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
-						t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
-						((Transform*)leftObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x - (((Rectangular*)b1)->width / 2.f) - (((Rectangular*)leftObj->GetComponent(ComponentType::Body))->width / 2.f);
-						((Physics*)leftObj->GetComponent(ComponentType::Physics))->IsBeingPushed = true;
-					}
-					else {
-						p1->Velocity.x = 0.0f;
-						t1->Position.x = ((Rectangular*)((Rectangular*)b1)->left_collision->GetComponent(ComponentType::Body))->aabb.max.x + (((Rectangular*)b1)->width / 2);
-					}
-				}
-			}
-		}
-		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT) {
+		if (((Rectangular*)b1)->collision_flag & COLLISION_RIGHT && p1->Velocity.x > 0.0f) {
 			Object* rightObj = ((Rectangular*)b1)->right_collision;
 
 			// For objects that are pushable
-			if (p1->AbleToPushObjects && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->pushable && p1->Velocity.x > 0.0f) {
-				// Pushing the object
-					// Make sure the pushed object is not colliding with another object on it's right
-				if (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->right_collision == nullptr) {
-					// Will not make any sense for the velocity multiplier to exceed 1, 
-					p1->Velocity.x *= std::min(p1->Mass / ((Physics*)rightObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
-					t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
-					((Transform*)rightObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x + (((Rectangular*)b1)->width / 2.f) + (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->width / 2.f);
-					((Physics*)rightObj->GetComponent(ComponentType::Physics))->IsBeingPushed = true;
-				}
-				else {
-					p1->Velocity.x = 0.0f;
-					t1->Position.x = ((Rectangular*)((Rectangular*)b1)->right_collision->GetComponent(ComponentType::Body))->aabb.min.x - (((Rectangular*)b1)->width / 2);
+			if (p1->AbleToPushObjects && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->pushable && ((Rectangular*)rightObj->GetComponent(ComponentType::Body))->right_collision == nullptr) {
+				// Will not make any sense for the velocity multiplier to exceed 1, 
+				p1->Velocity.x *= std::min(p1->Mass / ((Physics*)rightObj->GetComponent(ComponentType::Physics))->Mass, 1.f);
+				t1->Position.x = t1->PrevPosition.x + (p1->Velocity.x * engine->Get_Fixed_DT());
+				((Transform*)rightObj->GetComponent(ComponentType::Transform))->Position.x = t1->Position.x + (((Rectangular*)b1)->width / 2.f) + (((Rectangular*)rightObj->GetComponent(ComponentType::Body))->width / 2.f);
+			}
+			else {
+				p1->Velocity.x = 0.0f;
+				t1->Position.x = ((Rectangular*)((Rectangular*)b1)->right_collision->GetComponent(ComponentType::Body))->aabb.min.x - (((Rectangular*)b1)->width / 2);
+			}
+		}
+		if (((Rectangular*)b1)->collision_flag & COLLISION_TOP) {
+			top_collision_cooldown = 0.1f;
+			p1->Velocity.y = 0.0f;
+			t1->Position.y = ((Rectangular*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Body))->aabb.min.y - (((Rectangular*)b1)->height / 2);
+
+			// For objects on moving platforms
+			if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics)) != nullptr) {
+				if (((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y < 0.f) { // Check to see if the platform is going down
+					p1->Velocity.y += ((Physics*)((Rectangular*)b1)->top_collision->GetComponent(ComponentType::Physics))->Velocity.y + (gravity * engine->Get_Fixed_DT()); // Inherit the platform's velocity and add gravity
+					t1->Position.y += p1->Velocity.y * engine->Get_Fixed_DT();
 				}
 			}
 		}
-	}
+		if (((Rectangular*)b1)->collision_flag & COLLISION_BOTTOM) {
+			p1->Velocity.y = 0.0f;
+			t1->Position.y = ((Rectangular*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Body))->aabb.max.y + (((Rectangular*)b1)->height / 2);
 
-	if (((Rectangular*)b1)->collision_flag)
-		RecalculateBody(t1, b1);
+			// For objects on moving platforms
+			if (((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics)) != nullptr && !(((Rectangular*)b1)->collision_flag & COLLISION_LEFT) && !(((Rectangular*)b1)->collision_flag & COLLISION_RIGHT)) {
+				t1->Position.x += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.x * engine->Get_Fixed_DT();
+				t1->Position.y += ((Physics*)((Rectangular*)b1)->bottom_collision->GetComponent(ComponentType::Physics))->Velocity.y * engine->Get_Fixed_DT();
+			}
+		}
+
+		if (((Rectangular*)b1)->collision_flag)
+			RecalculateBody(t1, b1);
+	}
 }
 
 int total_grid_width, total_grid_height, num_of_grids_per_side;
