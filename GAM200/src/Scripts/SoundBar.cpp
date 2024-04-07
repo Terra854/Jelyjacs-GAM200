@@ -1,4 +1,9 @@
+/* !
+@author Yeo Jia Ming
+@date	23/3/2024
 
+This file contains the script for the pause menu sound bar
+*//*__________________________________________________________________________*/
 #include "Scripts/SoundBar.h"
 #include <Scripts/SoundToggle.h>
 #include <Utils.h>
@@ -9,16 +14,11 @@
 Object* sound_bg_obj;
 Transform* sound_bg_trans;
 
-// Constructor for the ButtonBase class.
-// @param name: The name of the portal.
 SoundBar::SoundBar(std::string name) : LogicScript(name)
 {
     std::cout << name << " Created" << std::endl;
 }
-/*********************************************************************/
-// Start method called when the ButtonBase script is ready.
-// @param obj: The object to which this script is attached.
-/*********************************************************************/
+
 void SoundBar::Start(Object* obj) {
     executeOnPause = true;
     std::cout << "SoundBar Script Ready : " << obj->GetName() << std::endl;
@@ -26,10 +26,7 @@ void SoundBar::Start(Object* obj) {
     
 }
 
-/*********************************************************************/
-// Update method called every frame to update the ButtonBase's logic.
-// @param obj: The object to which this script is attached.
-/*********************************************************************/
+
 void SoundBar::Update(Object* obj) {
     if (obj == nullptr || objectFactory->FindLayerThatHasThisObject(obj) == nullptr || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         return;
@@ -74,15 +71,11 @@ void SoundBar::Update(Object* obj) {
     
 
 }
-/*********************************************************************/
-// Shutdown method called when the ButtonBase script is being shut down.
-// @param obj: The object to which this script is attached.
-/*********************************************************************/
+
 void SoundBar::Shutdown(Object* obj) {
     std::cout << "SoundBar Script Shutdown : " << obj->GetName() << std::endl;
 }
 
-// Creating an instance of ButtonBase.
 SoundBar soundbar("SoundBar");
 
 

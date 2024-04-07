@@ -1,5 +1,10 @@
 #pragma once
+/* !
+@author Yeo Jia Ming
+@date	23/3/2024
 
+This file contains the script for the main menu how to play button
+*//*__________________________________________________________________________*/
 #include <Object.h>
 #include <GameLogic.h>
 
