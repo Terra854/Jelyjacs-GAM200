@@ -2324,6 +2324,7 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 	Animation* a = (Animation*)object->GetComponent(ComponentType::Animation);
 	Event* e = (Event*)object->GetComponent(ComponentType::Event);
 	Behaviour* be = (Behaviour*)object->GetComponent(ComponentType::Behaviour);
+	Dialogue* d = (Dialogue*)object->GetComponent(ComponentType::Dialogue);
 
 	// Get all instances of the object
 	std::vector<Object*> v = objectFactory->FindAllObjectsByName(object->GetName());
@@ -2339,6 +2340,7 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 			Animation* o_a = (Animation*)o->GetComponent(ComponentType::Animation);
 			Event* o_e = (Event*)o->GetComponent(ComponentType::Event);
 			Behaviour* o_be = (Behaviour*)o->GetComponent(ComponentType::Behaviour);
+			Dialogue* o_d = (Dialogue*)o->GetComponent(ComponentType::Dialogue);
 
 			// Check to see if a component needs to be deleted
 
@@ -2355,6 +2357,8 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 				objectFactory->DeleteComponent(o, ComponentType::Event);
 			if (be == nullptr && o_be != nullptr)
 				objectFactory->DeleteComponent(o, ComponentType::Behaviour);
+			if (d == nullptr && o_d != nullptr)
+				objectFactory->DeleteComponent(o, ComponentType::Dialogue);
 
 			if (te != nullptr && o_te == nullptr) {
 				o->AddComponent(new Texture(te->textureName));
@@ -2375,6 +2379,14 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 			if (a != nullptr && o_a == nullptr) {
 				o->AddComponent(new Animation());
 				o_a = (Animation*)o->GetComponent(ComponentType::Animation);
+			}
+			if (e != nullptr && o_e == nullptr) {
+				o->AddComponent(new Event());
+				o_e = (Event*)o->GetComponent(ComponentType::Event);
+			}
+			if (d != nullptr && o_d == nullptr) {
+				o->AddComponent(new Dialogue());
+				o_d = (Dialogue*)o->GetComponent(ComponentType::Dialogue);
 			}
 
 			// Check to see if we are not copying the data to components that doesn't exist
@@ -2425,6 +2437,9 @@ void LevelEditor::UpdateAllObjectInstances(Object* object) {
 			if (be != nullptr && o_be != nullptr) {
 				o_be->SetBehaviourIndex(be->GetBehaviourIndex());
 				o_be->SetBehaviourName(be->GetBehaviourName());
+			}
+			if (d != nullptr && o_d != nullptr) {
+				o_d->ChangeDialogue(d->GetEntireDialogue());
 			}
 		}
 	}
