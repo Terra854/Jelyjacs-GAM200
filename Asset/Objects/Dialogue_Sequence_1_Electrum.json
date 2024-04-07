@@ -18,7 +18,7 @@
     {
       "Type": "Dialogue",
       "Properties": {
-        "dialogue": "[Look Spark! Some Electrum!][Now you can teleport again][Hmm...][Looks like it's only good for one use though][(Press T when controlling Spark to\nteleport him directly to Finn)][(Keep track of the number of times you can\nteleport in the bottom left corner)]"
+        "dialogue": "[Look Spark! Some Electrum!][Now you can teleport again][Hmm...][Looks like it's only good for one use though][(Press T when controlling Spark to teleport him \ndirectly to Finn)][(Keep track of the number of times you can\nteleport in the bottom left corner)]"
       }
     }
   ]
