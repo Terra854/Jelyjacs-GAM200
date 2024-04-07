@@ -1,10 +1,9 @@
 #pragma once
 /* !
-@file	RestartButton.h
-@author Tan Yee Ann (t.yeeann@digipen.edu)
-@date	26/2/2023
+@author Yeo Jia Ming
+@date	10/3/2024
 
-This file contains the script for the RestartButtons
+This file contains the script for restart button in pause menu
 *//*__________________________________________________________________________*/
 #include <Object.h>
 #include <GameLogic.h>

@@ -1,10 +1,9 @@
 #pragma once
 /* !
-@file	.h
-@author 
-@date	26/2/2023
+@author Yeo Jia Ming
+@date	23/3/2024
 
-This file contains the script for the 
+This file contains the script for the next dialogue
 *//*__________________________________________________________________________*/
 #include <Object.h>
 #include <GameLogic.h>
