@@ -72,10 +72,10 @@ void GLApp::Initialize()
 }
 
 
-
+/*  _________________________________________________________________________ */
 /*
 * get all he models from the list.txt file and store them in the models map
-* @Guo Chen, this is the modified version of your init_model that works with assetmanager, you might want to delete your other one and this line
+* 
 */
 void GLApp::insert_models(std::string model_name) {
 
@@ -591,8 +591,6 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 
 	// add compiled, linked, and validated shader program to
 
-
-	// @Chen Guo when you removed your own map, leave this here ^delete the line above
 	AssetManager::addshader(shdr_pgm_name, shdr_pgm);
 }
 
