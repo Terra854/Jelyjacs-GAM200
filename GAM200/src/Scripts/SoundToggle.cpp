@@ -1,4 +1,9 @@
+/* !
+@author Yeo Jia Ming
+@date	23/3/2024
 
+This file contains the script for the pause menu sound toggle button
+*//*__________________________________________________________________________*/
 #include "Scripts/SoundToggle.h"
 #include <Scripts/SoundBar.h>
 #include <Utils.h>

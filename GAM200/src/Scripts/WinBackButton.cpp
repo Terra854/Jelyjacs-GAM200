@@ -1,9 +1,8 @@
 /* !
-@file	.cpp
-@author Tan Yee Ann (t.yeeann@digipen.edu)
-@date	26/2/2023
+@author Yeo Jia Ming
+@date	1/3/2024
 
-This file contains the script for the in-game clickable buttons
+This file contains the script for the win screen button
 *//*__________________________________________________________________________*/
 #include "Scripts/WinBackButton.h"
 #include <Utils.h>
@@ -14,25 +13,17 @@ This file contains the script for the in-game clickable buttons
 #include <../components/Texture.h>
 #include <Factory.h>
 
-// Constructor for the PauseButton class.
-// @param name: The name of the portal.
 WinBackButton::WinBackButton(std::string name) : LogicScript(name)
 {
     std::cout << name << " Created" << std::endl;
 }
-/*********************************************************************/
-// Start method called when the PauseButton script is ready.
-// @param obj: The object to which this script is attached.
-/*********************************************************************/
+
 void WinBackButton::Start(Object* obj) {
     executeOnPause = true;
     std::cout << "WinBackButton Script Ready : " << obj->GetName() << std::endl;
 }
 
-/*********************************************************************/
-// Update method called every frame to update the PauseButton's logic.
-// @param obj: The object to which this script is attached.
-/*********************************************************************/
+
 void WinBackButton::Update(Object* obj) {
     if (obj == nullptr || !objectFactory->FindLayerThatHasThisObject(obj) || !objectFactory->FindLayerThatHasThisObject(obj)->second.first.isVisible) {
         //std::cout << "NIL OBJ : WinBackButton" << std::endl;
@@ -62,15 +53,11 @@ void WinBackButton::Update(Object* obj) {
         sceneManager->PlayScene();
     }
 }
-/*********************************************************************/
-// Shutdown method called when the PauseButton script is being shut down.
-// @param obj: The object to which this script is attached.
-/*********************************************************************/
+
 void WinBackButton::Shutdown(Object* obj) {
     std::cout << "WinBackButton Script Shutdown : " << obj->GetName() << std::endl;
 }
 
-// Creating an instance of PauseButton.
 WinBackButton winbackButton ("WinBackButton");
 
 

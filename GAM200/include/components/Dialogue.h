@@ -1,4 +1,10 @@
 #pragma once
+/* !
+@author Yeo Jia Ming
+@date	23/3/2024
+
+This file contains the component for dialogue
+*//*__________________________________________________________________________*/
 #include <Debug.h>
 
 #include "Object.h"

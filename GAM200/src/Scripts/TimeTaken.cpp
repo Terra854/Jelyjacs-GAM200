@@ -1,4 +1,9 @@
+/* !
+@author Yeo Jia Ming
+@date	1/3/2024
 
+This file contains the script for the win screen time taken
+*//*__________________________________________________________________________*/
 #include "Scripts/TimeTaken.h"
 #include <Utils.h>
 #include <Audio.h>
@@ -20,16 +25,12 @@ enum
 } currentlvl;
 
 
-// Constructor for the ButtonBase class.
-// @param name: The name of the portal.
+
 TimeTaken::TimeTaken(std::string name) : LogicScript(name)
 {
     std::cout << name << " Created" << std::endl;
 }
-/*********************************************************************/
-// Start method called when the ButtonBase script is ready.
-// @param obj: The object to which this script is attached.
-/*********************************************************************/
+
 void TimeTaken::Start(Object* obj) {
     executeOnPause = true;
     std::cout << "TimeTaken Script Ready : " << obj->GetName() << std::endl;
@@ -38,10 +39,6 @@ void TimeTaken::Start(Object* obj) {
     totaltime = 0 ;
 }
 
-/*********************************************************************/
-// Update method called every frame to update the ButtonBase's logic.
-// @param obj: The object to which this script is attached.
-/*********************************************************************/
 void TimeTaken::Update(Object* obj) {
     if (obj == nullptr)
     {
@@ -83,10 +80,7 @@ void TimeTaken::Update(Object* obj) {
 
 
 }
-/*********************************************************************/
-// Shutdown method called when the ButtonBase script is being shut down.
-// @param obj: The object to which this script is attached.
-/*********************************************************************/
+
 void TimeTaken::Shutdown(Object* obj) {
     std::cout << "TimeTaken Script Shutdown : " << obj->GetName() << std::endl;
 }
