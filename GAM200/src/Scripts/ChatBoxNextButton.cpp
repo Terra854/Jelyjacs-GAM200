@@ -1,9 +1,8 @@
 /* !
-@file	.cpp
-@author Tan Yee Ann (t.yeeann@digipen.edu)
-@date	26/2/2023
+@author Yeo Jia Ming
+@date	23/3/2024
 
-This file contains the script for the in-game clickable buttons
+This file contains the script for the next dialogue
 *//*__________________________________________________________________________*/
 #include "Scripts/ChatBoxNextButton.h"
 #include <Utils.h>
