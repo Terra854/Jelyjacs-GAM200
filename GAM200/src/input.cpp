@@ -100,7 +100,7 @@ void MousePosCallBack(GLFWwindow* pWin, double xpos, double ypos)
 	mouse.y = ypos;
 }
 
-void mouse_button_callback(GLFWwindow*, int button, int action, int mods)
+void mouse_button_callback(GLFWwindow*, int button, int action, int )
 {
 	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE)
 	{
