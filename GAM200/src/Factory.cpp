@@ -25,7 +25,6 @@ ID aand is stored as part of a private map
 #include "components/PlayerControllable.h"
 #include "components/Animation.h"
 #include "components/Event.h"
-#include "components/Particle.h"
 #include "components/Text.h"
 #include "Assets Manager/asset_manager.h"
 #include "Object.h"
@@ -60,7 +59,6 @@ Factory::Factory()
 	AddComponentCreator("Player", new ComponentCreator<PlayerControllable>());
 	AddComponentCreator("Event", new ComponentCreator<Event>());
 	AddComponentCreator("Behaviour", new ComponentCreator<Behaviour>());
-	AddComponentCreator("Particles", new ComponentCreator<ParticleSystem>());
 	AddComponentCreator("Animation", new ComponentCreator<Animation>());
 	AddComponentCreator("Text", new ComponentCreator<Text>());
 	AddComponentCreator("Dialogue", new ComponentCreator<Dialogue>());
@@ -350,42 +348,6 @@ Object* Factory::createObject(const std::string& filename)
 			std::cout << "Behaviour Script & Index: " << temp_name << ", " << temp_index << std::endl;
 			b->SetBehaviourIndex(temp_index);
 			b->SetBehaviourName(temp_name);
-		}
-		else if (type == "Particle") // @guochen
-		{
-			ParticleSystem* p = (ParticleSystem*)((ComponentCreator<ParticleSystem>*) componentMap["Particle"])->Create();
-			jsonloop.readFloat(p->pos_x_min, "Properties", "posx", 0);
-			jsonloop.readFloat(p->pos_x_max, "Properties", "posx", 1);
-			jsonloop.readFloat(p->pos_y_min, "Properties", "posy", 0);
-			jsonloop.readFloat(p->pos_y_max, "Properties", "posy", 1);
-			jsonloop.readFloat(p->vel_x_min, "Properties", "velx", 0);
-			jsonloop.readFloat(p->vel_x_max, "Properties", "velx", 1);
-			jsonloop.readFloat(p->vel_y_min, "Properties", "vely", 0);
-			jsonloop.readFloat(p->vel_y_max, "Properties", "vely", 1);
-			jsonloop.readFloat(p->acc_x_min, "Properties", "accx", 0);
-			jsonloop.readFloat(p->acc_x_max, "Properties", "accx", 1);
-			jsonloop.readFloat(p->acc_y_min, "Properties", "accy", 0);
-			jsonloop.readFloat(p->acc_y_max, "Properties", "accy", 1);
-			jsonloop.readFloat(p->life_min, "Properties", "lifetime", 0);
-			jsonloop.readFloat(p->life_max, "Properties", "lifetime", 1);
-
-			std::string path;
-			jsonloop.readString(path, "Properties", "texture");
-			bool exist = AssetManager::texturecheckexist(path);
-
-			if (!exist) {
-				std::cout << "Missing Texture!" << std::endl;
-				// Attempt to add the texture
-				AssetManager::addtextures(path);
-			}
-			else
-			{
-				p->particle_texture = AssetManager::textureval(path);
-			}
-
-			std::cout << "PARTICLE TEXTURE SET: " << p->particle_texture << std::endl;
-
-			obj->AddComponent(p);
 		}
 		else if (type == "Text")
 		{
@@ -852,29 +814,6 @@ Object* Factory::cloneObject(Object* object, float posoffsetx, float posoffsety)
 			b->SetBehaviourCounter(b_tmp->GetBehaviourCounter());
 			b->SetBehaviourDistance(b_tmp->GetBehaviourDistance());
 			b->SetBehaviourSpeed(b_tmp->GetBehaviourSpeed());
-		}
-		else if (component.first == ComponentType::ParticleSystem) // @guochen
-		{
-			ParticleSystem* p = (ParticleSystem*)((ComponentCreator<ParticleSystem>*) componentMap["Particles"])->Create();
-			ParticleSystem* p_tmp = static_cast<ParticleSystem*>(object->GetComponent(ComponentType::ParticleSystem));
-
-			p->pos_x_min = p_tmp->pos_x_min;
-			p->pos_x_max = p_tmp->pos_x_max;
-			p->pos_y_min = p_tmp->pos_y_min;
-			p->pos_y_max = p_tmp->pos_y_max;
-			p->vel_x_min = p_tmp->vel_x_min;
-			p->vel_x_max = p_tmp->vel_x_max;
-			p->vel_y_min = p_tmp->vel_y_min;
-			p->vel_y_max = p_tmp->vel_y_max;
-			p->acc_x_min = p_tmp->acc_x_min;
-			p->acc_x_max = p_tmp->acc_x_max;
-			p->acc_y_min = p_tmp->acc_y_min;
-			p->acc_y_max = p_tmp->acc_y_max;
-			p->life_min = p_tmp->life_min;
-			p->life_max = p_tmp->life_max;
-			p->particle_texture = p_tmp->particle_texture;
-
-			obj->AddComponent(p);
 		}
 		else if (component.first == ComponentType::Text)
 		{
