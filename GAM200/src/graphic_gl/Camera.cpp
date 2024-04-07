@@ -166,6 +166,7 @@ void Camera::SetToPlayer() {
 */
 void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 {
+	if (scale.x == 1.0f && scale.y == 1.0f)return;
 	camera_shift = true;
 	Vec2 pos1, pos2;
 	pos1.x = start.x;
