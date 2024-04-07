@@ -486,6 +486,14 @@
                 "texturepath" : "Finn.png"
               },
               "Type" : "Animation"
+            },
+            {
+              "AbleToPushObjects" : true,
+              "AffectedByGravity" : true,
+              "Mass" : 1.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : 0.0
             }
           ],
           "Name" : "Finn",
@@ -599,6 +607,14 @@
                 "texturepath" : "Spark.png"
               },
               "Type" : "Animation"
+            },
+            {
+              "AbleToPushObjects" : false,
+              "AffectedByGravity" : true,
+              "Mass" : 1.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : 0.0
             }
           ],
           "Name" : "Spark",
@@ -7268,6 +7284,14 @@
                 "texturepath" : "elevator.png"
               },
               "Type" : "Texture"
+            },
+            {
+              "AbleToPushObjects" : false,
+              "AffectedByGravity" : false,
+              "Mass" : 0.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : -70.0
             }
           ],
           "Name" : "elevator",
@@ -7653,6 +7677,14 @@
                 "texturepath" : "Box.png"
               },
               "Type" : "Texture"
+            },
+            {
+              "AbleToPushObjects" : false,
+              "AffectedByGravity" : true,
+              "Mass" : 5.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : 0.0
             }
           ],
           "Name" : "Box",
@@ -7703,6 +7735,14 @@
                 "texturepath" : "GreenMovingPlatformx4.png"
               },
               "Type" : "Texture"
+            },
+            {
+              "AbleToPushObjects" : false,
+              "AffectedByGravity" : false,
+              "Mass" : 0.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : 0.0
             }
           ],
           "Name" : "elevator_hori",
@@ -7753,6 +7793,14 @@
                 "texturepath" : "GreenMovingPlatformx4.png"
               },
               "Type" : "Texture"
+            },
+            {
+              "AbleToPushObjects" : false,
+              "AffectedByGravity" : false,
+              "Mass" : 0.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : 0.0
             }
           ],
           "Name" : "elevator_hori",
@@ -7764,7 +7812,7 @@
             {
               "Position" : 
               {
-                "x" : 1732.0,
+                "x" : 1654.0,
                 "y" : 986.0
               },
               "Rotation" : 0.0,
@@ -8995,6 +9043,10 @@
                 "y" : 100.0
               },
               "Type" : "Transform"
+            },
+            {
+              "Type" : "Dialogue",
+              "dialogue" : "[We're almost there Spark!][The parts you need are just past this floor's door]"
             }
           ],
           "Name" : "Dialogue_Sequence_3",
