@@ -102,7 +102,7 @@ namespace CatPortal_Script {
 						player_a->current_type = AnimationType::Push;
                         player_a->fixed = true;
 					}
-                    Spark::teleporting = true;
+                    teleporting = true;
                     Spark::teleporting_state = Disappearing;
                     Spark::next_position = otherCatPortal_t->Position;
                     justTeleported = true;

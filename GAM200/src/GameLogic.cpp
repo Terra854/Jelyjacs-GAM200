@@ -37,6 +37,7 @@ Object* GameLogic::playerObj;
 Object* dynamic_collision;
 Vec2 start_position;
 int CatPower = 0;
+bool teleporting = false;
 float death_timer = 0.f;
 bool GameLogic::death;
 bool GameLogic::restarting;
@@ -217,7 +218,7 @@ void GameLogic::Update() {
 				static_cast<Body*>(temp->GetComponent(ComponentType::Body))->active = true;
 				std::cout << "Switched to Spark" << std::endl;
 			}
-			else if (GameLogic::playerObj->GetName() == "Spark") {
+			else if (GameLogic::playerObj->GetName() == "Spark" && !teleporting) {
 				Object* temp = objectFactory->FindObject("Finn");
 				GameLogic::playerObj = temp == nullptr ? GameLogic::playerObj : objectFactory->FindObject("Finn");
 				std::cout << "Switched to Finn" << std::endl;

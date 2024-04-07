@@ -55,7 +55,6 @@ public:
     // This could be used to manage the transition or effects of detachment in the game logic.
     static bool Just_detached;
 
-    static bool teleporting;
     static bool UsedPower;
     static TeleportingState teleporting_state;
 

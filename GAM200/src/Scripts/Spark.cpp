@@ -19,8 +19,6 @@ This file contains the script for Spark, the player character (Cat)
 // Static variable to track if Spark has just detached from Finn.
 bool Spark::Just_detached;
 bool Spark::Connected_to_Finn;
-
-bool Spark::teleporting;
 bool Spark::UsedPower;
 TeleportingState Spark::teleporting_state;
 Vec2 Spark::next_position;

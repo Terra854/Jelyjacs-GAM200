@@ -96,6 +96,7 @@ public:
 
 extern GameLogic* Logic;
 extern int CatPower;
+extern bool teleporting;
 extern bool cheat;
 
 class LogicScript
