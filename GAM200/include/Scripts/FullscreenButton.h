@@ -1,10 +1,9 @@
 #pragma once
 /* !
-@file	QuitButton.h
-@author 
-@date	26/2/2023
+@author Yeo Jia Ming
+@date	10/3/2024
 
-This file contains the script for the Quit Button
+This file contains the script for fullscreen button
 *//*__________________________________________________________________________*/
 #include <Object.h>
 #include <GameLogic.h>

@@ -1,9 +1,8 @@
 /* !
-@file	.cpp
-@author Tan Yee Ann (t.yeeann@digipen.edu)
-@date	26/2/2023
+@author Yeo Jia Ming
+@date	10/3/2024
 
-This file contains the script for the in-game clickable buttons
+This file contains the script for how to play button in pause menu
 *//*__________________________________________________________________________*/
 #include "Scripts/HowToPlayButton.h"
 #include <Utils.h>
