@@ -7,6 +7,13 @@ This file contains the definition of the animation game component class
 *//*__________________________________________________________________________*/
 #include "../include/components/Animation.h"
 
+
+/*  _________________________________________________________________________ */
+/*
+*  give the string of the animation type
+* @param type: the type of the animation
+* @return: the string of the animation type
+*/
 std::string AnimationTypeToString(AnimationType type) {
 	switch (type) {
 		case AnimationType::Idle:
@@ -45,15 +52,28 @@ std::string AnimationTypeToString(AnimationType type) {
 	}
 }
 
+/*  _________________________________________________________________________ */
+/*
+* Constructor for Animation
+*/
 Animation::Animation()
 	: Component(), animation_tex_obj{}
 {}
 
+/*  _________________________________________________________________________ */
+/*
+* Destructor for Animation
+*/
 void Animation::Initialize()
 {
 
 }
 
+/*  _________________________________________________________________________ */
+/*
+* Update the animation for the player
+* Guo Chen
+*/
 void Animation::Update_player()
 {
 	static float accum_time = 0.0f;
@@ -102,6 +122,11 @@ void Animation::Update_player()
 	}
 }
 
+/*  _________________________________________________________________________ */
+/*
+* Update the animation for the objects
+* Guo Chen
+*/
 void Animation::Update_objects()
 {
 	static float accum_time = 0.0f;
@@ -153,6 +178,11 @@ void Animation::Update_objects()
 	}
 }
 
+/*  _________________________________________________________________________ */
+/*
+* Update the time for the animation
+* Guo Chen
+*/
 void Animation::Update_time()
 {
 	this->previous_type = this->current_type;
@@ -183,6 +213,11 @@ void Animation::Update_time()
 	}
 }
 
+/*  _________________________________________________________________________ */
+/*
+* get the amount of animation types
+* Guo Chen
+*/
 int Animation::get_ani_type_count()
 {
 	int counter{};
@@ -195,7 +230,12 @@ int Animation::get_ani_type_count()
 	return counter;
 }
 
-// Get all the models and properly store them into the map to be rendered
+
+/*  _________________________________________________________________________ */
+/*
+* Get all the models and properly store them into the map to be rendered
+* Sen Chuan
+*/
 void Animation::set_up_map(bool val)
 {
 	frame_num = 0;
@@ -285,10 +325,12 @@ void Animation::set_up_map(bool val)
 }
 
 
+/*  _________________________________________________________________________ */
+/*
+* to create a model
+* Guo Chen
+*/
 
-/******************************************************************************
-	to create a model
-*******************************************************************************/
 GLApp::GLModel Animation::setup_texobj_animation(float x, float y, float z, float w, bool right)
 {
 	GLApp::GLModel Model;
@@ -371,7 +413,12 @@ GLApp::GLModel Animation::setup_texobj_animation(float x, float y, float z, floa
 	return Model;
 }
 
-// Converts string to animationType
+/*  _________________________________________________________________________ */
+/*
+*  get the animation type from the string
+* @param str: the string of the animation type
+* @return: the animation type
+*/
 AnimationType stringToAnimationType(const std::string& str) {
 	static const std::map<std::string, AnimationType> stringToType =
 	{
@@ -395,6 +442,12 @@ AnimationType stringToAnimationType(const std::string& str) {
 		return AnimationType::No_Animation_Type; // Default value
 }
 
+/*  _________________________________________________________________________ */
+/*
+*  check if the animation is left
+* @param type: the type of the animation
+* @return: true if the animation is left, false otherwise
+*/
 bool animationIsLeft(AnimationType type)
 {
 	switch (type)

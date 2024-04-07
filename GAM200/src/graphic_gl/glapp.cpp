@@ -236,45 +236,7 @@ void GLApp::Update()
 	/*if (input::IsPressed(KEY::s)) {
 		camera2D->ShakeCamera({0.1f,0.1f}, 1.0f);
 	}*/
-	/*
-	frame_dt_count = engine->Get_NumOfSteps();
-	while (frame_dt_count) {
-		frame_dt_count--;
-		if (video_start) {
-			if (video_count < 7) {
-				std::cout << "video_count: " << video_count << std::endl;
-				Object* video = objectFactory->FindObject("Video" + std::to_string(video_count));
-				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
-				Animation* ani_pt = static_cast<Animation*>(video->GetComponent(ComponentType::Animation));
-				ani_pt->fixed = true;
-				tran_pt->Position = Vec2(-330.f, 30.f);
-				video_timer += engine->Get_Fixed_DT();
-				if (video_timer >= 0.4f) {
-					video_timer = 0.0f;
-					tran_pt->Position = Vec2(2000, 0);
-					video_count++;
-				}
-			}
-			if (video_count == 7) {
-				Object* video = objectFactory->FindObject("Video" + std::to_string(video_count));
-				Transform* tran_pt = static_cast<Transform*>(video->GetComponent(ComponentType::Transform));
-				tran_pt->Position = Vec2(-330.f, 30.f);
-				video_timer += engine->Get_Fixed_DT();
-				if (video_timer >= 0.2f) {
-					video_timer = 0.0f;
-					video_count++;
-				}
-			}
-			if (video_count == 8) {
-				audio->setBackgroundAudio("background");
-				SceneManager::LoadScene("tutorial_level.json");
-				video_start = false;
-				video_count = 1;
-			}
-		}
-
-	}
-	*/
+	
 	//check debug
 	if (input::IsPressed(KEY::l))
 	{
@@ -313,8 +275,6 @@ void GLApp::Update()
 
 				//get text
 				Text* text = static_cast<Text*>(object->GetComponent(ComponentType::Text));
-
-
 
 				//get animation
 				ani_pt = static_cast<Animation*>(object->GetComponent(ComponentType::Animation));
@@ -617,9 +577,9 @@ void GLApp::insert_shdrpgm(std::string shdr_pgm_name, std::string vtx_shdr, std:
 		std::make_pair(GL_VERTEX_SHADER, vtx_shdr),
 		std::make_pair(GL_FRAGMENT_SHADER, frg_shdr)
 	};
-
+#if defined(DEBUG) | defined(_DEBUG)
 	std::cout << shdr_pgm_name << " | " << vtx_shdr << " | " << frg_shdr << std::endl;
-
+#endif
 	GLSLShader shdr_pgm;
 	shdr_pgm.CompileLinkValidate(shdr_files);
 	if (GL_FALSE == shdr_pgm.IsLinked())
@@ -875,6 +835,11 @@ Vec2 GLApp::game_to_ndc(Vec2 position)
 	return result;
 }
 
+/*  _________________________________________________________________________ */
+/*
+* a function to ndc position
+* @param ned position of the game
+*/
 float GLApp::game_to_ndc(float position)
 {
 	return position * 2.0f / window->width_init;
