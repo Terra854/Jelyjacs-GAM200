@@ -257,7 +257,7 @@ void Animation::set_up_map(bool val)
 			for (float i = 0; i < frame.second.first; i++)
 			{
 				bool faceright = true;
-				if (frame.second.second > AnimationType::No_Animation_Type / 2)
+				if (frame.second.second > (AnimationType::No_Animation_Type-1) / 2)
 					faceright = false;
 				float g = static_cast<float>(frame.first);
 				GLApp::GLModel model = setup_texobj_animation((i / animation_scale.first), ((g - 1) / animation_scale.second), ((i + 1) / animation_scale.first), (g / animation_scale.second), faceright);
@@ -275,11 +275,6 @@ void Animation::set_up_map(bool val)
 				animation_Map.emplace(frame.second.second, animationmodel);
 			}
 		}
-
-
-
-
-
 	}
 
 	// Info dump

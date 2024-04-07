@@ -262,21 +262,34 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 
 						ani->animation_frame.clear();
 
-						for (int i{1}; i <= ani->animation_scale.second; i++)
-						{
-							objcomponentjson.readInt(tmp, "Properties", std::to_string(i), 0);
-							objcomponentjson.readString(stringtmp, "Properties", std::to_string(i), 1);
+						int i{ 1 };
+						while (objcomponentjson.isMember("Properties")) {
+							std::string key = std::to_string(i);
+							if (!objcomponentjson.isMember(key, "Properties")) {
+								key = std::to_string(i + 1);
+								if (objcomponentjson.isMember(key, "Properties")) 	// If there is skipped key
+								{
+									i++;
+									continue;
+								}
+								break; // Exit the loop if key does not exist under "Properties"
+							}
+
+							objcomponentjson.readInt(tmp, "Properties", key, 0);
+							objcomponentjson.readString(stringtmp, "Properties", key, 1);
 
 							for (char& c : stringtmp)
 								c = std::tolower(c);
 
 							anitype = stringToAnimationType(stringtmp);
-							
+
 							animationframesecond.first = tmp;
 							animationframesecond.second = anitype;
 
 							ani->animation_frame.emplace(i, animationframesecond);
+							i++;
 						}
+
 
 						ani->set_up_map(true); // Update map
 
@@ -289,13 +302,13 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 						//std::cout << "Faceright: "; if (ani->face_right) { std::cout << "true"; }
 						//else { std::cout << "false"; } std::cout << std::endl;
 
-						//std::cout << "AnimationRow: " << ani->animation_scale.second << ", AnimationCol: " << ani->animation_scale.first << std::endl;
-						//for (auto& frame : ani->animation_frame)
-						//{
-						//	std::cout << "Row: " << frame.first;
-						//	std::cout << ", Col: " << frame.second.first;
-						//	std::cout << ", Type: " << frame.second.second << std::endl;
-						//}
+					/*	std::cout << "AnimationRow: " << ani->animation_scale.second << ", AnimationCol: " << ani->animation_scale.first << std::endl;
+						for (auto& frame : ani->animation_frame)
+						{
+							std::cout << "Row: " << frame.first;
+							std::cout << ", Col: " << frame.second.first;
+							std::cout << ", Type: " << frame.second.second << std::endl;
+						}*/
 					}
 
 					// Add here to read oher types of data if necessary WIP
@@ -511,6 +524,7 @@ void SaveScene(std::string filename)
 				components.append(typedata);
 			}
 
+			
 
 			innerobj["Components"] = components;
 			layer["Objects"].append(innerobj);

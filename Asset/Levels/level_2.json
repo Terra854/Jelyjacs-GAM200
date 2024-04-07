@@ -122,7 +122,8 @@
                   5.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Light.png"
               },
               "Type" : "Animation"
             }
@@ -292,6 +293,11 @@
                   1,
                   "Jump"
                 ],
+                "4" : 
+                [
+                  1,
+                  "Idle"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -299,7 +305,8 @@
                   3.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "MainDoor.png"
               },
               "Type" : "Animation"
             }
@@ -350,6 +357,11 @@
                   1,
                   "Jump"
                 ],
+                "4" : 
+                [
+                  1,
+                  "Idle"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -357,7 +369,8 @@
                   3.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "MainDoor.png"
               },
               "Type" : "Animation"
             }
@@ -407,6 +420,21 @@
                   17,
                   "Jump"
                 ],
+                "10" : 
+                [
+                  16,
+                  "Run_left"
+                ],
+                "11" : 
+                [
+                  16,
+                  "Push_left"
+                ],
+                "12" : 
+                [
+                  16,
+                  "Push_left"
+                ],
                 "2" : 
                 [
                   16,
@@ -432,6 +460,21 @@
                   16,
                   "Push"
                 ],
+                "7" : 
+                [
+                  17,
+                  "Jump_left"
+                ],
+                "8" : 
+                [
+                  16,
+                  "Jump_left"
+                ],
+                "9" : 
+                [
+                  22,
+                  "Idle_left"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -439,7 +482,8 @@
                   6.0
                 ],
                 "framerate" : 0.029999999329447746,
-                "jumpfixframe" : 17
+                "jumpfixframe" : 17,
+                "texturepath" : "Finn.png"
               },
               "Type" : "Animation"
             }
@@ -489,6 +533,26 @@
                   13,
                   "Idle"
                 ],
+                "10" : 
+                [
+                  24,
+                  "Jump_left"
+                ],
+                "11" : 
+                [
+                  23,
+                  "Push_left"
+                ],
+                "12" : 
+                [
+                  12,
+                  "Push_left"
+                ],
+                "13" : 
+                [
+                  22,
+                  "Teleport_left"
+                ],
                 "2" : 
                 [
                   12,
@@ -514,6 +578,16 @@
                   22,
                   "Teleport"
                 ],
+                "8" : 
+                [
+                  13,
+                  "Idle_left"
+                ],
+                "9" : 
+                [
+                  12,
+                  "Run_left"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -521,7 +595,8 @@
                   7.0
                 ],
                 "framerate" : 0.02500000037252903,
-                "jumpfixframe" : 7
+                "jumpfixframe" : 7,
+                "texturepath" : "Spark.png"
               },
               "Type" : "Animation"
             }
@@ -2931,6 +3006,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -2938,7 +3018,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Props_LasersPurple.png"
               },
               "Type" : "Animation"
             }
@@ -7058,6 +7139,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7065,7 +7151,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Props_LasersPurple.png"
               },
               "Type" : "Animation"
             }
@@ -7119,6 +7206,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7126,7 +7218,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Props_LasersPurple.png"
               },
               "Type" : "Animation"
             }
@@ -7226,6 +7319,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7233,7 +7331,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Props_LasersPurple.png"
               },
               "Type" : "Animation"
             }
@@ -7287,6 +7386,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7294,7 +7398,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Props_LasersPink.png"
               },
               "Type" : "Animation"
             }
@@ -7348,6 +7453,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7355,7 +7465,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Props_LasersPink.png"
               },
               "Type" : "Animation"
             }
@@ -7409,6 +7520,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7416,7 +7532,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Props_LasersPink.png"
               },
               "Type" : "Animation"
             }
@@ -7470,6 +7587,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7477,7 +7599,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Props_LasersPink.png"
               },
               "Type" : "Animation"
             }
@@ -7641,6 +7764,11 @@
                   1,
                   "Jump"
                 ],
+                "4" : 
+                [
+                  1,
+                  "Idle"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7648,7 +7776,8 @@
                   3.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "PressureDoor_DarkBlue.png"
               },
               "Type" : "Animation"
             }
@@ -7702,6 +7831,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7709,7 +7843,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "PressurePlate_Pink.png"
               },
               "Type" : "Animation"
             }
@@ -7763,6 +7898,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7770,7 +7910,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "PressurePlate_Purple.png"
               },
               "Type" : "Animation"
             }
@@ -7824,6 +7965,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7831,7 +7977,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "PressurePlate_Green.png"
               },
               "Type" : "Animation"
             }
@@ -7885,6 +8032,11 @@
                   1,
                   "Idle"
                 ],
+                "2" : 
+                [
+                  3,
+                  "Jump"
+                ],
                 "faceright" : true,
                 "frame" : 
                 [
@@ -7892,7 +8044,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "PressurePlate_DarkBlue.png"
               },
               "Type" : "Animation"
             }
@@ -7944,7 +8097,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "CatTeleport.png"
               },
               "Type" : "Animation"
             }
@@ -7996,7 +8150,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "CatTeleport.png"
               },
               "Type" : "Animation"
             }
@@ -8057,7 +8212,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "CatPowerLiquid.png"
               },
               "Type" : "Animation"
             }
@@ -8118,7 +8274,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "CatPowerLiquid.png"
               },
               "Type" : "Animation"
             }
@@ -8849,6 +9006,14 @@
               "Type" : "Transform"
             },
             {
+              "Type" : "Behaviour",
+              "counter" : 0.0,
+              "distance" : 0.0,
+              "index" : 0,
+              "scripts" : "Fan",
+              "speed" : 0.0
+            },
+            {
               "Properties" : 
               {
                 "1" : 
@@ -8863,7 +9028,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Fan.png"
               },
               "Type" : "Animation"
             }
@@ -8889,6 +9055,14 @@
               "Type" : "Transform"
             },
             {
+              "Type" : "Behaviour",
+              "counter" : 0.0,
+              "distance" : 0.0,
+              "index" : 0,
+              "scripts" : "Fan",
+              "speed" : 0.0
+            },
+            {
               "Properties" : 
               {
                 "1" : 
@@ -8903,7 +9077,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Fan.png"
               },
               "Type" : "Animation"
             }
@@ -8929,6 +9104,14 @@
               "Type" : "Transform"
             },
             {
+              "Type" : "Behaviour",
+              "counter" : 0.0,
+              "distance" : 0.0,
+              "index" : 0,
+              "scripts" : "Fan",
+              "speed" : 0.0
+            },
+            {
               "Properties" : 
               {
                 "1" : 
@@ -8943,7 +9126,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Fan.png"
               },
               "Type" : "Animation"
             }
@@ -8969,6 +9153,14 @@
               "Type" : "Transform"
             },
             {
+              "Type" : "Behaviour",
+              "counter" : 0.0,
+              "distance" : 0.0,
+              "index" : 0,
+              "scripts" : "Fan",
+              "speed" : 0.0
+            },
+            {
               "Properties" : 
               {
                 "1" : 
@@ -8983,7 +9175,8 @@
                   1.0
                 ],
                 "framerate" : 0.10000000149011612,
-                "jumpfixframe" : 0
+                "jumpfixframe" : 0,
+                "texturepath" : "Fan.png"
               },
               "Type" : "Animation"
             }
