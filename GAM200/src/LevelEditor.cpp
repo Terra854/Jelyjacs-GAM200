@@ -425,11 +425,13 @@ void LevelEditor::ObjectProperties() {
 		if (te == nullptr && a == nullptr) {
 			if (ImGui::Selectable("Texture")) {
 				object->AddComponent(new Texture(""));
+				if (update_all_instances)
 				UpdateAllObjectInstances(object);
 			}
 			/*
 			if (ImGui::Selectable("Animation")) {
 				object->AddComponent(new Animation());
+				if (update_all_instances)
 				UpdateAllObjectInstances(object);
 			}
 			*/
@@ -437,20 +439,23 @@ void LevelEditor::ObjectProperties() {
 		if (bo == nullptr)
 			if (ImGui::Selectable("Body")) {
 				object->AddComponent(new Rectangular());
+				if (update_all_instances)
 				UpdateAllObjectInstances(object);
 			}
 		if (ph == nullptr)
 			if (ImGui::Selectable("Physics")) {
 				object->AddComponent(new Physics());
+				if (update_all_instances)
 				UpdateAllObjectInstances(object);
 			}
-		/*
+		
 		if (e == nullptr)
 			if (ImGui::Selectable("Event")) {
 				object->AddComponent(new Event());
+				if (update_all_instances)
 				UpdateAllObjectInstances(object);
 			}
-			*/
+			
 		if (be == nullptr)
 			if (ImGui::Selectable("Behaviour")) {
 				object->AddComponent(new Behaviour());
