@@ -81,7 +81,8 @@ void DialogueSystem::Update()
 		
 		
 		CHATBOX::change_text(d->GetDialogueLines().at(d->GetSequence()));
-		objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = true;
+		if (objectFactory->GetLayer("ChatBoxMenu") != nullptr)
+			objectFactory->GetLayer("ChatBoxMenu")->second.first.isVisible = true;
 		Message_Handler msg(MessageID::Event_Type::NoMovement);
 		engine->Broadcast(&msg);
 	}
