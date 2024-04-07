@@ -45,7 +45,7 @@ ImVec4 clear_color;
 *******************************************************************************/
 CoreEngine::CoreEngine()
 {
-	fixed_dt = 90;
+	fixed_dt = 60;
 	core_fps = fixed_dt;
 	dt = 1.f / core_fps;
 	game_active = true;

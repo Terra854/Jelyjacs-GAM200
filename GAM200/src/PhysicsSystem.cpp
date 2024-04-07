@@ -231,7 +231,7 @@ void PrepareUniformGrid() {
 
 	Vec2 level_size = engine->Get_End_Coords() - engine->Get_Start_Coords();
 
-	int num_of_partitions_per_side = 6;
+	int num_of_partitions_per_side = 5;
 
 	//factor in objects that can be just outside the viewable area
 	int extra_grids_per_side = num_of_partitions_per_side / 6;
