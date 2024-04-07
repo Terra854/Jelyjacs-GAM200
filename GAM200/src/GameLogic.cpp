@@ -251,7 +251,8 @@ void GameLogic::Update() {
 		//engine->Broadcast(&msg);
 
 		if (objectFactory->GetLayer("PauseMenu") && objectFactory->GetLayer("GameMenu") && objectFactory->GetLayer("HowToPlayMenu")) {
-			engine->setPause();
+			
+			engine->isPaused() ? SceneManager::PlayScene() : SceneManager::PauseScene();
 
 			objectFactory->GetLayer("PauseMenu")->second.first.isVisible = engine->isPaused();
 			objectFactory->GetLayer("GameMenu")->second.first.isVisible = !engine->isPaused();
