@@ -330,8 +330,8 @@
             {
               "Position" : 
               {
-                "x" : 612.0,
-                "y" : 530.0
+                "x" : 648.0,
+                "y" : 521.0
               },
               "Rotation" : 0.0,
               "Scale" : 
@@ -826,6 +826,14 @@
                 "texturepath" : "Finn.png"
               },
               "Type" : "Animation"
+            },
+            {
+              "AbleToPushObjects" : true,
+              "AffectedByGravity" : true,
+              "Mass" : 1.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : 0.0
             }
           ],
           "Name" : "Finn",
@@ -939,6 +947,14 @@
                 "texturepath" : "Spark.png"
               },
               "Type" : "Animation"
+            },
+            {
+              "AbleToPushObjects" : false,
+              "AffectedByGravity" : true,
+              "Mass" : 1.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : 0.0
             }
           ],
           "Name" : "Spark",
@@ -989,6 +1005,14 @@
                 "texturepath" : "Box.png"
               },
               "Type" : "Texture"
+            },
+            {
+              "AbleToPushObjects" : false,
+              "AffectedByGravity" : true,
+              "Mass" : 5.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : 0.0
             }
           ],
           "Name" : "Box",
@@ -1039,6 +1063,14 @@
                 "texturepath" : "Box.png"
               },
               "Type" : "Texture"
+            },
+            {
+              "AbleToPushObjects" : false,
+              "AffectedByGravity" : true,
+              "Mass" : 5.0,
+              "Type" : "Physics",
+              "X_Velocity" : 0.0,
+              "Y_Velocity" : 0.0
             }
           ],
           "Name" : "Box",
@@ -8587,6 +8619,10 @@
                 "y" : 100.0
               },
               "Type" : "Transform"
+            },
+            {
+              "Type" : "Dialogue",
+              "dialogue" : "[I think we're on the right track Spark!][Looks like it's only going to get more difficult\nfrom here][Well I guess for starters, that box over there\nlooks useful][(Finn is capable of pushing boxes)][(Walk into the boxes to begin pushing them)][(Use boxes to hold down buttons and open doors)]"
             }
           ],
           "Name" : "Dialogue_Sequence_2",
@@ -8608,6 +8644,10 @@
                 "y" : 100.0
               },
               "Type" : "Transform"
+            },
+            {
+              "Type" : "Dialogue",
+              "dialogue" : "[Woah!][It's one of those portable teleporters][I've never seen one before][Looks like only you can use it Spark][(Touch the yellow teleporter as Spark to teleport\n him to another connected teleporter)]"
             }
           ],
           "Name" : "Dialogue_Sequence_2_CatTeleporter",
