@@ -1478,6 +1478,9 @@ void LevelEditor::ObjectProperties() {
 				{
 					Dialogue_EditMode = false;
 					d->ChangeDialogue(edited_dialogue);
+
+					if (update_all_instances)
+						UpdateAllObjectInstances(object);
 				}
 
 				ImGui::SameLine();
