@@ -17,6 +17,7 @@ This file contains the definitions for loading and saving scenes
 #include <components/Animation.h>
 #include <string>
 #include <../Scripts/TimeTaken.h>
+#include <components/Dialogue.h>
 
 /******************************************************************************
 LoadSceneFromJson
@@ -311,6 +312,40 @@ void LoadSceneFromJson(std::string filename, bool isParentScene)
 						}*/
 					}
 
+					if (type == "Physics")
+					{
+						Physics* ph = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
+
+						if (!ph)
+						{
+							obj->AddComponent(new Physics());
+							ph = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
+						}
+
+						objcomponentjson.readFloat(ph->Velocity.x, "X_Velocity");
+						objcomponentjson.readFloat(ph->Velocity.y, "Y_Velocity");
+						objcomponentjson.readFloat(ph->Mass, "Mass");
+
+						objcomponentjson.readBool(ph->AbleToPushObjects, "AbleToPushObjects");
+						objcomponentjson.readBool(ph->AffectedByGravity, "AffectedByGravity");
+					}
+
+					if (type == "Dialogue")
+					{
+						Dialogue* d = static_cast<Dialogue*>(obj->GetComponent(ComponentType::Dialogue));
+
+						if (!d)
+						{
+							obj->AddComponent(new Dialogue());
+							d = static_cast<Dialogue*>(obj->GetComponent(ComponentType::Dialogue));
+						}
+
+						std::string tmp;
+						objcomponentjson.readString(tmp, "dialogue");
+						d->ChangeDialogue(tmp);
+
+					}
+
 					// Add here to read oher types of data if necessary WIP
 				}
 
@@ -524,7 +559,33 @@ void SaveScene(std::string filename)
 				components.append(typedata);
 			}
 
-			
+			// Save objects physics data
+			if (obj->GetComponent(ComponentType::Physics) != nullptr)
+			{
+				Json::Value typedata;
+				Physics* ph = static_cast<Physics*>(obj->GetComponent(ComponentType::Physics));
+				typedata["X_Velocity"] = ph->Velocity.x;
+				typedata["Y_Velocity"] = ph->Velocity.y;
+
+				typedata["Mass"] = ph->Mass;
+				typedata["AffectedByGravity"] = ph->AffectedByGravity;
+				typedata["AbleToPushObjects"] = ph->AbleToPushObjects;
+
+				typedata["Type"] = "Physics";
+
+				components.append(typedata);
+			}
+
+			if (obj->GetComponent(ComponentType::Dialogue) != nullptr)
+			{
+				Json::Value typedata;
+				Dialogue* d = static_cast<Dialogue*>(obj->GetComponent(ComponentType::Dialogue));
+				typedata["dialogue"] = d->GetEntireDialogue();
+
+				typedata["Type"] = "Dialogue";
+
+				components.append(typedata);
+			}
 
 			innerobj["Components"] = components;
 			layer["Objects"].append(innerobj);
