@@ -117,17 +117,17 @@ void Camera::SetToPlayer() {
 		// make sure the camera is not out of bounds
 		Vec2 botleft = engine->Get_Start_Coords();
 		Vec2 topright = engine->Get_End_Coords();
-		if (position.x < botleft.x + window->width * 0.5 / scale.x) {
-			position.x = botleft.x + window->width * 0.5 / scale.x;
+		if (position.x < botleft.x + window->width * 0.5f / scale.x) {
+			position.x = botleft.x + window->width * 0.5f / scale.x;
 		}
-		if (position.y < botleft.y + window->height * 0.5 / scale.y) {
-			position.y = botleft.y + window->height * 0.5 / scale.y;
+		if (position.y < botleft.y + window->height * 0.5f / scale.y) {
+			position.y = botleft.y + window->height * 0.5f / scale.y;
 		}
-		if (position.x > topright.x - window->width * 0.5 / scale.x) {
-			position.x = topright.x - window->width * 0.5 / scale.x;
+		if (position.x > topright.x - window->width * 0.5f / scale.x) {
+			position.x = topright.x - window->width * 0.5f / scale.x;
 		}
-		if (position.y > topright.y - window->height * 0.5 / scale.y) {
-			position.y = topright.y - window->height * 0.5 / scale.y;
+		if (position.y > topright.y - window->height * 0.5f / scale.y) {
+			position.y = topright.y - window->height * 0.5f / scale.y;
 		}
 	}
 	else {
@@ -164,30 +164,30 @@ void Camera::TranslateCamera(Vec2 start, Vec2 end, float time)
 	// make sure the camera is not out of bounds
 	Vec2 botleft = engine->Get_Start_Coords();
 	Vec2 topright = engine->Get_End_Coords();
-	if (pos1.x < botleft.x + window->width * 0.5 / scale.x) {
-		pos1.x = botleft.x + window->width * 0.5 / scale.x;
+	if (pos1.x < botleft.x + window->width * 0.5f / scale.x) {
+		pos1.x = botleft.x + window->width * 0.5f / scale.x;
 	}
-	if (pos1.y < botleft.y + window->height * 0.5 / scale.y) {
-		pos1.y = botleft.y + window->height * 0.5 / scale.y;
+	if (pos1.y < botleft.y + window->height * 0.5f / scale.y) {
+		pos1.y = botleft.y + window->height * 0.5f / scale.y;
 	}
-	if (pos1.x > topright.x - window->width * 0.5 / scale.x) {
-		pos1.x = topright.x - window->width * 0.5 / scale.x;
+	if (pos1.x > topright.x - window->width * 0.5f / scale.x) {
+		pos1.x = topright.x - window->width * 0.5f / scale.x;
 	}
-	if (pos1.y > topright.y - window->height * 0.5 / scale.y) {
-		pos1.y = topright.y - window->height * 0.5 / scale.y;
+	if (pos1.y > topright.y - window->height * 0.5f / scale.y) {
+		pos1.y = topright.y - window->height * 0.5f / scale.y;
 	}
 
-	if (pos2.x < botleft.x + window->width * 0.5 / scale.x) {
-		pos2.x = botleft.x + window->width * 0.5 / scale.x;
+	if (pos2.x < botleft.x + window->width * 0.5f / scale.x) {
+		pos2.x = botleft.x + window->width * 0.5f / scale.x;
 	}
-	if (pos2.y < botleft.y + window->height * 0.5 / scale.y) {
-		pos2.y = botleft.y + window->height * 0.5 / scale.y;
+	if (pos2.y < botleft.y + window->height * 0.5f / scale.y) {
+		pos2.y = botleft.y + window->height * 0.5f / scale.y;
 	}
-	if (pos2.x > topright.x - window->width * 0.5 / scale.x) {
-		pos2.x = topright.x - window->width * 0.5 / scale.x;
+	if (pos2.x > topright.x - window->width * 0.5f / scale.x) {
+		pos2.x = topright.x - window->width * 0.5f / scale.x;
 	}
-	if (pos2.y > topright.y - window->height * 0.5 / scale.y) {
-		pos2.y = topright.y - window->height * 0.5 / scale.y;
+	if (pos2.y > topright.y - window->height * 0.5f / scale.y) {
+		pos2.y = topright.y - window->height * 0.5f / scale.y;
 	}
 
 	// convert to NDC
