@@ -50,6 +50,7 @@ std::string AnimationTypeToString(AnimationType type) {
 			return "No_Animation_Type";
 			break;		
 	}
+	return "No_Animation_Type";
 }
 
 /*  _________________________________________________________________________ */
